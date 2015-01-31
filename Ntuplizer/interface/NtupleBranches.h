@@ -1,6 +1,5 @@
 #ifndef NtupleBranches_H
 #define NtupleBranches_H
-
 #include <DataFormats/PatCandidates/interface/Electron.h>
 #include <DataFormats/PatCandidates/interface/Muon.h>
 #include <DataFormats/PatCandidates/interface/Tau.h>
@@ -89,95 +88,102 @@ public:
     std::vector<float>  	      lep_trackIso	         ;    
         
     /*-------------------------AK5 jets---------------------------*/   
-    int 	        	      njetsAK5               ;
-    std::vector<float>  	      jetAK5_pt              ;
-    std::vector<float>  	      jetAK5_eta             ;
-    std::vector<float>  	      jetAK5_mass            ;
-    std::vector<float>  	      jetAK5_phi             ;
-    std::vector<float>  	      jetAK5_e               ;
-    std::vector<float>  	      jetAK5_jec             ;
-    std::vector<float>  	      jetAK5_jecUp           ;
-    std::vector<float>  	      jetAK5_jecDown         ;   
-    std::vector<bool  >  	      jetAK5_IDLoose	     ;
-    std::vector<int  >                jetAK5_cm              ;
-    std::vector<int  >                jetAK5_nm              ;
-    std::vector<float>                jetAK5_che             ;
-    std::vector<float>                jetAK5_ne              ;
-    std::vector<int  >  	      jetAK5_charge	     ;
-    std::vector<int  >  	      jetAK5_flavour	     ;
-    std::vector<float>  	      jetAK5_ssv 	     ;
-    std::vector<float>  	      jetAK5_csv 	     ;         
-    std::vector<float>  	      jetAK5_tchp            ;
-    std::vector<float>  	      jetAK5_tche            ;
-    std::vector<float>  	      jetAK5_jp              ;
-    std::vector<float>  	      jetAK5_jbp             ;
-    std::vector<int  >                jetAK5_nSVs            ;
-    std::vector<int  >  	      jetAK5_nconstituents   ;     
+    int 	        	      njetsAK4               ;
+    std::vector<float>  	      jetAK4_pt              ;
+    std::vector<float>  	      jetAK4_eta             ;
+    std::vector<float>  	      jetAK4_mass            ;
+    std::vector<float>  	      jetAK4_phi             ;
+    std::vector<float>  	      jetAK4_e               ;
+    // std::vector<float>  	      jetAK4_jec             ;
+    // std::vector<float>  	      jetAK4_jecUp           ;
+    // std::vector<float>  	      jetAK4_jecDown         ; 
+    std::vector<bool  >  	      jetAK4_IDLoose	     ;
+    std::vector<int  >                jetAK4_cm              ;
+    std::vector<int  >                jetAK4_nm              ;
+    std::vector<float>                jetAK4_che             ;
+    std::vector<float>                jetAK4_ne              ;
+    std::vector<int  >  	      jetAK4_charge	     ;
+    std::vector<int  >  	      jetAK4_flavour	     ;
+    std::vector<float>  	      jetAK4_ssv 	     ;
+    std::vector<float>  	      jetAK4_csv 	     ;         
+    std::vector<float>  	      jetAK4_cisv 	     ;         
+    std::vector<float>  	      jetAK4_tchp            ;
+    std::vector<float>  	      jetAK4_tche            ;
+    std::vector<float>  	      jetAK4_jp              ;
+    std::vector<float>  	      jetAK4_jbp             ;
+    std::vector<float  >  	      jetAK4_vtxMass            ;
+	std::vector<float  >  	      jetAK4_vtxNtracks            ;
+	std::vector<float  >  	      jetAK4_vtx3DVal            ;
+	std::vector<float  >  	      jetAK4_vtx3DSig            ; 
+    //std::vector<int  >                jetAK4_nSVs            ;
+    std::vector<int  >  	      jetAK4_nconstituents   ;     
 
     /*-------------------------CA8 jets---------------------------*/
-    int 	        	      njetsCA8               ;
-    std::vector<float>  	      jetCA8_pt              ;
-    std::vector<float>  	      jetCA8_eta             ;
-    std::vector<float>  	      jetCA8_mass            ;
-    std::vector<float>  	      jetCA8_phi             ;
-    std::vector<float>  	      jetCA8_e               ;
-    std::vector<float>  	      jetCA8_jec             ;
-    std::vector<float>  	      jetCA8_jecUp           ;
-    std::vector<float>  	      jetCA8_jecDown         ;
-    std::vector<bool >  	      jetCA8_IDLoose	     ;
-    std::vector<int  >                jetCA8_cm              ;
-    std::vector<int  >                jetCA8_nm              ;
-    std::vector<float>                jetCA8_che             ;
-    std::vector<float>                jetCA8_ne              ;
-    std::vector<int  >  	      jetCA8_charge	     ;
-    std::vector<int  >  	      jetCA8_flavour	     ;
-    std::vector<float>  	      jetCA8_ssv 	     ;
-    std::vector<float>  	      jetCA8_csv 	     ;    
-    std::vector<float>  	      jetCA8_tchp            ;
-    std::vector<float>  	      jetCA8_tche            ;
-    std::vector<float>  	      jetCA8_jp              ;
-    std::vector<float>  	      jetCA8_jbp             ;
-    std::vector<int  >  	      jetCA8_nSVs            ; 
-    std::vector<float>  	      jetCA8_tau1            ;
-    std::vector<float>  	      jetCA8_tau2            ; 
-    std::vector<float>  	      jetCA8_tau3            ;    
-    std::vector<int  >  	      jetCA8_nconstituents   ;     
-
-    /*----------------------CA8 jets pruned-----------------------*/
-    int 	        	      njetsCA8pruned         ;
-    std::vector<float>  	      jetCA8pruned_pt        ;
-    std::vector<float>  	      jetCA8pruned_eta       ;
-    std::vector<float>  	      jetCA8pruned_mass      ;
-    std::vector<float>  	      jetCA8pruned_phi       ;
-    std::vector<float>  	      jetCA8pruned_e         ;
-    std::vector<float>  	      jetCA8pruned_jec       ;
-    std::vector<float>  	      jetCA8pruned_jecUp     ;
-    std::vector<float>  	      jetCA8pruned_jecDown   ;    
-    std::vector<int  >  	      jetCA8pruned_charge    ;
-    std::vector<int  >  	      jetCA8pruned_flavour   ;
-    std::vector<float>  	      jetCA8pruned_ssv 	     ;
-    std::vector<float>  	      jetCA8pruned_csv 	     ;    
-    std::vector<float>  	      jetCA8pruned_tchp      ;
-    std::vector<float>  	      jetCA8pruned_tche      ;
-    std::vector<float>  	      jetCA8pruned_jp        ;
-    std::vector<float>  	      jetCA8pruned_jbp       ;
-    std::vector<int  >  	      jetCA8pruned_nSVs      ;         	
+    int 	        	      	  njetsAK8               ;
+    std::vector<float>  	      jetAK8_pt              ;
+    std::vector<float>  	      jetAK8_eta             ;
+    std::vector<float>  	      jetAK8_mass            ;
+    std::vector<float>  	      jetAK8_phi             ;
+    std::vector<float>  	      jetAK8_e               ;
+    // std::vector<float>  	      jetAK8_jec             ;
+    // std::vector<float>  	      jetAK8_jecUp           ;
+    // std::vector<float>  	      jetAK8_jecDown         ;
+    std::vector<bool >  	      jetAK8_IDLoose	     ;
+    std::vector<int  >            jetAK8_cm         	 ;
+    std::vector<int  >            jetAK8_nm         	 ;
+    std::vector<float>            jetAK8_che       		 ;
+    std::vector<float>            jetAK8_ne         	 ;
+    std::vector<int  >  	      jetAK8_charge	     	 ;
+    std::vector<int  >  	      jetAK8_flavour	     ;
+    std::vector<float>  	      jetAK8_ssv 	     	 ;
+    std::vector<float>  	      jetAK8_csv 	     	 ;    
+    std::vector<float>  	      jetAK8_tchp            ;
+    std::vector<float>  	      jetAK8_tche            ;
+    std::vector<float>  	      jetAK8_jp              ;
+    std::vector<float>  	      jetAK8_jbp             ;
+    std::vector<float>  	      jetAK8_tau1            ;
+    std::vector<float>  	      jetAK8_tau2            ; 
+    std::vector<float>  	      jetAK8_tau3            ;    
+    std::vector<int  >  	      jetAK8_nconstituents   ;   
+	std::vector<float>  	      jetAK8pruned_mass      ;
+	std::vector<float>  	      jetAK8trimmed_mass     ;
+	std::vector<float>  	      jetAK8filtered_mass    ;  
+	std::vector<float>  	      jetAK8_nSubJets        ;
+    // /*----------------------CA8 jets pruned-----------------------*/
+//     int 	        	      njetsAK8pruned         ;
+//     std::vector<float>  	      jetAK8pruned_pt        ;
+//     std::vector<float>  	      jetAK8pruned_eta       ;
+//     std::vector<float>  	      jetAK8pruned_mass      ;
+//     std::vector<float>  	      jetAK8pruned_phi       ;
+//     std::vector<float>  	      jetAK8pruned_e         ;
+//     std::vector<float>  	      jetAK8pruned_jec       ;
+//     std::vector<float>  	      jetAK8pruned_jecUp     ;
+//     std::vector<float>  	      jetAK8pruned_jecDown   ;
+//     std::vector<int  >  	      jetAK8pruned_charge    ;
+//     std::vector<int  >  	      jetAK8pruned_flavour   ;
+//     std::vector<float>  	      jetAK8pruned_ssv 	     ;
+//     std::vector<float>  	      jetAK8pruned_csv 	     ;
+//     std::vector<float>  	      jetAK8pruned_tchp      ;
+//     std::vector<float>  	      jetAK8pruned_tche      ;
+//     std::vector<float>  	      jetAK8pruned_jp        ;
+//     std::vector<float>  	      jetAK8pruned_jbp       ;
+//     std::vector<int  >  	      jetAK8pruned_nSVs      ;
     
     /*----------------------CA8 subjets---------------------------*/
-    std::vector<int>    	      nsubjets               ;
-    std::vector< std::vector<float> > subjetCA8pruned_pt     ;
-    std::vector< std::vector<float> > subjetCA8pruned_eta    ;
-    std::vector< std::vector<float> > subjetCA8pruned_mass   ;
-    std::vector< std::vector<float> > subjetCA8pruned_phi    ;
-    std::vector< std::vector<float> > subjetCA8pruned_e      ;
-    std::vector< std::vector<int  > > subjetCA8pruned_charge ;
-    std::vector< std::vector<int  > > subjetCA8pruned_flavour;
-    std::vector< std::vector<float> > subjetCA8pruned_ssv    ;
-    std::vector< std::vector<float> > subjetCA8pruned_csv    ;    
-    std::vector< std::vector<float> > subjetCA8pruned_tchp   ;
-    std::vector< std::vector<float> > subjetCA8pruned_tche   ;
-    std::vector< std::vector<float> > subjetCA8pruned_jp     ;
-    std::vector< std::vector<float> > subjetCA8pruned_jbp    ;
+    //std::vector<int>    	      nsubjets               ;
+    std::vector< std::vector<float> > subjetAK8pruned_pt     ;
+    std::vector< std::vector<float> > subjetAK8pruned_eta    ;
+    std::vector< std::vector<float> > subjetAK8pruned_mass   ;
+    std::vector< std::vector<float> > subjetAK8pruned_phi    ;
+    std::vector< std::vector<float> > subjetAK8pruned_e      ;
+    std::vector< std::vector<int  > > subjetAK8pruned_charge ;
+    std::vector< std::vector<int  > > subjetAK8pruned_flavour;
+    std::vector< std::vector<float> > subjetAK8pruned_ssv    ;
+    std::vector< std::vector<float> > subjetAK8pruned_csv    ;    
+    std::vector< std::vector<float> > subjetAK8pruned_tchp   ;
+    std::vector< std::vector<float> > subjetAK8pruned_tche   ;
+    std::vector< std::vector<float> > subjetAK8pruned_jp     ;
+    std::vector< std::vector<float> > subjetAK8pruned_jbp    ;
    
     /*---------------------HLT triggers---------------------------*/    
     bool                              isFired_HLT_Mu40_eta2p1_v9 ;
