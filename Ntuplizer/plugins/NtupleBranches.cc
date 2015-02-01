@@ -111,6 +111,7 @@ void NtupleBranches::branch( void ){
 
   tree_->Branch( "jetAK8_tau1"		    , &jetAK8_tau1	    	);
   tree_->Branch( "jetAK8_tau2"		    , &jetAK8_tau2	    	);
+  tree_->Branch( "jetAK8_tau21"		    , &jetAK8_tau21	    	);
   tree_->Branch( "jetAK8_tau3"		    , &jetAK8_tau3	    	);
   tree_->Branch( "jetAK8pruned_mass"	, &jetAK8pruned_mass    );
   tree_->Branch( "jetAK8trimmed_mass"   , &jetAK8trimmed_mass   );
@@ -315,6 +316,7 @@ void NtupleBranches::reset( void ){
   jetAK8_jbp		    .clear();
   jetAK8_tau1		    .clear();
   jetAK8_tau2		    .clear();
+  jetAK8_tau21		    .clear();
   jetAK8_tau3		    .clear();
   jetAK8pruned_mass	    .clear();
   jetAK8trimmed_mass    .clear();

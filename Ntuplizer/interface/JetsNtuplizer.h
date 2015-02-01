@@ -14,7 +14,7 @@ class JetsNtuplizer : public CandidateNtuplizer {
 
 public:
 //   JetsNtuplizer( std::vector<edm::InputTag> labels, std::vector<std::string> jecCA8Labels, std::vector<std::string> jecAK5Labels, NtupleBranches* nBranches );
- JetsNtuplizer( std::vector<edm::InputTag> labels, NtupleBranches* nBranches );
+ JetsNtuplizer( std::vector<edm::EDGetTokenT<pat::JetCollection>> token, NtupleBranches* nBranches );
    ~JetsNtuplizer( void );
 
   void fillBranches( edm::Event const & event, const edm::EventSetup& iSetup );
@@ -23,11 +23,11 @@ public:
  
 private:
   
-  edm::InputTag jetInputTag_      ;
-  edm::InputTag fatjetInputTag_   ;
+  edm::EDGetTokenT<pat::JetCollection> jetInputToken_     ;
+  edm::EDGetTokenT<pat::JetCollection> fatjetInputToken_ 	;
   
-  edm::Handle< std::vector<pat::Jet> >      jets_      ;
-  edm::Handle< std::vector<pat::Jet> >      fatjets_      ;
+  edm::Handle<pat::JetCollection>      jets_      		;
+  edm::Handle<pat::JetCollection>      fatjets_      	;
 
   
 };

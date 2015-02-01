@@ -143,6 +143,7 @@ public:
     std::vector<float>  	      jetAK8_jbp             ;
     std::vector<float>  	      jetAK8_tau1            ;
     std::vector<float>  	      jetAK8_tau2            ; 
+	std::vector<float>  	      jetAK8_tau21            ; 
     std::vector<float>  	      jetAK8_tau3            ;    
     std::vector<int  >  	      jetAK8_nconstituents   ;   
 	std::vector<float>  	      jetAK8pruned_mass      ;

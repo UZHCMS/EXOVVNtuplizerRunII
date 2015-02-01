@@ -1,11 +1,10 @@
 #include "../interface/JetsNtuplizer.h"
-#include "DataFormats/JetReco/interface/CATopJetTagInfo.h"
 
 //===================================================================================================================        
-JetsNtuplizer::JetsNtuplizer( std::vector<edm::InputTag> labels, NtupleBranches* nBranches )
+JetsNtuplizer::JetsNtuplizer( std::vector<edm::EDGetTokenT<pat::JetCollection>> tokens, NtupleBranches* nBranches )
    : CandidateNtuplizer( nBranches )
-   , jetInputTag_( labels[0] )
-   , fatjetInputTag_( labels[1] )
+   , jetInputToken_( tokens[0] )
+   , fatjetInputToken_( tokens[1] )
 
 {
 
@@ -19,11 +18,11 @@ JetsNtuplizer::~JetsNtuplizer( void )
 
 void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetup& iSetup ){
 
-  event.getByLabel(jetInputTag_, jets_);
-  event.getByLabel(fatjetInputTag_, fatjets_);
+  event.getByToken(jetInputToken_, jets_);
+  event.getByToken(fatjetInputToken_, fatjets_);
   
   
-  int nsubjets = 0;
+ // int nsubjets = 0;
  
   nBranches_->njetsAK4 = 0;
   for (const pat::Jet &j : *jets_) {
@@ -120,6 +119,7 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
     nBranches_->jetAK8_flavour		.push_back(abs(fj.partonFlavour()));
     nBranches_->jetAK8_tau1			.push_back(fj.userFloat("NjettinessAK8:tau1"));	       
     nBranches_->jetAK8_tau2			.push_back(fj.userFloat("NjettinessAK8:tau2"));
+	nBranches_->jetAK8_tau21		.push_back((fj.userFloat("NjettinessAK8:tau2"))/(fj.userFloat("NjettinessAK8:tau1")));
     nBranches_->jetAK8_tau3			.push_back(fj.userFloat("NjettinessAK8:tau3"));	
 	
 	nBranches_->jetAK8pruned_mass	.push_back(fj.userFloat("ak8PFJetsCHSPrunedLinks"));
@@ -143,13 +143,14 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
 	//
 	// nBranches_->jetAK8_nSubJets		.push_back(nSubJets);
 	
-    nsubjets = 0;
-    for( unsigned int sj=0; sj<fj.numberOfDaughters(); ++sj ){
+  //   nsubjets = 0;
+  //   for( unsigned int sj=0; sj<fj.numberOfDaughters(); ++sj ){
+  //
+  //     const pat::Jet* subjet = dynamic_cast<const pat::Jet*>(fj.daughter(sj));
+  //     if( subjet->pt() < 0.01 ) continue;
+  //     nsubjets++;
+  // }
 
-      const pat::Jet* subjet = dynamic_cast<const pat::Jet*>(fj.daughter(sj));
-      if( subjet->pt() < 0.01 ) continue;
-      nsubjets++;
-  }
 	
 }
 }

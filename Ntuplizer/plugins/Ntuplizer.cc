@@ -18,12 +18,12 @@
 #include "../interface/NtupleBranches.h"
 #include "../interface/CandidateNtuplizer.h"
 #include "../interface/JetsNtuplizer.h"
-
+#include "../interface/MuonsNtuplizer.h"
 
 #include "DataFormats/VertexReco/interface/VertexFwd.h"
 #include "DataFormats/VertexReco/interface/Vertex.h"
-// #include "DataFormats/PatCandidates/interface/Muon.h"
-// #include "DataFormats/PatCandidates/interface/PackedCandidate.h"
+#include "DataFormats/PatCandidates/interface/Muon.h"
+#include "DataFormats/PatCandidates/interface/PackedCandidate.h"
 #include "DataFormats/PatCandidates/interface/Jet.h"
 
 
@@ -58,11 +58,33 @@ private:
   std::map<std::string,CandidateNtuplizer*> nTuplizers_;
   
   
+  edm::EDGetTokenT<reco::VertexCollection>  vtxToken_;
+  
+  edm::EDGetTokenT<pat::JetCollection> 		jetToken_;
+  edm::EDGetTokenT<pat::JetCollection> 		fatjetToken_;
+  
+  edm::EDGetTokenT<pat::MuonCollection> 	muonToken_;
+  edm::EDGetTokenT<pat::ElectronCollection> electronToken_;
+  edm::EDGetTokenT<pat::TauCollection> 		tauToken_;
+  
+  edm::EDGetTokenT<pat::METCollection> 		metToken_;
+  
+  const reco::Vertex PV;
+  
+  
 };
 
 
-Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig)
+Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
 
+	vtxToken_(consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("vertices"))),
+	jetToken_(consumes<pat::JetCollection>(iConfig.getParameter<edm::InputTag>("jets"))),
+	fatjetToken_(consumes<pat::JetCollection>(iConfig.getParameter<edm::InputTag>("fatjets"))),
+	muonToken_(consumes<pat::MuonCollection>(iConfig.getParameter<edm::InputTag>("muons"))),
+	electronToken_(consumes<pat::ElectronCollection>(iConfig.getParameter<edm::InputTag>("electrons"))),
+	tauToken_(consumes<pat::TauCollection>(iConfig.getParameter<edm::InputTag>("taus"))),
+	metToken_(consumes<pat::METCollection>(iConfig.getParameter<edm::InputTag>("mets")))
+	
 
 {
   
@@ -72,13 +94,20 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig)
   
 //   edm::InputTag vertices_ = iConfig.getParameter<edm::InputTag>("vertices");
   
-  std::vector<edm::InputTag> jetLabels;
-  jetLabels.push_back( iConfig.getParameter<edm::InputTag>("jets") );
-  jetLabels.push_back( iConfig.getParameter<edm::InputTag>("fatjets") );
+  // std::vector<edm::InputTag> jetLabels;
+//   jetLabels.push_back( iConfig.getParameter<edm::InputTag>("jets") );
+//   jetLabels.push_back( iConfig.getParameter<edm::InputTag>("fatjets") );
+  
+  std::vector<edm::EDGetTokenT<pat::JetCollection>> jetTokens;
+  jetTokens.push_back( jetToken_ 	);
+  jetTokens.push_back( fatjetToken_ );
+  
+  
   
   /*=======================================================================================*/
   
-  nTuplizers_["jets"] = new JetsNtuplizer( jetLabels, nBranches_ );
+  nTuplizers_["jets"]  = new JetsNtuplizer	( jetTokens,  nBranches_ );
+  nTuplizers_["muons"] = new MuonsNtuplizer ( muonToken_, vtxToken_ , nBranches_ );
   
   
 }
@@ -87,12 +116,12 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig)
 Ntuplizer::~Ntuplizer()
 {
   
-  /*     for( std::map<std::string,CandidateNtuplizer*>::iterator it = nTuplizers_.begin(); it != nTuplizers_.end(); ++it )
-   *      delete it->second;
-   *      
-   *   nTuplizers_.clear();
-   *   
-   *   delete nBranches_;  */ 
+   //     for( std::map<std::string,CandidateNtuplizer*>::iterator it = nTuplizers_.begin(); it != nTuplizers_.end(); ++it )
+   // *      delete it->second;
+   // *
+   // *   nTuplizers_.clear();
+   // *
+   // *   delete nBranches_;
 }
 
 
@@ -104,11 +133,12 @@ Ntuplizer::~Ntuplizer()
 void
 Ntuplizer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 {
-  using namespace edm;
+  using namespace edm;  
   
   edm::Handle<reco::VertexCollection> vertices;
-  iEvent.getByLabel("offlineSlimmedPrimaryVertices", vertices);
-  if (vertices->empty()) return; // skip the event if no PV found
+      iEvent.getByToken(vtxToken_, vertices);
+      if (vertices->empty()) return; // skip the event if no PV found
+      const reco::Vertex &PV = vertices->front();
   
   for( std::map<std::string,CandidateNtuplizer*>::iterator it = nTuplizers_.begin(); it != nTuplizers_.end(); ++it )
     (it->second)->fillBranches( iEvent, iSetup );
