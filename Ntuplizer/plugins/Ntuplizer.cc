@@ -19,6 +19,7 @@
 #include "../interface/CandidateNtuplizer.h"
 #include "../interface/JetsNtuplizer.h"
 #include "../interface/MuonsNtuplizer.h"
+#include "../interface/ElectronsNtuplizer.h"
 
 #include "DataFormats/VertexReco/interface/VertexFwd.h"
 #include "DataFormats/VertexReco/interface/Vertex.h"
@@ -108,7 +109,7 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
   
   nTuplizers_["jets"]  = new JetsNtuplizer	( jetTokens,  nBranches_ );
   nTuplizers_["muons"] = new MuonsNtuplizer ( muonToken_, vtxToken_ , nBranches_ );
-  
+  nTuplizers_["electrons"] = new ElectronsNtuplizer ( electronToken_, vtxToken_ , nBranches_ );
   
 }
 
