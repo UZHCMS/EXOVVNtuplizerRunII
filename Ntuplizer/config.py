@@ -37,9 +37,46 @@ process.TFileService = cms.Service("TFileService",
                                        fileName = cms.string('flatTuple.root')
                                    )
 
-process.ntuplizer = cms.EDAnalyzer('Ntuplizer')
+from RecoJets.Configuration.RecoPFJets_cff import ak8PFJetsCHS, ak8PFJetsCHSPruned, ak8PFJetsCHSSoftDrop, ak8PFJetsCHSPrunedLinks, ak8PFJetsCHSSoftDropLinks
 
-process.p = cms.Path(process.ntuplizer)
+process.chs = cms.EDFilter("CandPtrSelector",
+  src = cms.InputTag('packedPFCandidates'),
+  cut = cms.string('fromPV')
+)
+
+process.ak8PFJetsCHS = ak8PFJetsCHS.clone( src = cms.InputTag('chs') )
+process.ak8PFJetsCHSPruned = ak8PFJetsCHSPruned.clone( src = cms.InputTag('chs') )
+process.ak8PFJetsCHSSoftDrop = ak8PFJetsCHSPruned.clone( src = cms.InputTag('chs') )
+process.ak8PFJetsCHSPrunedLinks = ak8PFJetsCHSPrunedLinks.clone()
+process.ak8PFJetsCHSSoftDropLinks = ak8PFJetsCHSSoftDropLinks.clone()
+
+process.NjettinessAK8 = cms.EDProducer("NjettinessAdder",
+                               src = cms.InputTag("ak8PFJetsCHS"),
+                               Njets = cms.vuint32(1, 2, 3, 4),
+                               # variables for measure definition : 
+                               measureDefinition = cms.uint32( 0 ), # CMS default is normalized measure
+                               beta = cms.double(1.0),              # CMS default is 1
+                               R0 = cms.double( 0.8 ),              # CMS default is jet cone size
+                               Rcutoff = cms.double( -999.0),       # not used by default
+                               # variables for axes definition :
+                               axesDefinition = cms.uint32( 6 ),    # CMS default is 1-pass KT axes
+                               nPass = cms.int32(-999),             # not used by default
+                               akAxesR0 = cms.double(-999.0)        # not used by default
+                               )
+
+substructureSequence = cms.Sequence(process.chs + 
+                                    process.ak8PFJetsCHS +
+                                    process.ak8PFJetsCHSPruned +
+                                    process.ak8PFJetsCHSSoftDrop +
+                                    process.NjettinessAK8 +
+                                    process.ak8PFJetsCHSPrunedLinks +
+                                    process.ak8PFJetsCHSSoftDropLinks)
+                                    
+# import ExoDiBosonResonances.EDBRCommon.goodJets_cff
+# process.load("ExoDiBosonResonances.EDBRCommon.goodJets_cff")
+# process.goodJets.src = "slimmedJetsAK8"
+#
+# process.jetSequence = cms.Sequence(process.fatJetsSequence)
 
 process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     vertices = cms.InputTag("offlineSlimmedPrimaryVertices"),
@@ -50,4 +87,7 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     jets = cms.InputTag("slimmedJets"),
     fatjets = cms.InputTag("slimmedJetsAK8"),
     mets = cms.InputTag("slimmedMETs"),
+    rho = cms.InputTag("fixedGridRhoFastjetAll"),
 )
+
+process.p = cms.Path(substructureSequence*process.ntuplizer)

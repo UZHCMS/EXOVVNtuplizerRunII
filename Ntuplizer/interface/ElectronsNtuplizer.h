@@ -6,17 +6,19 @@
 class ElectronsNtuplizer : public CandidateNtuplizer {
 
 public:
-  ElectronsNtuplizer( edm::EDGetTokenT<pat::ElectronCollection> electronToken, edm::EDGetTokenT<reco::VertexCollection> verticesToken, NtupleBranches* nBranches );
+  ElectronsNtuplizer( edm::EDGetTokenT<pat::ElectronCollection> electronToken, edm::EDGetTokenT<reco::VertexCollection> verticeToken, edm::EDGetTokenT<double> rhoToken, NtupleBranches* nBranches );
   ~ElectronsNtuplizer( void );
   
   void fillBranches( edm::Event const & event, const edm::EventSetup& iSetup );
   
 private:
     edm::EDGetTokenT<pat::ElectronCollection> 	electronToken_   ;
-    edm::EDGetTokenT<reco::VertexCollection> verticesToken_;
+    edm::EDGetTokenT<reco::VertexCollection> 	verticeToken_;
+	edm::EDGetTokenT<double> 					rhoToken_;
    
-   edm::Handle<pat::ElectronCollection> 	electrons_;
-   edm::Handle<reco::VertexCollection> 		vertices_;
+   edm::Handle<pat::ElectronCollection> 		electrons_;
+   edm::Handle<reco::VertexCollection> 			vertices_;
+   edm::Handle<double> 							rho_;
 
       
 };

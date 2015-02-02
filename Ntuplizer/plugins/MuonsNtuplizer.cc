@@ -3,10 +3,11 @@
 #include <cmath>
 
 //===================================================================================================================        
-MuonsNtuplizer::MuonsNtuplizer( edm::EDGetTokenT<pat::MuonCollection> muonToken, edm::EDGetTokenT<reco::VertexCollection> verticeToken, NtupleBranches* nBranches )
+MuonsNtuplizer::MuonsNtuplizer( edm::EDGetTokenT<pat::MuonCollection> muonToken, edm::EDGetTokenT<reco::VertexCollection> verticeToken, edm::EDGetTokenT<double> rhoToken, NtupleBranches* nBranches )
    : CandidateNtuplizer( nBranches )
-   , muonsToken_( muonToken )
-   , verticesToken_( verticeToken )
+   , muonToken_		( muonToken 	)
+   , verticeToken_	( verticeToken 	)
+   , rhoToken_		( rhoToken 		)
 	   
 {
 }
@@ -20,8 +21,9 @@ MuonsNtuplizer::~MuonsNtuplizer( void )
 //===================================================================================================================
 void MuonsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetup& iSetup ){
 
-    event.getByToken(muonsToken_, muons_); 
-    event.getByToken(verticesToken_, vertices_);
+    event.getByToken(muonToken_		, muons_	); 
+    event.getByToken(verticeToken_	, vertices_	);
+	event.getByToken(rhoToken_		, rho_		);
  
 
     int nmus = 0;

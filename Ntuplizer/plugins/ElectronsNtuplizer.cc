@@ -5,10 +5,11 @@
 // #include <cmath>
 
 //===================================================================================================================
-ElectronsNtuplizer::ElectronsNtuplizer( edm::EDGetTokenT<pat::ElectronCollection> electronToken, edm::EDGetTokenT<reco::VertexCollection> verticesToken, NtupleBranches* nBranches )
+ElectronsNtuplizer::ElectronsNtuplizer( edm::EDGetTokenT<pat::ElectronCollection> electronToken, edm::EDGetTokenT<reco::VertexCollection> verticeToken, edm::EDGetTokenT<double> rhoToken, NtupleBranches* nBranches )
    : CandidateNtuplizer( nBranches )
-   , electronToken_( electronToken )
-   , verticesToken_( verticesToken )
+   , electronToken_	( electronToken )
+   , verticeToken_	( verticeToken	)
+   , rhoToken_		( rhoToken 		)
 {
 
 }
@@ -22,8 +23,9 @@ ElectronsNtuplizer::~ElectronsNtuplizer( void )
 //===================================================================================================================
 void ElectronsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetup& iSetup ){
 
-    event.getByToken(electronToken_, electrons_); 
-    event.getByToken(verticesToken_, vertices_);
+    event.getByToken(electronToken_	, electrons_); 
+    event.getByToken(verticeToken_	, vertices_	);
+	event.getByToken(rhoToken_		, rho_		);
 
 
   int nele = 0;

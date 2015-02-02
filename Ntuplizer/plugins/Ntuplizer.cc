@@ -60,6 +60,7 @@ private:
   
   
   edm::EDGetTokenT<reco::VertexCollection>  vtxToken_;
+  edm::EDGetTokenT<double>  rhoToken_;
   
   edm::EDGetTokenT<pat::JetCollection> 		jetToken_;
   edm::EDGetTokenT<pat::JetCollection> 		fatjetToken_;
@@ -79,6 +80,7 @@ private:
 Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
 
 	vtxToken_(consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("vertices"))),
+	rhoToken_(consumes<double>(iConfig.getParameter<edm::InputTag>("rho"))),
 	jetToken_(consumes<pat::JetCollection>(iConfig.getParameter<edm::InputTag>("jets"))),
 	fatjetToken_(consumes<pat::JetCollection>(iConfig.getParameter<edm::InputTag>("fatjets"))),
 	muonToken_(consumes<pat::MuonCollection>(iConfig.getParameter<edm::InputTag>("muons"))),
@@ -107,9 +109,9 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
   
   /*=======================================================================================*/
   
-  nTuplizers_["jets"]  = new JetsNtuplizer	( jetTokens,  nBranches_ );
-  nTuplizers_["muons"] = new MuonsNtuplizer ( muonToken_, vtxToken_ , nBranches_ );
-  nTuplizers_["electrons"] = new ElectronsNtuplizer ( electronToken_, vtxToken_ , nBranches_ );
+  nTuplizers_["jets"]  		= new JetsNtuplizer			( jetTokens,							  nBranches_ );
+  nTuplizers_["muons"] 		= new MuonsNtuplizer 		( muonToken_	, vtxToken_ , rhoToken_ , nBranches_ );
+  nTuplizers_["electrons"] 	= new ElectronsNtuplizer	( electronToken_, vtxToken_ , rhoToken_ , nBranches_ );
   
 }
 
