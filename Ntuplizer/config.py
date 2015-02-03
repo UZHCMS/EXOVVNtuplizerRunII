@@ -16,8 +16,6 @@ process.MessageLogger.cerr.FwkReport.reportEvery = 1000
 import FWCore.ParameterSet.VarParsing as VarParsing
 options = VarParsing.VarParsing ('analysis')
 options.maxEvents = -1
-#options.inputFiles = 'dcap://t3se01.psi.ch:22125//pnfs/psi.ch/cms/trivcat/store/user/jngadiub/Wprime-M1000_WH_lvqq/patTuple/patTuple_Wprime_WH_lvqq_1.root'
-#options.inputFiles = 'dcap://t3se01.psi.ch:22125//pnfs/psi.ch/cms/trivcat/store/t3groups/uniz-higgs/pattuple/mc/v1/background/TT_CT10_TuneZ2star_8TeV-powheg-tauola/EDBR_PATtuple_edbr_TTBAR_03012013/d697403925b5703dc02456d20f4b4874/TT_CT10_TuneZ2star_8TeV-powheg-tauola__Summer12_DR53X-PU_S10_START53_V7A-v2__AODSIM_3503_1_LRP.root'
 options.inputFiles ='root://xrootd.unl.edu//store/mc/Phys14DR/RSGravitonToWW_kMpl01_M_1000_Tune4C_13TeV_pythia8/MINIAODSIM/PU20bx25_tsg_PHYS14_25_V1-v2/10000/CE92595C-9676-E411-A785-00266CF2E2C8.root'
 
 options.parseArguments()
@@ -44,9 +42,9 @@ process.chs = cms.EDFilter("CandPtrSelector",
   cut = cms.string('fromPV')
 )
 
-process.ak8PFJetsCHS = ak8PFJetsCHS.clone( src = cms.InputTag('chs') )
-process.ak8PFJetsCHSPruned = ak8PFJetsCHSPruned.clone( src = cms.InputTag('chs') )
-process.ak8PFJetsCHSSoftDrop = ak8PFJetsCHSPruned.clone( src = cms.InputTag('chs') )
+process.ak8PFJetsCHS = ak8PFJetsCHS.clone( src = 'chs' )
+process.ak8PFJetsCHSPruned = ak8PFJetsCHSPruned.clone( src = 'chs' )
+process.ak8PFJetsCHSSoftDrop = ak8PFJetsCHSSoftDrop.clone( src = 'chs' )
 process.ak8PFJetsCHSPrunedLinks = ak8PFJetsCHSPrunedLinks.clone()
 process.ak8PFJetsCHSSoftDropLinks = ak8PFJetsCHSSoftDropLinks.clone()
 
@@ -72,11 +70,10 @@ substructureSequence = cms.Sequence(process.chs +
                                     process.ak8PFJetsCHSPrunedLinks +
                                     process.ak8PFJetsCHSSoftDropLinks)
                                     
-# import ExoDiBosonResonances.EDBRCommon.goodJets_cff
-# process.load("ExoDiBosonResonances.EDBRCommon.goodJets_cff")
-# process.goodJets.src = "slimmedJetsAK8"
-#
-# process.jetSequence = cms.Sequence(process.fatJetsSequence)
+import ExoDiBosonResonances.EDBRCommon.goodJets_cff
+process.load("ExoDiBosonResonances.EDBRCommon.goodJets_cff")
+process.goodJets.src = "ak8PFJetsCHSPruned"
+process.jetSequence = cms.Sequence(process.fatJetsSequence)
 
 process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     vertices = cms.InputTag("offlineSlimmedPrimaryVertices"),
@@ -86,8 +83,10 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     photons = cms.InputTag("slimmedPhotons"),
     jets = cms.InputTag("slimmedJets"),
     fatjets = cms.InputTag("slimmedJetsAK8"),
+    prunedjets = cms.InputTag("ak8PFJetsCHSPruned"),
+    softdropjets = cms.InputTag("ak8PFJetsCHSSoftDrop"),
     mets = cms.InputTag("slimmedMETs"),
     rho = cms.InputTag("fixedGridRhoFastjetAll"),
 )
 
-process.p = cms.Path(substructureSequence*process.ntuplizer)
+process.p = cms.Path(substructureSequence*process.jetSequence*process.ntuplizer)
