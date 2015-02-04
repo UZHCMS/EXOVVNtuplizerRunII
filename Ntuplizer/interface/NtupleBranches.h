@@ -1,16 +1,17 @@
 #ifndef NtupleBranches_H
 #define NtupleBranches_H
+
 #include <DataFormats/PatCandidates/interface/Electron.h>
 #include <DataFormats/PatCandidates/interface/Muon.h>
 #include <DataFormats/PatCandidates/interface/Tau.h>
 #include <DataFormats/MuonReco/interface/Muon.h>
- #include "DataFormats/VertexReco/interface/Vertex.h"
+#include "DataFormats/VertexReco/interface/Vertex.h"
 #include "DataFormats/EgammaCandidates/interface/GsfElectron.h"
 #include "DataFormats/EgammaCandidates/interface/Conversion.h"
 #include "DataFormats/RecoCandidate/interface/IsoDeposit.h"
 #include <DataFormats/PatCandidates/interface/MET.h>
- #include <DataFormats/PatCandidates/interface/Jet.h>
- #include <DataFormats/JetReco/interface/Jet.h>
+#include <DataFormats/PatCandidates/interface/Jet.h>
+#include <DataFormats/JetReco/interface/Jet.h>
 #include "DataFormats/FWLite/interface/Event.h"
 #include "DataFormats/Common/interface/Handle.h"
 #include "DataFormats/Common/interface/TriggerResults.h"
@@ -23,8 +24,7 @@
 #include "DataFormats/MuonReco/interface/MuonFwd.h"
 #include "DataFormats/MuonReco/interface/MuonCocktails.h"
 #include "SimDataFormats/PileupSummaryInfo/interface/PileupSummaryInfo.h"
-#include "SimDataFormats/GeneratorProducts/interface/LHEEventProduct.h"
-//#include "TauAnalysis/CandidateTools/interface/NSVfitStandaloneAlgorithm.h"
+#include "SimDataFormats/GeneratorProducts/interface/GenEventInfoProduct.h"
 #include "FWCore/Framework/interface/Event.h"
 #include "TMatrixD.h"
 #include "TMatrix.h"

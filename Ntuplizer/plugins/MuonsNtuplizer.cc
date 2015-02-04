@@ -4,10 +4,10 @@
 
 //===================================================================================================================        
 MuonsNtuplizer::MuonsNtuplizer( edm::EDGetTokenT<pat::MuonCollection> muonToken, edm::EDGetTokenT<reco::VertexCollection> verticeToken, edm::EDGetTokenT<double> rhoToken, NtupleBranches* nBranches )
-   : CandidateNtuplizer( nBranches )
-   , muonToken_		( muonToken 	)
-   , verticeToken_	( verticeToken 	)
-   , rhoToken_		( rhoToken 		)
+   : CandidateNtuplizer( nBranches    )
+   , muonToken_	       ( muonToken    )
+   , verticeToken_     ( verticeToken )
+   , rhoToken_	       ( rhoToken     )
 	   
 {
 }
@@ -21,17 +21,17 @@ MuonsNtuplizer::~MuonsNtuplizer( void )
 //===================================================================================================================
 void MuonsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetup& iSetup ){
 
-    event.getByToken(muonToken_		, muons_	); 
-    event.getByToken(verticeToken_	, vertices_	);
-	event.getByToken(rhoToken_		, rho_		);
+      event.getByToken(muonToken_   , muons_	); 
+      event.getByToken(verticeToken_, vertices_ ); 
+      event.getByToken(rhoToken_    , rho_	);
  
 
-    int nmus = 0;
+      int nmus = 0;
     
-	for (const pat::Muon &mu : *muons_) {
-        bool isHighPt = mu.isHighPtMuon(vertices_->at(0));
+      for (const pat::Muon &mu : *muons_) {
+      bool isHighPt = mu.isHighPtMuon(vertices_->at(0));
       
-        if( !isHighPt ) continue;
+      if( !isHighPt ) continue;
       
       nmus++;
                   
@@ -42,7 +42,7 @@ void MuonsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSet
       nBranches_->lep_mass   .push_back(mu.mass()  );   	 
       nBranches_->lep_pt     .push_back(mu.pt()    );   	 
       nBranches_->lep_phi    .push_back(mu.phi()   );
-	  nBranches_->lep_isHighPtMuon.push_back(isHighPt);
+      nBranches_->lep_isHighPtMuon.push_back(isHighPt);
       nBranches_->lep_isHEEP      .push_back(-99);
 	  
       /*===== ISO ====*/
@@ -53,6 +53,7 @@ void MuonsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSet
       nBranches_->lep_neutralHadIso         .push_back(mu.neutralHadronIso());
       nBranches_->lep_chargedHadIso         .push_back(mu.chargedHadronIso());
       nBranches_->lep_trackIso              .push_back(mu.trackIso());
+      
     } 
     
     nBranches_->nlep +=  nmus;
