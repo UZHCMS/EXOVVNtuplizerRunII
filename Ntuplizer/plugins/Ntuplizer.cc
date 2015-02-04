@@ -67,7 +67,7 @@ private:
   edm::EDGetTokenT<pat::JetCollection> 		jetToken_;
   edm::EDGetTokenT<pat::JetCollection> 		fatjetToken_;
   edm::EDGetTokenT<pat::JetCollection> 		prunedjetToken_;
-  edm::EDGetTokenT<pat::JetCollection> 		softdropjetToken_;
+ //  edm::EDGetTokenT<pat::JetCollection> 		softdropjetToken_;
 
   edm::EDGetTokenT<pat::MuonCollection> 	muonToken_;
   edm::EDGetTokenT<pat::ElectronCollection> electronToken_;
@@ -89,7 +89,7 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
 	jetToken_			(consumes<pat::JetCollection>		(iConfig.getParameter<edm::InputTag>("jets"))),
 	fatjetToken_		(consumes<pat::JetCollection>		(iConfig.getParameter<edm::InputTag>("fatjets"))),
 	prunedjetToken_		(consumes<pat::JetCollection>		(iConfig.getParameter<edm::InputTag>("prunedjets"))),
-	softdropjetToken_	(consumes<pat::JetCollection>		(iConfig.getParameter<edm::InputTag>("softdropjets"))),
+// 	softdropjetToken_	(consumes<pat::JetCollection>		(iConfig.getParameter<edm::InputTag>("softdropjets"))),
 
 	muonToken_			(consumes<pat::MuonCollection>		(iConfig.getParameter<edm::InputTag>("muons"))),
 	electronToken_		(consumes<pat::ElectronCollection>	(iConfig.getParameter<edm::InputTag>("electrons"))),
@@ -106,9 +106,9 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
   std::vector<edm::EDGetTokenT<pat::JetCollection>> jetTokens;
   jetTokens.push_back( jetToken_ 			);
   jetTokens.push_back( fatjetToken_ 		);
-  jetTokens.push_back( prunedjetToken_ 		);
-  jetTokens.push_back( softdropjetToken_	);
-  
+  // jetTokens.push_back( prunedjetToken_ 		);
+//   jetTokens.push_back( softdropjetToken_	);
+//
   
   /*=======================================================================================*/
   
@@ -139,13 +139,12 @@ Ntuplizer::~Ntuplizer()
 void
 Ntuplizer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 {
-  using namespace edm;
-  Handle<pat::JetCollection> prunedjets;
-  iEvent.getByToken(prunedjetToken_, prunedjets);
-  
-  for (const pat::Jet &j : *prunedjets) {
-	  printf("jet  with pt %5.1f , eta %+4.2f", j.pt(),  j.eta());
-  }
+	 using namespace edm;
+	 Handle<pat::JetCollection> prunedjets;
+	 iEvent.getByToken(prunedjetToken_, prunedjets);
+	 for (const pat::Jet &j : *prunedjets) {
+		  printf("jet  with pt %5.1f , eta %+4.2f", j.pt(),  j.eta());
+	  }
 
   
   edm::Handle<reco::VertexCollection> vertices;

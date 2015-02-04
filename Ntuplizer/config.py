@@ -1,22 +1,26 @@
+####### Process initialization ##########
+
 import FWCore.ParameterSet.Config as cms
 
 process = cms.Process("Ntuple")
 
-runOnMC = True
+process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_cff')
+process.load('Configuration.StandardSequences.Geometry_cff')
+process.load('Configuration.StandardSequences.MagneticField_38T_cff')
+process.GlobalTag.globaltag = 'PLS170_V7AN1::All'
 
-process.load("FWCore.MessageLogger.MessageLogger_cfi")
-
-process.MessageLogger.cerr.threshold = 'INFO'
-process.MessageLogger.categories.append('Ntuple')
-process.MessageLogger.cerr.INFO = cms.untracked.PSet(
-    limit = cms.untracked.int32(5)
-)
-process.MessageLogger.cerr.FwkReport.reportEvery = 1000
+process.TFileService = cms.Service("TFileService",
+                                       fileName = cms.string('flatTuple.root')
+                                   )
+				   
+####### Config parser ##########
 
 import FWCore.ParameterSet.VarParsing as VarParsing
+
 options = VarParsing.VarParsing ('analysis')
-options.maxEvents = -1
-options.inputFiles ='root://xrootd.unl.edu//store/mc/Phys14DR/RSGravitonToWW_kMpl01_M_1000_Tune4C_13TeV_pythia8/MINIAODSIM/PU20bx25_tsg_PHYS14_25_V1-v2/10000/CE92595C-9676-E411-A785-00266CF2E2C8.root'
+options.maxEvents = 1
+#options.inputFiles ='root://xrootd.unl.edu//store/mc/Phys14DR/RSGravitonToWW_kMpl01_M_1000_Tune4C_13TeV_pythia8/MINIAODSIM/PU20bx25_tsg_PHYS14_25_V1-v2/10000/CE92595C-9676-E411-A785-00266CF2E2C8.root'
+options.inputFiles = 'file:testWW.root'
 
 options.parseArguments()
 
@@ -31,9 +35,19 @@ process.source = cms.Source("PoolSource",
                             fileNames = cms.untracked.vstring(options.inputFiles)
                             )
 
-process.TFileService = cms.Service("TFileService",
-                                       fileName = cms.string('flatTuple.root')
-                                   )
+####### Logger ##########
+
+process.load("FWCore.MessageLogger.MessageLogger_cfi")
+
+process.MessageLogger.cerr.threshold = 'INFO'
+process.MessageLogger.categories.append('Ntuple')
+process.MessageLogger.cerr.INFO = cms.untracked.PSet(
+    limit = cms.untracked.int32(5)
+)
+process.MessageLogger.cerr.FwkReport.reportEvery = 1000
+
+
+####### Redo Jet clustering sequence ##########
 
 from RecoJets.Configuration.RecoPFJets_cff import ak8PFJetsCHS, ak8PFJetsCHSPruned, ak8PFJetsCHSSoftDrop, ak8PFJetsCHSPrunedLinks, ak8PFJetsCHSSoftDropLinks
 
@@ -61,19 +75,57 @@ process.NjettinessAK8 = cms.EDProducer("NjettinessAdder",
                                nPass = cms.int32(-999),             # not used by default
                                akAxesR0 = cms.double(-999.0)        # not used by default
                                )
+                               
+                               
+process.substructureSequence = cms.Sequence(process.chs + 
+                                    	    process.ak8PFJetsCHS +
+                                    	    process.ak8PFJetsCHSPruned +
+                                    	    process.ak8PFJetsCHSSoftDrop +
+                                    	    process.NjettinessAK8 +
+                                    	    process.ak8PFJetsCHSPrunedLinks +
+                                    	    process.ak8PFJetsCHSSoftDropLinks)
 
-substructureSequence = cms.Sequence(process.chs + 
-                                    process.ak8PFJetsCHS +
-                                    process.ak8PFJetsCHSPruned +
-                                    process.ak8PFJetsCHSSoftDrop +
-                                    process.NjettinessAK8 +
-                                    process.ak8PFJetsCHSPrunedLinks +
-                                    process.ak8PFJetsCHSSoftDropLinks)
-                                    
+####### Redo pat jets sequence ##########
+
+from ExoDiBosonResonances.EDBRJets.redoPatJets_cff import patJetCorrFactorsAK8, patJetsAK8, selectedPatJetsAK8
+
+# Redo ak8PFJetsCHS
+process.patJetCorrFactorsAK8 = patJetCorrFactorsAK8.clone( src = 'ak8PFJetsCHS' )
+process.patJetsAK8 = patJetsAK8.clone( jetSource = 'ak8PFJetsCHS' )
+process.selectedPatJetsAK8 = selectedPatJetsAK8.clone(cut = cms.string('pt > 20'))
+
+process.redoPatJets = cms.Sequence( process.patJetCorrFactorsAK8 + process.patJetsAK8 + process.selectedPatJetsAK8 )
+
+# Redo ak8PFJetsCHSPruned
+process.patPrunedJetCorrFactorsAK8 = patJetCorrFactorsAK8.clone( src = 'ak8PFJetsCHSPruned' )
+process.patPrunedJetsAK8 = patJetsAK8.clone( jetSource = 'ak8PFJetsCHSPruned' )
+process.selectedPrunedPatJetsAK8 = selectedPatJetsAK8.clone(cut = 'pt > 20', src = "patPrunedJetsAK8")
+
+process.redoPrunedPatJets = cms.Sequence( process.patPrunedJetCorrFactorsAK8 + process.patPrunedJetsAK8 + process.selectedPrunedPatJetsAK8 )
+
+####### ExoDiBosonResonances objects ##########
+
+import ExoDiBosonResonances.EDBRCommon.goodElectrons_cff
+import ExoDiBosonResonances.EDBRCommon.goodMuons_cff
 import ExoDiBosonResonances.EDBRCommon.goodJets_cff
+
+process.load("ExoDiBosonResonances.EDBRCommon.goodElectrons_cff")
+process.load("ExoDiBosonResonances.EDBRCommon.goodMuons_cff")
 process.load("ExoDiBosonResonances.EDBRCommon.goodJets_cff")
-process.goodJets.src = "ak8PFJetsCHSPruned"
+
+                                    
+process.goodJets.src = 'selectedPatJetsAK8'
 process.jetSequence = cms.Sequence(process.fatJetsSequence)
+
+process.goodPrunedJets  = process.goodJets.clone( src = 'selectedPrunedPatJetsAK8' )
+process.cleanPrunedJets = process.cleanJets.clone(src = 'goodPrunedJets' )
+process.PrunedJetSequence   = cms.Sequence(process.goodPrunedJets + process.cleanPrunedJets)
+
+process.leptonSequence  = cms.Sequence(process.muSequence + process.eleSequence)
+
+####### Ntuplizer initialization ##########
+
+runOnMC = True
 
 process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     vertices = cms.InputTag("offlineSlimmedPrimaryVertices"),
@@ -82,11 +134,13 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     taus = cms.InputTag("slimmedTaus"),
     photons = cms.InputTag("slimmedPhotons"),
     jets = cms.InputTag("slimmedJets"),
-    fatjets = cms.InputTag("slimmedJetsAK8"),
-    prunedjets = cms.InputTag("ak8PFJetsCHSPruned"),
-    softdropjets = cms.InputTag("ak8PFJetsCHSSoftDrop"),
+    fatjets = cms.InputTag("goodJets"),
+    prunedjets = cms.InputTag("goodPrunedJets"),
+   #softdropfatjets = cms.InputTag("goodSoftDropJets"),
     mets = cms.InputTag("slimmedMETs"),
     rho = cms.InputTag("fixedGridRhoFastjetAll"),
 )
 
-process.p = cms.Path(substructureSequence*process.jetSequence*process.ntuplizer)
+####### Final path ##########
+
+process.p = cms.Path(process.substructureSequence*process.redoPatJets*process.redoPrunedPatJets*process.leptonSequence*process.jetSequence*process.PrunedJetSequence*process.ntuplizer)
