@@ -4,7 +4,7 @@ import FWCore.ParameterSet.Config as cms
 
 process = cms.Process("Ntuple")
 
-process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_cff')
+process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_condDBv2_cff')
 process.load('Configuration.StandardSequences.Geometry_cff')
 process.load('Configuration.StandardSequences.MagneticField_38T_cff')
 process.GlobalTag.globaltag = 'PHYS14_25_V1'
@@ -18,7 +18,7 @@ process.TFileService = cms.Service("TFileService",
 import FWCore.ParameterSet.VarParsing as VarParsing
 
 options = VarParsing.VarParsing ('analysis')
-options.maxEvents = 1
+options.maxEvents = 100
 #options.inputFiles ='root://xrootd.unl.edu//store/mc/Phys14DR/RSGravitonToWW_kMpl01_M_1000_Tune4C_13TeV_pythia8/MINIAODSIM/PU20bx25_tsg_PHYS14_25_V1-v2/10000/CE92595C-9676-E411-A785-00266CF2E2C8.root'
 options.inputFiles = 'file:testWW.root'
 
@@ -92,14 +92,16 @@ from ExoDiBosonResonances.EDBRJets.redoPatJets_cff import patJetCorrFactorsAK8, 
 # Redo ak8PFJetsCHS
 process.patJetCorrFactorsAK8 = patJetCorrFactorsAK8.clone( src = 'ak8PFJetsCHS' )
 process.patJetsAK8 = patJetsAK8.clone( jetSource = 'ak8PFJetsCHS' )
-process.selectedPatJetsAK8 = selectedPatJetsAK8.clone(cut = cms.string('pt > 20'))
+process.patJetsAK8.jetCorrFactorsSource = cms.VInputTag( cms.InputTag("patJetCorrFactorsAK8") )
+process.selectedPatJetsAK8 = selectedPatJetsAK8.clone( cut = cms.string('pt > 20') )
 
 process.redoPatJets = cms.Sequence( process.patJetCorrFactorsAK8 + process.patJetsAK8 + process.selectedPatJetsAK8 )
 
 # Redo ak8PFJetsCHSPruned
 process.patPrunedJetCorrFactorsAK8 = patJetCorrFactorsAK8.clone( src = 'ak8PFJetsCHSPruned' )
 process.patPrunedJetsAK8 = patJetsAK8.clone( jetSource = 'ak8PFJetsCHSPruned' )
-process.patPrunedJetsAK8.userData.userFloats =cms.PSet(src = cms.VInputTag(""))
+process.patPrunedJetsAK8.jetCorrFactorsSource = cms.VInputTag( cms.InputTag("patPrunedJetCorrFactorsAK8") )
+process.patPrunedJetsAK8.userData.userFloats =cms.PSet(src = cms.VInputTag(""))	
 process.selectedPrunedPatJetsAK8 = selectedPatJetsAK8.clone(cut = 'pt > 20', src = "patPrunedJetsAK8")
 
 process.redoPrunedPatJets = cms.Sequence( process.patPrunedJetCorrFactorsAK8 + process.patPrunedJetsAK8 + process.selectedPrunedPatJetsAK8 )
@@ -124,6 +126,7 @@ process.redoPrunedPatJets = cms.Sequence( process.patPrunedJetCorrFactorsAK8 + p
 #
 # process.leptonSequence  = cms.Sequence(process.muSequence + process.eleSequence)
 
+
 ####### Ntuplizer initialization ##########
 
 runOnMC = True
@@ -132,6 +135,7 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     vertices = cms.InputTag("offlineSlimmedPrimaryVertices"),
     muons = cms.InputTag("slimmedMuons"),
     electrons = cms.InputTag("slimmedElectrons"),
+    #electronsId = cms.InputTag("egmGsfElectronIDs:heepElectronID-HEEPV50-CSA14-startup"),
     taus = cms.InputTag("slimmedTaus"),
     photons = cms.InputTag("slimmedPhotons"),
     jets = cms.InputTag("slimmedJets"),
