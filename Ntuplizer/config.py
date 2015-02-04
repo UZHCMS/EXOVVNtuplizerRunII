@@ -99,29 +99,30 @@ process.redoPatJets = cms.Sequence( process.patJetCorrFactorsAK8 + process.patJe
 # Redo ak8PFJetsCHSPruned
 process.patPrunedJetCorrFactorsAK8 = patJetCorrFactorsAK8.clone( src = 'ak8PFJetsCHSPruned' )
 process.patPrunedJetsAK8 = patJetsAK8.clone( jetSource = 'ak8PFJetsCHSPruned' )
+process.patPrunedJetsAK8.userData.userFloats =cms.PSet(src = cms.VInputTag(""))
 process.selectedPrunedPatJetsAK8 = selectedPatJetsAK8.clone(cut = 'pt > 20', src = "patPrunedJetsAK8")
 
 process.redoPrunedPatJets = cms.Sequence( process.patPrunedJetCorrFactorsAK8 + process.patPrunedJetsAK8 + process.selectedPrunedPatJetsAK8 )
 
 ####### ExoDiBosonResonances objects ##########
 
-import ExoDiBosonResonances.EDBRCommon.goodElectrons_cff
-import ExoDiBosonResonances.EDBRCommon.goodMuons_cff
-import ExoDiBosonResonances.EDBRCommon.goodJets_cff
-
-process.load("ExoDiBosonResonances.EDBRCommon.goodElectrons_cff")
-process.load("ExoDiBosonResonances.EDBRCommon.goodMuons_cff")
-process.load("ExoDiBosonResonances.EDBRCommon.goodJets_cff")
-
-                                    
-process.goodJets.src = 'selectedPatJetsAK8'
-process.jetSequence = cms.Sequence(process.fatJetsSequence)
-
-process.goodPrunedJets  = process.goodJets.clone( src = 'selectedPrunedPatJetsAK8' )
-process.cleanPrunedJets = process.cleanJets.clone(src = 'goodPrunedJets' )
-process.PrunedJetSequence   = cms.Sequence(process.goodPrunedJets + process.cleanPrunedJets)
-
-process.leptonSequence  = cms.Sequence(process.muSequence + process.eleSequence)
+# import ExoDiBosonResonances.EDBRCommon.goodElectrons_cff
+# import ExoDiBosonResonances.EDBRCommon.goodMuons_cff
+# import ExoDiBosonResonances.EDBRCommon.goodJets_cff
+#
+# process.load("ExoDiBosonResonances.EDBRCommon.goodElectrons_cff")
+# process.load("ExoDiBosonResonances.EDBRCommon.goodMuons_cff")
+# process.load("ExoDiBosonResonances.EDBRCommon.goodJets_cff")
+#
+#
+# process.goodJets.src = 'selectedPatJetsAK8'
+# process.jetSequence = cms.Sequence(process.fatJetsSequence)
+#
+# process.goodPrunedJets  = process.goodJets.clone( src = 'selectedPrunedPatJetsAK8' )
+# process.cleanPrunedJets = process.cleanJets.clone(src = 'goodPrunedJets' )
+# process.PrunedJetSequence   = cms.Sequence(process.goodPrunedJets + process.cleanPrunedJets)
+#
+# process.leptonSequence  = cms.Sequence(process.muSequence + process.eleSequence)
 
 ####### Ntuplizer initialization ##########
 
@@ -134,8 +135,8 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     taus = cms.InputTag("slimmedTaus"),
     photons = cms.InputTag("slimmedPhotons"),
     jets = cms.InputTag("slimmedJets"),
-    fatjets = cms.InputTag("goodJets"),
-    prunedjets = cms.InputTag("goodPrunedJets"),
+    fatjets = cms.InputTag("patJetsAK8"),
+    prunedjets = cms.InputTag("patPrunedJetsAK8"),
    #softdropfatjets = cms.InputTag("goodSoftDropJets"),
     mets = cms.InputTag("slimmedMETs"),
     rho = cms.InputTag("fixedGridRhoFastjetAll"),
@@ -143,4 +144,7 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
 
 ####### Final path ##########
 
-process.p = cms.Path(process.substructureSequence*process.redoPatJets*process.redoPrunedPatJets*process.leptonSequence*process.jetSequence*process.PrunedJetSequence*process.ntuplizer)
+#process.p = cms.Path(process.substructureSequence*process.redoPatJets*process.redoPrunedPatJets*process.leptonSequence*process.jetSequence*process.PrunedJetSequence*process.ntuplizer)
+
+process.p = cms.Path(process.substructureSequence*process.redoPatJets*process.redoPrunedPatJets*process.ntuplizer)
+
