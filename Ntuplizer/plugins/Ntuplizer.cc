@@ -106,7 +106,7 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
   std::vector<edm::EDGetTokenT<pat::JetCollection>> jetTokens;
   jetTokens.push_back( jetToken_ 			);
   jetTokens.push_back( fatjetToken_ 		);
-  // jetTokens.push_back( prunedjetToken_ 		);
+  jetTokens.push_back( prunedjetToken_ 		);
 //   jetTokens.push_back( softdropjetToken_	);
 //
   
