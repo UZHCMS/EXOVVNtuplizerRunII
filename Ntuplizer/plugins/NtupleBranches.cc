@@ -55,7 +55,7 @@ void NtupleBranches::branch( void ){
   tree_->Branch( "lep_chargedHadIso"	     , &lep_chargedHadIso      );
   tree_->Branch( "lep_trackIso"	             , &lep_trackIso	       );
       
-  /*-------------------------AK5 jets---------------------------*/	 
+  /*-------------------------AK4 jets---------------------------*/	 
   tree_->Branch( "njetsAK4"		    , &njetsAK4 	    );
   tree_->Branch( "jetAK4_pt"		    , &jetAK4_pt	    );
   tree_->Branch( "jetAK4_eta"		    , &jetAK4_eta	    );
@@ -81,7 +81,7 @@ void NtupleBranches::branch( void ){
   tree_->Branch( "jetAK4_vtx3DSig"	    , &jetAK4_vtx3DSig  );
   //tree_->Branch( "jetAK4_nSVs"		    , &jetAK4_nSVs	    );
         
-  /*-------------------------CA8 jets---------------------------*/    
+  /*-------------------------AK8 jets---------------------------*/    
   tree_->Branch( "njetsAK8"		    	, &njetsAK8 	    );
   tree_->Branch( "jetAK8_pt"		    , &jetAK8_pt	    );
   tree_->Branch( "jetAK8_eta"		    , &jetAK8_eta	    );
@@ -202,8 +202,8 @@ void NtupleBranches::branch( void ){
   tree_->Branch("isFired_HLT_PFJet320_v9"  		 , &isFired_HLT_PFJet320_v9  		);
 
   /*-------------------------MET--------------------------------*/
-  tree_->Branch("METraw_et"		        	, &METraw_et	     );
-  tree_->Branch("METraw_phi"		        , &METraw_phi	     ); 	
+//tree_->Branch("METraw_et"		        	, &METraw_et	     );
+//tree_->Branch("METraw_phi"		        , &METraw_phi	     ); 
   tree_->Branch("MET_et"	                , &MET_et  	    	 ); 
   tree_->Branch("MET_phi"	                , &MET_phi           );
 
@@ -408,8 +408,8 @@ void NtupleBranches::reset( void ){
  //  subjetAK8softdrop_jp	    .clear();
  //  subjetAK8softdrop_jbp	    .clear();
   /************************************/
-  METraw_et		    	.clear();
-  METraw_phi		    .clear();
+  // METraw_et		    	.clear();
+ //  METraw_phi		    .clear();
   MET_et	            .clear();
   MET_phi	            .clear();
   /************************************/  

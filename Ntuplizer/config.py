@@ -142,18 +142,31 @@ process.redoSoftDropPatJets = cms.Sequence( process.patSoftDropJetCorrFactorsAK8
 #
 # process.leptonSequence  = cms.Sequence(process.muSequence + process.eleSequence)
 
+####### Adding HEEP id ##########
+
+from PhysicsTools.SelectorUtils.tools.vid_id_tools import *
+process.load("RecoEgamma.ElectronIdentification.egmGsfElectronIDs_cfi")
+
+# overwrite a default parameter: for miniAOD, the collection name is a slimmed one
+process.egmGsfElectronIDs.physicsObjectSrc = cms.InputTag('slimmedElectrons')
+from PhysicsTools.SelectorUtils.centralIDRegistry import central_id_registry
+process.egmGsfElectronIDSequence = cms.Sequence(process.egmGsfElectronIDs)
+
+#add in the heep ID to the producer. You can run with other IDs but heep ID must be loaded with setupVIDSelection, not setupAllVIDSelection as heep works differently because mini-aod and aod are defined in the same file to ensure consistancy (you cant change cuts of aod without changing miniaod
+process.load('RecoEgamma.ElectronIdentification.Identification.heepElectronID_HEEPV50_CSA14_startup_cff')
+setupVIDSelection(process.egmGsfElectronIDs,process.heepElectronID_HEEPV50_CSA14_startup)
 
 ####### Ntuplizer initialization ##########
 
 runOnMC = True
 
 process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
+    runOnMC = cms.bool(runOnMC),
     vertices = cms.InputTag("offlineSlimmedPrimaryVertices"),
     muons = cms.InputTag("slimmedMuons"),
     electrons = cms.InputTag("slimmedElectrons"),
     #electronsId = cms.InputTag("egmGsfElectronIDs:heepElectronID-HEEPV50-CSA14-startup"),
     taus = cms.InputTag("slimmedTaus"),
-    photons = cms.InputTag("slimmedPhotons"),
     jets = cms.InputTag("slimmedJets"),
     fatjets = cms.InputTag("patJetsAK8"),
     prunedjets = cms.InputTag("patPrunedJetsAK8"),
@@ -162,6 +175,8 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     subjetflavour = cms.InputTag("AK8byValAlgo"),
     mets = cms.InputTag("slimmedMETs"),
     rho = cms.InputTag("fixedGridRhoFastjetAll"),
+    genparticles = cms.InputTag("prunedGenParticles"),
+    PUInfo = cms.InputTag("addPileupInfo"),
 )
 
 ####### Final path ##########
