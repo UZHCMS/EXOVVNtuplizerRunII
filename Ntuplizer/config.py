@@ -49,8 +49,8 @@ process.MessageLogger.cerr.FwkReport.reportEvery = 1
 
 ####### Redo Jet clustering sequence ##########
 
-from RecoJets.Configuration.RecoPFJets_cff import ak8PFJetsCHS, ak8PFJetsCHSPruned, ak8PFJetsCHSSoftDrop, ak8PFJetsCHSPrunedLinks, ak8PFJetsCHSSoftDropLinks
-
+from RecoJets.Configuration.RecoPFJets_cff import ak8PFJetsCHS, ak8PFJetsCHSPruned, ak8PFJetsCHSSoftDrop, ak8PFJetsCHSPrunedLinks, ak8PFJetsCHSSoftDropLinks# , ak8PFJetsCSTrimmed, ak8PFJetsCSFiltered, ak8PFJetsCHSFilteredLinks, ak8PFJetsCHSTrimmedLinks
+                                                                                                          
 process.chs = cms.EDFilter("CandPtrSelector",
   src = cms.InputTag('packedPFCandidates'),
   cut = cms.string('fromPV')
@@ -59,9 +59,12 @@ process.chs = cms.EDFilter("CandPtrSelector",
 process.ak8PFJetsCHS = ak8PFJetsCHS.clone( src = 'chs' )
 process.ak8PFJetsCHSPruned = ak8PFJetsCHSPruned.clone( src = 'chs' )
 process.ak8PFJetsCHSSoftDrop = ak8PFJetsCHSSoftDrop.clone( src = 'chs' )
+# process.ak8PFJetsCSTrimmed = ak8PFJetsCSTrimmed.clone( src = 'chs' )
+# process.ak8PFJetsCSFiltered = ak8PFJetsCSFiltered.clone( src = 'chs' )
 process.ak8PFJetsCHSPrunedLinks = ak8PFJetsCHSPrunedLinks.clone()
 process.ak8PFJetsCHSSoftDropLinks = ak8PFJetsCHSSoftDropLinks.clone()
-
+# process.ak8PFJetsCHSFilteredLinks = ak8PFJetsCHSFilteredLinks.clone()
+# process.ak8PFJetsCHSTrimmedLinks = ak8PFJetsCHSTrimmedLinks.clone()
 process.NjettinessAK8 = cms.EDProducer("NjettinessAdder",
                                src = cms.InputTag("ak8PFJetsCHS"),
                                Njets = cms.vuint32(1, 2, 3, 4),
@@ -81,9 +84,13 @@ process.substructureSequence = cms.Sequence(process.chs +
                                     	    process.ak8PFJetsCHS +
                                     	    process.ak8PFJetsCHSPruned +
                                     	    process.ak8PFJetsCHSSoftDrop +
+                                            # process.ak8PFJetsCSTrimmed +
+                                            # process.ak8PFJetsCSFiltered +
                                     	    process.NjettinessAK8 +
                                     	    process.ak8PFJetsCHSPrunedLinks +
-                                    	    process.ak8PFJetsCHSSoftDropLinks)
+                                    	    process.ak8PFJetsCHSSoftDropLinks) # +
+#                                             process.ak8PFJetsCHSFilteredLinks +
+#                                             process.ak8PFJetsCHSTrimmedLinks)
 
 ####### Redo pat jets sequence ##########
 
@@ -105,6 +112,15 @@ process.patPrunedJetsAK8.userData.userFloats =cms.PSet(src = cms.VInputTag(""))
 process.selectedPrunedPatJetsAK8 = selectedPatJetsAK8.clone(cut = 'pt > 20', src = "patPrunedJetsAK8")
 
 process.redoPrunedPatJets = cms.Sequence( process.patPrunedJetCorrFactorsAK8 + process.patPrunedJetsAK8 + process.selectedPrunedPatJetsAK8 )
+
+# Redo ak8PFJetsCHSSoftDrop
+process.patSoftDropJetCorrFactorsAK8 = patJetCorrFactorsAK8.clone( src = 'ak8PFJetsCHSSoftDrop' )
+process.patSoftDropJetsAK8 = patJetsAK8.clone( jetSource = 'ak8PFJetsCHSSoftDrop' )
+process.patSoftDropJetsAK8.jetCorrFactorsSource = cms.VInputTag( cms.InputTag("patSoftDropJetCorrFactorsAK8") )
+process.patSoftDropJetsAK8.userData.userFloats =cms.PSet(src = cms.VInputTag(""))	
+process.selectedSoftDropPatJetsAK8 = selectedPatJetsAK8.clone(cut = 'pt > 20', src = "patSoftDropJetsAK8")
+
+process.redoSoftDropPatJets = cms.Sequence( process.patSoftDropJetCorrFactorsAK8 + process.patSoftDropJetsAK8 + process.selectedSoftDropPatJetsAK8 )
 
 ####### ExoDiBosonResonances objects ##########
 
@@ -141,7 +157,9 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     jets = cms.InputTag("slimmedJets"),
     fatjets = cms.InputTag("patJetsAK8"),
     prunedjets = cms.InputTag("patPrunedJetsAK8"),
-   #softdropfatjets = cms.InputTag("goodSoftDropJets"),
+    softdropjets = cms.InputTag("patSoftDropJetsAK8"),
+    #subjetflavour = cms.InputTag("flavourByVal"),
+    subjetflavour = cms.InputTag("AK8byValAlgo"),
     mets = cms.InputTag("slimmedMETs"),
     rho = cms.InputTag("fixedGridRhoFastjetAll"),
 )
@@ -150,5 +168,5 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
 
 #process.p = cms.Path(process.substructureSequence*process.redoPatJets*process.redoPrunedPatJets*process.leptonSequence*process.jetSequence*process.PrunedJetSequence*process.ntuplizer)
 
-process.p = cms.Path(process.substructureSequence*process.redoPatJets*process.redoPrunedPatJets*process.ntuplizer)
+process.p = cms.Path(process.substructureSequence*process.redoPatJets*process.redoPrunedPatJets*process.redoSoftDropPatJets*process.ntuplizer)
 
