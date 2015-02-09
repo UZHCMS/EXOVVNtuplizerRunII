@@ -116,15 +116,15 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
     nBranches_->jetAK8_jp     	    .push_back(fj.bDiscriminator("jetProbabilityBJetTags"));	       
     nBranches_->jetAK8_jbp    	    .push_back(fj.bDiscriminator("jetBProbabilityBJetTags"));
   
-    nBranches_->jetAK8_flavour		.push_back(abs(fj.partonFlavour()));
-    nBranches_->jetAK8_tau1			.push_back(fj.userFloat("NjettinessAK8:tau1"));	       
-    nBranches_->jetAK8_tau2			.push_back(fj.userFloat("NjettinessAK8:tau2"));
-	nBranches_->jetAK8_tau21		.push_back((fj.userFloat("NjettinessAK8:tau2"))/(fj.userFloat("NjettinessAK8:tau1")));
-    nBranches_->jetAK8_tau3			.push_back(fj.userFloat("NjettinessAK8:tau3"));	
+    nBranches_->jetAK8_flavour	    .push_back(abs(fj.partonFlavour()));
+    nBranches_->jetAK8_tau1	    .push_back(fj.userFloat("NjettinessAK8:tau1"));	   
+    nBranches_->jetAK8_tau2	    .push_back(fj.userFloat("NjettinessAK8:tau2"));
+    nBranches_->jetAK8_tau21	    .push_back((fj.userFloat("NjettinessAK8:tau2"))/(fj.userFloat("NjettinessAK8:tau1")));
+    nBranches_->jetAK8_tau3	    .push_back(fj.userFloat("NjettinessAK8:tau3")); 
 	
-	nBranches_->jetAK8pruned_mass	.push_back(fj.userFloat("ak8PFJetsCHSPrunedLinks"));
-    nBranches_->jetAK8trimmed_mass	.push_back(fj.userFloat("ak8PFJetsCHSTrimmedLinks"));
-	nBranches_->jetAK8filtered_mass	.push_back(fj.userFloat("ak8PFJetsCHSFilteredLinks"));
+    nBranches_->jetAK8pruned_mass   .push_back(fj.userFloat("ak8PFJetsCHSPrunedLinks"));
+    nBranches_->jetAK8trimmed_mass  .push_back(fj.userFloat("ak8PFJetsCHSTrimmedLinks"));
+    nBranches_->jetAK8filtered_mass .push_back(fj.userFloat("ak8PFJetsCHSFilteredLinks"));
 	
 	
 	// edm::Handle<edm::View<reco::CATopJetTagInfo>> tagInfo;
