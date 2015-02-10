@@ -6,7 +6,7 @@
 #include "../interface/METsNtuplizer.h"
 #include "../interface/PileUpNtuplizer.h"
 #include "../interface/GenParticlesNtuplizer.h"
-//#include "../interface/TriggersNtuplizer.h"
+#include "../interface/TriggersNtuplizer.h"
 #include "../interface/VerticesNtuplizer.h"
 
 
@@ -29,10 +29,12 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
 	muonToken_			(consumes<pat::MuonCollection>					(iConfig.getParameter<edm::InputTag>("muons"))),
 	electronToken_		(consumes<pat::ElectronCollection>				(iConfig.getParameter<edm::InputTag>("electrons"))),
 	tauToken_			(consumes<pat::TauCollection>					(iConfig.getParameter<edm::InputTag>("taus"))),
-	metToken_			(consumes<pat::METCollection>					(iConfig.getParameter<edm::InputTag>("mets")))
+	metToken_			(consumes<pat::METCollection>					(iConfig.getParameter<edm::InputTag>("mets"))),
+	
+	triggerToken_		(consumes<edm::TriggerResults>					(iConfig.getParameter<edm::InputTag>("HLT")))
 
 {
-  
+ 
   /*=======================================================================================*/
   edm::Service<TFileService> fs;
   TTree* tree = fs->make<TTree>( "tree", "tree" );
@@ -56,7 +58,11 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
   /*=======================================================================================*/  
   std::vector<edm::EDGetTokenT<reco::VertexCollection>> vtxTokens;
   vtxTokens.push_back( vtxToken_  );
-      
+  
+  /*=======================================================================================*/
+  std::vector<edm::EDGetTokenT<edm::TriggerResults>> triggerTokens;
+  triggerTokens.push_back( triggerToken_ );
+  
   /*=======================================================================================*/
   
   nTuplizers_["jets"]  	   = new JetsNtuplizer		( jetTokens		, flavourToken_	,	    	 nBranches_ );
@@ -64,6 +70,7 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
   nTuplizers_["electrons"] = new ElectronsNtuplizer ( electronToken_, vtxToken_		, rhoToken_, nBranches_ );
   nTuplizers_["MET"]       = new METsNtuplizer      ( metTokens		, 							 nBranches_ );
   nTuplizers_["vertices"]  = new VerticesNtuplizer  ( vtxTokens		, 							 nBranches_ );
+  nTuplizers_["triggers"]  = new TriggersNtuplizer	( triggerTokens , 							 nBranches_ );
 
   /*=======================================================================================*/    
   if ( runOnMC ){
@@ -95,8 +102,9 @@ void Ntuplizer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
   
   edm::Handle<reco::VertexCollection> vertices;
   iEvent.getByToken(vtxToken_, vertices);
-  
+	  
   if (vertices->empty()) return; // skip the event if no PV found
+  
 
   nBranches_->EVENT_event     = iEvent.id().event();
   nBranches_->EVENT_run       = iEvent.id().run();

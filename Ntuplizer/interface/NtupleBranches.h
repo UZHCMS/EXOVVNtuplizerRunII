@@ -217,34 +217,40 @@ public:
     // std::vector< std::vector<float> > subjetAK8softdrop_jbp    ;
    
     /*---------------------HLT triggers---------------------------*/    
-    bool                              isFired_HLT_Mu40_eta2p1_v9 ;
-    bool                              isFired_HLT_Mu40_eta2p1_v10;
-    bool                              isFired_HLT_Mu40_eta2p1_v11;    
-    bool                              isFired_HLT_Ele80_CaloIdVT_TrkIdT_v8 ;
-    bool                              isFired_HLT_Ele80_CaloIdVT_TrkIdT_v9 ;
-    bool                              isFired_HLT_Ele80_CaloIdVT_TrkIdT_v10;
-    bool                              isFired_HLT_Ele80_CaloIdVT_GsfTrkIdT_v1 ;
-    bool                              isFired_HLT_Ele80_CaloIdVT_GsfTrkIdT_v2 ;
-    bool			      isFired_HLT_PFHT650_v5;
-    bool			      isFired_HLT_PFHT650_v6;
-    bool			      isFired_HLT_PFHT650_v7;
-    bool			      isFired_HLT_PFHT650_v8;
-    bool			      isFired_HLT_PFHT650_v9;
-    bool			      isFired_HLT_PFNoPUHT650_v1;
-    bool			      isFired_HLT_PFNoPUHT650_v3;
-    bool			      isFired_HLT_PFNoPUHT650_v4;
-    bool			      isFired_HLT_PFJet320_v3;
-    bool			      isFired_HLT_PFJet320_v4;
-    bool			      isFired_HLT_PFJet320_v5;
-    bool			      isFired_HLT_PFJet320_v6;
-    bool			      isFired_HLT_PFJet320_v8;
-    bool			      isFired_HLT_PFJet320_v9;			      
+    // bool                              isFired_HLT_Mu40_eta2p1_v9 ;
+//     bool                              isFired_HLT_Mu40_eta2p1_v10;
+//     bool                              isFired_HLT_Mu40_eta2p1_v11;
+//     bool                              isFired_HLT_Ele80_CaloIdVT_TrkIdT_v8 ;
+//     bool                              isFired_HLT_Ele80_CaloIdVT_TrkIdT_v9 ;
+//     bool                              isFired_HLT_Ele80_CaloIdVT_TrkIdT_v10;
+//     bool                              isFired_HLT_Ele80_CaloIdVT_GsfTrkIdT_v1 ;
+//     bool                              isFired_HLT_Ele80_CaloIdVT_GsfTrkIdT_v2 ;
+//     bool			      isFired_HLT_PFHT650_v5;
+//     bool			      isFired_HLT_PFHT650_v6;
+//     bool			      isFired_HLT_PFHT650_v7;
+//     bool			      isFired_HLT_PFHT650_v8;
+//     bool			      isFired_HLT_PFHT650_v9;
+//     bool			      isFired_HLT_PFNoPUHT650_v1;
+//     bool			      isFired_HLT_PFNoPUHT650_v3;
+//     bool			      isFired_HLT_PFNoPUHT650_v4;
+//     bool			      isFired_HLT_PFJet320_v3;
+//     bool			      isFired_HLT_PFJet320_v4;
+//     bool			      isFired_HLT_PFJet320_v5;
+//     bool			      isFired_HLT_PFJet320_v6;
+//     bool			      isFired_HLT_PFJet320_v8;
+//     bool			      isFired_HLT_PFJet320_v9;	 
+	bool    isFired_HLT_AK8PFJet360TrimMod_Mass30_v1				;
+	bool    isFired_HLT_AK8PFHT700_TrimR0p1PT0p03Mass50_v1			;
+	bool    isFired_HLT_AK8DiPFJet280_200_TrimMass30_BTagCSV0p3_v1	;
+	bool    isFired_HLT_PFHT650_WideJetMJJ950DEtaJJ1p5_v1			;
+	bool    isFired_HLT_PFHT650_WideJetMJJ900DEtaJJ1p5_v1			;
+	bool    isFired_HLT_PFHT900_v1     								;
     
     /*-------------------------MET--------------------------------*/
     std::vector<float>                METraw_et              ;	 
     std::vector<float>                METraw_phi             ;     
-    std::vector<float>  	      MET_et                 ;
-    std::vector<float>  	      MET_phi                ;
+    std::vector<float>  	          MET_et                 ;
+    std::vector<float>  	      	  MET_phi                ;
 
     /*------------------------EVENT infos-------------------------*/    
     int                               EVENT_event            ;

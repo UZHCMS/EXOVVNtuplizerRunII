@@ -34,7 +34,7 @@ private:
   virtual void beginRun(edm::Run const&, edm::EventSetup const&) 							override;
   virtual void endRun(edm::Run const&, edm::EventSetup const&) 								override;
   virtual void beginLuminosityBlock(edm::LuminosityBlock const&, edm::EventSetup const&) 	override;
-  virtual void endLuminosityBlock(edm::LuminosityBlock const&, edm::EventSetup const&) 		override;
+  virtual void endLuminosityBlock(edm::LuminosityBlock const  &, edm::EventSetup const&)    override;
   
   // ----------member data ---------------------------
   
@@ -60,5 +60,8 @@ private:
   edm::EDGetTokenT<pat::TauCollection> 	    				tauToken_			;
   
   edm::EDGetTokenT<pat::METCollection> 	    				metToken_			;
+  
+  edm::EDGetTokenT<edm::TriggerResults>						triggerToken_;
+  
 
 };
