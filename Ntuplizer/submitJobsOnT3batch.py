@@ -3,6 +3,12 @@ import random
 import sys
 from optparse import OptionParser
 import ConfigParser
+import time
+
+#-----------------------------------------------------------------------------------------
+def getLocalJobsDir(localdir):
+
+   return commands.getoutput("pwd")+"/"+localdir
 
 #-----------------------------------------------------------------------------------------
 def getJobsDirs(outdir):
@@ -168,6 +174,8 @@ nfiles = config.getint('JobsConfig','nfiles')
 src = config.get('JobsConfig','src')
 sample = config.get('JobsConfig','sample')
 outdir = config.get('JobsConfig','outdir')
+localjobdir = config.get('JobsConfig','localjobdir')
+jobname = config.get('JobsConfig','jobname')
 outfile = config.get('JobsConfig','outfile')
 queue = config.get('JobsConfig','queue')
 cmsswdir = config.get('JobsConfig','cmsswdir')
@@ -212,8 +220,8 @@ if opts.clean:
       print cmd
       os.system(cmd)
     
-   print "rm -rf jobOutputs/*" 
-   os.system("rm -rf jobOutputs/*")
+   print "rm -rf "+getLocalJobsDir(localjobdir)  
+   os.system("rm -rf "+getLocalJobsDir(localjobdir)+"/*")
       
    sys.exit()   
 	 
@@ -229,8 +237,8 @@ else:
 
 print len(files)
 
-status,cmd_out = commands.getstatusoutput( 'ls jobOutputs' )
-if status: os.system('mkdir jobOutputs')
+status,cmd_out = commands.getstatusoutput( 'ls '+getLocalJobsDir(localjobdir) )
+if status: os.system('mkdir '+getLocalJobsDir(localjobdir))
    
 it = 0
 jobIndex = 1
@@ -244,11 +252,11 @@ while it < len(files):
     if f != "":
        print "    * %s" %(f)
        if not(opts.useDAS): inputFiles+="dcap://t3se01.psi.ch:22125/%s," %(src+"/"+f) 
-       else: inputFiles+="root://xrootd.unl.edu/%s " %(f)	  
+       else: inputFiles+="root://xrootd.unl.edu/%s," %(f)	  
   tmpList = list(inputFiles)
   tmpList.pop(len(tmpList)-1)
   inputFiles = "".join(tmpList)
-  cmd = "qsub -q %s %s %s %s %s %s %s %s %s" %(queue,bashfile,outfile,outdir,cmsswdir,cfg,inputFiles,maxevents,jobIndex)
+  cmd = "qsub -o %s -e %s -q %s %s %s %s %s %s %s %s %s %s %s" %(getLocalJobsDir(localjobdir),getLocalJobsDir(localjobdir),queue,bashfile,outfile,outdir,cmsswdir,cfg,inputFiles,maxevents,jobIndex,jobname,getLocalJobsDir(localjobdir))
   cmds.append(cmd)
   it+=nfiles
   jobIndex+=1
@@ -259,5 +267,10 @@ for c in cmds:
    print c
    if not(opts.test):
       os.system(c)
+      time.sleep(30)
 
+#for c in range(1):
+#   print cmds[c]
+#   os.system(cmds[c])
+   
 #python submitJobsOnT3batch.py -C submitJobsOnT3batch.cfg --useDAS
