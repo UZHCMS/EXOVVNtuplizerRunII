@@ -18,9 +18,9 @@ process.TFileService = cms.Service("TFileService",
 import FWCore.ParameterSet.VarParsing as VarParsing
 
 options = VarParsing.VarParsing ('analysis')
-options.maxEvents = 100
-#options.inputFiles ='root://xrootd.unl.edu//store/mc/Phys14DR/RSGravitonToWW_kMpl01_M_1000_Tune4C_13TeV_pythia8/MINIAODSIM/PU20bx25_tsg_PHYS14_25_V1-v2/10000/CE92595C-9676-E411-A785-00266CF2E2C8.root'
-options.inputFiles = 'file:testWW.root'
+options.maxEvents = -1
+# options.inputFiles ='root://xrootd.unl.edu//store/mc/Phys14DR/RSGravitonToWW_kMpl01_M_1000_Tune4C_13TeV_pythia8/MINIAODSIM/PU20bx25_tsg_PHYS14_25_V1-v2/10000/CE92595C-9676-E411-A785-00266CF2E2C8.root'
+#options.inputFiles = 'file:testWW.root'
 
 options.parseArguments()
 
@@ -177,6 +177,7 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     rho = cms.InputTag("fixedGridRhoFastjetAll"),
     genparticles = cms.InputTag("prunedGenParticles"),
     PUInfo = cms.InputTag("addPileupInfo"),
+    HLT = cms.InputTag("TriggerResults","","HLT"),
 )
 
 ####### Final path ##########
