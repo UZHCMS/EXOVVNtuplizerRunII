@@ -206,6 +206,8 @@ void NtupleBranches::branch( void ){
   tree_->Branch("isFired_HLT_PFHT650_WideJetMJJ950DEtaJJ1p5_v1"			, &isFired_HLT_PFHT650_WideJetMJJ950DEtaJJ1p5_v1			);
   tree_->Branch("isFired_HLT_PFHT650_WideJetMJJ900DEtaJJ1p5_v1"		 	, &isFired_HLT_PFHT650_WideJetMJJ900DEtaJJ1p5_v1			);
   tree_->Branch("isFired_HLT_PFHT900_v1"							 	, &isFired_HLT_PFHT900_v1									);
+  tree_->Branch("isFired_HLT_Ele95_CaloIdVT_GsfTrkIdT_v1"		 		, &isFired_HLT_Ele95_CaloIdVT_GsfTrkIdT_v1					);
+  tree_->Branch("isFired_HLT_Mu40_v1"		 		, &isFired_HLT_Mu40_v1					);
 
   /*-------------------------MET--------------------------------*/
 //tree_->Branch("METraw_et"		        	, &METraw_et	     );
@@ -244,6 +246,8 @@ void NtupleBranches::reset( void ){
   isFired_HLT_PFHT650_WideJetMJJ950DEtaJJ1p5_v1              = false;
   isFired_HLT_PFHT650_WideJetMJJ900DEtaJJ1p5_v1              = false;
   isFired_HLT_PFHT900_v1             						 = false;
+  isFired_HLT_Ele95_CaloIdVT_GsfTrkIdT_v1 = false;
+  isFired_HLT_Mu40_v1 = false;
   // isFired_HLT_Mu40_eta2p1_v9              = false;
  //  isFired_HLT_Mu40_eta2p1_v10             = false;
  //  isFired_HLT_Mu40_eta2p1_v11             = false;
