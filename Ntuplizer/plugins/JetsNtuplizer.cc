@@ -13,15 +13,6 @@ JetsNtuplizer::JetsNtuplizer( std::vector<edm::EDGetTokenT<pat::JetCollection>> 
    //, flavourToken_			( flavourToken 	) //For subjet flavour matching!! Not done yet.
 
 {
-
-   /*if( tokens.size() == 3 ){
-      prunedjetInputToken_ = tokens[2];
-      doPrunedAK8subjets = true;
-   }
-   else if( tokens.size() == 4 ){
-      softdropjetInputToken_ = tokens[3];
-      doSoftDropAK8subjets = true;
-   }*/
    
 }
 
@@ -81,6 +72,7 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
 	  nBranches_->jetAK4_vtxNtracks	    .push_back(j.userFloat("vtxNtracks")); 
 	  nBranches_->jetAK4_vtx3DVal	    .push_back(j.userFloat("vtx3DVal")); 
 	  nBranches_->jetAK4_vtx3DSig	    .push_back(j.userFloat("vtx3DSig"));
+
   }
   
   /****************************************************************/
@@ -206,19 +198,19 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
 	  
 	     nBranches_->njetsAK8pruned++;
 	  
-	     vPrunedSubjetpt	     .clear();
+	     vPrunedSubjetpt	 .clear();
 	     vPrunedSubjeteta	 .clear();    
 	     vPrunedSubjetmass   .clear();   
 	     vPrunedSubjetphi	 .clear();    
-	     vPrunedSubjete	     .clear();
+	     vPrunedSubjete	 .clear();
 	     vPrunedSubjetcharge .clear();
 	     vPrunedSubjetflavour.clear();
 	     vPrunedSubjetssv	 .clear();    
 	     vPrunedSubjetcsv	 .clear();    
 	     vPrunedSubjettchp   .clear();   
 	     vPrunedSubjettche   .clear();
-	     vPrunedSubjetjp	     .clear();
-	     vPrunedSubjetjbp	     .clear();     
+	     vPrunedSubjetjp	 .clear();
+	     vPrunedSubjetjbp	 .clear();	
 	  
 	     //Get subjets from matched pruned jet
 	     std::vector<reco::CandidatePtr> pruneddaus(prunedjet.daughterPtrVector());

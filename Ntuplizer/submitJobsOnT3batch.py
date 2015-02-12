@@ -27,7 +27,7 @@ def getJobsDirs(outdir,jobname):
       if b[-1:][0].find(jobname) != -1:
          c = b[-1:][0].split()
          jobsdir.append(path+"/"+c[0])
-	 
+
    return jobsdir	 
 	 
 #-----------------------------------------------------------------------------------------
@@ -195,11 +195,11 @@ if opts.copyfiles:
       a = j.split("-")
       jobid = a[1]
       inputpath = "srm://t3se01.psi.ch:8443/srm/managerv2?SFN="+j+"/"+outfile
-      outputpath = "srm://t3se01.psi.ch:8443/srm/managerv2?SFN=%s"%("/"+newdir+"/"+prefix+"_"+jobid+".root")
+      outputpath = "srm://t3se01.psi.ch:8443/srm/managerv2?SFN=%s"%(newdir+"/"+prefix+"_"+jobid+".root")
       #cmd = "srmmv %s %s" %(inputpath,outputpath) 
       cmd = "gfal-copy %s %s" %(inputpath,outputpath)
       print cmd
-      os.system(cmd) 
+      #os.system(cmd) 
           	 
    sys.exit()	 
 
@@ -217,7 +217,7 @@ if opts.clean:
 	 print cmd
 	 os.system(cmd)
       jdir = "srm://t3se01.psi.ch:8443/srm/managerv2?SFN="+j
-      cmd = "srmrmdir %s" %jdir
+      cmd = "lcg-del -d %s" %jdir
       print cmd
       os.system(cmd)
     
