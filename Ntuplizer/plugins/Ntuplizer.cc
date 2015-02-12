@@ -13,28 +13,28 @@
 ///////////////////////////////////////////////////////////////////////////////////
 Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
 	
-	vtxToken_			(consumes<reco::VertexCollection>				(iConfig.getParameter<edm::InputTag>("vertices"))),
-	rhoToken_			(consumes<double>								(iConfig.getParameter<edm::InputTag>("rho"))),
-	puinfoToken_    	(consumes<std::vector<PileupSummaryInfo> >		(iConfig.getParameter<edm::InputTag>("PUInfo"))),
+	vtxToken_		(consumes<reco::VertexCollection>				(iConfig.getParameter<edm::InputTag>("vertices"))),
+	rhoToken_		(consumes<double>						(iConfig.getParameter<edm::InputTag>("rho"))),
+	puinfoToken_    	(consumes<std::vector<PileupSummaryInfo> >		        (iConfig.getParameter<edm::InputTag>("PUInfo"))),
 	
-	genparticleToken_ 	(consumes<reco::GenParticleCollection>			(iConfig.getParameter<edm::InputTag>("genparticles"))),
+	genparticleToken_ 	(consumes<reco::GenParticleCollection>			        (iConfig.getParameter<edm::InputTag>("genparticles"))),
 	
-	jetToken_			(consumes<pat::JetCollection>					(iConfig.getParameter<edm::InputTag>("jets"))),
+	jetToken_		(consumes<pat::JetCollection>					(iConfig.getParameter<edm::InputTag>("jets"))),
 	fatjetToken_		(consumes<pat::JetCollection>					(iConfig.getParameter<edm::InputTag>("fatjets"))),
 	prunedjetToken_		(consumes<pat::JetCollection>					(iConfig.getParameter<edm::InputTag>("prunedjets"))),
 	softdropjetToken_	(consumes<pat::JetCollection>					(iConfig.getParameter<edm::InputTag>("softdropjets"))),
 	
-	flavourToken_		(consumes<reco::JetFlavourMatchingCollection>	(iConfig.getParameter<edm::InputTag>("subjetflavour"))),
+	flavourToken_		(consumes<reco::JetFlavourMatchingCollection>	                (iConfig.getParameter<edm::InputTag>("subjetflavour"))),
 
-	muonToken_			(consumes<pat::MuonCollection>					(iConfig.getParameter<edm::InputTag>("muons"))),
+	muonToken_		(consumes<pat::MuonCollection>					(iConfig.getParameter<edm::InputTag>("muons"))),
 	electronToken_		(consumes<pat::ElectronCollection>				(iConfig.getParameter<edm::InputTag>("electrons"))),
-	tauToken_			(consumes<pat::TauCollection>					(iConfig.getParameter<edm::InputTag>("taus"))),
-	metToken_			(consumes<pat::METCollection>					(iConfig.getParameter<edm::InputTag>("mets"))),
+	tauToken_		(consumes<pat::TauCollection>					(iConfig.getParameter<edm::InputTag>("taus"))),
+	metToken_		(consumes<pat::METCollection>					(iConfig.getParameter<edm::InputTag>("mets"))),
 	
 	triggerToken_		(consumes<edm::TriggerResults>					(iConfig.getParameter<edm::InputTag>("HLT")))
 
 {
- 
+  
   /*=======================================================================================*/
   edm::Service<TFileService> fs;
   TTree* tree = fs->make<TTree>( "tree", "tree" );
@@ -47,8 +47,7 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
   jetTokens.push_back( fatjetToken_ 		);
   jetTokens.push_back( prunedjetToken_ 		);
   jetTokens.push_back( softdropjetToken_	);
-  // jetTokens.push_back( flavourToken_	 		);
-  
+  // jetTokens.push_back( flavourToken_	 		);  
 
   /*=======================================================================================*/  
   std::vector<edm::EDGetTokenT<pat::METCollection>> metTokens;
@@ -65,12 +64,12 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
   
   /*=======================================================================================*/
   
-  nTuplizers_["jets"]  	   = new JetsNtuplizer		( jetTokens		, flavourToken_	,	    	 nBranches_ );
-  nTuplizers_["muons"] 	   = new MuonsNtuplizer     ( muonToken_	, vtxToken_		, rhoToken_, nBranches_ );
-  nTuplizers_["electrons"] = new ElectronsNtuplizer ( electronToken_, vtxToken_		, rhoToken_, nBranches_ );
-  nTuplizers_["MET"]       = new METsNtuplizer      ( metTokens		, 							 nBranches_ );
-  nTuplizers_["vertices"]  = new VerticesNtuplizer  ( vtxTokens		, 							 nBranches_ );
-  nTuplizers_["triggers"]  = new TriggersNtuplizer	( triggerTokens , 							 nBranches_ );
+  nTuplizers_["jets"]  	   = new JetsNtuplizer	    ( jetTokens		, flavourToken_	, nBranches_ );
+  nTuplizers_["muons"] 	   = new MuonsNtuplizer     ( muonToken_	, vtxToken_	, rhoToken_, nBranches_ );
+  nTuplizers_["electrons"] = new ElectronsNtuplizer ( electronToken_    , vtxToken_     , rhoToken_, nBranches_ );
+  nTuplizers_["MET"]       = new METsNtuplizer      ( metTokens		, nBranches_ );
+  nTuplizers_["vertices"]  = new VerticesNtuplizer  ( vtxTokens		, nBranches_ );
+  nTuplizers_["triggers"]  = new TriggersNtuplizer  ( triggerTokens     , nBranches_ );
 
   /*=======================================================================================*/    
   if ( runOnMC ){

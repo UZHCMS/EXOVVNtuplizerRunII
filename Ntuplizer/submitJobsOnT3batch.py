@@ -195,7 +195,7 @@ if opts.copyfiles:
       a = j.split("-")
       jobid = a[1]
       inputpath = "srm://t3se01.psi.ch:8443/srm/managerv2?SFN="+j+"/"+outfile
-      outputpath = "srm://t3se01.psi.ch:8443/srm/managerv2?SFN=%s"%(newdir+"/"+prefix+"_"+jobid+".root")
+      outputpath = "srm://t3se01.psi.ch:8443/srm/managerv2?SFN=%s"%("/"+newdir+"/"+prefix+"_"+jobid+".root")
       #cmd = "srmmv %s %s" %(inputpath,outputpath) 
       cmd = "gfal-copy %s %s" %(inputpath,outputpath)
       print cmd

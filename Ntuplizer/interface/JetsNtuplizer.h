@@ -24,6 +24,9 @@ public:
  
 private:
   
+  //bool doPrunedAK8subjets;
+  //bool doSoftDropAK8subjets;
+  
   edm::EDGetTokenT<pat::JetCollection> 					jetInputToken_     		;
   edm::EDGetTokenT<pat::JetCollection> 					fatjetInputToken_  		;
   edm::EDGetTokenT<pat::JetCollection> 					prunedjetInputToken_ 	;
