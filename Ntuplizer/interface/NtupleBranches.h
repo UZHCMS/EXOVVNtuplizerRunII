@@ -52,6 +52,8 @@ public:
     float                               lheV_pt              ;
     float                               lheHT                ;
     float                               lheNj                ;
+    float                               genWeight            ;
+    float                               qScale               ;
     std::vector<float>  	        genParticle_pt	     ;
     std::vector<float>  	        genParticle_px	     ;
     std::vector<float>  	        genParticle_py	     ;
