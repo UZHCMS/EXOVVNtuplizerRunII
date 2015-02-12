@@ -38,7 +38,9 @@ TOPWORKDIR=/scratch/`whoami`
 JOB_ID=$7
 
 # Basename of job sandbox (job workdir will be $TOPWORKDIR/$JOBDIR)
-JOBDIR=flatjob-$JOB_ID
+JOBDIR=$8-$JOB_ID
+echo "---------------------------------> jen "
+echo $JOBDIR
 ##################################################################
 
 
@@ -62,9 +64,8 @@ JOBDIR=flatjob-$JOB_ID
 # here you could change location of the job report stdout/stderr files
 #  if you did not want them in the submission directory
 
-#$ -o /shome/jngadiub/EXOVVAnalysisRunII/CMSSW_7_3_0/src/EXOVVNtuplizerRunII/Ntuplizer/jobOutputs
-#$ -e /shome/jngadiub/EXOVVAnalysisRunII/CMSSW_7_3_0/src/EXOVVNtuplizerRunII/Ntuplizer/jobOutputs
-
+##$ -o $8
+##$ -e $8
 
 ##################################################################
 
@@ -152,8 +153,6 @@ if test $? -ne 0; then
 fi
 
 cd $WORKDIR
-cp -r /shome/cgalloni/TAU/CMSSW_5_3_13/src/EXOVVNtuplizer/Ntuplizer/JEC .
-
 cmsRun $CMSSW_CONFIG_FILE inputFiles=$5 maxEvents=$6>> myout.txt 2>>myerr.txt
 
 
@@ -207,7 +206,7 @@ echo "Cleaning up $WORKDIR"
 rm -rf $WORKDIR
 
 cd $STARTDIR
-mv $JOBDIR jobOutputs/
+mv $JOBDIR $9/
 
 
 ###########################################################################

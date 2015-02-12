@@ -3,9 +3,15 @@ import random
 import sys
 from optparse import OptionParser
 import ConfigParser
+import time
 
 #-----------------------------------------------------------------------------------------
-def getJobsDirs(outdir):
+def getLocalJobsDir(localdir):
+
+   return commands.getoutput("pwd")+"/"+localdir
+
+#-----------------------------------------------------------------------------------------
+def getJobsDirs(outdir,jobname):
    user = commands.getoutput("whoami")
    
    path = "/pnfs/psi.ch/cms/trivcat/store/user/%s"%(user+"/"+outdir)
@@ -18,10 +24,10 @@ def getJobsDirs(outdir):
    jobsdir = []
    for a in list_:
       b = a.split(" ")
-      if b[-1:][0].find("flatjob") != -1:
+      if b[-1:][0].find(jobname) != -1:
          c = b[-1:][0].split()
          jobsdir.append(path+"/"+c[0])
-	 
+
    return jobsdir	 
 	 
 #-----------------------------------------------------------------------------------------
@@ -168,6 +174,8 @@ nfiles = config.getint('JobsConfig','nfiles')
 src = config.get('JobsConfig','src')
 sample = config.get('JobsConfig','sample')
 outdir = config.get('JobsConfig','outdir')
+localjobdir = config.get('JobsConfig','localjobdir')
+jobname = config.get('JobsConfig','jobname')
 outfile = config.get('JobsConfig','outfile')
 queue = config.get('JobsConfig','queue')
 cmsswdir = config.get('JobsConfig','cmsswdir')
@@ -180,23 +188,24 @@ newdir = config.get('JobsConfig','newdir')
 #-----------------------------------------------------------------------------------------
 if opts.copyfiles:
 
-   jobsdir = getJobsDirs(outdir)
+   jobsdir = getJobsDirs(outdir,jobname)
    user = commands.getoutput("whoami")	
     
    for j in jobsdir:
       a = j.split("-")
       jobid = a[1]
       inputpath = "srm://t3se01.psi.ch:8443/srm/managerv2?SFN="+j+"/"+outfile
-      outputpath = "srm://t3se01.psi.ch:8443/srm/managerv2?SFN=/pnfs/psi.ch/cms/trivcat/store/user/%s"%(user+"/"+newdir+"/"+prefix+"_"+jobid+".root")
-      cmd = "srmmv %s %s" %(inputpath,outputpath) 
+      outputpath = "srm://t3se01.psi.ch:8443/srm/managerv2?SFN=%s"%(newdir+"/"+prefix+"_"+jobid+".root")
+      #cmd = "srmmv %s %s" %(inputpath,outputpath) 
+      cmd = "gfal-copy %s %s" %(inputpath,outputpath)
       print cmd
-      os.system(cmd) 
+      os.system(cmd)
           	 
    sys.exit()	 
 
 if opts.clean:
 
-   jobsdir = getJobsDirs(outdir)
+   jobsdir = getJobsDirs(outdir,jobname)
    
    for j in jobsdir:
       status,cmd_out = commands.getstatusoutput( 'ls '+j )
@@ -204,16 +213,16 @@ if opts.clean:
          a = j.split("-")
          jobid = a[1]
          inputpath = "srm://t3se01.psi.ch:8443/srm/managerv2?SFN="+j+"/"+outfile
-	 cmd = "srmrm "+inputpath
+	 cmd = "gfal-rm "+inputpath
 	 print cmd
 	 os.system(cmd)
       jdir = "srm://t3se01.psi.ch:8443/srm/managerv2?SFN="+j
-      cmd = "srmrmdir %s" %jdir
+      cmd = "lcg-del -d %s" %jdir
       print cmd
       os.system(cmd)
     
-   print "rm -rf jobOutputs/*" 
-   os.system("rm -rf jobOutputs/*")
+   print "rm -rf "+getLocalJobsDir(localjobdir)  
+   os.system("rm -rf "+getLocalJobsDir(localjobdir)+"/*")
       
    sys.exit()   
 	 
@@ -229,8 +238,8 @@ else:
 
 print len(files)
 
-status,cmd_out = commands.getstatusoutput( 'ls jobOutputs' )
-if status: os.system('mkdir jobOutputs')
+status,cmd_out = commands.getstatusoutput( 'ls '+getLocalJobsDir(localjobdir) )
+if status: os.system('mkdir '+getLocalJobsDir(localjobdir))
    
 it = 0
 jobIndex = 1
@@ -244,11 +253,11 @@ while it < len(files):
     if f != "":
        print "    * %s" %(f)
        if not(opts.useDAS): inputFiles+="dcap://t3se01.psi.ch:22125/%s," %(src+"/"+f) 
-       else: inputFiles+="root://xrootd.unl.edu/%s " %(f)	  
+       else: inputFiles+="root://xrootd.unl.edu/%s," %(f)	  
   tmpList = list(inputFiles)
   tmpList.pop(len(tmpList)-1)
   inputFiles = "".join(tmpList)
-  cmd = "qsub -q %s %s %s %s %s %s %s %s %s" %(queue,bashfile,outfile,outdir,cmsswdir,cfg,inputFiles,maxevents,jobIndex)
+  cmd = "qsub -o %s -e %s -q %s %s %s %s %s %s %s %s %s %s %s" %(getLocalJobsDir(localjobdir),getLocalJobsDir(localjobdir),queue,bashfile,outfile,outdir,cmsswdir,cfg,inputFiles,maxevents,jobIndex,jobname,getLocalJobsDir(localjobdir))
   cmds.append(cmd)
   it+=nfiles
   jobIndex+=1
@@ -259,5 +268,10 @@ for c in cmds:
    print c
    if not(opts.test):
       os.system(c)
+      time.sleep(30)
 
+#for c in range(1):
+#   print cmds[c]
+#   os.system(cmds[c])
+   
 #python submitJobsOnT3batch.py -C submitJobsOnT3batch.cfg --useDAS
