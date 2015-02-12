@@ -7,7 +7,7 @@ process = cms.Process("Ntuple")
 process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_condDBv2_cff')
 process.load('Configuration.StandardSequences.Geometry_cff')
 process.load('Configuration.StandardSequences.MagneticField_38T_cff')
-process.GlobalTag.globaltag = 'PHYS14_25_V1'
+process.GlobalTag.globaltag = 'PHYS14_25_V2'
 
 process.TFileService = cms.Service("TFileService",
                                        fileName = cms.string('flatTuple.root')
@@ -20,7 +20,7 @@ import FWCore.ParameterSet.VarParsing as VarParsing
 options = VarParsing.VarParsing ('analysis')
 options.maxEvents = -1
 # options.inputFiles ='root://xrootd.unl.edu//store/mc/Phys14DR/RSGravitonToWW_kMpl01_M_1000_Tune4C_13TeV_pythia8/MINIAODSIM/PU20bx25_tsg_PHYS14_25_V1-v2/10000/CE92595C-9676-E411-A785-00266CF2E2C8.root'
-options.inputFiles = 'file:testWW.root'
+options.inputFiles = "file:////afs/cern.ch/user/h/hinzmann/workspace/tmp/1020E374-B26B-E411-8F91-E0CB4E29C513.root"
 
 options.parseArguments()
 
@@ -37,9 +37,9 @@ process.source = cms.Source("PoolSource",
 
 ######## Sequence settings ##########
 
-doAK8reclustering = False
-doAK8prunedReclustering = False
-doAK8softdropReclustering = False
+doAK8reclustering = True
+doAK8prunedReclustering = True
+doAK8softdropReclustering = True
 
 ####### Logger ##########
 
@@ -62,7 +62,7 @@ process.chs = cms.EDFilter("CandPtrSelector",
   cut = cms.string('fromPV')
 )
 
-process.ak8PFJetsCHS = ak8PFJetsCHS.clone( src = 'chs' )
+process.ak8PFJetsCHS = ak8PFJetsCHS.clone( src = 'chs', jetPtMin = 100.0 )
 
 process.NjettinessAK8 = cms.EDProducer("NjettinessAdder",
 			       src = cms.InputTag("ak8PFJetsCHS"),
@@ -79,10 +79,10 @@ process.NjettinessAK8 = cms.EDProducer("NjettinessAdder",
 			       )
 			       
    
-process.ak8PFJetsCHSPruned = ak8PFJetsCHSPruned.clone( src = 'chs' )
+process.ak8PFJetsCHSPruned = ak8PFJetsCHSPruned.clone( src = 'chs', jetPtMin = 100.0  )
 process.ak8PFJetsCHSPrunedLinks = ak8PFJetsCHSPrunedLinks.clone()
 
-process.ak8PFJetsCHSSoftDrop = ak8PFJetsCHSSoftDrop.clone( src = 'chs' )
+process.ak8PFJetsCHSSoftDrop = ak8PFJetsCHSSoftDrop.clone( src = 'chs', jetPtMin = 100.0  )
 process.ak8PFJetsCHSSoftDropLinks = ak8PFJetsCHSSoftDropLinks.clone()
 
 # process.ak8PFJetsCSTrimmed = ak8PFJetsCSTrimmed.clone( src = 'chs' )
@@ -103,7 +103,7 @@ if doAK8prunedReclustering:
 
 if doAK8softdropReclustering:
    process.substructureSequence+=process.ak8PFJetsCHSSoftDrop
-   process.substructureSequence+=process.process.ak8PFJetsCHSSoftDropLinks
+   process.substructureSequence+=process.ak8PFJetsCHSSoftDropLinks
                                   
 ####### Redo pat jets sequence ##########
 process.redoPatJets = cms.Sequence()
