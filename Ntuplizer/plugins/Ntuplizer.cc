@@ -5,6 +5,7 @@
 #include "../interface/ElectronsNtuplizer.h"
 #include "../interface/METsNtuplizer.h"
 #include "../interface/PileUpNtuplizer.h"
+#include "../interface/GenEventNtuplizer.h"
 #include "../interface/GenParticlesNtuplizer.h"
 #include "../interface/TriggersNtuplizer.h"
 #include "../interface/VerticesNtuplizer.h"
@@ -16,6 +17,7 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
 	vtxToken_		(consumes<reco::VertexCollection>				(iConfig.getParameter<edm::InputTag>("vertices"))),
 	rhoToken_		(consumes<double>						(iConfig.getParameter<edm::InputTag>("rho"))),
 	puinfoToken_    	(consumes<std::vector<PileupSummaryInfo> >		        (iConfig.getParameter<edm::InputTag>("PUInfo"))),
+	geneventToken_    	(consumes<GenEventInfoProduct>				        (iConfig.getParameter<edm::InputTag>("genEventInfo"))),
 	
 	genparticleToken_ 	(consumes<reco::GenParticleCollection>			        (iConfig.getParameter<edm::InputTag>("genparticles"))),
 	
@@ -80,6 +82,10 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
      std::vector<edm::EDGetTokenT< std::vector<PileupSummaryInfo> > > puTokens;
      puTokens.push_back( puinfoToken_ );
      nTuplizers_["PU"] = new PileUpNtuplizer( puTokens, nBranches_ );
+
+     std::vector<edm::EDGetTokenT< GenEventInfoProduct > > geneTokens;
+     geneTokens.push_back( geneventToken_ );
+     nTuplizers_["genEvent"] = new GenEventNtuplizer( geneTokens, nBranches_ );
   }
 }
 

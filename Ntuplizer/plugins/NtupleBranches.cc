@@ -34,6 +34,8 @@ void NtupleBranches::branch( void ){
   tree_->Branch( "lheV_pt"	             , &lheV_pt                ); 
   tree_->Branch( "lheHT"	             , &lheHT                  ); 
   tree_->Branch( "lheNj"	             , &lheNj                  ); 
+  tree_->Branch( "genWeight"	             , &genWeight              ); 
+  tree_->Branch( "qScale"	             , &qScale                 ); 
   
   /*-------------------------leptons----------------------------*/
   tree_->Branch( "nlep"  		     , &nlep		       );
@@ -236,6 +238,8 @@ void NtupleBranches::reset( void ){
   lheV_pt     = 0;
   lheHT       = 0;
   lheNj       = 0;
+  genWeight   = 0;
+  qScale      = 0;
   nlep        = 0;
   njetsAK4    = 0;
   njetsAK8    = 0;  
