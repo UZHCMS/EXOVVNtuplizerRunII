@@ -98,7 +98,7 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
       	 jecAK4_->setJetEta( uncorrJet.eta()	);
       	 jecAK4_->setJetPt ( uncorrJet.pt()	);
       	 jecAK4_->setJetE  ( uncorrJet.energy() );
-      	 jecAK4_->setRho   ( *(rho_.product())  );
+      	 jecAK4_->setRho   ( nBranches_->rho  );
       	 jecAK4_->setNPV   ( vertices_->size()  );
       	 jecAK4_->setJetA  ( j.jetArea()	);
       	 double corr = jecAK4_->getCorrection();
@@ -188,7 +188,7 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
       jecAK8_->setJetPt ( uncorrJet.pt()           );
       jecAK8_->setJetE  ( uncorrJet.energy()       );
       jecAK8_->setJetA  ( fj.jetArea() );
-      jecAK8_->setRho   ( *(rho_.product())        );
+      jecAK8_->setRho   ( nBranches_->rho        );
       jecAK8_->setNPV   ( vertices_->size()        );
       double corr = jecAK8_->getCorrection();
 
@@ -266,8 +266,8 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
 	     	jecAK8_->setJetEta( uncorrPrunedJet.eta()	   );
 	     	jecAK8_->setJetPt ( uncorrPrunedJet.pt()	   );
 	     	jecAK8_->setJetE  ( uncorrPrunedJet.energy()	   );
-	     	jecAK8_->setJetA  ( fj.jetArea() );
-	     	jecAK8_->setRho   ( *(rho_.product())	     );
+	     	jecAK8_->setJetA  ( prunedjet.jetArea() );
+	     	jecAK8_->setRho   ( nBranches_->rho	     );
 	     	jecAK8_->setNPV   ( vertices_->size()	     );
 	     	double prunedcorr = jecAK8_->getCorrection();
 	     	
@@ -375,8 +375,8 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
              jecAK8_->setJetEta( uncorrSoftDropJet.eta()   );
              jecAK8_->setJetPt ( uncorrSoftDropJet.pt()    );
              jecAK8_->setJetE  ( uncorrSoftDropJet.energy());
-             jecAK8_->setJetA  ( fj.jetArea()              );
-             jecAK8_->setRho   ( *(rho_.product())	   );
+             jecAK8_->setJetA  ( softdropjet.jetArea()              );
+             jecAK8_->setRho   ( nBranches_->rho	   );
              jecAK8_->setNPV   ( vertices_->size()	   );
              double softdropcorr = jecAK8_->getCorrection();	     
 	     	     
