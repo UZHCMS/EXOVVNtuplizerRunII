@@ -4,7 +4,9 @@
 //#include "AnalysisDataFormats/TopObjects/interface/CATopJetTagInfo.h"
 
 //===================================================================================================================        
+
 JetsNtuplizer::JetsNtuplizer( std::vector<edm::EDGetTokenT<pat::JetCollection>> tokens, std::vector<std::string> jecAK4Labels, std::vector<std::string> jecAK8Labels, edm::EDGetTokenT<reco::JetFlavourMatchingCollection> flavourToken, edm::EDGetTokenT<double> rhoToken, edm::EDGetTokenT<reco::VertexCollection> verticeToken, NtupleBranches* nBranches )
+
    : CandidateNtuplizer     ( nBranches )
    , jetInputToken_	    	( tokens[0] )
    , fatjetInputToken_	    ( tokens[1] )
@@ -12,6 +14,7 @@ JetsNtuplizer::JetsNtuplizer( std::vector<edm::EDGetTokenT<pat::JetCollection>> 
    , softdropjetInputToken_ ( tokens[3] )
    , rhoToken_	       		( rhoToken  )
    , verticeToken_     		( verticeToken  )	
+
    //, flavourToken_			( flavourToken 	) //For subjet flavour matching!! Not done yet.
 
 {
@@ -74,6 +77,7 @@ void JetsNtuplizer::initJetCorrFactors( void ){
   jecAK4_ = boost::shared_ptr<FactorizedJetCorrector> ( new FactorizedJetCorrector(vPar) );
   std::cout<<"jecAK4_ = "<<jecAK4_<<std::endl;
 }
+
 //===================================================================================================================
 void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetup& iSetup ){
   
@@ -83,6 +87,8 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
   event.getByToken(verticeToken_ 	, vertices_ );
  //event.getByToken(flavourToken_, jetMC );
   
+  nBranches_->rho = *(rho_.product());
+
   bool doPruning 	= event.getByToken(prunedjetInputToken_, prunedjets_ );
   bool doSoftDrop 	= event.getByToken(softdropjetInputToken_, softdropjets_ );
   
@@ -94,8 +100,7 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
 	  if (j.pt() < 20) continue;
 	  bool IDLoose = looseJetID(j);
   //if( !IDLoose ) continue;
-	
-	  
+
       reco::Candidate::LorentzVector uncorrJet = j.correctedP4(0);
 
       jecAK4_->setJetEta( uncorrJet.eta()          );
@@ -112,8 +117,7 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
   //     jecAK4Unc_->setJetEta( uncorrJet.eta() );
   //     jecAK4Unc_->setJetPt( corr * uncorrJet.pt() );
   //  //   double corrDown = corr * ( 1 - fabs(jecAK4Unc_->getUncertainty(-1)) );
-	  
-	
+
 	  
 	  nBranches_->njetsAK4++;
       

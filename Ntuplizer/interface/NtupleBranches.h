@@ -52,6 +52,8 @@ public:
     float                               lheV_pt              ;
     float                               lheHT                ;
     float                               lheNj                ;
+    float                               genWeight            ;
+    float                               qScale               ;
     std::vector<float>  	        genParticle_pt	     ;
     std::vector<float>  	        genParticle_px	     ;
     std::vector<float>  	        genParticle_py	     ;
@@ -87,6 +89,7 @@ public:
     std::vector<float>  	      lep_chargedHadIso	     	 ;
     std::vector<float>  	      lep_trackIso	         ;    
         
+    float                               rho               ;
     /*-------------------------AK5 jets---------------------------*/   
     int 	        	      	  njetsAK4               ;
     std::vector<float>  	      jetAK4_pt              ;

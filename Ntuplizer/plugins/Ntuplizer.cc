@@ -5,6 +5,7 @@
 #include "../interface/ElectronsNtuplizer.h"
 #include "../interface/METsNtuplizer.h"
 #include "../interface/PileUpNtuplizer.h"
+#include "../interface/GenEventNtuplizer.h"
 #include "../interface/GenParticlesNtuplizer.h"
 #include "../interface/TriggersNtuplizer.h"
 #include "../interface/VerticesNtuplizer.h"
@@ -13,9 +14,12 @@
 ///////////////////////////////////////////////////////////////////////////////////
 Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
 	
-	vtxToken_			(consumes<reco::VertexCollection>				(iConfig.getParameter<edm::InputTag>("vertices"))),
-	rhoToken_			(consumes<double>								(iConfig.getParameter<edm::InputTag>("rho"))),
-	puinfoToken_    	(consumes<std::vector<PileupSummaryInfo> >		(iConfig.getParameter<edm::InputTag>("PUInfo"))),
+
+	vtxToken_		(consumes<reco::VertexCollection>				(iConfig.getParameter<edm::InputTag>("vertices"))),
+	rhoToken_		(consumes<double>								(iConfig.getParameter<edm::InputTag>("rho"))),
+	puinfoToken_    (consumes<std::vector<PileupSummaryInfo> >		(iConfig.getParameter<edm::InputTag>("PUInfo"))),
+	geneventToken_  (consumes<GenEventInfoProduct>				    (iConfig.getParameter<edm::InputTag>("genEventInfo"))),
+
 	
 	genparticleToken_ 	(consumes<reco::GenParticleCollection>			        (iConfig.getParameter<edm::InputTag>("genparticles"))),
 	
@@ -82,12 +86,14 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
   
   /*=======================================================================================*/
   
+
   nTuplizers_["jets"]  	   = new JetsNtuplizer	    ( jetTokens		, jecAK4Labels	, jecAK8Labels, flavourToken_	, rhoToken_ , vtxToken_ , nBranches_ );
   nTuplizers_["muons"] 	   = new MuonsNtuplizer     ( muonToken_	, vtxToken_		, rhoToken_						, nBranches_ );
   nTuplizers_["electrons"] = new ElectronsNtuplizer ( electronToken_, vtxToken_     , rhoToken_						, nBranches_ );
   nTuplizers_["MET"]       = new METsNtuplizer      ( metTokens														, nBranches_ );
   nTuplizers_["vertices"]  = new VerticesNtuplizer  ( vtxTokens														, nBranches_ );
   nTuplizers_["triggers"]  = new TriggersNtuplizer  ( triggerTokens     											, nBranches_ );
+
 
   /*=======================================================================================*/    
   if ( runOnMC ){
@@ -98,6 +104,10 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
      std::vector<edm::EDGetTokenT< std::vector<PileupSummaryInfo> > > puTokens;
      puTokens.push_back( puinfoToken_ );
      nTuplizers_["PU"] = new PileUpNtuplizer( puTokens, nBranches_ );
+
+     std::vector<edm::EDGetTokenT< GenEventInfoProduct > > geneTokens;
+     geneTokens.push_back( geneventToken_ );
+     nTuplizers_["genEvent"] = new GenEventNtuplizer( geneTokens, nBranches_ );
   }
 }
 
@@ -117,10 +127,6 @@ Ntuplizer::~Ntuplizer()
 ///////////////////////////////////////////////////////////////////////////////////
 void Ntuplizer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup){
   
-  edm::Handle<reco::VertexCollection> vertices;
-  iEvent.getByToken(vtxToken_, vertices);
-	  
-  if (vertices->empty()) return; // skip the event if no PV found
 
   nBranches_->EVENT_event     = iEvent.id().event();
   nBranches_->EVENT_run       = iEvent.id().run();
