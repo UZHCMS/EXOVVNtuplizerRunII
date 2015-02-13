@@ -38,9 +38,9 @@ process.source = cms.Source("PoolSource",
 
 ######## Sequence settings ##########
 
-doAK8reclustering = False
-doAK8prunedReclustering = False
-doAK8softdropReclustering = False
+doAK8reclustering = True
+doAK8prunedReclustering = True
+doAK8softdropReclustering = True
 
 
 ####### Logger ##########

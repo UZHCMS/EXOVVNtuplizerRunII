@@ -186,10 +186,10 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
 
       jecAK8_->setJetEta( uncorrJet.eta()          );
       jecAK8_->setJetPt ( uncorrJet.pt()           );
-      //jecAK8_->setJetE  ( uncorrJet.energy()       ); //not needed for current correction scheme
+      jecAK8_->setJetE  ( uncorrJet.energy()       );
       jecAK8_->setJetA  ( fj.jetArea() );
       jecAK8_->setRho   ( nBranches_->rho        );
-      //jecAK8_->setNPV   ( vertices_->size()        ); //not needed for current correction scheme
+      jecAK8_->setNPV   ( vertices_->size()        );
       double corr = jecAK8_->getCorrection();
 
       //jecAK8Unc_->setJetEta( uncorrJet.eta() );
@@ -376,7 +376,7 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
              jecAK8_->setJetPt ( uncorrSoftDropJet.pt()    );
              jecAK8_->setJetE  ( uncorrSoftDropJet.energy());
              jecAK8_->setJetA  ( softdropjet.jetArea()              );
-             jecAK8_->setRho   ( *(rho_.product())	   );
+             jecAK8_->setRho   ( nBranches_->rho	   );
              jecAK8_->setNPV   ( vertices_->size()	   );
              double softdropcorr = jecAK8_->getCorrection();	     
 	     	     
