@@ -4,12 +4,13 @@
 //#include "AnalysisDataFormats/TopObjects/interface/CATopJetTagInfo.h"
 
 //===================================================================================================================        
-JetsNtuplizer::JetsNtuplizer( std::vector<edm::EDGetTokenT<pat::JetCollection>> tokens, edm::EDGetTokenT<reco::JetFlavourMatchingCollection> flavourToken, NtupleBranches* nBranches )
+JetsNtuplizer::JetsNtuplizer( std::vector<edm::EDGetTokenT<pat::JetCollection>> tokens, edm::EDGetTokenT<double> rhoToken, edm::EDGetTokenT<reco::JetFlavourMatchingCollection> flavourToken, NtupleBranches* nBranches )
    : CandidateNtuplizer     ( nBranches )
    , jetInputToken_	    ( tokens[0] )
    , fatjetInputToken_	    ( tokens[1] )
    , prunedjetInputToken_   ( tokens[2] )
    , softdropjetInputToken_ ( tokens[3] )
+   , rhoToken_	       ( rhoToken     )
    //, flavourToken_			( flavourToken 	) //For subjet flavour matching!! Not done yet.
 
 {
@@ -30,6 +31,18 @@ JetsNtuplizer::~JetsNtuplizer( void )
 {
 }
 
+bool JetsNtuplizer::looseJetID( const pat::Jet& j ) {
+  // In sync with: https://twiki.cern.ch/twiki/bin/viewauth/CMS/JetID#Recommendations_for_8_TeV_data_a
+  return ( j.nConstituents() > 1 && 
+              j.photonEnergyFraction() < 0.99 && 
+              j.neutralHadronEnergyFraction() < 0.99 && 
+              j.muonEnergyFraction() < 0.8 && 
+              j.electronEnergyFraction() < 0.9 && 
+              (j.chargedHadronMultiplicity() > 0 || fabs(j.eta())>2.4 ) && 
+              (j.chargedEmEnergyFraction() < 0.99 || fabs(j.eta())>2.4 ) &&
+              (j.chargedHadronEnergyFraction() > 0. || fabs(j.eta())>2.4 ) );
+}
+
 //===================================================================================================================
 void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetup& iSetup ){
   
@@ -39,6 +52,9 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
   
   bool doPruning = event.getByToken(prunedjetInputToken_, prunedjets_ );
   bool doSoftDrop = event.getByToken(softdropjetInputToken_, softdropjets_ );
+
+  event.getByToken(rhoToken_    , rho_	);
+  nBranches_->rho = *(rho_.product());
   
   /****************************************************************/
   nBranches_->njetsAK4 = 0;
@@ -47,14 +63,7 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
 	  
 	  if (j.pt() < 20) continue;
 	  
-	  bool IDLoose = false;
-	  
-	  if( j.nConstituents() > 1 && 
-              j.muonEnergyFraction() < 0.99 && 
-              j.photonEnergyFraction() < 0.99 && 
-              j.chargedEmEnergyFraction() < 0.99 &&
-              j.neutralHadronEnergyFraction() < 0.99 && 
-              j.chargedHadronEnergyFraction() > 0. ) IDLoose = true;
+	  bool IDLoose = looseJetID(j);
 	  
 	  if( !IDLoose ) continue;
 	  nBranches_->njetsAK4++;
@@ -120,15 +129,7 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
 	  
 	  if (fj.pt() < 80) continue;
 	  
-	  bool IDLoose = false;
-	  
-	  if( fj.nConstituents() > 1 && 
-              fj.muonEnergyFraction() < 0.99 && 
-              fj.photonEnergyFraction() < 0.99 && 
-              fj.chargedEmEnergyFraction() < 0.99 &&
-              fj.neutralHadronEnergyFraction() < 0.99 && 
-              fj.chargedHadronEnergyFraction() > 0. ) IDLoose = true;
-
+	  bool IDLoose = looseJetID(fj);
 	  
 	  if( !IDLoose ) continue;
 	  

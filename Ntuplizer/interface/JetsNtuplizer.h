@@ -15,8 +15,10 @@ class JetsNtuplizer : public CandidateNtuplizer {
 
 public:
 //   JetsNtuplizer( std::vector<edm::InputTag> labels, std::vector<std::string> jecCA8Labels, std::vector<std::string> jecAK5Labels, NtupleBranches* nBranches );
- JetsNtuplizer( std::vector<edm::EDGetTokenT<pat::JetCollection>> token, edm::EDGetTokenT<reco::JetFlavourMatchingCollection> flavourToken, NtupleBranches* nBranches );
+ JetsNtuplizer( std::vector<edm::EDGetTokenT<pat::JetCollection>> token, edm::EDGetTokenT<double> rhoToken, edm::EDGetTokenT<reco::JetFlavourMatchingCollection> flavourToken, NtupleBranches* nBranches );
    ~JetsNtuplizer( void );
+
+  bool looseJetID( const pat::Jet& j );
 
   void fillBranches( edm::Event const & event, const edm::EventSetup& iSetup );
  // void initJetCorrFactors( void );
@@ -31,6 +33,7 @@ private:
   edm::EDGetTokenT<pat::JetCollection> 					fatjetInputToken_  		;
   edm::EDGetTokenT<pat::JetCollection> 					prunedjetInputToken_ 	;
   edm::EDGetTokenT<pat::JetCollection> 					softdropjetInputToken_ 	;
+  edm::EDGetTokenT<double> 		    rhoToken_    ;
   edm::EDGetTokenT<reco::JetFlavourMatchingCollection> 	flavourToken_   		;
   
   edm::Handle<pat::JetCollection>      					jets_      				;
@@ -38,6 +41,7 @@ private:
   edm::Handle<pat::JetCollection>      					prunedjets_      		;
   edm::Handle<pat::JetCollection>      					softdropjets_      		;
 
+  edm::Handle<double> 			    rho_         ;
   
   edm::Handle<reco::JetFlavourMatchingCollection> 		jetMC ;
 };
