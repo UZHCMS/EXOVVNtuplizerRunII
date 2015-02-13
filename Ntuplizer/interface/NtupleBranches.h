@@ -89,6 +89,7 @@ public:
     std::vector<float>  	      lep_chargedHadIso	     	 ;
     std::vector<float>  	      lep_trackIso	         ;    
         
+    float                               rho               ;
     /*-------------------------AK5 jets---------------------------*/   
     int 	        	      	  njetsAK4               ;
     std::vector<float>  	      jetAK4_pt              ;

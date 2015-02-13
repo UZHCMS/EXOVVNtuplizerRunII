@@ -66,7 +66,7 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
   
   /*=======================================================================================*/
   
-  nTuplizers_["jets"]  	   = new JetsNtuplizer	    ( jetTokens		, flavourToken_	, nBranches_ );
+  nTuplizers_["jets"]  	   = new JetsNtuplizer	    ( jetTokens		, rhoToken_ , flavourToken_, nBranches_ );
   nTuplizers_["muons"] 	   = new MuonsNtuplizer     ( muonToken_	, vtxToken_	, rhoToken_, nBranches_ );
   nTuplizers_["electrons"] = new ElectronsNtuplizer ( electronToken_    , vtxToken_     , rhoToken_, nBranches_ );
   nTuplizers_["MET"]       = new METsNtuplizer      ( metTokens		, nBranches_ );
@@ -105,12 +105,11 @@ Ntuplizer::~Ntuplizer()
 ///////////////////////////////////////////////////////////////////////////////////
 void Ntuplizer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup){
   
-  edm::Handle<reco::VertexCollection> vertices;
-  iEvent.getByToken(vtxToken_, vertices);
-	  
-  if (vertices->empty()) return; // skip the event if no PV found
+///// This may be difficult to sync with other analyses -> better do at analysis level
+//  edm::Handle<reco::VertexCollection> vertices;
+//  iEvent.getByToken(vtxToken_, vertices);
+//  if (vertices->empty()) return; // skip the event if no PV found 
   
-
   nBranches_->EVENT_event     = iEvent.id().event();
   nBranches_->EVENT_run       = iEvent.id().run();
   nBranches_->EVENT_lumiBlock = iEvent.id().luminosityBlock();  

@@ -57,6 +57,9 @@ void NtupleBranches::branch( void ){
   tree_->Branch( "lep_chargedHadIso"	     , &lep_chargedHadIso      );
   tree_->Branch( "lep_trackIso"	             , &lep_trackIso	       );
       
+  /*-------------------------energy density---------------------------*/	 
+  tree_->Branch("rho"	    		        , &rho	  	     	 );
+
   /*-------------------------AK4 jets---------------------------*/	 
   tree_->Branch( "njetsAK4"		    , &njetsAK4 	    );
   tree_->Branch( "jetAK4_pt"		    , &jetAK4_pt	    );
