@@ -18,9 +18,9 @@ process.TFileService = cms.Service("TFileService",
 import FWCore.ParameterSet.VarParsing as VarParsing
 
 options = VarParsing.VarParsing ('analysis')
-options.maxEvents = 10
+options.maxEvents = -1
 # options.inputFiles ='root://xrootd.unl.edu//store/mc/Phys14DR/RSGravitonToWW_kMpl01_M_1000_Tune4C_13TeV_pythia8/MINIAODSIM/PU20bx25_tsg_PHYS14_25_V1-v2/10000/CE92595C-9676-E411-A785-00266CF2E2C8.root'
-options.inputFiles = "file:////afs/cern.ch/user/h/hinzmann/workspace/tmp/1020E374-B26B-E411-8F91-E0CB4E29C513.root"
+options.inputFiles = "root://xrootd.unl.edu//store/mc/Phys14DR/RSGravitonToWW_kMpl01_M_4000_Tune4C_13TeV_pythia8/MINIAODSIM/PU20bx25_PHYS14_25_V1-v1/00000/0C9B3A02-A86F-E411-83EA-D8D385FF6C5E.root"
 
 options.parseArguments()
 
@@ -37,9 +37,9 @@ process.source = cms.Source("PoolSource",
 
 ######## Sequence settings ##########
 
-doAK8reclustering = True
-doAK8prunedReclustering = True
-doAK8softdropReclustering = True
+doAK8reclustering = False
+doAK8prunedReclustering = False
+doAK8softdropReclustering = False
 
 ####### Logger ##########
 

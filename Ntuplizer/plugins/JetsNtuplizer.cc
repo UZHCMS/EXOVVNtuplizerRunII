@@ -47,7 +47,7 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
               j.neutralHadronEnergyFraction() < 0.99 && 
               j.chargedHadronEnergyFraction() > 0. ) IDLoose = true;
 	  
-	  if( !IDLoose ) continue;
+	  //if( !IDLoose ) continue;
 	  nBranches_->njetsAK4++;
 	  
 	  nBranches_->jetAK4_pt     	    .push_back(j.pt());

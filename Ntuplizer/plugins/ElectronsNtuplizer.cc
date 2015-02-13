@@ -38,6 +38,7 @@ void ElectronsNtuplizer::fillBranches( edm::Event const & event, const edm::Even
   for (const pat::Electron &ele : *electrons_) {
     
     bool isHEEP = false;
+    bool isHEEPv50 = false;
 
     float et = ele.energy()!=0. ? ele.et()/ele.energy()*ele.caloEnergy() : 0.;
     float eta = ele.superCluster()->eta();
@@ -73,13 +74,40 @@ void ElectronsNtuplizer::fillBranches( edm::Event const & event, const edm::Even
        }
        
     }
-     
-    if( !isHEEP ) continue;
-    nele++;
 
-    //std::cout << isHEEP << std::endl;
+    if (ele.gsfTrack().isNonnull()){
         
+       if( et > 35. ) {
+          if( fabs(eta) < 1.4442 ){
+             iso = ele.dr03EcalRecHitSumEt() + ele.dr03HcalDepth1TowerSumEt();
+             isoCut = 2 + 0.03*et + 0.28*rho;	  
+             if( ele.ecalDriven() == 1 && ele.deltaEtaSuperClusterTrackAtVtx() < std::max(0.016-1E-4*et,0.004) && ele.deltaPhiSuperClusterTrackAtVtx() < 0.06 && 
+	         ele.hadronicOverEm() < (2./ele.superCluster()->energy()+0.05) && 
+		 (ele.full5x5_e2x5Max()/ele.full5x5_e5x5() > 0.94 || ele.full5x5_e1x5()/ele.full5x5_e5x5() > 0.83) &&
+		 ele.dr03TkSumPt() < 5. && ele.gsfTrack()->hitPattern().numberOfHits(reco::HitPattern::MISSING_INNER_HITS) <= 1 &&
+		 iso < isoCut && fabs(dxy) < 0.02 ) isHEEPv50 = true;
+          }
+          if( fabs(eta) > 1.566 && fabs(eta) < 2.5 ){
+             iso = ele.dr03EcalRecHitSumEt() + ele.dr03HcalDepth1TowerSumEt();
+             if( et <= 50 )
+             	isoCut = 2.5 + 0.28*rho;
+             else
+             	isoCut = 2.5+0.03*(et-50.) + 0.28*rho;       
+             if( ele.ecalDriven() == 1 && ele.deltaEtaSuperClusterTrackAtVtx() < std::max(0.015-8.5E-5*et,0.006) && ele.deltaPhiSuperClusterTrackAtVtx() < 0.06 && 
+	         ele.hadronicOverEm() < (12.5/ele.superCluster()->energy()+0.05) && ele.full5x5_sigmaIetaIeta() < 0.03 && 
+		 ele.dr03TkSumPt() < 5. && ele.gsfTrack()->hitPattern().numberOfHits(reco::HitPattern::MISSING_INNER_HITS) <= 1 &&
+		 iso < isoCut && fabs(dxy) < 0.05 ) isHEEPv50 = true;
+          }  
+	  
+       }
+       
+    }
+     
+    //if( !isHEEP ) continue;
+    nele++;
+          
     nBranches_->lep_isHEEP      .push_back( isHEEP );
+    nBranches_->lep_isHEEPv50      .push_back( isHEEPv50 );
     nBranches_->lep_isHighPtMuon.push_back(-99);        
     nBranches_->lep_type        .push_back(ele.pdgId());
     nBranches_->lep_charge      .push_back(ele.charge());
