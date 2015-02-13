@@ -5,6 +5,7 @@
 #include "../interface/ElectronsNtuplizer.h"
 #include "../interface/METsNtuplizer.h"
 #include "../interface/PileUpNtuplizer.h"
+#include "../interface/GenEventNtuplizer.h"
 #include "../interface/GenParticlesNtuplizer.h"
 #include "../interface/TriggersNtuplizer.h"
 #include "../interface/VerticesNtuplizer.h"
@@ -13,13 +14,16 @@
 ///////////////////////////////////////////////////////////////////////////////////
 Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
 	
+
 	vtxToken_		(consumes<reco::VertexCollection>				(iConfig.getParameter<edm::InputTag>("vertices"))),
-	rhoToken_		(consumes<double>						(iConfig.getParameter<edm::InputTag>("rho"))),
-	puinfoToken_    	(consumes<std::vector<PileupSummaryInfo> >		        (iConfig.getParameter<edm::InputTag>("PUInfo"))),
+	rhoToken_		(consumes<double>								(iConfig.getParameter<edm::InputTag>("rho"))),
+	puinfoToken_    (consumes<std::vector<PileupSummaryInfo> >		(iConfig.getParameter<edm::InputTag>("PUInfo"))),
+	geneventToken_  (consumes<GenEventInfoProduct>				    (iConfig.getParameter<edm::InputTag>("genEventInfo"))),
+
 	
 	genparticleToken_ 	(consumes<reco::GenParticleCollection>			        (iConfig.getParameter<edm::InputTag>("genparticles"))),
 	
-	jetToken_		(consumes<pat::JetCollection>					(iConfig.getParameter<edm::InputTag>("jets"))),
+	jetToken_			(consumes<pat::JetCollection>					(iConfig.getParameter<edm::InputTag>("jets"))),
 	fatjetToken_		(consumes<pat::JetCollection>					(iConfig.getParameter<edm::InputTag>("fatjets"))),
 	prunedjetToken_		(consumes<pat::JetCollection>					(iConfig.getParameter<edm::InputTag>("prunedjets"))),
 	softdropjetToken_	(consumes<pat::JetCollection>					(iConfig.getParameter<edm::InputTag>("softdropjets"))),
@@ -34,7 +38,8 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
 	triggerToken_		(consumes<edm::TriggerResults>					(iConfig.getParameter<edm::InputTag>("HLT")))
 
 {
-  
+
+	
   /*=======================================================================================*/
   edm::Service<TFileService> fs;
   TTree* tree = fs->make<TTree>( "tree", "tree" );
@@ -48,6 +53,23 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
   jetTokens.push_back( prunedjetToken_ 		);
   jetTokens.push_back( softdropjetToken_	);
   // jetTokens.push_back( flavourToken_	 		);  
+  
+  std::string jecpath = iConfig.getParameter<std::string>("jecpath");
+  
+  std::vector<std::string> jecAK8Labels;
+  std::string tmpString;
+  std::vector<std::string> tmpVec = iConfig.getParameter<std::vector<std::string> >("jecAK8chsPayloadNames");
+  for( unsigned int v = 0; v < tmpVec.size(); ++v ){
+     tmpString = jecpath + tmpVec[v];
+     jecAK8Labels.push_back(tmpString);
+  }    
+  std::vector<std::string> jecAK4Labels;
+  tmpVec.clear(); tmpVec = iConfig.getParameter<std::vector<std::string> >("jecAK4chsPayloadNames");
+  for( unsigned int v = 0; v < tmpVec.size(); ++v ){
+     tmpString = jecpath + tmpVec[v];
+     jecAK4Labels.push_back(tmpString);
+  }    
+  
 
   /*=======================================================================================*/  
   std::vector<edm::EDGetTokenT<pat::METCollection>> metTokens;
@@ -64,12 +86,14 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
   
   /*=======================================================================================*/
   
-  nTuplizers_["jets"]  	   = new JetsNtuplizer	    ( jetTokens		, flavourToken_	, nBranches_ );
-  nTuplizers_["muons"] 	   = new MuonsNtuplizer     ( muonToken_	, vtxToken_	, rhoToken_, nBranches_ );
-  nTuplizers_["electrons"] = new ElectronsNtuplizer ( electronToken_    , vtxToken_     , rhoToken_, nBranches_ );
-  nTuplizers_["MET"]       = new METsNtuplizer      ( metTokens		, nBranches_ );
-  nTuplizers_["vertices"]  = new VerticesNtuplizer  ( vtxTokens		, nBranches_ );
-  nTuplizers_["triggers"]  = new TriggersNtuplizer  ( triggerTokens     , nBranches_ );
+
+  nTuplizers_["jets"]  	   = new JetsNtuplizer	    ( jetTokens		, jecAK4Labels	, jecAK8Labels, flavourToken_	, rhoToken_ , vtxToken_ , nBranches_ );
+  nTuplizers_["muons"] 	   = new MuonsNtuplizer     ( muonToken_	, vtxToken_		, rhoToken_						, nBranches_ );
+  nTuplizers_["electrons"] = new ElectronsNtuplizer ( electronToken_, vtxToken_     , rhoToken_						, nBranches_ );
+  nTuplizers_["MET"]       = new METsNtuplizer      ( metTokens														, nBranches_ );
+  nTuplizers_["vertices"]  = new VerticesNtuplizer  ( vtxTokens														, nBranches_ );
+  nTuplizers_["triggers"]  = new TriggersNtuplizer  ( triggerTokens     											, nBranches_ );
+
 
   /*=======================================================================================*/    
   if ( runOnMC ){
@@ -80,6 +104,10 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
      std::vector<edm::EDGetTokenT< std::vector<PileupSummaryInfo> > > puTokens;
      puTokens.push_back( puinfoToken_ );
      nTuplizers_["PU"] = new PileUpNtuplizer( puTokens, nBranches_ );
+
+     std::vector<edm::EDGetTokenT< GenEventInfoProduct > > geneTokens;
+     geneTokens.push_back( geneventToken_ );
+     nTuplizers_["genEvent"] = new GenEventNtuplizer( geneTokens, nBranches_ );
   }
 }
 
@@ -98,11 +126,6 @@ Ntuplizer::~Ntuplizer()
 
 ///////////////////////////////////////////////////////////////////////////////////
 void Ntuplizer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup){
-  
-  edm::Handle<reco::VertexCollection> vertices;
-  iEvent.getByToken(vtxToken_, vertices);
-	  
-  if (vertices->empty()) return; // skip the event if no PV found
   
 
   nBranches_->EVENT_event     = iEvent.id().event();

@@ -199,7 +199,7 @@ if opts.copyfiles:
       #cmd = "srmmv %s %s" %(inputpath,outputpath) 
       cmd = "gfal-copy %s %s" %(inputpath,outputpath)
       print cmd
-      #os.system(cmd) 
+      os.system(cmd)
           	 
    sys.exit()	 
 

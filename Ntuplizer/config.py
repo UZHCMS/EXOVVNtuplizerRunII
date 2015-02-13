@@ -18,9 +18,9 @@ process.TFileService = cms.Service("TFileService",
 import FWCore.ParameterSet.VarParsing as VarParsing
 
 options = VarParsing.VarParsing ('analysis')
-options.maxEvents = -1
+options.maxEvents = 1000
 # options.inputFiles ='root://xrootd.unl.edu//store/mc/Phys14DR/RSGravitonToWW_kMpl01_M_1000_Tune4C_13TeV_pythia8/MINIAODSIM/PU20bx25_tsg_PHYS14_25_V1-v2/10000/CE92595C-9676-E411-A785-00266CF2E2C8.root'
-options.inputFiles = "root://xrootd.unl.edu//store/mc/Phys14DR/RSGravitonToWW_kMpl01_M_4000_Tune4C_13TeV_pythia8/MINIAODSIM/PU20bx25_PHYS14_25_V1-v1/00000/0C9B3A02-A86F-E411-83EA-D8D385FF6C5E.root"
+options.inputFiles = 'file:testWW.root'
 
 options.parseArguments()
 
@@ -33,13 +33,14 @@ process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(options.maxE
 
 process.source = cms.Source("PoolSource",
                             fileNames = cms.untracked.vstring(options.inputFiles)
-                            )
+                            )                     
 
 ######## Sequence settings ##########
 
 doAK8reclustering = False
 doAK8prunedReclustering = False
 doAK8softdropReclustering = False
+
 
 ####### Logger ##########
 
@@ -55,14 +56,16 @@ process.MessageLogger.cerr.FwkReport.reportEvery = 1000
 
 ####### Redo Jet clustering sequence ##########
 
-from RecoJets.Configuration.RecoPFJets_cff import ak8PFJetsCHS, ak8PFJetsCHSPruned, ak8PFJetsCHSSoftDrop, ak8PFJetsCHSPrunedLinks, ak8PFJetsCHSSoftDropLinks# , ak8PFJetsCSTrimmed, ak8PFJetsCSFiltered, ak8PFJetsCHSFilteredLinks, ak8PFJetsCHSTrimmedLinks
+from RecoJets.Configuration.RecoPFJets_cff import ak4PFJetsCHS, ak8PFJetsCHS, ak8PFJetsCHSPruned, ak8PFJetsCHSSoftDrop, ak8PFJetsCHSPrunedLinks, ak8PFJetsCHSSoftDropLinks# , ak8PFJetsCSTrimmed, ak8PFJetsCSFiltered, ak8PFJetsCHSFilteredLinks, ak8PFJetsCHSTrimmedLinks
                                                                                                           
 process.chs = cms.EDFilter("CandPtrSelector",
   src = cms.InputTag('packedPFCandidates'),
   cut = cms.string('fromPV')
 )
 
+#process.ak4PFJetsCHS = ak4PFJetsCHS.clone( src = 'chs', jetPtMin = 100.0 )
 process.ak8PFJetsCHS = ak8PFJetsCHS.clone( src = 'chs', jetPtMin = 100.0 )
+
 
 process.NjettinessAK8 = cms.EDProducer("NjettinessAdder",
 			       src = cms.InputTag("ak8PFJetsCHS"),
@@ -78,11 +81,12 @@ process.NjettinessAK8 = cms.EDProducer("NjettinessAdder",
 			       akAxesR0 = cms.double(-999.0)	    # not used by default
 			       )
 			       
-   
+ 
 process.ak8PFJetsCHSPruned = ak8PFJetsCHSPruned.clone( src = 'chs', jetPtMin = 100.0  )
 process.ak8PFJetsCHSPrunedLinks = ak8PFJetsCHSPrunedLinks.clone()
 
 process.ak8PFJetsCHSSoftDrop = ak8PFJetsCHSSoftDrop.clone( src = 'chs', jetPtMin = 100.0  )
+
 process.ak8PFJetsCHSSoftDropLinks = ak8PFJetsCHSSoftDropLinks.clone()
 
 # process.ak8PFJetsCSTrimmed = ak8PFJetsCSTrimmed.clone( src = 'chs' )
@@ -104,7 +108,7 @@ if doAK8prunedReclustering:
 if doAK8softdropReclustering:
    process.substructureSequence+=process.ak8PFJetsCHSSoftDrop
    process.substructureSequence+=process.ak8PFJetsCHSSoftDropLinks
-                                  
+  
 ####### Redo pat jets sequence ##########
 process.redoPatJets = cms.Sequence()
 process.redoPrunedPatJets = cms.Sequence()
@@ -196,6 +200,21 @@ if doAK8prunedReclustering:
 if doAK8softdropReclustering:
    jetsAK8softdrop = "patSoftDropJetsAK8"     
 
+######## JEC ########
+if doAK8reclustering:
+  jecLevelsAK8chs = [
+    'JEC/PHYS14_25_V2::All_L1FastJet_AK8PFchs.txt',
+    'JEC/PHYS14_25_V2::All_L2Relative_AK8PFchs.txt',
+    'JEC/PHYS14_25_V2::All_L3Absolute_AK8PFchs.txt'
+  ]
+  jecLevelsAK4chs = [
+    'JEC/PHYS14_25_V2::All_L1FastJet_AK4PFchs.txt',
+    'JEC/PHYS14_25_V2::All_L2Relative_AK4PFchs.txt',
+    'JEC/PHYS14_25_V2::All_L3Absolute_AK4PFchs.txt'
+  ]
+          
+   
+
 process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     runOnMC = cms.bool(runOnMC),
     vertices = cms.InputTag("offlineSlimmedPrimaryVertices"),
@@ -213,7 +232,11 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     rho = cms.InputTag("fixedGridRhoFastjetAll"),
     genparticles = cms.InputTag("prunedGenParticles"),
     PUInfo = cms.InputTag("addPileupInfo"),
+    genEventInfo = cms.InputTag("generator"),
     HLT = cms.InputTag("TriggerResults","","HLT"),
+    jecAK8chsPayloadNames = cms.vstring( jecLevelsAK8chs ),
+    jecAK4chsPayloadNames = cms.vstring( jecLevelsAK4chs ),
+    jecpath = cms.string(''),
 )
 
 ####### Final path ##########
