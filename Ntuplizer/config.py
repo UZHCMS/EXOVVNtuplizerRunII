@@ -18,9 +18,10 @@ process.TFileService = cms.Service("TFileService",
 import FWCore.ParameterSet.VarParsing as VarParsing
 
 options = VarParsing.VarParsing ('analysis')
-options.maxEvents = 1000
+options.maxEvents = 10
 # options.inputFiles ='root://xrootd.unl.edu//store/mc/Phys14DR/RSGravitonToWW_kMpl01_M_1000_Tune4C_13TeV_pythia8/MINIAODSIM/PU20bx25_tsg_PHYS14_25_V1-v2/10000/CE92595C-9676-E411-A785-00266CF2E2C8.root'
-options.inputFiles = 'file:testWW.root'
+# options.inputFiles = 'file:testWW.root'
+options.inputFiles = 'file:////afs/cern.ch/user/h/hinzmann/workspace/tmp/1020E374-B26B-E411-8F91-E0CB4E29C513.root'
 
 
 options.parseArguments()
@@ -202,18 +203,16 @@ if doAK8softdropReclustering:
    jetsAK8softdrop = "patSoftDropJetsAK8"     
 
 ######## JEC ########
-if doAK8reclustering:
-  jecLevelsAK8chs = [
+jecLevelsAK8chs = [
     'JEC/PHYS14_25_V2::All_L1FastJet_AK8PFchs.txt',
     'JEC/PHYS14_25_V2::All_L2Relative_AK8PFchs.txt',
     'JEC/PHYS14_25_V2::All_L3Absolute_AK8PFchs.txt'
   ]
-  jecLevelsAK4chs = [
+jecLevelsAK4chs = [
     'JEC/PHYS14_25_V2::All_L1FastJet_AK4PFchs.txt',
     'JEC/PHYS14_25_V2::All_L2Relative_AK4PFchs.txt',
     'JEC/PHYS14_25_V2::All_L3Absolute_AK4PFchs.txt'
   ]
-          
    
 
 process.ntuplizer = cms.EDAnalyzer("Ntuplizer",

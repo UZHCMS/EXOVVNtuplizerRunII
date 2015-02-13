@@ -106,7 +106,7 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
       jecAK4_->setJetEta( uncorrJet.eta()          );
       jecAK4_->setJetPt ( uncorrJet.pt()           );
       jecAK4_->setJetE  ( uncorrJet.energy()       );
-	  jecAK4_->setRho   ( *(rho_.product())        );
+	  jecAK4_->setRho   ( nBranches_->rho        );
 	  jecAK4_->setNPV   ( vertices_->size()        );
       jecAK4_->setJetA  ( j.jetArea() 			   );
       double corr = jecAK4_->getCorrection();
@@ -194,10 +194,10 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
 
       jecAK8_->setJetEta( uncorrJet.eta()          );
       jecAK8_->setJetPt ( uncorrJet.pt()           );
-      jecAK8_->setJetE  ( uncorrJet.energy()       );
+      //jecAK8_->setJetE  ( uncorrJet.energy()       ); //not needed for current correction scheme
       jecAK8_->setJetA  ( fj.jetArea() );
-      jecAK8_->setRho   ( *(rho_.product())        );
-      jecAK8_->setNPV   ( vertices_->size()        );
+      jecAK8_->setRho   ( nBranches_->rho        );
+      //jecAK8_->setNPV   ( vertices_->size()        ); //not needed for current correction scheme
       double corr = jecAK8_->getCorrection();
 
       // jecAK8Unc_->setJetEta( uncorrJet.eta() );
@@ -274,10 +274,10 @@ if( doPruning ){
 
    jecAK8_->setJetEta( uncorrPrunedJet.eta()          );
    jecAK8_->setJetPt ( uncorrPrunedJet.pt()           );
-   jecAK8_->setJetE  ( uncorrPrunedJet.energy()       );
-   jecAK8_->setJetA  ( fj.jetArea() );
-   jecAK8_->setRho   ( *(rho_.product())        );
-   jecAK8_->setNPV   ( vertices_->size()        );
+   //jecAK8_->setJetE  ( uncorrPrunedJet.energy()       ); //not needed for current correction scheme
+   jecAK8_->setJetA  ( prunedjet.jetArea() );
+   jecAK8_->setRho   ( nBranches_->rho        );
+   //jecAK8_->setNPV   ( vertices_->size()        ); //not needed for current correction scheme
    double prunedcorr = jecAK8_->getCorrection();
    
    nBranches_->jetAK8_prunedmassCorr	    .push_back(prunedcorr*fj.userFloat("ak8PFJetsCHSPrunedLinks"));
@@ -383,10 +383,10 @@ if( doPruning ){
 
          jecAK8_->setJetEta( uncorrSoftDropJet.eta()          );
          jecAK8_->setJetPt ( uncorrSoftDropJet.pt()           );
-         jecAK8_->setJetE  ( uncorrSoftDropJet.energy()       );
-         jecAK8_->setJetA  ( fj.jetArea() );
-         jecAK8_->setRho   ( *(rho_.product())        );
-         jecAK8_->setNPV   ( vertices_->size()        );
+         //jecAK8_->setJetE  ( uncorrSoftDropJet.energy()       );
+         jecAK8_->setJetA  ( softdropjet.jetArea() );
+         jecAK8_->setRho   ( nBranches_->rho        );
+         //jecAK8_->setNPV   ( vertices_->size()        );
          double softdropcorr = jecAK8_->getCorrection();	 
 		 
 		 nBranches_->jetAK8_softdropmassCorr	.push_back(softdropcorr*fj.userFloat("ak8PFJetsCHSSoftDropLinks"));
