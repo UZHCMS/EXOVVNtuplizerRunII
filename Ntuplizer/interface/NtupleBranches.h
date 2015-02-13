@@ -79,6 +79,7 @@ public:
     std::vector<float>  	      lep_pt		         ;
     std::vector<float>  	      lep_phi		         ;
     std::vector<int  >  	      lep_isHEEP	         ;
+    std::vector<int  >  	      lep_isHEEPv50	         ;
     std::vector<int  >            lep_isHighPtMuon       	 ;
     std::vector<float>  	      lep_pfRhoCorrRelIso03  	 ;
     std::vector<float>  	      lep_pfRhoCorrRelIso04  	 ;

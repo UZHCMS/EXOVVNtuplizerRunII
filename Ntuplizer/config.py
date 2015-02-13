@@ -23,7 +23,6 @@ options.maxEvents = 10
 # options.inputFiles = 'file:testWW.root'
 options.inputFiles = 'file:////afs/cern.ch/user/h/hinzmann/workspace/tmp/1020E374-B26B-E411-8F91-E0CB4E29C513.root'
 
-
 options.parseArguments()
 
 process.options  = cms.untracked.PSet( 
@@ -39,9 +38,9 @@ process.source = cms.Source("PoolSource",
 
 ######## Sequence settings ##########
 
-doAK8reclustering = True
-doAK8prunedReclustering = True
-doAK8softdropReclustering = True
+doAK8reclustering = False
+doAK8prunedReclustering = False
+doAK8softdropReclustering = False
 
 
 ####### Logger ##########

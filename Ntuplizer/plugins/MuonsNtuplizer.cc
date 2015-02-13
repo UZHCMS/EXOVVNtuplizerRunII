@@ -31,7 +31,7 @@ void MuonsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSet
       for (const pat::Muon &mu : *muons_) {
       bool isHighPt = mu.isHighPtMuon(vertices_->at(0));
       
-      if( !isHighPt ) continue;
+      //if( !isHighPt ) continue;
       
       nmus++;
                   
