@@ -33,8 +33,7 @@ void GenJetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 	  nBranches_->genJetAK4_mass   	    .push_back(j.mass());
 	  nBranches_->genJetAK4_phi    	    .push_back(j.phi());   
 	  nBranches_->genJetAK4_e      	    .push_back(j.energy());
-          float visibleFraction = 0;
-          if(j.energy()>0) visibleFraction = (j.energy()-j.invisibleEnergy())/j.energy();
+          float visibleFraction = (j.energy()>0) ?(j.energy()-j.invisibleEnergy())/j.energy() : 0;
 	  nBranches_->genJetNoNuAK4_pt     	    .push_back(j.pt()*visibleFraction);
 	  nBranches_->genJetNoNuAK4_mass   	    .push_back(j.mass()*visibleFraction);
 	  nBranches_->genJetNoNuAK4_e      	    .push_back(j.energy()*visibleFraction);
