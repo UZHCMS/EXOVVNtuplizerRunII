@@ -1,6 +1,7 @@
 #include "../interface/Ntuplizer.h"
 #include "../interface/CandidateNtuplizer.h"
 #include "../interface/JetsNtuplizer.h"
+#include "../interface/GenJetsNtuplizer.h"
 #include "../interface/MuonsNtuplizer.h"
 #include "../interface/ElectronsNtuplizer.h"
 #include "../interface/METsNtuplizer.h"
@@ -27,6 +28,7 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
 	fatjetToken_		(consumes<pat::JetCollection>					(iConfig.getParameter<edm::InputTag>("fatjets"))),
 	prunedjetToken_		(consumes<pat::JetCollection>					(iConfig.getParameter<edm::InputTag>("prunedjets"))),
 	softdropjetToken_	(consumes<pat::JetCollection>					(iConfig.getParameter<edm::InputTag>("softdropjets"))),
+	genJetToken_	(consumes<reco::GenJetCollection>					(iConfig.getParameter<edm::InputTag>("genJets"))),
 	
 	flavourToken_		(consumes<reco::JetFlavourMatchingCollection>	                (iConfig.getParameter<edm::InputTag>("subjetflavour"))),
 
@@ -88,6 +90,7 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
   
 
   nTuplizers_["jets"]  	   = new JetsNtuplizer	    ( jetTokens		, jecAK4Labels	, jecAK8Labels, flavourToken_	, rhoToken_ , vtxToken_ , nBranches_ );
+  nTuplizers_["genJets"]   = new GenJetsNtuplizer	    ( genJetToken_ , nBranches_ );
   nTuplizers_["muons"] 	   = new MuonsNtuplizer     ( muonToken_	, vtxToken_		, rhoToken_						, nBranches_ );
   nTuplizers_["electrons"] = new ElectronsNtuplizer ( electronToken_, vtxToken_     , rhoToken_						, nBranches_ );
   nTuplizers_["MET"]       = new METsNtuplizer      ( metTokens														, nBranches_ );
