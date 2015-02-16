@@ -197,6 +197,17 @@ void NtupleBranches::branch( void ){
   //tree_->Branch( "subjetAK8softdrop_jp"     , &subjetAK8softdrop_jp	   );
   //tree_->Branch( "subjetAK8softdrop_jbp"    , &subjetAK8softdrop_jbp     );
     
+  /*-------------------------AK4 GenJets---------------------------*/	 
+  tree_->Branch( "ngenJetsAK4"		    , &ngenJetsAK4 	);
+  tree_->Branch( "genJetAK4_pt"		    , &genJetAK4_pt	);
+  tree_->Branch( "genJetAK4_eta"		    , &genJetAK4_eta	);
+  tree_->Branch( "genJetAK4_mass"		    , &genJetAK4_mass	);
+  tree_->Branch( "genJetAK4_phi"		    , &genJetAK4_phi	);
+  tree_->Branch( "genJetAK4_e"		    , &genJetAK4_e 	);
+  tree_->Branch( "genJetNoNuAK4_pt"		    , &genJetNoNuAK4_pt	);
+  tree_->Branch( "genJetNoNuAK4_mass"		    , &genJetNoNuAK4_mass	);
+  tree_->Branch( "genJetNoNuAK4_e"		    , &genJetNoNuAK4_e 	);
+        
   /*----------------------HLT trigger---------------------------*/	  
   tree_->Branch("isFired_HLT_AK8PFJet360TrimMod_Mass30_v1"		, &isFired_HLT_AK8PFJet360TrimMod_Mass30_v1		  );
   tree_->Branch("isFired_HLT_AK8PFHT700_TrimR0p1PT0p03Mass50_v1"	, &isFired_HLT_AK8PFHT700_TrimR0p1PT0p03Mass50_v1	  );
