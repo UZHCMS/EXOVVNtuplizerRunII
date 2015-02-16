@@ -1,20 +1,23 @@
 from ROOT import *
 
-numberOfEvents=10
+numberOfEvents=1
 options="precision=3,colsize=7"
 
-f1=TFile("dijetTree_test.root")
+f1=TFile("../../dijetTree_test.root")
 tree1=f1.Get("dijets").Get("events")
 branches=[b.GetName() for b in tree1.GetListOfBranches()]
 print branches
 branches_selected=[
 #'runNo', 'lumi',
 'evtNo', 
+'rho', 
 #'nJetsAK8',
+'jetPtAK4', 'jetEtaAK4', 'jetPhiAK4', 'jetMassAK4', 'jetEnergyAK4',
+'jetJecAK4', 'jetAreaAK4',
 'jetPtAK8', 'jetEtaAK8', 'jetPhiAK8', 'jetMassAK8', 'jetEnergyAK8',
-#'jetJecAK8',
+'jetJecAK8', 'jetAreaAK8',
 'idLAK8',# 'idTAK8',
-#'jetChfAK8', 'jetNhfAK8',# 'jetPhfAK8', 'jetMufAK8', 'jetElfAK8',
+'jetChfAK8', 'jetNhfAK8', 'jetPhfAK8', 'jetMufAK8', 'jetElfAK8',
 'jetMassPrunedAK8', 'jetMassSoftDropAK8',
 'jetTau1AK8', 'jetTau2AK8', 'jetTau3AK8']
 tree1.GetPlayer().SetScanRedirect(True)
@@ -28,13 +31,15 @@ print branches
 branches_selected=[
 #'EVENT_run', 'EVENT_lumiBlock',
 'EVENT_event',
+'rho',
 #'njetsAK8',
+'jetAK4_pt', 'jetAK4_eta', 'jetAK4_phi', 'jetAK4_mass', 'jetAK4_e',
+'jetAK4_jec', 'jetAK4_area',
 'jetAK8_pt', 'jetAK8_eta', 'jetAK8_phi', 'jetAK8_mass', 'jetAK8_e',
+'jetAK8_jec', 'jetAK8_area',
 'jetAK8_IDLoose',
-#'jetAK8_che', 'jetAK8_ne',# 'jetAK8_cm', 'jetAK8_nm', 
-'jetAK8_prunedmass', #'jetAK8_softdropmass', #'jetAK8_trimmedmass', 'jetAK8_filteredmass',
-#'jetAK8pruned_mass',
-'jetAK8softdrop_mass',
+'jetAK8_chf', 'jetAK8_nhf', 'jetAK8_phf', 'jetAK8_muf', 'jetAK8_emf',
+'jetAK8_prunedmassUnCorr', 'jetAK8_softdropmassCorr',
 'jetAK8_tau1', 'jetAK8_tau2', 'jetAK8_tau3', #'jetAK8_tau21', 
 ]
 tree2.GetPlayer().SetScanRedirect(True)
