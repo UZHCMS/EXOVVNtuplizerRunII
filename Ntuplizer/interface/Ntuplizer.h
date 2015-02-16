@@ -1,5 +1,5 @@
 #include <memory>
-
+#include "DataFormats/METReco/interface/METCollection.h"
 #include "FWCore/Framework/interface/Frameworkfwd.h"
 #include "FWCore/Framework/interface/EDAnalyzer.h"
 
@@ -61,6 +61,7 @@ private:
   edm::EDGetTokenT<pat::TauCollection> 	    				tauToken_			;
   
   edm::EDGetTokenT<pat::METCollection> 	    				metToken_			;
+  edm::InputTag pfMETlabel;	     // input label for particle-flow MET
   
   edm::EDGetTokenT<edm::TriggerResults>						triggerToken_;
   
