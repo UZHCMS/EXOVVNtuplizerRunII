@@ -18,10 +18,11 @@ process.TFileService = cms.Service("TFileService",
 import FWCore.ParameterSet.VarParsing as VarParsing
 
 options = VarParsing.VarParsing ('analysis')
+
 options.maxEvents = 10
-# options.inputFiles ='root://xrootd.unl.edu//store/mc/Phys14DR/RSGravitonToWW_kMpl01_M_1000_Tune4C_13TeV_pythia8/MINIAODSIM/PU20bx25_tsg_PHYS14_25_V1-v2/10000/CE92595C-9676-E411-A785-00266CF2E2C8.root'
-# options.inputFiles = 'file:testWW.root'
-options.inputFiles = 'file:////afs/cern.ch/user/h/hinzmann/workspace/tmp/1020E374-B26B-E411-8F91-E0CB4E29C513.root'
+#options.inputFiles ='root://xrootd.unl.edu//store/mc/Phys14DR/RSGravitonToWW_kMpl01_M_1000_Tune4C_13TeV_pythia8/MINIAODSIM/PU20bx25_tsg_PHYS14_25_V1-v2/10000/CE92595C-9676-E411-A785-00266CF2E2C8.root'
+options.inputFiles = 'file:testWW.root'
+
 
 options.parseArguments()
 
@@ -64,7 +65,7 @@ process.chs = cms.EDFilter("CandPtrSelector",
   cut = cms.string('fromPV')
 )
 
-#process.ak4PFJetsCHS = ak4PFJetsCHS.clone( src = 'chs', jetPtMin = 100.0 )
+process.ak4PFJetsCHS = ak4PFJetsCHS.clone(src = 'chs')
 process.ak8PFJetsCHS = ak8PFJetsCHS.clone( src = 'chs', jetPtMin = 100.0 )
 
 
@@ -186,6 +187,69 @@ process.egmGsfElectronIDSequence = cms.Sequence(process.egmGsfElectronIDs)
 process.load('RecoEgamma.ElectronIdentification.Identification.heepElectronID_HEEPV50_CSA14_startup_cff')
 setupVIDSelection(process.egmGsfElectronIDs,process.heepElectronID_HEEPV50_CSA14_startup)
 
+###### Recluster MET ##########
+# from RecoMET.METProducers.PFMET_cfi import pfMet
+# 
+# process.pfJetMETcorr = cms.EDProducer("PFJetMETcorrInputProducer",
+#     src = cms.InputTag('ak4PFJetsCHS'),
+#     offsetCorrLabel = cms.InputTag("ak4PFL1FastjetCorrector"),
+#     jetCorrLabel = cms.InputTag("ak4PFL1FastL2L3Corrector"), # NOTE: use "ak4PFL1FastL2L3Corrector" for MC / "ak4PFL1FastL2L3ResidualCorrector" for Data
+#     jetCorrEtaMax = cms.double(9.9),
+#     type1JetPtThreshold = cms.double(10.0),
+#     skipEM = cms.bool(True),
+#     skipEMfractionThreshold = cms.double(0.90),
+#     skipMuons = cms.bool(True),
+#     skipMuonSelection = cms.string("isGlobalMuon | isStandAloneMuon")
+# )
+    
+# process.pfType1CorrectedMet = cms.EDProducer("CorrectedPFMETProducer",
+#     src = cms.InputTag("pfMet"),
+#     applyType1Corrections = cms.bool(True),
+#     srcType1Corrections = cms.VInputTag(cms.InputTag("pfJetMETcorr","type1")),
+#     type0Rsoft = cms.double(0.6),
+#     applyType2Corrections = cms.bool(False),
+#     srcCHSSums = cms.VInputTag(cms.InputTag("pfchsMETcorr","type0")),
+#     applyType0Corrections = cms.bool(False)
+# )
+#
+# process.patMET = cms.EDProducer("PATMETProducer",
+#     metSource = cms.InputTag("pfType1CorrectedMet"),
+#     userData = cms.PSet(
+#         userCands = cms.PSet(
+#             src = cms.VInputTag("")
+#         ),
+#         userInts = cms.PSet(
+#             src = cms.VInputTag("")
+#         ),
+#         userFloats = cms.PSet(
+#             src = cms.VInputTag("")
+#         ),
+#         userClasses = cms.PSet(
+#             src = cms.VInputTag("")
+#         ),
+#         userFunctionLabels = cms.vstring(),
+#         userFunctions = cms.vstring()
+#     ),
+#     addResolutions = cms.bool(False),
+#     addEfficiencies = cms.bool(False),
+#     genMETSource = cms.InputTag("genMetTrue"),
+#     efficiencies = cms.PSet(
+#
+#     ),
+#     addGenMET = cms.bool(False),
+#     addMuonCorrections = cms.bool(False),
+#     muonSource = cms.InputTag("muons"),
+#     resolutions = cms.PSet(
+#
+#     )
+# )
+# 
+# process.redoPatMET = cms.Sequence()
+# process.redoPatMET+=process.pfMet
+# process.redoPatMET+=process.corrPfMetType1
+# process.redoPatMET+=process.pfMetT1
+
+
 ####### Ntuplizer initialization ##########
 
 runOnMC = True
@@ -229,6 +293,9 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     #subjetflavour = cms.InputTag("flavourByVal"),
     subjetflavour = cms.InputTag("AK8byValAlgo"),
     mets = cms.InputTag("slimmedMETs"),
+    pfmets = cms.InputTag("pfMet"),
+    corrMetPx = cms.string("+0.1166 + 0.0200*Nvtx"),
+    corrMetPy = cms.string("+0.2764 - 0.1280*Nvtx"),
     rho = cms.InputTag("fixedGridRhoFastjetAll"),
     genparticles = cms.InputTag("prunedGenParticles"),
     PUInfo = cms.InputTag("addPileupInfo"),
@@ -241,7 +308,7 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
 
 ####### Final path ##########
 
-#process.p = cms.Path(process.substructureSequence*process.redoPatJets*process.redoPrunedPatJets*process.leptonSequence*process.jetSequence*process.PrunedJetSequence*process.ntuplizer)
+# process.p = cms.Path(process.substructureSequence*process.redoPatJets*process.redoPrunedPatJets*process.redoSoftDropPatJets*process.ak4PFJetsCHS*process.redoPatMET*process.ntuplizer)
+process.p = cms.Path(process.substructureSequence*process.redoPatJets*process.redoPrunedPatJets*process.redoSoftDropPatJets*process.ak4PFJetsCHS*process.ntuplizer)
 
-process.p = cms.Path(process.substructureSequence*process.redoPatJets*process.redoPrunedPatJets*process.redoSoftDropPatJets*process.ntuplizer)
 

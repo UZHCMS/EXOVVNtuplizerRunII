@@ -219,12 +219,22 @@ void NtupleBranches::branch( void ){
   tree_->Branch("isFired_HLT_Mu40_v1"		 		        , &isFired_HLT_Mu40_v1					  );
 
   /*-------------------------MET--------------------------------*/
-  //tree_->Branch("METraw_et" , &METraw_et  );
-  //tree_->Branch("METraw_phi", &METraw_phi ); 
-  tree_->Branch("MET_et"      , &MET_et	    ); 
-  tree_->Branch("MET_sumEt"   , &MET_sumEt  ); 
-  tree_->Branch("MET_phi"     , &MET_phi    );
- 
+<<<<<<< HEAD
+  tree_->Branch("METraw_et"		        	, &METraw_et	     );
+  tree_->Branch("METraw_phi"		        , &METraw_phi	     ); 
+  tree_->Branch("METraw_sumEt"		        , &METraw_sumEt	     ); 
+  
+  tree_->Branch("MET_corrPx"		        , &MET_corrPx	     ); 
+  tree_->Branch("MET_corrPy"		        , &MET_corrPy	     ); 
+  
+  tree_->Branch("MET_et"	                , &MET_et  	    	 ); 
+  tree_->Branch("MET_phi"	                , &MET_phi           );
+  // tree_->Branch("MET_T1Uncertainty"	        , &MET_T1Uncertainty );
+  tree_->Branch("MET_sumEt"	                , &MET_sumEt 	   	 ); 
+  //tree_->Branch("METdefault_et"	            , &METdefault_et  	    	 ); 
+  //tree_->Branch("METdefault_sumEt"	        , &METdefault_sumEt 	   	 ); 
+ // tree_->Branch("METdefault_phi"	        , &METdefault_phi            );
+
   /*------------- ------EVENT infos-----------------------------*/
   tree_->Branch("EVENT_event"	 , &EVENT_event     );
   tree_->Branch("EVENT_run"	 , &EVENT_run	    );
@@ -427,11 +437,17 @@ void NtupleBranches::reset( void ){
   //subjetAK8softdrop_jp     .clear();
   //subjetAK8softdrop_jbp    .clear();
   /************************************/
-  //METraw_et .clear();
-  //METraw_phi.clear();
-  MET_et   .clear();
-  MET_sumEt.clear();
-  MET_phi  .clear();
+
+  METraw_et		    	.clear();
+  METraw_phi		    .clear();
+  METraw_sumEt		    .clear();
+  MET_et	            .clear();
+  MET_sumEt             .clear();
+  MET_phi	            .clear();
+  MET_corrPx	         .clear();
+  MET_corrPy	         .clear();
+  MET_T1Uncertainty		.clear();
+
   /************************************/  
   nPuVtxTrue            .clear();
   nPuVtx       		    .clear();

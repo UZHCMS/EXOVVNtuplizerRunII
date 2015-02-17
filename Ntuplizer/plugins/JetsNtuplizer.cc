@@ -65,7 +65,6 @@ void JetsNtuplizer::initJetCorrFactors( void ){
   
   // Make the FactorizedJetCorrector
   jecAK4_ = boost::shared_ptr<FactorizedJetCorrector> ( new FactorizedJetCorrector(vPar) );
-  std::cout<<"jecAK4_ = "<<jecAK4_<<std::endl;
 }
 
 //===================================================================================================================

@@ -281,10 +281,14 @@ public:
 	    
     /*-------------------------MET--------------------------------*/
     std::vector<float>                METraw_et              ;	 
-    std::vector<float>                METraw_phi             ;     
+    std::vector<float>                METraw_phi             ;
+	std::vector<float>                METraw_sumEt           ; 
+	std::vector<float>                MET_corrPx             ;
+	std::vector<float>                MET_corrPy         	 ;    
     std::vector<float>  	          MET_et                 ;
+	std::vector<float>  	      	  MET_phi                ;
 	std::vector<float>  	          MET_sumEt              ;
-    std::vector<float>  	      	  MET_phi                ;
+	std::vector<float>  	      	  MET_T1Uncertainty		 ;
 
     /*------------------------EVENT infos-------------------------*/    
     int                               EVENT_event            ;
