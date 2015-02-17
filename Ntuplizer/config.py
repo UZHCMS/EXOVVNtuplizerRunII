@@ -18,7 +18,7 @@ process.TFileService = cms.Service("TFileService",
 import FWCore.ParameterSet.VarParsing as VarParsing
 
 options = VarParsing.VarParsing ('analysis')
-options.maxEvents = 1000
+options.maxEvents = -1
 # options.inputFiles ='root://xrootd.unl.edu//store/mc/Phys14DR/RSGravitonToWW_kMpl01_M_1000_Tune4C_13TeV_pythia8/MINIAODSIM/PU20bx25_tsg_PHYS14_25_V1-v2/10000/CE92595C-9676-E411-A785-00266CF2E2C8.root'
 options.inputFiles = 'file:testWW.root'
 
@@ -37,9 +37,9 @@ process.source = cms.Source("PoolSource",
 
 ######## Sequence settings ##########
 
-doAK8reclustering = False
-doAK8prunedReclustering = False
-doAK8softdropReclustering = False
+doAK8reclustering = True
+doAK8prunedReclustering = True
+doAK8softdropReclustering = True
 
 
 ####### Logger ##########

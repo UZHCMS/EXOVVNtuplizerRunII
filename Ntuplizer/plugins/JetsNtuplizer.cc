@@ -236,8 +236,8 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
 	  nBranches_->jetAK8_tau1	    .push_back(fj.userFloat("NjettinessAK8:tau1"));	   
 	  nBranches_->jetAK8_tau2	    .push_back(fj.userFloat("NjettinessAK8:tau2"));
 	  nBranches_->jetAK8_tau3	    .push_back(fj.userFloat("NjettinessAK8:tau3")); 
-	  nBranches_->jetAK8_prunedmassUnCorr	.push_back(fj.userFloat("ak8PFJetsCHSPrunedLinks"));
-	  nBranches_->jetAK8_softdropmassUnCorr	.push_back(fj.userFloat("ak8PFJetsCHSSoftDropLinks"));
+	  nBranches_->jetAK8_prunedmassUnCorr  .push_back(fj.userFloat("ak8PFJetsCHSPrunedLinks"));
+	  nBranches_->jetAK8_softdropmassUnCorr.push_back(fj.userFloat("ak8PFJetsCHSSoftDropLinks"));
 	 
           TLorentzVector FatJet; FatJet.SetPtEtaPhiE( fj.pt(), fj.eta(), fj.phi(), fj.energy() );  
 
@@ -271,8 +271,8 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
 	     	jecAK8_->setNPV   ( vertices_->size()	     );
 	     	double prunedcorr = jecAK8_->getCorrection();
 	     	
-	     	nBranches_->jetAK8_prunedmassCorr	 .push_back(prunedcorr*fj.userFloat("ak8PFJetsCHSPrunedLinks"));
-	     	nBranches_->jetAK8pruned_jec			 .push_back(prunedcorr);
+	     	nBranches_->jetAK8_prunedmassCorr.push_back(prunedcorr*fj.userFloat("ak8PFJetsCHSPrunedLinks"));
+	     	nBranches_->jetAK8pruned_jec	 .push_back(prunedcorr);
 	  
 	        /****************************************************************/       
       
