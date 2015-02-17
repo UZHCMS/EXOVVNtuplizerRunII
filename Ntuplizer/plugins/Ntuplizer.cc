@@ -30,15 +30,16 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
 	fatjetToken_		(consumes<pat::JetCollection>					(iConfig.getParameter<edm::InputTag>("fatjets"))),
 	prunedjetToken_		(consumes<pat::JetCollection>					(iConfig.getParameter<edm::InputTag>("prunedjets"))),
 	softdropjetToken_	(consumes<pat::JetCollection>					(iConfig.getParameter<edm::InputTag>("softdropjets"))),
-	genJetToken_	(consumes<reco::GenJetCollection>					(iConfig.getParameter<edm::InputTag>("genJets"))),
+	genJetToken_		(consumes<reco::GenJetCollection>					(iConfig.getParameter<edm::InputTag>("genJets"))),
 	
 	flavourToken_		(consumes<reco::JetFlavourMatchingCollection>	                (iConfig.getParameter<edm::InputTag>("subjetflavour"))),
 
-	muonToken_		(consumes<pat::MuonCollection>					(iConfig.getParameter<edm::InputTag>("muons"))),
+	muonToken_			(consumes<pat::MuonCollection>					(iConfig.getParameter<edm::InputTag>("muons"))),
 	electronToken_		(consumes<pat::ElectronCollection>				(iConfig.getParameter<edm::InputTag>("electrons"))),
-	tauToken_		(consumes<pat::TauCollection>					(iConfig.getParameter<edm::InputTag>("taus"))),
-	metToken_		(consumes<pat::METCollection>					(iConfig.getParameter<edm::InputTag>("mets"))),
-	// pfMETlabel         (iConfig.getParameter<edm::InputTag>("pfmets"        )),
+	tauToken_			(consumes<pat::TauCollection>					(iConfig.getParameter<edm::InputTag>("taus"))),
+	metToken_			(consumes<pat::METCollection>					(iConfig.getParameter<edm::InputTag>("mets"))),
+	reclusteredmetToken_(consumes<pat::METCollection>					(iConfig.getParameter<edm::InputTag>("reclusteredmets"))),
+	pfMETlabel          (iConfig.getParameter<edm::InputTag>("pfmets")),
 	triggerToken_		(consumes<edm::TriggerResults>					(iConfig.getParameter<edm::InputTag>("HLT")))
 	
 	
@@ -81,6 +82,7 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
   std::vector<edm::EDGetTokenT<pat::METCollection>> metTokens;
   //METsLabels.push_back( iConfig.getParameter<edm::InputTag>("METrawColl") );
   metTokens.push_back( metToken_ );
+  metTokens.push_back( reclusteredmetToken_ );
   
   std::vector<std::string> corrFormulas;
   corrFormulas.push_back(iConfig.getParameter<std::string>("corrMetPx"));
@@ -101,7 +103,7 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
   nTuplizers_["genJets"]   = new GenJetsNtuplizer	    ( genJetToken_ , nBranches_ );
   nTuplizers_["muons"] 	   = new MuonsNtuplizer     ( muonToken_	, vtxToken_		, rhoToken_						, nBranches_ );
   nTuplizers_["electrons"] = new ElectronsNtuplizer ( electronToken_, vtxToken_     , rhoToken_						, nBranches_ );
-  nTuplizers_["MET"]       = new METsNtuplizer      ( metTokens		, jetToken_		, muonToken_  , jecAK4Labels, corrFormulas, rhoToken_ , vtxToken_ , nBranches_ );
+  nTuplizers_["MET"]       = new METsNtuplizer      ( metTokens		, pfMETlabel	, jetToken_		, muonToken_  , jecAK4Labels, corrFormulas, rhoToken_ , vtxToken_ , nBranches_ );
   nTuplizers_["vertices"]  = new VerticesNtuplizer  ( vtxTokens														, nBranches_ );
   nTuplizers_["triggers"]  = new TriggersNtuplizer  ( triggerTokens     											, nBranches_ );
 
@@ -138,14 +140,6 @@ Ntuplizer::~Ntuplizer()
 
 ///////////////////////////////////////////////////////////////////////////////////
 void Ntuplizer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup){
-	
-	// edm::Handle< edm::View<reco::PFMET> >   pfMEThandle;
-	// iEvent.getByLabel(pfMETlabel, pfMEThandle);
-	//
-	// float pfMET           = (pfMEThandle->front() ).et();
-	// std::cout<<"pfMet = "<< pfMET<<std::endl;
-
- 	 
 
   nBranches_->EVENT_event     = iEvent.id().event();
   nBranches_->EVENT_run       = iEvent.id().run();
