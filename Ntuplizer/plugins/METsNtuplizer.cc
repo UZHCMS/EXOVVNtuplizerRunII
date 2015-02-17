@@ -5,6 +5,7 @@
 //===================================================================================================================        
 // METsNtuplizer::METsNtuplizer( std::vector<edm::EDGetTokenT<pat::METCollection>> tokens, NtupleBranches* nBranches )
  METsNtuplizer::METsNtuplizer( 	std::vector<edm::EDGetTokenT<pat::METCollection>> 	mettokens,
+ 								edm::InputTag										pfmetlabel,
  	 							edm::EDGetTokenT<pat::JetCollection> 				jettoken,
 								edm::EDGetTokenT<pat::MuonCollection> 				muontoken,
 								std::vector<std::string> 							jecAK4labels,
@@ -13,19 +14,19 @@
 								edm::EDGetTokenT<reco::VertexCollection> 			vtxtoken,
 								NtupleBranches* 									nBranches )
 									
-									
-									
-   : CandidateNtuplizer ( nBranches ) 
-   , metInputToken_		( mettokens[0] 	)
-   , jetInputToken_		( jettoken		)
-   , muonInputToken_	( muontoken    	)	
-   , jetCorrLabel_		( jecAK4labels  )								
-   , corrFormulas_		(corrformulas	)						
-   , rhoToken_	      	( rhotoken     	)	
-   , verticeToken_     	( vtxtoken 		)														
-   //, METsRawLabel_( labels[0] )
+: CandidateNtuplizer		( nBranches )
+, metInputToken_			( mettokens[0] 	)
+, reclusteredmetInputToken_	( mettokens[1] 	)
+, METsRawLabel_				( pfmetlabel	)									
+, jetInputToken_			( jettoken		)
+, muonInputToken_			( muontoken    	)	
+, jetCorrLabel_				( jecAK4labels  )								
+, corrFormulas_				( corrformulas	)						
+, rhoToken_					( rhotoken     	)	
+, verticeToken_				( vtxtoken 		)														
+
 {
-    offsetCorrLabel_.push_back(jetCorrLabel_[0]);
+	offsetCorrLabel_.push_back(jetCorrLabel_[0]);
 	initJetCorrFactors();
 	 
 }
@@ -162,51 +163,78 @@ void METsNtuplizer::addTypeICorr( edm::Event const & event ){
 
 //===================================================================================================================
 void METsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetup& iSetup ){
+	
+	bool defaultMET		= event.getByToken(metInputToken_				, METs_ );
+	bool reclusteredMET	= event.getByToken(reclusteredmetInputToken_	, reclusteredMETs_ );
+	if ( METsRawLabel_.label() != "" ) event.getByLabel(METsRawLabel_   , pfMET_ );
+	
+	if(defaultMET){
+		
+		addTypeICorr(event);
+		
+		for (const pat::MET &met : *METs_) {
+			
+			const float rawPt 	= met.shiftedPt(pat::MET::NoShift, pat::MET::Raw);
+	   		const float rawPhi 	= met.shiftedPhi(pat::MET::NoShift, pat::MET::Raw);
+	   		const float rawSumEt= met.shiftedSumEt(pat::MET::NoShift, pat::MET::Raw);
+		
+	   		TVector2 rawMET_;
+	   		rawMET_.SetMagPhi (rawPt, rawPhi );
+		
+	   		Double_t rawPx = rawMET_.Px();
+	   		Double_t rawPy = rawMET_.Py();
+	   		Double_t rawEt = std::hypot(rawPx,rawPy);
+		
+	   //	Double_t uncorrSumEt =+ uncorrPtMET;
+		
+	        nBranches_->METraw_et .push_back(rawEt); 
+	        nBranches_->METraw_phi.push_back(rawPhi);
+	   		nBranches_->METraw_sumEt.push_back(rawSumEt);
+		
+			double pxcorr = rawPx+TypeICorrMap_["corrEx"];
+			double pycorr = rawPy+TypeICorrMap_["corrEy"];
+	   		double et = std::hypot(pxcorr,pycorr);
+		
+	   		double sumEtcorr = rawSumEt+TypeICorrMap_["corrSumEt"];
+			TLorentzVector corrmet; corrmet.SetPxPyPzE(pxcorr,pycorr,0.,et);
+			nBranches_->MET_et .push_back(et);
+			nBranches_->MET_phi.push_back(corrmet.Phi());
+	   		nBranches_->MET_sumEt.push_back(sumEtcorr);
+			nBranches_->MET_corrPx.push_back(TypeICorrMap_["corrEx"]);
+			nBranches_->MET_corrPy.push_back(TypeICorrMap_["corrEy"]);
+		
+	   		//nBranches_->MET_T1Uncertainty.push_back(met.shiftedPt(pat::MET::NoShift, pat::MET::Type1));
+		} 
+	}  
+	
+	else if (reclusteredMET){
+		
+        nBranches_->METraw_et .push_back((pfMET_->front() ).et());
+        nBranches_->METraw_phi.push_back((pfMET_->front() ).phi());
+  		nBranches_->METraw_sumEt.push_back((pfMET_->front() ).sumEt());
+		
+		for (const pat::MET &met : *reclusteredMETs_) {
+					
+//			const float rawPt 	= met.uncorrectedPt	( pat::MET::UncorrectionType::uncorrALL);
+//	   		const float rawPhi 	= met.uncorrectedPhi( pat::MET::UncorrectionType::uncorrALL);
 
-   
-    event.getByToken(metInputToken_, METs_ ); 
-	
-	 addTypeICorr(event);    
-	//for( unsigned int m = 0; m < METs_->size(); ++m){
-	for (const pat::MET &met : *METs_) {
+//	   		TVector2 rawMET_;
+//	   		rawMET_.SetMagPhi (rawPt, rawPhi );
+
+//	   		Double_t rawPx = rawMET_.Px();
+//	   		Double_t rawPy = rawMET_.Py();
+//	   		Double_t rawEt = std::hypot(rawPx,rawPy);
+//			//Double_t uncorrSumEt =+ uncorrPtMET;
+
+//	        nBranches_->METraw_et .push_back(rawEt);
+//	        nBranches_->METraw_phi.push_back(rawPhi);
+// 	   		nBranches_->METraw_sumEt.push_back(rawSumEt);
+			
+			nBranches_->MET_et .push_back(met.et());
+			nBranches_->MET_phi.push_back(met.phi());
+	   		nBranches_->MET_sumEt.push_back(met.sumEt());
 		
-		const float rawPt 	= met.shiftedPt(pat::MET::NoShift, pat::MET::Raw);
-		const float rawPhi 	= met.shiftedPhi(pat::MET::NoShift, pat::MET::Raw);
-		const float rawSumEt= met.shiftedSumEt(pat::MET::NoShift, pat::MET::Raw);
-		
-		TVector2 rawMET_;
-		rawMET_.SetMagPhi (rawPt, rawPhi );
-		
-		Double_t rawPx = rawMET_.Px();
-		Double_t rawPy = rawMET_.Py();
-		Double_t rawEt = std::hypot(rawPx,rawPy);
-		
-//		Double_t uncorrSumEt =+ uncorrPtMET;
-		
-        nBranches_->METraw_et .push_back(rawEt); 
-        nBranches_->METraw_phi.push_back(rawPhi);
-		nBranches_->METraw_sumEt.push_back(rawSumEt);
-		
-	
-		
-        double pxcorr = rawPx+TypeICorrMap_["corrEx"];   
-        double pycorr = rawPy+TypeICorrMap_["corrEy"];
-		double et = std::hypot(pxcorr,pycorr);
-		
-		double sumEtcorr = rawSumEt+TypeICorrMap_["corrSumEt"];
-		
-        TLorentzVector corrmet; corrmet.SetPxPyPzE(pxcorr,pycorr,0.,et); 
-		 
-        nBranches_->MET_et .push_back(et);    
-        nBranches_->MET_phi.push_back(corrmet.Phi());
-		nBranches_->MET_sumEt.push_back(sumEtcorr);
-		
-        nBranches_->MET_corrPx.push_back(TypeICorrMap_["corrEx"]);    
-        nBranches_->MET_corrPy.push_back(TypeICorrMap_["corrEy"]);
-		
-		//nBranches_->MET_T1Uncertainty.push_back(met.shiftedPt(pat::MET::NoShift, pat::MET::Type1));
-		
-	}    
-   
+		}
+	}
 }
 
