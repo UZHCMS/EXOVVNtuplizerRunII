@@ -219,7 +219,6 @@ void NtupleBranches::branch( void ){
   tree_->Branch("isFired_HLT_Mu40_v1"		 		        , &isFired_HLT_Mu40_v1					  );
 
   /*-------------------------MET--------------------------------*/
-<<<<<<< HEAD
   tree_->Branch("METraw_et"		        	, &METraw_et	     );
   tree_->Branch("METraw_phi"		        , &METraw_phi	     ); 
   tree_->Branch("METraw_sumEt"		        , &METraw_sumEt	     ); 
