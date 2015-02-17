@@ -101,14 +101,14 @@ void NtupleBranches::branch( void ){
   tree_->Branch( "jetAK8_mass"		    , &jetAK8_mass		 );
   tree_->Branch( "jetAK8_phi"		    , &jetAK8_phi		 );
   tree_->Branch( "jetAK8_e"		    , &jetAK8_e 		 );
-  tree_->Branch( "jetAK8_jec"		    , &jetAK4_jec 		 );
-  tree_->Branch( "jetAK8_IDLoose"	    , &jetAK4_IDLoose		 );
-  tree_->Branch( "jetAK8_muf" 		    , &jetAK4_muf		 );
-  tree_->Branch( "jetAK8_phf" 		    , &jetAK4_phf		 );
-  tree_->Branch( "jetAK8_emf" 		    , &jetAK4_emf		 );
-  tree_->Branch( "jetAK8_nhf" 		    , &jetAK4_nhf		 );
-  tree_->Branch( "jetAK8_chf" 		    , &jetAK4_chf		 );
-  tree_->Branch( "jetAK8_area" 		    , &jetAK4_area		 );
+  tree_->Branch( "jetAK8_jec"		    , &jetAK8_jec 		 );
+  tree_->Branch( "jetAK8_IDLoose"	    , &jetAK8_IDLoose		 );
+  tree_->Branch( "jetAK8_muf" 		    , &jetAK8_muf		 );
+  tree_->Branch( "jetAK8_phf" 		    , &jetAK8_phf		 );
+  tree_->Branch( "jetAK8_emf" 		    , &jetAK8_emf		 );
+  tree_->Branch( "jetAK8_nhf" 		    , &jetAK8_nhf		 );
+  tree_->Branch( "jetAK8_chf" 		    , &jetAK8_chf		 );
+  tree_->Branch( "jetAK8_area" 		    , &jetAK8_area		 );
   tree_->Branch( "jetAK8_cm"     	    , &jetAK8_cm		 );
   tree_->Branch( "jetAK8_nm"     	    , &jetAK8_nm		 );
   tree_->Branch( "jetAK8_che"     	    , &jetAK8_che		 );
@@ -197,6 +197,17 @@ void NtupleBranches::branch( void ){
   //tree_->Branch( "subjetAK8softdrop_jp"     , &subjetAK8softdrop_jp	   );
   //tree_->Branch( "subjetAK8softdrop_jbp"    , &subjetAK8softdrop_jbp     );
     
+  /*-------------------------AK4 GenJets---------------------------*/	 
+  tree_->Branch( "ngenJetsAK4"		    , &ngenJetsAK4 	);
+  tree_->Branch( "genJetAK4_pt"		    , &genJetAK4_pt	);
+  tree_->Branch( "genJetAK4_eta"		    , &genJetAK4_eta	);
+  tree_->Branch( "genJetAK4_mass"		    , &genJetAK4_mass	);
+  tree_->Branch( "genJetAK4_phi"		    , &genJetAK4_phi	);
+  tree_->Branch( "genJetAK4_e"		    , &genJetAK4_e 	);
+  tree_->Branch( "genJetNoNuAK4_pt"		    , &genJetNoNuAK4_pt	);
+  tree_->Branch( "genJetNoNuAK4_mass"		    , &genJetNoNuAK4_mass	);
+  tree_->Branch( "genJetNoNuAK4_e"		    , &genJetNoNuAK4_e 	);
+        
   /*----------------------HLT trigger---------------------------*/	  
   tree_->Branch("isFired_HLT_AK8PFJet360TrimMod_Mass30_v1"		, &isFired_HLT_AK8PFJet360TrimMod_Mass30_v1		  );
   tree_->Branch("isFired_HLT_AK8PFHT700_TrimR0p1PT0p03Mass50_v1"	, &isFired_HLT_AK8PFHT700_TrimR0p1PT0p03Mass50_v1	  );
@@ -208,12 +219,21 @@ void NtupleBranches::branch( void ){
   tree_->Branch("isFired_HLT_Mu40_v1"		 		        , &isFired_HLT_Mu40_v1					  );
 
   /*-------------------------MET--------------------------------*/
-  //tree_->Branch("METraw_et" , &METraw_et  );
-  //tree_->Branch("METraw_phi", &METraw_phi ); 
-  tree_->Branch("MET_et"      , &MET_et	    ); 
-  tree_->Branch("MET_sumEt"   , &MET_sumEt  ); 
-  tree_->Branch("MET_phi"     , &MET_phi    );
- 
+  tree_->Branch("METraw_et"		        	, &METraw_et	     );
+  tree_->Branch("METraw_phi"		        , &METraw_phi	     ); 
+  tree_->Branch("METraw_sumEt"		        , &METraw_sumEt	     ); 
+  
+  tree_->Branch("MET_corrPx"		        , &MET_corrPx	     ); 
+  tree_->Branch("MET_corrPy"		        , &MET_corrPy	     ); 
+  
+  tree_->Branch("MET_et"	                , &MET_et  	    	 ); 
+  tree_->Branch("MET_phi"	                , &MET_phi           );
+  // tree_->Branch("MET_T1Uncertainty"	        , &MET_T1Uncertainty );
+  tree_->Branch("MET_sumEt"	                , &MET_sumEt 	   	 ); 
+  //tree_->Branch("METdefault_et"	            , &METdefault_et  	    	 ); 
+  //tree_->Branch("METdefault_sumEt"	        , &METdefault_sumEt 	   	 ); 
+ // tree_->Branch("METdefault_phi"	        , &METdefault_phi            );
+
   /*------------- ------EVENT infos-----------------------------*/
   tree_->Branch("EVENT_event"	 , &EVENT_event     );
   tree_->Branch("EVENT_run"	 , &EVENT_run	    );
@@ -416,11 +436,17 @@ void NtupleBranches::reset( void ){
   //subjetAK8softdrop_jp     .clear();
   //subjetAK8softdrop_jbp    .clear();
   /************************************/
-  //METraw_et .clear();
-  //METraw_phi.clear();
-  MET_et   .clear();
-  MET_sumEt.clear();
-  MET_phi  .clear();
+
+  METraw_et		    	.clear();
+  METraw_phi		    .clear();
+  METraw_sumEt		    .clear();
+  MET_et	            .clear();
+  MET_sumEt             .clear();
+  MET_phi	            .clear();
+  MET_corrPx	         .clear();
+  MET_corrPy	         .clear();
+  MET_T1Uncertainty		.clear();
+
   /************************************/  
   nPuVtxTrue            .clear();
   nPuVtx       		    .clear();

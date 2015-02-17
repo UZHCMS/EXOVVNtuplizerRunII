@@ -91,7 +91,7 @@ public:
     std::vector<float>  	      lep_trackIso	         ;    
         
     float                               rho               ;
-    /*-------------------------AK5 jets---------------------------*/   
+    /*-------------------------AK4 jets---------------------------*/   
     int 	        	      	  njetsAK4               ;
     std::vector<float>  	      jetAK4_pt              ;
     std::vector<float>  	      jetAK4_eta             ;
@@ -235,6 +235,17 @@ public:
     // std::vector< std::vector<float> > subjetAK8softdrop_tche   ;
     // std::vector< std::vector<float> > subjetAK8softdrop_jp     ;
     // std::vector< std::vector<float> > subjetAK8softdrop_jbp    ;
+
+    /*-------------------------AK4 genJets---------------------------*/   
+    int 	        	      	  ngenJetsAK4               ;
+    std::vector<float>  	      genJetAK4_pt              ;
+    std::vector<float>  	      genJetAK4_eta             ;
+    std::vector<float>  	      genJetAK4_mass            ;
+    std::vector<float>  	      genJetAK4_phi             ;
+    std::vector<float>  	      genJetAK4_e               ;
+    std::vector<float>  	      genJetNoNuAK4_pt              ;
+    std::vector<float>  	      genJetNoNuAK4_mass            ;
+    std::vector<float>  	      genJetNoNuAK4_e               ;
    
     /*---------------------HLT triggers---------------------------*/    
     // bool    isFired_HLT_Mu40_eta2p1_v9 ;
@@ -270,10 +281,14 @@ public:
 	    
     /*-------------------------MET--------------------------------*/
     std::vector<float>                METraw_et              ;	 
-    std::vector<float>                METraw_phi             ;     
+    std::vector<float>                METraw_phi             ;
+	std::vector<float>                METraw_sumEt           ; 
+	std::vector<float>                MET_corrPx             ;
+	std::vector<float>                MET_corrPy         	 ;    
     std::vector<float>  	          MET_et                 ;
+	std::vector<float>  	      	  MET_phi                ;
 	std::vector<float>  	          MET_sumEt              ;
-    std::vector<float>  	      	  MET_phi                ;
+	std::vector<float>  	      	  MET_T1Uncertainty		 ;
 
     /*------------------------EVENT infos-------------------------*/    
     int                               EVENT_event            ;
