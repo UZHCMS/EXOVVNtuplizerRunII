@@ -152,7 +152,7 @@ argv = sys.argv
 parser = OptionParser()
 
 parser.add_option("-C", "--config", dest="config", default=[], action="append",
-                              help="configuration defining the job configuration")
+                              help="file defining the job configuration")
 parser.add_option("-t", "--test", dest="test", default=False, action="store_true",
                               help="test job config")			      
 parser.add_option("-c", "--copy", dest="copyfiles", default=False, action="store_true",
@@ -161,12 +161,23 @@ parser.add_option("--clean", "--clean", dest="clean", default=False, action="sto
                               help="clean job dir")
 parser.add_option("--useDAS", "--useDAS", dest="useDAS", default=False, action="store_true",
                               help="use das query")
-			      
+parser.add_option("-H", "-H", dest="help", default=False, action="store_true",
+                              help="usage")
+			      			      
 (opts, args) = parser.parse_args(argv)
 
 if opts.config =="":
     opts.config = "config"
 
+if opts.help:
+   print ""
+   print "Usage for testing: "
+   print "          python submitJobsOnT3batch.py -C submitJobsOnT3batch.cfg --test --useDAS"
+   print "Or: "
+   print "          python submitJobsOnT3batch.py -C submitJobsOnT3batch.cfg --useDAS"
+   print ""
+   sys.exit()
+   
 print opts.config
 config = ConfigParser.ConfigParser()
 config.read(opts.config)
@@ -184,7 +195,7 @@ bashfile = config.get('JobsConfig','bashfile')
 maxevents = config.getint('JobsConfig','maxevents')
 prefix = config.get('JobsConfig','prefix')
 newdir = config.get('JobsConfig','newdir')
-
+   
 #-----------------------------------------------------------------------------------------
 if opts.copyfiles:
 
@@ -268,7 +279,6 @@ for c in cmds:
    print c
    if not(opts.test):
       os.system(c)
-      time.sleep(30)
 
 #for c in range(1):
 #   print cmds[c]

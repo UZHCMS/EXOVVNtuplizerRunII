@@ -39,8 +39,6 @@ JOB_ID=$7
 
 # Basename of job sandbox (job workdir will be $TOPWORKDIR/$JOBDIR)
 JOBDIR=$8-$JOB_ID
-echo "---------------------------------> jen "
-echo $JOBDIR
 ##################################################################
 
 
@@ -99,7 +97,7 @@ STARTDIR=`pwd`
 WORKDIR=$TOPWORKDIR/$JOBDIR
 RESULTDIR=$STARTDIR/$JOBDIR
 
-srmmkdir $USER_SRM_HOME/$HN_NAME/$SEUSERSUBDIR/$JOBDIR
+gfal-mkdir $USER_SRM_HOME/$HN_NAME/$SEUSERSUBDIR/$JOBDIR
 if test x"$SEUSERSUBDIR" = x; then
    SERESULTDIR=$USER_SRM_HOME/$HN_NAME/$JOBDIR
 else
@@ -153,6 +151,9 @@ if test $? -ne 0; then
 fi
 
 cd $WORKDIR
+
+cp -r $CMSSW_DIR/src/EXOVVNtuplizerRunII/Ntuplizer/JEC .
+
 cmsRun $CMSSW_CONFIG_FILE inputFiles=$5 maxEvents=$6>> myout.txt 2>>myerr.txt
 
 
