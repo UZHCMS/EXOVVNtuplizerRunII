@@ -198,15 +198,15 @@ void NtupleBranches::branch( void ){
   //tree_->Branch( "subjetAK8softdrop_jbp"    , &subjetAK8softdrop_jbp     );
     
   /*-------------------------AK4 GenJets---------------------------*/	 
-  tree_->Branch( "ngenJetsAK4"		    , &ngenJetsAK4 	);
-  tree_->Branch( "genJetAK4_pt"		    , &genJetAK4_pt	);
-  tree_->Branch( "genJetAK4_eta"		    , &genJetAK4_eta	);
-  tree_->Branch( "genJetAK4_mass"		    , &genJetAK4_mass	);
-  tree_->Branch( "genJetAK4_phi"		    , &genJetAK4_phi	);
-  tree_->Branch( "genJetAK4_e"		    , &genJetAK4_e 	);
-  tree_->Branch( "genJetNoNuAK4_pt"		    , &genJetNoNuAK4_pt	);
-  tree_->Branch( "genJetNoNuAK4_mass"		    , &genJetNoNuAK4_mass	);
-  tree_->Branch( "genJetNoNuAK4_e"		    , &genJetNoNuAK4_e 	);
+  tree_->Branch( "ngenJetsAK4"		    , &ngenJetsAK4 	  );
+  tree_->Branch( "genJetAK4_pt"		    , &genJetAK4_pt	  );
+  tree_->Branch( "genJetAK4_eta"	    , &genJetAK4_eta	  );
+  tree_->Branch( "genJetAK4_mass"	    , &genJetAK4_mass	  );
+  tree_->Branch( "genJetAK4_phi"	    , &genJetAK4_phi	  );
+  tree_->Branch( "genJetAK4_e"		    , &genJetAK4_e 	  );
+  tree_->Branch( "genJetNoNuAK4_pt"	    , &genJetNoNuAK4_pt	  );
+  tree_->Branch( "genJetNoNuAK4_mass"	    , &genJetNoNuAK4_mass );
+  tree_->Branch( "genJetNoNuAK4_e"	    , &genJetNoNuAK4_e    );
         
   /*----------------------HLT trigger---------------------------*/	  
   tree_->Branch("isFired_HLT_AK8PFJet360TrimMod_Mass30_v1"		, &isFired_HLT_AK8PFJet360TrimMod_Mass30_v1		  );
@@ -219,20 +219,18 @@ void NtupleBranches::branch( void ){
   tree_->Branch("isFired_HLT_Mu40_v1"		 		        , &isFired_HLT_Mu40_v1					  );
 
   /*-------------------------MET--------------------------------*/
-  tree_->Branch("METraw_et"		        	, &METraw_et	     );
+  tree_->Branch("METraw_et"		        , &METraw_et	     );
   tree_->Branch("METraw_phi"		        , &METraw_phi	     ); 
-  tree_->Branch("METraw_sumEt"		        , &METraw_sumEt	     ); 
-  
+  tree_->Branch("METraw_sumEt"		        , &METraw_sumEt	     );   
   tree_->Branch("MET_corrPx"		        , &MET_corrPx	     ); 
-  tree_->Branch("MET_corrPy"		        , &MET_corrPy	     ); 
-  
-  tree_->Branch("MET_et"	                , &MET_et  	    	 ); 
+  tree_->Branch("MET_corrPy"		        , &MET_corrPy	     );   
+  tree_->Branch("MET_et"	                , &MET_et  	     ); 
   tree_->Branch("MET_phi"	                , &MET_phi           );
   // tree_->Branch("MET_T1Uncertainty"	        , &MET_T1Uncertainty );
-  tree_->Branch("MET_sumEt"	                , &MET_sumEt 	   	 ); 
-  //tree_->Branch("METdefault_et"	            , &METdefault_et  	    	 ); 
-  //tree_->Branch("METdefault_sumEt"	        , &METdefault_sumEt 	   	 ); 
- // tree_->Branch("METdefault_phi"	        , &METdefault_phi            );
+  tree_->Branch("MET_sumEt"	                , &MET_sumEt 	     ); 
+  //tree_->Branch("METdefault_et"	        , &METdefault_et     ); 
+  //tree_->Branch("METdefault_sumEt"	        , &METdefault_sumEt  ); 
+ // tree_->Branch("METdefault_phi"	        , &METdefault_phi    );
 
   /*------------- ------EVENT infos-----------------------------*/
   tree_->Branch("EVENT_event"	 , &EVENT_event     );
@@ -260,6 +258,8 @@ void NtupleBranches::reset( void ){
   nlep        = 0;
   njetsAK4    = 0;
   njetsAK8    = 0;  
+  ngenJetsAK4 = 0;
+
   //njetsAK8pruned = 0;
   //njetsAK8softdrop = 0;
   isFired_HLT_AK8PFJet360TrimMod_Mass30_v1             	= false;
@@ -286,6 +286,15 @@ void NtupleBranches::reset( void ){
   genParticle_nMoth	    .clear();
   genParticle_nDau	    .clear();
   genParticle_dau	    .clear();
+  /************************************/
+  genJetAK4_pt              .clear();
+  genJetAK4_eta             .clear();
+  genJetAK4_mass            .clear();
+  genJetAK4_phi             .clear();
+  genJetAK4_e	            .clear();
+  genJetNoNuAK4_pt          .clear();
+  genJetNoNuAK4_mass        .clear();
+  genJetNoNuAK4_e           .clear();
   /************************************/
   lep_type		    .clear();
   lep_charge		    .clear();
@@ -437,19 +446,19 @@ void NtupleBranches::reset( void ){
   //subjetAK8softdrop_jbp    .clear();
   /************************************/
 
-  METraw_et		    	.clear();
-  METraw_phi		    .clear();
-  METraw_sumEt		    .clear();
-  MET_et	            .clear();
-  MET_sumEt             .clear();
-  MET_phi	            .clear();
+  METraw_et		 .clear();
+  METraw_phi		 .clear();
+  METraw_sumEt		 .clear();
+  MET_et	         .clear();
+  MET_sumEt              .clear();
+  MET_phi	         .clear();
   MET_corrPx	         .clear();
   MET_corrPy	         .clear();
-  MET_T1Uncertainty		.clear();
+  MET_T1Uncertainty	 .clear();
 
   /************************************/  
-  nPuVtxTrue            .clear();
-  nPuVtx       		    .clear();
-  bX	     		    .clear();
+  nPuVtxTrue             .clear();
+  nPuVtx       		 .clear();
+  bX	     		 .clear();
 
 } 
