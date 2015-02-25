@@ -1,11 +1,15 @@
 #include "../interface/TriggersNtuplizer.h"
 #include "FWCore/Common/interface/TriggerNames.h"
 #include "DataFormats/Common/interface/TriggerResults.h"
+#include "DataFormats/PatCandidates/interface/TriggerObjectStandAlone.h"
+#include "DataFormats/PatCandidates/interface/PackedTriggerPrescales.h"
 
 //===================================================================================================================        
-TriggersNtuplizer::TriggersNtuplizer( std::vector<edm::EDGetTokenT<edm::TriggerResults>> tokens, NtupleBranches* nBranches )
-   : CandidateNtuplizer( nBranches )
-   , HLTtriggersToken_( tokens[0] )
+TriggersNtuplizer::TriggersNtuplizer(edm::EDGetTokenT<edm::TriggerResults> tokens, edm::EDGetTokenT<pat::TriggerObjectStandAloneCollection> object, edm::EDGetTokenT<pat::PackedTriggerPrescales> prescale,  NtupleBranches* nBranches )
+   : CandidateNtuplizer	( nBranches )
+   , HLTtriggersToken_	( tokens )
+	, triggerObjects_		( object )	
+	, triggerPrescales_	( prescale )		
 {
    
 }
@@ -19,9 +23,13 @@ TriggersNtuplizer::~TriggersNtuplizer( void )
 //===================================================================================================================
 void TriggersNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetup& iSetup ){
 	
-	event.getByToken(HLTtriggersToken_, HLTtriggers_);
+	event.getByToken(HLTtriggersToken_, HLTtriggers_);	
+	event.getByToken(triggerObjects_, triggerObjects);
+	event.getByToken(triggerPrescales_, triggerPrescales);
+	
 	const edm::TriggerNames& trigNames = event.triggerNames(*HLTtriggers_);
-
+	
+	
 	// for (unsigned int i = 0, n = HLTtriggers_->size(); i < n; ++i) {
 // 	  std::cout << "Trigger " << trigNames.triggerName(i) << std::endl;//<< ": " << (HLTtriggers_->accept(i) ? "PASS" : "fail (or not run)") << std::endl;
 // 	}
@@ -58,6 +66,45 @@ void TriggersNtuplizer::fillBranches( edm::Event const & event, const edm::Event
 	if( TrggIndex_HLT_Ele95_CaloIdVT_GsfTrkIdT_v1 < HLTtriggers_->size() ) nBranches_->isFired_HLT_Ele95_CaloIdVT_GsfTrkIdT_v1 = HLTtriggers_->accept(TrggIndex_HLT_Ele95_CaloIdVT_GsfTrkIdT_v1);
 	if( TrggIndex_HLT_Mu40_v1 < HLTtriggers_->size() ) nBranches_->isFired_HLT_Mu40_v1 = HLTtriggers_->accept(TrggIndex_HLT_Mu40_v1);
 	
+	////////////////// Trigger objects ///////////////////////////////////	
+	
+   std::vector<float> vfilterIDs     ;
+   vfilterIDs.clear();
+   std::vector<int> vfiredTrigger     ;
+   vfiredTrigger.clear();
+	
+	for (pat::TriggerObjectStandAlone obj : *triggerObjects) { 
+		obj.unpackPathNames(trigNames);
+		
+		std::vector<std::string> pathNamesAll  = obj.pathNames(false);
+		std::vector<std::string> pathNamesLast = obj.pathNames(true);
+		
+		for (unsigned h = 0, n = pathNamesLast.size(); h < n; ++h) {
+			bool isBoth = obj.hasPathName( pathNamesLast[h], true , true );
+         bool isL3   = obj.hasPathName( pathNamesLast[h], false, true );
+			
+			if( isBoth || isL3 ){
+				nBranches_->triggerObject_pt   	    .push_back(obj.pt());
+			   nBranches_->triggerObject_eta    	    .push_back(obj.eta());
+			   nBranches_->triggerObject_phi    	    .push_back(obj.phi());
+			   nBranches_->triggerObject_mass        .push_back(obj.mass());
+				
+				for (unsigned h = 0; h < obj.filterIds().size(); ++h) vfilterIDs.push_back( obj.filterIds()[h]); // as defined in http://cmslxr.fnal.gov/lxr/source/DataFormats/HLTReco/interface/TriggerTypeDefs.h
+				
+				if( pathNamesLast[h] == "HLT_AK8PFJet360TrimMod_Mass30_v1") 					vfiredTrigger			 .push_back( 0 );
+				if( pathNamesLast[h] == "HT_AK8PFHT700_TrimR0p1PT0p03Mass50_v1") 				vfiredTrigger   	    .push_back( 1 );
+			   if( pathNamesLast[h] == "HLT_AK8DiPFJet280_200_TrimMass30_BTagCSV0p3_v1")	vfiredTrigger   	    .push_back( 2 );
+			   if( pathNamesLast[h] == "HLT_PFHT650_WideJetMJJ950DEtaJJ1p5_v1") 				vfiredTrigger   	    .push_back( 3 );
+			   if( pathNamesLast[h] == "HLT_PFHT650_WideJetMJJ900DEtaJJ1p5_v1")  			vfiredTrigger   	    .push_back( 4 );
+			   if( pathNamesLast[h] == "HLT_PFHT900_v1")  											vfiredTrigger   	    .push_back( 5 );
+			   if( pathNamesLast[h] == "HLT_Ele95_CaloIdVT_GsfTrkIdT_v1")  					vfiredTrigger   	    .push_back( 6 );
+			   if( pathNamesLast[h] == "HLT_Mu40_v1") 												vfiredTrigger   	    .push_back( 7 );
+			   // else 																								vfiredTrigger   	    .push_back( -99 );
+			}
+		}
+		nBranches_->triggerObject_filterIDs		.push_back(vfilterIDs);
+		nBranches_->triggerObject_firedTrigger	.push_back(vfiredTrigger);
+	}
 }
 // ###### Available triggers #######
 // Trigger generation_step

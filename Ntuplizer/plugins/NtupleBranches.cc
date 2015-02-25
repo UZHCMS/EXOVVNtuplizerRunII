@@ -217,6 +217,13 @@ void NtupleBranches::branch( void ){
   tree_->Branch("isFired_HLT_PFHT900_v1"				, &isFired_HLT_PFHT900_v1				  );
   tree_->Branch("isFired_HLT_Ele95_CaloIdVT_GsfTrkIdT_v1"		, &isFired_HLT_Ele95_CaloIdVT_GsfTrkIdT_v1		  );
   tree_->Branch("isFired_HLT_Mu40_v1"		 		        , &isFired_HLT_Mu40_v1					  );
+  
+  tree_->Branch("triggerObject_pt"				, &triggerObject_pt				);
+  tree_->Branch("triggerObject_eta"				, &triggerObject_eta				);
+  tree_->Branch("triggerObject_phi"				, &triggerObject_phi				);
+  tree_->Branch("triggerObject_mass"			, &triggerObject_mass			);
+  tree_->Branch("triggerObject_filterIDs"		, &triggerObject_filterIDs		);
+  tree_->Branch("triggerObject_firedTrigger"	, &triggerObject_firedTrigger	);
 
   /*-------------------------MET--------------------------------*/
   tree_->Branch("METraw_et"		        , &METraw_et	     );
@@ -460,5 +467,12 @@ void NtupleBranches::reset( void ){
   nPuVtxTrue             .clear();
   nPuVtx       		 .clear();
   bX	     		 .clear();
+  
+  triggerObject_pt.clear();
+  triggerObject_eta.clear();
+  triggerObject_phi.clear();
+  triggerObject_mass.clear();
+  triggerObject_filterIDs.clear();
+  triggerObject_firedTrigger.clear();
 
 } 
