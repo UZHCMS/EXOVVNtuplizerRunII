@@ -95,11 +95,10 @@ void TriggersNtuplizer::fillBranches( edm::Event const & event, const edm::Event
 				if( pathNamesLast[h] == "HT_AK8PFHT700_TrimR0p1PT0p03Mass50_v1") 				vfiredTrigger   	    .push_back( 1 );
 			   if( pathNamesLast[h] == "HLT_AK8DiPFJet280_200_TrimMass30_BTagCSV0p3_v1")	vfiredTrigger   	    .push_back( 2 );
 			   if( pathNamesLast[h] == "HLT_PFHT650_WideJetMJJ950DEtaJJ1p5_v1") 				vfiredTrigger   	    .push_back( 3 );
-			   if( pathNamesLast[h] == "HLT_PFHT650_WideJetMJJ950DEtaJJ1p5_v1") 				vfiredTrigger   	    .push_back( 4 );
-			   if( pathNamesLast[h] == "HLT_PFHT650_WideJetMJJ900DEtaJJ1p5_v1")  			vfiredTrigger   	    .push_back( 5 );
-			   if( pathNamesLast[h] == "HLT_PFHT900_v1")  											vfiredTrigger   	    .push_back( 6 );
-			   if( pathNamesLast[h] == "HLT_Ele95_CaloIdVT_GsfTrkIdT_v1")  					vfiredTrigger   	    .push_back( 7 );
-			   if( pathNamesLast[h] == "HLT_Mu40_v1") 												vfiredTrigger   	    .push_back( 8 );
+			   if( pathNamesLast[h] == "HLT_PFHT650_WideJetMJJ900DEtaJJ1p5_v1")  			vfiredTrigger   	    .push_back( 4 );
+			   if( pathNamesLast[h] == "HLT_PFHT900_v1")  											vfiredTrigger   	    .push_back( 5 );
+			   if( pathNamesLast[h] == "HLT_Ele95_CaloIdVT_GsfTrkIdT_v1")  					vfiredTrigger   	    .push_back( 6 );
+			   if( pathNamesLast[h] == "HLT_Mu40_v1") 												vfiredTrigger   	    .push_back( 7 );
 			   // else 																								vfiredTrigger   	    .push_back( -99 );
 			}
 		}
