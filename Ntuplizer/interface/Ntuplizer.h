@@ -12,8 +12,10 @@
 #include "CommonTools/UtilAlgos/interface/TFileService.h"
 #include "SimDataFormats/JetMatching/interface/JetFlavourMatching.h"
 #include "SimDataFormats/JetMatching/interface/JetFlavour.h"
-
+#include "DataFormats/PatCandidates/interface/TriggerObjectStandAlone.h"
+#include "DataFormats/PatCandidates/interface/PackedTriggerPrescales.h"
 #include "../interface/NtupleBranches.h"
+
 
 class NtupleBranches;
 class CandidateNtuplizer;
@@ -65,7 +67,9 @@ private:
   edm::EDGetTokenT<pat::METCollection> 	    				reclusteredmetToken_;
   edm::InputTag 											pfMETlabel;	     // input label for particle-flow MET
   
-  edm::EDGetTokenT<edm::TriggerResults>						triggerToken_;
+  edm::EDGetTokenT<edm::TriggerResults>						  triggerToken_;
+  edm::EDGetTokenT<pat::TriggerObjectStandAloneCollection> triggerObjects_;
+  edm::EDGetTokenT<pat::PackedTriggerPrescales>            triggerPrescales_;
   
 
 };

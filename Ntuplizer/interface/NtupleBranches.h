@@ -253,7 +253,13 @@ public:
     bool    isFired_HLT_PFHT900_v1				  ;
     bool    isFired_HLT_Ele95_CaloIdVT_GsfTrkIdT_v1               ;
     bool    isFired_HLT_Mu40_v1                                   ;
-	    
+	 
+ 	 std::vector<float>						triggerObject_pt				;
+  	 std::vector<float>						triggerObject_eta				;
+ 	 std::vector<float>						triggerObject_phi				;
+  	 std::vector<float>						triggerObject_mass			;
+	 std::vector< std::vector<float> >	triggerObject_filterIDs		; // as defined in http://cmslxr.fnal.gov/lxr/source/DataFormats/HLTReco/interface/TriggerTypeDefs.h
+	 std::vector< std::vector<int> >		triggerObject_firedTrigger	; // as defined in plugins/TriggersNtuplizer.cc
     /*-------------------------MET--------------------------------*/
     std::vector<float>                METraw_et              ;	 
     std::vector<float>                METraw_phi             ;

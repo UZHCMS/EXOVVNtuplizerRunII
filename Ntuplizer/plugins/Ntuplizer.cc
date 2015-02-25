@@ -10,6 +10,8 @@
 #include "../interface/GenParticlesNtuplizer.h"
 #include "../interface/TriggersNtuplizer.h"
 #include "../interface/VerticesNtuplizer.h"
+#include "DataFormats/PatCandidates/interface/TriggerObjectStandAlone.h"
+#include "DataFormats/PatCandidates/interface/PackedTriggerPrescales.h"
 
 // #include "DataFormats/METReco/interface/PFMET.h"
 
@@ -40,7 +42,9 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
 	metToken_			(consumes<pat::METCollection>					(iConfig.getParameter<edm::InputTag>("mets"))),
 	reclusteredmetToken_(consumes<pat::METCollection>					(iConfig.getParameter<edm::InputTag>("reclusteredmets"))),
 	pfMETlabel          (iConfig.getParameter<edm::InputTag>("pfmets")),
-	triggerToken_		(consumes<edm::TriggerResults>					(iConfig.getParameter<edm::InputTag>("HLT")))
+	triggerToken_		(consumes<edm::TriggerResults>							(iConfig.getParameter<edm::InputTag>("HLT"))),
+	triggerObjects_	(consumes<pat::TriggerObjectStandAloneCollection>	(iConfig.getParameter<edm::InputTag>("triggerobjects"))),
+	triggerPrescales_	(consumes<pat::PackedTriggerPrescales>					(iConfig.getParameter<edm::InputTag>("triggerprescales")))
 	
 	
 
@@ -93,19 +97,19 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
   vtxTokens.push_back( vtxToken_  );
   
   /*=======================================================================================*/
-  std::vector<edm::EDGetTokenT<edm::TriggerResults>> triggerTokens;
-  triggerTokens.push_back( triggerToken_ );
+  // std::vector<edm::EDGetTokenT<edm::TriggerResults>> triggerTokens;
+ //  triggerTokens.push_back( triggerToken_ );
   
   /*=======================================================================================*/
   
 
-  nTuplizers_["jets"]  	   = new JetsNtuplizer	    ( jetTokens		, jecAK4Labels	, jecAK8Labels, flavourToken_	, rhoToken_ , vtxToken_ , nBranches_ );
-  nTuplizers_["genJets"]   = new GenJetsNtuplizer	    ( genJetToken_ , nBranches_ );
-  nTuplizers_["muons"] 	   = new MuonsNtuplizer     ( muonToken_	, vtxToken_		, rhoToken_						, nBranches_ );
-  nTuplizers_["electrons"] = new ElectronsNtuplizer ( electronToken_, vtxToken_     , rhoToken_						, nBranches_ );
-  nTuplizers_["MET"]       = new METsNtuplizer      ( metTokens		, pfMETlabel	, jetToken_		, muonToken_  , jecAK4Labels, corrFormulas, rhoToken_ , vtxToken_ , nBranches_ );
-  nTuplizers_["vertices"]  = new VerticesNtuplizer  ( vtxTokens														, nBranches_ );
-  nTuplizers_["triggers"]  = new TriggersNtuplizer  ( triggerTokens     											, nBranches_ );
+  nTuplizers_["jets"]  	   = new JetsNtuplizer	    ( jetTokens		, jecAK4Labels		, jecAK8Labels	, flavourToken_	, rhoToken_ , vtxToken_ , nBranches_ );
+  nTuplizers_["genJets"]   = new GenJetsNtuplizer	 ( genJetToken_ 							, nBranches_ );
+  nTuplizers_["muons"] 	   = new MuonsNtuplizer     ( muonToken_		, vtxToken_			, rhoToken_		, nBranches_ );
+  nTuplizers_["electrons"] = new ElectronsNtuplizer ( electronToken_	, vtxToken_     	, rhoToken_		, nBranches_ );
+  nTuplizers_["MET"]       = new METsNtuplizer      ( metTokens		, pfMETlabel		, jetToken_		, muonToken_  , jecAK4Labels, corrFormulas, rhoToken_ , vtxToken_ , nBranches_ );
+  nTuplizers_["vertices"]  = new VerticesNtuplizer  ( vtxTokens													, nBranches_ );
+  nTuplizers_["triggers"]  = new TriggersNtuplizer  ( triggerToken_  , triggerObjects_	, triggerPrescales_	, nBranches_ );
 
 
   /*=======================================================================================*/    
