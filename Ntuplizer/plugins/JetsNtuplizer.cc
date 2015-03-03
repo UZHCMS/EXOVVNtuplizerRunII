@@ -143,7 +143,7 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
 	  nBranches_->jetAK4_vtxNtracks	    .push_back(j.userFloat("vtxNtracks")); 
 	  nBranches_->jetAK4_vtx3DVal	    .push_back(j.userFloat("vtx3DVal")); 
 	  nBranches_->jetAK4_vtx3DSig	    .push_back(j.userFloat("vtx3DSig"));
-
+	
   }
   
   /****************************************************************/
@@ -178,7 +178,7 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
   //std::vector<float> vSoftDropSubjettche   ;
   //std::vector<float> vSoftDropSubjetjp     ;
   //std::vector<float> vSoftDropSubjetjbp    ;
-  
+     
   for (const pat::Jet &fj : *fatjets_) {
 	  
       reco::Candidate::LorentzVector uncorrJet = fj.correctedP4(0);
@@ -198,9 +198,9 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
       //jecAK8Unc_->setJetPt( corr * uncorrJet.pt() );
       //double corrDown = corr * ( 1 - fabs(jecAK8Unc_->getUncertainty(-1)) );
     
-      if( corr*uncorrJet.pt() < 80. ) continue;
+      //if( corr*uncorrJet.pt() < 80. ) continue;
     
-          nBranches_->njetsAK8++;	       
+      nBranches_->njetsAK8++;	       
                   
 	  bool IDLoose = looseJetID(fj);
 	  //if( !IDLoose ) continue;
