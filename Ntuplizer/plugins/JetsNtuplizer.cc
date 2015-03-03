@@ -110,8 +110,8 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
          //double corrDown = corr * ( 1 - fabs(jecAK4Unc_->getUncertainty(-1)) );
 
 	  nBranches_->njetsAK4++;
-      
-	  nBranches_->jetAK4_pt     	    .push_back(corr*uncorrJet.pt());
+
+	  nBranches_->jetAK4_pt     	    .push_back(corr*uncorrJet.pt());      
 	  nBranches_->jetAK4_eta    	    .push_back(j.eta());
 	  nBranches_->jetAK4_mass   	    .push_back(corr*uncorrJet.mass());
 	  nBranches_->jetAK4_phi    	    .push_back(j.phi());   
@@ -181,33 +181,31 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
      
   for (const pat::Jet &fj : *fatjets_) {
 	  
-      reco::Candidate::LorentzVector uncorrJet = fj.correctedP4(0);
+      	  reco::Candidate::LorentzVector uncorrJet = fj.correctedP4(0);
 
-      jecAK8_->setJetEta( uncorrJet.eta()          );
-      jecAK8_->setJetPt ( uncorrJet.pt()           );
-      jecAK8_->setJetE  ( uncorrJet.energy()       );
-      jecAK8_->setJetA  ( fj.jetArea() );
-      jecAK8_->setRho   ( nBranches_->rho        );
-      jecAK8_->setNPV   ( vertices_->size()        );
-      double corr = jecAK8_->getCorrection();
+      	  jecAK8_->setJetEta( uncorrJet.eta()	       );
+      	  jecAK8_->setJetPt ( uncorrJet.pt()	       );
+      	  jecAK8_->setJetE  ( uncorrJet.energy()       );
+      	  jecAK8_->setJetA  ( fj.jetArea() );
+      	  jecAK8_->setRho   ( nBranches_->rho	     );
+      	  jecAK8_->setNPV   ( vertices_->size()        );
+      	  double corr = jecAK8_->getCorrection();
 
-      //jecAK8Unc_->setJetEta( uncorrJet.eta() );
-      //jecAK8Unc_->setJetPt( corr * uncorrJet.pt() );
-      //double corrUp = corr * (1 + fabs(jecAK8Unc_->getUncertainty(1)));
-      //jecAK8Unc_->setJetEta( uncorrJet.eta() );
-      //jecAK8Unc_->setJetPt( corr * uncorrJet.pt() );
-      //double corrDown = corr * ( 1 - fabs(jecAK8Unc_->getUncertainty(-1)) );
+      	  //jecAK8Unc_->setJetEta( uncorrJet.eta() );
+      	  //jecAK8Unc_->setJetPt( corr * uncorrJet.pt() );
+      	  //double corrUp = corr * (1 + fabs(jecAK8Unc_->getUncertainty(1)));
+      	  //jecAK8Unc_->setJetEta( uncorrJet.eta() );
+      	  //jecAK8Unc_->setJetPt( corr * uncorrJet.pt() );
+      	  //double corrDown = corr * ( 1 - fabs(jecAK8Unc_->getUncertainty(-1)) );
     
-      //if( corr*uncorrJet.pt() < 80. ) continue;
-    
-      nBranches_->njetsAK8++;	       
-                  
+      	  if( corr*uncorrJet.pt() < 80. ) continue;
+    	                    
 	  bool IDLoose = looseJetID(fj);
 	  //if( !IDLoose ) continue;
 	  
 	  nBranches_->njetsAK8++;	       
-                   
-	  nBranches_->jetAK8_pt     	    .push_back(corr*uncorrJet.pt());
+
+	  nBranches_->jetAK8_pt     	    .push_back(corr*uncorrJet.pt());                   
 	  nBranches_->jetAK8_eta    	    .push_back(fj.eta());
 	  nBranches_->jetAK8_mass   	    .push_back(corr*uncorrJet.mass());
 	  nBranches_->jetAK8_phi    	    .push_back(fj.phi());

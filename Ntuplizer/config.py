@@ -291,6 +291,8 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     jecAK8chsPayloadNames = cms.vstring( jecLevelsAK8chs ),
     jecAK4chsPayloadNames = cms.vstring( jecLevelsAK4chs ),
     jecpath = cms.string(''),
+    triggerobjects = cms.InputTag("selectedPatTrigger"),
+    triggerprescales = cms.InputTag("patTrigger"),
 )
 
 ####### Final path ##########
