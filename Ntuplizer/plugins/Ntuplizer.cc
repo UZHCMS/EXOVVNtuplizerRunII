@@ -10,6 +10,8 @@
 #include "../interface/GenParticlesNtuplizer.h"
 #include "../interface/TriggersNtuplizer.h"
 #include "../interface/VerticesNtuplizer.h"
+#include "DataFormats/PatCandidates/interface/TriggerObjectStandAlone.h"
+#include "DataFormats/PatCandidates/interface/PackedTriggerPrescales.h"
 
 // #include "DataFormats/METReco/interface/PFMET.h"
 
@@ -18,28 +20,31 @@
 Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
 	
 
-	vtxToken_		(consumes<reco::VertexCollection>				(iConfig.getParameter<edm::InputTag>("vertices"))),
-	rhoToken_		(consumes<double>								(iConfig.getParameter<edm::InputTag>("rho"))),
-	puinfoToken_    (consumes<std::vector<PileupSummaryInfo> >		(iConfig.getParameter<edm::InputTag>("PUInfo"))),
-	geneventToken_  (consumes<GenEventInfoProduct>				    (iConfig.getParameter<edm::InputTag>("genEventInfo"))),
+	vtxToken_		(consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("vertices"))),
+	rhoToken_		(consumes<double>(iConfig.getParameter<edm::InputTag>("rho"))),
+	puinfoToken_            (consumes<std::vector<PileupSummaryInfo> >(iConfig.getParameter<edm::InputTag>("PUInfo"))),
+	geneventToken_          (consumes<GenEventInfoProduct>(iConfig.getParameter<edm::InputTag>("genEventInfo"))),
 
 	
-	genparticleToken_ 	(consumes<reco::GenParticleCollection>			        (iConfig.getParameter<edm::InputTag>("genparticles"))),
+	genparticleToken_ 	(consumes<reco::GenParticleCollection>(iConfig.getParameter<edm::InputTag>("genparticles"))),
 	
-	jetToken_			(consumes<pat::JetCollection>					(iConfig.getParameter<edm::InputTag>("jets"))),
-	fatjetToken_		(consumes<pat::JetCollection>					(iConfig.getParameter<edm::InputTag>("fatjets"))),
-	prunedjetToken_		(consumes<pat::JetCollection>					(iConfig.getParameter<edm::InputTag>("prunedjets"))),
-	softdropjetToken_	(consumes<pat::JetCollection>					(iConfig.getParameter<edm::InputTag>("softdropjets"))),
-	genJetToken_	(consumes<reco::GenJetCollection>					(iConfig.getParameter<edm::InputTag>("genJets"))),
+	jetToken_		(consumes<pat::JetCollection>(iConfig.getParameter<edm::InputTag>("jets"))),
+	fatjetToken_		(consumes<pat::JetCollection>(iConfig.getParameter<edm::InputTag>("fatjets"))),
+	prunedjetToken_		(consumes<pat::JetCollection>(iConfig.getParameter<edm::InputTag>("prunedjets"))),
+	softdropjetToken_	(consumes<pat::JetCollection>(iConfig.getParameter<edm::InputTag>("softdropjets"))),
+	genJetToken_		(consumes<reco::GenJetCollection>(iConfig.getParameter<edm::InputTag>("genJets"))),
 	
-	flavourToken_		(consumes<reco::JetFlavourMatchingCollection>	                (iConfig.getParameter<edm::InputTag>("subjetflavour"))),
+	flavourToken_		(consumes<reco::JetFlavourMatchingCollection>(iConfig.getParameter<edm::InputTag>("subjetflavour"))),
 
-	muonToken_		(consumes<pat::MuonCollection>					(iConfig.getParameter<edm::InputTag>("muons"))),
-	electronToken_		(consumes<pat::ElectronCollection>				(iConfig.getParameter<edm::InputTag>("electrons"))),
-	tauToken_		(consumes<pat::TauCollection>					(iConfig.getParameter<edm::InputTag>("taus"))),
-	metToken_		(consumes<pat::METCollection>					(iConfig.getParameter<edm::InputTag>("mets"))),
-	// pfMETlabel         (iConfig.getParameter<edm::InputTag>("pfmets"        )),
-	triggerToken_		(consumes<edm::TriggerResults>					(iConfig.getParameter<edm::InputTag>("HLT")))
+	muonToken_		(consumes<pat::MuonCollection>(iConfig.getParameter<edm::InputTag>("muons"))),
+	electronToken_		(consumes<pat::ElectronCollection>(iConfig.getParameter<edm::InputTag>("electrons"))),
+	tauToken_		(consumes<pat::TauCollection>(iConfig.getParameter<edm::InputTag>("taus"))),
+	metToken_		(consumes<pat::METCollection>(iConfig.getParameter<edm::InputTag>("mets"))),
+	reclusteredmetToken_    (consumes<pat::METCollection>(iConfig.getParameter<edm::InputTag>("reclusteredmets"))),
+	pfMETlabel              (iConfig.getParameter<edm::InputTag>("pfmets")),
+	triggerToken_		(consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("HLT"))),
+	triggerObjects_	        (consumes<pat::TriggerObjectStandAloneCollection>(iConfig.getParameter<edm::InputTag>("triggerobjects"))),
+	triggerPrescales_	(consumes<pat::PackedTriggerPrescales>(iConfig.getParameter<edm::InputTag>("triggerprescales")))
 	
 	
 
@@ -81,6 +86,7 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
   std::vector<edm::EDGetTokenT<pat::METCollection>> metTokens;
   //METsLabels.push_back( iConfig.getParameter<edm::InputTag>("METrawColl") );
   metTokens.push_back( metToken_ );
+  metTokens.push_back( reclusteredmetToken_ );
   
   std::vector<std::string> corrFormulas;
   corrFormulas.push_back(iConfig.getParameter<std::string>("corrMetPx"));
@@ -91,19 +97,19 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
   vtxTokens.push_back( vtxToken_  );
   
   /*=======================================================================================*/
-  std::vector<edm::EDGetTokenT<edm::TriggerResults>> triggerTokens;
-  triggerTokens.push_back( triggerToken_ );
+  // std::vector<edm::EDGetTokenT<edm::TriggerResults>> triggerTokens;
+ //  triggerTokens.push_back( triggerToken_ );
   
   /*=======================================================================================*/
   
 
-  nTuplizers_["jets"]  	   = new JetsNtuplizer	    ( jetTokens		, jecAK4Labels	, jecAK8Labels, flavourToken_	, rhoToken_ , vtxToken_ , nBranches_ );
-  nTuplizers_["genJets"]   = new GenJetsNtuplizer	    ( genJetToken_ , nBranches_ );
-  nTuplizers_["muons"] 	   = new MuonsNtuplizer     ( muonToken_	, vtxToken_		, rhoToken_						, nBranches_ );
-  nTuplizers_["electrons"] = new ElectronsNtuplizer ( electronToken_, vtxToken_     , rhoToken_						, nBranches_ );
-  nTuplizers_["MET"]       = new METsNtuplizer      ( metTokens		, jetToken_		, muonToken_  , jecAK4Labels, corrFormulas, rhoToken_ , vtxToken_ , nBranches_ );
-  nTuplizers_["vertices"]  = new VerticesNtuplizer  ( vtxTokens														, nBranches_ );
-  nTuplizers_["triggers"]  = new TriggersNtuplizer  ( triggerTokens     											, nBranches_ );
+  nTuplizers_["jets"]  	   = new JetsNtuplizer	    ( jetTokens		, jecAK4Labels   , jecAK8Labels     , flavourToken_, rhoToken_   , vtxToken_  , nBranches_);
+  nTuplizers_["genJets"]   = new GenJetsNtuplizer   ( genJetToken_ 	, nBranches_    );
+  nTuplizers_["muons"] 	   = new MuonsNtuplizer     ( muonToken_	, vtxToken_      , rhoToken_        , nBranches_  );
+  nTuplizers_["electrons"] = new ElectronsNtuplizer ( electronToken_	, vtxToken_      , rhoToken_        , nBranches_  );
+  nTuplizers_["MET"]       = new METsNtuplizer      ( metTokens		, pfMETlabel     , jetToken_        , muonToken_   , jecAK4Labels, corrFormulas, rhoToken_, vtxToken_ , nBranches_ );
+  nTuplizers_["vertices"]  = new VerticesNtuplizer  ( vtxTokens		, nBranches_    ); 
+  nTuplizers_["triggers"]  = new TriggersNtuplizer  ( triggerToken_     , triggerObjects_, triggerPrescales_, nBranches_  );
 
 
   /*=======================================================================================*/    
@@ -138,12 +144,6 @@ Ntuplizer::~Ntuplizer()
 
 ///////////////////////////////////////////////////////////////////////////////////
 void Ntuplizer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup){
-	
-	// edm::Handle< edm::View<reco::PFMET> >   pfMEThandle;
-	// iEvent.getByLabel(pfMETlabel, pfMEThandle);
-	//
-	// float pfMET           = (pfMEThandle->front() ).et();
-	// std::cout<<"pfMet = "<< pfMET<<std::endl;
 
   nBranches_->EVENT_event     = iEvent.id().event();
   nBranches_->EVENT_run       = iEvent.id().run();

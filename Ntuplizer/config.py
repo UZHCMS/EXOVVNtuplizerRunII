@@ -42,7 +42,7 @@ process.source = cms.Source("PoolSource",
 doAK8reclustering = True
 doAK8prunedReclustering = True
 doAK8softdropReclustering = True
-
+doMETReclustering = False
 
 ####### Logger ##########
 
@@ -188,66 +188,41 @@ process.load('RecoEgamma.ElectronIdentification.Identification.heepElectronID_HE
 setupVIDSelection(process.egmGsfElectronIDs,process.heepElectronID_HEEPV50_CSA14_startup)
 
 ###### Recluster MET ##########
-# from RecoMET.METProducers.PFMET_cfi import pfMet
-# 
-# process.pfJetMETcorr = cms.EDProducer("PFJetMETcorrInputProducer",
-#     src = cms.InputTag('ak4PFJetsCHS'),
-#     offsetCorrLabel = cms.InputTag("ak4PFL1FastjetCorrector"),
-#     jetCorrLabel = cms.InputTag("ak4PFL1FastL2L3Corrector"), # NOTE: use "ak4PFL1FastL2L3Corrector" for MC / "ak4PFL1FastL2L3ResidualCorrector" for Data
-#     jetCorrEtaMax = cms.double(9.9),
-#     type1JetPtThreshold = cms.double(10.0),
-#     skipEM = cms.bool(True),
-#     skipEMfractionThreshold = cms.double(0.90),
-#     skipMuons = cms.bool(True),
-#     skipMuonSelection = cms.string("isGlobalMuon | isStandAloneMuon")
-# )
-    
-# process.pfType1CorrectedMet = cms.EDProducer("CorrectedPFMETProducer",
-#     src = cms.InputTag("pfMet"),
-#     applyType1Corrections = cms.bool(True),
-#     srcType1Corrections = cms.VInputTag(cms.InputTag("pfJetMETcorr","type1")),
-#     type0Rsoft = cms.double(0.6),
-#     applyType2Corrections = cms.bool(False),
-#     srcCHSSums = cms.VInputTag(cms.InputTag("pfchsMETcorr","type0")),
-#     applyType0Corrections = cms.bool(False)
-# )
-#
-# process.patMET = cms.EDProducer("PATMETProducer",
-#     metSource = cms.InputTag("pfType1CorrectedMet"),
-#     userData = cms.PSet(
-#         userCands = cms.PSet(
-#             src = cms.VInputTag("")
-#         ),
-#         userInts = cms.PSet(
-#             src = cms.VInputTag("")
-#         ),
-#         userFloats = cms.PSet(
-#             src = cms.VInputTag("")
-#         ),
-#         userClasses = cms.PSet(
-#             src = cms.VInputTag("")
-#         ),
-#         userFunctionLabels = cms.vstring(),
-#         userFunctions = cms.vstring()
-#     ),
-#     addResolutions = cms.bool(False),
-#     addEfficiencies = cms.bool(False),
-#     genMETSource = cms.InputTag("genMetTrue"),
-#     efficiencies = cms.PSet(
-#
-#     ),
-#     addGenMET = cms.bool(False),
-#     addMuonCorrections = cms.bool(False),
-#     muonSource = cms.InputTag("muons"),
-#     resolutions = cms.PSet(
-#
-#     )
-# )
-# 
-# process.redoPatMET = cms.Sequence()
-# process.redoPatMET+=process.pfMet
-# process.redoPatMET+=process.corrPfMetType1
-# process.redoPatMET+=process.pfMetT1
+process.redoPatMET = cms.Sequence()
+
+process.load("PhysicsTools.PatAlgos.producersLayer1.patCandidates_cff")
+
+from RecoMET.METProducers.PFMET_cfi import pfMet
+from JetMETCorrections.Type1MET.correctionTermsPfMetType1Type2_cff import corrPfMetType1
+
+from JetMETCorrections.Configuration.JetCorrectors_cff import ak4PFCHSL1FastL2L3Corrector,ak4PFCHSL1FastjetCorrector,ak4PFCHSL2RelativeCorrector,ak4PFCHSL3AbsoluteCorrector
+process.ak4PFCHSL1FastL2L3Corrector = ak4PFCHSL1FastL2L3Corrector.clone()
+
+from JetMETCorrections.Type1MET.correctedMet_cff import pfMetT1
+from PhysicsTools.PatAlgos.producersLayer1.metProducer_cfi import patMETs
+
+process.pfMet = pfMet.clone(src = "packedPFCandidates")
+process.pfMet.calculateSignificance = False
+
+corrPfMetType1.jetCorrLabel = cms.InputTag('ak4PFCHSL1FastL2L3Corrector')
+corrPfMetType1.src = cms.InputTag('ak4PFJetsCHS')
+corrPfMetType1.offsetCorrLabel = cms.InputTag("ak4PFCHSL1FastjetCorrector")
+
+process.pfMetT1 = pfMetT1.clone()
+process.patMETs = patMETs.clone()
+process.patMETs.addGenMET = False # There's no point in recalculating this, and we can't remake it since we don't have genParticles beyond |eta|=5
+
+if doMETReclustering:
+    process.redoPatMET+=process.ak4PFJetsCHS
+    process.redoPatMET+=process.pfMet
+    process.redoPatMET+=process.ak4PFCHSL1FastjetCorrector
+    process.redoPatMET+=process.ak4PFCHSL2RelativeCorrector
+    process.redoPatMET+=process.ak4PFCHSL3AbsoluteCorrector
+    process.redoPatMET+=process.ak4PFCHSL1FastL2L3Corrector
+    process.redoPatMET+=process.corrPfMetType1
+    process.redoPatMET+=process.pfMetT1
+    process.redoPatMET+=process.patMETs
+
 
 
 ####### Ntuplizer initialization ##########
@@ -258,12 +233,23 @@ jetsAK8 = "slimmedJetsAK8"
 jetsAK8pruned = ""
 jetsAK8softdrop = ""
 
+METS = "slimmedMETs"
+reclusteredMETS = ""
+pfMETS = ""
+
+
 if doAK8reclustering:
    jetsAK8 = "patJetsAK8"
 if doAK8prunedReclustering:
    jetsAK8pruned = "patPrunedJetsAK8" 
 if doAK8softdropReclustering:
-   jetsAK8softdrop = "patSoftDropJetsAK8"     
+   jetsAK8softdrop = "patSoftDropJetsAK8"  
+   
+if doMETReclustering:
+    METS = "" 
+    reclusteredMETS = "patMETs"
+    pfMETS = "pfMet" 
+     
 
 ######## JEC ########
 jecLevelsAK8chs = [
@@ -292,8 +278,9 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     genJets = cms.InputTag("slimmedGenJets"),
     #subjetflavour = cms.InputTag("flavourByVal"),
     subjetflavour = cms.InputTag("AK8byValAlgo"),
-    mets = cms.InputTag("slimmedMETs"),
-    pfmets = cms.InputTag("pfMet"),
+    mets = cms.InputTag(METS),
+    reclusteredmets = cms.InputTag(reclusteredMETS),
+    pfmets = cms.InputTag(pfMETS),
     corrMetPx = cms.string("+0.1166 + 0.0200*Nvtx"),
     corrMetPy = cms.string("+0.2764 - 0.1280*Nvtx"),
     rho = cms.InputTag("fixedGridRhoFastjetAll"),
@@ -308,7 +295,7 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
 
 ####### Final path ##########
 
-# process.p = cms.Path(process.substructureSequence*process.redoPatJets*process.redoPrunedPatJets*process.redoSoftDropPatJets*process.ak4PFJetsCHS*process.redoPatMET*process.ntuplizer)
-process.p = cms.Path(process.substructureSequence*process.redoPatJets*process.redoPrunedPatJets*process.redoSoftDropPatJets*process.ak4PFJetsCHS*process.ntuplizer)
+process.p = cms.Path(process.substructureSequence*process.redoPatJets*process.redoPrunedPatJets*process.redoSoftDropPatJets*process.redoPatMET*process.ntuplizer)
+# process.p = cms.Path(process.substructureSequence*process.redoPatJets*process.redoPrunedPatJets*process.redoSoftDropPatJets*process.ak4PFJetsCHS*process.ntuplizer)
 
 
