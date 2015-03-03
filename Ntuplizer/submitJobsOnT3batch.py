@@ -207,7 +207,12 @@ if opts.copyfiles:
       jobid = a[1]
       inputpath = "srm://t3se01.psi.ch:8443/srm/managerv2?SFN="+j+"/"+outfile
       outputpath = "srm://t3se01.psi.ch:8443/srm/managerv2?SFN=%s"%(newdir+"/"+prefix+"_"+jobid+".root")
-      #cmd = "srmmv %s %s" %(inputpath,outputpath) 
+      checkfile = "ls -l %s"%(newdir+"/"+prefix+"_"+jobid+".root") 
+      status,cmd_out = commands.getstatusoutput(checkfile)
+      if not(status): 
+         cmd = "gfal-rm %s"%(outputpath)
+	 print cmd
+	 os.system(cmd)
       cmd = "gfal-copy %s %s" %(inputpath,outputpath)
       print cmd
       os.system(cmd)
@@ -233,7 +238,7 @@ if opts.clean:
       os.system(cmd)
     
    print "rm -rf "+getLocalJobsDir(localjobdir)  
-   os.system("rm -rf "+getLocalJobsDir(localjobdir)+"/*")
+   os.system("rm -rf "+getLocalJobsDir(localjobdir))
       
    sys.exit()   
 	 

@@ -41,6 +41,7 @@ void ElectronsNtuplizer::fillBranches( edm::Event const & event, const edm::Even
     bool isHEEPv50 = false;
 
     float et = ele.energy()!=0. ? ele.et()/ele.energy()*ele.caloEnergy() : 0.;
+    
     float eta = ele.superCluster()->eta();
     double iso;
     double isoCut;
@@ -107,12 +108,12 @@ void ElectronsNtuplizer::fillBranches( edm::Event const & event, const edm::Even
     nele++;
           
     nBranches_->lep_isHEEP      .push_back( isHEEP );
-    nBranches_->lep_isHEEPv50      .push_back( isHEEPv50 );
+    nBranches_->lep_isHEEPv50   .push_back( isHEEPv50 );
     nBranches_->lep_isHighPtMuon.push_back(-99);        
     nBranches_->lep_type        .push_back(ele.pdgId());
     nBranches_->lep_charge      .push_back(ele.charge());
     nBranches_->lep_e           .push_back(ele.energy());
-    nBranches_->lep_eta         .push_back(ele.superCluster()->eta());
+    nBranches_->lep_eta         .push_back(ele.eta());
     nBranches_->lep_mass        .push_back(ele.mass());
     nBranches_->lep_pt          .push_back(ele.pt());  
     nBranches_->lep_phi         .push_back(ele.phi());    
@@ -142,7 +143,7 @@ void ElectronsNtuplizer::fillBranches( edm::Event const & event, const edm::Even
     nBranches_->lep_pfDeltaCorrRelIso.push_back(DeltaCorrectedIso);
     nBranches_->lep_pfRhoCorrRelIso04.push_back(RhoCorrectedIso04);
     nBranches_->lep_pfRhoCorrRelIso03.push_back(RhoCorrectedIso03);
-    nBranches_->lep_pfRelIso	  .push_back((ele.chargedHadronIso() + ele.neutralHadronIso()+ ele.photonIso())/ele.pt());
+    nBranches_->lep_pfRelIso	     .push_back((ele.chargedHadronIso() + ele.neutralHadronIso()+ ele.photonIso())/ele.pt());
     nBranches_->lep_photonIso	     .push_back(ele.photonIso());
     nBranches_->lep_neutralHadIso    .push_back(ele.neutralHadronIso());
     nBranches_->lep_chargedHadIso    .push_back(ele.chargedHadronIso());
