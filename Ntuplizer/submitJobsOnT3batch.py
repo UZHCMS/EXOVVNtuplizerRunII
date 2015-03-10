@@ -92,6 +92,12 @@ def getFileListFromSampleDAS(sample):
       dataset = "/T_tW-channel-DR_Tune4C_13TeV-CSA14-powheg-tauola/Phys14DR-PU20bx25_PHYS14_25_V1-v1/MINIAODSIM" 
    elif sample == "Tbar_tW-channel":
       dataset = "/Tbar_tW-channel-DR_Tune4C_13TeV-CSA14-powheg-tauola/Phys14DR-PU20bx25_PHYS14_25_V1-v1/MINIAODSIM"
+   elif sample == "QCD_HT_500To1000_ext":
+      dataset = "/QCD_HT-500To1000_13TeV-madgraph/Phys14DR-PU20bx25_PHYS14_25_V1_ext1-v1/MINIAODSIM"
+   elif sample == "QCD_HT_250To500_ext":
+      dataset = "/QCD_HT_250To500_13TeV-madgraph/Phys14DR-PU20bx25_PHYS14_25_V1_ext1-v2/MINIAODSIM"
+   elif sample == "QCD_HT_1000ToInf_ext":
+      dataset ="/QCD_HT_1000ToInf_13TeV-madgraph/Phys14DR-PU20bx25_PHYS14_25_V1_ext1-v1/MINIAODSIM"
    elif sample == "QCD_HT-500To1000":
       dataset = "/QCD_HT-500To1000_13TeV-madgraph/Phys14DR-PU20bx25_PHYS14_25_V1-v1/MINIAODSIM"       
    elif sample == "QCD_HT_1000ToInf":
@@ -106,7 +112,7 @@ def getFileListFromSampleDAS(sample):
       dataset = "/QCD_Pt-15to3000_Tune4C_Flat_13TeV_pythia8/Phys14DR-PU20bx25_trkalmb_PHYS14_25_V1-v1/MINIAODSIM"      
    elif sample == "QCD_Pt-1800to2400":
       dataset = "/QCD_Pt-1800to2400_Tune4C_13TeV_pythia8/Phys14DR-PU20bx25_trkalmb_PHYS14_25_V1-v2/MINIAODSIM"      
-   elif sample == "QCD_Pt-2400to320":
+   elif sample == "QCD_Pt-2400to3200":
       dataset = "/QCD_Pt-2400to3200_Tune4C_13TeV_pythia8/Phys14DR-PU20bx25_trkalmb_PHYS14_25_V1-v1/MINIAODSIM"      
    elif sample == "QCD_Pt-300to470":
       dataset = "/QCD_Pt-300to470_Tune4C_13TeV_pythia8/Phys14DR-PU20bx25_trkalmb_castor_PHYS14_25_V1-v2/MINIAODSIM"      
@@ -114,9 +120,9 @@ def getFileListFromSampleDAS(sample):
       dataset = "/QCD_Pt-3200_Tune4C_13TeV_pythia8/Phys14DR-PU20bx25_trkalmb_PHYS14_25_V1-v1/MINIAODSIM"      
    elif sample == "QCD_Pt-470to600":
       dataset = "/QCD_Pt-470to600_Tune4C_13TeV_pythia8/Phys14DR-PU20bx25_trkalmb_castor_PHYS14_25_V1-v2/MINIAODSIM"      
-   elif sample == "QCD_Pt-600to800":
+   elif sample == "QCD_Pt_600to800":
       dataset = "/QCD_Pt-600to800_Tune4C_13TeV_pythia8/Phys14DR-PU20bx25_trkalmb_castor_PHYS14_25_V1-v1/MINIAODSIM"      
-   elif sample == "QCD_Pt-800to1000":
+   elif sample == "QCD_Pt_800to1000":
       dataset = "/QCD_Pt-800to1000_Tune4C_13TeV_pythia8/Phys14DR-PU20bx25_trkalmb_castor_PHYS14_25_V1-v2/MINIAODSIM"      
    elif sample == "RSGravitonToWW_M_1000":
       dataset = "/RSGravitonToWW_kMpl01_M_1000_Tune4C_13TeV_pythia8/Phys14DR-PU20bx25_tsg_PHYS14_25_V1-v2/MINIAODSIM"      
