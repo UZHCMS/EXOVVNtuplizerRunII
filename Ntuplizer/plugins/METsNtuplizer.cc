@@ -63,7 +63,7 @@ double METsNtuplizer::getJEC( reco::Candidate::LorentzVector& rawJetP4, const pa
    
    double jetCorrFactor = 1.;
    if ( fabs(rawJetP4.eta()) < jetCorrEtaMax ){     
-      jecAK4_->setJetEta( rawJetP4.eta()	);
+      jecAK4_->setJetEta( rawJetP4.eta() );
       jecAK4_->setJetPt ( rawJetP4.pt()	);
       jecAK4_->setJetE  ( rawJetP4.energy() );
       jecAK4_->setJetPhi( rawJetP4.phi()    );
@@ -185,8 +185,6 @@ void METsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
 	   		Double_t rawPy = rawMET_.Py();
 	   		Double_t rawEt = std::hypot(rawPx,rawPy);
 		
-	   //	Double_t uncorrSumEt =+ uncorrPtMET;
-		
 			nBranches_->METraw_et .push_back(rawEt); 
 			nBranches_->METraw_phi.push_back(rawPhi);
 	   		nBranches_->METraw_sumEt.push_back(rawSumEt);
@@ -203,8 +201,8 @@ void METsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
 			nBranches_->MET_corrPx.push_back(TypeICorrMap_["corrEx"]);
 			nBranches_->MET_corrPy.push_back(TypeICorrMap_["corrEy"]);
 			
-		
-	   		//nBranches_->MET_T1Uncertainty.push_back(met.shiftedPt(pat::MET::NoShift, pat::MET::Type1));
+			//nBranches_->MET_T1Uncertainty.push_back(met.shiftedPt(pat::MET::NoShift, pat::MET::Type1));
+			
 		} 
 	}  
 	

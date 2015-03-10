@@ -20,8 +20,9 @@ import FWCore.ParameterSet.VarParsing as VarParsing
 options = VarParsing.VarParsing ('analysis')
 
 options.maxEvents = -1
-options.inputFiles ='root://xrootd.unl.edu//store/mc/Phys14DR/TTJets_MSDecaysCKM_central_Tune4C_13TeV-madgraph-tauola/MINIAODSIM/PU20bx25_PHYS14_25_V1-v1/00000/00C90EFC-3074-E411-A845-002590DB9262.root'
-# options.inputFiles = 'file:testWW.root'
+options.inputFiles ='root://xrootd.unl.edu//store/mc/Phys14DR/RSGravitonToWW_kMpl01_M_1000_Tune4C_13TeV_pythia8/MINIAODSIM/PU20bx25_tsg_PHYS14_25_V1-v2/10000/CE92595C-9676-E411-A785-00266CF2E2C8.root'
+#options.inputFiles = 'file:testWW.root'
+
 
 
 options.parseArguments()
@@ -293,6 +294,8 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     jecAK8chsPayloadNames = cms.vstring( jecLevelsAK8chs ),
     jecAK4chsPayloadNames = cms.vstring( jecLevelsAK4chs ),
     jecpath = cms.string(''),
+    triggerobjects = cms.InputTag("selectedPatTrigger"),
+    triggerprescales = cms.InputTag("patTrigger"),
 )
 
 ####### Final path ##########

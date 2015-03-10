@@ -41,6 +41,7 @@ void ElectronsNtuplizer::fillBranches( edm::Event const & event, const edm::Even
     bool isHEEPv50 = false;
 
     float et = ele.energy()!=0. ? ele.et()/ele.energy()*ele.caloEnergy() : 0.;
+    
     float eta = ele.superCluster()->eta();
     double iso;
     double isoCut;
@@ -106,6 +107,7 @@ void ElectronsNtuplizer::fillBranches( edm::Event const & event, const edm::Even
     //if( !isHEEP ) continue;
     nele++;
           
+
     nBranches_->lep_isHEEP			.push_back( isHEEP );
     nBranches_->lep_isHEEPv50		.push_back( isHEEPv50 );
     nBranches_->lep_isHighPtMuon	.push_back(-99);       
@@ -144,7 +146,7 @@ void ElectronsNtuplizer::fillBranches( edm::Event const & event, const edm::Even
     nBranches_->lep_pfDeltaCorrRelIso.push_back(DeltaCorrectedIso);
     nBranches_->lep_pfRhoCorrRelIso04.push_back(RhoCorrectedIso04);
     nBranches_->lep_pfRhoCorrRelIso03.push_back(RhoCorrectedIso03);
-    nBranches_->lep_pfRelIso	  .push_back((ele.chargedHadronIso() + ele.neutralHadronIso()+ ele.photonIso())/ele.pt());
+    nBranches_->lep_pfRelIso	     .push_back((ele.chargedHadronIso() + ele.neutralHadronIso()+ ele.photonIso())/ele.pt());
     nBranches_->lep_photonIso	     .push_back(ele.photonIso());
     nBranches_->lep_neutralHadIso    .push_back(ele.neutralHadronIso());
     nBranches_->lep_chargedHadIso    .push_back(ele.chargedHadronIso());
