@@ -106,16 +106,18 @@ void ElectronsNtuplizer::fillBranches( edm::Event const & event, const edm::Even
     //if( !isHEEP ) continue;
     nele++;
           
-    nBranches_->lep_isHEEP      .push_back( isHEEP );
-    nBranches_->lep_isHEEPv50      .push_back( isHEEPv50 );
-    nBranches_->lep_isHighPtMuon.push_back(-99);        
-    nBranches_->lep_type        .push_back(ele.pdgId());
-    nBranches_->lep_charge      .push_back(ele.charge());
-    nBranches_->lep_e           .push_back(ele.energy());
-    nBranches_->lep_eta         .push_back(ele.superCluster()->eta());
-    nBranches_->lep_mass        .push_back(ele.mass());
-    nBranches_->lep_pt          .push_back(ele.pt());  
-    nBranches_->lep_phi         .push_back(ele.phi());    
+    nBranches_->lep_isHEEP			.push_back( isHEEP );
+    nBranches_->lep_isHEEPv50		.push_back( isHEEPv50 );
+    nBranches_->lep_isHighPtMuon	.push_back(-99);       
+	 nBranches_->lep_isTightMuon	.push_back(-99); 
+	 nBranches_->lep_isLooseMuon	.push_back(-99);       
+    nBranches_->lep_type			.push_back(ele.pdgId());
+    nBranches_->lep_charge			.push_back(ele.charge());
+    nBranches_->lep_e				.push_back(ele.energy());
+    nBranches_->lep_eta				.push_back(ele.superCluster()->eta());
+    nBranches_->lep_mass			.push_back(ele.mass());
+    nBranches_->lep_pt				.push_back(ele.pt());  
+    nBranches_->lep_phi				.push_back(ele.phi());    
 
     double Aeff04 = 0.5;
     if ( fabs(ele.superCluster()->eta()) < 1.0 ) Aeff04 = 0.208;
