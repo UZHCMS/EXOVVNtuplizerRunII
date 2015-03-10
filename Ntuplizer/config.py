@@ -24,6 +24,7 @@ options.inputFiles ='root://xrootd.unl.edu//store/mc/Phys14DR/RSGravitonToWW_kMp
 #options.inputFiles = 'file:testWW.root'
 
 
+
 options.parseArguments()
 
 process.options  = cms.untracked.PSet( 
@@ -288,6 +289,8 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     PUInfo = cms.InputTag("addPileupInfo"),
     genEventInfo = cms.InputTag("generator"),
     HLT = cms.InputTag("TriggerResults","","HLT"),
+    triggerobjects = cms.InputTag("selectedPatTrigger"),
+    triggerprescales = cms.InputTag("patTrigger"),
     jecAK8chsPayloadNames = cms.vstring( jecLevelsAK8chs ),
     jecAK4chsPayloadNames = cms.vstring( jecLevelsAK4chs ),
     jecpath = cms.string(''),
