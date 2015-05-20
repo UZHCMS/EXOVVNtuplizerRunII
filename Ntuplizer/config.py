@@ -7,7 +7,8 @@ process = cms.Process("Ntuple")
 process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_condDBv2_cff')
 process.load('Configuration.StandardSequences.Geometry_cff')
 process.load('Configuration.StandardSequences.MagneticField_38T_cff')
-process.GlobalTag.globaltag = 'PHYS14_25_V2'
+#process.GlobalTag.globaltag = 'PHYS14_25_V2'
+process.GlobalTag.globaltag = 'MCRUN2_74_V7'
 
 process.TFileService = cms.Service("TFileService",
                                        fileName = cms.string('flatTuple.root')
@@ -20,10 +21,8 @@ import FWCore.ParameterSet.VarParsing as VarParsing
 options = VarParsing.VarParsing ('analysis')
 
 options.maxEvents = -1
-options.inputFiles ='root://xrootd.unl.edu//store/mc/Phys14DR/RSGravitonToWW_kMpl01_M_1000_Tune4C_13TeV_pythia8/MINIAODSIM/PU20bx25_tsg_PHYS14_25_V1-v2/10000/CE92595C-9676-E411-A785-00266CF2E2C8.root'
-#options.inputFiles = 'file:testWW.root'
-
-
+#options.inputFiles ='root://xrootd.unl.edu//store/mc/Phys14DR/RSGravitonToWW_kMpl01_M_1000_Tune4C_13TeV_pythia8/MINIAODSIM/PU20bx25_tsg_PHYS14_25_V1-v2/10000/CE92595C-9676-E411-A785-00266CF2E2C8.root'
+options.inputFiles = 'dcap://t3se01.psi.ch:22125//pnfs/psi.ch/cms/trivcat/store/user/jngadiub/BulkGraviton_WW_WlepWhad_M3000_narrow/MiniAOD/BulkGraviton_WW_WlepWhad_M3000_narrow_miniAOD_1.root'
 
 options.parseArguments()
 
@@ -40,9 +39,9 @@ process.source = cms.Source("PoolSource",
 
 ######## Sequence settings ##########
 
-doAK8reclustering = True
-doAK8prunedReclustering = True
-doAK8softdropReclustering = True
+doAK8reclustering = False
+doAK8prunedReclustering = False
+doAK8softdropReclustering = False
 doMETReclustering = False
 
 ####### Logger ##########
@@ -59,14 +58,14 @@ process.MessageLogger.cerr.FwkReport.reportEvery = 1000
 
 ####### Redo Jet clustering sequence ##########
 
-from RecoJets.Configuration.RecoPFJets_cff import ak4PFJetsCHS, ak8PFJetsCHS, ak8PFJetsCHSPruned, ak8PFJetsCHSSoftDrop, ak8PFJetsCHSPrunedLinks, ak8PFJetsCHSSoftDropLinks# , ak8PFJetsCSTrimmed, ak8PFJetsCSFiltered, ak8PFJetsCHSFilteredLinks, ak8PFJetsCHSTrimmedLinks
+from RecoJets.Configuration.RecoPFJets_cff import ak4PFJetsCHS, ak8PFJetsCHS, ak8PFJetsCHSPruned, ak8PFJetsCHSSoftDrop, ak8PFJetsCHSPrunedMass, ak8PFJetsCHSSoftDropMass# , ak8PFJetsCSTrimmed, ak8PFJetsCSFiltered, ak8PFJetsCHSFilteredLinks, ak8PFJetsCHSTrimmedLinks
                                                                                                           
 process.chs = cms.EDFilter("CandPtrSelector",
   src = cms.InputTag('packedPFCandidates'),
   cut = cms.string('fromPV')
 )
 
-process.ak4PFJetsCHS = ak4PFJetsCHS.clone(src = 'chs')
+process.ak4PFJetsCHS = ak4PFJetsCHS.clone( src = 'chs' )
 process.ak8PFJetsCHS = ak8PFJetsCHS.clone( src = 'chs', jetPtMin = 100.0 )
 
 
@@ -86,11 +85,11 @@ process.NjettinessAK8 = cms.EDProducer("NjettinessAdder",
 			       
  
 process.ak8PFJetsCHSPruned = ak8PFJetsCHSPruned.clone( src = 'chs', jetPtMin = 100.0  )
-process.ak8PFJetsCHSPrunedLinks = ak8PFJetsCHSPrunedLinks.clone()
+process.ak8PFJetsCHSPrunedLinks = ak8PFJetsCHSPrunedMass.clone()
 
 process.ak8PFJetsCHSSoftDrop = ak8PFJetsCHSSoftDrop.clone( src = 'chs', jetPtMin = 100.0  )
 
-process.ak8PFJetsCHSSoftDropLinks = ak8PFJetsCHSSoftDropLinks.clone()
+process.ak8PFJetsCHSSoftDropLinks = ak8PFJetsCHSSoftDropMass.clone()
 
 # process.ak8PFJetsCSTrimmed = ak8PFJetsCSTrimmed.clone( src = 'chs' )
 # process.ak8PFJetsCSFiltered = ak8PFJetsCSFiltered.clone( src = 'chs' )
@@ -117,7 +116,7 @@ process.redoPatJets = cms.Sequence()
 process.redoPrunedPatJets = cms.Sequence()
 process.redoSoftDropPatJets = cms.Sequence()
 
-from ExoDiBosonResonances.EDBRJets.redoPatJets_cff import patJetCorrFactorsAK8, patJetsAK8, selectedPatJetsAK8
+from EXOVVNtuplizerRunII.Ntuplizer.redoPatJets_cff import patJetCorrFactorsAK8, patJetsAK8, selectedPatJetsAK8
 
 # Redo pat jets from ak8PFJetsCHS
 process.patJetCorrFactorsAK8 = patJetCorrFactorsAK8.clone( src = 'ak8PFJetsCHS' )
@@ -254,14 +253,20 @@ if doMETReclustering:
 
 ######## JEC ########
 jecLevelsAK8chs = [
-    'JEC/PHYS14_25_V2::All_L1FastJet_AK8PFchs.txt',
-    'JEC/PHYS14_25_V2::All_L2Relative_AK8PFchs.txt',
-    'JEC/PHYS14_25_V2::All_L3Absolute_AK8PFchs.txt'
+    #'JEC/PHYS14_25_V2::All_L1FastJet_AK8PFchs.txt',
+    #'JEC/PHYS14_25_V2::All_L2Relative_AK8PFchs.txt',
+    #'JEC/PHYS14_25_V2::All_L3Absolute_AK8PFchs.txt'
+    'JEC/MCRUN2_74_V7::All_L1FastJet_AK8PFchs.txt',
+    'JEC/MCRUN2_74_V7::All_L2Relative_AK8PFchs.txt',
+    'JEC/MCRUN2_74_V7::All_L3Absolute_AK8PFchs.txt'
   ]
 jecLevelsAK4chs = [
-    'JEC/PHYS14_25_V2::All_L1FastJet_AK4PFchs.txt',
-    'JEC/PHYS14_25_V2::All_L2Relative_AK4PFchs.txt',
-    'JEC/PHYS14_25_V2::All_L3Absolute_AK4PFchs.txt'
+    #'JEC/PHYS14_25_V2::All_L1FastJet_AK4PFchs.txt',
+    #'JEC/PHYS14_25_V2::All_L2Relative_AK4PFchs.txt',
+    #'JEC/PHYS14_25_V2::All_L3Absolute_AK4PFchs.txt'
+    'JEC/MCRUN2_74_V7::All_L1FastJet_AK4PFchs.txt',
+    'JEC/MCRUN2_74_V7::All_L2Relative_AK4PFchs.txt',
+    'JEC/MCRUN2_74_V7::All_L3Absolute_AK4PFchs.txt'
   ]
    
 
@@ -297,8 +302,4 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
 )
 
 ####### Final path ##########
-
 process.p = cms.Path(process.substructureSequence*process.redoPatJets*process.redoPrunedPatJets*process.redoSoftDropPatJets*process.redoPatMET*process.ntuplizer)
-# process.p = cms.Path(process.substructureSequence*process.redoPatJets*process.redoPrunedPatJets*process.redoSoftDropPatJets*process.ak4PFJetsCHS*process.ntuplizer)
-
-

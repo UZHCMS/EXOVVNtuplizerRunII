@@ -43,14 +43,14 @@ void NtupleBranches::branch( void ){
   tree_->Branch( "lep_charge"		     , &lep_charge	       );
   tree_->Branch( "lep_e" 		     , &lep_e		       );
   tree_->Branch( "lep_eta"		     , &lep_eta 	       );
-  tree_->Branch( "lep_mass"		  			   , &lep_mass	       );
-  tree_->Branch( "lep_pt"		     				, &lep_pt  	       );
-  tree_->Branch( "lep_phi"		     				, &lep_phi 	       );
-  tree_->Branch( "lep_isHEEP"	            	, &lep_isHEEP             );
-  tree_->Branch( "lep_isHEEPv50"	            , &lep_isHEEPv50             );
-  tree_->Branch( "lep_isHighPtMuon"	   	  	, &lep_isHighPtMuon       );
-  tree_->Branch( "lep_isTightMuon"	     		, &lep_isTightMuon       );
-  tree_->Branch( "lep_isLooseMuon"	     		, &lep_isLooseMuon       );
+  tree_->Branch( "lep_mass"		     , &lep_mass	       );
+  tree_->Branch( "lep_pt"		     , &lep_pt  	       );
+  tree_->Branch( "lep_phi"		     , &lep_phi 	       );
+  tree_->Branch( "lep_isHEEP"	             , &lep_isHEEP             );
+  tree_->Branch( "lep_isHEEPv50"	     , &lep_isHEEPv50	       );
+  tree_->Branch( "lep_isHighPtMuon"	     , &lep_isHighPtMuon       );
+  tree_->Branch( "lep_isTightMuon"	     , &lep_isTightMuon        );
+  tree_->Branch( "lep_isLooseMuon"	     , &lep_isLooseMuon        );
   tree_->Branch( "lep_pfRhoCorrRelIso03"     , &lep_pfRhoCorrRelIso03  );
   tree_->Branch( "lep_pfRhoCorrRelIso04"     , &lep_pfRhoCorrRelIso04  );
   tree_->Branch( "lep_pfDeltaCorrRelIso"     , &lep_pfDeltaCorrRelIso  );
@@ -211,24 +211,23 @@ void NtupleBranches::branch( void ){
   tree_->Branch( "genJetNoNuAK4_e"	    , &genJetNoNuAK4_e    );
         
   /*----------------------HLT trigger---------------------------*/	  
-  tree_->Branch("isFired_HLT_AK8PFJet360TrimMod_Mass30_v1"							, &isFired_HLT_AK8PFJet360TrimMod_Mass30_v1							);
-  tree_->Branch("isFired_HLT_AK8PFHT700_TrimR0p1PT0p03Mass50_v1"					, &isFired_HLT_AK8PFHT700_TrimR0p1PT0p03Mass50_v1					);
-  tree_->Branch("isFired_HLT_AK8DiPFJet280_200_TrimMass30_BTagCSV0p3_v1"		, &isFired_HLT_AK8DiPFJet280_200_TrimMass30_BTagCSV0p3_v1		);
-  tree_->Branch("isFired_HLT_PFHT650_WideJetMJJ950DEtaJJ1p5_v1"					, &isFired_HLT_PFHT650_WideJetMJJ950DEtaJJ1p5_v1					);
-  tree_->Branch("isFired_HLT_PFHT650_WideJetMJJ900DEtaJJ1p5_v1"					, &isFired_HLT_PFHT650_WideJetMJJ900DEtaJJ1p5_v1					);
-  tree_->Branch("isFired_HLT_PFHT900_v1"													, &isFired_HLT_PFHT900_v1													);
-  tree_->Branch("isFired_HLT_Ele95_CaloIdVT_GsfTrkIdT_v1"							, &isFired_HLT_Ele95_CaloIdVT_GsfTrkIdT_v1							);
-  tree_->Branch("isFired_HLT_Mu40_v1"														, &isFired_HLT_Mu40_v1														);
-  tree_->Branch("isFired_HLT_IsoMu20_eta2p1_IterTrk02_v1"							, &isFired_HLT_IsoMu20_eta2p1_IterTrk02_v1							);
-  tree_->Branch("isFired_HLT_Ele27_eta2p1_WP85_Gsf_v1"								, &isFired_HLT_Ele27_eta2p1_WP85_Gsf_v1								);
-  tree_->Branch("isFired_HLT_IsoMu20_eta2p1_IterTrk02_TriCentralPFJet40_v1"	, &isFired_HLT_IsoMu20_eta2p1_IterTrk02_TriCentralPFJet40_v1	);
-  tree_->Branch("isFired_HLT_Ele27_eta2p1_WP85_Gsf_TriCentralPFJet40_v1"		, &isFired_HLT_Ele27_eta2p1_WP85_Gsf_TriCentralPFJet40_v1		);
+  tree_->Branch("isFired_HLT_AK8PFJet360TrimMod_Mass30_v1"		   , &isFired_HLT_AK8PFJet360TrimMod_Mass30_v1  	     );
+  tree_->Branch("isFired_HLT_AK8PFHT700_TrimR0p1PT0p03Mass50_v1"	   , &isFired_HLT_AK8PFHT700_TrimR0p1PT0p03Mass50_v1	     );
+  tree_->Branch("isFired_HLT_AK8DiPFJet280_200_TrimMass30_BTagCSV0p3_v1"   , &isFired_HLT_AK8DiPFJet280_200_TrimMass30_BTagCSV0p3_v1 );
+  tree_->Branch("isFired_HLT_PFHT650_WideJetMJJ950DEtaJJ1p5_v1"		   , &isFired_HLT_PFHT650_WideJetMJJ950DEtaJJ1p5_v1	     );
+  tree_->Branch("isFired_HLT_PFHT650_WideJetMJJ900DEtaJJ1p5_v1"		   , &isFired_HLT_PFHT650_WideJetMJJ900DEtaJJ1p5_v1	     );
+  tree_->Branch("isFired_HLT_PFHT900_v1"				   , &isFired_HLT_PFHT900_v1				     );
+  tree_->Branch("isFired_HLT_Ele23_CaloIdL_TrackIdL_IsoVL_v1"              , &isFired_HLT_Ele23_CaloIdL_TrackIdL_IsoVL_v1            );
+  tree_->Branch("isFired_HLT_Ele32_eta2p1_WP75_Gsf_v1"                     , &isFired_HLT_Ele32_eta2p1_WP75_Gsf_v1                   );
+  tree_->Branch("isFired_HLT_Ele105_CaloIdVT_GsfTrkIdT_v1"		   , &isFired_HLT_Ele105_CaloIdVT_GsfTrkIdT_v1		     );
+  tree_->Branch("isFired_HLT_IsoMu24_eta2p1_v1"                            , &isFired_HLT_IsoMu24_eta2p1_v1                          );
+  tree_->Branch("isFired_HLT_Mu45_eta2p1_v1"				   , &isFired_HLT_Mu45_eta2p1_v1			     );
   
-  tree_->Branch("triggerObject_pt"				, &triggerObject_pt				);
-  tree_->Branch("triggerObject_eta"				, &triggerObject_eta				);
-  tree_->Branch("triggerObject_phi"				, &triggerObject_phi				);
-  tree_->Branch("triggerObject_mass"			, &triggerObject_mass			);
-  tree_->Branch("triggerObject_filterIDs"		, &triggerObject_filterIDs		);
+  tree_->Branch("triggerObject_pt"		, &triggerObject_pt		);
+  tree_->Branch("triggerObject_eta"		, &triggerObject_eta		);
+  tree_->Branch("triggerObject_phi"		, &triggerObject_phi	        );
+  tree_->Branch("triggerObject_mass"		, &triggerObject_mass		);
+  tree_->Branch("triggerObject_filterIDs"	, &triggerObject_filterIDs	);
   tree_->Branch("triggerObject_firedTrigger"	, &triggerObject_firedTrigger	);
 
   /*-------------------------MET--------------------------------*/
@@ -275,19 +274,17 @@ void NtupleBranches::reset( void ){
 
   //njetsAK8pruned = 0;
   //njetsAK8softdrop = 0;
-  isFired_HLT_AK8PFJet360TrimMod_Mass30_v1						= false;
-  isFired_HLT_AK8PFHT700_TrimR0p1PT0p03Mass50_v1				= false;
-  isFired_HLT_AK8DiPFJet280_200_TrimMass30_BTagCSV0p3_v1		= false;
-  isFired_HLT_PFHT650_WideJetMJJ950DEtaJJ1p5_v1					= false;
-  isFired_HLT_PFHT650_WideJetMJJ900DEtaJJ1p5_v1					= false;
-  isFired_HLT_PFHT900_v1												= false;
-  isFired_HLT_Ele95_CaloIdVT_GsfTrkIdT_v1							= false;
-  isFired_HLT_Mu40_v1													= false;
-  isFired_HLT_IsoMu20_eta2p1_IterTrk02_v1							= false;
-  isFired_HLT_Ele27_eta2p1_WP85_Gsf_v1								= false;
-  isFired_HLT_IsoMu20_eta2p1_IterTrk02_TriCentralPFJet40_v1	= false;
-  isFired_HLT_Ele27_eta2p1_WP85_Gsf_TriCentralPFJet40_v1		= false;
-  
+  isFired_HLT_AK8PFJet360TrimMod_Mass30_v1		    = false;
+  isFired_HLT_AK8PFHT700_TrimR0p1PT0p03Mass50_v1	    = false;
+  isFired_HLT_AK8DiPFJet280_200_TrimMass30_BTagCSV0p3_v1    = false;
+  isFired_HLT_PFHT650_WideJetMJJ950DEtaJJ1p5_v1		    = false;
+  isFired_HLT_PFHT650_WideJetMJJ900DEtaJJ1p5_v1		    = false;
+  isFired_HLT_PFHT900_v1				    = false;
+  isFired_HLT_IsoMu24_eta2p1_v1				    = false;
+  isFired_HLT_Mu45_eta2p1_v1				    = false;
+  isFired_HLT_Ele23_CaloIdL_TrackIdL_IsoVL_v1               = false;
+  isFired_HLT_Ele32_eta2p1_WP75_Gsf_v1                      = false;
+  isFired_HLT_Ele105_CaloIdVT_GsfTrkIdT_v1		    = false;  
     
   /************************************/    
   genParticle_pt	    .clear();

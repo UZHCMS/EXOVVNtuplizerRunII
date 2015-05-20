@@ -243,9 +243,16 @@ if opts.clean:
       print cmd
       os.system(cmd)
     
-   print "rm -rf "+getLocalJobsDir(localjobdir)  
-   os.system("rm -rf "+getLocalJobsDir(localjobdir))
-      
+   print "" 
+   cmd = "rm -rf "+getLocalJobsDir(localjobdir) 
+   print cmd 
+   os.system(cmd)   
+   user = commands.getoutput("whoami")
+   dir = '/pnfs/psi.ch/cms/trivcat/store/user/'+user+"/"+outdir
+   cmd = "lcg-del -d srm://t3se01.psi.ch:8443/srm/managerv2?SFN=" + dir
+   print cmd
+   os.system(cmd)
+         
    sys.exit()   
 	 
 #-----------------------------------------------------------------------------------------	 
@@ -287,12 +294,21 @@ while it < len(files):
 print "==============================================="
 
 for c in cmds:
+   print ""
    print c
+   print ""
    if not(opts.test):
       os.system(c)
-
-#for c in range(1):
-#   print cmds[c]
-#   os.system(cmds[c])
    
 #python submitJobsOnT3batch.py -C submitJobsOnT3batch.cfg --useDAS
+
+#crash M1000:
+#job 1 (file 63) --> 6902352
+#job 6 (file 49) --> 6902353
+#job 9 (file 17) --> 6902354
+
+#crash M2000:
+#job 1
+#job 5
+#job 8
+#job 9
