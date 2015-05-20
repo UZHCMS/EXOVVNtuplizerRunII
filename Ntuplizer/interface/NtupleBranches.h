@@ -92,6 +92,20 @@ public:
     std::vector<float>  	      lep_chargedHadIso	     	 ;
     std::vector<float>  	      lep_trackIso	         ;            
     float                        rho                        ;
+  	std::vector<int>	lep_passConversionVeto				;
+  	std::vector<float>lep_full5x5_sigmaIetaIeta			;
+  	std::vector<float>lep_dEtaIn										;
+  	std::vector<float>lep_dPhiIn										;
+  	std::vector<float>lep_hOverE										;
+  	std::vector<float>lep_relIsoWithDBeta						;
+  	std::vector<float>lep_ooEmooP										;
+  	std::vector<float>lep_d0												;
+  	std::vector<float>lep_dz												;
+  	std::vector<int>	lep_expectedMissingInnerHits	;
+  	std::vector<int>	lep_isVetoElectron						;
+  	std::vector<int>	lep_isMediumElectron					;
+  	std::vector<int>	lep_isTightElectron						;
+    
     
     /*-------------------------AK4 jets---------------------------*/   
     int 	        	      njetsAK4               ;
@@ -247,12 +261,12 @@ public:
     std::vector<float>  	      genJetNoNuAK4_e           ;
    
     /*---------------------HLT triggers---------------------------*/    
-    bool    isFired_HLT_AK8PFJet360TrimMod_Mass30_v1	             ;
-    bool    isFired_HLT_AK8PFHT700_TrimR0p1PT0p03Mass50_v1           ;
-    bool    isFired_HLT_AK8DiPFJet280_200_TrimMass30_BTagCSV0p3_v1   ;
-    bool    isFired_HLT_PFHT650_WideJetMJJ950DEtaJJ1p5_v1	     ;
-    bool    isFired_HLT_PFHT650_WideJetMJJ900DEtaJJ1p5_v1	     ;
-    bool    isFired_HLT_PFHT900_v1			             ;    
+  	bool    isFired_HLT_AK8PFJet360_TrimMass30_v1							;
+  	bool    isFired_HLT_AK8PFHT700_TrimR0p1PT0p03Mass50_v1					;
+  	bool    isFired_HLT_AK8DiPFJet280_200_TrimMass30_BTagCSV0p41_v1		;
+  	bool    isFired_HLT_PFHT650_WideJetMJJ950DEtaJJ1p5_v1					;
+  	bool    isFired_HLT_PFHT650_WideJetMJJ900DEtaJJ1p5_v1					;
+  	bool    isFired_HLT_PFHT900_v1													;
     bool    isFired_HLT_Ele23_CaloIdL_TrackIdL_IsoVL_v1              ;
     bool    isFired_HLT_Ele32_eta2p1_WP75_Gsf_v1		     ;
     bool    isFired_HLT_Ele105_CaloIdVT_GsfTrkIdT_v1                 ;

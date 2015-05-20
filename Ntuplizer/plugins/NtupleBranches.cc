@@ -59,6 +59,20 @@ void NtupleBranches::branch( void ){
   tree_->Branch( "lep_neutralHadIso"	     , &lep_neutralHadIso      );
   tree_->Branch( "lep_chargedHadIso"	     , &lep_chargedHadIso      );
   tree_->Branch( "lep_trackIso"	             , &lep_trackIso	       );
+  
+	tree_->Branch( "lep_passConversionVeto"				, &lep_passConversionVeto);
+	tree_->Branch( "lep_full5x5_sigmaIetaIeta"		, &lep_full5x5_sigmaIetaIeta);
+	tree_->Branch( "lep_dEtaIn"										, &lep_dEtaIn);
+	tree_->Branch( "lep_dPhiIn"										, &lep_dPhiIn);
+	tree_->Branch( "lep_hOverE"										, &lep_hOverE);
+	tree_->Branch( "lep_relIsoWithDBeta"					, &lep_relIsoWithDBeta);
+	tree_->Branch( "lep_ooEmooP"									, &lep_ooEmooP);
+	tree_->Branch( "lep_d0"												, &lep_d0);
+	tree_->Branch( "lep_dz"												, &lep_dz);
+	tree_->Branch( "lep_expectedMissingInnerHits"	, &lep_expectedMissingInnerHits);
+	tree_->Branch( "lep_isVetoElectron"						, &lep_isVetoElectron);
+	tree_->Branch( "lep_isMediumElectron"					, &lep_isMediumElectron);
+	tree_->Branch( "lep_isTightElectron"					, &lep_isTightElectron);
       
   /*-------------------------energy density---------------------------*/	 
   tree_->Branch("rho"	    		        , &rho	  	     	 );
@@ -211,12 +225,12 @@ void NtupleBranches::branch( void ){
   tree_->Branch( "genJetNoNuAK4_e"	    , &genJetNoNuAK4_e    );
         
   /*----------------------HLT trigger---------------------------*/	  
-  tree_->Branch("isFired_HLT_AK8PFJet360TrimMod_Mass30_v1"		   , &isFired_HLT_AK8PFJet360TrimMod_Mass30_v1  	     );
-  tree_->Branch("isFired_HLT_AK8PFHT700_TrimR0p1PT0p03Mass50_v1"	   , &isFired_HLT_AK8PFHT700_TrimR0p1PT0p03Mass50_v1	     );
-  tree_->Branch("isFired_HLT_AK8DiPFJet280_200_TrimMass30_BTagCSV0p3_v1"   , &isFired_HLT_AK8DiPFJet280_200_TrimMass30_BTagCSV0p3_v1 );
-  tree_->Branch("isFired_HLT_PFHT650_WideJetMJJ950DEtaJJ1p5_v1"		   , &isFired_HLT_PFHT650_WideJetMJJ950DEtaJJ1p5_v1	     );
-  tree_->Branch("isFired_HLT_PFHT650_WideJetMJJ900DEtaJJ1p5_v1"		   , &isFired_HLT_PFHT650_WideJetMJJ900DEtaJJ1p5_v1	     );
-  tree_->Branch("isFired_HLT_PFHT900_v1"				   , &isFired_HLT_PFHT900_v1				     );
+	tree_->Branch("isFired_HLT_AK8PFJet360_TrimMass30_v1"										, &isFired_HLT_AK8PFJet360_TrimMass30_v1							);
+	tree_->Branch("isFired_HLT_AK8PFHT700_TrimR0p1PT0p03Mass50_v1"					, &isFired_HLT_AK8PFHT700_TrimR0p1PT0p03Mass50_v1					);
+	tree_->Branch("isFired_HLT_AK8DiPFJet280_200_TrimMass30_BTagCSV0p41_v1"		, &isFired_HLT_AK8DiPFJet280_200_TrimMass30_BTagCSV0p41_v1		);
+	tree_->Branch("isFired_HLT_PFHT650_WideJetMJJ950DEtaJJ1p5_v1"					, &isFired_HLT_PFHT650_WideJetMJJ950DEtaJJ1p5_v1					);
+	tree_->Branch("isFired_HLT_PFHT650_WideJetMJJ900DEtaJJ1p5_v1"					, &isFired_HLT_PFHT650_WideJetMJJ900DEtaJJ1p5_v1					);
+	tree_->Branch("isFired_HLT_PFHT900_v1"													, &isFired_HLT_PFHT900_v1													);
   tree_->Branch("isFired_HLT_Ele23_CaloIdL_TrackIdL_IsoVL_v1"              , &isFired_HLT_Ele23_CaloIdL_TrackIdL_IsoVL_v1            );
   tree_->Branch("isFired_HLT_Ele32_eta2p1_WP75_Gsf_v1"                     , &isFired_HLT_Ele32_eta2p1_WP75_Gsf_v1                   );
   tree_->Branch("isFired_HLT_Ele105_CaloIdVT_GsfTrkIdT_v1"		   , &isFired_HLT_Ele105_CaloIdVT_GsfTrkIdT_v1		     );
@@ -274,12 +288,12 @@ void NtupleBranches::reset( void ){
 
   //njetsAK8pruned = 0;
   //njetsAK8softdrop = 0;
-  isFired_HLT_AK8PFJet360TrimMod_Mass30_v1		    = false;
-  isFired_HLT_AK8PFHT700_TrimR0p1PT0p03Mass50_v1	    = false;
-  isFired_HLT_AK8DiPFJet280_200_TrimMass30_BTagCSV0p3_v1    = false;
-  isFired_HLT_PFHT650_WideJetMJJ950DEtaJJ1p5_v1		    = false;
-  isFired_HLT_PFHT650_WideJetMJJ900DEtaJJ1p5_v1		    = false;
-  isFired_HLT_PFHT900_v1				    = false;
+  isFired_HLT_AK8PFJet360_TrimMass30_v1						= false;
+	isFired_HLT_AK8PFHT700_TrimR0p1PT0p03Mass50_v1				= false;
+	isFired_HLT_AK8DiPFJet280_200_TrimMass30_BTagCSV0p41_v1		= false;
+	isFired_HLT_PFHT650_WideJetMJJ950DEtaJJ1p5_v1					= false;
+	isFired_HLT_PFHT650_WideJetMJJ900DEtaJJ1p5_v1					= false;
+	isFired_HLT_PFHT900_v1												= false;
   isFired_HLT_IsoMu24_eta2p1_v1				    = false;
   isFired_HLT_Mu45_eta2p1_v1				    = false;
   isFired_HLT_Ele23_CaloIdL_TrackIdL_IsoVL_v1               = false;
@@ -330,7 +344,23 @@ void NtupleBranches::reset( void ){
   lep_photonIso 	    .clear();
   lep_neutralHadIso	    .clear();
   lep_chargedHadIso	    .clear();
-  lep_trackIso	            .clear();  	  
+  lep_trackIso	            .clear();
+  
+	
+	lep_passConversionVeto				.clear();
+	lep_full5x5_sigmaIetaIeta			.clear();
+	lep_dEtaIn										.clear();
+	lep_dPhiIn										.clear();
+	lep_hOverE										.clear();
+	lep_relIsoWithDBeta						.clear();
+	lep_ooEmooP										.clear();
+	lep_d0												.clear();
+	lep_dz												.clear();
+	lep_expectedMissingInnerHits	.clear();
+	lep_isVetoElectron						.clear();
+	lep_isMediumElectron					.clear();
+	lep_isTightElectron						.clear();
+    	  
   /************************************/
   jetAK4_pt		    .clear();
   jetAK4_eta		    .clear();
