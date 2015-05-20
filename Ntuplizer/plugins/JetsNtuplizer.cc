@@ -233,9 +233,9 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
 	  nBranches_->jetAK8_tau1	    .push_back(fj.userFloat("NjettinessAK8:tau1"));	   
 	  nBranches_->jetAK8_tau2	    .push_back(fj.userFloat("NjettinessAK8:tau2"));
 	  nBranches_->jetAK8_tau3	    .push_back(fj.userFloat("NjettinessAK8:tau3")); 
-	  nBranches_->jetAK8_prunedmassUnCorr  .push_back(fj.userFloat("ak8PFJetsCHSPrunedLinks"));
-	  nBranches_->jetAK8_softdropmassUnCorr.push_back(fj.userFloat("ak8PFJetsCHSSoftDropLinks"));
-	 
+	  nBranches_->jetAK8_prunedmassUnCorr  .push_back(fj.userFloat("ak8PFJetsCHSPrunedMass"));
+	  nBranches_->jetAK8_softdropmassUnCorr.push_back(fj.userFloat("ak8PFJetsCHSSoftDropMass"));
+	  	 
           TLorentzVector FatJet; FatJet.SetPtEtaPhiE( fj.pt(), fj.eta(), fj.phi(), fj.energy() );  
 
           if( doPruning ){
