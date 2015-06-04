@@ -7,6 +7,7 @@
 <use name="JetMETCorrections/Objects"/>
 <use name="PhysicsTools/PatUtils"/>
 <use name="PhysicsTools/PatExamples"/>
+<use name="PhysicsTools/PatAlgos"/>
 <use name="SimDataFormats/JetMatching"/>
 <use name="DataFormats/PatCandidates"/>
 <use name="DataFormats/Candidate"/>
