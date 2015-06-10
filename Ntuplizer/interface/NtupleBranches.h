@@ -75,14 +75,15 @@ public:
     std::vector<float>  	      lep_charge	         ;
     std::vector<float>  	      lep_e 		         ;
     std::vector<float>  	      lep_eta		         ;
+    //  std::vector<float>  	      lep_etaTrack		         ; 
     std::vector<float>  	      lep_mass		         ;
     std::vector<float>  	      lep_pt		         ;
     std::vector<float>  	      lep_phi		         ;
     std::vector<int  >  	      lep_isHEEP	         ;
     std::vector<int  >  	      lep_isHEEPv50	         ;
-    std::vector<int  >           lep_isHighPtMuon       	 ;
-	 std::vector<int  >           lep_isTightMuon       	 ;
-	 std::vector<int  >           lep_isLooseMuon       	 ;
+    std::vector<int  >                lep_isHighPtMuon       	 ;
+    std::vector<int  >                lep_isTightMuon       	 ;
+    std::vector<int  >                lep_isLooseMuon       	 ;
     std::vector<float>  	      lep_pfRhoCorrRelIso03  	 ;
     std::vector<float>  	      lep_pfRhoCorrRelIso04  	 ;
     std::vector<float>  	      lep_pfDeltaCorrRelIso  	 ;
@@ -91,22 +92,121 @@ public:
     std::vector<float>  	      lep_neutralHadIso	     	 ;
     std::vector<float>  	      lep_chargedHadIso	     	 ;
     std::vector<float>  	      lep_trackIso	         ;            
-    float                        rho                        ;
-  	std::vector<int>	lep_passConversionVeto				;
-  	std::vector<float>lep_full5x5_sigmaIetaIeta			;
-  	std::vector<float>lep_dEtaIn										;
-  	std::vector<float>lep_dPhiIn										;
-  	std::vector<float>lep_hOverE										;
-  	std::vector<float>lep_relIsoWithDBeta						;
-  	std::vector<float>lep_ooEmooP										;
-  	std::vector<float>lep_d0												;
-  	std::vector<float>lep_dz												;
-  	std::vector<int>	lep_expectedMissingInnerHits	;
-  	std::vector<int>	lep_isVetoElectron						;
-  	std::vector<int>	lep_isMediumElectron					;
-  	std::vector<int>	lep_isTightElectron						;
+    float                             rho                        ;
+    std::vector<int>	              lep_passConversionVeto	 ;
+    std::vector<float>                lep_full5x5_sigmaIetaIeta	 ;
+    std::vector<float>                lep_dEtaIn		 ;
+    std::vector<float>                lep_dPhiIn		 ;
+    std::vector<float>                lep_hOverE		 ;
+    std::vector<float>                lep_relIsoWithDBeta	 ;
+    std::vector<float>                lep_ooEmooP		 ;
+    std::vector<float>                lep_d0			 ;
+    std::vector<float>                lep_dz			 ;
+    std::vector<int>	lep_expectedMissingInnerHits	         ;
+    std::vector<int>	lep_isVetoElectron			 ;
+    std::vector<int>	lep_isMediumElectron			 ;
+    std::vector<int>	lep_isTightElectron			 ;
     
-    
+
+    /*more variables*/
+    std::vector<float>  	      lep_etaTrack	         ;
+    std::vector<int  >                lep_isSoftMuon             ; 
+    std::vector<float>  	      lep_pfRhoCorrRelIso03Boost ;
+    std::vector<float>  	      lep_pfRhoCorrRelIso04Boost ;
+    std::vector<float>  	      lep_pfDeltaCorrRelIsoBoost ;
+    std::vector<float>  	      lep_pfRelIsoBoost  	 ;    
+    std::vector<float>  	      lep_photonIsoBoost 	 ;
+    std::vector<float>  	      lep_neutralHadIsoBoost     ;
+    std::vector<float>  	      lep_chargedHadIsoBoost     ;
+    std::vector<int  >  	      lep_TauType	         ;
+    std::vector<float>  	      lep_normChi2  	         ;
+    std::vector<int  >  	      lep_isGlobalMuon	         ;
+    std::vector<int  >  	      lep_trackerHits	         ;
+    std::vector<int  >  	      lep_matchedStations        ;
+    std::vector<int  >  	      lep_pixelHits 	         ;
+    std::vector<int  >  	      lep_globalHits	         ;
+    std::vector<float>  	      lep_SemileptonicPFIso 	 ;//  Isolations for semileptonic tau channel  
+    std::vector<float>  	      lep_SemileptonicCorrPFIso  ;// the simple PF one and the corrected one for the tau presence
+ /*-------------------------Tau Discriminant-------------------*/
+
+    std::vector<float>  	      decayModeFindingNewDMs			  ;
+    std::vector<float>                decayModeFinding  			  ;
+    std::vector<float>  	      byLooseCombinedIsolationDeltaBetaCorr3Hits  ;
+    std::vector<float>  	      byMediumCombinedIsolationDeltaBetaCorr3Hits ;
+    std::vector<float>  	      byTightCombinedIsolationDeltaBetaCorr3Hits  ;
+    std::vector<float>  	      byCombinedIsolationDeltaBetaCorrRaw3Hits    ;
+    std::vector<float>  	      chargedIsoPtSum				  ;
+    std::vector<float>  	      neutralIsoPtSum				  ;
+    std::vector<float>  	      puCorrPtSum				  ;
+    std::vector<float>  	      byIsolationMVA3oldDMwoLTraw		  ;
+    std::vector<float>  	      byVLooseIsolationMVA3oldDMwoLT		  ;
+    std::vector<float>  	      byLooseIsolationMVA3oldDMwoLT		  ;
+    std::vector<float>  	      byMediumIsolationMVA3oldDMwoLT		  ;
+    std::vector<float>  	      byTightIsolationMVA3oldDMwoLT		  ;
+    std::vector<float>  	      byVTightIsolationMVA3oldDMwoLT		  ;
+    std::vector<float>  	      byVVTightIsolationMVA3oldDMwoLT		  ;
+    std::vector<float>  	      byIsolationMVA3oldDMwLTraw		  ;
+    std::vector<float>  	      byVLooseIsolationMVA3oldDMwLT		  ;
+    std::vector<float>  	      byLooseIsolationMVA3oldDMwLT		  ;
+    std::vector<float>  	      byMediumIsolationMVA3oldDMwLT		  ;
+    std::vector<float>  	      byTightIsolationMVA3oldDMwLT		  ;
+    std::vector<float>  	      byVTightIsolationMVA3oldDMwLT		  ;
+    std::vector<float>  	      byVVTightIsolationMVA3oldDMwLT		  ;
+    std::vector<float>  	      byIsolationMVA3newDMwoLTraw		  ;
+    std::vector<float>  	      byVLooseIsolationMVA3newDMwoLT		  ;
+    std::vector<float>  	      byLooseIsolationMVA3newDMwoLT		  ;
+    std::vector<float>  	      byMediumIsolationMVA3newDMwoLT		  ;
+    std::vector<float>  	      byTightIsolationMVA3newDMwoLT		  ;
+    std::vector<float>  	      byVTightIsolationMVA3newDMwoLT		  ;
+    std::vector<float>  	      byVVTightIsolationMVA3newDMwoLT		  ;
+    std::vector<float>  	      byIsolationMVA3newDMwLTraw		  ;
+    std::vector<float>  	      byVLooseIsolationMVA3newDMwLT		  ;
+    std::vector<float>  	      byLooseIsolationMVA3newDMwLT		  ;
+    std::vector<float>  	      byMediumIsolationMVA3newDMwLT		  ;
+    std::vector<float>  	      byTightIsolationMVA3newDMwLT		  ;
+    std::vector<float>  	      byVTightIsolationMVA3newDMwLT		  ;
+    std::vector<float>  	      byVVTightIsolationMVA3newDMwLT		  ;
+    std::vector<float>  	      againstElectronLoose			  ;
+    std::vector<float>  	      againstElectronMedium			  ;
+    std::vector<float>  	      againstElectronTight			  ;
+    std::vector<float>  	      againstElectronMVA5raw			  ;
+    std::vector<float>  	      againstElectronMVA5category		  ;
+    std::vector<float>  	      againstElectronVLooseMVA5 		  ;
+    std::vector<float>  	      againstElectronLooseMVA5  		  ;
+    std::vector<float>  	      againstElectronMediumMVA5 		  ;
+    std::vector<float>  	      againstElectronTightMVA5  		  ;
+    std::vector<float>  	      againstElectronVTightMVA5 		  ;
+    std::vector<float>  	      againstMuonLoose  			  ;
+    std::vector<float>  	      againstMuonMedium 			  ;
+    std::vector<float>  	      againstMuonTight  			  ;
+    std::vector<float>  	      againstMuonLoose2 			  ;
+    std::vector<float>  	      againstMuonMedium2			  ;
+    std::vector<float>  	      againstMuonTight2 			  ;
+    std::vector<float>  	      againstMuonLoose3 			  ;
+    std::vector<float>  	      againstMuonTight3 			  ;
+    std::vector<float>  	      againstMuonMVAraw 			  ;
+    std::vector<float>  	      againstMuonLooseMVA			  ;
+    std::vector<float>  	      againstMuonMediumMVA			  ;
+    std::vector<float>  	      againstMuonTightMVA			  ;
+/* /\*----------------------Tau tracks---------------------------*\/ */
+  
+/*     std::vector<int>    nCharCand              ; */
+/*     std::vector<int>    nNeuCand               ; */
+/*     std::vector<int>    nGamCand               ; */
+/*     std::vector<int>    decayMode              ; */
+/*     std::vector<float>  leadTrack_dxy          ; */
+/*     std::vector<float>  leadTrack_dxySig       ; */
+/*     std::vector<float>  secVtxX                ; */
+/*     std::vector<float>  secVtxY                ; */
+/*     std::vector<float>  secVtxZ                ; */
+/*     std::vector<float>  flightLengthX          ; */
+/*     std::vector<float>  flightLengthY          ; */
+/*     std::vector<float>  flightLengthZ          ; */
+/*     std::vector<float>  flightLength           ; */
+/*     std::vector<float>  flightLengthSig        ; */
+
+ 
+
     /*-------------------------AK4 jets---------------------------*/   
     int 	        	      njetsAK4               ;
     std::vector<float>  	      jetAK4_pt              ;

@@ -22,8 +22,8 @@ options = VarParsing.VarParsing ('analysis')
 
 options.maxEvents = -1
 #options.inputFiles ='root://xrootd.unl.edu//store/mc/Phys14DR/RSGravitonToWW_kMpl01_M_1000_Tune4C_13TeV_pythia8/MINIAODSIM/PU20bx25_tsg_PHYS14_25_V1-v2/10000/CE92595C-9676-E411-A785-00266CF2E2C8.root'
-options.inputFiles = 'dcap://t3se01.psi.ch:22125//pnfs/psi.ch/cms/trivcat/store/user/jngadiub/BulkGraviton_WW_WlepWhad_M3000_narrow/MiniAOD/BulkGraviton_WW_WlepWhad_M3000_narrow_miniAOD_1.root'
-
+#options.inputFiles = 'dcap://t3se01.psi.ch:22125//pnfs/psi.ch/cms/trivcat/store/user/jngadiub/BulkGraviton_WW_WlepWhad_M3000_narrow/MiniAOD/BulkGraviton_WW_WlepWhad_M3000_narrow_miniAOD_1.root'
+options.inputFiles = 'file:/afs/cern.ch/work/c/cgalloni/RunII/CMSSW_7_4_1/src/B2G-RunIISpring15DR74-00001_MuTauEleTau.root'
 options.parseArguments()
 
 process.options  = cms.untracked.PSet( 
@@ -43,7 +43,7 @@ doAK8reclustering = False
 doAK8prunedReclustering = False
 doAK8softdropReclustering = False
 doMETReclustering = False
-
+doSemileptonicTausBoosted = False
 ####### Logger ##########
 
 process.load("FWCore.MessageLogger.MessageLogger_cfi")
@@ -152,6 +152,42 @@ if doAK8softdropReclustering:
    process.redoSoftDropPatJets+=process.patSoftDropJetCorrFactorsAK8 
    process.redoSoftDropPatJets+=process.patSoftDropJetsAK8 
    process.redoSoftDropPatJets+=process.selectedSoftDropPatJetsAK8
+
+###### Boosted Semileptonic taus
+process.SemileptonicTausBoostedSequence = cms.Sequence()
+from PhysicsTools.PatAlgos.tools.helpers import massSearchReplaceAnyInputTag
+process.load("TauCleaning.PATtupleProduction.CleanJets_cff")
+recoTauPileUpVertices = cms.EDFilter(
+    "RecoTauPileUpVertexSelector",
+    src = cms.InputTag("offlinePrimaryVertices"),
+    minTrackSumPt = cms.double(5),
+    filter = cms.bool(False),
+)###??? does it do the same as primaryVertexFilter ??
+
+
+
+if doSemileptonicTausBoosted:
+   print "Cleaning the jet collection for mu-tauh channel"
+   process.SemileptonicTausBoostedSequence +=process.ak4PFJetsCHS
+   process.SemileptonicTausBoostedSequence +=process.recoTauPileUpVertices
+   process.PATCMGSequence += process.CleanJetsMuTauSequence
+
+
+
+##old code
+
+## ? Do we need thes filters?  process.load('CMGTools.Common.PAT.addFilterPaths_cff')
+#print "Cleaning the jet collection for mu-tauh channel"
+#from PhysicsTools.PatAlgos.tools.helpers import massSearchReplaceAnyInputTag
+#process.load("ExoDiBosonResonances.PATtupleProduction.CleanJets_cff")
+#process.PATCMGSequence += process.primaryVertexFilter
+#process.PATCMGSequence += process.CleanJetsMuTauSequence
+#process.PATTauSequenceMuTau = cloneProcessingSnippet(process,process.PATTauSequence, "MuTau")
+#massSearchReplaceAnyInputTag(process.PATTauSequenceMuTau,cms.InputTag("pfJetsForHPSTauMuTau"),cms.InputTag("ak5PFJetsNoMu"))
+#process.PATTauSequenceMuTau.replace( process.pfJetsForHPSTauMuTau, process.primaryVertexFilter+process.CleanJetsMuTauSequence )
+#process.PATCMGSequence += process.PATTauSequenceMuTau
+#patEventContentCMG+=['keep *_*selectedPatTausMuTau*_*_*']
+
 
 ####### ExoDiBosonResonances objects ##########
 
@@ -277,6 +313,8 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     electrons = cms.InputTag("slimmedElectrons"),
     #electronsId = cms.InputTag("egmGsfElectronIDs:heepElectronID-HEEPV50-CSA14-startup"),
     taus = cms.InputTag("slimmedTaus"),
+    tausMuTau = cms.InputTag("slimmedTausMuTau"),
+    tausEleTau = cms.InputTag("slimmedTausEleTau"),
     jets = cms.InputTag("slimmedJets"),
     fatjets = cms.InputTag(jetsAK8),
     prunedjets = cms.InputTag(jetsAK8pruned),
