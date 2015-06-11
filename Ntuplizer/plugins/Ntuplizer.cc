@@ -113,8 +113,7 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
   /*=======================================================================================*/
   
 
-  nTuplizers_["jets"]  	   = new JetsNtuplizer	    ( jetTokens		, jecAK4Labels   , jecAK8Labels     , flavourToken_, rhoToken_   , vtxToken_  , nBranches_);
-  nTuplizers_["genJets"]   = new GenJetsNtuplizer   ( genJetToken_ 	, nBranches_    );
+  nTuplizers_["jets"]  	   = new JetsNtuplizer	    ( jetTokens		, jecAK4Labels   , jecAK8Labels     , flavourToken_, rhoToken_   , vtxToken_  , nBranches_);  
   nTuplizers_["muons"] 	   = new MuonsNtuplizer     ( muonToken_	, vtxToken_      , rhoToken_        , nBranches_  );
   nTuplizers_["electrons"] = new ElectronsNtuplizer ( electronToken_	, vtxToken_      , rhoToken_        , nBranches_  );
   nTuplizers_["MET"]       = new METsNtuplizer      ( metTokens		, pfMETlabel     , jetToken_        , muonToken_   , jecAK4Labels, corrFormulas, rhoToken_, vtxToken_ , nBranches_ );
@@ -124,6 +123,9 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
 
   /*=======================================================================================*/    
   if ( runOnMC ){
+    
+    nTuplizers_["genJets"]   = new GenJetsNtuplizer   ( genJetToken_ 	, nBranches_    );
+    
      std::vector<edm::EDGetTokenT<reco::GenParticleCollection>> genpTokens;
      genpTokens.push_back( genparticleToken_ );
      nTuplizers_["genParticles"] = new GenParticlesNtuplizer( genpTokens, nBranches_ );
