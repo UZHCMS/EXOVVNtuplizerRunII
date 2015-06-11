@@ -18,7 +18,7 @@ process.GlobalTag = GlobalTag(process.GlobalTag, 'auto:run2_mc')
 
 
 process.TFileService = cms.Service("TFileService",
-                                       fileName = cms.string('flatTuple.root')
+                                       fileName = cms.string('Tier0_Test_SUPERBUNNIES_zeroBias2.root')
                                    )
 				   
 ####### Config parser ##########
@@ -27,10 +27,20 @@ import FWCore.ParameterSet.VarParsing as VarParsing
 
 options = VarParsing.VarParsing ('analysis')
 
-options.maxEvents = 100
+options.maxEvents = -1
 #options.inputFiles ='root://xrootd.unl.edu//store/mc/Phys14DR/RSGravitonToWW_kMpl01_M_1000_Tune4C_13TeV_pythia8/MINIAODSIM/PU20bx25_tsg_PHYS14_25_V1-v2/10000/CE92595C-9676-E411-A785-00266CF2E2C8.root'
 # options.inputFiles = 'dcap://t3se01.psi.ch:22125//pnfs/psi.ch/cms/trivcat/store/user/jngadiub/BulkGraviton_WW_WlepWhad_M3000_narrow/MiniAOD/BulkGraviton_WW_WlepWhad_M3000_narrow_miniAOD_1.root'
-options.inputFiles ='file:/shome/thaarres/UZHtuplizer/CMSSW_7_4_1/src/EXOVVNtuplizerRunII/Ntuplizer/QCD_Pt_1000to1400_TuneCUETP8M1_13TeV.root'
+# options.inputFiles ='file:/shome/thaarres/UZHtuplizer/CMSSW_7_4_1/src/EXOVVNtuplizerRunII/Ntuplizer/QCD_Pt_1000to1400_TuneCUETP8M1_13TeV.root'
+# options.inputFiles ='file:/shome/thaarres/CMSSW_7_4_1/src/EXOVVNtuplizerRunII/Ntuplizer/miniAOD-prod_PAT.root'
+
+options.inputFiles =['root://xrootd.unl.edu//store/backfill/2/data/Tier0_Test_SUPERBUNNIES_vocms001/ZeroBias2/MINIAOD/PromptReco-v63/000/246/908/00000/0AAC26C7-850D-E511-8468-02163E01457A.root',
+                      'root://xrootd.unl.edu//store/backfill/2/data/Tier0_Test_SUPERBUNNIES_vocms001/ZeroBias2/MINIAOD/PromptReco-v63/000/246/908/00000/1CE64589-850D-E511-96D5-02163E011BB0.root',
+                      'root://xrootd.unl.edu//store/backfill/2/data/Tier0_Test_SUPERBUNNIES_vocms001/ZeroBias2/MINIAOD/PromptReco-v63/000/246/908/00000/44F8DE83-850D-E511-959E-02163E0135BC.root',
+                      'root://xrootd.unl.edu//store/backfill/2/data/Tier0_Test_SUPERBUNNIES_vocms001/ZeroBias2/MINIAOD/PromptReco-v63/000/246/908/00000/566EECBB-850D-E511-A167-02163E013613.root',
+                      'root://xrootd.unl.edu//store/backfill/2/data/Tier0_Test_SUPERBUNNIES_vocms001/ZeroBias2/MINIAOD/PromptReco-v63/000/246/908/00000/A253C67E-850D-E511-A95E-02163E0145C5.root',
+                      'root://xrootd.unl.edu//store/backfill/2/data/Tier0_Test_SUPERBUNNIES_vocms001/ZeroBias2/MINIAOD/PromptReco-v63/000/246/908/00000/AA814B7D-850D-E511-8B4C-02163E0146EE.root'
+                    ]
+
 
 options.parseArguments()
 
@@ -273,7 +283,7 @@ if doMETReclustering:
 
 ####### Ntuplizer initialization ##########
 
-runOnMC = True
+runOnMC = False
 
 jetsAK8 = "slimmedJetsAK8"
 jetsAK8pruned = ""
