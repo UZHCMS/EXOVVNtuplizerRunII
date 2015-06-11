@@ -48,6 +48,7 @@ private:
   edm::EDGetTokenT<double>                                  rhoToken_;
   edm::EDGetTokenT< std::vector<PileupSummaryInfo> >        puinfoToken_;
   edm::EDGetTokenT< GenEventInfoProduct >                   geneventToken_;
+
   
   edm::EDGetTokenT<reco::GenParticleCollection>             genparticleToken_;
   
@@ -57,15 +58,19 @@ private:
   edm::EDGetTokenT<pat::JetCollection>                      softdropjetToken_;
   edm::EDGetTokenT<reco::GenJetCollection>                  genJetToken_	;
   
-  edm::EDGetTokenT<reco::JetFlavourMatchingCollection>      flavourToken_		;
 
-  edm::EDGetTokenT<pat::MuonCollection>                     muonToken_;	
-  edm::EDGetTokenT<pat::ElectronCollection>                 electronToken_;
-  edm::EDGetTokenT<pat::TauCollection>                      tauToken_;
-  
-  edm::EDGetTokenT<pat::METCollection>                      metToken_;
-  edm::EDGetTokenT<pat::METCollection>                      reclusteredmetToken_;
-  edm::InputTag                                             pfMETlabel;	     // input label for particle-flow MET
+  edm::EDGetTokenT<reco::JetFlavourMatchingCollection> 		           flavourToken_		;
+
+  edm::EDGetTokenT<pat::MuonCollection>     				muonToken_			;	
+  edm::EDGetTokenT<pat::ElectronCollection> 				electronToken_	        	;
+  edm::EDGetTokenT<pat::TauCollection> 	    				tauToken_			;
+  edm::EDGetTokenT<pat::TauCollection> 	    				tauEleTauToken_			;
+  edm::EDGetTokenT<pat::TauCollection> 	    				tauMuTauToken_			;
+
+  edm::EDGetTokenT<pat::METCollection> 	    				metToken_			;
+  edm::EDGetTokenT<pat::METCollection> 	    				reclusteredmetToken_            ;
+  edm::InputTag 							pfMETlabel                      ;	     // input label for particle-flow MET
+
   
   edm::EDGetTokenT<edm::TriggerResults>                     triggerToken_;
   edm::EDGetTokenT<pat::TriggerObjectStandAloneCollection>  triggerObjects_;

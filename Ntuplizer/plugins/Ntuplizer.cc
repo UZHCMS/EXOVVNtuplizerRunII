@@ -4,12 +4,14 @@
 #include "../interface/GenJetsNtuplizer.h"
 #include "../interface/MuonsNtuplizer.h"
 #include "../interface/ElectronsNtuplizer.h"
+#include "../interface/TausNtuplizer.h"
 #include "../interface/METsNtuplizer.h"
 #include "../interface/PileUpNtuplizer.h"
 #include "../interface/GenEventNtuplizer.h"
 #include "../interface/GenParticlesNtuplizer.h"
 #include "../interface/TriggersNtuplizer.h"
 #include "../interface/VerticesNtuplizer.h"
+
 #include "DataFormats/PatCandidates/interface/TriggerObjectStandAlone.h"
 #include "DataFormats/PatCandidates/interface/PackedTriggerPrescales.h"
 
@@ -39,6 +41,9 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
 	muonToken_		(consumes<pat::MuonCollection>(iConfig.getParameter<edm::InputTag>("muons"))),
 	electronToken_		(consumes<pat::ElectronCollection>(iConfig.getParameter<edm::InputTag>("electrons"))),
 	tauToken_		(consumes<pat::TauCollection>(iConfig.getParameter<edm::InputTag>("taus"))),
+	tauEleTauToken_		(consumes<pat::TauCollection>(iConfig.getParameter<edm::InputTag>("tausEleTau"))),
+	tauMuTauToken_		(consumes<pat::TauCollection>(iConfig.getParameter<edm::InputTag>("tausMuTau"))),
+
 	metToken_		(consumes<pat::METCollection>(iConfig.getParameter<edm::InputTag>("mets"))),
 	reclusteredmetToken_    (consumes<pat::METCollection>(iConfig.getParameter<edm::InputTag>("reclusteredmets"))),
 	pfMETlabel              (iConfig.getParameter<edm::InputTag>("pfmets")),
@@ -59,11 +64,12 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
   
   /*=======================================================================================*/
   std::vector<edm::EDGetTokenT<pat::JetCollection>> jetTokens;
-  jetTokens.push_back( jetToken_ 			);
+  jetTokens.push_back(jetToken_ 			);
   jetTokens.push_back( fatjetToken_ 		);
   jetTokens.push_back( prunedjetToken_ 		);
   jetTokens.push_back( softdropjetToken_	);
   // jetTokens.push_back( flavourToken_	 		);  
+
   
   std::string jecpath = iConfig.getParameter<std::string>("jecpath");
   
@@ -80,7 +86,11 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
      tmpString = jecpath + tmpVec[v];
      jecAK4Labels.push_back(tmpString);
   }    
-  
+   /*=======================================================================================*/  
+  // std::vector<edm::EDGetTokenT<pat::TauCollection>> tauTokens;
+  //tauTokens.push_back( tauToken_ 		);
+  //tauTokens.push_back( tauEleTauToken_ 		);
+  //tauTokens.push_back( tauMuTauToken_ 		);
 
   /*=======================================================================================*/  
   std::vector<edm::EDGetTokenT<pat::METCollection>> metTokens;
@@ -109,7 +119,7 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
   nTuplizers_["MET"]       = new METsNtuplizer      ( metTokens		, pfMETlabel     , jetToken_        , muonToken_   , jecAK4Labels, corrFormulas, rhoToken_, vtxToken_ , nBranches_ );
   nTuplizers_["vertices"]  = new VerticesNtuplizer  ( vtxTokens		, nBranches_    ); 
   nTuplizers_["triggers"]  = new TriggersNtuplizer  ( triggerToken_     , triggerObjects_, triggerPrescales_, nBranches_  );
-
+  nTuplizers_["taus"]      = new TausNtuplizer      ( tauToken_, tauEleTauToken_,   tauMuTauToken_   , rhoToken_      , vtxToken_        , nBranches_  );
 
   /*=======================================================================================*/    
   if ( runOnMC ){
@@ -149,6 +159,7 @@ void Ntuplizer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
   
   nBranches_->reset();
       
+
   nBranches_->EVENT_event     = iEvent.id().event();
   nBranches_->EVENT_run       = iEvent.id().run();
   nBranches_->EVENT_lumiBlock = iEvent.id().luminosityBlock();  
