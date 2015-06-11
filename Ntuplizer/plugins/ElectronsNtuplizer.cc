@@ -73,7 +73,7 @@ void ElectronsNtuplizer::fillBranches( edm::Event const & event, const edm::Even
 	int nele = 0;
   
 	for (const pat::Electron &ele : *electrons_) {
-    
+	  nele++;
 		bool isHEEP = false;
 		bool isHEEPv50 = false;
 
@@ -137,8 +137,8 @@ void ElectronsNtuplizer::fillBranches( edm::Event const & event, const edm::Even
 			}      
 		}
 		
-		//if( !isHEEP ) continue;
-		nele++;
+	
+		
           
 
 		nBranches_->lep_isHEEP				.push_back( isHEEP );
@@ -270,7 +270,7 @@ void ElectronsNtuplizer::fillBranches( edm::Event const & event, const edm::Even
 					) isTightElectron = true;	
 		}
 		
-		//Endcap cuts
+		//Endcap cut
 		else
 			if(fabs(eta) > 1.479 && fabs(eta) < 2.5){
 				
@@ -318,15 +318,106 @@ void ElectronsNtuplizer::fillBranches( edm::Event const & event, const edm::Even
 			nBranches_->lep_hOverE										.push_back(hOverE_);
 			nBranches_->lep_relIsoWithDBeta						.push_back(relIsoWithDBeta_);
 			nBranches_->lep_ooEmooP										.push_back(ooEmooP_);
-			nBranches_->lep_d0												.push_back(d0_);
+			
 			nBranches_->lep_dz												.push_back(dz_);
 			nBranches_->lep_expectedMissingInnerHits	.push_back(expectedMissingInnerHits_);
 			nBranches_->lep_isVetoElectron						.push_back(isVetoElectron);
 			nBranches_->lep_isMediumElectron					.push_back(isMediumElectron);
 			nBranches_->lep_isTightElectron						.push_back(isTightElectron);
 		
+	
+
+			nBranches_->lep_etaTrack    .push_back(ele.eta());
+			nBranches_->lep_d0          .push_back(dxy);
+			
+			nBranches_->lep_isSoftMuon	   .push_back(-99);
+			
+			nBranches_->lep_photonIsoBoost    .push_back(ele.userIsolation(pat::PfGammaIso));
+			nBranches_->lep_neutralHadIsoBoost.push_back(ele.userIsolation(pat::PfNeutralHadronIso));
+			nBranches_->lep_chargedHadIsoBoost.push_back(ele.userIsolation(pat::PfChargedHadronIso));
+			
+			
+			nBranches_->lep_normChi2	   .push_back(-99);
+			nBranches_->lep_isGlobalMuon       .push_back(-99);
+			nBranches_->lep_trackerHits	   .push_back(-99);
+			nBranches_->lep_matchedStations.push_back(-99);
+			nBranches_->lep_pixelHits	   .push_back(-99);
+			nBranches_->lep_globalHits	   .push_back(-99);
+			nBranches_->lep_TauType            .push_back(0);
+		
+			float  DeltaCorrectedIsoBoost = (ele.userIsolation(pat::PfChargedHadronIso) + std::max(0., ele.userIsolation(pat::PfNeutralHadronIso) + ele.userIsolation(pat::PfGammaIso) - 0.5*ele.userIsolation(pat::PfPUChargedHadronIso)))/ele.pt();
+			float  RhoCorrectedIso04Boost = ele.userIsolation(pat::PfChargedHadronIso) + std::max(ele.userIsolation(pat::PfNeutralHadronIso) + ele.userIsolation(pat::PfGammaIso) - rho*Aeff04, 0.);
+			float  RhoCorrectedIso03Boost = ele.userIsolation(pat::PfChargedHadronIso) + std::max(ele.userIsolation(pat::PfNeutralHadronIso) + ele.userIsolation(pat::PfGammaIso) - rho*Aeff03, 0.);
+			
+			nBranches_->lep_pfDeltaCorrRelIsoBoost   .push_back(DeltaCorrectedIsoBoost);
+			nBranches_->lep_pfRhoCorrRelIso04Boost   .push_back(RhoCorrectedIso04Boost);
+			nBranches_->lep_pfRhoCorrRelIso03Boost   .push_back(RhoCorrectedIso03Boost);
+			nBranches_->lep_pfRelIsoBoost            .push_back((ele.userIsolation(pat::PfChargedHadronIso) + ele.userIsolation(pat::PfNeutralHadronIso) + ele.userIsolation(pat::PfGammaIso))/ele.pt());
+        
+			nBranches_->lep_SemileptonicPFIso        .push_back(RhoCorrectedIso03// /ele.pt()
+									    );
+			nBranches_->lep_SemileptonicCorrPFIso    .push_back(RhoCorrectedIso03Boost// /ele.pt()
+									    );
+			nBranches_->decayModeFindingNewDMs                     .push_back(-99);			
+			nBranches_->decayModeFinding	                       .push_back(-99);
+			nBranches_->byLooseCombinedIsolationDeltaBetaCorr3Hits .push_back(-99);
+			nBranches_->byMediumCombinedIsolationDeltaBetaCorr3Hits.push_back(-99);
+			nBranches_->byTightCombinedIsolationDeltaBetaCorr3Hits .push_back(-99);
+			nBranches_->byCombinedIsolationDeltaBetaCorrRaw3Hits   .push_back(-99);
+			nBranches_->chargedIsoPtSum                            .push_back(-99);
+			nBranches_->neutralIsoPtSum                            .push_back(-99);
+			nBranches_->puCorrPtSum                                .push_back(-99);
+			nBranches_->byIsolationMVA3oldDMwoLTraw                .push_back(-99); 
+			nBranches_->byVLooseIsolationMVA3oldDMwoLT             .push_back(-99);
+			nBranches_->byLooseIsolationMVA3oldDMwoLT              .push_back(-99);
+			nBranches_->byMediumIsolationMVA3oldDMwoLT             .push_back(-99);
+			nBranches_->byTightIsolationMVA3oldDMwoLT              .push_back(-99);
+			nBranches_->byVTightIsolationMVA3oldDMwoLT             .push_back(-99);
+			nBranches_->byVVTightIsolationMVA3oldDMwoLT            .push_back(-99);
+			nBranches_->byIsolationMVA3oldDMwLTraw                 .push_back(-99);
+			nBranches_->byVLooseIsolationMVA3oldDMwLT              .push_back(-99);
+			nBranches_->byLooseIsolationMVA3oldDMwLT               .push_back(-99);
+			nBranches_->byMediumIsolationMVA3oldDMwLT              .push_back(-99);
+			nBranches_->byTightIsolationMVA3oldDMwLT               .push_back(-99);
+			nBranches_->byVTightIsolationMVA3oldDMwLT              .push_back(-99);
+			nBranches_->byVVTightIsolationMVA3oldDMwLT             .push_back(-99);
+			nBranches_->byIsolationMVA3newDMwoLTraw                .push_back(-99);
+			nBranches_->byVLooseIsolationMVA3newDMwoLT             .push_back(-99);
+			nBranches_->byLooseIsolationMVA3newDMwoLT              .push_back(-99);
+			nBranches_->byMediumIsolationMVA3newDMwoLT             .push_back(-99);
+			nBranches_->byTightIsolationMVA3newDMwoLT              .push_back(-99);
+			nBranches_->byVTightIsolationMVA3newDMwoLT             .push_back(-99);
+			nBranches_->byVVTightIsolationMVA3newDMwoLT            .push_back(-99);
+			nBranches_->byIsolationMVA3newDMwLTraw                 .push_back(-99);
+			nBranches_->byVLooseIsolationMVA3newDMwLT              .push_back(-99);
+			nBranches_->byLooseIsolationMVA3newDMwLT               .push_back(-99);
+			nBranches_->byMediumIsolationMVA3newDMwLT              .push_back(-99);
+			nBranches_->byTightIsolationMVA3newDMwLT               .push_back(-99);
+			nBranches_->byVTightIsolationMVA3newDMwLT              .push_back(-99);
+			nBranches_->byVVTightIsolationMVA3newDMwLT             .push_back(-99);
+			nBranches_->againstElectronLoose                       .push_back(-99);
+			nBranches_->againstElectronMedium                      .push_back(-99);
+			nBranches_->againstElectronTight                       .push_back(-99);
+			nBranches_->againstElectronMVA5raw                     .push_back(-99);
+			nBranches_->againstElectronMVA5category                .push_back(-99);
+			nBranches_->againstElectronVLooseMVA5                  .push_back(-99);
+			nBranches_->againstElectronLooseMVA5                   .push_back(-99);
+			nBranches_->againstElectronMediumMVA5                  .push_back(-99);
+			nBranches_->againstElectronTightMVA5                   .push_back(-99);
+			nBranches_->againstElectronVTightMVA5                  .push_back(-99);
+			nBranches_->againstMuonLoose                           .push_back(-99);
+			nBranches_->againstMuonMedium                          .push_back(-99);
+			nBranches_->againstMuonTight                           .push_back(-99);
+			nBranches_->againstMuonLoose2                          .push_back(-99);
+			nBranches_->againstMuonMedium2                         .push_back(-99);
+			nBranches_->againstMuonTight2                          .push_back(-99);
+			nBranches_->againstMuonLoose3                          .push_back(-99);
+			nBranches_->againstMuonTight3                          .push_back(-99);
+			nBranches_->againstMuonMVAraw                          .push_back(-99);
+			nBranches_->againstMuonLooseMVA                        .push_back(-99);
+			nBranches_->againstMuonMediumMVA                       .push_back(-99);
+			nBranches_->againstMuonTightMVA                        .push_back(-99);  
 	}
   
 	nBranches_->nlep += nele;
-
 }

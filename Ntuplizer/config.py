@@ -27,11 +27,8 @@ import FWCore.ParameterSet.VarParsing as VarParsing
 
 options = VarParsing.VarParsing ('analysis')
 
-options.maxEvents = 100
-#options.inputFiles ='root://xrootd.unl.edu//store/mc/Phys14DR/RSGravitonToWW_kMpl01_M_1000_Tune4C_13TeV_pythia8/MINIAODSIM/PU20bx25_tsg_PHYS14_25_V1-v2/10000/CE92595C-9676-E411-A785-00266CF2E2C8.root'
-# options.inputFiles = 'dcap://t3se01.psi.ch:22125//pnfs/psi.ch/cms/trivcat/store/user/jngadiub/BulkGraviton_WW_WlepWhad_M3000_narrow/MiniAOD/BulkGraviton_WW_WlepWhad_M3000_narrow_miniAOD_1.root'
-options.inputFiles ='file:/shome/thaarres/UZHtuplizer/CMSSW_7_4_1/src/EXOVVNtuplizerRunII/Ntuplizer/QCD_Pt_1000to1400_TuneCUETP8M1_13TeV.root'
-
+options.maxEvents = -1
+options.inputFiles = 'file:/afs/cern.ch/work/c/cgalloni/RunII/CMSSW_7_4_1/src/ZZ_MuTauEleTau_2000.root '#B2G-RunIISpring15DR74-00001_MuTauEleTau.root'
 options.parseArguments()
 
 process.options  = cms.untracked.PSet( 
@@ -51,7 +48,7 @@ process.source = cms.Source("PoolSource",
 
 #! To recluster and add AK8 Higgs tagging and softdrop subjet b-tagging (both need to be simoultaneously true or false, if not you will have issues with your softdrop subjets!)
 #If you use the softdrop subjets from the slimmedJetsAK8 collection, only CSV seems to be available?
-doAK8reclustering = False
+doAK8reclustering = True
 doAK8softdropReclustering = False
 doBtagging = False
 
@@ -60,7 +57,7 @@ doAK8prunedReclustering = False
 
 #! To recluster MET with new corrections
 doMETReclustering = False
-
+doSemileptonicTausBoosted = False
 ####### Logger ##########
 
 process.load("FWCore.MessageLogger.MessageLogger_cfi")
@@ -102,6 +99,7 @@ process.NjettinessAK8 = cms.EDProducer("NjettinessAdder",
              akAxesR0 = cms.double(-999.0)      # not used by default
              )
 			       
+
 process.ak8CHSJetsPruned = ak8PFJetsCHSPruned.clone( src = 'chs', jetPtMin = fatjet_ptmin  )
 process.ak8CHSJetsSoftDrop = ak8PFJetsCHSSoftDrop.clone( src = 'chs', jetPtMin = fatjet_ptmin  )
 
@@ -236,6 +234,7 @@ process.patJetsAk8CHSJets.userData.userFloats.src += ['NjettinessAK8:tau1','Njet
 process.patJetsAk8CHSJets.addTagInfos = True
 
 # ###### Recluster MET ##########
+
 process.redoPatMET = cms.Sequence()
 
 # process.load("PhysicsTools.PatAlgos.producersLayer1.patCandidates_cff")
@@ -316,6 +315,8 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     muons = cms.InputTag("slimmedMuons"),
     electrons = cms.InputTag("slimmedElectrons"),
     taus = cms.InputTag("slimmedTaus"),
+    tausMuTau = cms.InputTag("slimmedTausMuTau"),
+    tausEleTau = cms.InputTag("slimmedTausEleTau"),
     jets = cms.InputTag("slimmedJets"),
     fatjets = cms.InputTag(jetsAK8),
     prunedjets = cms.InputTag(jetsAK8pruned),

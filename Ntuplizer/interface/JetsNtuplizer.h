@@ -23,13 +23,13 @@ public:
 
   void fillBranches( edm::Event const & event, const edm::EventSetup& iSetup );
   void initJetCorrFactors( void );
-
- 
-private:
+  
+  
+ private:
   
   //bool doPrunedAK8subjets;
   //bool doSoftDropAK8subjets;
-
+  
   std::vector<std::string>                    jecAK8PayloadNames_;
   boost::shared_ptr<FactorizedJetCorrector>   jecAK8_            ;      
   // boost::shared_ptr<JetCorrectionUncertainty> jecAK8Unc_         ;
