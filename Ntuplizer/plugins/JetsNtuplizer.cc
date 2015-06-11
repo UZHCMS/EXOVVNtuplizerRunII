@@ -8,14 +8,15 @@
 JetsNtuplizer::JetsNtuplizer( std::vector<edm::EDGetTokenT<pat::JetCollection>> tokens, std::vector<std::string> jecAK4Labels, std::vector<std::string> jecAK8Labels, edm::EDGetTokenT<reco::JetFlavourMatchingCollection> flavourToken, edm::EDGetTokenT<double> rhoToken, edm::EDGetTokenT<reco::VertexCollection> verticeToken, NtupleBranches* nBranches )
 
   : CandidateNtuplizer     ( nBranches )
-    , jetInputToken_	    ( tokens[0] )
-      , fatjetInputToken_	    ( tokens[1] )
-        , prunedjetInputToken_   ( tokens[2] )
-          , softdropjetInputToken_ ( tokens[3] )
-            , rhoToken_	       	    ( rhoToken  )
-              , verticeToken_     	    ( verticeToken  )	    
-                //, flavourToken_			( flavourToken 	) //For subjet flavour matching!! Not done yet.
 
+  , jetInputToken_	    ( tokens[0] )
+  , fatjetInputToken_	    ( tokens[1] )
+  , prunedjetInputToken_    ( tokens[2] )
+  , softdropjetInputToken_  ( tokens[3] )
+  , rhoToken_	       	    ( rhoToken  )
+  , verticeToken_     	    ( verticeToken  )	    
+   //, flavourToken_			( flavourToken 	) //For subjet flavour matching!! Not done yet.
+    
 {
 	
   jecAK4PayloadNames_ = jecAK4Labels;
