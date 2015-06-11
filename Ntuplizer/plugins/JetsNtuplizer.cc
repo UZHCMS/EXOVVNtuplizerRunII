@@ -221,9 +221,6 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
       const std::vector<edm::Ptr<pat::Jet> > &wSubjets = fj.subjets("SoftDrop");
     
     	for ( const pat::Jet & softdropsubjet : wSubjets ) {
-    	  printf("   w subjet with pt %5.1f (raw pt %5.1f), eta %+4.2f, mass %5.1f ungroomed\n",
-    		 softdropsubjet.pt(), softdropsubjet.pt()*softdropsubjet.jecFactor("Uncorrected"), softdropsubjet.eta(), softdropsubjet.mass() );
-         
          if( softdropsubjet.pt() < 0.01 ) continue;
          
          nsubjets++;
