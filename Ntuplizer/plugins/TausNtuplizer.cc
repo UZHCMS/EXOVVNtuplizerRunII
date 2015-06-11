@@ -30,32 +30,61 @@ TausNtuplizer::~TausNtuplizer( void )
 //===================================================================================================================
 void TausNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetup& iSetup ){
  
-    event.getByToken( tauInputToken_ , taus_); 
-    event.getByToken( tauEleTauInputToken_ , eleTaus_); 
-    event.getByToken( tauMuTauInputToken_ , muTaus_);  
-    event.getByToken( rhoToken_	 	, rho_	   );
-    event.getByToken( verticeToken_ 	, vertices_ );
-    
+    event.getByToken( tauInputToken_       , taus_     ); 
+    event.getByToken( tauEleTauInputToken_ , eleTaus_  ); 
+    event.getByToken( tauMuTauInputToken_  , muTaus_   );  
+    event.getByToken( rhoToken_	 	   , rho_      );
+    event.getByToken( verticeToken_ 	   , vertices_ );
+
+    /********************************************************************/    
     for( size_t t = 0; t < taus_->size(); ++t ){
 
       pat::Tau tau = (*taus_)[t];
-
     
-      nBranches_->lep_type   .push_back(tau.pdgId());
-      nBranches_->lep_charge .push_back(tau.charge());
-      nBranches_->lep_e      .push_back(tau.energy());
-      nBranches_->lep_eta    .push_back(tau.eta());
-      nBranches_->lep_etaTrack    .push_back(tau.eta());
-      nBranches_->lep_mass   .push_back(tau.mass());
-      nBranches_->lep_pt     .push_back(tau.pt());
-      nBranches_->lep_phi    .push_back(tau.phi());
-      nBranches_->lep_TauType.push_back(1);
-     
+      nBranches_->lep_type   	     	      .push_back(tau.pdgId());
+      nBranches_->lep_charge 	     	      .push_back(tau.charge());
+      nBranches_->lep_e      	     	      .push_back(tau.energy());
+      nBranches_->lep_eta    	     	      .push_back(tau.eta());
+      nBranches_->lep_etaSC  	     	      .push_back(tau.eta());
+      nBranches_->lep_mass   	     	      .push_back(tau.mass());
+      nBranches_->lep_pt     	     	      .push_back(tau.pt());
+      nBranches_->lep_phi    	     	      .push_back(tau.phi());
+      nBranches_->lep_d0	      	      .push_back(tau.dxy());	 
+      nBranches_->lep_TauType	     	      .push_back(1);
+      nBranches_->lep_normChi2       	      .push_back(-99);   
+      nBranches_->lep_trackerHits    	      .push_back(-99);
+      nBranches_->lep_matchedStations	      .push_back(-99);
+      nBranches_->lep_pixelHits      	      .push_back(-99);
+      nBranches_->lep_globalHits     	      .push_back(-99);
+      nBranches_->lep_isGlobalMuon   	      .push_back(-99);
+      nBranches_->lep_isLooseMuon    	      .push_back(-99);
+      nBranches_->lep_isSoftMuon     	      .push_back(-99);
+      nBranches_->lep_isTightMuon    	      .push_back(-99);
+      nBranches_->lep_isHighPtMuon   	      .push_back(-99);
+      nBranches_->lep_dz	     	      .push_back(-99);
+      nBranches_->lep_isHeepElectron 	      .push_back(-99);
+      nBranches_->lep_isLooseElectron	      .push_back(-99);
+      nBranches_->lep_SemileptonicPFIso       .push_back(-99);
+      nBranches_->lep_SemileptonicCorrPFIso   .push_back(-99);            
+      nBranches_->lep_passConversionVeto      .push_back(-99);
+      nBranches_->lep_full5x5_sigmaIetaIeta   .push_back(-99);
+      nBranches_->lep_dEtaIn		      .push_back(-99);
+      nBranches_->lep_dPhiIn		      .push_back(-99);
+      nBranches_->lep_hOverE		      .push_back(-99);
+      nBranches_->lep_relIsoWithDBeta	      .push_back(-99);
+      nBranches_->lep_ooEmooP		      .push_back(-99);
+      nBranches_->lep_expectedMissingInnerHits.push_back(-99);
+      nBranches_->lep_isVetoElectron	      .push_back(-99);
+      nBranches_->lep_isMediumElectron	      .push_back(-99);
+      nBranches_->lep_isTightElectron	      .push_back(-99);
+         
+      /*====================== ISO ========================*/	         
       double rho = *(rho_.product());
       float  deltaR = 0.3;
       double energy = TMath::Pi()*deltaR*deltaR*rho;      
       nBranches_->lep_pfRhoCorrRelIso03.push_back((tau.chargedHadronIso() + std::max(0.,tau.neutralHadronIso() + tau.photonIso() - energy))/tau.pt());      
       nBranches_->lep_pfRhoCorrRelIso03Boost.push_back((tau.userIsolation(pat::PfChargedHadronIso) + std::max(0.,tau.userIsolation(pat::PfNeutralHadronIso) + tau.userIsolation(pat::PfGammaIso) - energy))/tau.pt()); 
+
       deltaR = 0.4;
       energy = TMath::Pi()*deltaR*deltaR*rho;      
       nBranches_->lep_pfRhoCorrRelIso04.push_back((tau.chargedHadronIso() + std::max(0.,tau.neutralHadronIso() + tau.photonIso() - energy))/tau.pt());
@@ -73,21 +102,7 @@ void TausNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
       nBranches_->lep_neutralHadIsoBoost    .push_back(tau.userIsolation(pat::PfNeutralHadronIso));
       nBranches_->lep_chargedHadIsoBoost    .push_back(tau.userIsolation(pat::PfChargedHadronIso));
 
-      nBranches_->lep_normChi2         .push_back(-99);
-   
-      nBranches_->lep_trackerHits      .push_back(-99);
-      nBranches_->lep_matchedStations  .push_back(-99);
-      nBranches_->lep_pixelHits        .push_back(-99);
-      nBranches_->lep_globalHits       .push_back(-99);
-      nBranches_->lep_isGlobalMuon     .push_back(-99);
-      nBranches_->lep_isLooseMuon      .push_back(-99);
-      nBranches_->lep_isSoftMuon       .push_back(-99);
-      nBranches_->lep_isTightMuon      .push_back(-99);
-      nBranches_->lep_isHighPtMuon     .push_back(-99);
-      nBranches_->lep_dz	       .push_back(-99);
-      nBranches_->lep_isHEEP           .push_back(-99);
-      nBranches_->lep_isHEEPv50        .push_back(-99);
-          
+      /*====================== IDs ========================*/	                         
       nBranches_->decayModeFindingNewDMs                     .push_back(tau.tauID("decayModeFindingNewDMs"  		    ));
       nBranches_->decayModeFinding	                     .push_back(tau.tauID("decayModeFinding"			    ));
       nBranches_->byLooseCombinedIsolationDeltaBetaCorr3Hits .push_back(tau.tauID("byLooseCombinedIsolationDeltaBetaCorr3Hits"  ));
@@ -147,50 +162,59 @@ void TausNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
       nBranches_->againstMuonLooseMVA                        .push_back(tau.tauID("againstMuonLooseMVA"			    ));
       nBranches_->againstMuonMediumMVA                       .push_back(tau.tauID("againstMuonMediumMVA"			    ));
       nBranches_->againstMuonTightMVA                        .push_back(tau.tauID("againstMuonTightMVA"			    ));  
-     
-      nBranches_->lep_SemileptonicPFIso                       .push_back(-99);
-      nBranches_->lep_SemileptonicCorrPFIso                   .push_back(-99);
-      
-      
-      nBranches_->lep_passConversionVeto		      .push_back(-99);
-      nBranches_->lep_full5x5_sigmaIetaIeta		      .push_back(-99);
-      nBranches_->lep_dEtaIn				      .push_back(-99);
-      nBranches_->lep_dPhiIn				      .push_back(-99);
-      nBranches_->lep_hOverE				      .push_back(-99);
-      nBranches_->lep_relIsoWithDBeta			      .push_back(-99);
-      nBranches_->lep_ooEmooP				      .push_back(-99);
-      nBranches_->lep_d0				      .push_back(tau.dxy());
-      
-      nBranches_->lep_expectedMissingInnerHits	              .push_back(-99);
-      nBranches_->lep_isVetoElectron			      .push_back(-99);
-      nBranches_->lep_isMediumElectron			      .push_back(-99);
-      nBranches_->lep_isTightElectron			      .push_back(-99);
-      
-      
+      /*======================================================*/            
 
- }
-  
+  }
+
+  /********************************************************************/      
   for( size_t t = 0; t < eleTaus_->size(); ++t ){
  
       pat::Tau eleTau = (*eleTaus_)[t];
-
               
-      nBranches_->lep_type   .push_back(eleTau.pdgId());
-      nBranches_->lep_charge .push_back(eleTau.charge());
-      nBranches_->lep_e      .push_back(eleTau.energy());
-      nBranches_->lep_eta    .push_back(eleTau.eta()); 
-      nBranches_->lep_etaTrack    .push_back(eleTau.eta());
-      nBranches_->lep_mass   .push_back(eleTau.mass());
-      nBranches_->lep_pt     .push_back(eleTau.pt());
-      nBranches_->lep_phi    .push_back(eleTau.phi());
-      nBranches_->lep_TauType.push_back(2);
-
- 
+      nBranches_->lep_type   		      .push_back(eleTau.pdgId());
+      nBranches_->lep_charge 		      .push_back(eleTau.charge());
+      nBranches_->lep_e      		      .push_back(eleTau.energy());
+      nBranches_->lep_eta    		      .push_back(eleTau.eta()); 
+      nBranches_->lep_etaSC  		      .push_back(eleTau.eta());
+      nBranches_->lep_mass   		      .push_back(eleTau.mass());
+      nBranches_->lep_pt     		      .push_back(eleTau.pt());
+      nBranches_->lep_phi    		      .push_back(eleTau.phi());
+      nBranches_->lep_TauType		      .push_back(2);
+      nBranches_->lep_d0	              .push_back(eleTau.dxy());
+      nBranches_->lep_normChi2       	      .push_back(-99); 
+      nBranches_->lep_isGlobalMuon   	      .push_back(-99); 
+      nBranches_->lep_trackerHits    	      .push_back(-99); 
+      nBranches_->lep_matchedStations	      .push_back(-99); 
+      nBranches_->lep_pixelHits      	      .push_back(-99); 
+      nBranches_->lep_globalHits     	      .push_back(-99); 
+      nBranches_->lep_isLooseMuon    	      .push_back(-99); 
+      nBranches_->lep_isSoftMuon     	      .push_back(-99); 
+      nBranches_->lep_isTightMuon    	      .push_back(-99); 
+      nBranches_->lep_isHighPtMuon   	      .push_back(-99); 
+      nBranches_->lep_dz	     	      .push_back(-99); 
+      nBranches_->lep_isHeepElectron 	      .push_back(-99); 
+      nBranches_->lep_isLooseElectron	      .push_back(-99); 
+      nBranches_->lep_SemileptonicPFIso       .push_back(-99);
+      nBranches_->lep_SemileptonicCorrPFIso   .push_back(-99);     
+      nBranches_->lep_passConversionVeto      .push_back(-99);
+      nBranches_->lep_full5x5_sigmaIetaIeta   .push_back(-99);
+      nBranches_->lep_dEtaIn    	      .push_back(-99);
+      nBranches_->lep_dPhiIn		      .push_back(-99);
+      nBranches_->lep_hOverE		      .push_back(-99);
+      nBranches_->lep_relIsoWithDBeta	      .push_back(-99);
+      nBranches_->lep_ooEmooP		      .push_back(-99);  
+      nBranches_->lep_expectedMissingInnerHits.push_back(-99);
+      nBranches_->lep_isVetoElectron	      .push_back(-99);
+      nBranches_->lep_isMediumElectron	      .push_back(-99);
+      nBranches_->lep_isTightElectron	      .push_back(-99);
+      
+      /*====================== ISO ========================*/	          
       double rho = *(rho_.product());
       float  deltaR = 0.3;
       double energy = TMath::Pi()*deltaR*deltaR*rho;      
       nBranches_->lep_pfRhoCorrRelIso03.push_back((eleTau.chargedHadronIso() + std::max(0.,eleTau.neutralHadronIso() + eleTau.photonIso() - energy))/eleTau.pt());      
       nBranches_->lep_pfRhoCorrRelIso03Boost.push_back((eleTau.userIsolation(pat::PfChargedHadronIso) + std::max(0.,eleTau.userIsolation(pat::PfNeutralHadronIso) + eleTau.userIsolation(pat::PfGammaIso) - energy))/eleTau.pt()); 
+
       deltaR = 0.4;
       energy = TMath::Pi()*deltaR*deltaR*rho;      
       nBranches_->lep_pfRhoCorrRelIso04.push_back((eleTau.chargedHadronIso() + std::max(0.,eleTau.neutralHadronIso() + eleTau.photonIso() - energy))/eleTau.pt());
@@ -207,21 +231,8 @@ void TausNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
       nBranches_->lep_photonIsoBoost        .push_back(eleTau.userIsolation(pat::PfGammaIso));
       nBranches_->lep_neutralHadIsoBoost    .push_back(eleTau.userIsolation(pat::PfNeutralHadronIso));
       nBranches_->lep_chargedHadIsoBoost    .push_back(eleTau.userIsolation(pat::PfChargedHadronIso));
-      
-      nBranches_->lep_normChi2       .push_back(-99);
-      nBranches_->lep_isGlobalMuon   .push_back(-99);
-      nBranches_->lep_trackerHits    .push_back(-99);
-      nBranches_->lep_matchedStations.push_back(-99);
-      nBranches_->lep_pixelHits      .push_back(-99);
-      nBranches_->lep_globalHits     .push_back(-99);
-      nBranches_->lep_isLooseMuon    .push_back(-99);
-      nBranches_->lep_isSoftMuon     .push_back(-99);
-      nBranches_->lep_isTightMuon    .push_back(-99);
-      nBranches_->lep_isHighPtMuon   .push_back(-99);
-      nBranches_->lep_dz	     .push_back(-99);
-      nBranches_->lep_isHEEP         .push_back(-99);
-      nBranches_->lep_isHEEPv50         .push_back(-99);
-      
+
+      /*====================== IDs ========================*/	                                     
       nBranches_->decayModeFindingNewDMs                     .push_back(eleTau.tauID("decayModeFindingNewDMs"		       ));
       nBranches_->decayModeFinding	                     .push_back(eleTau.tauID("decayModeFinding"			       ));
       nBranches_->byLooseCombinedIsolationDeltaBetaCorr3Hits .push_back(eleTau.tauID("byLooseCombinedIsolationDeltaBetaCorr3Hits"  ));
@@ -281,49 +292,59 @@ void TausNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
       nBranches_->againstMuonLooseMVA                        .push_back(eleTau.tauID("againstMuonLooseMVA"  		       ));
       nBranches_->againstMuonMediumMVA                       .push_back(eleTau.tauID("againstMuonMediumMVA" 		       ));
       nBranches_->againstMuonTightMVA                        .push_back(eleTau.tauID("againstMuonTightMVA"  		       ));   
-        
-      
-      nBranches_->lep_SemileptonicPFIso                      .push_back(-99);
-      nBranches_->lep_SemileptonicCorrPFIso                  .push_back(-99);
-     
-
-      nBranches_->lep_passConversionVeto		     .push_back(-99);
-      nBranches_->lep_full5x5_sigmaIetaIeta		     .push_back(-99);
-      nBranches_->lep_dEtaIn    		             .push_back(-99);
-      nBranches_->lep_dPhiIn			             .push_back(-99);
-      nBranches_->lep_hOverE				     .push_back(-99);
-      nBranches_->lep_relIsoWithDBeta			     .push_back(-99);
-      nBranches_->lep_ooEmooP				     .push_back(-99);
-      nBranches_->lep_d0	                             .push_back(eleTau.dxy());
-  
-      nBranches_->lep_expectedMissingInnerHits               .push_back(-99);
-      nBranches_->lep_isVetoElectron						.push_back(-99);
-      nBranches_->lep_isMediumElectron				        	.push_back(-99);
-      nBranches_->lep_isTightElectron						.push_back(-99);
+      /*======================================================*/                          
       
   }
-  
+
+  /********************************************************************/        
   for( size_t t = 0; t < muTaus_->size(); ++t ){
 
       pat::Tau muTau = (*muTaus_)[t];
-
        
-      nBranches_->lep_type   .push_back(muTau.pdgId());
-      nBranches_->lep_charge .push_back(muTau.charge());
-      nBranches_->lep_e      .push_back(muTau.energy());
-      nBranches_->lep_eta    .push_back(muTau.eta()); 
-      nBranches_->lep_etaTrack    .push_back(muTau.eta());
-      nBranches_->lep_mass   .push_back(muTau.mass());
-      nBranches_->lep_pt     .push_back(muTau.pt());
-      nBranches_->lep_phi    .push_back(muTau.phi());
-      nBranches_->lep_TauType.push_back(3);
-     
-      //Single top
+      nBranches_->lep_type   		       .push_back(muTau.pdgId());
+      nBranches_->lep_charge 		       .push_back(muTau.charge());
+      nBranches_->lep_e      		       .push_back(muTau.energy());
+      nBranches_->lep_eta    		       .push_back(muTau.eta()); 
+      nBranches_->lep_etaSC  		       .push_back(muTau.eta());
+      nBranches_->lep_mass   		       .push_back(muTau.mass());
+      nBranches_->lep_pt     		       .push_back(muTau.pt());
+      nBranches_->lep_phi    		       .push_back(muTau.phi());
+      nBranches_->lep_TauType		       .push_back(3);
+      nBranches_->lep_d0     		       .push_back(muTau.dxy());   
+      nBranches_->lep_normChi2       	       .push_back(-99);
+      nBranches_->lep_isGlobalMuon   	       .push_back(-99);
+      nBranches_->lep_trackerHits    	       .push_back(-99);
+      nBranches_->lep_matchedStations	       .push_back(-99);
+      nBranches_->lep_pixelHits      	       .push_back(-99);
+      nBranches_->lep_globalHits     	       .push_back(-99);
+      nBranches_->lep_isLooseMuon    	       .push_back(-99);
+      nBranches_->lep_isSoftMuon     	       .push_back(-99);
+      nBranches_->lep_isTightMuon    	       .push_back(-99);
+      nBranches_->lep_isHighPtMuon   	       .push_back(-99);
+      nBranches_->lep_dz	     	       .push_back(-99);
+      nBranches_->lep_isHeepElectron 	       .push_back(-99);
+      nBranches_->lep_isLooseElectron	       .push_back(-99);
+      nBranches_->lep_SemileptonicPFIso        .push_back(-99);
+      nBranches_->lep_SemileptonicCorrPFIso    .push_back(-99);     
+      nBranches_->lep_passConversionVeto       .push_back(-99);
+      nBranches_->lep_full5x5_sigmaIetaIeta    .push_back(-99);
+      nBranches_->lep_dEtaIn		       .push_back(-99);
+      nBranches_->lep_dPhiIn		       .push_back(-99);
+      nBranches_->lep_hOverE		       .push_back(-99);
+      nBranches_->lep_relIsoWithDBeta	       .push_back(-99);
+      nBranches_->lep_ooEmooP		       .push_back(-99);
+      nBranches_->lep_expectedMissingInnerHits .push_back(-99);
+      nBranches_->lep_isVetoElectron	       .push_back(-99);
+      nBranches_->lep_isMediumElectron	       .push_back(-99);
+      nBranches_->lep_isTightElectron	       .push_back(-99);
+           
+      /*====================== ISO ========================*/	          
       double rho = *(rho_.product());
       float  deltaR = 0.3;
       double energy = TMath::Pi()*deltaR*deltaR*rho;      
       nBranches_->lep_pfRhoCorrRelIso03.push_back((muTau.chargedHadronIso() + std::max(0.,muTau.neutralHadronIso() + muTau.photonIso() - energy))/muTau.pt());      
       nBranches_->lep_pfRhoCorrRelIso03Boost.push_back((muTau.userIsolation(pat::PfChargedHadronIso) + std::max(0.,muTau.userIsolation(pat::PfNeutralHadronIso) + muTau.userIsolation(pat::PfGammaIso) - energy))/muTau.pt()); 
+
       deltaR = 0.4;
       energy = TMath::Pi()*deltaR*deltaR*rho;      
       nBranches_->lep_pfRhoCorrRelIso04.push_back((muTau.chargedHadronIso() + std::max(0.,muTau.neutralHadronIso() + muTau.photonIso() - energy))/muTau.pt());
@@ -341,20 +362,7 @@ void TausNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
       nBranches_->lep_neutralHadIsoBoost    .push_back(muTau.userIsolation(pat::PfNeutralHadronIso));
       nBranches_->lep_chargedHadIsoBoost    .push_back(muTau.userIsolation(pat::PfChargedHadronIso));
       
-      nBranches_->lep_normChi2       .push_back(-99);
-      nBranches_->lep_isGlobalMuon   .push_back(-99);
-      nBranches_->lep_trackerHits    .push_back(-99);
-      nBranches_->lep_matchedStations.push_back(-99);
-      nBranches_->lep_pixelHits      .push_back(-99);
-      nBranches_->lep_globalHits     .push_back(-99);
-      nBranches_->lep_isLooseMuon    .push_back(-99);
-      nBranches_->lep_isSoftMuon     .push_back(-99);
-      nBranches_->lep_isTightMuon    .push_back(-99);
-      nBranches_->lep_isHighPtMuon   .push_back(-99);
-      nBranches_->lep_dz	     .push_back(-99);
-      nBranches_->lep_isHEEP         .push_back(-99);
-      nBranches_->lep_isHEEPv50        .push_back(-99);
-
+      /*====================== IDs ========================*/	                                     
       nBranches_->decayModeFindingNewDMs                     .push_back(muTau.tauID("decayModeFindingNewDMs"		      ));
       nBranches_->decayModeFinding	                     .push_back(muTau.tauID("decayModeFinding"			      ));
       nBranches_->byLooseCombinedIsolationDeltaBetaCorr3Hits .push_back(muTau.tauID("byLooseCombinedIsolationDeltaBetaCorr3Hits"  ));
@@ -414,28 +422,10 @@ void TausNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
       nBranches_->againstMuonLooseMVA                        .push_back(muTau.tauID("againstMuonLooseMVA"			      ));
       nBranches_->againstMuonMediumMVA                       .push_back(muTau.tauID("againstMuonMediumMVA"  		      ));
       nBranches_->againstMuonTightMVA                        .push_back(muTau.tauID("againstMuonTightMVA"			      ));         
-   
-     
-      nBranches_->lep_SemileptonicPFIso        .push_back(-99);
-      nBranches_->lep_SemileptonicCorrPFIso    .push_back(-99);
-     
-
-      nBranches_->lep_passConversionVeto				.push_back(-99);
-      nBranches_->lep_full5x5_sigmaIetaIeta			.push_back(-99);
-      nBranches_->lep_dEtaIn										.push_back(-99);
-      nBranches_->lep_dPhiIn										.push_back(-99);
-      nBranches_->lep_hOverE										.push_back(-99);
-      nBranches_->lep_relIsoWithDBeta						.push_back(-99);
-      nBranches_->lep_ooEmooP										.push_back(-99);
-       nBranches_->lep_d0												.push_back(muTau.dxy());
-   
-      nBranches_->lep_expectedMissingInnerHits	.push_back(-99);
-      nBranches_->lep_isVetoElectron						.push_back(-99);
-      nBranches_->lep_isMediumElectron					.push_back(-99);
-      nBranches_->lep_isTightElectron						.push_back(-99);
-  }
+      /*======================================================*/                          
+        
+  }  
+        
+  nBranches_->nlep +=  taus_->size() +eleTaus_->size()+ muTaus_->size();
   
-    
-    
-    nBranches_->nlep +=  taus_->size() +eleTaus_->size()+ muTaus_->size();
 }  

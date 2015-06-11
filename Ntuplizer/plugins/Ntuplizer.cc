@@ -39,7 +39,12 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
 	flavourToken_		(consumes<reco::JetFlavourMatchingCollection>(iConfig.getParameter<edm::InputTag>("subjetflavour"))),
 
 	muonToken_		(consumes<pat::MuonCollection>(iConfig.getParameter<edm::InputTag>("muons"))),
-	electronToken_		(consumes<pat::ElectronCollection>(iConfig.getParameter<edm::InputTag>("electrons"))),
+	electronToken_		(consumes<edm::View<pat::Electron> >(iConfig.getParameter<edm::InputTag>("electrons"))),
+	eleHEEPIdMapToken_      (consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("eleHEEPIdMap"))),
+	eleVetoIdMapToken_      (consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("eleVetoIdMap"))),
+	eleLooseIdMapToken_     (consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("eleLooseIdMap"))),
+	eleMediumIdMapToken_    (consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("eleMediumIdMap"))),
+	eleTightIdMapToken_     (consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("eleTightIdMap"))),
 	tauToken_		(consumes<pat::TauCollection>(iConfig.getParameter<edm::InputTag>("taus"))),
 	tauEleTauToken_		(consumes<pat::TauCollection>(iConfig.getParameter<edm::InputTag>("tausEleTau"))),
 	tauMuTauToken_		(consumes<pat::TauCollection>(iConfig.getParameter<edm::InputTag>("tausMuTau"))),
@@ -50,9 +55,7 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
 	triggerToken_		(consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("HLT"))),
 	triggerObjects_	        (consumes<pat::TriggerObjectStandAloneCollection>(iConfig.getParameter<edm::InputTag>("triggerobjects"))),
 	triggerPrescales_	(consumes<pat::PackedTriggerPrescales>(iConfig.getParameter<edm::InputTag>("triggerprescales")))
-	
-	
-
+		
 {
 
 	
@@ -86,11 +89,6 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
      tmpString = jecpath + tmpVec[v];
      jecAK4Labels.push_back(tmpString);
   }    
-   /*=======================================================================================*/  
-  // std::vector<edm::EDGetTokenT<pat::TauCollection>> tauTokens;
-  //tauTokens.push_back( tauToken_ 		);
-  //tauTokens.push_back( tauEleTauToken_ 		);
-  //tauTokens.push_back( tauMuTauToken_ 		);
 
   /*=======================================================================================*/  
   std::vector<edm::EDGetTokenT<pat::METCollection>> metTokens;
@@ -104,22 +102,25 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
 
   /*=======================================================================================*/  
   std::vector<edm::EDGetTokenT<reco::VertexCollection>> vtxTokens;
-  vtxTokens.push_back( vtxToken_  );
+  vtxTokens.push_back( vtxToken_  );  
+
+  /*=======================================================================================*/    
+  std::vector<edm::EDGetTokenT<edm::ValueMap<bool> > > eleIdTokens;
+  eleIdTokens.push_back(eleVetoIdMapToken_  );
+  eleIdTokens.push_back(eleLooseIdMapToken_ );
+  eleIdTokens.push_back(eleMediumIdMapToken_);
+  eleIdTokens.push_back(eleTightIdMapToken_ );
+  eleIdTokens.push_back(eleHEEPIdMapToken_  );
   
-  /*=======================================================================================*/
-  // std::vector<edm::EDGetTokenT<edm::TriggerResults>> triggerTokens;
- //  triggerTokens.push_back( triggerToken_ );
-  
-  /*=======================================================================================*/
-  
+  /*=======================================================================================*/  
 
   nTuplizers_["jets"]  	   = new JetsNtuplizer	    ( jetTokens		, jecAK4Labels   , jecAK8Labels     , flavourToken_, rhoToken_   , vtxToken_  , nBranches_);  
   nTuplizers_["muons"] 	   = new MuonsNtuplizer     ( muonToken_	, vtxToken_      , rhoToken_        , nBranches_  );
-  nTuplizers_["electrons"] = new ElectronsNtuplizer ( electronToken_	, vtxToken_      , rhoToken_        , nBranches_  );
+  nTuplizers_["electrons"] = new ElectronsNtuplizer ( electronToken_	, vtxToken_      , rhoToken_        , eleIdTokens  , nBranches_  );
   nTuplizers_["MET"]       = new METsNtuplizer      ( metTokens		, pfMETlabel     , jetToken_        , muonToken_   , jecAK4Labels, corrFormulas, rhoToken_, vtxToken_ , nBranches_ );
   nTuplizers_["vertices"]  = new VerticesNtuplizer  ( vtxTokens		, nBranches_    ); 
   nTuplizers_["triggers"]  = new TriggersNtuplizer  ( triggerToken_     , triggerObjects_, triggerPrescales_, nBranches_  );
-  nTuplizers_["taus"]      = new TausNtuplizer      ( tauToken_, tauEleTauToken_,   tauMuTauToken_   , rhoToken_      , vtxToken_        , nBranches_  );
+  nTuplizers_["taus"]      = new TausNtuplizer      ( tauToken_         , tauEleTauToken_, tauMuTauToken_   , rhoToken_    , vtxToken_   , nBranches_ );
 
   /*=======================================================================================*/    
   if ( runOnMC ){

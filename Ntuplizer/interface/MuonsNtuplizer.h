@@ -6,7 +6,10 @@
 class MuonsNtuplizer : public CandidateNtuplizer {
 
 public:
-   MuonsNtuplizer( edm::EDGetTokenT<pat::MuonCollection> muonToken, edm::EDGetTokenT<reco::VertexCollection> verticeToken, edm::EDGetTokenT<double> rhoToken,  NtupleBranches* nBranches );
+   MuonsNtuplizer( edm::EDGetTokenT<pat::MuonCollection>    muonToken   , 
+                   edm::EDGetTokenT<reco::VertexCollection> verticeToken, 
+		   edm::EDGetTokenT<double>		    rhoToken	, 
+		   NtupleBranches* nBranches );
    ~MuonsNtuplizer( void );
 
    void fillBranches( edm::Event const & event, const edm::EventSetup& iSetup );

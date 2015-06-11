@@ -59,17 +59,22 @@ private:
   edm::EDGetTokenT<reco::GenJetCollection>                  genJetToken_	;
   
 
-  edm::EDGetTokenT<reco::JetFlavourMatchingCollection> 		           flavourToken_		;
+  edm::EDGetTokenT<reco::JetFlavourMatchingCollection> 	    flavourToken_	;
 
-  edm::EDGetTokenT<pat::MuonCollection>     				muonToken_			;	
-  edm::EDGetTokenT<pat::ElectronCollection> 				electronToken_	        	;
-  edm::EDGetTokenT<pat::TauCollection> 	    				tauToken_			;
-  edm::EDGetTokenT<pat::TauCollection> 	    				tauEleTauToken_			;
-  edm::EDGetTokenT<pat::TauCollection> 	    				tauMuTauToken_			;
+  edm::EDGetTokenT<pat::MuonCollection>     		    muonToken_  	;	
+  edm::EDGetTokenT<edm::View<pat::Electron> >		    electronToken_	;
+  edm::EDGetTokenT<edm::ValueMap<bool> >                    eleHEEPIdMapToken_  ;
+  edm::EDGetTokenT<edm::ValueMap<bool> >                    eleVetoIdMapToken_  ;
+  edm::EDGetTokenT<edm::ValueMap<bool> >                    eleLooseIdMapToken_ ;
+  edm::EDGetTokenT<edm::ValueMap<bool> >                    eleMediumIdMapToken_;
+  edm::EDGetTokenT<edm::ValueMap<bool> >                    eleTightIdMapToken_ ;
+  edm::EDGetTokenT<pat::TauCollection> 	    		    tauToken_		;
+  edm::EDGetTokenT<pat::TauCollection> 	    		    tauEleTauToken_	;
+  edm::EDGetTokenT<pat::TauCollection> 	    		    tauMuTauToken_	;
 
-  edm::EDGetTokenT<pat::METCollection> 	    				metToken_			;
-  edm::EDGetTokenT<pat::METCollection> 	    				reclusteredmetToken_            ;
-  edm::InputTag 							pfMETlabel                      ;	     // input label for particle-flow MET
+  edm::EDGetTokenT<pat::METCollection> 	    		    metToken_		;
+  edm::EDGetTokenT<pat::METCollection> 	    		    reclusteredmetToken_;
+  edm::InputTag 					    pfMETlabel  	;	     // input label for particle-flow MET
 
   
   edm::EDGetTokenT<edm::TriggerResults>                     triggerToken_;

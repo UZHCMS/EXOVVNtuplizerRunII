@@ -4,18 +4,12 @@ import FWCore.ParameterSet.Config as cms
 
 process = cms.Process("Ntuple")
 
-# process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_condDBv2_cff')
-# process.load('Configuration.StandardSequences.Geometry_cff')
-# process.load('Configuration.StandardSequences.MagneticField_38T_cff')
-# #process.GlobalTag.globaltag = 'PHYS14_25_V2'
-# process.GlobalTag.globaltag = 'MCRUN2_74_V7'
-
 process.load("Configuration.StandardSequences.MagneticField_cff")
 process.load('Configuration.Geometry.GeometryRecoDB_cff')
 process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_cff")
 from Configuration.AlCa.GlobalTag import GlobalTag
+#process.GlobalTag = GlobalTag(process.GlobalTag, 'MCRUN2_74_V9::All')
 process.GlobalTag = GlobalTag(process.GlobalTag, 'auto:run2_mc')
-
 
 process.TFileService = cms.Service("TFileService",
                                        fileName = cms.string('Tier0_Test_SUPERBUNNIES_zeroBias2.root')
@@ -45,7 +39,7 @@ options.inputFiles =['root://xrootd.unl.edu//store/backfill/2/data/Tier0_Test_SU
 options.parseArguments()
 
 process.options  = cms.untracked.PSet( 
-                     wantSummary = cms.untracked.bool(True),
+                     wantSummary = cms.untracked.bool(False),
                      SkipEvent = cms.untracked.vstring('ProductNotFound'),
                      allowUnscheduled = cms.untracked.bool(True)
                      )
@@ -61,7 +55,7 @@ process.source = cms.Source("PoolSource",
 
 #! To recluster and add AK8 Higgs tagging and softdrop subjet b-tagging (both need to be simoultaneously true or false, if not you will have issues with your softdrop subjets!)
 #If you use the softdrop subjets from the slimmedJetsAK8 collection, only CSV seems to be available?
-doAK8reclustering = True
+doAK8reclustering = False
 doAK8softdropReclustering = False
 doBtagging = False
 
@@ -283,6 +277,25 @@ if doMETReclustering:
     process.redoPatMET+=process.pfMetT1
     process.redoPatMET+=process.patMETs
 
+####### Adding HEEP id ##########
+
+from PhysicsTools.SelectorUtils.tools.vid_id_tools import *
+
+dataFormat=DataFormat.MiniAOD
+switchOnVIDElectronIdProducer(process,dataFormat)
+
+process.egmGsfElectronIDSequence = cms.Sequence(process.egmGsfElectronIDs)
+
+# define which IDs we want to produce
+#my_id_modules = ['RecoEgamma.ElectronIdentification.Identification.cutBasedElectronID_PHYS14_PU20bx25_V2_cff',
+#		 'RecoEgamma.ElectronIdentification.Identification.heepElectronID_HEEPV51_cff']
+my_id_modules = ['RecoEgamma.ElectronIdentification.Identification.heepElectronID_HEEPV51_cff',
+                 'RecoEgamma.ElectronIdentification.Identification.cutBasedElectronID_PHYS14_PU20bx25_V2_cff']
+
+#add them to the VID producer
+for idmod in my_id_modules:
+    setupAllVIDIdsInModule(process,idmod,setupVIDElectronSelection)
+
 ####### Ntuplizer initialization ##########
 
 runOnMC = False
@@ -327,9 +340,14 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     vertices = cms.InputTag("offlineSlimmedPrimaryVertices"),
     muons = cms.InputTag("slimmedMuons"),
     electrons = cms.InputTag("slimmedElectrons"),
+    eleHEEPIdMap = cms.InputTag("egmGsfElectronIDs:heepElectronID-HEEPV51"),
+    eleVetoIdMap = cms.InputTag("egmGsfElectronIDs:cutBasedElectronID-PHYS14-PU20bx25-V2-standalone-veto"),
+    eleLooseIdMap = cms.InputTag("egmGsfElectronIDs:cutBasedElectronID-PHYS14-PU20bx25-V2-standalone-loose"),
+    eleMediumIdMap = cms.InputTag("egmGsfElectronIDs:cutBasedElectronID-PHYS14-PU20bx25-V2-standalone-medium"),
+    eleTightIdMap = cms.InputTag("egmGsfElectronIDs:cutBasedElectronID-PHYS14-PU20bx25-V2-standalone-tight"),
     taus = cms.InputTag("slimmedTaus"),
-    tausMuTau = cms.InputTag("slimmedTausMuTau"),
-    tausEleTau = cms.InputTag("slimmedTausEleTau"),
+    tausMuTau = cms.InputTag("slimmedTaus"),
+    tausEleTau = cms.InputTag("slimmedTaus"),
     jets = cms.InputTag("slimmedJets"),
     fatjets = cms.InputTag(jetsAK8),
     prunedjets = cms.InputTag(jetsAK8pruned),
