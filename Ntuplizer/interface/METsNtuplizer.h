@@ -8,10 +8,15 @@ class TFormula;
 class METsNtuplizer : public CandidateNtuplizer {
 
 public:
- METsNtuplizer( std::vector<edm::EDGetTokenT<pat::METCollection>> mettoken, edm::InputTag pfmetlabel, edm::EDGetTokenT<pat::JetCollection> jettoken, 
-		 edm::EDGetTokenT<pat::MuonCollection> muontoken, std::vector<std::string> jecAK4labels, std::vector<std::string> corrformulas,
-		 edm::EDGetTokenT<double> rhotoken, edm::EDGetTokenT<reco::VertexCollection> vtxtoken, NtupleBranches* nBranches );
- ~METsNtuplizer( void );
+   METsNtuplizer( edm::EDGetTokenT<pat::METCollection>     mettoken    , 
+ 	 	  edm::EDGetTokenT<pat::JetCollection>	   jettoken    ,
+		  edm::EDGetTokenT<pat::MuonCollection>    muontoken   ,
+		  edm::EDGetTokenT<double>		   rhotoken    ,
+		  edm::EDGetTokenT<reco::VertexCollection> vtxtoken    ,
+		  std::vector<std::string>		   jecAK4labels,
+		  std::vector<std::string>		   corrformulas,
+		  NtupleBranches*			   nBranches  );
+   ~METsNtuplizer( void );
    
    void 	fillBranches      ( edm::Event const & event, const edm::EventSetup& iSetup );
    void   	addTypeICorr      ( edm::Event const & event );
@@ -20,37 +25,30 @@ public:
    void   	initJetCorrFactors( void );
    
    private:
-	   edm::EDGetTokenT<pat::METCollection>		metInputToken_				;
-	   edm::EDGetTokenT<pat::METCollection>		reclusteredmetInputToken_ 	        ;
-	   edm::InputTag				METsRawLabel_				;
-	   edm::EDGetTokenT<pat::JetCollection> 	jetInputToken_   			; 
-	   edm::EDGetTokenT<pat::MuonCollection>	muonInputToken_  			;
-	   
-	   std::vector<std::string>	                jetCorrLabel_				;
-	   std::vector<std::string> 		       	corrFormulas_         	         	;
-	   edm::EDGetTokenT<double>  		    	rhoToken_   				;  
-	   edm::EDGetTokenT<reco::VertexCollection>     verticeToken_    			;
+    edm::EDGetTokenT<pat::METCollection>	 metInputToken_  ;
+    edm::EDGetTokenT<pat::JetCollection>	 jetInputToken_  ; 
+    edm::EDGetTokenT<pat::MuonCollection>	 muonInputToken_ ;
+    edm::EDGetTokenT<double>			 rhoToken_	 ;  
+    edm::EDGetTokenT<reco::VertexCollection>	 verticeToken_   ;   
+    std::vector<std::string>			 jetCorrLabel_   ;
+    std::vector<std::string>			 corrFormulas_   ;
+
+    std::vector<std::string>			 offsetCorrLabel_;   
+    boost::shared_ptr<FactorizedJetCorrector>	 jecAK4_	 ;
+    boost::shared_ptr<FactorizedJetCorrector>	 jecOffset_	 ;
+    
+    edm::Handle<pat::METCollection>		 METs_  	 ;
+    edm::Handle<pat::MuonCollection>		 muons_ 	 ;
+    edm::Handle<pat::JetCollection>		 jets_  	 ;
+    edm::Handle< double >			 rho_		 ;
+    edm::Handle<reco::VertexCollection> 	 vertices_	 ;
    
-	   std::vector<std::string> 		       	offsetCorrLabel_			;
-   
-	   boost::shared_ptr<FactorizedJetCorrector>    jecAK4_         			;
-	   boost::shared_ptr<FactorizedJetCorrector>    jecOffset_      			;
-   
-     
-	   //edm::Handle< std::vector<pat::MET> > METsRaw_;
-	   edm::Handle<pat::METCollection>     		METs_			  	;
-	   edm::Handle<pat::METCollection> 	       	reclusteredMETs_    	        ;
-	   edm::Handle<edm::View<reco::PFMET> >   	pfMET_				;
-	   edm::Handle<pat::MuonCollection> 		muons_				;
-	   edm::Handle<pat::JetCollection>      	jets_      			;
-	   edm::Handle< double >                        rho_        	  	        ;
-	   edm::Handle<reco::VertexCollection> 	        vertices_     		        ;
-   
-	   std::map<std::string,double> 	       	TypeICorrMap_   	        ;
-  
-  
-	   TFormula* corrPx_;
-	   TFormula* corrPy_;
+    std::map<std::string,double>		 TypeICorrMap_   ;
+    
+    TFormula* corrPx_;
+    TFormula* corrPy_;
+
+    bool doCorrOnTheFly_;
 };
 
 #endif // METsNtuplizer_H

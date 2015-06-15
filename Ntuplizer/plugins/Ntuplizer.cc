@@ -25,9 +25,7 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
 	vtxToken_		(consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("vertices"))),
 	rhoToken_		(consumes<double>(iConfig.getParameter<edm::InputTag>("rho"))),
 	puinfoToken_            (consumes<std::vector<PileupSummaryInfo> >(iConfig.getParameter<edm::InputTag>("PUInfo"))),
-	geneventToken_          (consumes<GenEventInfoProduct>(iConfig.getParameter<edm::InputTag>("genEventInfo"))),
-
-	
+	geneventToken_          (consumes<GenEventInfoProduct>(iConfig.getParameter<edm::InputTag>("genEventInfo"))),	
 	genparticleToken_ 	(consumes<reco::GenParticleCollection>(iConfig.getParameter<edm::InputTag>("genparticles"))),
 	
 	jetToken_		(consumes<pat::JetCollection>(iConfig.getParameter<edm::InputTag>("jets"))),
@@ -50,8 +48,8 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
 	tauMuTauToken_		(consumes<pat::TauCollection>(iConfig.getParameter<edm::InputTag>("tausMuTau"))),
 
 	metToken_		(consumes<pat::METCollection>(iConfig.getParameter<edm::InputTag>("mets"))),
-	reclusteredmetToken_    (consumes<pat::METCollection>(iConfig.getParameter<edm::InputTag>("reclusteredmets"))),
-	pfMETlabel              (iConfig.getParameter<edm::InputTag>("pfmets")),
+	jetForMetCorrToken_     (consumes<pat::JetCollection>(iConfig.getParameter<edm::InputTag>("jetsForMetCorr"))),
+
 	triggerToken_		(consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("HLT"))),
 	triggerObjects_	        (consumes<pat::TriggerObjectStandAloneCollection>(iConfig.getParameter<edm::InputTag>("triggerobjects"))),
 	triggerPrescales_	(consumes<pat::PackedTriggerPrescales>(iConfig.getParameter<edm::InputTag>("triggerprescales")))
@@ -62,17 +60,18 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
   /*=======================================================================================*/
   edm::Service<TFileService> fs;
   TTree* tree = fs->make<TTree>( "tree", "tree" );
-  nBranches_ = new NtupleBranches( tree );
   runOnMC = iConfig.getParameter<bool>("runOnMC");
+  doTausBoostedFlag_ = iConfig.getParameter<bool>("doTausBoosted");
+  doPruningFlag_ = iConfig.getParameter<bool>("doPruning");
+  nBranches_ = new NtupleBranches( tree, doPruningFlag_, doTausBoostedFlag_ );
   
   /*=======================================================================================*/
   std::vector<edm::EDGetTokenT<pat::JetCollection>> jetTokens;
-  jetTokens.push_back(jetToken_ 			);
-  jetTokens.push_back( fatjetToken_ 		);
-  jetTokens.push_back( prunedjetToken_ 		);
-  jetTokens.push_back( softdropjetToken_	);
-  // jetTokens.push_back( flavourToken_	 		);  
-
+  jetTokens.push_back( jetToken_ 	 );
+  jetTokens.push_back( fatjetToken_ 	 );
+  jetTokens.push_back( prunedjetToken_ 	 );
+  jetTokens.push_back( softdropjetToken_ );
+  //jetTokens.push_back( flavourToken_	 );  
   
   std::string jecpath = iConfig.getParameter<std::string>("jecpath");
   
@@ -83,23 +82,25 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
      tmpString = jecpath + tmpVec[v];
      jecAK8Labels.push_back(tmpString);
   }    
-  std::vector<std::string> jecAK4Labels;
+  std::vector<std::string> jecAK4chsLabels;
   tmpVec.clear(); tmpVec = iConfig.getParameter<std::vector<std::string> >("jecAK4chsPayloadNames");
   for( unsigned int v = 0; v < tmpVec.size(); ++v ){
      tmpString = jecpath + tmpVec[v];
-     jecAK4Labels.push_back(tmpString);
+     jecAK4chsLabels.push_back(tmpString);
   }    
 
-  /*=======================================================================================*/  
-  std::vector<edm::EDGetTokenT<pat::METCollection>> metTokens;
-  //METsLabels.push_back( iConfig.getParameter<edm::InputTag>("METrawColl") );
-  metTokens.push_back( metToken_ );
-  metTokens.push_back( reclusteredmetToken_ );
-  
+  /*=======================================================================================*/    
   std::vector<std::string> corrFormulas;
   corrFormulas.push_back(iConfig.getParameter<std::string>("corrMetPx"));
   corrFormulas.push_back(iConfig.getParameter<std::string>("corrMetPy"));
 
+  std::vector<std::string> jecAK4Labels;
+  tmpVec.clear(); tmpVec = iConfig.getParameter<std::vector<std::string> >("jecAK4forMetCorr");
+  for( unsigned int v = 0; v < tmpVec.size(); ++v ){
+     tmpString = jecpath + tmpVec[v];
+     jecAK4Labels.push_back(tmpString);
+  }  
+  
   /*=======================================================================================*/  
   std::vector<edm::EDGetTokenT<reco::VertexCollection>> vtxTokens;
   vtxTokens.push_back( vtxToken_  );  
@@ -114,13 +115,49 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
   
   /*=======================================================================================*/  
 
-  nTuplizers_["jets"]  	   = new JetsNtuplizer	    ( jetTokens		, jecAK4Labels   , jecAK8Labels     , flavourToken_, rhoToken_   , vtxToken_  , nBranches_);  
-  nTuplizers_["muons"] 	   = new MuonsNtuplizer     ( muonToken_	, vtxToken_      , rhoToken_        , nBranches_  );
-  nTuplizers_["electrons"] = new ElectronsNtuplizer ( electronToken_	, vtxToken_      , rhoToken_        , eleIdTokens  , nBranches_  );
-  nTuplizers_["MET"]       = new METsNtuplizer      ( metTokens		, pfMETlabel     , jetToken_        , muonToken_   , jecAK4Labels, corrFormulas, rhoToken_, vtxToken_ , nBranches_ );
-  nTuplizers_["vertices"]  = new VerticesNtuplizer  ( vtxTokens		, nBranches_    ); 
-  nTuplizers_["triggers"]  = new TriggersNtuplizer  ( triggerToken_     , triggerObjects_, triggerPrescales_, nBranches_  );
-  nTuplizers_["taus"]      = new TausNtuplizer      ( tauToken_         , tauEleTauToken_, tauMuTauToken_   , rhoToken_    , vtxToken_   , nBranches_ );
+  nTuplizers_["jets"]  	   = new JetsNtuplizer	    ( jetTokens      , 
+                                                      jecAK4chsLabels, 
+						      jecAK8Labels   , 
+						      flavourToken_  , 
+						      rhoToken_      , 
+						      vtxToken_      , 
+						      nBranches_    ); 
+						       
+  nTuplizers_["muons"] 	   = new MuonsNtuplizer     ( muonToken_   , 
+                                                      vtxToken_    , 
+						      rhoToken_    , 
+						      nBranches_  );
+						      
+  nTuplizers_["electrons"] = new ElectronsNtuplizer ( electronToken_, 
+                                                      vtxToken_     , 
+						      rhoToken_     , 
+						      eleIdTokens   , 
+						      nBranches_   );
+						      
+  nTuplizers_["MET"]       = new METsNtuplizer      ( metToken_   , 
+                                                      jetForMetCorrToken_, 
+						      muonToken_  , 
+						      rhoToken_   ,
+						      vtxToken_   , 
+						      jecAK4Labels,
+                                                      corrFormulas, 
+						      nBranches_ );
+						      
+  nTuplizers_["vertices"]  = new VerticesNtuplizer  ( vtxTokens   , 
+                                                      nBranches_ );
+						       
+  nTuplizers_["triggers"]  = new TriggersNtuplizer  ( triggerToken_    , 
+                                                      triggerObjects_  , 
+						      triggerPrescales_, 
+						      nBranches_      );
+						      
+  if( doTausBoostedFlag_ )
+     nTuplizers_["taus"] = new TausNtuplizer ( tauToken_      , 
+                                               tauEleTauToken_, 
+					       tauMuTauToken_ , 
+					       rhoToken_      , 
+					       vtxToken_      , 
+					       nBranches_    );
 
   /*=======================================================================================*/    
   if ( runOnMC ){

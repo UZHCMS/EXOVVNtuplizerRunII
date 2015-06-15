@@ -23,7 +23,7 @@
 #include "Math/VectorUtil.h"
 
 //===================================================================================================================
-ElectronsNtuplizer::ElectronsNtuplizer( edm::EDGetTokenT<edm::View<pat::Electron>  >           electronToken, 
+ElectronsNtuplizer::ElectronsNtuplizer( edm::EDGetTokenT<edm::View<pat::Electron>  >          electronToken, 
                                         edm::EDGetTokenT<reco::VertexCollection>              verticeToken , 
 					edm::EDGetTokenT<double>                              rhoToken     ,
                                         std::vector< edm::EDGetTokenT<edm::ValueMap<bool> > > eleIDtokens  ,
@@ -243,9 +243,11 @@ void ElectronsNtuplizer::fillBranches( edm::Event const & event, const edm::Even
     nBranches_->againstMuonMediumMVA			   .push_back(-99);
     nBranches_->againstMuonTightMVA			   .push_back(-99);  
     /***************************************************************************/
+    
    }
 
    nBranches_->nlep += nele;
+
 }
 
 //===================================================================================================================
