@@ -1,11 +1,12 @@
 #include "../interface/NtupleBranches.h"
 
 //===================================================================================================================        
-NtupleBranches::NtupleBranches( TTree* tree )
+NtupleBranches::NtupleBranches( TTree* tree, bool doPruning, bool doTausBoosted )
    : tree_( tree )
 {
+   doPruning_ = doPruning;
+   doTausBoosted_ = doTausBoosted; 
    branch();
-
 }
 
 //===================================================================================================================
@@ -43,14 +44,13 @@ void NtupleBranches::branch( void ){
   tree_->Branch( "lep_charge"		     , &lep_charge	       );
   tree_->Branch( "lep_e" 		     , &lep_e		       );
   tree_->Branch( "lep_eta"		     , &lep_eta 	       );
-  tree_->Branch( "lep_mass"		  			   , &lep_mass	       );
-  tree_->Branch( "lep_pt"		     				, &lep_pt  	       );
-  tree_->Branch( "lep_phi"		     				, &lep_phi 	       );
-  tree_->Branch( "lep_isHEEP"	            	, &lep_isHEEP             );
-  tree_->Branch( "lep_isHEEPv50"	            , &lep_isHEEPv50             );
-  tree_->Branch( "lep_isHighPtMuon"	   	  	, &lep_isHighPtMuon       );
-  tree_->Branch( "lep_isTightMuon"	     		, &lep_isTightMuon       );
-  tree_->Branch( "lep_isLooseMuon"	     		, &lep_isLooseMuon       );
+  tree_->Branch( "lep_etaSC"		     , &lep_etaSC 	       );
+  tree_->Branch( "lep_mass"		     , &lep_mass	       );
+  tree_->Branch( "lep_pt"		     , &lep_pt  	       );
+  tree_->Branch( "lep_phi"		     , &lep_phi 	       );
+  tree_->Branch( "lep_isHighPtMuon"	     , &lep_isHighPtMuon       );
+  tree_->Branch( "lep_isTightMuon"	     , &lep_isTightMuon        );
+  tree_->Branch( "lep_isLooseMuon"	     , &lep_isLooseMuon        );
   tree_->Branch( "lep_pfRhoCorrRelIso03"     , &lep_pfRhoCorrRelIso03  );
   tree_->Branch( "lep_pfRhoCorrRelIso04"     , &lep_pfRhoCorrRelIso04  );
   tree_->Branch( "lep_pfDeltaCorrRelIso"     , &lep_pfDeltaCorrRelIso  );
@@ -58,10 +58,105 @@ void NtupleBranches::branch( void ){
   tree_->Branch( "lep_photonIso" 	     , &lep_photonIso	       );
   tree_->Branch( "lep_neutralHadIso"	     , &lep_neutralHadIso      );
   tree_->Branch( "lep_chargedHadIso"	     , &lep_chargedHadIso      );
-  tree_->Branch( "lep_trackIso"	             , &lep_trackIso	       );
+  tree_->Branch( "lep_trackIso"	             , &lep_trackIso	       );  
+  tree_->Branch( "lep_passConversionVeto"      , &lep_passConversionVeto       );
+  tree_->Branch( "lep_full5x5_sigmaIetaIeta"   , &lep_full5x5_sigmaIetaIeta    );
+  tree_->Branch( "lep_dEtaIn"	               , &lep_dEtaIn                   );
+  tree_->Branch( "lep_dPhiIn"                  , &lep_dPhiIn                   );
+  tree_->Branch( "lep_hOverE"   	       , &lep_hOverE                   );
+  tree_->Branch( "lep_relIsoWithDBeta"         , &lep_relIsoWithDBeta          );
+  tree_->Branch( "lep_ooEmooP"	               , &lep_ooEmooP                  );
+  tree_->Branch( "lep_d0"                      , &lep_d0                       );
+  tree_->Branch( "lep_dz"		       , &lep_dz                       );
+  tree_->Branch( "lep_expectedMissingInnerHits", &lep_expectedMissingInnerHits );
+  tree_->Branch( "lep_isVetoElectron"	       , &lep_isVetoElectron           );
+  tree_->Branch( "lep_isMediumElectron"	       , &lep_isMediumElectron         );
+  tree_->Branch( "lep_isTightElectron"         , &lep_isTightElectron          );  
+  tree_->Branch( "lep_isHeepElectron"	       , &lep_isHeepElectron           );
+  tree_->Branch( "lep_isLooseElectron"	       , &lep_isLooseElectron          );
+  tree_->Branch( "lep_isSoftMuon"	       , &lep_isSoftMuon	     );
+  tree_->Branch( "lep_pfRhoCorrRelIso03Boost"  , &lep_pfRhoCorrRelIso03Boost );
+  tree_->Branch( "lep_pfRhoCorrRelIso04Boost"  , &lep_pfRhoCorrRelIso04Boost );
+  tree_->Branch( "lep_pfDeltaCorrRelIsoBoost"  , &lep_pfDeltaCorrRelIsoBoost );
+  tree_->Branch( "lep_pfRelIsoBoost"  	       , &lep_pfRelIsoBoost	     );
+  tree_->Branch( "lep_photonIsoBoost" 	       , &lep_photonIsoBoost	     );
+  tree_->Branch( "lep_neutralHadIsoBoost"      , &lep_neutralHadIsoBoost     );
+  tree_->Branch( "lep_chargedHadIsoBoost"      , &lep_chargedHadIsoBoost     );
+  tree_->Branch( "lep_normChi2"  	       , &lep_normChi2  	     );
+  tree_->Branch( "lep_isGlobalMuon"	       , &lep_isGlobalMuon	     );
+  tree_->Branch( "lep_trackerHits"	       , &lep_trackerHits	     );
+  tree_->Branch( "lep_matchedStations"	       , &lep_matchedStations	     );
+  tree_->Branch( "lep_pixelHits" 	       , &lep_pixelHits 	     );
+  tree_->Branch( "lep_globalHits"	       , &lep_globalHits	     );
+  tree_->Branch( "lep_TauType"		       , &lep_TauType		     );
+  tree_->Branch( "lep_SemileptonicPFIso"       , &lep_SemileptonicPFIso      );
+  tree_->Branch( "lep_SemileptonicCorrPFIso"   , &lep_SemileptonicCorrPFIso  );
+  
+ /*-------------------------Tau Discriminant-------------------*/
+  if( doTausBoosted_ ){	
+     tree_->Branch( "decayModeFindingNewDMs"			 , &decayModeFindingNewDMs			);
+     tree_->Branch( "decayModeFinding"  			 , &decayModeFinding				);
+     tree_->Branch( "byLooseCombinedIsolationDeltaBetaCorr3Hits" , &byLooseCombinedIsolationDeltaBetaCorr3Hits  );
+     tree_->Branch( "byMediumCombinedIsolationDeltaBetaCorr3Hits", &byMediumCombinedIsolationDeltaBetaCorr3Hits );
+     tree_->Branch( "byTightCombinedIsolationDeltaBetaCorr3Hits" , &byTightCombinedIsolationDeltaBetaCorr3Hits  );
+     tree_->Branch( "byCombinedIsolationDeltaBetaCorrRaw3Hits"   , &byCombinedIsolationDeltaBetaCorrRaw3Hits	);
+     tree_->Branch( "chargedIsoPtSum"				 , &chargedIsoPtSum				);
+     tree_->Branch( "neutralIsoPtSum"				 , &neutralIsoPtSum				);
+     tree_->Branch( "puCorrPtSum"				 , &puCorrPtSum 				);
+     tree_->Branch( "byIsolationMVA3oldDMwoLTraw"		 , &byIsolationMVA3oldDMwoLTraw 		);
+     tree_->Branch( "byVLooseIsolationMVA3oldDMwoLT"		 , &byVLooseIsolationMVA3oldDMwoLT		);
+     tree_->Branch( "byLooseIsolationMVA3oldDMwoLT"		 , &byLooseIsolationMVA3oldDMwoLT		);
+     tree_->Branch( "byMediumIsolationMVA3oldDMwoLT"		 , &byMediumIsolationMVA3oldDMwoLT		);
+     tree_->Branch( "byTightIsolationMVA3oldDMwoLT"		 , &byTightIsolationMVA3oldDMwoLT		);
+     tree_->Branch( "byVTightIsolationMVA3oldDMwoLT"		 , &byVTightIsolationMVA3oldDMwoLT		);
+     tree_->Branch( "byVVTightIsolationMVA3oldDMwoLT"		 , &byVVTightIsolationMVA3oldDMwoLT		);
+     tree_->Branch( "byIsolationMVA3oldDMwLTraw"		 , &byIsolationMVA3oldDMwLTraw  		);
+     tree_->Branch( "byVLooseIsolationMVA3oldDMwLT"		 , &byVLooseIsolationMVA3oldDMwLT		);
+     tree_->Branch( "byLooseIsolationMVA3oldDMwLT"		 , &byLooseIsolationMVA3oldDMwLT		);
+     tree_->Branch( "byMediumIsolationMVA3oldDMwLT"		 , &byMediumIsolationMVA3oldDMwLT		);
+     tree_->Branch( "byTightIsolationMVA3oldDMwLT"		 , &byTightIsolationMVA3oldDMwLT		);
+     tree_->Branch( "byVTightIsolationMVA3oldDMwLT"		 , &byVTightIsolationMVA3oldDMwLT		);
+     tree_->Branch( "byVVTightIsolationMVA3oldDMwLT"		 , &byVVTightIsolationMVA3oldDMwLT		);
+     tree_->Branch( "byIsolationMVA3newDMwoLTraw"		 , &byIsolationMVA3newDMwoLTraw 		);
+     tree_->Branch( "byVLooseIsolationMVA3newDMwoLT"		 , &byVLooseIsolationMVA3newDMwoLT		);
+     tree_->Branch( "byLooseIsolationMVA3newDMwoLT"		 , &byLooseIsolationMVA3newDMwoLT		);
+     tree_->Branch( "byMediumIsolationMVA3newDMwoLT"		 , &byMediumIsolationMVA3newDMwoLT		);
+     tree_->Branch( "byTightIsolationMVA3newDMwoLT"		 , &byTightIsolationMVA3newDMwoLT		);
+     tree_->Branch( "byVTightIsolationMVA3newDMwoLT"		 , &byVTightIsolationMVA3newDMwoLT		);
+     tree_->Branch( "byVVTightIsolationMVA3newDMwoLT"		 , &byVVTightIsolationMVA3newDMwoLT		);
+     tree_->Branch( "byIsolationMVA3newDMwLTraw"		 , &byIsolationMVA3newDMwLTraw  		);
+     tree_->Branch( "byVLooseIsolationMVA3newDMwLT"		 , &byVLooseIsolationMVA3newDMwLT		);
+     tree_->Branch( "byLooseIsolationMVA3newDMwLT"		 , &byLooseIsolationMVA3newDMwLT		);
+     tree_->Branch( "byMediumIsolationMVA3newDMwLT"		 , &byMediumIsolationMVA3newDMwLT		);
+     tree_->Branch( "byTightIsolationMVA3newDMwLT"		 , &byTightIsolationMVA3newDMwLT		);
+     tree_->Branch( "byVTightIsolationMVA3newDMwLT"		 , &byVTightIsolationMVA3newDMwLT		);
+     tree_->Branch( "byVVTightIsolationMVA3newDMwLT"		 , &byVVTightIsolationMVA3newDMwLT		);
+     tree_->Branch( "againstElectronLoose"			 , &againstElectronLoose			);
+     tree_->Branch( "againstElectronMedium"			 , &againstElectronMedium			);
+     tree_->Branch( "againstElectronTight"			 , &againstElectronTight			);
+     tree_->Branch( "againstElectronMVA5raw"			 , &againstElectronMVA5raw			);
+     tree_->Branch( "againstElectronMVA5category"		 , &againstElectronMVA5category 		);
+     tree_->Branch( "againstElectronVLooseMVA5" 		 , &againstElectronVLooseMVA5			);
+     tree_->Branch( "againstElectronLooseMVA5"  		 , &againstElectronLooseMVA5			);
+     tree_->Branch( "againstElectronMediumMVA5" 		 , &againstElectronMediumMVA5			);
+     tree_->Branch( "againstElectronTightMVA5"  		 , &againstElectronTightMVA5			);
+     tree_->Branch( "againstElectronVTightMVA5" 		 , &againstElectronVTightMVA5			);
+     tree_->Branch( "againstMuonLoose"  			 , &againstMuonLoose				);
+     tree_->Branch( "againstMuonMedium" 			 , &againstMuonTight				);
+     tree_->Branch( "againstMuonTight"  			 , &againstMuonTight				);
+     tree_->Branch( "againstMuonLoose2" 			 , &againstMuonLoose2				);
+     tree_->Branch( "againstMuonMedium2"			 , &againstMuonMedium2  			);
+     tree_->Branch( "againstMuonTight2" 			 , &againstMuonLoose3				);
+     tree_->Branch( "againstMuonLoose3" 			 , &againstMuonLoose3				);
+     tree_->Branch( "againstMuonTight3" 			 , &againstMuonTight3				);
+     tree_->Branch( "againstMuonMVAraw" 			 , &againstMuonMVAraw				);
+     tree_->Branch( "againstMuonLooseMVA"			 , &againstMuonLooseMVA 			);
+     tree_->Branch( "againstMuonMediumMVA"			 , &againstMuonMediumMVA			);
+     tree_->Branch( "againstMuonTightMVA"			 , &againstMuonTightMVA 			);
+  }
       
   /*-------------------------energy density---------------------------*/	 
-  tree_->Branch("rho"	    		        , &rho	  	     	 );
+  tree_->Branch( "rho", &rho );
 
   /*-------------------------AK4 jets---------------------------*/	 
   tree_->Branch( "njetsAK4"		    , &njetsAK4 	);
@@ -117,6 +212,7 @@ void NtupleBranches::branch( void ){
   tree_->Branch( "jetAK8_ne"     	    , &jetAK8_ne		 );
   tree_->Branch( "jetAK8_charge" 	    , &jetAK8_charge    	 );
   tree_->Branch( "jetAK8_flavour"	    , &jetAK8_flavour   	 );
+  tree_->Branch( "jetAK8_Hbbtag"	    , &jetAK8_Hbbtag		 );
   tree_->Branch( "jetAK8_ssv"		    , &jetAK8_ssv		 );
   tree_->Branch( "jetAK8_csv"		    , &jetAK8_csv		 );
   tree_->Branch( "jetAK8_tchp"		    , &jetAK8_tchp		 );
@@ -126,29 +222,29 @@ void NtupleBranches::branch( void ){
   tree_->Branch( "jetAK8_tau1"		    , &jetAK8_tau1		 );
   tree_->Branch( "jetAK8_tau2"		    , &jetAK8_tau2      	 );
   tree_->Branch( "jetAK8_tau3"		    , &jetAK8_tau3	    	 );
-  tree_->Branch( "jetAK8_prunedmassUnCorr"  , &jetAK8_prunedmassUnCorr   );
+  tree_->Branch( "jetAK8_prunedmass"        , &jetAK8_prunedmass   );
   tree_->Branch( "jetAK8_prunedmassCorr"    , &jetAK8_prunedmassCorr	 );
   tree_->Branch( "jetAK8pruned_jec"	    , &jetAK8pruned_jec          );
-  tree_->Branch( "jetAK8_softdropmassUnCorr", &jetAK8_softdropmassUnCorr ); 
+  tree_->Branch( "jetAK8_softdropmass"      , &jetAK8_softdropmass ); 
   tree_->Branch( "jetAK8_softdropmassCorr"  , &jetAK8_softdropmassCorr   );
   tree_->Branch( "jetAK8softdrop_jec"	    , &jetAK8softdrop_jec        );
   
   // /*----------------------AK8 jets pruned-----------------------*/
-  //tree_->Branch( "njetsAK8pruned"	 , &njetsAK8pruned	 );
-  //tree_->Branch( "jetAK8pruned_pt"	 , &jetAK8pruned_pt	 );
-  //tree_->Branch( "jetAK8pruned_eta"	 , &jetAK8pruned_eta	 );
-  //tree_->Branch( "jetAK8pruned_mass"	 , &jetAK8pruned_mass    );
-  //tree_->Branch( "jetAK8pruned_phi"	 , &jetAK8pruned_phi	 );
-  //tree_->Branch( "jetAK8pruned_e"	 , &jetAK8pruned_e	 );
-  //tree_->Branch( "jetAK8pruned_flavour", &jetAK8pruned_flavour );
-  //tree_->Branch( "jetAK8pruned_charge" , &jetAK8pruned_charge  );
-  //tree_->Branch( "jetAK8pruned_ssv"	 , &jetAK8pruned_ssv	 );
-  //tree_->Branch( "jetAK8pruned_csv"	 , &jetAK8pruned_csv	 );
-  //tree_->Branch( "jetAK8pruned_tchp"	 , &jetAK8pruned_tchp    );
-  //tree_->Branch( "jetAK8pruned_tche"	 , &jetAK8pruned_tche    );
-  //tree_->Branch( "jetAK8pruned_jp"	 , &jetAK8pruned_jp	 );
-  //tree_->Branch( "jetAK8pruned_jbp"	 , &jetAK8pruned_jbp	 );
-  //tree_->Branch( "jetAK8pruned_nSVs"	 , &jetAK8pruned_nSVs    );
+  // tree_->Branch( "njetsAK8pruned"   , &njetsAK8pruned   );
+  // tree_->Branch( "jetAK8pruned_pt"   , &jetAK8pruned_pt   );
+  // tree_->Branch( "jetAK8pruned_eta"   , &jetAK8pruned_eta   );
+  // tree_->Branch( "jetAK8pruned_mass"   , &jetAK8pruned_mass    );
+  // tree_->Branch( "jetAK8pruned_phi"   , &jetAK8pruned_phi   );
+  // tree_->Branch( "jetAK8pruned_e"   , &jetAK8pruned_e   );
+  // tree_->Branch( "jetAK8pruned_flavour", &jetAK8pruned_flavour );
+  // tree_->Branch( "jetAK8pruned_charge" , &jetAK8pruned_charge  );
+  // tree_->Branch( "jetAK8pruned_ssv"   , &jetAK8pruned_ssv   );
+  // tree_->Branch( "jetAK8pruned_csv"   , &jetAK8pruned_csv   );
+  // tree_->Branch( "jetAK8pruned_tchp"   , &jetAK8pruned_tchp    );
+  // tree_->Branch( "jetAK8pruned_tche"   , &jetAK8pruned_tche    );
+  // tree_->Branch( "jetAK8pruned_jp"   , &jetAK8pruned_jp   );
+  // tree_->Branch( "jetAK8pruned_jbp"   , &jetAK8pruned_jbp   );
+  // tree_->Branch( "jetAK8pruned_nSVs"   , &jetAK8pruned_nSVs    );
   
   // /*----------------------AK8 jets softdrop-----------------------*/
   //tree_->Branch( "njetsAK8softdrop"	   , &njetsAK8softdrop	      );
@@ -167,37 +263,39 @@ void NtupleBranches::branch( void ){
   //tree_->Branch( "jetAK8softdrop_jbp"    , &jetAK8softdrop_jbp      );
   //tree_->Branch( "jetAK8softdrop_nSVs"   , &jetAK8softdrop_nSVs     );
 	  
-  /*----------------------Pruned AK8 subjets---------------------------*/    
-  tree_->Branch( "nsubjets"		    , &nsubjets	 	       );
-  tree_->Branch( "subjetAK8pruned_pt"	    , &subjetAK8pruned_pt      );
-  tree_->Branch( "subjetAK8pruned_eta"	    , &subjetAK8pruned_eta     );
-  tree_->Branch( "subjetAK8pruned_mass"     , &subjetAK8pruned_mass    );
-  tree_->Branch( "subjetAK8pruned_phi"	    , &subjetAK8pruned_phi     );
-  tree_->Branch( "subjetAK8pruned_e"	    , &subjetAK8pruned_e       );
-  tree_->Branch( "subjetAK8pruned_charge"   , &subjetAK8pruned_charge  );
-  tree_->Branch( "subjetAK8pruned_flavour"  , &subjetAK8pruned_flavour );
-  tree_->Branch( "subjetAK8pruned_ssv"	    , &subjetAK8pruned_ssv     );
-  tree_->Branch( "subjetAK8pruned_csv"	    , &subjetAK8pruned_csv     );
-  tree_->Branch( "subjetAK8pruned_tchp"     , &subjetAK8pruned_tchp    );
-  tree_->Branch( "subjetAK8pruned_tche"     , &subjetAK8pruned_tche    );
-  tree_->Branch( "subjetAK8pruned_jp"	    , &subjetAK8pruned_jp      );
-  tree_->Branch( "subjetAK8pruned_jbp"	    , &subjetAK8pruned_jbp     );
+  /*----------------------Pruned AK8 subjets---------------------------*/   
+  if( doPruning_ ){ 
+     tree_->Branch( "nprunedsubjets"	       , &nprunedsubjets	  );
+     tree_->Branch( "subjetAK8pruned_pt"       , &subjetAK8pruned_pt	  );
+     tree_->Branch( "subjetAK8pruned_eta"      , &subjetAK8pruned_eta	  );
+     tree_->Branch( "subjetAK8pruned_mass"     , &subjetAK8pruned_mass    );
+     tree_->Branch( "subjetAK8pruned_phi"      , &subjetAK8pruned_phi	  );
+     tree_->Branch( "subjetAK8pruned_e"        , &subjetAK8pruned_e	  );
+     tree_->Branch( "subjetAK8pruned_charge"   , &subjetAK8pruned_charge  );
+     tree_->Branch( "subjetAK8pruned_flavour"  , &subjetAK8pruned_flavour );
+     tree_->Branch( "subjetAK8pruned_ssv"      , &subjetAK8pruned_ssv	  );
+     tree_->Branch( "subjetAK8pruned_csv"      , &subjetAK8pruned_csv	  );
+     tree_->Branch( "subjetAK8pruned_tchp"     , &subjetAK8pruned_tchp    );
+     tree_->Branch( "subjetAK8pruned_tche"     , &subjetAK8pruned_tche    );
+     tree_->Branch( "subjetAK8pruned_jp"       , &subjetAK8pruned_jp	  );
+     tree_->Branch( "subjetAK8pruned_jbp"      , &subjetAK8pruned_jbp	  );
+  }
   
   // /*----------------------Softdrop AK8 subjets---------------------------*/
-  //tree_->Branch( "nsoftdropsubjets"	      , &nsoftdropsubjets	   );
-  //tree_->Branch( "subjetAK8softdrop_pt"     , &subjetAK8softdrop_pt      );
-  //tree_->Branch( "subjetAK8softdrop_eta"    , &subjetAK8softdrop_eta     );
-  //tree_->Branch( "subjetAK8softdrop_mass"   , &subjetAK8softdrop_mass    );
-  //tree_->Branch( "subjetAK8softdrop_phi"    , &subjetAK8softdrop_phi     );
-  //tree_->Branch( "subjetAK8softdrop_e"      , &subjetAK8softdrop_e	   );
-  //tree_->Branch( "subjetAK8softdrop_charge" , &subjetAK8softdrop_charge  );
-  //tree_->Branch( "subjetAK8softdrop_flavour", &subjetAK8softdrop_flavour );
-  //tree_->Branch( "subjetAK8softdrop_ssv"    , &subjetAK8softdrop_ssv     );
-  //tree_->Branch( "subjetAK8softdrop_csv"    , &subjetAK8softdrop_csv     );
-  //tree_->Branch( "subjetAK8softdrop_tchp"   , &subjetAK8softdrop_tchp    );
-  //tree_->Branch( "subjetAK8softdrop_tche"   , &subjetAK8softdrop_tche    );
-  //tree_->Branch( "subjetAK8softdrop_jp"     , &subjetAK8softdrop_jp	   );
-  //tree_->Branch( "subjetAK8softdrop_jbp"    , &subjetAK8softdrop_jbp     );
+  tree_->Branch( "nsoftdropsubjets"         , &nsoftdropsubjets           );
+  tree_->Branch( "subjetAK8softdrop_pt"     , &subjetAK8softdrop_pt      );
+  tree_->Branch( "subjetAK8softdrop_eta"    , &subjetAK8softdrop_eta     );
+  tree_->Branch( "subjetAK8softdrop_mass"   , &subjetAK8softdrop_mass    );
+  tree_->Branch( "subjetAK8softdrop_phi"    , &subjetAK8softdrop_phi     );
+  tree_->Branch( "subjetAK8softdrop_e"      , &subjetAK8softdrop_e       );
+  tree_->Branch( "subjetAK8softdrop_charge" , &subjetAK8softdrop_charge  );
+  tree_->Branch( "subjetAK8softdrop_flavour", &subjetAK8softdrop_flavour );
+  tree_->Branch( "subjetAK8softdrop_ssv"    , &subjetAK8softdrop_ssv     );
+  tree_->Branch( "subjetAK8softdrop_csv"    , &subjetAK8softdrop_csv     );
+  tree_->Branch( "subjetAK8softdrop_tchp"   , &subjetAK8softdrop_tchp    );
+  tree_->Branch( "subjetAK8softdrop_tche"   , &subjetAK8softdrop_tche    );
+  tree_->Branch( "subjetAK8softdrop_jp"     , &subjetAK8softdrop_jp      );
+  tree_->Branch( "subjetAK8softdrop_jbp"    , &subjetAK8softdrop_jbp     );
     
   /*-------------------------AK4 GenJets---------------------------*/	 
   tree_->Branch( "ngenJetsAK4"		    , &ngenJetsAK4 	  );
@@ -211,24 +309,23 @@ void NtupleBranches::branch( void ){
   tree_->Branch( "genJetNoNuAK4_e"	    , &genJetNoNuAK4_e    );
         
   /*----------------------HLT trigger---------------------------*/	  
-  tree_->Branch("isFired_HLT_AK8PFJet360TrimMod_Mass30_v1"							, &isFired_HLT_AK8PFJet360TrimMod_Mass30_v1							);
-  tree_->Branch("isFired_HLT_AK8PFHT700_TrimR0p1PT0p03Mass50_v1"					, &isFired_HLT_AK8PFHT700_TrimR0p1PT0p03Mass50_v1					);
-  tree_->Branch("isFired_HLT_AK8DiPFJet280_200_TrimMass30_BTagCSV0p3_v1"		, &isFired_HLT_AK8DiPFJet280_200_TrimMass30_BTagCSV0p3_v1		);
-  tree_->Branch("isFired_HLT_PFHT650_WideJetMJJ950DEtaJJ1p5_v1"					, &isFired_HLT_PFHT650_WideJetMJJ950DEtaJJ1p5_v1					);
-  tree_->Branch("isFired_HLT_PFHT650_WideJetMJJ900DEtaJJ1p5_v1"					, &isFired_HLT_PFHT650_WideJetMJJ900DEtaJJ1p5_v1					);
-  tree_->Branch("isFired_HLT_PFHT900_v1"													, &isFired_HLT_PFHT900_v1													);
-  tree_->Branch("isFired_HLT_Ele95_CaloIdVT_GsfTrkIdT_v1"							, &isFired_HLT_Ele95_CaloIdVT_GsfTrkIdT_v1							);
-  tree_->Branch("isFired_HLT_Mu40_v1"														, &isFired_HLT_Mu40_v1														);
-  tree_->Branch("isFired_HLT_IsoMu20_eta2p1_IterTrk02_v1"							, &isFired_HLT_IsoMu20_eta2p1_IterTrk02_v1							);
-  tree_->Branch("isFired_HLT_Ele27_eta2p1_WP85_Gsf_v1"								, &isFired_HLT_Ele27_eta2p1_WP85_Gsf_v1								);
-  tree_->Branch("isFired_HLT_IsoMu20_eta2p1_IterTrk02_TriCentralPFJet40_v1"	, &isFired_HLT_IsoMu20_eta2p1_IterTrk02_TriCentralPFJet40_v1	);
-  tree_->Branch("isFired_HLT_Ele27_eta2p1_WP85_Gsf_TriCentralPFJet40_v1"		, &isFired_HLT_Ele27_eta2p1_WP85_Gsf_TriCentralPFJet40_v1		);
+  tree_->Branch("isFired_HLT_AK8PFJet360_TrimMass30_v1"			 , &isFired_HLT_AK8PFJet360_TrimMass30_v1		   );
+  tree_->Branch("isFired_HLT_AK8PFHT700_TrimR0p1PT0p03Mass50_v1"         , &isFired_HLT_AK8PFHT700_TrimR0p1PT0p03Mass50_v1	   );
+  tree_->Branch("isFired_HLT_AK8DiPFJet280_200_TrimMass30_BTagCSV0p41_v1", &isFired_HLT_AK8DiPFJet280_200_TrimMass30_BTagCSV0p41_v1);
+  tree_->Branch("isFired_HLT_PFHT650_WideJetMJJ950DEtaJJ1p5_v1"		 , &isFired_HLT_PFHT650_WideJetMJJ950DEtaJJ1p5_v1	   );
+  tree_->Branch("isFired_HLT_PFHT650_WideJetMJJ900DEtaJJ1p5_v1"		 , &isFired_HLT_PFHT650_WideJetMJJ900DEtaJJ1p5_v1	   );
+  tree_->Branch("isFired_HLT_PFHT900_v1"				 , &isFired_HLT_PFHT900_v1				   );
+  tree_->Branch("isFired_HLT_Ele23_CaloIdL_TrackIdL_IsoVL_v1"            , &isFired_HLT_Ele23_CaloIdL_TrackIdL_IsoVL_v1 	   );
+  tree_->Branch("isFired_HLT_Ele32_eta2p1_WP75_Gsf_v1"                   , &isFired_HLT_Ele32_eta2p1_WP75_Gsf_v1		   );
+  tree_->Branch("isFired_HLT_Ele105_CaloIdVT_GsfTrkIdT_v1"		 , &isFired_HLT_Ele105_CaloIdVT_GsfTrkIdT_v1		   );
+  tree_->Branch("isFired_HLT_IsoMu24_eta2p1_v1"                          , &isFired_HLT_IsoMu24_eta2p1_v1			   );
+  tree_->Branch("isFired_HLT_Mu45_eta2p1_v1"				 , &isFired_HLT_Mu45_eta2p1_v1  			   );
   
-  tree_->Branch("triggerObject_pt"				, &triggerObject_pt				);
-  tree_->Branch("triggerObject_eta"				, &triggerObject_eta				);
-  tree_->Branch("triggerObject_phi"				, &triggerObject_phi				);
-  tree_->Branch("triggerObject_mass"			, &triggerObject_mass			);
-  tree_->Branch("triggerObject_filterIDs"		, &triggerObject_filterIDs		);
+  tree_->Branch("triggerObject_pt"		, &triggerObject_pt		);
+  tree_->Branch("triggerObject_eta"		, &triggerObject_eta		);
+  tree_->Branch("triggerObject_phi"		, &triggerObject_phi	        );
+  tree_->Branch("triggerObject_mass"		, &triggerObject_mass		);
+  tree_->Branch("triggerObject_filterIDs"	, &triggerObject_filterIDs	);
   tree_->Branch("triggerObject_firedTrigger"	, &triggerObject_firedTrigger	);
 
   /*-------------------------MET--------------------------------*/
@@ -239,11 +336,11 @@ void NtupleBranches::branch( void ){
   tree_->Branch("MET_corrPy"		        , &MET_corrPy	     );   
   tree_->Branch("MET_et"	                , &MET_et  	     ); 
   tree_->Branch("MET_phi"	                , &MET_phi           );
-  // tree_->Branch("MET_T1Uncertainty"	        , &MET_T1Uncertainty );
   tree_->Branch("MET_sumEt"	                , &MET_sumEt 	     ); 
   //tree_->Branch("METdefault_et"	        , &METdefault_et     ); 
   //tree_->Branch("METdefault_sumEt"	        , &METdefault_sumEt  ); 
- // tree_->Branch("METdefault_phi"	        , &METdefault_phi    );
+  //tree_->Branch("METdefault_phi"	        , &METdefault_phi    );
+  //tree_->Branch("MET_T1Uncertainty"	        , &MET_T1Uncertainty );
 
   /*------------- ------EVENT infos-----------------------------*/
   tree_->Branch("EVENT_event"	 , &EVENT_event     );
@@ -275,19 +372,17 @@ void NtupleBranches::reset( void ){
 
   //njetsAK8pruned = 0;
   //njetsAK8softdrop = 0;
-  isFired_HLT_AK8PFJet360TrimMod_Mass30_v1						= false;
-  isFired_HLT_AK8PFHT700_TrimR0p1PT0p03Mass50_v1				= false;
-  isFired_HLT_AK8DiPFJet280_200_TrimMass30_BTagCSV0p3_v1		= false;
-  isFired_HLT_PFHT650_WideJetMJJ950DEtaJJ1p5_v1					= false;
-  isFired_HLT_PFHT650_WideJetMJJ900DEtaJJ1p5_v1					= false;
-  isFired_HLT_PFHT900_v1												= false;
-  isFired_HLT_Ele95_CaloIdVT_GsfTrkIdT_v1							= false;
-  isFired_HLT_Mu40_v1													= false;
-  isFired_HLT_IsoMu20_eta2p1_IterTrk02_v1							= false;
-  isFired_HLT_Ele27_eta2p1_WP85_Gsf_v1								= false;
-  isFired_HLT_IsoMu20_eta2p1_IterTrk02_TriCentralPFJet40_v1	= false;
-  isFired_HLT_Ele27_eta2p1_WP85_Gsf_TriCentralPFJet40_v1		= false;
-  
+  isFired_HLT_AK8PFJet360_TrimMass30_v1			  = false;
+  isFired_HLT_AK8PFHT700_TrimR0p1PT0p03Mass50_v1	  = false;
+  isFired_HLT_AK8DiPFJet280_200_TrimMass30_BTagCSV0p41_v1 = false;
+  isFired_HLT_PFHT650_WideJetMJJ950DEtaJJ1p5_v1	 	  = false;
+  isFired_HLT_PFHT650_WideJetMJJ900DEtaJJ1p5_v1	 	  = false;
+  isFired_HLT_PFHT900_v1			 	  = false;
+  isFired_HLT_IsoMu24_eta2p1_v1			 	  = false;
+  isFired_HLT_Mu45_eta2p1_v1			 	  = false;
+  isFired_HLT_Ele23_CaloIdL_TrackIdL_IsoVL_v1    	  = false;
+  isFired_HLT_Ele32_eta2p1_WP75_Gsf_v1           	  = false;
+  isFired_HLT_Ele105_CaloIdVT_GsfTrkIdT_v1	   	  = false;
     
   /************************************/    
   genParticle_pt	    .clear();
@@ -314,27 +409,120 @@ void NtupleBranches::reset( void ){
   genJetNoNuAK4_mass        .clear();
   genJetNoNuAK4_e           .clear();
   /************************************/
-  lep_type		    .clear();
-  lep_charge		    .clear();
-  lep_e 		    .clear();
-  lep_eta		    .clear();
-  lep_mass		    .clear();
-  lep_pt		    .clear();
-  lep_phi		    .clear();
-  lep_isHEEP	            .clear();
-  lep_isHEEPv50	            .clear();
-  lep_isHighPtMuon	    .clear();
-  lep_isTightMuon	    		.clear();
-  lep_isLooseMuon	    		.clear();
-  lep_pfRhoCorrRelIso03		.clear();
-  lep_pfRhoCorrRelIso04    .clear();
-  lep_pfDeltaCorrRelIso    .clear();
-  lep_pfRelIso  	    .clear();
-  lep_photonIso 	    .clear();
-  lep_neutralHadIso	    .clear();
-  lep_chargedHadIso	    .clear();
-  lep_trackIso	            .clear();  	  
-  /************************************/
+  lep_type		      .clear();
+  lep_charge		      .clear();
+  lep_e 		      .clear();
+  lep_eta		      .clear();
+  lep_etaSC		      .clear();
+  lep_mass		      .clear();
+  lep_pt		      .clear();
+  lep_phi		      .clear();
+  lep_isHighPtMuon	      .clear();
+  lep_isTightMuon	      .clear();
+  lep_isLooseMuon	      .clear();
+  lep_pfRhoCorrRelIso03	      .clear();
+  lep_pfRhoCorrRelIso04       .clear();
+  lep_pfDeltaCorrRelIso       .clear();
+  lep_pfRelIso  	      .clear();
+  lep_photonIso 	      .clear();
+  lep_neutralHadIso	      .clear();
+  lep_chargedHadIso	      .clear();
+  lep_trackIso	              .clear(); 
+  lep_passConversionVeto      .clear();
+  lep_full5x5_sigmaIetaIeta   .clear();
+  lep_dEtaIn		      .clear();
+  lep_dPhiIn		      .clear();
+  lep_hOverE		      .clear();
+  lep_relIsoWithDBeta	      .clear();
+  lep_ooEmooP		      .clear();
+  lep_d0		      .clear();
+  lep_dz		      .clear();
+  lep_expectedMissingInnerHits.clear();
+  lep_isVetoElectron	      .clear();
+  lep_isMediumElectron	      .clear();
+  lep_isTightElectron	      .clear();
+  lep_isLooseElectron	      .clear();
+  lep_isHeepElectron	      .clear();
+  lep_TauType               .clear();
+  lep_isSoftMuon	    .clear();
+  lep_pfRhoCorrRelIso03Boost.clear();
+  lep_pfRhoCorrRelIso04Boost.clear();
+  lep_pfDeltaCorrRelIsoBoost.clear();
+  lep_pfRelIsoBoost         .clear();    
+  lep_photonIsoBoost        .clear();
+  lep_neutralHadIsoBoost    .clear();
+  lep_chargedHadIsoBoost    .clear();   
+  lep_SemileptonicPFIso     .clear();
+  lep_SemileptonicCorrPFIso .clear();
+  lep_normChi2  	    .clear();
+  lep_isGlobalMuon	    .clear();
+  lep_trackerHits	    .clear();
+  lep_matchedStations	    .clear();
+  lep_pixelHits 	    .clear();
+  lep_globalHits	    .clear();	
+  /************************************/ 
+  /*Tau discriminats*/
+  decayModeFindingNewDMs		     .clear();      
+  decayModeFinding			     .clear();
+  byLooseCombinedIsolationDeltaBetaCorr3Hits .clear();
+  byMediumCombinedIsolationDeltaBetaCorr3Hits.clear();
+  byTightCombinedIsolationDeltaBetaCorr3Hits .clear();
+  byCombinedIsolationDeltaBetaCorrRaw3Hits   .clear();
+  chargedIsoPtSum			     .clear();
+  neutralIsoPtSum			     .clear();
+  puCorrPtSum				     .clear();
+  byIsolationMVA3oldDMwoLTraw		     .clear();
+  byVLooseIsolationMVA3oldDMwoLT	     .clear();
+  byLooseIsolationMVA3oldDMwoLT 	     .clear();
+  byMediumIsolationMVA3oldDMwoLT	     .clear();
+  byTightIsolationMVA3oldDMwoLT 	     .clear();
+  byVTightIsolationMVA3oldDMwoLT	     .clear();
+  byVVTightIsolationMVA3oldDMwoLT	     .clear();
+  byIsolationMVA3oldDMwLTraw		     .clear();
+  byVLooseIsolationMVA3oldDMwLT 	     .clear();
+  byLooseIsolationMVA3oldDMwLT  	     .clear();
+  byMediumIsolationMVA3oldDMwLT 	     .clear();
+  byTightIsolationMVA3oldDMwLT  	     .clear();
+  byVTightIsolationMVA3oldDMwLT 	     .clear();
+  byVVTightIsolationMVA3oldDMwLT	     .clear();
+  byIsolationMVA3newDMwoLTraw		     .clear();
+  byVLooseIsolationMVA3newDMwoLT	     .clear();
+  byLooseIsolationMVA3newDMwoLT 	     .clear();
+  byMediumIsolationMVA3newDMwoLT	     .clear();
+  byTightIsolationMVA3newDMwoLT 	     .clear();
+  byVTightIsolationMVA3newDMwoLT	     .clear();
+  byVVTightIsolationMVA3newDMwoLT	     .clear();
+  byIsolationMVA3newDMwLTraw		     .clear();
+  byVLooseIsolationMVA3newDMwLT 	     .clear();
+  byLooseIsolationMVA3newDMwLT  	     .clear();
+  byMediumIsolationMVA3newDMwLT 	     .clear();
+  byTightIsolationMVA3newDMwLT  	     .clear();
+  byVTightIsolationMVA3newDMwLT 	     .clear();
+  byVVTightIsolationMVA3newDMwLT	     .clear();
+  againstElectronLoose  		     .clear();
+  againstElectronMedium 		     .clear();
+  againstElectronTight  		     .clear();
+  againstElectronMVA5raw		     .clear();
+  againstElectronMVA5category		     .clear();
+  againstElectronVLooseMVA5		     .clear();
+  againstElectronLooseMVA5		     .clear();
+  againstElectronMediumMVA5		     .clear();
+  againstElectronTightMVA5		     .clear();
+  againstElectronVTightMVA5		     .clear();
+  againstMuonLoose			     .clear();
+  againstMuonTight			     .clear();
+  againstMuonTight			     .clear();
+  againstMuonLoose2			     .clear();
+  againstMuonMedium2			     .clear();
+  againstMuonLoose3			     .clear();
+  againstMuonLoose3			     .clear();
+  againstMuonTight3			     .clear();
+  againstMuonMVAraw			     .clear();
+  againstMuonLooseMVA			     .clear();
+  againstMuonMediumMVA  		     .clear();
+  againstMuonTightMVA			     .clear();
+
+ /************************************/
   jetAK4_pt		    .clear();
   jetAK4_eta		    .clear();
   jetAK4_mass		    .clear();
@@ -389,6 +577,7 @@ void NtupleBranches::reset( void ){
   jetAK8_ne                 .clear();
   jetAK8_charge 	    .clear();
   jetAK8_flavour	    .clear();
+  jetAK8_Hbbtag		    .clear();
   jetAK8_ssv		    .clear();
   jetAK8_csv		    .clear();
   jetAK8_tchp		    .clear();
@@ -398,27 +587,27 @@ void NtupleBranches::reset( void ){
   jetAK8_tau1		    .clear();
   jetAK8_tau2		    .clear();
   jetAK8_tau3		    .clear();
-  jetAK8_prunedmassUnCorr   .clear();
-  jetAK8_softdropmassUnCorr .clear();
+  jetAK8_prunedmass   .clear();
+  jetAK8_softdropmass .clear();
   jetAK8_prunedmassCorr	    .clear();
   jetAK8_softdropmassCorr   .clear();
   jetAK8softdrop_jec	    .clear();
   jetAK8pruned_jec	    .clear();
 
   /************************************/
-  //jetAK8pruned_pt	   .clear();
-  //jetAK8pruned_eta	   .clear();
-  //jetAK8pruned_mass	   .clear();
-  //jetAK8pruned_phi	   .clear();
-  //jetAK8pruned_e	   .clear();
-  //jetAK8pruned_flavour   .clear();
-  //jetAK8pruned_charge    .clear();
-  //jetAK8pruned_ssv	   .clear();
-  //jetAK8pruned_csv	   .clear();
-  //jetAK8pruned_tchp	   .clear();
-  //jetAK8pruned_tche	   .clear();
-  //jetAK8pruned_jp	   .clear();
-  //jetAK8pruned_jbp	   .clear();
+  // jetAK8pruned_pt     .clear();
+  // jetAK8pruned_eta     .clear();
+  // jetAK8pruned_mass     .clear();
+  // jetAK8pruned_phi     .clear();
+  // jetAK8pruned_e     .clear();
+  // jetAK8pruned_flavour   .clear();
+  // jetAK8pruned_charge    .clear();
+  // jetAK8pruned_ssv     .clear();
+  // jetAK8pruned_csv     .clear();
+  // jetAK8pruned_tchp     .clear();
+  // jetAK8pruned_tche     .clear();
+  // jetAK8pruned_jp     .clear();
+  // jetAK8pruned_jbp     .clear();
   /************************************/
   //jetAK8softdrop_pt	    .clear();
   //jetAK8softdrop_eta      .clear();
@@ -435,7 +624,7 @@ void NtupleBranches::reset( void ){
   //jetAK8softdrop_jbp      .clear();
   //jetAK8softdrop_nSVs	    .clear();
   /************************************/
-  nsubjets		    .clear();
+  nprunedsubjets	    .clear();
   subjetAK8pruned_pt	    .clear();
   subjetAK8pruned_eta	    .clear();
   subjetAK8pruned_mass      .clear();
@@ -450,20 +639,20 @@ void NtupleBranches::reset( void ){
   subjetAK8pruned_jp	    .clear();
   subjetAK8pruned_jbp	    .clear();
   /************************************/
-  //nsoftdropsubjets	     .clear();
-  //subjetAK8softdrop_pt     .clear();
-  //subjetAK8softdrop_eta    .clear();
-  //subjetAK8softdrop_mass   .clear();
-  //subjetAK8softdrop_phi    .clear();
-  //subjetAK8softdrop_e      .clear();
-  //subjetAK8softdrop_charge .clear();
-  //subjetAK8softdrop_flavour.clear();
-  //subjetAK8softdrop_ssv    .clear();
-  //subjetAK8softdrop_csv    .clear();
-  //subjetAK8softdrop_tchp   .clear();
-  //subjetAK8softdrop_tche   .clear();
-  //subjetAK8softdrop_jp     .clear();
-  //subjetAK8softdrop_jbp    .clear();
+  nsoftdropsubjets         .clear();
+  subjetAK8softdrop_pt     .clear();
+  subjetAK8softdrop_eta    .clear();
+  subjetAK8softdrop_mass   .clear();
+  subjetAK8softdrop_phi    .clear();
+  subjetAK8softdrop_e      .clear();
+  subjetAK8softdrop_charge .clear();
+  subjetAK8softdrop_flavour.clear();
+  subjetAK8softdrop_ssv    .clear();
+  subjetAK8softdrop_csv    .clear();
+  subjetAK8softdrop_tchp   .clear();
+  subjetAK8softdrop_tche   .clear();
+  subjetAK8softdrop_jp     .clear();
+  subjetAK8softdrop_jbp    .clear();
   /************************************/
 
   METraw_et		 .clear();
