@@ -60,7 +60,7 @@ doAK8prunedReclustering = False
 
 # To corr jets on the fly if the JEC in the MC have been changed.
 # NB: this flag corrects the pruned/softdrop jets as well. We should probably add a second flag.
-corrJetsOnTheFly = True
+corrJetsOnTheFly = False
 
 #! To recluster MET with new corrections
 doMETReclustering = False
@@ -367,15 +367,15 @@ if corrMETonTheFly:
        'JEC/MCRUN2_74_V9::All_L3Absolute_AK4PF.txt'
      ]   
 				    
-from PhysicsTools.SelectorUtils.pfJetIDSelector_cfi import pfJetIDSelector
-process.goodSlimmedJets = cms.EDFilter("PFJetIDSelectionFunctorFilter",
-                        filterParams = pfJetIDSelector.clone(),
-                        src = cms.InputTag("slimmedJets")
-                        )
-process.goodFatJets = cms.EDFilter("PFJetIDSelectionFunctorFilter",
-                        filterParams = pfJetIDSelector.clone(),
-                        src = cms.InputTag(jetsAK8)
-                        )
+#from PhysicsTools.SelectorUtils.pfJetIDSelector_cfi import pfJetIDSelector
+#process.goodSlimmedJets = cms.EDFilter("PFJetIDSelectionFunctorFilter",
+#                        filterParams = pfJetIDSelector.clone(),
+#                        src = cms.InputTag("slimmedJets")
+#                        )
+#process.goodFatJets = cms.EDFilter("PFJetIDSelectionFunctorFilter",
+#                        filterParams = pfJetIDSelector.clone(),
+#                        src = cms.InputTag(jetsAK8)
+#                        )
 						                                                                        
 ################## Ntuplizer ###################
 process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
@@ -393,8 +393,8 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     taus = cms.InputTag(TAUS),
     tausMuTau = cms.InputTag(MUTAUS),
     tausEleTau = cms.InputTag(ELETAUS),
-    jets = cms.InputTag("goodSlimmedJets"),
-    fatjets = cms.InputTag("goodFatJets"),
+    jets = cms.InputTag("slimmedJets"),
+    fatjets = cms.InputTag(jetsAK8),
     prunedjets = cms.InputTag(jetsAK8pruned),
     softdropjets = cms.InputTag(jetsAK8softdrop),
     genJets = cms.InputTag("slimmedGenJets"),

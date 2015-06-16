@@ -41,18 +41,37 @@ JetsNtuplizer::JetsNtuplizer( std::vector<edm::EDGetTokenT<pat::JetCollection>> 
 JetsNtuplizer::~JetsNtuplizer( void )
 {
 }
+
 //===================================================================================================================
 bool JetsNtuplizer::looseJetID( const pat::Jet& j ) {
-  // In sync with: https://twiki.cern.ch/twiki/bin/viewauth/CMS/JetID#Recommendations_for_8_TeV_data_a
-  return ( j.nConstituents() > 1 && 
+
+  /*return ( j.nConstituents() > 1 && 
     j.photonEnergyFraction() < 0.99 && 
       j.neutralHadronEnergyFraction() < 0.99 && 
         j.muonEnergyFraction() < 0.8 && 
           j.electronEnergyFraction() < 0.9 && 
             (j.chargedHadronMultiplicity() > 0 || fabs(j.eta())>2.4 ) && 
               (j.chargedEmEnergyFraction() < 0.99 || fabs(j.eta())>2.4 ) &&
-                (j.chargedHadronEnergyFraction() > 0. || fabs(j.eta())>2.4 ) );
+                (j.chargedHadronEnergyFraction() > 0. || fabs(j.eta())>2.4 ) );*/
+
+  //In sync with: https://twiki.cern.ch/twiki/bin/viewauth/CMS/JetID#Recommendations_for_8_TeV_data_a
+  //and with dijet group https://github.com/CMSDIJET/DijetRootTreeMaker/blob/e650ba19e9e9bc676754a948298bb5cf850f4ecc/plugins/DijetTreeProducer.cc#L869
+
+  double eta = j.eta();		
+  double chf = j.chargedHadronEnergyFraction();
+  double nhf = j.neutralHadronEnergyFraction(); // + j.HFHadronEnergyFraction();
+  double muf = j.muonEnergy()/(j.jecFactor(0) * j.energy());  
+  double nemf = j.neutralEmEnergyFraction();
+  double cemf = j.chargedEmEnergyFraction();
+  int chMult = j.chargedMultiplicity();
+  int neMult = j.neutralMultiplicity();
+  int npr    = chMult + neMult;
+  int NumConst = npr;
+
+  return (nhf<0.99 && nemf<0.99 && NumConst>1 && muf < 0.8) && ((fabs(eta) <= 2.4 && chf>0 && chMult>0 && cemf<0.99) || fabs(eta)>2.4);        
+      		
 }
+
 //===================================================================================================================
 void JetsNtuplizer::initJetCorrFactors( void ){
 
