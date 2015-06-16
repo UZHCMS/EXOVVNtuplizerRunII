@@ -1,11 +1,12 @@
 #include "../interface/NtupleBranches.h"
 
 //===================================================================================================================        
-NtupleBranches::NtupleBranches( TTree* tree )
+NtupleBranches::NtupleBranches( TTree* tree, bool doPruning, bool doTausBoosted )
    : tree_( tree )
 {
+   doPruning_ = doPruning;
+   doTausBoosted_ = doTausBoosted; 
    branch();
-
 }
 
 //===================================================================================================================
@@ -91,66 +92,68 @@ void NtupleBranches::branch( void ){
   tree_->Branch( "lep_SemileptonicPFIso"       , &lep_SemileptonicPFIso      );
   tree_->Branch( "lep_SemileptonicCorrPFIso"   , &lep_SemileptonicCorrPFIso  );
   
- /*-------------------------Tau Discriminant-------------------*/	
-  tree_->Branch( "decayModeFindingNewDMs"		      , &decayModeFindingNewDMs 		     );
-  tree_->Branch( "decayModeFinding"			      , &decayModeFinding			     ); 
-  tree_->Branch( "byLooseCombinedIsolationDeltaBetaCorr3Hits" , &byLooseCombinedIsolationDeltaBetaCorr3Hits  );
-  tree_->Branch( "byMediumCombinedIsolationDeltaBetaCorr3Hits", &byMediumCombinedIsolationDeltaBetaCorr3Hits );
-  tree_->Branch( "byTightCombinedIsolationDeltaBetaCorr3Hits" , &byTightCombinedIsolationDeltaBetaCorr3Hits  );
-  tree_->Branch( "byCombinedIsolationDeltaBetaCorrRaw3Hits"   , &byCombinedIsolationDeltaBetaCorrRaw3Hits    );
-  tree_->Branch( "chargedIsoPtSum"			      , &chargedIsoPtSum			     );
-  tree_->Branch( "neutralIsoPtSum"			      , &neutralIsoPtSum			     );
-  tree_->Branch( "puCorrPtSum"				      , &puCorrPtSum				     );
-  tree_->Branch( "byIsolationMVA3oldDMwoLTraw"		      , &byIsolationMVA3oldDMwoLTraw		     );
-  tree_->Branch( "byVLooseIsolationMVA3oldDMwoLT"	      , &byVLooseIsolationMVA3oldDMwoLT 	     );
-  tree_->Branch( "byLooseIsolationMVA3oldDMwoLT" 	      , &byLooseIsolationMVA3oldDMwoLT  	     );
-  tree_->Branch( "byMediumIsolationMVA3oldDMwoLT"	      , &byMediumIsolationMVA3oldDMwoLT 	     );
-  tree_->Branch( "byTightIsolationMVA3oldDMwoLT" 	      , &byTightIsolationMVA3oldDMwoLT  	     );
-  tree_->Branch( "byVTightIsolationMVA3oldDMwoLT"	      , &byVTightIsolationMVA3oldDMwoLT 	     );
-  tree_->Branch( "byVVTightIsolationMVA3oldDMwoLT"	      , &byVVTightIsolationMVA3oldDMwoLT	     );
-  tree_->Branch( "byIsolationMVA3oldDMwLTraw"		      , &byIsolationMVA3oldDMwLTraw		     );
-  tree_->Branch( "byVLooseIsolationMVA3oldDMwLT" 	      , &byVLooseIsolationMVA3oldDMwLT  	     );
-  tree_->Branch( "byLooseIsolationMVA3oldDMwLT"  	      , &byLooseIsolationMVA3oldDMwLT		     );
-  tree_->Branch( "byMediumIsolationMVA3oldDMwLT" 	      , &byMediumIsolationMVA3oldDMwLT  	     );
-  tree_->Branch( "byTightIsolationMVA3oldDMwLT"  	      , &byTightIsolationMVA3oldDMwLT		     );
-  tree_->Branch( "byVTightIsolationMVA3oldDMwLT" 	      , &byVTightIsolationMVA3oldDMwLT  	     );
-  tree_->Branch( "byVVTightIsolationMVA3oldDMwLT"	      , &byVVTightIsolationMVA3oldDMwLT 	     );
-  tree_->Branch( "byIsolationMVA3newDMwoLTraw"		      , &byIsolationMVA3newDMwoLTraw		     );
-  tree_->Branch( "byVLooseIsolationMVA3newDMwoLT"	      , &byVLooseIsolationMVA3newDMwoLT 	     );
-  tree_->Branch( "byLooseIsolationMVA3newDMwoLT" 	      , &byLooseIsolationMVA3newDMwoLT  	     );
-  tree_->Branch( "byMediumIsolationMVA3newDMwoLT"	      , &byMediumIsolationMVA3newDMwoLT 	     );
-  tree_->Branch( "byTightIsolationMVA3newDMwoLT" 	      , &byTightIsolationMVA3newDMwoLT  	     );
-  tree_->Branch( "byVTightIsolationMVA3newDMwoLT"	      , &byVTightIsolationMVA3newDMwoLT 	     );
-  tree_->Branch( "byVVTightIsolationMVA3newDMwoLT"	      , &byVVTightIsolationMVA3newDMwoLT	     );
-  tree_->Branch( "byIsolationMVA3newDMwLTraw"		      , &byIsolationMVA3newDMwLTraw		     );
-  tree_->Branch( "byVLooseIsolationMVA3newDMwLT" 	      , &byVLooseIsolationMVA3newDMwLT  	     );
-  tree_->Branch( "byLooseIsolationMVA3newDMwLT"  	      , &byLooseIsolationMVA3newDMwLT		     );
-  tree_->Branch( "byMediumIsolationMVA3newDMwLT" 	      , &byMediumIsolationMVA3newDMwLT  	     );
-  tree_->Branch( "byTightIsolationMVA3newDMwLT"  	      , &byTightIsolationMVA3newDMwLT		     );
-  tree_->Branch( "byVTightIsolationMVA3newDMwLT" 	      , &byVTightIsolationMVA3newDMwLT  	     );
-  tree_->Branch( "byVVTightIsolationMVA3newDMwLT"	      , &byVVTightIsolationMVA3newDMwLT 	     );
-  tree_->Branch( "againstElectronLoose"  		      , &againstElectronLoose  		             );
-  tree_->Branch( "againstElectronMedium" 		      , &againstElectronMedium  		     );
-  tree_->Branch( "againstElectronTight"  		      , &againstElectronTight			     );
-  tree_->Branch( "againstElectronMVA5raw"		      , &againstElectronMVA5raw 		     );
-  tree_->Branch( "againstElectronMVA5category"		      , &againstElectronMVA5category		     );
-  tree_->Branch( "againstElectronVLooseMVA5"		      , &againstElectronVLooseMVA5		     );
-  tree_->Branch( "againstElectronLooseMVA5"		      , &againstElectronLooseMVA5		     );
-  tree_->Branch( "againstElectronMediumMVA5"		      , &againstElectronMediumMVA5		     );
-  tree_->Branch( "againstElectronTightMVA5"		      , &againstElectronTightMVA5		     );
-  tree_->Branch( "againstElectronVTightMVA5"		      , &againstElectronVTightMVA5		     );
-  tree_->Branch( "againstMuonLoose"			      , &againstMuonLoose			     );
-  tree_->Branch( "againstMuonMedium"			      , &againstMuonTight			     );
-  tree_->Branch( "againstMuonTight"			      , &againstMuonTight			     );
-  tree_->Branch( "againstMuonLoose2"			      , &againstMuonLoose2			     );
-  tree_->Branch( "againstMuonMedium2"			      , &againstMuonMedium2			     );
-  tree_->Branch( "againstMuonTight2"			      , &againstMuonLoose3			     );
-  tree_->Branch( "againstMuonLoose3"			      , &againstMuonLoose3			     );
-  tree_->Branch( "againstMuonTight3"			      , &againstMuonTight3			     );
-  tree_->Branch( "againstMuonMVAraw"			      , &againstMuonMVAraw			     );
-  tree_->Branch( "againstMuonLooseMVA"			      , &againstMuonLooseMVA			     );
-  tree_->Branch( "againstMuonMediumMVA"  		      , &againstMuonMediumMVA			     ); 
-  tree_->Branch( "againstMuonTightMVA"			      , &againstMuonTightMVA			     );
+ /*-------------------------Tau Discriminant-------------------*/
+  if( doTausBoosted_ ){	
+     tree_->Branch( "decayModeFindingNewDMs"			 , &decayModeFindingNewDMs			);
+     tree_->Branch( "decayModeFinding"  			 , &decayModeFinding				);
+     tree_->Branch( "byLooseCombinedIsolationDeltaBetaCorr3Hits" , &byLooseCombinedIsolationDeltaBetaCorr3Hits  );
+     tree_->Branch( "byMediumCombinedIsolationDeltaBetaCorr3Hits", &byMediumCombinedIsolationDeltaBetaCorr3Hits );
+     tree_->Branch( "byTightCombinedIsolationDeltaBetaCorr3Hits" , &byTightCombinedIsolationDeltaBetaCorr3Hits  );
+     tree_->Branch( "byCombinedIsolationDeltaBetaCorrRaw3Hits"   , &byCombinedIsolationDeltaBetaCorrRaw3Hits	);
+     tree_->Branch( "chargedIsoPtSum"				 , &chargedIsoPtSum				);
+     tree_->Branch( "neutralIsoPtSum"				 , &neutralIsoPtSum				);
+     tree_->Branch( "puCorrPtSum"				 , &puCorrPtSum 				);
+     tree_->Branch( "byIsolationMVA3oldDMwoLTraw"		 , &byIsolationMVA3oldDMwoLTraw 		);
+     tree_->Branch( "byVLooseIsolationMVA3oldDMwoLT"		 , &byVLooseIsolationMVA3oldDMwoLT		);
+     tree_->Branch( "byLooseIsolationMVA3oldDMwoLT"		 , &byLooseIsolationMVA3oldDMwoLT		);
+     tree_->Branch( "byMediumIsolationMVA3oldDMwoLT"		 , &byMediumIsolationMVA3oldDMwoLT		);
+     tree_->Branch( "byTightIsolationMVA3oldDMwoLT"		 , &byTightIsolationMVA3oldDMwoLT		);
+     tree_->Branch( "byVTightIsolationMVA3oldDMwoLT"		 , &byVTightIsolationMVA3oldDMwoLT		);
+     tree_->Branch( "byVVTightIsolationMVA3oldDMwoLT"		 , &byVVTightIsolationMVA3oldDMwoLT		);
+     tree_->Branch( "byIsolationMVA3oldDMwLTraw"		 , &byIsolationMVA3oldDMwLTraw  		);
+     tree_->Branch( "byVLooseIsolationMVA3oldDMwLT"		 , &byVLooseIsolationMVA3oldDMwLT		);
+     tree_->Branch( "byLooseIsolationMVA3oldDMwLT"		 , &byLooseIsolationMVA3oldDMwLT		);
+     tree_->Branch( "byMediumIsolationMVA3oldDMwLT"		 , &byMediumIsolationMVA3oldDMwLT		);
+     tree_->Branch( "byTightIsolationMVA3oldDMwLT"		 , &byTightIsolationMVA3oldDMwLT		);
+     tree_->Branch( "byVTightIsolationMVA3oldDMwLT"		 , &byVTightIsolationMVA3oldDMwLT		);
+     tree_->Branch( "byVVTightIsolationMVA3oldDMwLT"		 , &byVVTightIsolationMVA3oldDMwLT		);
+     tree_->Branch( "byIsolationMVA3newDMwoLTraw"		 , &byIsolationMVA3newDMwoLTraw 		);
+     tree_->Branch( "byVLooseIsolationMVA3newDMwoLT"		 , &byVLooseIsolationMVA3newDMwoLT		);
+     tree_->Branch( "byLooseIsolationMVA3newDMwoLT"		 , &byLooseIsolationMVA3newDMwoLT		);
+     tree_->Branch( "byMediumIsolationMVA3newDMwoLT"		 , &byMediumIsolationMVA3newDMwoLT		);
+     tree_->Branch( "byTightIsolationMVA3newDMwoLT"		 , &byTightIsolationMVA3newDMwoLT		);
+     tree_->Branch( "byVTightIsolationMVA3newDMwoLT"		 , &byVTightIsolationMVA3newDMwoLT		);
+     tree_->Branch( "byVVTightIsolationMVA3newDMwoLT"		 , &byVVTightIsolationMVA3newDMwoLT		);
+     tree_->Branch( "byIsolationMVA3newDMwLTraw"		 , &byIsolationMVA3newDMwLTraw  		);
+     tree_->Branch( "byVLooseIsolationMVA3newDMwLT"		 , &byVLooseIsolationMVA3newDMwLT		);
+     tree_->Branch( "byLooseIsolationMVA3newDMwLT"		 , &byLooseIsolationMVA3newDMwLT		);
+     tree_->Branch( "byMediumIsolationMVA3newDMwLT"		 , &byMediumIsolationMVA3newDMwLT		);
+     tree_->Branch( "byTightIsolationMVA3newDMwLT"		 , &byTightIsolationMVA3newDMwLT		);
+     tree_->Branch( "byVTightIsolationMVA3newDMwLT"		 , &byVTightIsolationMVA3newDMwLT		);
+     tree_->Branch( "byVVTightIsolationMVA3newDMwLT"		 , &byVVTightIsolationMVA3newDMwLT		);
+     tree_->Branch( "againstElectronLoose"			 , &againstElectronLoose			);
+     tree_->Branch( "againstElectronMedium"			 , &againstElectronMedium			);
+     tree_->Branch( "againstElectronTight"			 , &againstElectronTight			);
+     tree_->Branch( "againstElectronMVA5raw"			 , &againstElectronMVA5raw			);
+     tree_->Branch( "againstElectronMVA5category"		 , &againstElectronMVA5category 		);
+     tree_->Branch( "againstElectronVLooseMVA5" 		 , &againstElectronVLooseMVA5			);
+     tree_->Branch( "againstElectronLooseMVA5"  		 , &againstElectronLooseMVA5			);
+     tree_->Branch( "againstElectronMediumMVA5" 		 , &againstElectronMediumMVA5			);
+     tree_->Branch( "againstElectronTightMVA5"  		 , &againstElectronTightMVA5			);
+     tree_->Branch( "againstElectronVTightMVA5" 		 , &againstElectronVTightMVA5			);
+     tree_->Branch( "againstMuonLoose"  			 , &againstMuonLoose				);
+     tree_->Branch( "againstMuonMedium" 			 , &againstMuonTight				);
+     tree_->Branch( "againstMuonTight"  			 , &againstMuonTight				);
+     tree_->Branch( "againstMuonLoose2" 			 , &againstMuonLoose2				);
+     tree_->Branch( "againstMuonMedium2"			 , &againstMuonMedium2  			);
+     tree_->Branch( "againstMuonTight2" 			 , &againstMuonLoose3				);
+     tree_->Branch( "againstMuonLoose3" 			 , &againstMuonLoose3				);
+     tree_->Branch( "againstMuonTight3" 			 , &againstMuonTight3				);
+     tree_->Branch( "againstMuonMVAraw" 			 , &againstMuonMVAraw				);
+     tree_->Branch( "againstMuonLooseMVA"			 , &againstMuonLooseMVA 			);
+     tree_->Branch( "againstMuonMediumMVA"			 , &againstMuonMediumMVA			);
+     tree_->Branch( "againstMuonTightMVA"			 , &againstMuonTightMVA 			);
+  }
       
   /*-------------------------energy density---------------------------*/	 
   tree_->Branch( "rho", &rho );
@@ -260,21 +263,23 @@ void NtupleBranches::branch( void ){
   //tree_->Branch( "jetAK8softdrop_jbp"    , &jetAK8softdrop_jbp      );
   //tree_->Branch( "jetAK8softdrop_nSVs"   , &jetAK8softdrop_nSVs     );
 	  
-  /*----------------------Pruned AK8 subjets---------------------------*/    
-  tree_->Branch( "nprunedsubjets"	    , &nprunedsubjets	       );
-  tree_->Branch( "subjetAK8pruned_pt"	    , &subjetAK8pruned_pt      );
-  tree_->Branch( "subjetAK8pruned_eta"	    , &subjetAK8pruned_eta     );
-  tree_->Branch( "subjetAK8pruned_mass"     , &subjetAK8pruned_mass    );
-  tree_->Branch( "subjetAK8pruned_phi"	    , &subjetAK8pruned_phi     );
-  tree_->Branch( "subjetAK8pruned_e"	    , &subjetAK8pruned_e       );
-  tree_->Branch( "subjetAK8pruned_charge"   , &subjetAK8pruned_charge  );
-  tree_->Branch( "subjetAK8pruned_flavour"  , &subjetAK8pruned_flavour );
-  tree_->Branch( "subjetAK8pruned_ssv"	    , &subjetAK8pruned_ssv     );
-  tree_->Branch( "subjetAK8pruned_csv"	    , &subjetAK8pruned_csv     );
-  tree_->Branch( "subjetAK8pruned_tchp"     , &subjetAK8pruned_tchp    );
-  tree_->Branch( "subjetAK8pruned_tche"     , &subjetAK8pruned_tche    );
-  tree_->Branch( "subjetAK8pruned_jp"	    , &subjetAK8pruned_jp      );
-  tree_->Branch( "subjetAK8pruned_jbp"	    , &subjetAK8pruned_jbp     );
+  /*----------------------Pruned AK8 subjets---------------------------*/   
+  if( doPruning_ ){ 
+     tree_->Branch( "nprunedsubjets"	       , &nprunedsubjets	  );
+     tree_->Branch( "subjetAK8pruned_pt"       , &subjetAK8pruned_pt	  );
+     tree_->Branch( "subjetAK8pruned_eta"      , &subjetAK8pruned_eta	  );
+     tree_->Branch( "subjetAK8pruned_mass"     , &subjetAK8pruned_mass    );
+     tree_->Branch( "subjetAK8pruned_phi"      , &subjetAK8pruned_phi	  );
+     tree_->Branch( "subjetAK8pruned_e"        , &subjetAK8pruned_e	  );
+     tree_->Branch( "subjetAK8pruned_charge"   , &subjetAK8pruned_charge  );
+     tree_->Branch( "subjetAK8pruned_flavour"  , &subjetAK8pruned_flavour );
+     tree_->Branch( "subjetAK8pruned_ssv"      , &subjetAK8pruned_ssv	  );
+     tree_->Branch( "subjetAK8pruned_csv"      , &subjetAK8pruned_csv	  );
+     tree_->Branch( "subjetAK8pruned_tchp"     , &subjetAK8pruned_tchp    );
+     tree_->Branch( "subjetAK8pruned_tche"     , &subjetAK8pruned_tche    );
+     tree_->Branch( "subjetAK8pruned_jp"       , &subjetAK8pruned_jp	  );
+     tree_->Branch( "subjetAK8pruned_jbp"      , &subjetAK8pruned_jbp	  );
+  }
   
   // /*----------------------Softdrop AK8 subjets---------------------------*/
   tree_->Branch( "nsoftdropsubjets"         , &nsoftdropsubjets           );

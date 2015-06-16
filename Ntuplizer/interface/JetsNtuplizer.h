@@ -55,6 +55,8 @@ public:
   edm::Handle<reco::JetFlavourMatchingCollection> 		jetMC 					;
   edm::Handle< double >                     			rho_        			;
   edm::Handle<reco::VertexCollection> 	     			vertices_     			;
+  
+  bool doCorrOnTheFly_;
 };
 
 #endif // JetsNtuplizer_H

@@ -30,12 +30,14 @@ TausNtuplizer::~TausNtuplizer( void )
 //===================================================================================================================
 void TausNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetup& iSetup ){
  
-    event.getByToken( tauInputToken_       , taus_     ); 
+    bool doTausBoosted = event.getByToken( tauInputToken_ , taus_ ); 
+    if ( !doTausBoosted ) return;
+    
     event.getByToken( tauEleTauInputToken_ , eleTaus_  ); 
     event.getByToken( tauMuTauInputToken_  , muTaus_   );  
     event.getByToken( rhoToken_	 	   , rho_      );
     event.getByToken( verticeToken_ 	   , vertices_ );
-
+    
     /********************************************************************/    
     for( size_t t = 0; t < taus_->size(); ++t ){
 

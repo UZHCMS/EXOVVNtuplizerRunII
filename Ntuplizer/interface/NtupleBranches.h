@@ -37,7 +37,7 @@
 class NtupleBranches {
 
 public:
-  NtupleBranches( TTree* tree = 0 );
+  NtupleBranches( TTree* tree = 0, bool doPruning = false, bool doTausBoosted = false );
   ~NtupleBranches( void );
    
   void branch( void );
@@ -46,6 +46,10 @@ public:
   void fillTree( void ){ tree_->Fill(); };
 
   //=================================================================================================================== 
+  /* config variables */
+  bool doPruning_;
+  bool doTausBoosted_;  
+  
   /* output tree variables*/
     
   /*----------------------gen particles-------------------------*/
@@ -54,13 +58,13 @@ public:
   float                           lheNj                ;
   float                           genWeight            ;
   float                           qScale               ;
-  std::vector<float>              genParticle_pt	     ;
-  std::vector<float>              genParticle_px	     ;
-  std::vector<float>              genParticle_py	     ;
-  std::vector<float>              genParticle_pz	     ;
+  std::vector<float>              genParticle_pt       ;
+  std::vector<float>              genParticle_px       ;
+  std::vector<float>              genParticle_py       ;
+  std::vector<float>              genParticle_pz       ;
   std::vector<float>              genParticle_e        ;
-  std::vector<float>              genParticle_eta	     ;
-  std::vector<float>              genParticle_phi	     ;
+  std::vector<float>              genParticle_eta      ;
+  std::vector<float>              genParticle_phi      ;
   std::vector<float>              genParticle_mass     ;
   std::vector<int  >              genParticle_pdgId    ;
   std::vector<int  >              genParticle_status   ;
@@ -78,8 +82,8 @@ public:
   std::vector<float>              jetAK4_phi           ;
   std::vector<float>              jetAK4_e             ;
   std::vector<float>              jetAK4_jec           ;
-  //std::vector<float>	      jetAK4_jecUp	     ;
-  //std::vector<float>	      jetAK4_jecDown	     ; 
+  //std::vector<float>	      jetAK4_jecUp	       ;
+  //std::vector<float>	      jetAK4_jecDown	       ; 
   std::vector<bool>              jetAK4_IDLoose        ;
   std::vector<float>              jetAK4_muf           ;
   std::vector<float>              jetAK4_phf           ;
@@ -92,18 +96,18 @@ public:
   std::vector<float>              jetAK4_che           ;
   std::vector<float>              jetAK4_ne            ;
   std::vector<int>                jetAK4_charge	       ;
-  std::vector<int>                jetAK4_flavour	     ;
-  std::vector<float>              jetAK4_ssv 	         ;
+  std::vector<int>                jetAK4_flavour       ;
+  std::vector<float>              jetAK4_ssv 	       ;
   std::vector<float>              jetAK4_cisv 	       ;         
   std::vector<float>              jetAK4_tchp          ;
   std::vector<float>              jetAK4_tche          ;
   std::vector<float>              jetAK4_jp            ;
   std::vector<float>              jetAK4_jbp           ;
   std::vector<float>              jetAK4_vtxMass       ;
-  std::vector<float>              jetAK4_vtxNtracks   ;
-  std::vector<float>              jetAK4_vtx3DVal     ;
-  std::vector<float>              jetAK4_vtx3DSig     ; 
-  //std::vector<int  >              jetAK4_nSVs            ;
+  std::vector<float>              jetAK4_vtxNtracks    ;
+  std::vector<float>              jetAK4_vtx3DVal      ;
+  std::vector<float>              jetAK4_vtx3DSig      ; 
+  //std::vector<int  >              jetAK4_nSVs        ;
 
     /*-------------------------leptons----------------------------*/
     int 	                      nlep		         ;
