@@ -49,7 +49,6 @@ process.source = cms.Source("PoolSource",
 
 ######## Sequence settings ##########
 
-
 #! To recluster and add AK8 Higgs tagging and softdrop subjet b-tagging (both need to be simoultaneously true or false, if not you will have issues with your softdrop subjets!)
 #If you use the softdrop subjets from the slimmedJetsAK8 collection, only CSV seems to be available?
 doAK8reclustering = False
@@ -69,7 +68,6 @@ corrMETonTheFly = False #If you recluster the MET there is no need for re-correc
 
 #taus
 doSemileptonicTausBoosted = False
-
 
 ####### Logger ##########
 
@@ -244,6 +242,7 @@ process.patJetsAk8CHSJets.userData.userFloats.src += ['NjettinessAK8:tau1','Njet
 process.patJetsAk8CHSJets.addTagInfos = True
 
 # ###### Recluster MET ##########
+
 from RecoJets.JetProducers.ak4PFJets_cfi import ak4PFJets
 process.ak4PFJets = ak4PFJets.clone(src = "packedPFCandidates")
 process.ak4PFJets.doAreaFastjet = True
@@ -308,6 +307,12 @@ my_id_modules = ['RecoEgamma.ElectronIdentification.Identification.heepElectronI
 for idmod in my_id_modules:
     setupAllVIDIdsInModule(process,idmod,setupVIDElectronSelection)
 
+####### Event filters ###########
+
+#process.load('RecoMET.METFilters.hcalLaserEventFilter_cfi')
+#process.load('RecoMET.METFilters.EcalDeadCellTriggerPrimitiveFilter_cfi')
+#process.load('CommonTools/RecoAlgos/HBHENoiseFilter_cfi')
+
 ####### Ntuplizer initialization ##########
 
 runOnMC = False
@@ -361,18 +366,17 @@ if corrMETonTheFly:
        'JEC/MCRUN2_74_V9::All_L2Relative_AK4PF.txt',
        'JEC/MCRUN2_74_V9::All_L3Absolute_AK4PF.txt'
      ]   
-
-from PhysicsTools.SelectorUtils.jetIDSelector_cfi import jetIDSelector
-process.goodSlimmedJets = cms.EDFilter("JetIDSelectionFunctorFilter",
-                                    filterParams=jetIDSelector.clone(quality = cms.string('LOOSE')),
-                                    src=cms.InputTag("slimmedJets")
-                                    )                                            
-
-process.goodFatJets = cms.EDFilter("JetIDSelectionFunctorFilter",
-                                    filterParams=jetIDSelector.clone(quality = cms.string('LOOSE')),
-                                    src=cms.InputTag(jetsAK8)
-                                    )
-                                                                        
+				    
+from PhysicsTools.SelectorUtils.pfJetIDSelector_cfi import pfJetIDSelector
+process.goodSlimmedJets = cms.EDFilter("PFJetIDSelectionFunctorFilter",
+                        filterParams = pfJetIDSelector.clone(),
+                        src = cms.InputTag("slimmedJets")
+                        )
+process.goodFatJets = cms.EDFilter("PFJetIDSelectionFunctorFilter",
+                        filterParams = pfJetIDSelector.clone(),
+                        src = cms.InputTag(jetsAK8)
+                        )
+						                                                                        
 ################## Ntuplizer ###################
 process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     runOnMC = cms.bool(runOnMC),
