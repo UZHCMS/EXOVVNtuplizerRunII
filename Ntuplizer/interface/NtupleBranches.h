@@ -122,6 +122,7 @@ public:
     std::vector<int  >                lep_isHighPtMuon       	 ;
     std::vector<int  >                lep_isTightMuon       	 ;
     std::vector<int  >                lep_isLooseMuon       	 ;
+    std::vector<int  >                lep_isPFMuon               ;
     std::vector<float>  	      lep_pfRhoCorrRelIso03  	 ;
     std::vector<float>  	      lep_pfRhoCorrRelIso04  	 ;
     std::vector<float>  	      lep_pfDeltaCorrRelIso  	 ;

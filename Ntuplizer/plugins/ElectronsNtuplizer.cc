@@ -79,7 +79,8 @@ void ElectronsNtuplizer::fillBranches( edm::Event const & event, const edm::Even
     nBranches_->lep_etaSC	   .push_back(ele.superCluster()->eta());
     nBranches_->lep_mass	   .push_back(ele.mass());
     nBranches_->lep_pt  	   .push_back(ele.pt());  
-    nBranches_->lep_phi 	   .push_back(ele.phi());    
+    nBranches_->lep_phi 	   .push_back(ele.phi()); 
+    nBranches_->lep_isPFMuon       .push_back(-99);   
     nBranches_->lep_isSoftMuon     .push_back(-99);	    
     nBranches_->lep_normChi2	   .push_back(-99);
     nBranches_->lep_isGlobalMuon   .push_back(-99);
