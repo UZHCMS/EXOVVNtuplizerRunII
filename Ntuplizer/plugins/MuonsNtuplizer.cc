@@ -86,9 +86,10 @@ void MuonsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSet
     nBranches_->lep_TauType                 .push_back(0);      
 
     /*========== IDs ==============*/    
-    nBranches_->lep_isHighPtMuon            .push_back(mu.isHighPtMuon(vertices_->at(0)));
-    nBranches_->lep_isTightMuon 	    .push_back(mu.isTightMuon(vertices_->at(0)));
-    nBranches_->lep_isLooseMuon 	    .push_back(mu.isLooseMuon());
+    nBranches_->lep_isHighPtMuon.push_back(mu.isHighPtMuon(vertices_->at(0)));
+    nBranches_->lep_isTightMuon .push_back(mu.isTightMuon(vertices_->at(0)));
+    nBranches_->lep_isLooseMuon .push_back(mu.isLooseMuon());
+    nBranches_->lep_isPFMuon    .push_back(mu.isPFMuon());   
 
     double rho = *(rho_.product());     
     float deltaR = 0.3;
@@ -99,7 +100,7 @@ void MuonsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSet
     nBranches_->lep_dz  	.push_back(mu.muonBestTrack()->dz(vertices_->at(0).position()));
     nBranches_->lep_isGlobalMuon.push_back(mu.isGlobalMuon());  
     nBranches_->lep_isSoftMuon  .push_back(mu.isSoftMuon(vertices_->at(0)));  
-  
+      
     double normChi2	   = -99;
     int    trackerHits     = -99;
     int    pixelHits	   = -99;
