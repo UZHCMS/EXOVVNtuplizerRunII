@@ -37,7 +37,7 @@
 class NtupleBranches {
 
 public:
-  NtupleBranches( TTree* tree = 0, bool doPruning = false, bool doTausBoosted = false );
+  NtupleBranches( TTree* tree = 0, bool doPruning = false, bool doTausBoosted = false, bool doHbbTag = false);
   ~NtupleBranches( void );
    
   void branch( void );
@@ -49,6 +49,7 @@ public:
   /* config variables */
   bool doPruning_;
   bool doTausBoosted_;  
+  bool doHbbTag_;
   
   /* output tree variables*/
     
@@ -97,12 +98,12 @@ public:
   std::vector<float>              jetAK4_ne            ;
   std::vector<int>                jetAK4_charge	       ;
   std::vector<int>                jetAK4_flavour       ;
-  std::vector<float>              jetAK4_ssv 	       ;
+  // std::vector<float>              jetAK4_ssv          ;
   std::vector<float>              jetAK4_cisv 	       ;         
-  std::vector<float>              jetAK4_tchp          ;
-  std::vector<float>              jetAK4_tche          ;
-  std::vector<float>              jetAK4_jp            ;
-  std::vector<float>              jetAK4_jbp           ;
+  // std::vector<float>              jetAK4_tchp          ;
+  // std::vector<float>              jetAK4_tche          ;
+  // std::vector<float>              jetAK4_jp            ;
+  // std::vector<float>              jetAK4_jbp           ;
   std::vector<float>              jetAK4_vtxMass       ;
   std::vector<float>              jetAK4_vtxNtracks    ;
   std::vector<float>              jetAK4_vtx3DVal      ;
@@ -269,12 +270,12 @@ public:
   std::vector<int  >  	      jetAK8_charge	       ;
   std::vector<int  >  	      jetAK8_flavour	       ;
   std::vector<float>  	      jetAK8_Hbbtag 	       ;
-  std::vector<float>  	      jetAK8_ssv 	       ;
+  // std::vector<float>          jetAK8_ssv          ;
   std::vector<float>  	      jetAK8_csv 	       ;    
-  std::vector<float>  	      jetAK8_tchp              ;
-  std::vector<float>  	      jetAK8_tche              ;
-  std::vector<float>  	      jetAK8_jp                ;
-  std::vector<float>  	      jetAK8_jbp               ;
+  // std::vector<float>          jetAK8_tchp              ;
+  // std::vector<float>          jetAK8_tche              ;
+  // std::vector<float>          jetAK8_jp                ;
+  // std::vector<float>          jetAK8_jbp               ;
   std::vector<float>  	      jetAK8_tau1              ;
   std::vector<float>  	      jetAK8_tau2              ;
   std::vector<float>  	      jetAK8_tau3              ;    
@@ -331,12 +332,12 @@ public:
   std::vector< std::vector<float> > subjetAK8pruned_e      ;
   std::vector< std::vector<int  > > subjetAK8pruned_charge ;
   std::vector< std::vector<int  > > subjetAK8pruned_flavour;
-  std::vector< std::vector<float> > subjetAK8pruned_ssv    ;
+  // std::vector< std::vector<float> > subjetAK8pruned_ssv    ;
   std::vector< std::vector<float> > subjetAK8pruned_csv    ;    
-  std::vector< std::vector<float> > subjetAK8pruned_tchp   ;
-  std::vector< std::vector<float> > subjetAK8pruned_tche   ;
-  std::vector< std::vector<float> > subjetAK8pruned_jp     ;
-  std::vector< std::vector<float> > subjetAK8pruned_jbp    ;
+  // std::vector< std::vector<float> > subjetAK8pruned_tchp   ;
+  // std::vector< std::vector<float> > subjetAK8pruned_tche   ;
+  // std::vector< std::vector<float> > subjetAK8pruned_jp     ;
+  // std::vector< std::vector<float> > subjetAK8pruned_jbp    ;
 	
   std::vector<int>                  nsoftdropsubjets         ;
   std::vector< std::vector<float> > subjetAK8softdrop_pt     ;
@@ -346,12 +347,12 @@ public:
   std::vector< std::vector<float> > subjetAK8softdrop_e      ;
   std::vector< std::vector<int  > > subjetAK8softdrop_charge ;
   std::vector< std::vector<int  > > subjetAK8softdrop_flavour;
-  std::vector< std::vector<float> > subjetAK8softdrop_ssv    ;
+  // std::vector< std::vector<float> > subjetAK8softdrop_ssv    ;
   std::vector< std::vector<float> > subjetAK8softdrop_csv    ;
-  std::vector< std::vector<float> > subjetAK8softdrop_tchp   ;
-  std::vector< std::vector<float> > subjetAK8softdrop_tche   ;
-  std::vector< std::vector<float> > subjetAK8softdrop_jp     ;
-  std::vector< std::vector<float> > subjetAK8softdrop_jbp    ;
+  // std::vector< std::vector<float> > subjetAK8softdrop_tchp   ;
+  // std::vector< std::vector<float> > subjetAK8softdrop_tche   ;
+  // std::vector< std::vector<float> > subjetAK8softdrop_jp     ;
+  // std::vector< std::vector<float> > subjetAK8softdrop_jbp    ;
 
   /*-------------------------AK4 genJets---------------------------*/   
   int			      ngenJetsAK4               ;

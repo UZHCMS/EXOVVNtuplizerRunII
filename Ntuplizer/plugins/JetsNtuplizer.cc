@@ -165,12 +165,12 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
     nBranches_->jetAK4_che     	    .push_back(j.chargedHadronEnergy()+j.electronEnergy()+j.muonEnergy());
     nBranches_->jetAK4_ne     	    .push_back(j.neutralHadronEnergy()+j.photonEnergy());
     nBranches_->jetAK4_charge 	    .push_back(j.charge());
-    nBranches_->jetAK4_ssv    	    .push_back(j.bDiscriminator("pfSimpleSecondaryVertexHighPurBJetTags"));
+    // nBranches_->jetAK4_ssv          .push_back(j.bDiscriminator("pfSimpleSecondaryVertexHighPurBJetTags"));
     nBranches_->jetAK4_cisv    	    .push_back(j.bDiscriminator("pfCombinedInclusiveSecondaryVertexV2BJetTags"));
-    nBranches_->jetAK4_tchp   	    .push_back(j.bDiscriminator("pfTrackCountingHighPurBJetTags"));
-    nBranches_->jetAK4_tche   	    .push_back(j.bDiscriminator("pfTrackCountingHighEffBJetTags"));
-    nBranches_->jetAK4_jp     	    .push_back(j.bDiscriminator("pfJetProbabilityBJetTags"));
-    nBranches_->jetAK4_jbp    	    .push_back(j.bDiscriminator("pfJetBProbabilityBJetTags"));
+    // nBranches_->jetAK4_tchp         .push_back(j.bDiscriminator("pfTrackCountingHighPurBJetTags"));
+    // nBranches_->jetAK4_tche         .push_back(j.bDiscriminator("pfTrackCountingHighEffBJetTags"));
+    // nBranches_->jetAK4_jp           .push_back(j.bDiscriminator("pfJetProbabilityBJetTags"));
+    // nBranches_->jetAK4_jbp          .push_back(j.bDiscriminator("pfJetBProbabilityBJetTags"));
     nBranches_->jetAK4_flavour	    .push_back(abs(j.partonFlavour()));
     nBranches_->jetAK4_vtxMass	    .push_back(j.userFloat("vtxMass")); 
     nBranches_->jetAK4_vtxNtracks   .push_back(j.userFloat("vtxNtracks")); 
@@ -251,12 +251,12 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
       vSoftDropSubjete.clear();
       vSoftDropSubjetcharge.clear();
       vSoftDropSubjetflavour.clear();
-      vSoftDropSubjetssv.clear();
+      // vSoftDropSubjetssv.clear();
       vSoftDropSubjetcsv.clear();
-      vSoftDropSubjettchp.clear();
-      vSoftDropSubjettche.clear();
-      vSoftDropSubjetjp.clear();
-      vSoftDropSubjetjbp.clear();
+      // vSoftDropSubjettchp.clear();
+      // vSoftDropSubjettche.clear();
+      // vSoftDropSubjetjp.clear();
+      // vSoftDropSubjetjbp.clear();
       
       nsubjets = 0;
       
@@ -275,12 +275,12 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
          vSoftDropSubjete.push_back(softdropsubjet.energy());
          vSoftDropSubjetflavour.push_back(abs(softdropsubjet.partonFlavour()));
          vSoftDropSubjetcharge.push_back(softdropsubjet.charge());
-         vSoftDropSubjetssv.push_back(softdropsubjet.bDiscriminator("pfSimpleSecondaryVertexHighPurBJetTags")); 
+         // vSoftDropSubjetssv.push_back(softdropsubjet.bDiscriminator("pfSimpleSecondaryVertexHighPurBJetTags"));
          vSoftDropSubjetcsv.push_back(softdropsubjet.bDiscriminator("pfCombinedInclusiveSecondaryVertexV2BJetTags") );
-         vSoftDropSubjettchp.push_back(softdropsubjet.bDiscriminator("pfTrackCountingHighPurBJetTags") );
-         vSoftDropSubjettche.push_back(softdropsubjet.bDiscriminator("pfTrackCountingHighEffBJetTags") );
-         vSoftDropSubjetjp.push_back(softdropsubjet.bDiscriminator("pfJetProbabilityBJetTags") );
-         vSoftDropSubjetjbp.push_back(softdropsubjet.bDiscriminator("pfJetBProbabilityBJetTags") );
+         // vSoftDropSubjettchp.push_back(softdropsubjet.bDiscriminator("pfTrackCountingHighPurBJetTags") );
+         // vSoftDropSubjettche.push_back(softdropsubjet.bDiscriminator("pfTrackCountingHighEffBJetTags") );
+         // vSoftDropSubjetjp.push_back(softdropsubjet.bDiscriminator("pfJetProbabilityBJetTags") );
+         // vSoftDropSubjetjbp.push_back(softdropsubjet.bDiscriminator("pfJetBProbabilityBJetTags") );
          
        } 
 
@@ -292,12 +292,12 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
       nBranches_->subjetAK8softdrop_e.push_back(vSoftDropSubjete);
       nBranches_->subjetAK8softdrop_charge.push_back(vSoftDropSubjetcharge);
       nBranches_->subjetAK8softdrop_flavour.push_back(vSoftDropSubjetflavour);
-      nBranches_->subjetAK8softdrop_ssv.push_back(vSoftDropSubjetssv);
+      // nBranches_->subjetAK8softdrop_ssv.push_back(vSoftDropSubjetssv);
       nBranches_->subjetAK8softdrop_csv.push_back(vSoftDropSubjetcsv);
-      nBranches_->subjetAK8softdrop_tchp.push_back(vSoftDropSubjettchp);
-      nBranches_->subjetAK8softdrop_tche.push_back(vSoftDropSubjettche);
-      nBranches_->subjetAK8softdrop_jp.push_back(vSoftDropSubjetjp);
-      nBranches_->subjetAK8softdrop_jbp.push_back(vSoftDropSubjetjbp);
+      // nBranches_->subjetAK8softdrop_tchp.push_back(vSoftDropSubjettchp);
+      // nBranches_->subjetAK8softdrop_tche.push_back(vSoftDropSubjettche);
+      // nBranches_->subjetAK8softdrop_jp.push_back(vSoftDropSubjetjp);
+      // nBranches_->subjetAK8softdrop_jbp.push_back(vSoftDropSubjetjbp);
     
     
     }
@@ -325,12 +325,12 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
     nBranches_->jetAK8_ne     	    .push_back(fj.neutralHadronEnergy()+fj.photonEnergy());
     nBranches_->jetAK8_charge 	    .push_back(fj.charge());					 
     nBranches_->jetAK8_Hbbtag       .push_back(fj.bDiscriminator("pfBoostedDoubleSecondaryVertexAK8BJetTags"));       
-    nBranches_->jetAK8_ssv    	    .push_back(fj.bDiscriminator("pfSimpleSecondaryVertexHighPurBJetTags")); 
-    nBranches_->jetAK8_csv    	    .push_back(fj.bDiscriminator("pfCombinedInclusiveSecondaryVertexV2BJetTags"));      
-    nBranches_->jetAK8_tchp   	    .push_back(fj.bDiscriminator("pfTrackCountingHighPurBJetTags"));	       
-    nBranches_->jetAK8_tche   	    .push_back(fj.bDiscriminator("pfTrackCountingHighEffBJetTags"));	       
-    nBranches_->jetAK8_jp     	    .push_back(fj.bDiscriminator("pfJetProbabilityBJetTags"));	       
-    nBranches_->jetAK8_jbp    	    .push_back(fj.bDiscriminator("pfJetBProbabilityBJetTags"));
+    // nBranches_->jetAK8_ssv          .push_back(fj.bDiscriminator("pfSimpleSecondaryVertexHighPurBJetTags"));
+    nBranches_->jetAK8_csv          .push_back(fj.bDiscriminator("pfCombinedInclusiveSecondaryVertexV2BJetTags"));
+    // nBranches_->jetAK8_tchp         .push_back(fj.bDiscriminator("pfTrackCountingHighPurBJetTags"));
+    // nBranches_->jetAK8_tche         .push_back(fj.bDiscriminator("pfTrackCountingHighEffBJetTags"));
+    // nBranches_->jetAK8_jp           .push_back(fj.bDiscriminator("pfJetProbabilityBJetTags"));
+    // nBranches_->jetAK8_jbp          .push_back(fj.bDiscriminator("pfJetBProbabilityBJetTags"));
     nBranches_->jetAK8_flavour      .push_back(abs(fj.partonFlavour()));
     nBranches_->jetAK8_tau1         .push_back(fj.userFloat("NjettinessAK8:tau1"));	   
     nBranches_->jetAK8_tau2         .push_back(fj.userFloat("NjettinessAK8:tau2"));
@@ -408,12 +408,12 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
       vPrunedSubjete      .clear();
       vPrunedSubjetcharge .clear();
       vPrunedSubjetflavour.clear();
-      vPrunedSubjetssv    .clear();
+      // vPrunedSubjetssv    .clear();
       vPrunedSubjetcsv    .clear();
-      vPrunedSubjettchp   .clear();
-      vPrunedSubjettche   .clear();
-      vPrunedSubjetjp     .clear();
-      vPrunedSubjetjbp    .clear();
+      // vPrunedSubjettchp   .clear();
+      // vPrunedSubjettche   .clear();
+      // vPrunedSubjetjp     .clear();
+      // vPrunedSubjetjbp    .clear();
 
       //Get subjets from matched pruned jet
       std::vector<reco::CandidatePtr> pruneddaus(prunedjet.daughterPtrVector());
@@ -438,12 +438,12 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
         vPrunedSubjete.push_back(prunedsubjet.energy());
         vPrunedSubjetflavour.push_back(abs(prunedsubjet.partonFlavour()));
         vPrunedSubjetcharge.push_back(prunedsubjet.charge());
-        vPrunedSubjetssv.push_back(prunedsubjet.bDiscriminator("pfSimpleSecondaryVertexHighPurBJetTags")); 
+        // vPrunedSubjetssv.push_back(prunedsubjet.bDiscriminator("pfSimpleSecondaryVertexHighPurBJetTags"));
         vPrunedSubjetcsv.push_back(prunedsubjet.bDiscriminator("pfCombinedInclusiveSecondaryVertexV2BJetTags") );
-        vPrunedSubjettchp.push_back(prunedsubjet.bDiscriminator("pfTrackCountingHighPurBJetTags") );
-        vPrunedSubjettche.push_back(prunedsubjet.bDiscriminator("pfTrackCountingHighEffBJetTags") );
-        vPrunedSubjetjp.push_back(prunedsubjet.bDiscriminator("pfJetProbabilityBJetTags") );
-        vPrunedSubjetjbp.push_back(prunedsubjet.bDiscriminator("pfJetBProbabilityBJetTags") );     
+        // vPrunedSubjettchp.push_back(prunedsubjet.bDiscriminator("pfTrackCountingHighPurBJetTags") );
+        // vPrunedSubjettche.push_back(prunedsubjet.bDiscriminator("pfTrackCountingHighEffBJetTags") );
+        // vPrunedSubjetjp.push_back(prunedsubjet.bDiscriminator("pfJetProbabilityBJetTags") );
+        // vPrunedSubjetjbp.push_back(prunedsubjet.bDiscriminator("pfJetBProbabilityBJetTags") );   
         
       }
 
@@ -455,12 +455,12 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
       nBranches_->subjetAK8pruned_e.push_back(vPrunedSubjete            );
       nBranches_->subjetAK8pruned_charge.push_back(vPrunedSubjetcharge  );
       nBranches_->subjetAK8pruned_flavour.push_back(vPrunedSubjetflavour);
-      nBranches_->subjetAK8pruned_ssv.push_back(vPrunedSubjetssv        );
+      // nBranches_->subjetAK8pruned_ssv.push_back(vPrunedSubjetssv        );
       nBranches_->subjetAK8pruned_csv.push_back(vPrunedSubjetcsv        );
-      nBranches_->subjetAK8pruned_tchp.push_back(vPrunedSubjettchp      );
-      nBranches_->subjetAK8pruned_tche.push_back(vPrunedSubjettche      );
-      nBranches_->subjetAK8pruned_jp.push_back(vPrunedSubjetjp          );
-      nBranches_->subjetAK8pruned_jbp.push_back(vPrunedSubjetjbp        );
+      // nBranches_->subjetAK8pruned_tchp.push_back(vPrunedSubjettchp      );
+      // nBranches_->subjetAK8pruned_tche.push_back(vPrunedSubjettche      );
+      // nBranches_->subjetAK8pruned_jp.push_back(vPrunedSubjetjp          );
+      // nBranches_->subjetAK8pruned_jbp.push_back(vPrunedSubjetjbp        );
     }
     else{
       nBranches_->jetAK8_prunedmassCorr.push_back(-99);
@@ -512,12 +512,12 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
       vSoftDropSubjete.clear();
       vSoftDropSubjetcharge.clear();
       vSoftDropSubjetflavour.clear();
-      vSoftDropSubjetssv.clear();
+      // vSoftDropSubjetssv.clear();
       vSoftDropSubjetcsv.clear();
-      vSoftDropSubjettchp.clear();
-      vSoftDropSubjettche.clear();
-      vSoftDropSubjetjp.clear();
-      vSoftDropSubjetjbp.clear();
+      // vSoftDropSubjettchp.clear();
+      // vSoftDropSubjettche.clear();
+      // vSoftDropSubjetjp.clear();
+      // vSoftDropSubjetjbp.clear();
 
       //Get subjets from matched pruned jet
       std::vector<reco::CandidatePtr> softdropdaus(softdropjet.daughterPtrVector());
@@ -542,12 +542,12 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
         vSoftDropSubjete.push_back(softdropsubjet.energy());
         vSoftDropSubjetflavour.push_back(abs(softdropsubjet.partonFlavour()));
         vSoftDropSubjetcharge.push_back(softdropsubjet.charge());
-        vSoftDropSubjetssv.push_back(softdropsubjet.bDiscriminator("pfSimpleSecondaryVertexHighEffBJetTags")); 
+        // vSoftDropSubjetssv.push_back(softdropsubjet.bDiscriminator("pfSimpleSecondaryVertexHighEffBJetTags"));
         vSoftDropSubjetcsv.push_back(softdropsubjet.bDiscriminator("pfCombinedInclusiveSecondaryVertexV2BJetTags") );
-        vSoftDropSubjettchp.push_back(softdropsubjet.bDiscriminator("pfTrackCountingHighPurBJetTags") );
-        vSoftDropSubjettche.push_back(softdropsubjet.bDiscriminator("pfTrackCountingHighEffBJetTags") );
-        vSoftDropSubjetjp.push_back(softdropsubjet.bDiscriminator("pfJetProbabilityBJetTags") );
-        vSoftDropSubjetjbp.push_back(softdropsubjet.bDiscriminator("pfJetBProbabilityBJetTags") );       
+        // vSoftDropSubjettchp.push_back(softdropsubjet.bDiscriminator("pfTrackCountingHighPurBJetTags") );
+        // vSoftDropSubjettche.push_back(softdropsubjet.bDiscriminator("pfTrackCountingHighEffBJetTags") );
+        // vSoftDropSubjetjp.push_back(softdropsubjet.bDiscriminator("pfJetProbabilityBJetTags") );
+        // vSoftDropSubjetjbp.push_back(softdropsubjet.bDiscriminator("pfJetBProbabilityBJetTags") );
       }
 
       nBranches_->nsoftdropsubjets.push_back(nsubjets);
@@ -558,12 +558,12 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
       nBranches_->subjetAK8softdrop_e.push_back(vSoftDropSubjete);
       nBranches_->subjetAK8softdrop_charge.push_back(vSoftDropSubjetcharge);
       nBranches_->subjetAK8softdrop_flavour.push_back(vSoftDropSubjetflavour);
-      nBranches_->subjetAK8softdrop_ssv.push_back(vSoftDropSubjetssv);
+      // nBranches_->subjetAK8softdrop_ssv.push_back(vSoftDropSubjetssv);
       nBranches_->subjetAK8softdrop_csv.push_back(vSoftDropSubjetcsv);
-      nBranches_->subjetAK8softdrop_tchp.push_back(vSoftDropSubjettchp);
-      nBranches_->subjetAK8softdrop_tche.push_back(vSoftDropSubjettche);
-      nBranches_->subjetAK8softdrop_jp.push_back(vSoftDropSubjetjp);
-      nBranches_->subjetAK8softdrop_jbp.push_back(vSoftDropSubjetjbp);
+      // nBranches_->subjetAK8softdrop_tchp.push_back(vSoftDropSubjettchp);
+      // nBranches_->subjetAK8softdrop_tche.push_back(vSoftDropSubjettche);
+      // nBranches_->subjetAK8softdrop_jp.push_back(vSoftDropSubjetjp);
+      // nBranches_->subjetAK8softdrop_jbp.push_back(vSoftDropSubjetjbp);
       
     }
     else{
