@@ -63,7 +63,8 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
   runOnMC = iConfig.getParameter<bool>("runOnMC");
   doTausBoostedFlag_ = iConfig.getParameter<bool>("doTausBoosted");
   doPruningFlag_ = iConfig.getParameter<bool>("doPruning");
-  nBranches_ = new NtupleBranches( tree, doPruningFlag_, doTausBoostedFlag_ );
+  doHbbTagFlag_ = iConfig.getParameter<bool>("doHbbTag");
+  nBranches_ = new NtupleBranches( tree, doPruningFlag_, doTausBoostedFlag_, doHbbTagFlag_ );
   
   /*=======================================================================================*/
   std::vector<edm::EDGetTokenT<pat::JetCollection>> jetTokens;

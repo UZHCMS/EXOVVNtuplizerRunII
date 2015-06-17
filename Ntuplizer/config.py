@@ -21,10 +21,10 @@ import FWCore.ParameterSet.VarParsing as VarParsing
 
 options = VarParsing.VarParsing ('analysis')
 
-options.maxEvents = -1
+options.maxEvents = 100
 
-options.inputFiles ='file:RSGravToWWToLNQQ_kMpl01_M-1000_TuneCUETP8M1_13TeV-pythia8.root'
-
+options.inputFiles ='file:/shome/jngadiub/EXOVVAnalysisRunII/CMSSW_7_4_3/src/EXOVVNtuplizerRunII/Ntuplizer/test/RSGravToWWToLNQQ_kMpl01_M-1000_TuneCUETP8M1_13TeV-pythia8.root'
+# options.inputFiles ='root://xrootd.unl.edu//store/mc/RunIISpring15DR74/RSGravToWW_kMpl01_M-800_TuneCUETP8M1_13TeV-pythia8/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v2/10000/4A29C383-4604-E511-9B87-001EC9AF02D2.root'
 #options.inputFiles =['root://xrootd.unl.edu//store/backfill/2/data/Tier0_Test_SUPERBUNNIES_vocms001/ZeroBias2/MINIAOD/PromptReco-v63/000/246/908/00000/0AAC26C7-850D-E511-8468-02163E01457A.root',
 #                      'root://xrootd.unl.edu//store/backfill/2/data/Tier0_Test_SUPERBUNNIES_vocms001/ZeroBias2/MINIAOD/PromptReco-v63/000/246/908/00000/1CE64589-850D-E511-96D5-02163E011BB0.root',
 #                      'root://xrootd.unl.edu//store/backfill/2/data/Tier0_Test_SUPERBUNNIES_vocms001/ZeroBias2/MINIAOD/PromptReco-v63/000/246/908/00000/44F8DE83-850D-E511-959E-02163E0135BC.root',
@@ -116,13 +116,13 @@ process.ak8CHSJetsSoftDrop = ak8PFJetsCHSSoftDrop.clone( src = 'chs', jetPtMin =
 ################# Recluster jets with b-tagging ######################
 
 bTagDiscriminators = [
-    'pfJetProbabilityBJetTags',
-    'pfJetBProbabilityBJetTags',
-    'pfSimpleSecondaryVertexHighEffBJetTags',
-    'pfSimpleSecondaryVertexHighPurBJetTags',
+    # 'pfJetProbabilityBJetTags',
+    # 'pfJetBProbabilityBJetTags',
+    # 'pfSimpleSecondaryVertexHighEffBJetTags',
+    # 'pfSimpleSecondaryVertexHighPurBJetTags',
     'pfCombinedInclusiveSecondaryVertexV2BJetTags',
-    'pfTrackCountingHighPurBJetTags',
-    'pfTrackCountingHighEffBJetTags',
+    # 'pfTrackCountingHighPurBJetTags',
+    # 'pfTrackCountingHighEffBJetTags',
     'pfBoostedDoubleSecondaryVertexAK8BJetTags'    
 ]
 
@@ -380,6 +380,7 @@ if corrMETonTheFly:
 ################## Ntuplizer ###################
 process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     runOnMC = cms.bool(runOnMC),
+    doHbbTag = cms.bool(doBtagging),
     doPruning = cms.bool(doAK8prunedReclustering),
     doTausBoosted = cms.bool(doSemileptonicTausBoosted),
     vertices = cms.InputTag("offlineSlimmedPrimaryVertices"),
