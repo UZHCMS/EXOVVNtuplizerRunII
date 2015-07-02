@@ -27,11 +27,13 @@ private:
    edm::EDGetTokenT<edm::ValueMap<bool> >    electronMediumIdMapToken_;
    edm::EDGetTokenT<edm::ValueMap<bool> >    electronTightIdMapToken_;
    edm::EDGetTokenT<edm::ValueMap<bool> >    electronHEEPIdMapToken_;
+   edm::EDGetTokenT<edm::ValueMap<bool> >    electronHEEPId51MapToken_;
    
    edm::Handle<edm::View<pat::Electron> >    electrons_    ;
    edm::Handle<reco::VertexCollection> 	     vertices_     ;
    edm::Handle<double> 			     rho_	   ;
    edm::Handle<edm::ValueMap<bool> >         heep_id_decisions;
+   edm::Handle<edm::ValueMap<bool> >         heep_id51_decisions;
    edm::Handle<edm::ValueMap<bool> >         veto_id_decisions;  
    edm::Handle<edm::ValueMap<bool> >         loose_id_decisions; 
    edm::Handle<edm::ValueMap<bool> >         medium_id_decisions;

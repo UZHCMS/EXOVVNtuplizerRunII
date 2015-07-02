@@ -39,6 +39,7 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
 	muonToken_		(consumes<pat::MuonCollection>(iConfig.getParameter<edm::InputTag>("muons"))),
 	electronToken_		(consumes<edm::View<pat::Electron> >(iConfig.getParameter<edm::InputTag>("electrons"))),
 	eleHEEPIdMapToken_      (consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("eleHEEPIdMap"))),
+  eleHEEPId51MapToken_      (consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("eleHEEPId51Map"))),
 	eleVetoIdMapToken_      (consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("eleVetoIdMap"))),
 	eleLooseIdMapToken_     (consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("eleLooseIdMap"))),
 	eleMediumIdMapToken_    (consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("eleMediumIdMap"))),
@@ -113,6 +114,7 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
   eleIdTokens.push_back(eleMediumIdMapToken_);
   eleIdTokens.push_back(eleTightIdMapToken_ );
   eleIdTokens.push_back(eleHEEPIdMapToken_  );
+  eleIdTokens.push_back(eleHEEPId51MapToken_  );
   
   /*=======================================================================================*/  
 

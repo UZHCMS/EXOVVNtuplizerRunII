@@ -75,6 +75,7 @@ void NtupleBranches::branch( void ){
   tree_->Branch( "lep_isMediumElectron"	       , &lep_isMediumElectron         );
   tree_->Branch( "lep_isTightElectron"         , &lep_isTightElectron          );  
   tree_->Branch( "lep_isHeepElectron"	       , &lep_isHeepElectron           );
+  tree_->Branch( "lep_isHeep51Electron"	     , &lep_isHeep51Electron         );
   tree_->Branch( "lep_isLooseElectron"	       , &lep_isLooseElectron          );
   tree_->Branch( "lep_isSoftMuon"	       , &lep_isSoftMuon	     );
   tree_->Branch( "lep_pfRhoCorrRelIso03Boost"  , &lep_pfRhoCorrRelIso03Boost );
@@ -448,6 +449,7 @@ void NtupleBranches::reset( void ){
   lep_isTightElectron	      .clear();
   lep_isLooseElectron	      .clear();
   lep_isHeepElectron	      .clear();
+  lep_isHeep51Electron	    .clear();
   lep_TauType               .clear();
   lep_isSoftMuon	    .clear();
   lep_pfRhoCorrRelIso03Boost.clear();

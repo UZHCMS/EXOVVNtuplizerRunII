@@ -147,6 +147,7 @@ public:
     std::vector<int>	              lep_isMediumElectron	  ;
     std::vector<int>	              lep_isTightElectron	  ;    
     std::vector<int  >  	      lep_isHeepElectron	 ;
+    std::vector<int  >  	      lep_isHeep51Electron ;
     std::vector<int  >  	      lep_isLooseElectron	 ;
     std::vector<int  >                lep_isSoftMuon             ; 
     std::vector<float>  	      lep_pfRhoCorrRelIso03Boost ;

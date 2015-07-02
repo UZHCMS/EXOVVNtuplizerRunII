@@ -71,6 +71,7 @@ void MuonsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSet
     nBranches_->lep_pt     	     	    .push_back(mu.pt()    );
     nBranches_->lep_phi    		    .push_back(mu.phi()   );
     nBranches_->lep_isHeepElectron	    .push_back(-99);
+    nBranches_->lep_isHeep51Electron	    .push_back(-99);
     nBranches_->lep_isLooseElectron         .push_back(-99);
     nBranches_->lep_passConversionVeto      .push_back(-99);
     nBranches_->lep_full5x5_sigmaIetaIeta   .push_back(-99);
