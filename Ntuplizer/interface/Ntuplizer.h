@@ -45,6 +45,7 @@ private:
   bool                                                      runOnMC             ;
   bool                                                      doTausBoostedFlag_  ;
   bool                                                      doPruningFlag_      ;
+  bool                                                      doHbbTagFlag_       ;
   
   edm::EDGetTokenT<reco::VertexCollection>                  vtxToken_           ;
   edm::EDGetTokenT<double>                                  rhoToken_           ;
@@ -66,6 +67,7 @@ private:
   edm::EDGetTokenT<pat::MuonCollection>     		    muonToken_  	;	
   edm::EDGetTokenT<edm::View<pat::Electron> >		    electronToken_	;
   edm::EDGetTokenT<edm::ValueMap<bool> >                    eleHEEPIdMapToken_  ;
+  edm::EDGetTokenT<edm::ValueMap<bool> >                    eleHEEPId51MapToken_  ;
   edm::EDGetTokenT<edm::ValueMap<bool> >                    eleVetoIdMapToken_  ;
   edm::EDGetTokenT<edm::ValueMap<bool> >                    eleLooseIdMapToken_ ;
   edm::EDGetTokenT<edm::ValueMap<bool> >                    eleMediumIdMapToken_;

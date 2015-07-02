@@ -63,8 +63,10 @@ void TausNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
       nBranches_->lep_isSoftMuon     	      .push_back(-99);
       nBranches_->lep_isTightMuon    	      .push_back(-99);
       nBranches_->lep_isHighPtMuon   	      .push_back(-99);
+      nBranches_->lep_isPFMuon                .push_back(-99);   
       nBranches_->lep_dz	     	      .push_back(-99);
       nBranches_->lep_isHeepElectron 	      .push_back(-99);
+      nBranches_->lep_isHeep51Electron 	      .push_back(-99);
       nBranches_->lep_isLooseElectron	      .push_back(-99);
       nBranches_->lep_SemileptonicPFIso       .push_back(-99);
       nBranches_->lep_SemileptonicCorrPFIso   .push_back(-99);            
@@ -193,8 +195,10 @@ void TausNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
       nBranches_->lep_isSoftMuon     	      .push_back(-99); 
       nBranches_->lep_isTightMuon    	      .push_back(-99); 
       nBranches_->lep_isHighPtMuon   	      .push_back(-99); 
+      nBranches_->lep_isPFMuon                .push_back(-99);   
       nBranches_->lep_dz	     	      .push_back(-99); 
       nBranches_->lep_isHeepElectron 	      .push_back(-99); 
+      nBranches_->lep_isHeep51Electron 	      .push_back(-99); 
       nBranches_->lep_isLooseElectron	      .push_back(-99); 
       nBranches_->lep_SemileptonicPFIso       .push_back(-99);
       nBranches_->lep_SemileptonicCorrPFIso   .push_back(-99);     
@@ -323,8 +327,10 @@ void TausNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
       nBranches_->lep_isSoftMuon     	       .push_back(-99);
       nBranches_->lep_isTightMuon    	       .push_back(-99);
       nBranches_->lep_isHighPtMuon   	       .push_back(-99);
+      nBranches_->lep_isPFMuon                 .push_back(-99);   
       nBranches_->lep_dz	     	       .push_back(-99);
       nBranches_->lep_isHeepElectron 	       .push_back(-99);
+      nBranches_->lep_isHeep51Electron 	       .push_back(-99);
       nBranches_->lep_isLooseElectron	       .push_back(-99);
       nBranches_->lep_SemileptonicPFIso        .push_back(-99);
       nBranches_->lep_SemileptonicCorrPFIso    .push_back(-99);     

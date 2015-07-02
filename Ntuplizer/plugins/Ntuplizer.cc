@@ -39,6 +39,7 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
 	muonToken_		(consumes<pat::MuonCollection>(iConfig.getParameter<edm::InputTag>("muons"))),
 	electronToken_		(consumes<edm::View<pat::Electron> >(iConfig.getParameter<edm::InputTag>("electrons"))),
 	eleHEEPIdMapToken_      (consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("eleHEEPIdMap"))),
+  eleHEEPId51MapToken_      (consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("eleHEEPId51Map"))),
 	eleVetoIdMapToken_      (consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("eleVetoIdMap"))),
 	eleLooseIdMapToken_     (consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("eleLooseIdMap"))),
 	eleMediumIdMapToken_    (consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("eleMediumIdMap"))),
@@ -63,7 +64,8 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
   runOnMC = iConfig.getParameter<bool>("runOnMC");
   doTausBoostedFlag_ = iConfig.getParameter<bool>("doTausBoosted");
   doPruningFlag_ = iConfig.getParameter<bool>("doPruning");
-  nBranches_ = new NtupleBranches( tree, doPruningFlag_, doTausBoostedFlag_ );
+  doHbbTagFlag_ = iConfig.getParameter<bool>("doHbbTag");
+  nBranches_ = new NtupleBranches( tree, doPruningFlag_, doTausBoostedFlag_, doHbbTagFlag_ );
   
   /*=======================================================================================*/
   std::vector<edm::EDGetTokenT<pat::JetCollection>> jetTokens;
@@ -112,6 +114,7 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
   eleIdTokens.push_back(eleMediumIdMapToken_);
   eleIdTokens.push_back(eleTightIdMapToken_ );
   eleIdTokens.push_back(eleHEEPIdMapToken_  );
+  eleIdTokens.push_back(eleHEEPId51MapToken_  );
   
   /*=======================================================================================*/  
 
@@ -197,7 +200,6 @@ void Ntuplizer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
   
   nBranches_->reset();
       
-
   nBranches_->EVENT_event     = iEvent.id().event();
   nBranches_->EVENT_run       = iEvent.id().run();
   nBranches_->EVENT_lumiBlock = iEvent.id().luminosityBlock();  

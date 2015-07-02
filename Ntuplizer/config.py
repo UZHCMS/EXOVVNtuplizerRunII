@@ -21,10 +21,10 @@ import FWCore.ParameterSet.VarParsing as VarParsing
 
 options = VarParsing.VarParsing ('analysis')
 
-options.maxEvents = -1
+options.maxEvents = 100
 
-options.inputFiles ='file:RSGravToWWToLNQQ_kMpl01_M-1000_TuneCUETP8M1_13TeV-pythia8.root'
-
+options.inputFiles ='file:/shome/jngadiub/EXOVVAnalysisRunII/CMSSW_7_4_3/src/EXOVVNtuplizerRunII/Ntuplizer/test/RSGravToWWToLNQQ_kMpl01_M-1000_TuneCUETP8M1_13TeV-pythia8.root'
+# options.inputFiles ='root://xrootd.unl.edu//store/mc/RunIISpring15DR74/RSGravToWW_kMpl01_M-800_TuneCUETP8M1_13TeV-pythia8/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v2/10000/4A29C383-4604-E511-9B87-001EC9AF02D2.root'
 #options.inputFiles =['root://xrootd.unl.edu//store/backfill/2/data/Tier0_Test_SUPERBUNNIES_vocms001/ZeroBias2/MINIAOD/PromptReco-v63/000/246/908/00000/0AAC26C7-850D-E511-8468-02163E01457A.root',
 #                      'root://xrootd.unl.edu//store/backfill/2/data/Tier0_Test_SUPERBUNNIES_vocms001/ZeroBias2/MINIAOD/PromptReco-v63/000/246/908/00000/1CE64589-850D-E511-96D5-02163E011BB0.root',
 #                      'root://xrootd.unl.edu//store/backfill/2/data/Tier0_Test_SUPERBUNNIES_vocms001/ZeroBias2/MINIAOD/PromptReco-v63/000/246/908/00000/44F8DE83-850D-E511-959E-02163E0135BC.root',
@@ -49,7 +49,6 @@ process.source = cms.Source("PoolSource",
 
 ######## Sequence settings ##########
 
-
 #! To recluster and add AK8 Higgs tagging and softdrop subjet b-tagging (both need to be simoultaneously true or false, if not you will have issues with your softdrop subjets!)
 #If you use the softdrop subjets from the slimmedJetsAK8 collection, only CSV seems to be available?
 doAK8reclustering = False
@@ -61,7 +60,7 @@ doAK8prunedReclustering = False
 
 # To corr jets on the fly if the JEC in the MC have been changed.
 # NB: this flag corrects the pruned/softdrop jets as well. We should probably add a second flag.
-corrJetsOnTheFly = True
+corrJetsOnTheFly = False
 
 #! To recluster MET with new corrections
 doMETReclustering = False
@@ -69,7 +68,6 @@ corrMETonTheFly = False #If you recluster the MET there is no need for re-correc
 
 #taus
 doSemileptonicTausBoosted = False
-
 
 ####### Logger ##########
 
@@ -118,13 +116,13 @@ process.ak8CHSJetsSoftDrop = ak8PFJetsCHSSoftDrop.clone( src = 'chs', jetPtMin =
 ################# Recluster jets with b-tagging ######################
 
 bTagDiscriminators = [
-    'pfJetProbabilityBJetTags',
-    'pfJetBProbabilityBJetTags',
-    'pfSimpleSecondaryVertexHighEffBJetTags',
-    'pfSimpleSecondaryVertexHighPurBJetTags',
+    # 'pfJetProbabilityBJetTags',
+    # 'pfJetBProbabilityBJetTags',
+    # 'pfSimpleSecondaryVertexHighEffBJetTags',
+    # 'pfSimpleSecondaryVertexHighPurBJetTags',
     'pfCombinedInclusiveSecondaryVertexV2BJetTags',
-    'pfTrackCountingHighPurBJetTags',
-    'pfTrackCountingHighEffBJetTags',
+    # 'pfTrackCountingHighPurBJetTags',
+    # 'pfTrackCountingHighEffBJetTags',
     'pfBoostedDoubleSecondaryVertexAK8BJetTags'    
 ]
 
@@ -244,6 +242,7 @@ process.patJetsAk8CHSJets.userData.userFloats.src += ['NjettinessAK8:tau1','Njet
 process.patJetsAk8CHSJets.addTagInfos = True
 
 # ###### Recluster MET ##########
+
 from RecoJets.JetProducers.ak4PFJets_cfi import ak4PFJets
 process.ak4PFJets = ak4PFJets.clone(src = "packedPFCandidates")
 process.ak4PFJets.doAreaFastjet = True
@@ -302,11 +301,18 @@ process.egmGsfElectronIDSequence = cms.Sequence(process.egmGsfElectronIDs)
 #my_id_modules = ['RecoEgamma.ElectronIdentification.Identification.cutBasedElectronID_PHYS14_PU20bx25_V2_cff',
 #		 'RecoEgamma.ElectronIdentification.Identification.heepElectronID_HEEPV51_cff']
 my_id_modules = ['RecoEgamma.ElectronIdentification.Identification.heepElectronID_HEEPV51_cff',
+                 'RecoEgamma.ElectronIdentification.Identification.heepElectronID_HEEPV60_cff',
                  'RecoEgamma.ElectronIdentification.Identification.cutBasedElectronID_PHYS14_PU20bx25_V2_cff']
 
 #add them to the VID producer
 for idmod in my_id_modules:
     setupAllVIDIdsInModule(process,idmod,setupVIDElectronSelection)
+
+####### Event filters ###########
+
+#process.load('RecoMET.METFilters.hcalLaserEventFilter_cfi')
+#process.load('RecoMET.METFilters.EcalDeadCellTriggerPrimitiveFilter_cfi')
+#process.load('CommonTools/RecoAlgos/HBHENoiseFilter_cfi')
 
 ####### Ntuplizer initialization ##########
 
@@ -361,27 +367,28 @@ if corrMETonTheFly:
        'JEC/MCRUN2_74_V9::All_L2Relative_AK4PF.txt',
        'JEC/MCRUN2_74_V9::All_L3Absolute_AK4PF.txt'
      ]   
-
-from PhysicsTools.SelectorUtils.jetIDSelector_cfi import jetIDSelector
-process.goodSlimmedJets = cms.EDFilter("JetIDSelectionFunctorFilter",
-                                    filterParams=jetIDSelector.clone(quality = cms.string('LOOSE')),
-                                    src=cms.InputTag("slimmedJets")
-                                    )                                            
-
-process.goodFatJets = cms.EDFilter("JetIDSelectionFunctorFilter",
-                                    filterParams=jetIDSelector.clone(quality = cms.string('LOOSE')),
-                                    src=cms.InputTag(jetsAK8)
-                                    )
-                                                                        
+				    
+#from PhysicsTools.SelectorUtils.pfJetIDSelector_cfi import pfJetIDSelector
+#process.goodSlimmedJets = cms.EDFilter("PFJetIDSelectionFunctorFilter",
+#                        filterParams = pfJetIDSelector.clone(),
+#                        src = cms.InputTag("slimmedJets")
+#                        )
+#process.goodFatJets = cms.EDFilter("PFJetIDSelectionFunctorFilter",
+#                        filterParams = pfJetIDSelector.clone(),
+#                        src = cms.InputTag(jetsAK8)
+#                        )
+						                                                                        
 ################## Ntuplizer ###################
 process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     runOnMC = cms.bool(runOnMC),
+    doHbbTag = cms.bool(doBtagging),
     doPruning = cms.bool(doAK8prunedReclustering),
     doTausBoosted = cms.bool(doSemileptonicTausBoosted),
     vertices = cms.InputTag("offlineSlimmedPrimaryVertices"),
     muons = cms.InputTag("slimmedMuons"),
     electrons = cms.InputTag("slimmedElectrons"),
-    eleHEEPIdMap = cms.InputTag("egmGsfElectronIDs:heepElectronID-HEEPV51"),
+    eleHEEPId51Map = cms.InputTag("egmGsfElectronIDs:heepElectronID-HEEPV51"),
+    eleHEEPIdMap = cms.InputTag("egmGsfElectronIDs:heepElectronID-HEEPV60"),
     eleVetoIdMap = cms.InputTag("egmGsfElectronIDs:cutBasedElectronID-PHYS14-PU20bx25-V2-standalone-veto"),
     eleLooseIdMap = cms.InputTag("egmGsfElectronIDs:cutBasedElectronID-PHYS14-PU20bx25-V2-standalone-loose"),
     eleMediumIdMap = cms.InputTag("egmGsfElectronIDs:cutBasedElectronID-PHYS14-PU20bx25-V2-standalone-medium"),
@@ -389,8 +396,8 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     taus = cms.InputTag(TAUS),
     tausMuTau = cms.InputTag(MUTAUS),
     tausEleTau = cms.InputTag(ELETAUS),
-    jets = cms.InputTag("goodSlimmedJets"),
-    fatjets = cms.InputTag("goodFatJets"),
+    jets = cms.InputTag("slimmedJets"),
+    fatjets = cms.InputTag(jetsAK8),
     prunedjets = cms.InputTag(jetsAK8pruned),
     softdropjets = cms.InputTag(jetsAK8softdrop),
     genJets = cms.InputTag("slimmedGenJets"),
