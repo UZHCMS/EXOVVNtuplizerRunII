@@ -107,7 +107,7 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
 
   bool doPruning  = event.getByToken(prunedjetInputToken_, prunedjets_ );
   bool doSoftDrop = event.getByToken(softdropjetInputToken_, softdropjets_ );
-  
+
   /****************************************************************/
   nBranches_->njetsAK4 = 0;
   
@@ -214,6 +214,7 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
      
   for (const pat::Jet &fj : *fatjets_) {
 	  
+		  	 
     reco::Candidate::LorentzVector uncorrJet;
     double corr = 1;
     
@@ -303,8 +304,36 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
     }
     	                    
     bool IDLoose = looseJetID(fj);
-    //if( !IDLoose ) continue;
+    
 
+    // if(fj.userFloat("ak8PFJetsCHSPrunedMass"  )<0. || fj.userFloat("ak8PFJetsCHSSoftDropMass")<0.){
+    //
+    //   std::cout<<" | Pruned mass  |  Softdrop mass   |  Mass   |  Eta   |  Pt   |  Jet ID   |  Tau21   | CEMF | NEMF |"<< std::endl;
+    //   std::cout<<" |  "<<fj.userFloat("ak8PFJetsCHSPrunedMass")<<"   |  "<<fj.userFloat("ak8PFJetsCHSSoftDropMass")<<"   |  "<< fj.mass()<<"   |"<<fj.eta()<<"|  "<<fj.pt()<<"   |    "<<IDLoose<<"   |"<<fj.userFloat("NjettinessAK8:tau2")/fj.userFloat("NjettinessAK8:tau1")<<"|"<<fj.chargedEmEnergyFraction()<<"|"<<fj.neutralEmEnergyFraction()<<"|"<<std::endl;
+    //   std::cout<<"###############################################################################################"<< std::endl;
+    //
+    //   std::vector<reco::Candidate const *> constituents;
+    //         for ( unsigned ida = 0; ida < fj.numberOfDaughters(); ++ida ) {
+    //     reco::Candidate const * cand = fj.daughter(ida);
+    //     if ( cand->numberOfDaughters() == 0 )
+    //       constituents.push_back( cand ) ;
+    //     else {
+    //       for ( unsigned jda = 0; jda < cand->numberOfDaughters(); ++jda ) {
+    //         reco::Candidate const * cand2 = cand->daughter(jda);
+    //         constituents.push_back( cand2 );
+    //       }
+    //     }
+    //   }
+    //   std::sort( constituents.begin(), constituents.end(), [] (reco::Candidate const * ida, reco::Candidate const * jda){return ida->pt() > jda->pt();} );
+    //
+    //   for ( unsigned int ida = 0; ida < constituents.size(); ++ida ) {
+    //     const pat::PackedCandidate &cand = dynamic_cast<const pat::PackedCandidate &>(*constituents[ida]);
+    //     printf("         constituent %3d: pt %6.2f, eta %6.2f, phi %6.2f, mass %6.2f, pdgId %+3d\n", ida,cand.pt(),cand.eta(),cand.phi(),cand.mass(),cand.pdgId());
+    //   }
+    //   std::cout<<"###############################################################################################"<< std::endl;
+    //
+    // }
+    
     nBranches_->njetsAK8++;	       
     nBranches_->jetAK8_pt     	    .push_back(corr*uncorrJet.pt());                   
     nBranches_->jetAK8_eta    	    .push_back(fj.eta());
@@ -337,7 +366,8 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
     nBranches_->jetAK8_tau3         .push_back(fj.userFloat("NjettinessAK8:tau3")); 
     nBranches_->jetAK8_prunedmass   .push_back(fj.userFloat("ak8PFJetsCHSPrunedMass"));
     nBranches_->jetAK8_softdropmass .push_back(fj.userFloat("ak8PFJetsCHSSoftDropMass"));
-		  	 
+    
+
     TLorentzVector FatJet; FatJet.SetPtEtaPhiE( fj.pt(), fj.eta(), fj.phi(), fj.energy() );  
 
     if( doPruning ){
@@ -570,8 +600,9 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
       nBranches_->jetAK8_softdropmassCorr.push_back(-99);
       nBranches_->jetAK8softdrop_jec  .push_back(-99);
     } 
+    // std::cout<<"Failed fraction: "<<jetFail<<"/"<<jetTot<<" ("<<jetFail/jetTot<<" %%)"<< std::endl;
+    //  std::cout<<"###############################################################################################"<< std::endl;
   }
-
 }
 
 

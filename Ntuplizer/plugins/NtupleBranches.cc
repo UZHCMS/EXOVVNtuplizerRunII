@@ -198,9 +198,9 @@ void NtupleBranches::branch( void ){
   tree_->Branch( "jetAK8_pt"		    , &jetAK8_pt		 );
   tree_->Branch( "jetAK8_eta"		    , &jetAK8_eta		 );
   tree_->Branch( "jetAK8_mass"		    , &jetAK8_mass		 );
-  tree_->Branch( "jetAK8_phi"		    , &jetAK8_phi		 );
-  tree_->Branch( "jetAK8_e"		    , &jetAK8_e 		 );
-  tree_->Branch( "jetAK8_jec"		    , &jetAK8_jec 		 );
+  tree_->Branch( "jetAK8_phi"         , &jetAK8_phi		 );
+  tree_->Branch( "jetAK8_e"		        , &jetAK8_e 		 );
+  tree_->Branch( "jetAK8_jec"		      , &jetAK8_jec 		 );
   tree_->Branch( "jetAK8_IDLoose"	    , &jetAK8_IDLoose		 );
   tree_->Branch( "jetAK8_muf" 		    , &jetAK8_muf		 );
   tree_->Branch( "jetAK8_phf" 		    , &jetAK8_phf		 );
@@ -210,14 +210,14 @@ void NtupleBranches::branch( void ){
   tree_->Branch( "jetAK8_area" 		    , &jetAK8_area		 );
   tree_->Branch( "jetAK8_cm"     	    , &jetAK8_cm		 );
   tree_->Branch( "jetAK8_nm"     	    , &jetAK8_nm		 );
-  tree_->Branch( "jetAK8_che"     	    , &jetAK8_che		 );
+  tree_->Branch( "jetAK8_che"     	  , &jetAK8_che		 );
   tree_->Branch( "jetAK8_ne"     	    , &jetAK8_ne		 );
   tree_->Branch( "jetAK8_charge" 	    , &jetAK8_charge    	 );
   tree_->Branch( "jetAK8_flavour"	    , &jetAK8_flavour   	 );
+  tree_->Branch( "jetAK8_csv"		      , &jetAK8_csv		 );
   if(doHbbTag_){
     tree_->Branch( "jetAK8_Hbbtag"	    , &jetAK8_Hbbtag		 );
 // tree_->Branch( "jetAK8_ssv"        , &jetAK8_ssv     );
-    tree_->Branch( "jetAK8_csv"		    , &jetAK8_csv		 );
   // tree_->Branch( "jetAK8_tchp"        , &jetAK8_tchp     );
   // tree_->Branch( "jetAK8_tche"        , &jetAK8_tche     );
   // tree_->Branch( "jetAK8_jp"        , &jetAK8_jp     );
@@ -311,19 +311,45 @@ void NtupleBranches::branch( void ){
   tree_->Branch( "genJetNoNuAK4_pt"	    , &genJetNoNuAK4_pt	  );
   tree_->Branch( "genJetNoNuAK4_mass"	    , &genJetNoNuAK4_mass );
   tree_->Branch( "genJetNoNuAK4_e"	    , &genJetNoNuAK4_e    );
+  
+  tree_->Branch( "ngenJetsAK8"		    , &ngenJetsAK8 	  );
+  tree_->Branch( "genJetAK8_pt"		    , &genJetAK8_pt	  );
+  tree_->Branch( "genJetAK8_eta"	    , &genJetAK8_eta	  );
+  tree_->Branch( "genJetAK8_mass"	    , &genJetAK8_mass	  );
+  tree_->Branch( "genJetAK8_phi"	    , &genJetAK8_phi	  );
+  tree_->Branch( "genJetAK8_e"		    , &genJetAK8_e 	  );
+  tree_->Branch( "genJetAK8_prunedmass"  , &genJetAK8_prunedmass 	  );
+  tree_->Branch( "genJetAK8_softdropmass", &genJetAK8_softdropmass 	  );
+  // tree_->Branch( "genJetNoNuAK8_pt"      , &genJetNoNuAK8_pt    );
+  // tree_->Branch( "genJetNoNuAK8_mass"      , &genJetNoNuAK8_mass );
+  // tree_->Branch( "genJetNoNuAK8_e"      , &genJetNoNuAK8_e    );
         
   /*----------------------HLT trigger---------------------------*/	  
-  tree_->Branch("isFired_HLT_AK8PFJet360_TrimMass30_v1"			 , &isFired_HLT_AK8PFJet360_TrimMass30_v1		   );
-  tree_->Branch("isFired_HLT_AK8PFHT700_TrimR0p1PT0p03Mass50_v1"         , &isFired_HLT_AK8PFHT700_TrimR0p1PT0p03Mass50_v1	   );
-  tree_->Branch("isFired_HLT_AK8DiPFJet280_200_TrimMass30_BTagCSV0p41_v1", &isFired_HLT_AK8DiPFJet280_200_TrimMass30_BTagCSV0p41_v1);
-  tree_->Branch("isFired_HLT_PFHT650_WideJetMJJ950DEtaJJ1p5_v1"		 , &isFired_HLT_PFHT650_WideJetMJJ950DEtaJJ1p5_v1	   );
-  tree_->Branch("isFired_HLT_PFHT650_WideJetMJJ900DEtaJJ1p5_v1"		 , &isFired_HLT_PFHT650_WideJetMJJ900DEtaJJ1p5_v1	   );
-  tree_->Branch("isFired_HLT_PFHT900_v1"				 , &isFired_HLT_PFHT900_v1				   );
-  tree_->Branch("isFired_HLT_Ele23_CaloIdL_TrackIdL_IsoVL_v1"            , &isFired_HLT_Ele23_CaloIdL_TrackIdL_IsoVL_v1 	   );
-  tree_->Branch("isFired_HLT_Ele32_eta2p1_WP75_Gsf_v1"                   , &isFired_HLT_Ele32_eta2p1_WP75_Gsf_v1		   );
-  tree_->Branch("isFired_HLT_Ele105_CaloIdVT_GsfTrkIdT_v1"		 , &isFired_HLT_Ele105_CaloIdVT_GsfTrkIdT_v1		   );
-  tree_->Branch("isFired_HLT_IsoMu24_eta2p1_v1"                          , &isFired_HLT_IsoMu24_eta2p1_v1			   );
-  tree_->Branch("isFired_HLT_Mu45_eta2p1_v1"				 , &isFired_HLT_Mu45_eta2p1_v1  			   );
+  tree_->Branch("isFired_HLT_AK8PFJet360_TrimMass30_v1"                   , &isFired_HLT_AK8PFJet360_TrimMass30_v1		   );
+  tree_->Branch("isFired_HLT_AK8PFHT700_TrimR0p1PT0p03Mass50_v1"          , &isFired_HLT_AK8PFHT700_TrimR0p1PT0p03Mass50_v1	   );
+  tree_->Branch("isFired_HLT_AK8DiPFJet280_200_TrimMass30_BTagCSV0p41_v1" , &isFired_HLT_AK8DiPFJet280_200_TrimMass30_BTagCSV0p41_v1);
+  tree_->Branch("isFired_HLT_PFHT650_WideJetMJJ950DEtaJJ1p5_v1"           , &isFired_HLT_PFHT650_WideJetMJJ950DEtaJJ1p5_v1	   );
+  tree_->Branch("isFired_HLT_PFHT650_WideJetMJJ900DEtaJJ1p5_v1"           , &isFired_HLT_PFHT650_WideJetMJJ900DEtaJJ1p5_v1	   ); 
+  tree_->Branch("isFired_HLT_HT400_v1"                                    , &isFired_HLT_HT400_v1);
+  tree_->Branch("isFired_HLT_PFHT350_v1"                                  , &isFired_HLT_PFHT350_v1);
+  tree_->Branch("isFired_HLT_PFHT600_v1"                                  , &isFired_HLT_PFHT600_v1);
+  tree_->Branch("isFired_HLT_PFHT650_v1"                                  , &isFired_HLT_PFHT650_v1);
+  tree_->Branch("isFired_HLT_PFHT900_v1"                                  , &isFired_HLT_PFHT900_v1);
+  
+  // tree_->Branch("isFired_HLT_PFHT350_v2"                                  , &isFired_HLT_PFHT350_v2);
+  // tree_->Branch("isFired_HLT_PFHT400_v1"                                  , &isFired_HLT_PFHT400_v1);
+  // tree_->Branch("isFired_HLT_PFHT475_v1"                                  , &isFired_HLT_PFHT475_v1);
+  // tree_->Branch("isFired_HLT_PFHT600_v2"                                  , &isFired_HLT_PFHT600_v2);
+  // tree_->Branch("isFired_HLT_PFHT650_v2"                                  , &isFired_HLT_PFHT650_v2);
+  // tree_->Branch("isFired_HLT_PFHT650_WideJetMJJ900DEtaJJ1p5_v2"           , &isFired_HLT_PFHT650_WideJetMJJ900DEtaJJ1p5_v2);
+  // tree_->Branch("isFired_HLT_PFHT650_WideJetMJJ950DEtaJJ1p5_v2"           , &isFired_HLT_PFHT650_WideJetMJJ950DEtaJJ1p5_v2);
+  // tree_->Branch("isFired_HLT_PFHT800_v1"                                  , &isFired_HLT_PFHT800_v1);
+  
+  tree_->Branch("isFired_HLT_Ele23_CaloIdL_TrackIdL_IsoVL_v1"   , &isFired_HLT_Ele23_CaloIdL_TrackIdL_IsoVL_v1 	   );
+  tree_->Branch("isFired_HLT_Ele32_eta2p1_WP75_Gsf_v1"          , &isFired_HLT_Ele32_eta2p1_WP75_Gsf_v1		   );
+  tree_->Branch("isFired_HLT_Ele105_CaloIdVT_GsfTrkIdT_v1"      , &isFired_HLT_Ele105_CaloIdVT_GsfTrkIdT_v1		   );
+  tree_->Branch("isFired_HLT_IsoMu24_eta2p1_v1"                 , &isFired_HLT_IsoMu24_eta2p1_v1			   );
+  tree_->Branch("isFired_HLT_Mu45_eta2p1_v1"                    , &isFired_HLT_Mu45_eta2p1_v1  			   );
   
   tree_->Branch("triggerObject_pt"		, &triggerObject_pt		);
   tree_->Branch("triggerObject_eta"		, &triggerObject_eta		);
@@ -373,20 +399,37 @@ void NtupleBranches::reset( void ){
   njetsAK4    = 0;
   njetsAK8    = 0;  
   ngenJetsAK4 = 0;
+  ngenJetsAK8 = 0;
 
   //njetsAK8pruned = 0;
   //njetsAK8softdrop = 0;
-  isFired_HLT_AK8PFJet360_TrimMass30_v1			  = false;
-  isFired_HLT_AK8PFHT700_TrimR0p1PT0p03Mass50_v1	  = false;
+  isFired_HLT_AK8PFJet360_TrimMass30_v1                   = false;
+  isFired_HLT_AK8PFHT700_TrimR0p1PT0p03Mass50_v1          = false;
   isFired_HLT_AK8DiPFJet280_200_TrimMass30_BTagCSV0p41_v1 = false;
-  isFired_HLT_PFHT650_WideJetMJJ950DEtaJJ1p5_v1	 	  = false;
-  isFired_HLT_PFHT650_WideJetMJJ900DEtaJJ1p5_v1	 	  = false;
-  isFired_HLT_PFHT900_v1			 	  = false;
-  isFired_HLT_IsoMu24_eta2p1_v1			 	  = false;
-  isFired_HLT_Mu45_eta2p1_v1			 	  = false;
-  isFired_HLT_Ele23_CaloIdL_TrackIdL_IsoVL_v1    	  = false;
-  isFired_HLT_Ele32_eta2p1_WP75_Gsf_v1           	  = false;
-  isFired_HLT_Ele105_CaloIdVT_GsfTrkIdT_v1	   	  = false;
+  isFired_HLT_PFHT650_WideJetMJJ950DEtaJJ1p5_v1           = false;
+  isFired_HLT_PFHT650_WideJetMJJ900DEtaJJ1p5_v1           = false;
+  
+  isFired_HLT_PFHT350_v1                                  = false;
+  isFired_HLT_PFHT600_v1                                  = false;
+  isFired_HLT_PFHT650_v1                                  = false;
+  isFired_HLT_PFHT900_v1                                  = false;
+  isFired_HLT_HT400_v1                                    = false;
+  
+  isFired_HLT_PFHT350_v2                                  = false;
+  isFired_HLT_PFHT400_v1                                  = false;
+  isFired_HLT_PFHT475_v1                                  = false;
+  isFired_HLT_PFHT600_v2                                  = false;
+  isFired_HLT_PFHT650_v2                                  = false;
+  isFired_HLT_PFHT650_WideJetMJJ900DEtaJJ1p5_v2           = false;
+  isFired_HLT_PFHT650_WideJetMJJ950DEtaJJ1p5_v2           = false;
+  isFired_HLT_PFHT800_v1                                  = false;
+  
+  isFired_HLT_PFHT900_v1                                  = false;
+  isFired_HLT_IsoMu24_eta2p1_v1                           = false;
+  isFired_HLT_Mu45_eta2p1_v1                              = false;
+  isFired_HLT_Ele23_CaloIdL_TrackIdL_IsoVL_v1             = false;
+  isFired_HLT_Ele32_eta2p1_WP75_Gsf_v1                    = false;
+  isFired_HLT_Ele105_CaloIdVT_GsfTrkIdT_v1                = false;
     
   /************************************/    
   genParticle_pt	    .clear();
@@ -396,35 +439,46 @@ void NtupleBranches::reset( void ){
   genParticle_e 	    .clear();
   genParticle_eta	    .clear();
   genParticle_phi	    .clear();
-  genParticle_mass	    .clear();
-  genParticle_pdgId	    .clear();
-  genParticle_status	    .clear();
-  genParticle_mother        .clear();
-  genParticle_nMoth	    .clear();
-  genParticle_nDau	    .clear();
-  genParticle_dau	    .clear();
+  genParticle_mass	  .clear();
+  genParticle_pdgId	  .clear();
+  genParticle_status  .clear();
+  genParticle_mother  .clear();
+  genParticle_nMoth   .clear();
+  genParticle_nDau    .clear();
+  genParticle_dau     .clear();
   /************************************/
   genJetAK4_pt              .clear();
   genJetAK4_eta             .clear();
   genJetAK4_mass            .clear();
   genJetAK4_phi             .clear();
-  genJetAK4_e	            .clear();
+  genJetAK4_e	              .clear();
   genJetNoNuAK4_pt          .clear();
   genJetNoNuAK4_mass        .clear();
   genJetNoNuAK4_e           .clear();
   /************************************/
-  lep_type		      .clear();
-  lep_charge		      .clear();
-  lep_e 		      .clear();
-  lep_eta		      .clear();
+  genJetAK8_pt              .clear();
+  genJetAK8_eta             .clear();
+  genJetAK8_mass            .clear();
+  genJetAK8_phi             .clear();
+  genJetAK8_e	              .clear();
+  genJetAK8_prunedmass      .clear();
+  genJetAK8_softdropmass    .clear();
+  // genJetNoNuAK8_pt          .clear();
+//   genJetNoNuAK8_mass        .clear();
+//   genJetNoNuAK8_e           .clear();
+  /************************************/
+  lep_type          .clear();
+  lep_charge        .clear();
+  lep_e             .clear();
+  lep_eta           .clear();
   lep_etaSC		      .clear();
   lep_mass		      .clear();
-  lep_pt		      .clear();
-  lep_phi		      .clear();
-  lep_isHighPtMuon	      .clear();
-  lep_isTightMuon	      .clear();
-  lep_isLooseMuon	      .clear();
-  lep_isPFMuon   	      .clear();
+  lep_pt            .clear();
+  lep_phi		        .clear();
+  lep_isHighPtMuon  .clear();
+  lep_isTightMuon   .clear();
+  lep_isLooseMuon   .clear();
+  lep_isPFMuon      .clear();
   lep_pfRhoCorrRelIso03	      .clear();
   lep_pfRhoCorrRelIso04       .clear();
   lep_pfDeltaCorrRelIso       .clear();

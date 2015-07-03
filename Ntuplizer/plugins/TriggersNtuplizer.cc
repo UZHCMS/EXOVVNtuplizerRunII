@@ -29,51 +29,92 @@ void TriggersNtuplizer::fillBranches( edm::Event const & event, const edm::Event
 	
 	const edm::TriggerNames& trigNames = event.triggerNames(*HLTtriggers_);
 	
-	
-	 //for (unsigned int i = 0, n = HLTtriggers_->size(); i < n; ++i) {
- 	  //std::cout << "Trigger " << trigNames.triggerName(i) << std::endl;//<< ": " << (HLTtriggers_->accept(i) ? "PASS" : "fail (or not run)") << std::endl;
- 	//}
+   // for (unsigned int i = 0, n = HLTtriggers_->size(); i < n; ++i) {
+   //   std::cout << "Trigger " << trigNames.triggerName(i) << std::endl;//<< ": " << (HLTtriggers_->accept(i) ? "PASS" : "fail (or not run)") << std::endl;
+   // }
 	
 	////////////////// dijet triggers ///////////////////////////////////
-	unsigned int TrggIndex_HLT_AK8PFJet360_TrimMass30_v1		     (trigNames.triggerIndex("HLT_AK8PFJet360_TrimMass30_v1"));
-	unsigned int TrggIndex_HLT_AK8PFHT700_TrimR0p1PT0p03Mass50_v1	     (trigNames.triggerIndex("HT_AK8PFHT700_TrimR0p1PT0p03Mass50_v1"));
+	unsigned int TrggIndex_HLT_AK8PFJet360_TrimMass30_v1                  (trigNames.triggerIndex("HLT_AK8PFJet360_TrimMass30_v1"));
+	unsigned int TrggIndex_HLT_AK8PFHT700_TrimR0p1PT0p03Mass50_v1         (trigNames.triggerIndex("HLT_AK8PFHT700_TrimR0p1PT0p03Mass50_v1"));
 	unsigned int TrggIndex_HLT_AK8DiPFJet280_200_TrimMass30_BTagCSV0p41_v1(trigNames.triggerIndex("HLT_AK8DiPFJet280_200_TrimMass30_BTagCSV0p41_v1"));
-	unsigned int TrggIndex_HLT_PFHT650_WideJetMJJ950DEtaJJ1p5_v1	     (trigNames.triggerIndex("HLT_PFHT650_WideJetMJJ950DEtaJJ1p5_v1"));
-	unsigned int TrggIndex_HLT_PFHT650_WideJetMJJ900DEtaJJ1p5_v1	     (trigNames.triggerIndex("HLT_PFHT650_WideJetMJJ900DEtaJJ1p5_v1"));
-	unsigned int TrggIndex_HLT_PFHT900_v1				     (trigNames.triggerIndex("HLT_PFHT900_v1"));
+	unsigned int TrggIndex_HLT_PFHT650_WideJetMJJ950DEtaJJ1p5_v1          (trigNames.triggerIndex("HLT_PFHT650_WideJetMJJ950DEtaJJ1p5_v1"));
+	unsigned int TrggIndex_HLT_PFHT650_WideJetMJJ900DEtaJJ1p5_v1          (trigNames.triggerIndex("HLT_PFHT650_WideJetMJJ900DEtaJJ1p5_v1"));
+  
+  // unsigned int TrggIndex_HLT_PFHT350_v2                                 (trigNames.triggerIndex("HLT_PFHT350_v2"));
+  // unsigned int TrggIndex_HLT_PFHT400_v1                                 (trigNames.triggerIndex("HLT_PFHT400_v1 "));
+  // unsigned int TrggIndex_HLT_PFHT475_v1                                 (trigNames.triggerIndex("HLT_PFHT475_v1 "));
+  // unsigned int TrggIndex_HLT_PFHT600_v2                                 (trigNames.triggerIndex("HLT_PFHT600_v2"));
+  // unsigned int TrggIndex_HLT_PFHT650_v2                                 (trigNames.triggerIndex("HLT_PFHT650_v2"));
+  // unsigned int TrggIndex_HLT_PFHT650_WideJetMJJ900DEtaJJ1p5_v2          (trigNames.triggerIndex("HLT_PFHT650_WideJetMJJ900DEtaJJ1p5_v2"));
+  // unsigned int TrggIndex_HLT_PFHT650_WideJetMJJ950DEtaJJ1p5_v2          (trigNames.triggerIndex("HLT_PFHT650_WideJetMJJ950DEtaJJ1p5_v2"));
+  // unsigned int TrggIndex_HLT_PFHT800_v1                                 (trigNames.triggerIndex("HLT_PFHT800_v1 "));
 
-	nBranches_->isFired_HLT_AK8PFJet360_TrimMass30_v1               = false;
-	nBranches_->isFired_HLT_AK8PFHT700_TrimR0p1PT0p03Mass50_v1         = false;
+  unsigned int TrggIndex_HLT_PFHT350_v1                                 (trigNames.triggerIndex("HLT_PFHT350_v1"));
+  unsigned int TrggIndex_HLT_PFHT600_v1                                 (trigNames.triggerIndex("HLT_PFHT600_v1"));
+  unsigned int TrggIndex_HLT_PFHT650_v1                                 (trigNames.triggerIndex("HLT_PFHT650_v1"));
+  unsigned int TrggIndex_HLT_PFHT900_v1                                 (trigNames.triggerIndex("HLT_PFHT900_v1"));
+  unsigned int TrggIndex_HLT_HT400_v1                                   (trigNames.triggerIndex("HLT_HT400_v1"));
+
+	nBranches_->isFired_HLT_AK8PFJet360_TrimMass30_v1                   = false;
+	nBranches_->isFired_HLT_AK8PFHT700_TrimR0p1PT0p03Mass50_v1          = false;
 	nBranches_->isFired_HLT_AK8DiPFJet280_200_TrimMass30_BTagCSV0p41_v1 = false;
-	nBranches_->isFired_HLT_PFHT650_WideJetMJJ950DEtaJJ1p5_v1          = false;
-	nBranches_->isFired_HLT_PFHT650_WideJetMJJ900DEtaJJ1p5_v1          = false;
-	nBranches_->isFired_HLT_PFHT900_v1                                 = false;
+	nBranches_->isFired_HLT_PFHT650_WideJetMJJ950DEtaJJ1p5_v1           = false;
+	nBranches_->isFired_HLT_PFHT650_WideJetMJJ900DEtaJJ1p5_v1           = false;
+  
+  nBranches_->isFired_HLT_PFHT350_v1                                  = false;
+  nBranches_->isFired_HLT_PFHT600_v1                                  = false;
+  nBranches_->isFired_HLT_PFHT650_v1                                  = false;
+  nBranches_->isFired_HLT_PFHT900_v1                                  = false;
+	nBranches_->isFired_HLT_HT400_v1                                    = false;
+  
+  // nBranches_->isFired_HLT_PFHT350_v2                                  = false;
+  // nBranches_->isFired_HLT_PFHT400_v1                                  = false;
+  // nBranches_->isFired_HLT_PFHT475_v1                                  = false;
+  // nBranches_->isFired_HLT_PFHT600_v2                                  = false;
+  // nBranches_->isFired_HLT_PFHT650_v2                                  = false;
+  // nBranches_->isFired_HLT_PFHT650_WideJetMJJ900DEtaJJ1p5_v2           = false;
+  // nBranches_->isFired_HLT_PFHT650_WideJetMJJ950DEtaJJ1p5_v2           = false;
+  // nBranches_->isFired_HLT_PFHT800_v1                                  = false;
+    
 	
-	if( TrggIndex_HLT_AK8PFJet360_TrimMass30_v1		     < HLTtriggers_->size() ) nBranches_->isFired_HLT_AK8PFJet360_TrimMass30_v1		 = HLTtriggers_->accept(TrggIndex_HLT_AK8PFJet360_TrimMass30_v1		);
-	if( TrggIndex_HLT_AK8PFHT700_TrimR0p1PT0p03Mass50_v1	     < HLTtriggers_->size() ) nBranches_->isFired_HLT_AK8PFHT700_TrimR0p1PT0p03Mass50_v1	 = HLTtriggers_->accept(TrggIndex_HLT_AK8PFHT700_TrimR0p1PT0p03Mass50_v1	);      
-	if( TrggIndex_HLT_AK8DiPFJet280_200_TrimMass30_BTagCSV0p41_v1 < HLTtriggers_->size() ) nBranches_->isFired_HLT_AK8DiPFJet280_200_TrimMass30_BTagCSV0p41_v1 = HLTtriggers_->accept(TrggIndex_HLT_AK8DiPFJet280_200_TrimMass30_BTagCSV0p41_v1);
-	if( TrggIndex_HLT_PFHT650_WideJetMJJ950DEtaJJ1p5_v1	     < HLTtriggers_->size() ) nBranches_->isFired_HLT_PFHT650_WideJetMJJ950DEtaJJ1p5_v1 	 = HLTtriggers_->accept(TrggIndex_HLT_PFHT650_WideJetMJJ950DEtaJJ1p5_v1 	);
-	if( TrggIndex_HLT_PFHT650_WideJetMJJ900DEtaJJ1p5_v1	     < HLTtriggers_->size() ) nBranches_->isFired_HLT_PFHT650_WideJetMJJ900DEtaJJ1p5_v1 	 = HLTtriggers_->accept(TrggIndex_HLT_PFHT650_WideJetMJJ900DEtaJJ1p5_v1 	); 
-	if( TrggIndex_HLT_PFHT900_v1				     < HLTtriggers_->size() ) nBranches_->isFired_HLT_PFHT900_v1                                 = HLTtriggers_->accept(TrggIndex_HLT_PFHT900_v1                                );
+	if( TrggIndex_HLT_AK8PFJet360_TrimMass30_v1                   < HLTtriggers_->size() ) nBranches_->isFired_HLT_AK8PFJet360_TrimMass30_v1                    = HLTtriggers_->accept(TrggIndex_HLT_AK8PFJet360_TrimMass30_v1  );
+	if( TrggIndex_HLT_AK8PFHT700_TrimR0p1PT0p03Mass50_v1          < HLTtriggers_->size() ) nBranches_->isFired_HLT_AK8PFHT700_TrimR0p1PT0p03Mass50_v1           = HLTtriggers_->accept(TrggIndex_HLT_AK8PFHT700_TrimR0p1PT0p03Mass50_v1 );      
+	if( TrggIndex_HLT_AK8DiPFJet280_200_TrimMass30_BTagCSV0p41_v1 < HLTtriggers_->size() ) nBranches_->isFired_HLT_AK8DiPFJet280_200_TrimMass30_BTagCSV0p41_v1  = HLTtriggers_->accept(TrggIndex_HLT_AK8DiPFJet280_200_TrimMass30_BTagCSV0p41_v1  );
+	if( TrggIndex_HLT_PFHT650_WideJetMJJ950DEtaJJ1p5_v1           < HLTtriggers_->size() ) nBranches_->isFired_HLT_PFHT650_WideJetMJJ950DEtaJJ1p5_v1            = HLTtriggers_->accept(TrggIndex_HLT_PFHT650_WideJetMJJ950DEtaJJ1p5_v1  );
+	if( TrggIndex_HLT_PFHT650_WideJetMJJ900DEtaJJ1p5_v1           < HLTtriggers_->size() ) nBranches_->isFired_HLT_PFHT650_WideJetMJJ900DEtaJJ1p5_v1            = HLTtriggers_->accept(TrggIndex_HLT_PFHT650_WideJetMJJ900DEtaJJ1p5_v1  ); 
+	if( TrggIndex_HLT_PFHT350_v1                                  < HLTtriggers_->size() ) nBranches_->isFired_HLT_PFHT350_v1                                   = HLTtriggers_->accept(TrggIndex_HLT_PFHT350_v1 );
+	if( TrggIndex_HLT_PFHT600_v1                                  < HLTtriggers_->size() ) nBranches_->isFired_HLT_PFHT600_v1                                   = HLTtriggers_->accept(TrggIndex_HLT_PFHT600_v1 );
+	if( TrggIndex_HLT_PFHT650_v1                                  < HLTtriggers_->size() ) nBranches_->isFired_HLT_PFHT650_v1                                   = HLTtriggers_->accept(TrggIndex_HLT_PFHT650_v1 );
+	if( TrggIndex_HLT_PFHT900_v1                                  < HLTtriggers_->size() ) nBranches_->isFired_HLT_PFHT900_v1                                   = HLTtriggers_->accept(TrggIndex_HLT_PFHT900_v1 );
+	if( TrggIndex_HLT_HT400_v1                                    < HLTtriggers_->size() ) nBranches_->isFired_HLT_HT400_v1                                     = HLTtriggers_->accept(TrggIndex_HLT_HT400_v1 );
 
+  // if( TrggIndex_HLT_PFHT350_v2                                  < HLTtriggers_->size() ) nBranches_->isFired_HLT_PFHT350_v2                                   = HLTtriggers_->accept(TrggIndex_HLT_PFHT350_v2 );
+  // if( TrggIndex_HLT_PFHT400_v1                                  < HLTtriggers_->size() ) nBranches_->isFired_HLT_PFHT400_v1                                   = HLTtriggers_->accept(TrggIndex_HLT_PFHT400_v1 );
+  // if( TrggIndex_HLT_PFHT475_v1                                  < HLTtriggers_->size() ) nBranches_->isFired_HLT_PFHT475_v1                                   = HLTtriggers_->accept(TrggIndex_HLT_PFHT475_v1 );
+  // if( TrggIndex_HLT_PFHT600_v2                                  < HLTtriggers_->size() ) nBranches_->isFired_HLT_PFHT600_v2                                   = HLTtriggers_->accept(TrggIndex_HLT_PFHT600_v2 );
+  // if( TrggIndex_HLT_PFHT650_v2                                  < HLTtriggers_->size() ) nBranches_->isFired_HLT_PFHT650_v2                                   = HLTtriggers_->accept(TrggIndex_HLT_PFHT650_v2 );
+  // if( TrggIndex_HLT_PFHT650_WideJetMJJ900DEtaJJ1p5_v2           < HLTtriggers_->size() ) nBranches_->isFired_HLT_PFHT650_WideJetMJJ900DEtaJJ1p5_v2            = HLTtriggers_->accept(TrggIndex_HLT_PFHT650_WideJetMJJ900DEtaJJ1p5_v2 );
+  // if( TrggIndex_HLT_PFHT650_WideJetMJJ950DEtaJJ1p5_v2           < HLTtriggers_->size() ) nBranches_->isFired_HLT_PFHT650_WideJetMJJ950DEtaJJ1p5_v2            = HLTtriggers_->accept(TrggIndex_HLT_PFHT650_WideJetMJJ950DEtaJJ1p5_v2 );
+  // if( TrggIndex_HLT_PFHT800_v1                                  < HLTtriggers_->size() ) nBranches_->isFired_HLT_PFHT800_v1                                   = HLTtriggers_->accept(TrggIndex_HLT_PFHT800_v1 );
+  //
 	////////////////// single lepton triggers ///////////////////////////////////
-	unsigned int TrggIndex_HLT_IsoMu24_eta2p1_v1               (trigNames.triggerIndex("HLT_IsoMu24_eta2p1_v1"		 ));
-	unsigned int TrggIndex_HLT_Mu45_eta2p1_v1		   (trigNames.triggerIndex("HLT_Mu45_eta2p1_v1" 		 ));
-        unsigned int TrggIndex_HLT_Ele23_CaloIdL_TrackIdL_IsoVL_v1 (trigNames.triggerIndex("HLT_Ele23_CaloIdL_TrackIdL_IsoVL_v1" ));
-	unsigned int TrggIndex_HLT_Ele32_eta2p1_WP75_Gsf_v1	   (trigNames.triggerIndex("HLT_Ele32_eta2p1_WP75_Gsf_v1"	 ));
-	unsigned int TrggIndex_HLT_Ele105_CaloIdVT_GsfTrkIdT_v1	   (trigNames.triggerIndex("HLT_Ele105_CaloIdVT_GsfTrkIdT_v1"	 ));
+	unsigned int TrggIndex_HLT_IsoMu24_eta2p1_v1                (trigNames.triggerIndex("HLT_IsoMu24_eta2p1_v1" ));
+	unsigned int TrggIndex_HLT_Mu45_eta2p1_v1                   (trigNames.triggerIndex("HLT_Mu45_eta2p1_v1"  ));
+  unsigned int TrggIndex_HLT_Ele23_CaloIdL_TrackIdL_IsoVL_v1  (trigNames.triggerIndex("HLT_Ele23_CaloIdL_TrackIdL_IsoVL_v1" ));
+	unsigned int TrggIndex_HLT_Ele32_eta2p1_WP75_Gsf_v1         (trigNames.triggerIndex("HLT_Ele32_eta2p1_WP75_Gsf_v1"  ));
+	unsigned int TrggIndex_HLT_Ele105_CaloIdVT_GsfTrkIdT_v1     (trigNames.triggerIndex("HLT_Ele105_CaloIdVT_GsfTrkIdT_v1"  ));
 
-        nBranches_->isFired_HLT_IsoMu24_eta2p1_v1               = false;  
-	nBranches_->isFired_HLT_Mu45_eta2p1_v1 		    	= false;
-        nBranches_->isFired_HLT_Ele23_CaloIdL_TrackIdL_IsoVL_v1 = false;
-        nBranches_->isFired_HLT_Ele32_eta2p1_WP75_Gsf_v1 	= false;
-	nBranches_->isFired_HLT_Ele105_CaloIdVT_GsfTrkIdT_v1 	= false;
+  nBranches_->isFired_HLT_IsoMu24_eta2p1_v1               = false;  
+	nBranches_->isFired_HLT_Mu45_eta2p1_v1                  = false;
+  nBranches_->isFired_HLT_Ele23_CaloIdL_TrackIdL_IsoVL_v1 = false;
+  nBranches_->isFired_HLT_Ele32_eta2p1_WP75_Gsf_v1        = false;
+	nBranches_->isFired_HLT_Ele105_CaloIdVT_GsfTrkIdT_v1    = false;
 
-        if( TrggIndex_HLT_IsoMu24_eta2p1_v1    		  < HLTtriggers_->size() ) nBranches_->isFired_HLT_IsoMu24_eta2p1_v1		   = HLTtriggers_->accept(TrggIndex_HLT_IsoMu24_eta2p1_v1		);    
-	if( TrggIndex_HLT_Mu45_eta2p1_v1	      	  < HLTtriggers_->size() ) nBranches_->isFired_HLT_Mu45_eta2p1_v1		   = HLTtriggers_->accept(TrggIndex_HLT_Mu45_eta2p1_v1  		);
-	if( TrggIndex_HLT_Ele23_CaloIdL_TrackIdL_IsoVL_v1 < HLTtriggers_->size() ) nBranches_->isFired_HLT_Ele23_CaloIdL_TrackIdL_IsoVL_v1 = HLTtriggers_->accept(TrggIndex_HLT_Ele23_CaloIdL_TrackIdL_IsoVL_v1 );
-	if( TrggIndex_HLT_Ele32_eta2p1_WP75_Gsf_v1 	  < HLTtriggers_->size() ) nBranches_->isFired_HLT_Ele32_eta2p1_WP75_Gsf_v1	   = HLTtriggers_->accept(TrggIndex_HLT_Ele32_eta2p1_WP75_Gsf_v1	);    
-	if( TrggIndex_HLT_Ele105_CaloIdVT_GsfTrkIdT_v1 	  < HLTtriggers_->size() ) nBranches_->isFired_HLT_Ele105_CaloIdVT_GsfTrkIdT_v1    = HLTtriggers_->accept(TrggIndex_HLT_Ele105_CaloIdVT_GsfTrkIdT_v1	);    
+  if( TrggIndex_HLT_IsoMu24_eta2p1_v1               < HLTtriggers_->size() ) nBranches_->isFired_HLT_IsoMu24_eta2p1_v1                = HLTtriggers_->accept(TrggIndex_HLT_IsoMu24_eta2p1_v1  );    
+	if( TrggIndex_HLT_Mu45_eta2p1_v1                  < HLTtriggers_->size() ) nBranches_->isFired_HLT_Mu45_eta2p1_v1                   = HLTtriggers_->accept(TrggIndex_HLT_Mu45_eta2p1_v1 );
+	if( TrggIndex_HLT_Ele23_CaloIdL_TrackIdL_IsoVL_v1 < HLTtriggers_->size() ) nBranches_->isFired_HLT_Ele23_CaloIdL_TrackIdL_IsoVL_v1  = HLTtriggers_->accept(TrggIndex_HLT_Ele23_CaloIdL_TrackIdL_IsoVL_v1  );
+	if( TrggIndex_HLT_Ele32_eta2p1_WP75_Gsf_v1        < HLTtriggers_->size() ) nBranches_->isFired_HLT_Ele32_eta2p1_WP75_Gsf_v1         = HLTtriggers_->accept(TrggIndex_HLT_Ele32_eta2p1_WP75_Gsf_v1 );    
+	if( TrggIndex_HLT_Ele105_CaloIdVT_GsfTrkIdT_v1 	  < HLTtriggers_->size() ) nBranches_->isFired_HLT_Ele105_CaloIdVT_GsfTrkIdT_v1     = HLTtriggers_->accept(TrggIndex_HLT_Ele105_CaloIdVT_GsfTrkIdT_v1 );    
 	
 	////////////////// Trigger objects ///////////////////////////////////	
 	
