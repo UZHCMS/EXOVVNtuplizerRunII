@@ -83,5 +83,7 @@ private:
   edm::EDGetTokenT<pat::TriggerObjectStandAloneCollection>  triggerObjects_     ;
   edm::EDGetTokenT<pat::PackedTriggerPrescales>             triggerPrescales_   ;
   
+  edm::EDGetTokenT<edm::TriggerResults>                     noiseFilterToken_;
+  
 
 };

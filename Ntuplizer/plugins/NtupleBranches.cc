@@ -332,6 +332,20 @@ void NtupleBranches::branch( void ){
   tree_->Branch("triggerObject_mass"		, &triggerObject_mass		);
   tree_->Branch("triggerObject_filterIDs"	, &triggerObject_filterIDs	);
   tree_->Branch("triggerObject_firedTrigger"	, &triggerObject_firedTrigger	);
+  
+  tree_->Branch("passFilterHBHE"                 ,&passFilterHBHE_                ,"passFilterHBHE_/O");
+  tree_->Branch("passFilterCSCHalo"              ,&passFilterCSCHalo_             ,"passFilterCSCHalo_/O");
+  tree_->Branch("passFilterHCALlaser"            ,&passFilterHCALlaser_           ,"passFilterHCALlaser_/O");
+  tree_->Branch("passFilterECALDeadCell"         ,&passFilterECALDeadCell_        ,"passFilterECALDeadCell_/O");
+  tree_->Branch("passFilterGoodVtx"              ,&passFilterGoodVtx_             ,"passFilterGoodVtx_/O");
+  tree_->Branch("passFilterTrkFailure"           ,&passFilterTrkFailure_          ,"passFilterTrkFailure_/O");
+  tree_->Branch("passFilterEEBadSc"              ,&passFilterEEBadSc_             ,"passFilterEEBadSc_/O");
+  tree_->Branch("passFilterECALlaser"            ,&passFilterECALlaser_           ,"passFilterECALlaser_/O");
+  tree_->Branch("passFilterTrkPOG"               ,&passFilterTrkPOG_              ,"passFilterTrkPOG_/O");
+  tree_->Branch("passFilterTrkPOG_manystrip"     ,&passFilterTrkPOG_manystrip_    ,"passFilterTrkPOG_manystrip_/O");
+  tree_->Branch("passFilterTrkPOG_toomanystrip"  ,&passFilterTrkPOG_toomanystrip_ ,"passFilterTrkPOG_toomanystrip_/O");
+  tree_->Branch("passFilterTrkPOG_logError"      ,&passFilterTrkPOG_logError_     ,"passFilterTrkPOG_logError_/O");
+  tree_->Branch("passFilterMETFilters"           ,&passFilterMETFilters_          ,"passFilterMETFilters_/O");
 
   /*-------------------------MET--------------------------------*/
   tree_->Branch("METraw_et"		        , &METraw_et	     );
@@ -683,5 +697,19 @@ void NtupleBranches::reset( void ){
   triggerObject_mass.clear();
   triggerObject_filterIDs.clear();
   triggerObject_firedTrigger.clear();
+  
+  passFilterHBHE_                  = false;
+  passFilterCSCHalo_               = false;
+  passFilterHCALlaser_             = false;
+  passFilterECALDeadCell_          = false;
+  passFilterGoodVtx_               = false;
+  passFilterTrkFailure_            = false;
+  passFilterEEBadSc_               = false;
+  passFilterECALlaser_             = false;
+  passFilterTrkPOG_                = false;
+  passFilterTrkPOG_manystrip_      = false;
+  passFilterTrkPOG_toomanystrip_   = false;
+  passFilterTrkPOG_logError_       = false;
+  passFilterMETFilters_            = false;
 
 } 
