@@ -53,7 +53,8 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
 
 	triggerToken_		(consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("HLT"))),
 	triggerObjects_	        (consumes<pat::TriggerObjectStandAloneCollection>(iConfig.getParameter<edm::InputTag>("triggerobjects"))),
-	triggerPrescales_	(consumes<pat::PackedTriggerPrescales>(iConfig.getParameter<edm::InputTag>("triggerprescales")))
+	triggerPrescales_	(consumes<pat::PackedTriggerPrescales>(iConfig.getParameter<edm::InputTag>("triggerprescales"))),
+  noiseFilterToken_ (consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("noiseFilter")))
 		
 {
 
@@ -151,8 +152,10 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
 						       
   nTuplizers_["triggers"]  = new TriggersNtuplizer  ( triggerToken_    , 
                                                       triggerObjects_  , 
-						      triggerPrescales_, 
-						      nBranches_      );
+						      triggerPrescales_,
+                  noiseFilterToken_,
+						      nBranches_,
+                  iConfig      );
 						      
   if( doTausBoostedFlag_ )
      nTuplizers_["taus"] = new TausNtuplizer ( tauToken_      , 

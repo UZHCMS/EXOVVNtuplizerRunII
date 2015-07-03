@@ -7,11 +7,11 @@ Ntuplizer for searches for heavy resonances decaying to dibosons
 export SCRAM_ARCH=slc6_amd64_gcc491
 cmsrel CMSSW_7_4_3
 cd CMSSW_7_4_3/src
+git cms-init
 ```
 
-For the boosted Hbb tagger:
+For the boosted Hbb tagger (will add a lot of packages that will take a long time to compile):
 ```
-git cms-init
 git remote add btv-cmssw https://github.com/cms-btv-pog/cmssw.git
 git fetch btv-cmssw
 git cms-merge-topic -u cms-btv-pog:BoostedDoubleSVTagger-WithWeightFiles-v2_from-CMSSW_7_4_1

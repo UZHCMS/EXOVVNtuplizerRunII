@@ -385,6 +385,20 @@ public:
   std::vector<float>  		    triggerObject_mass	      ;
   std::vector< std::vector<float> > triggerObject_filterIDs   ; // as defined in http://cmslxr.fnal.gov/lxr/source/DataFormats/HLTReco/interface/TriggerTypeDefs.h
   std::vector< std::vector<int> >   triggerObject_firedTrigger; // as defined in plugins/TriggersNtuplizer.cc
+  // HLT noise filters
+  bool passFilterHBHE_;
+  bool passFilterCSCHalo_;
+  bool passFilterHCALlaser_;
+  bool passFilterECALDeadCell_;
+  bool passFilterGoodVtx_;
+  bool passFilterTrkFailure_;
+  bool passFilterEEBadSc_;
+  bool passFilterECALlaser_;
+  bool passFilterTrkPOG_;
+  bool passFilterTrkPOG_manystrip_;
+  bool passFilterTrkPOG_toomanystrip_;
+  bool passFilterTrkPOG_logError_;
+  bool passFilterMETFilters_;
   /*-------------------------MET--------------------------------*/
   std::vector<float>                METraw_et		      ;	 
   std::vector<float>                METraw_phi		      ;

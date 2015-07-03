@@ -1,16 +1,32 @@
 #include "../interface/TriggersNtuplizer.h"
 #include "FWCore/Common/interface/TriggerNames.h"
+#include "FWCore/ParameterSet/interface/ParameterSet.h"
 #include "DataFormats/Common/interface/TriggerResults.h"
 #include "DataFormats/PatCandidates/interface/TriggerObjectStandAlone.h"
 #include "DataFormats/PatCandidates/interface/PackedTriggerPrescales.h"
 
 //===================================================================================================================        
-TriggersNtuplizer::TriggersNtuplizer(edm::EDGetTokenT<edm::TriggerResults> tokens, edm::EDGetTokenT<pat::TriggerObjectStandAloneCollection> object, edm::EDGetTokenT<pat::PackedTriggerPrescales> prescale,  NtupleBranches* nBranches )
+TriggersNtuplizer::TriggersNtuplizer(edm::EDGetTokenT<edm::TriggerResults> tokens, edm::EDGetTokenT<pat::TriggerObjectStandAloneCollection> object, edm::EDGetTokenT<pat::PackedTriggerPrescales> prescale, edm::EDGetTokenT<edm::TriggerResults> noiseFilterToken, NtupleBranches* nBranches, const edm::ParameterSet& iConfig )
    : CandidateNtuplizer	( nBranches )
    , HLTtriggersToken_	( tokens )
    , triggerObjects_	( object )	
-   , triggerPrescales_	( prescale )		
+   , triggerPrescales_	( prescale )
+   , noiseFilterToken_	( noiseFilterToken )		
 {
+   
+  HBHENoiseFilter_Selector_ =  iConfig.getParameter<std::string> ("noiseFilterSelection_HBHENoiseFilter");
+  CSCHaloNoiseFilter_Selector_ =  iConfig.getParameter<std::string> ("noiseFilterSelection_CSCTightHaloFilter");
+  HCALlaserNoiseFilter_Selector_ =  iConfig.getParameter<std::string> ("noiseFilterSelection_hcalLaserEventFilter");
+  ECALDeadCellNoiseFilter_Selector_ =  iConfig.getParameter<std::string> ("noiseFilterSelection_EcalDeadCellTriggerPrimitiveFilter");
+  GoodVtxNoiseFilter_Selector_ =  iConfig.getParameter<std::string> ("noiseFilterSelection_goodVertices");
+  TrkFailureNoiseFilter_Selector_ =  iConfig.getParameter<std::string> ("noiseFilterSelection_trackingFailureFilter");
+  EEBadScNoiseFilter_Selector_ =  iConfig.getParameter<std::string> ("noiseFilterSelection_eeBadScFilter");
+  ECALlaserNoiseFilter_Selector_ =  iConfig.getParameter<std::string> ("noiseFilterSelection_ecalLaserCorrFilter");
+  TrkPOGNoiseFilter_Selector_ =  iConfig.getParameter<std::string> ("noiseFilterSelection_trkPOGFilters");
+  TrkPOG_manystrip_NoiseFilter_Selector_ =  iConfig.getParameter<std::string> ("noiseFilterSelection_trkPOG_manystripclus53X");
+  TrkPOG_toomanystrip_NoiseFilter_Selector_ =  iConfig.getParameter<std::string> ("noiseFilterSelection_trkPOG_toomanystripclus53X");
+  TrkPOG_logError_NoiseFilter_Selector_ =  iConfig.getParameter<std::string> ("noiseFilterSelection_trkPOG_logErrorTooManyClusters");
+  METFilters_Selector_ =  iConfig.getParameter<std::string> ("noiseFilterSelection_metFilters");
    
 }
 
@@ -123,6 +139,41 @@ void TriggersNtuplizer::fillBranches( edm::Event const & event, const edm::Event
 		nBranches_->triggerObject_firedTrigger.push_back(vfiredTrigger);
 		
 	}
+  
+  
+  // HLT Noise Filters
+  event.getByToken(noiseFilterToken_, noiseFilterBits_);
+  const edm::TriggerNames &names = event.triggerNames(*noiseFilterBits_);
+  
+  for (unsigned int i = 0, n = noiseFilterBits_->size(); i < n; ++i) {
+    if (names.triggerName(i) == HBHENoiseFilter_Selector_)
+      nBranches_->passFilterHBHE_ = noiseFilterBits_->accept(i);
+    if (names.triggerName(i) == CSCHaloNoiseFilter_Selector_)
+      nBranches_->passFilterCSCHalo_ = noiseFilterBits_->accept(i);
+    if (names.triggerName(i) == HCALlaserNoiseFilter_Selector_)
+      nBranches_->passFilterHCALlaser_ = noiseFilterBits_->accept(i);
+    if (names.triggerName(i) == ECALDeadCellNoiseFilter_Selector_)
+      nBranches_->passFilterECALDeadCell_ = noiseFilterBits_->accept(i);
+    if (names.triggerName(i) == GoodVtxNoiseFilter_Selector_)
+      nBranches_->passFilterGoodVtx_ = noiseFilterBits_->accept(i);
+    if (names.triggerName(i) == TrkFailureNoiseFilter_Selector_)
+      nBranches_->passFilterTrkFailure_ = noiseFilterBits_->accept(i);
+    if (names.triggerName(i) == EEBadScNoiseFilter_Selector_)
+      nBranches_->passFilterEEBadSc_ = noiseFilterBits_->accept(i);
+    if (names.triggerName(i) == ECALlaserNoiseFilter_Selector_)
+      nBranches_->passFilterECALlaser_ = noiseFilterBits_->accept(i);
+    if (names.triggerName(i) == TrkPOGNoiseFilter_Selector_)
+      nBranches_->passFilterTrkPOG_ = noiseFilterBits_->accept(i);
+    if (names.triggerName(i) == TrkPOG_manystrip_NoiseFilter_Selector_)
+      nBranches_->passFilterTrkPOG_manystrip_ = noiseFilterBits_->accept(i);
+    if (names.triggerName(i) == TrkPOG_toomanystrip_NoiseFilter_Selector_)
+      nBranches_->passFilterTrkPOG_toomanystrip_ = noiseFilterBits_->accept(i);
+    if (names.triggerName(i) == TrkPOG_logError_NoiseFilter_Selector_)
+      nBranches_->passFilterTrkPOG_logError_ = noiseFilterBits_->accept(i);
+    if (names.triggerName(i) == METFilters_Selector_)
+      nBranches_->passFilterMETFilters_ = noiseFilterBits_->accept(i);
+  }
+
 	
 }
 
