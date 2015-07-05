@@ -340,7 +340,7 @@ def checkJobsOutputFromXML(xmlfile):
          if j == jj and e != ee: print "Job "+j+": found " + jobsevents[j] + " expected " + e    
             
 #-----------------------------------------------------------------------------------------
-def getFileListDAS(dataset,instance):
+def getFileListDAS(dataset,instance="prod/global"):
 
    cmd = './das_client.py --query="file dataset=%s instance=%s" --limit=1000' %(dataset,instance)
    cmd_out = commands.getoutput( cmd )
