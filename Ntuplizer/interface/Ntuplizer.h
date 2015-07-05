@@ -67,6 +67,7 @@ private:
   edm::EDGetTokenT<pat::MuonCollection>     		    muonToken_  	;	
   edm::EDGetTokenT<edm::View<pat::Electron> >		    electronToken_	;
   edm::EDGetTokenT<edm::ValueMap<bool> >                    eleHEEPIdMapToken_  ;
+  edm::EDGetTokenT<edm::ValueMap<bool> >                    eleHEEPId51MapToken_  ;
   edm::EDGetTokenT<edm::ValueMap<bool> >                    eleVetoIdMapToken_  ;
   edm::EDGetTokenT<edm::ValueMap<bool> >                    eleLooseIdMapToken_ ;
   edm::EDGetTokenT<edm::ValueMap<bool> >                    eleMediumIdMapToken_;
@@ -81,6 +82,8 @@ private:
   edm::EDGetTokenT<edm::TriggerResults>                     triggerToken_       ;
   edm::EDGetTokenT<pat::TriggerObjectStandAloneCollection>  triggerObjects_     ;
   edm::EDGetTokenT<pat::PackedTriggerPrescales>             triggerPrescales_   ;
+  
+  edm::EDGetTokenT<edm::TriggerResults>                     noiseFilterToken_;
   
 
 };

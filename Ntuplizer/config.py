@@ -301,6 +301,7 @@ process.egmGsfElectronIDSequence = cms.Sequence(process.egmGsfElectronIDs)
 #my_id_modules = ['RecoEgamma.ElectronIdentification.Identification.cutBasedElectronID_PHYS14_PU20bx25_V2_cff',
 #		 'RecoEgamma.ElectronIdentification.Identification.heepElectronID_HEEPV51_cff']
 my_id_modules = ['RecoEgamma.ElectronIdentification.Identification.heepElectronID_HEEPV51_cff',
+                 'RecoEgamma.ElectronIdentification.Identification.heepElectronID_HEEPV60_cff',
                  'RecoEgamma.ElectronIdentification.Identification.cutBasedElectronID_PHYS14_PU20bx25_V2_cff']
 
 #add them to the VID producer
@@ -308,6 +309,16 @@ for idmod in my_id_modules:
     setupAllVIDIdsInModule(process,idmod,setupVIDElectronSelection)
 
 ####### Event filters ###########
+
+# process.load('RecoMET.METFilters.CSCTightHaloFilter_cfi') #DOES NOT WORK
+# process.load('RecoMET.METFilters.eeBadScFilter_cfi') #DOES NOT WORK
+# process.load('RecoMET.METFilters.trackingFailureFilter_cfi') #DOES NOT WORK
+# process.goodVertices = cms.EDFilter(
+#  "VertexSelector",
+#  filter = cms.bool(False),
+#  src = cms.InputTag("offlinePrimaryVertices"),
+#  cut = cms.string("!isFake && ndof > 4 && abs(z) <= 24 && position.rho < 2")
+# )
 
 #process.load('RecoMET.METFilters.hcalLaserEventFilter_cfi')
 #process.load('RecoMET.METFilters.EcalDeadCellTriggerPrimitiveFilter_cfi')
@@ -376,7 +387,8 @@ if corrMETonTheFly:
 #                        filterParams = pfJetIDSelector.clone(),
 #                        src = cms.InputTag(jetsAK8)
 #                        )
-						                                                                        
+						                                                             
+                                                                                    
 ################## Ntuplizer ###################
 process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     runOnMC = cms.bool(runOnMC),
@@ -386,7 +398,8 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     vertices = cms.InputTag("offlineSlimmedPrimaryVertices"),
     muons = cms.InputTag("slimmedMuons"),
     electrons = cms.InputTag("slimmedElectrons"),
-    eleHEEPIdMap = cms.InputTag("egmGsfElectronIDs:heepElectronID-HEEPV51"),
+    eleHEEPId51Map = cms.InputTag("egmGsfElectronIDs:heepElectronID-HEEPV51"),
+    eleHEEPIdMap = cms.InputTag("egmGsfElectronIDs:heepElectronID-HEEPV60"),
     eleVetoIdMap = cms.InputTag("egmGsfElectronIDs:cutBasedElectronID-PHYS14-PU20bx25-V2-standalone-veto"),
     eleLooseIdMap = cms.InputTag("egmGsfElectronIDs:cutBasedElectronID-PHYS14-PU20bx25-V2-standalone-loose"),
     eleMediumIdMap = cms.InputTag("egmGsfElectronIDs:cutBasedElectronID-PHYS14-PU20bx25-V2-standalone-medium"),
@@ -412,9 +425,29 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     HLT = cms.InputTag("TriggerResults","","HLT"),
     triggerobjects = cms.InputTag("selectedPatTrigger"),
     triggerprescales = cms.InputTag("patTrigger"),
+    noiseFilter = cms.InputTag('TriggerResults','','PAT'),
     jecAK8chsPayloadNames = cms.vstring( jecLevelsAK8chs ),
     jecAK4chsPayloadNames = cms.vstring( jecLevelsAK4chs ),
     jecpath = cms.string(''),
+    
+    ## Noise Filters ###################################
+    # defined here: https://github.com/cms-sw/cmssw/blob/CMSSW_7_4_X/PhysicsTools/PatAlgos/python/slimming/metFilterPaths_cff.py
+    noiseFilterSelection_HBHENoiseFilter = cms.string('Flag_HBHENoiseFilter'),
+    noiseFilterSelection_CSCTightHaloFilter = cms.string('Flag_CSCTightHaloFilter'),
+    noiseFilterSelection_hcalLaserEventFilter = cms.string('Flag_hcalLaserEventFilter'),
+    noiseFilterSelection_EcalDeadCellTriggerPrimitiveFilter = cms.string('Flag_EcalDeadCellTriggerPrimitiveFilter'),
+    noiseFilterSelection_goodVertices = cms.string('Flag_goodVertices'),
+    noiseFilterSelection_trackingFailureFilter = cms.string('Flag_trackingFailureFilter'),
+    noiseFilterSelection_eeBadScFilter = cms.string('Flag_eeBadScFilter'),
+    noiseFilterSelection_ecalLaserCorrFilter = cms.string('Flag_ecalLaserCorrFilter'),
+    noiseFilterSelection_trkPOGFilters = cms.string('Flag_trkPOGFilters'),
+    # and the sub-filters
+    noiseFilterSelection_trkPOG_manystripclus53X = cms.string('Flag_trkPOG_manystripclus53X'),
+    noiseFilterSelection_trkPOG_toomanystripclus53X = cms.string('Flag_trkPOG_toomanystripclus53X'),
+    noiseFilterSelection_trkPOG_logErrorTooManyClusters = cms.string('Flag_trkPOG_logErrorTooManyClusters'),
+    # summary
+    noiseFilterSelection_metFilters = cms.string('Flag_METFilters'),
+
 )
 
 ####### Final path ##########

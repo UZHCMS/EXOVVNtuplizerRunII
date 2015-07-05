@@ -75,6 +75,7 @@ void NtupleBranches::branch( void ){
   tree_->Branch( "lep_isMediumElectron"	       , &lep_isMediumElectron         );
   tree_->Branch( "lep_isTightElectron"         , &lep_isTightElectron          );  
   tree_->Branch( "lep_isHeepElectron"	       , &lep_isHeepElectron           );
+  tree_->Branch( "lep_isHeep51Electron"	     , &lep_isHeep51Electron         );
   tree_->Branch( "lep_isLooseElectron"	       , &lep_isLooseElectron          );
   tree_->Branch( "lep_isSoftMuon"	       , &lep_isSoftMuon	     );
   tree_->Branch( "lep_pfRhoCorrRelIso03Boost"  , &lep_pfRhoCorrRelIso03Boost );
@@ -331,6 +332,20 @@ void NtupleBranches::branch( void ){
   tree_->Branch("triggerObject_mass"		, &triggerObject_mass		);
   tree_->Branch("triggerObject_filterIDs"	, &triggerObject_filterIDs	);
   tree_->Branch("triggerObject_firedTrigger"	, &triggerObject_firedTrigger	);
+  
+  tree_->Branch("passFilterHBHE"                 ,&passFilterHBHE_                ,"passFilterHBHE_/O");
+  tree_->Branch("passFilterCSCHalo"              ,&passFilterCSCHalo_             ,"passFilterCSCHalo_/O");
+  tree_->Branch("passFilterHCALlaser"            ,&passFilterHCALlaser_           ,"passFilterHCALlaser_/O");
+  tree_->Branch("passFilterECALDeadCell"         ,&passFilterECALDeadCell_        ,"passFilterECALDeadCell_/O");
+  tree_->Branch("passFilterGoodVtx"              ,&passFilterGoodVtx_             ,"passFilterGoodVtx_/O");
+  tree_->Branch("passFilterTrkFailure"           ,&passFilterTrkFailure_          ,"passFilterTrkFailure_/O");
+  tree_->Branch("passFilterEEBadSc"              ,&passFilterEEBadSc_             ,"passFilterEEBadSc_/O");
+  tree_->Branch("passFilterECALlaser"            ,&passFilterECALlaser_           ,"passFilterECALlaser_/O");
+  tree_->Branch("passFilterTrkPOG"               ,&passFilterTrkPOG_              ,"passFilterTrkPOG_/O");
+  tree_->Branch("passFilterTrkPOG_manystrip"     ,&passFilterTrkPOG_manystrip_    ,"passFilterTrkPOG_manystrip_/O");
+  tree_->Branch("passFilterTrkPOG_toomanystrip"  ,&passFilterTrkPOG_toomanystrip_ ,"passFilterTrkPOG_toomanystrip_/O");
+  tree_->Branch("passFilterTrkPOG_logError"      ,&passFilterTrkPOG_logError_     ,"passFilterTrkPOG_logError_/O");
+  tree_->Branch("passFilterMETFilters"           ,&passFilterMETFilters_          ,"passFilterMETFilters_/O");
 
   /*-------------------------MET--------------------------------*/
   tree_->Branch("METraw_et"		        , &METraw_et	     );
@@ -448,6 +463,7 @@ void NtupleBranches::reset( void ){
   lep_isTightElectron	      .clear();
   lep_isLooseElectron	      .clear();
   lep_isHeepElectron	      .clear();
+  lep_isHeep51Electron	    .clear();
   lep_TauType               .clear();
   lep_isSoftMuon	    .clear();
   lep_pfRhoCorrRelIso03Boost.clear();
@@ -681,5 +697,19 @@ void NtupleBranches::reset( void ){
   triggerObject_mass.clear();
   triggerObject_filterIDs.clear();
   triggerObject_firedTrigger.clear();
+  
+  passFilterHBHE_                  = false;
+  passFilterCSCHalo_               = false;
+  passFilterHCALlaser_             = false;
+  passFilterECALDeadCell_          = false;
+  passFilterGoodVtx_               = false;
+  passFilterTrkFailure_            = false;
+  passFilterEEBadSc_               = false;
+  passFilterECALlaser_             = false;
+  passFilterTrkPOG_                = false;
+  passFilterTrkPOG_manystrip_      = false;
+  passFilterTrkPOG_toomanystrip_   = false;
+  passFilterTrkPOG_logError_       = false;
+  passFilterMETFilters_            = false;
 
 } 
