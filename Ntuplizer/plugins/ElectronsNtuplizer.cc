@@ -37,6 +37,7 @@ ElectronsNtuplizer::ElectronsNtuplizer( edm::EDGetTokenT<edm::View<pat::Electron
 	, electronMediumIdMapToken_( eleIDtokens[2] )
 	, electronTightIdMapToken_ ( eleIDtokens[3] )
 	, electronHEEPIdMapToken_  ( eleIDtokens[4] )
+  , electronHEEPId51MapToken_( eleIDtokens[5] )
 
 {
 
@@ -63,6 +64,7 @@ void ElectronsNtuplizer::fillBranches( edm::Event const & event, const edm::Even
    event.getByToken(rhoToken_	   , rho_       );
    
    event.getByToken(electronHEEPIdMapToken_  , heep_id_decisions   );
+   event.getByToken(electronHEEPId51MapToken_, heep_id51_decisions );
    event.getByToken(electronVetoIdMapToken_  , veto_id_decisions   );
    event.getByToken(electronLooseIdMapToken_ , loose_id_decisions  );
    event.getByToken(electronMediumIdMapToken_, medium_id_decisions );
@@ -172,12 +174,14 @@ void ElectronsNtuplizer::fillBranches( edm::Event const & event, const edm::Even
     bool isMediumElectron = (*medium_id_decisions)[el];
     bool isTightElectron  = (*tight_id_decisions)[el] ;
     bool isHeepElectron   = (*heep_id_decisions)[el]  ;
+    bool isHeep51Electron = (*heep_id51_decisions)[el];
   
     nBranches_->lep_isVetoElectron  .push_back(isVetoElectron);
     nBranches_->lep_isLooseElectron .push_back(isLooseElectron);
     nBranches_->lep_isMediumElectron.push_back(isMediumElectron);
     nBranches_->lep_isTightElectron .push_back(isTightElectron);
     nBranches_->lep_isHeepElectron  .push_back(isHeepElectron);  
+    nBranches_->lep_isHeep51Electron.push_back(isHeep51Electron);  
 
     /***************************************************************************/
 
@@ -383,6 +387,7 @@ bool ElectronsNtuplizer::eleIDpassed(std::string id, const pat::Electron &ele ){
   }
 
   bool isHeepElectron = false;
+  bool isHeep51Electron = false;
 
   float et = ele.energy()!=0. ? ele.et()/ele.energy()*ele.caloEnergy() : 0.;
   double iso;
@@ -397,10 +402,15 @@ bool ElectronsNtuplizer::eleIDpassed(std::string id, const pat::Electron &ele ){
         		  iso = ele.dr03EcalRecHitSumEt() + ele.dr03HcalDepth1TowerSumEt();
         		  isoCut = 2 + 0.03*et + 0.28*rho;	    
         		  if( ele.ecalDriven() == 1 && dEtaInSeed( ele ) < 0.004 && ele.deltaPhiSuperClusterTrackAtVtx() < 0.06 && 
-        			  ele.hadronicOverEm() < (2./ele.superCluster()->energy()+0.05) && 
-        				  (ele.full5x5_e2x5Max()/ele.full5x5_e5x5() > 0.94 || ele.full5x5_e1x5()/ele.full5x5_e5x5() > 0.83) &&
-        					  ele.dr03TkSumPt() < 5. && ele.gsfTrack()->hitPattern().numberOfHits(reco::HitPattern::MISSING_INNER_HITS) <= 1 &&
-        						  iso < isoCut && fabs(dxy) < 0.02 ) isHeepElectron = true;
+      				    (ele.full5x5_e2x5Max()/ele.full5x5_e5x5() > 0.94 || ele.full5x5_e1x5()/ele.full5x5_e5x5() > 0.83) &&
+        					ele.dr03TkSumPt() < 5. && ele.gsfTrack()->hitPattern().numberOfHits(reco::HitPattern::MISSING_INNER_HITS) <= 1 &&
+                  iso < isoCut && fabs(dxy) < 0.02 )
+              {
+                if (ele.hadronicOverEm() < (2./ele.superCluster()->energy()+0.05))
+                  isHeep51Electron = true;
+                if (ele.hadronicOverEm() < (1./ele.superCluster()->energy()+0.05))
+                  isHeepElectron = true;
+              }
         	  }
         	  if( fabs(eta) > 1.566 && fabs(eta) < 2.5 ){
         		  iso = ele.dr03EcalRecHitSumEt() + ele.dr03HcalDepth1TowerSumEt();
@@ -409,9 +419,15 @@ bool ElectronsNtuplizer::eleIDpassed(std::string id, const pat::Electron &ele ){
         		  else
         			  isoCut = 2.5+0.03*(et-50.) + 0.28*rho;       
         		  if( ele.ecalDriven() == 1 && dEtaInSeed( ele ) < 0.006 && ele.deltaPhiSuperClusterTrackAtVtx() < 0.06 && 
-        			  ele.hadronicOverEm() < (12.5/ele.superCluster()->energy()+0.05) && ele.full5x5_sigmaIetaIeta() < 0.03 && 
+        			    ele.full5x5_sigmaIetaIeta() < 0.03 && 
         				  ele.dr03TkSumPt() < 5. && ele.gsfTrack()->hitPattern().numberOfHits(reco::HitPattern::MISSING_INNER_HITS) <= 1 &&
-        					  iso < isoCut && fabs(dxy) < 0.05 ) isHeepElectron = true;
+        					iso < isoCut && fabs(dxy) < 0.05 )
+              {
+                if (ele.hadronicOverEm() < (12.5/ele.superCluster()->energy()+0.05))
+                  isHeep51Electron = true;
+                if (ele.hadronicOverEm() < (5./ele.superCluster()->energy()+0.05))
+                  isHeepElectron = true;
+              }
         	  }    
           }	 
   }
@@ -419,6 +435,7 @@ bool ElectronsNtuplizer::eleIDpassed(std::string id, const pat::Electron &ele ){
   if( id == "Veto" ) return isVetoElectron;
   else if( id == "Medium" ) return isMediumElectron;
   else if( id == "Tight" ) return isTightElectron;
+  else if( id == "Heep51" ) return isHeep51Electron;
   else if( id == "Heep" ) return isHeepElectron;
   else return false;
    

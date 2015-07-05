@@ -21,13 +21,10 @@ import FWCore.ParameterSet.VarParsing as VarParsing
 
 options = VarParsing.VarParsing ('analysis')
 
-options.maxEvents = -1
+options.maxEvents = 100
 
-options.inputFiles = ['root://xrootd.unl.edu//store/mc/RunIISpring15DR74/WW_TuneCUETP8M1_13TeV-pythia8/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v1/70000/6E3F7018-0709-E511-B085-B499BAAC0068.root',
-                      'file:file_WW-3_1.root','file:file_WW-3_2.root','file:file_WW-3_3.root','file:file_WW-3_4.root','file:file_WW-3_5.root',
-		      'file:file_WW-3_6.root','file:file_WW-3_8.root','file:file_WW-3_9.root','file:file_WW-3_10.root']
-
-
+options.inputFiles ='file:/shome/jngadiub/EXOVVAnalysisRunII/CMSSW_7_4_3/src/EXOVVNtuplizerRunII/Ntuplizer/test/RSGravToWWToLNQQ_kMpl01_M-1000_TuneCUETP8M1_13TeV-pythia8.root'
+# options.inputFiles ='root://xrootd.unl.edu//store/mc/RunIISpring15DR74/RSGravToWW_kMpl01_M-800_TuneCUETP8M1_13TeV-pythia8/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v2/10000/4A29C383-4604-E511-9B87-001EC9AF02D2.root'
 #options.inputFiles =['root://xrootd.unl.edu//store/backfill/2/data/Tier0_Test_SUPERBUNNIES_vocms001/ZeroBias2/MINIAOD/PromptReco-v63/000/246/908/00000/0AAC26C7-850D-E511-8468-02163E01457A.root',
 #                      'root://xrootd.unl.edu//store/backfill/2/data/Tier0_Test_SUPERBUNNIES_vocms001/ZeroBias2/MINIAOD/PromptReco-v63/000/246/908/00000/1CE64589-850D-E511-96D5-02163E011BB0.root',
 #                      'root://xrootd.unl.edu//store/backfill/2/data/Tier0_Test_SUPERBUNNIES_vocms001/ZeroBias2/MINIAOD/PromptReco-v63/000/246/908/00000/44F8DE83-850D-E511-959E-02163E0135BC.root',
@@ -119,13 +116,13 @@ process.ak8CHSJetsSoftDrop = ak8PFJetsCHSSoftDrop.clone( src = 'chs', jetPtMin =
 ################# Recluster jets with b-tagging ######################
 
 bTagDiscriminators = [
-    'pfJetProbabilityBJetTags',
-    'pfJetBProbabilityBJetTags',
-    'pfSimpleSecondaryVertexHighEffBJetTags',
-    'pfSimpleSecondaryVertexHighPurBJetTags',
+    # 'pfJetProbabilityBJetTags',
+    # 'pfJetBProbabilityBJetTags',
+    # 'pfSimpleSecondaryVertexHighEffBJetTags',
+    # 'pfSimpleSecondaryVertexHighPurBJetTags',
     'pfCombinedInclusiveSecondaryVertexV2BJetTags',
-    'pfTrackCountingHighPurBJetTags',
-    'pfTrackCountingHighEffBJetTags',
+    # 'pfTrackCountingHighPurBJetTags',
+    # 'pfTrackCountingHighEffBJetTags',
     'pfBoostedDoubleSecondaryVertexAK8BJetTags'    
 ]
 
@@ -305,6 +302,7 @@ process.egmGsfElectronIDSequence = cms.Sequence(process.egmGsfElectronIDs)
 #my_id_modules = ['RecoEgamma.ElectronIdentification.Identification.cutBasedElectronID_PHYS14_PU20bx25_V2_cff',
 #		 'RecoEgamma.ElectronIdentification.Identification.heepElectronID_HEEPV51_cff']
 my_id_modules = ['RecoEgamma.ElectronIdentification.Identification.heepElectronID_HEEPV51_cff',
+                 'RecoEgamma.ElectronIdentification.Identification.heepElectronID_HEEPV60_cff',
                  'RecoEgamma.ElectronIdentification.Identification.cutBasedElectronID_PHYS14_PU20bx25_V2_cff']
 
 #add them to the VID producer
@@ -312,6 +310,16 @@ for idmod in my_id_modules:
     setupAllVIDIdsInModule(process,idmod,setupVIDElectronSelection)
 
 ####### Event filters ###########
+
+# process.load('RecoMET.METFilters.CSCTightHaloFilter_cfi') #DOES NOT WORK
+# process.load('RecoMET.METFilters.eeBadScFilter_cfi') #DOES NOT WORK
+# process.load('RecoMET.METFilters.trackingFailureFilter_cfi') #DOES NOT WORK
+# process.goodVertices = cms.EDFilter(
+#  "VertexSelector",
+#  filter = cms.bool(False),
+#  src = cms.InputTag("offlinePrimaryVertices"),
+#  cut = cms.string("!isFake && ndof > 4 && abs(z) <= 24 && position.rho < 2")
+# )
 
 #process.load('RecoMET.METFilters.hcalLaserEventFilter_cfi')
 #process.load('RecoMET.METFilters.EcalDeadCellTriggerPrimitiveFilter_cfi')
@@ -380,16 +388,19 @@ if corrMETonTheFly:
 #                        filterParams = pfJetIDSelector.clone(),
 #                        src = cms.InputTag(jetsAK8)
 #                        )
-						                                                                        
+						                                                             
+                                                                                    
 ################## Ntuplizer ###################
 process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     runOnMC = cms.bool(runOnMC),
+    doHbbTag = cms.bool(doBtagging),
     doPruning = cms.bool(doAK8prunedReclustering),
     doTausBoosted = cms.bool(doSemileptonicTausBoosted),
     vertices = cms.InputTag("offlineSlimmedPrimaryVertices"),
     muons = cms.InputTag("slimmedMuons"),
     electrons = cms.InputTag("slimmedElectrons"),
-    eleHEEPIdMap = cms.InputTag("egmGsfElectronIDs:heepElectronID-HEEPV51"),
+    eleHEEPId51Map = cms.InputTag("egmGsfElectronIDs:heepElectronID-HEEPV51"),
+    eleHEEPIdMap = cms.InputTag("egmGsfElectronIDs:heepElectronID-HEEPV60"),
     eleVetoIdMap = cms.InputTag("egmGsfElectronIDs:cutBasedElectronID-PHYS14-PU20bx25-V2-standalone-veto"),
     eleLooseIdMap = cms.InputTag("egmGsfElectronIDs:cutBasedElectronID-PHYS14-PU20bx25-V2-standalone-loose"),
     eleMediumIdMap = cms.InputTag("egmGsfElectronIDs:cutBasedElectronID-PHYS14-PU20bx25-V2-standalone-medium"),
@@ -415,9 +426,29 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     HLT = cms.InputTag("TriggerResults","","HLT"),
     triggerobjects = cms.InputTag("selectedPatTrigger"),
     triggerprescales = cms.InputTag("patTrigger"),
+    noiseFilter = cms.InputTag('TriggerResults','','PAT'),
     jecAK8chsPayloadNames = cms.vstring( jecLevelsAK8chs ),
     jecAK4chsPayloadNames = cms.vstring( jecLevelsAK4chs ),
     jecpath = cms.string(''),
+    
+    ## Noise Filters ###################################
+    # defined here: https://github.com/cms-sw/cmssw/blob/CMSSW_7_4_X/PhysicsTools/PatAlgos/python/slimming/metFilterPaths_cff.py
+    noiseFilterSelection_HBHENoiseFilter = cms.string('Flag_HBHENoiseFilter'),
+    noiseFilterSelection_CSCTightHaloFilter = cms.string('Flag_CSCTightHaloFilter'),
+    noiseFilterSelection_hcalLaserEventFilter = cms.string('Flag_hcalLaserEventFilter'),
+    noiseFilterSelection_EcalDeadCellTriggerPrimitiveFilter = cms.string('Flag_EcalDeadCellTriggerPrimitiveFilter'),
+    noiseFilterSelection_goodVertices = cms.string('Flag_goodVertices'),
+    noiseFilterSelection_trackingFailureFilter = cms.string('Flag_trackingFailureFilter'),
+    noiseFilterSelection_eeBadScFilter = cms.string('Flag_eeBadScFilter'),
+    noiseFilterSelection_ecalLaserCorrFilter = cms.string('Flag_ecalLaserCorrFilter'),
+    noiseFilterSelection_trkPOGFilters = cms.string('Flag_trkPOGFilters'),
+    # and the sub-filters
+    noiseFilterSelection_trkPOG_manystripclus53X = cms.string('Flag_trkPOG_manystripclus53X'),
+    noiseFilterSelection_trkPOG_toomanystripclus53X = cms.string('Flag_trkPOG_toomanystripclus53X'),
+    noiseFilterSelection_trkPOG_logErrorTooManyClusters = cms.string('Flag_trkPOG_logErrorTooManyClusters'),
+    # summary
+    noiseFilterSelection_metFilters = cms.string('Flag_METFilters'),
+
 )
 
 ####### Final path ##########
