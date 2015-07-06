@@ -412,8 +412,7 @@ if opts.copyfiles:
    user = commands.getoutput("whoami")	
     
    for j in jobsdir:
-      a = j.split("-")
-      jobid = a[1]
+      jobid = j.rsplit("-",1)[1]
       inputpath = "srm://t3se01.psi.ch:8443/srm/managerv2?SFN="+j+"/"+outfile
       outputpath = "srm://t3se01.psi.ch:8443/srm/managerv2?SFN=%s"%(newdir+"/"+prefix+"_"+jobid+".root")
       checkfile = "ls -l %s"%(newdir+"/"+prefix+"_"+jobid+".root") 
