@@ -143,6 +143,19 @@ public:
     std::vector<float>                lep_d0			 ;
     std::vector<float>                lep_dz			 ;
     std::vector<int>	              lep_expectedMissingInnerHits;
+    
+    std::vector<float>                lep_dr03EcalRecHitSumEt;
+    std::vector<float>                lep_dr03HcalDepth1TowerSumEt;
+    std::vector<float>                lep_rho;
+    std::vector<bool>                 lep_ecalDriven;
+    std::vector<float>                lep_dEtaInSeed;
+    std::vector<float>                lep_full5x5_e2x5Max;
+    std::vector<float>                lep_full5x5_e5x5;
+    std::vector<float>                lep_full5x5_e1x5;
+    std::vector<float>                lep_dr03TkSumPt;
+    std::vector<float>                lep_superCluster_e;
+    std::vector<float>                lep_hadronicOverEm;
+    
     std::vector<int>	              lep_isVetoElectron	  ;
     std::vector<int>	              lep_isMediumElectron	  ;
     std::vector<int>	              lep_isTightElectron	  ;    

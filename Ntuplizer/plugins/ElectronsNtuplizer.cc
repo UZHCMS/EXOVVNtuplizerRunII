@@ -144,14 +144,14 @@ void ElectronsNtuplizer::fillBranches( edm::Event const & event, const edm::Even
     nBranches_->lep_SemileptonicPFIso	  .push_back(RhoCorrectedIso03);// /ele.pt()							     );
     nBranches_->lep_SemileptonicCorrPFIso .push_back(RhoCorrectedIso03Boost);// /ele.pt()
      
-    /*======= IDs ==========*/   	    
+    /*======= IDs ==========*/
     nBranches_->lep_passConversionVeto      .push_back(ele.passConversionVeto());
     nBranches_->lep_full5x5_sigmaIetaIeta   .push_back(ele.full5x5_sigmaIetaIeta());
     nBranches_->lep_dEtaIn		    .push_back(ele.deltaEtaSuperClusterTrackAtVtx());
     nBranches_->lep_dPhiIn		    .push_back(ele.deltaPhiSuperClusterTrackAtVtx());
     nBranches_->lep_hOverE		    .push_back(ele.hcalOverEcal());
-    nBranches_->lep_dz  		    .push_back(ele.gsfTrack()->dz( vertices_->at(0).position()));
-    nBranches_->lep_d0  	            .push_back((-1)*ele.gsfTrack()->dxy(vertices_->at(0).position()));
+    nBranches_->lep_dz  		    .push_back( vertices_->size() ? ele.gsfTrack()->dz(vertices_->at(0).position()) :  ele.gsfTrack()->dz() );
+    nBranches_->lep_d0  	            .push_back((-1) * (vertices_->size() ? ele.gsfTrack()->dxy(vertices_->at(0).position()) :  ele.gsfTrack()->dxy()));
     nBranches_->lep_expectedMissingInnerHits.push_back(ele.gsfTrack()->hitPattern().numberOfHits(reco::HitPattern::MISSING_INNER_HITS));
 
     reco::GsfElectron::PflowIsolationVariables pfIso = ele.pfIsolationVariables();
@@ -166,6 +166,19 @@ void ElectronsNtuplizer::fillBranches( edm::Event const & event, const edm::Even
     else{
     	    nBranches_->lep_ooEmooP.push_back(fabs(1.0/ele.ecalEnergy() - ele.eSuperClusterOverP()/ele.ecalEnergy() ));
     }
+    
+    /*======= HEEP ID variables ==========*/
+    nBranches_->lep_dr03EcalRecHitSumEt      .push_back(ele.dr03EcalRecHitSumEt());
+    nBranches_->lep_dr03HcalDepth1TowerSumEt     .push_back(ele.dr03HcalDepth1TowerSumEt());
+    nBranches_->lep_rho      .push_back( *(rho_.product()) );
+    nBranches_->lep_ecalDriven      .push_back(ele.ecalDriven());
+    nBranches_->lep_dEtaInSeed      .push_back( dEtaInSeed(ele));
+    nBranches_->lep_full5x5_e2x5Max      .push_back(ele.full5x5_e2x5Max());
+    nBranches_->lep_full5x5_e5x5      .push_back(ele.full5x5_e5x5());
+    nBranches_->lep_full5x5_e1x5      .push_back(ele.full5x5_e1x5());
+    nBranches_->lep_dr03TkSumPt      .push_back(ele.dr03TkSumPt());
+    nBranches_->lep_superCluster_e      .push_back(ele.superCluster()->energy());
+    nBranches_->lep_hadronicOverEm      .push_back(ele.hadronicOverEm());
 
     const auto el = electrons_->ptrAt(nele);
 
@@ -298,8 +311,8 @@ bool ElectronsNtuplizer::eleIDpassed(std::string id, const pat::Electron &ele ){
   float absiso = pfIso.sumChargedHadronPt + std::max(0.0 , pfIso.sumNeutralHadronEt + pfIso.sumPhotonEt - 0.5 * pfIso.sumPUPt );
   relIsoWithDBeta_ = absiso/ele.pt();
   // Impact parameter
-  d0_ = (-1) * ele.gsfTrack()->dxy(vertices_->at(0).position() );
-  dz_ = ele.gsfTrack()->dz( vertices_->at(0).position() );
+  d0_ = (-1.) * (vertices_->size() ? ele.gsfTrack()->dxy(vertices_->at(0).position()) :  ele.gsfTrack()->dxy() );
+  dz_ = (vertices_->size() ? ele.gsfTrack()->dz(vertices_->at(0).position()) :  ele.gsfTrack()->dz() );
 
   // Conversion rejection
   expectedMissingInnerHits_ = ele.gsfTrack()->hitPattern().numberOfHits(reco::HitPattern::MISSING_INNER_HITS);

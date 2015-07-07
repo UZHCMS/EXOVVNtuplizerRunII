@@ -71,6 +71,19 @@ void NtupleBranches::branch( void ){
   tree_->Branch( "lep_d0"                      , &lep_d0                       );
   tree_->Branch( "lep_dz"		       , &lep_dz                       );
   tree_->Branch( "lep_expectedMissingInnerHits", &lep_expectedMissingInnerHits );
+  
+  tree_->Branch( "lep_dr03EcalRecHitSumEt", &lep_dr03EcalRecHitSumEt);
+  tree_->Branch( "lep_dr03HcalDepth1TowerSumEt", &lep_dr03HcalDepth1TowerSumEt);
+  tree_->Branch( "lep_rho", &lep_rho);
+  tree_->Branch( "lep_ecalDriven", &lep_ecalDriven);
+  tree_->Branch( "lep_dEtaInSeed", &lep_dEtaInSeed);
+  tree_->Branch( "lep_full5x5_e2x5Max", &lep_full5x5_e2x5Max);
+  tree_->Branch( "lep_full5x5_e5x5", &lep_full5x5_e5x5);
+  tree_->Branch( "lep_full5x5_e1x5", &lep_full5x5_e1x5);
+  tree_->Branch( "lep_dr03TkSumPt", &lep_dr03TkSumPt);
+  tree_->Branch( "lep_superCluster_e", &lep_superCluster_e);
+  tree_->Branch( "lep_hadronicOverEm", &lep_hadronicOverEm);
+  
   tree_->Branch( "lep_isVetoElectron"	       , &lep_isVetoElectron           );
   tree_->Branch( "lep_isMediumElectron"	       , &lep_isMediumElectron         );
   tree_->Branch( "lep_isTightElectron"         , &lep_isTightElectron          );  
@@ -458,6 +471,19 @@ void NtupleBranches::reset( void ){
   lep_d0		      .clear();
   lep_dz		      .clear();
   lep_expectedMissingInnerHits.clear();
+  
+  lep_dr03EcalRecHitSumEt.clear();
+  lep_dr03HcalDepth1TowerSumEt.clear();
+  lep_rho.clear();
+  lep_ecalDriven.clear();
+  lep_dEtaInSeed.clear();
+  lep_full5x5_e2x5Max.clear();
+  lep_full5x5_e5x5.clear();
+  lep_full5x5_e1x5.clear();
+  lep_dr03TkSumPt.clear();
+  lep_superCluster_e.clear();
+  lep_hadronicOverEm.clear();
+  
   lep_isVetoElectron	      .clear();
   lep_isMediumElectron	      .clear();
   lep_isTightElectron	      .clear();
