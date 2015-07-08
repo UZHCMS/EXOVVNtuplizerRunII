@@ -23,7 +23,7 @@ options = VarParsing.VarParsing ('analysis')
 
 options.maxEvents = 100
 
-options.inputFiles ='file:/shome/jngadiub/EXOVVAnalysisRunII/CMSSW_7_4_3/src/EXOVVNtuplizerRunII/Ntuplizer/test/RSGravToWWToLNQQ_kMpl01_M-1000_TuneCUETP8M1_13TeV-pythia8.root'
+options.inputFiles ='root://xrootd.unl.edu//store/mc/RunIISpring15DR74/WW_TuneCUETP8M1_13TeV-pythia8/MINIAODSIM/Asympt50ns_MCRUN2_74_V9A-v1/10000/16843F55-DE06-E511-A0EE-008CFA1CB8A8.root'
 # options.inputFiles ='root://xrootd.unl.edu//store/mc/RunIISpring15DR74/RSGravToWW_kMpl01_M-800_TuneCUETP8M1_13TeV-pythia8/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v2/10000/4A29C383-4604-E511-9B87-001EC9AF02D2.root'
 #options.inputFiles =['root://xrootd.unl.edu//store/backfill/2/data/Tier0_Test_SUPERBUNNIES_vocms001/ZeroBias2/MINIAOD/PromptReco-v63/000/246/908/00000/0AAC26C7-850D-E511-8468-02163E01457A.root',
 #                      'root://xrootd.unl.edu//store/backfill/2/data/Tier0_Test_SUPERBUNNIES_vocms001/ZeroBias2/MINIAOD/PromptReco-v63/000/246/908/00000/1CE64589-850D-E511-96D5-02163E011BB0.root',
@@ -49,14 +49,32 @@ process.source = cms.Source("PoolSource",
 
 ######## Sequence settings ##########
 
+# run flags
+runOnMC = False
+doGenParticles = False
+doGenJets = False
+doGenEvent = False
+doPileUp = False
+doElectrons = True
+doMuons = True
+doTaus = False
+doAK8Jets = True
+doAK4Jets = True
+doVertices = True
+doTriggerDecisions = True
+doTriggerObjects = False
+doHltFilters = True
+doMissingEt = True
+doSemileptonicTausBoosted = False #doTausBoosted
+
 #! To recluster and add AK8 Higgs tagging and softdrop subjet b-tagging (both need to be simoultaneously true or false, if not you will have issues with your softdrop subjets!)
 #If you use the softdrop subjets from the slimmedJetsAK8 collection, only CSV seems to be available?
 doAK8reclustering = False
 doAK8softdropReclustering = False
-doBtagging = False
+doBtagging = True #doHbbtag
 
 #! To add pruned jet and pruned subjet collection (not in MINIAOD)
-doAK8prunedReclustering = False
+doAK8prunedReclustering = False #doPruning
 
 # To corr jets on the fly if the JEC in the MC have been changed.
 # NB: this flag corrects the pruned/softdrop jets as well. We should probably add a second flag.
@@ -65,9 +83,6 @@ corrJetsOnTheFly = False
 #! To recluster MET with new corrections
 doMETReclustering = False
 corrMETonTheFly = False #If you recluster the MET there is no need for re-correcting. Use it only if you run on default miniAOD met collection.
-
-#taus
-doSemileptonicTausBoosted = False
 
 ####### Logger ##########
 
@@ -327,8 +342,6 @@ for idmod in my_id_modules:
 
 ####### Ntuplizer initialization ##########
 
-runOnMC = False
-
 jetsAK8 = "slimmedJetsAK8"
 jetsAK8pruned = ""
 # jetsAK8softdrop = "slimmedJetsAK8PFCHSSoftDropPacked" (if you want to add this subjet collection, changes need to be made in plugins/JetsNtuplizer.cc! Not needed to obtain subjets)
@@ -393,6 +406,20 @@ if corrMETonTheFly:
 ################## Ntuplizer ###################
 process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     runOnMC = cms.bool(runOnMC),
+    doGenParticles = cms.bool(doGenParticles),
+    doGenJets = cms.bool(doGenJets),
+    doGenEvent = cms.bool(doGenEvent),
+    doPileUp = cms.bool(doPileUp),
+    doElectrons = cms.bool(doElectrons),
+    doMuons = cms.bool(doMuons),
+    doTaus = cms.bool(doTaus),
+    doAK8Jets = cms.bool(doAK8Jets),
+    doAK4Jets = cms.bool(doAK4Jets),
+    doVertices = cms.bool(doVertices),
+    doTriggerDecisions = cms.bool(doTriggerDecisions),
+    doTriggerObjects = cms.bool(doTriggerObjects),
+    doHltFilters = cms.bool(doHltFilters),
+    doMissingEt = cms.bool(doMissingEt),
     doHbbTag = cms.bool(doBtagging),
     doPruning = cms.bool(doAK8prunedReclustering),
     doTausBoosted = cms.bool(doSemileptonicTausBoosted),
