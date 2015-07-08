@@ -24,6 +24,7 @@ GenParticlesNtuplizer::~GenParticlesNtuplizer( void )
     std::vector<int> vMoth;
     int nMoth = 0;
     int nDau  = 0;  
+    nBranches_->genParticle_N = genParticles_->size();
     for( unsigned p=0; p<genParticles_->size(); ++p ){
       //if( (*genParticles_)[p].status() != 3 ) continue;
       vDau.clear(); vMoth.clear();
