@@ -340,7 +340,7 @@ def checkJobsOutputFromXML(xmlfile):
          if j == jj and e != ee: print "Job "+j+": found " + jobsevents[j] + " expected " + e    
             
 #-----------------------------------------------------------------------------------------
-def getFileListDAS(dataset,instance):
+def getFileListDAS(dataset,instance="prod/global"):
 
    cmd = './das_client.py --query="file dataset=%s instance=%s" --limit=1000' %(dataset,instance)
    cmd_out = commands.getoutput( cmd )
@@ -412,8 +412,7 @@ if opts.copyfiles:
    user = commands.getoutput("whoami")	
     
    for j in jobsdir:
-      a = j.split("-")
-      jobid = a[1]
+      jobid = j.rsplit("-",1)[1]
       inputpath = "srm://t3se01.psi.ch:8443/srm/managerv2?SFN="+j+"/"+outfile
       outputpath = "srm://t3se01.psi.ch:8443/srm/managerv2?SFN=%s"%(newdir+"/"+prefix+"_"+jobid+".root")
       checkfile = "ls -l %s"%(newdir+"/"+prefix+"_"+jobid+".root") 
