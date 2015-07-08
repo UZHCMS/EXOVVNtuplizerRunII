@@ -16,7 +16,7 @@ class JetsNtuplizer : public CandidateNtuplizer {
 public:
 //   JetsNtuplizer( std::vector<edm::InputTag> labels, std::vector<std::string> jecCA8Labels, std::vector<std::string> jecAK5Labels, NtupleBranches* nBranches );
 
- JetsNtuplizer( std::vector<edm::EDGetTokenT<pat::JetCollection>> token, std::vector<std::string> jecAK4Labels, std::vector<std::string> jecAK8Labels, edm::EDGetTokenT<reco::JetFlavourMatchingCollection> flavourToken, edm::EDGetTokenT<double> rhoToken, edm::EDGetTokenT<reco::VertexCollection> verticeToken, NtupleBranches* nBranches );
+ JetsNtuplizer( std::vector<edm::EDGetTokenT<pat::JetCollection>> token, std::vector<std::string> jecAK4Labels, std::vector<std::string> jecAK8Labels, edm::EDGetTokenT<reco::JetFlavourMatchingCollection> flavourToken, edm::EDGetTokenT<double> rhoToken, edm::EDGetTokenT<reco::VertexCollection> verticeToken, NtupleBranches* nBranches, std::map< std::string, bool >& runFlags );
    ~JetsNtuplizer( void );
 
   bool looseJetID( const pat::Jet& j );
@@ -26,9 +26,6 @@ public:
   
   
  private:
-  
-  //bool doPrunedAK8subjets;
-  //bool doSoftDropAK8subjets;
   
   std::vector<std::string>                    jecAK8PayloadNames_;
   boost::shared_ptr<FactorizedJetCorrector>   jecAK8_            ;      
@@ -46,7 +43,7 @@ public:
   edm::EDGetTokenT<reco::JetFlavourMatchingCollection> 	flavourToken_   		;
   edm::EDGetTokenT<double> 		   						rhoToken_     			;
   edm::EDGetTokenT<reco::VertexCollection>  			verticeToken_ 			;
-   
+  
   edm::Handle<pat::JetCollection>      					jets_      				;
   edm::Handle<pat::JetCollection>      					fatjets_      			;
   edm::Handle<pat::JetCollection>      					prunedjets_      		;
@@ -57,6 +54,10 @@ public:
   edm::Handle<reco::VertexCollection> 	     			vertices_     			;
   
   bool doCorrOnTheFly_;
+  bool doAK4Jets_;
+  bool doAK8Jets_;
+  bool doPruning_;
+  
 };
 
 #endif // JetsNtuplizer_H
