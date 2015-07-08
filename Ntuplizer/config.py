@@ -242,51 +242,52 @@ process.patJetsAk8CHSJets.userData.userFloats.src += ['NjettinessAK8:tau1','Njet
 process.patJetsAk8CHSJets.addTagInfos = True
 
 # ###### Recluster MET ##########
+if doMETReclustering:
 
-from RecoJets.JetProducers.ak4PFJets_cfi import ak4PFJets
-process.ak4PFJets = ak4PFJets.clone(src = "packedPFCandidates")
-process.ak4PFJets.doAreaFastjet = True
+  from RecoJets.JetProducers.ak4PFJets_cfi import ak4PFJets
+  process.ak4PFJets = ak4PFJets.clone(src = "packedPFCandidates")
+  process.ak4PFJets.doAreaFastjet = True
 
-from PhysicsTools.PatAlgos.tools.jetTools import switchJetCollection
-switchJetCollection(process,
-                    jetSource = cms.InputTag('ak4PFJets'),
-                    jetCorrections = ('AK4PF', ['L1FastJet', 'L2Relative', 'L3Absolute'], ''),
-		    genParticles = cms.InputTag('prunedGenParticles'),
-		    pvSource = cms.InputTag('offlineSlimmedPrimaryVertices')
-                    )
-		    
-from RecoMET.METProducers.PFMET_cfi import pfMet
-process.pfMet = pfMet.clone(src = "packedPFCandidates")
-process.pfMet.calculateSignificance = False
-		    
-from JetMETCorrections.Type1MET.correctedMet_cff import pfMetT1
-process.pfMetT1 = pfMetT1.clone()
+  from PhysicsTools.PatAlgos.tools.jetTools import switchJetCollection
+  switchJetCollection(process,
+  		      jetSource = cms.InputTag('ak4PFJets'),
+  		      jetCorrections = ('AK4PF', ['L1FastJet', 'L2Relative', 'L3Absolute'], ''),
+  		      genParticles = cms.InputTag('prunedGenParticles'),
+  		      pvSource = cms.InputTag('offlineSlimmedPrimaryVertices')
+  		      )
+  		      
+  from RecoMET.METProducers.PFMET_cfi import pfMet
+  process.pfMet = pfMet.clone(src = "packedPFCandidates")
+  process.pfMet.calculateSignificance = False
+  		      
+  from JetMETCorrections.Type1MET.correctedMet_cff import pfMetT1
+  process.pfMetT1 = pfMetT1.clone()
 
-from PhysicsTools.PatUtils.tools.runType1PFMEtUncertainties import runType1PFMEtUncertainties
-runType1PFMEtUncertainties(process,addToPatDefaultSequence=False,
-                           jetCollection="selectedPatJets",
-                           photonCollection="slimmedPhotons",
-                           electronCollection="slimmedElectrons",
-                           muonCollection="slimmedMuons",
-                           tauCollection="slimmedTaus",
-			   makeType1p2corrPFMEt=False)
-			   
-process.patMETs.addGenMET  = cms.bool(False)
-process.patJets.addGenJetMatch = cms.bool(False) 
-process.patJets.addGenPartonMatch = cms.bool(False) 
-process.patJets.addPartonJetMatch = cms.bool(False) 
-			       
-from PhysicsTools.PatAlgos.tools.metTools import addMETCollection
-addMETCollection(process, labelName = 'patMET'    , metSource = 'pfMetT1'  ) # T1
-addMETCollection(process, labelName = 'patPFMet'  , metSource = 'pfMet'    ) # RAW
-		     
-from PhysicsTools.PatAlgos.slimming.slimmedMETs_cfi import slimmedMETs
-process.mySlimmedMETs = slimmedMETs.clone()
-process.mySlimmedMETs.src = cms.InputTag("patMET")
-process.mySlimmedMETs.rawUncertainties   = cms.InputTag("patPFMet") # only central value
-process.mySlimmedMETs.type1Uncertainties = cms.InputTag("patPFMetT1")    # only central value for now
-del process.mySlimmedMETs.type1p2Uncertainties # not available
-del process.mySlimmedMETs.caloMET
+  from PhysicsTools.PatUtils.tools.runType1PFMEtUncertainties import runType1PFMEtUncertainties
+  runType1PFMEtUncertainties(process,addToPatDefaultSequence=False,
+  			     jetCollection="selectedPatJets",
+  			     photonCollection="slimmedPhotons",
+  			     electronCollection="slimmedElectrons",
+  			     muonCollection="slimmedMuons",
+  			     tauCollection="slimmedTaus",
+  			     makeType1p2corrPFMEt=False)
+  			     
+  process.patMETs.addGenMET  = cms.bool(False)
+  process.patJets.addGenJetMatch = cms.bool(False) 
+  process.patJets.addGenPartonMatch = cms.bool(False) 
+  process.patJets.addPartonJetMatch = cms.bool(False) 
+  				 
+  from PhysicsTools.PatAlgos.tools.metTools import addMETCollection
+  addMETCollection(process, labelName = 'patMET'    , metSource = 'pfMetT1'  ) # T1
+  addMETCollection(process, labelName = 'patPFMet'  , metSource = 'pfMet'    ) # RAW
+  		       
+  from PhysicsTools.PatAlgos.slimming.slimmedMETs_cfi import slimmedMETs
+  process.mySlimmedMETs = slimmedMETs.clone()
+  process.mySlimmedMETs.src = cms.InputTag("patMET")
+  process.mySlimmedMETs.rawUncertainties   = cms.InputTag("patPFMet") # only central value
+  process.mySlimmedMETs.type1Uncertainties = cms.InputTag("patPFMetT1")    # only central value for now
+  del process.mySlimmedMETs.type1p2Uncertainties # not available
+  del process.mySlimmedMETs.caloMET
         
 ####### Adding HEEP id ##########
 
