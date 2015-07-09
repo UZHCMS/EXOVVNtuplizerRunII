@@ -7,6 +7,7 @@ Ntuplizer for searches for heavy resonances decaying to dibosons
 export SCRAM_ARCH=slc6_amd64_gcc491
 cmsrel CMSSW_7_4_3
 cd CMSSW_7_4_3/src
+cmsenv
 git cms-init
 ```
 
@@ -27,7 +28,7 @@ git clone https://github.com/$GITUSER/EXOVVNtuplizerRunII
 cd EXOVVNtuplizerRunII
 git remote add UZHCMS https://github.com/UZHCMS/EXOVVNtuplizerRunII
 git fetch UZHCMS
-git checkout -b CMSSW_7_4_X UZHCMS/CMSSW_7_4_X
+git checkout -b DevelopmentBranch UZHCMS/master
 cd $CMSSW_BASE/src
 scram b distclean
 scram b -j8

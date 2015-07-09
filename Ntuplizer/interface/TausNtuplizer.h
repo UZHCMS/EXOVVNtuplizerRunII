@@ -6,7 +6,7 @@
 class TausNtuplizer : public CandidateNtuplizer {
 
 public:
-  TausNtuplizer( edm::EDGetTokenT<pat::TauCollection> tauToken, edm::EDGetTokenT<pat::TauCollection> tauEleTauToken , edm::EDGetTokenT<pat::TauCollection> tauMuTauToken , edm::EDGetTokenT<double> rhoToken, edm::EDGetTokenT<reco::VertexCollection> verticeToken,  NtupleBranches* nBranches );
+  TausNtuplizer( edm::EDGetTokenT<pat::TauCollection> tauToken, edm::EDGetTokenT<pat::TauCollection> tauEleTauToken , edm::EDGetTokenT<pat::TauCollection> tauMuTauToken , edm::EDGetTokenT<double> rhoToken, edm::EDGetTokenT<reco::VertexCollection> verticeToken,  NtupleBranches* nBranches, std::map< std::string, bool >& runFlags );
    ~TausNtuplizer( void );
    
    void fillBranches( edm::Event const & event, const edm::EventSetup& iSetup );
@@ -26,6 +26,8 @@ public:
    edm::Handle< std::vector<pat::Tau> > muTaus_ ;
    edm::Handle< double >                rho_     ;
    edm::Handle<reco::VertexCollection> 	     			vertices_     			;
+   
+   bool doBoostedTaus_;
 
 };
 

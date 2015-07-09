@@ -42,10 +42,6 @@ private:
   
   NtupleBranches* nBranches_;
   std::map<std::string,CandidateNtuplizer*>                 nTuplizers_         ;
-  bool                                                      runOnMC             ;
-  bool                                                      doTausBoostedFlag_  ;
-  bool                                                      doPruningFlag_      ;
-  bool                                                      doHbbTagFlag_       ;
   
   edm::EDGetTokenT<reco::VertexCollection>                  vtxToken_           ;
   edm::EDGetTokenT<double>                                  rhoToken_           ;
