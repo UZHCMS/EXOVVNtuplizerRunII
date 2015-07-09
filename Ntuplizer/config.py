@@ -6,8 +6,6 @@ process = cms.Process("Ntuple")
 
 process.load("Configuration.StandardSequences.MagneticField_cff")
 process.load('Configuration.Geometry.GeometryRecoDB_cff')
-process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_cff")
-from Configuration.AlCa.GlobalTag import GlobalTag
 
 process.TFileService = cms.Service("TFileService",
                                     fileName = cms.string('flatTuple.root')
@@ -21,8 +19,7 @@ options = VarParsing.VarParsing ('analysis')
 
 options.maxEvents = -1
 
-#options.inputFiles ='dcap://t3se01.psi.ch:22125//pnfs/psi.ch/cms/trivcat/store/user/jngadiub/jobtmp_MINIAOD/MINIAOD-30/MINIAOD.root'
-options.inputFiles ='file:testminiaod_PAT.root'
+options.inputFiles ='dcap://t3se01.psi.ch:22125//pnfs/psi.ch/cms/trivcat/store/t3groups/uniz-higgs/ExpressPhysics/MINIAOD/Run2015B-Express-v1/MINIAOD_Run2015B-Express-v1_67.root'
 
 options.parseArguments()
 
@@ -40,14 +37,34 @@ process.source = cms.Source("PoolSource",
 
 ######## Sequence settings ##########
 
+# run flags
+runOnMC = False
+runOnAOD = False #do not switch it on since the step does not work for the moment
+useJSON = False
+doGenParticles = False
+doGenJets = False
+doGenEvent = False
+doPileUp = False
+doElectrons = True
+doMuons = True
+doTaus = False
+doAK8Jets = True
+doAK4Jets = True
+doVertices = True
+doTriggerDecisions = True
+doTriggerObjects = False
+doHltFilters = False #does not work for express data
+doMissingEt = True
+doSemileptonicTausBoosted = False #doTausBoosted
+
 #! To recluster and add AK8 Higgs tagging and softdrop subjet b-tagging (both need to be simoultaneously true or false, if not you will have issues with your softdrop subjets!)
 #If you use the softdrop subjets from the slimmedJetsAK8 collection, only CSV seems to be available?
 doAK8reclustering = False
 doAK8softdropReclustering = False
-doBtagging = False
+doBtagging = False #doHbbtag
 
 #! To add pruned jet and pruned subjet collection (not in MINIAOD)
-doAK8prunedReclustering = False
+doAK8prunedReclustering = False #doPruning
 
 # To corr jets on the fly if the JEC in the MC have been changed.
 # NB: this flag corrects the pruned/softdrop jets as well. We should probably add a second flag.
@@ -56,9 +73,6 @@ corrJetsOnTheFly = False
 #! To recluster MET with new corrections
 doMETReclustering = False
 corrMETonTheFly = False #If you recluster the MET there is no need for re-correcting. Use it only if you run on default miniAOD met collection.
-
-#taus
-doSemileptonicTausBoosted = False
 
 ####### Logger ##########
 
@@ -71,6 +85,35 @@ process.MessageLogger.cerr.INFO = cms.untracked.PSet(
 )
 process.MessageLogger.cerr.FwkReport.reportEvery = 1000
 
+####### Define conditions ##########
+process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_cff")
+from Configuration.AlCa.GlobalTag import GlobalTag
+
+if runOnMC:
+   #process.GlobalTag = GlobalTag(process.GlobalTag, 'MCRUN2_74_V9::All')
+   process.GlobalTag = GlobalTag(process.GlobalTag, 'auto:run2_mc')
+elif not(runOnMC):
+   process.GlobalTag = GlobalTag(process.GlobalTag, 'GR_P_V56')
+   
+######## to run the miniaod step but it doesnt not work! ##########
+if not(runOnMC) and runOnAOD:
+  from SLHCUpgradeSimulations.Configuration.postLS1Customs import customisePostLS1_50ns 
+  process = customisePostLS1_50ns(process)
+  from FWCore.ParameterSet.Utilities import convertToUnscheduled
+  process=convertToUnscheduled(process)
+  process.load('Configuration.StandardSequences.PAT_cff')
+  from PhysicsTools.PatAlgos.slimming.miniAOD_tools import miniAOD_customizeAllData 
+  process = miniAOD_customizeAllData(process)
+
+######### read JSON file for data ##########					                                                             
+if not(runOnMC) and useJSON:
+
+  import FWCore.PythonUtilities.LumiList as LumiList
+  import FWCore.ParameterSet.Types as CfgTypes
+  process.source.lumisToProcess = CfgTypes.untracked(CfgTypes.VLuminosityBlockRange())
+  JSONfile = 'json_DCSONLY_Run2015B.txt'
+  myLumis = LumiList.LumiList(filename = JSONfile).getCMSSWString().split(',')
+  process.source.lumisToProcess.extend(myLumis) 
 
 ####### Redo Jet clustering sequence ##########
 
@@ -318,14 +361,6 @@ for idmod in my_id_modules:
 
 ####### Ntuplizer initialization ##########
 
-runOnMC = False
-
-if runOnMC:
-   #process.GlobalTag = GlobalTag(process.GlobalTag, 'MCRUN2_74_V9::All')
-   process.GlobalTag = GlobalTag(process.GlobalTag, 'auto:run2_mc')
-elif not(runOnMC):
-   process.GlobalTag = GlobalTag(process.GlobalTag, 'GR_P_V56')
-
 jetsAK8 = "slimmedJetsAK8"
 jetsAK8pruned = ""
 # jetsAK8softdrop = "slimmedJetsAK8PFCHSSoftDropPacked" (if you want to add this subjet collection, changes need to be made in plugins/JetsNtuplizer.cc! Not needed to obtain subjets)
@@ -385,32 +420,24 @@ if corrMETonTheFly:
 #                        filterParams = pfJetIDSelector.clone(),
 #                        src = cms.InputTag(jetsAK8)
 #                        )
-
-#to run the miniaod step but it doesnt not work!
-runOnAOD = False
-if runOnAOD:
-  from SLHCUpgradeSimulations.Configuration.postLS1Customs import customisePostLS1_50ns 
-  process = customisePostLS1_50ns(process)
-  from FWCore.ParameterSet.Utilities import convertToUnscheduled
-  process=convertToUnscheduled(process)
-  process.load('Configuration.StandardSequences.PAT_cff')
-  from PhysicsTools.PatAlgos.slimming.miniAOD_tools import miniAOD_customizeAllData 
-  process = miniAOD_customizeAllData(process)
-
-#read JSON file	for data					                                                             
-useJSON = False
-if not(runOnMC) and useJSON:
-
-  import FWCore.PythonUtilities.LumiList as LumiList
-  import FWCore.ParameterSet.Types as CfgTypes
-  process.source.lumisToProcess = CfgTypes.untracked(CfgTypes.VLuminosityBlockRange())
-  JSONfile = 'json_DCSONLY_Run2015B.txt'
-  myLumis = LumiList.LumiList(filename = JSONfile).getCMSSWString().split(',')
-  process.source.lumisToProcess.extend(myLumis) 
                                                                                       
 ################## Ntuplizer ###################
 process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     runOnMC = cms.bool(runOnMC),
+    doGenParticles = cms.bool(doGenParticles),
+    doGenJets = cms.bool(doGenJets),
+    doGenEvent = cms.bool(doGenEvent),
+    doPileUp = cms.bool(doPileUp),
+    doElectrons = cms.bool(doElectrons),
+    doMuons = cms.bool(doMuons),
+    doTaus = cms.bool(doTaus),
+    doAK8Jets = cms.bool(doAK8Jets),
+    doAK4Jets = cms.bool(doAK4Jets),
+    doVertices = cms.bool(doVertices),
+    doTriggerDecisions = cms.bool(doTriggerDecisions),
+    doTriggerObjects = cms.bool(doTriggerObjects),
+    doHltFilters = cms.bool(doHltFilters),
+    doMissingEt = cms.bool(doMissingEt),
     doHbbTag = cms.bool(doBtagging),
     doPruning = cms.bool(doAK8prunedReclustering),
     doTausBoosted = cms.bool(doSemileptonicTausBoosted),

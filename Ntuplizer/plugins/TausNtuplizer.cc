@@ -9,13 +9,15 @@
 TausNtuplizer::TausNtuplizer( edm::EDGetTokenT<pat::TauCollection> tauToken,edm::EDGetTokenT<pat::TauCollection> tauEleTauToken,edm::EDGetTokenT<pat::TauCollection> tauMuTauToken,
 			      edm::EDGetTokenT<double> rhoToken, 
 			      edm::EDGetTokenT<reco::VertexCollection> verticeToken,
-			      NtupleBranches* nBranches )
+			      NtupleBranches* nBranches,
+            std::map< std::string, bool >& runFlags )
   : CandidateNtuplizer( nBranches )
   , tauInputToken_ (tauToken)
   , tauEleTauInputToken_ ( tauEleTauToken)
   , tauMuTauInputToken_ ( tauMuTauToken )
   , rhoToken_	       	    ( rhoToken  )
-  , verticeToken_     	    ( verticeToken  )	    
+  , verticeToken_     	    ( verticeToken  )	 
+  , doBoostedTaus_     	    ( runFlags["doBoostedTaus"]  )	 
  
 {
   
@@ -284,66 +286,68 @@ void TausNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
       nBranches_->tau_neutralHadIsoBoost    .push_back(muTau.userIsolation(pat::PfNeutralHadronIso));
       nBranches_->tau_chargedHadIsoBoost    .push_back(muTau.userIsolation(pat::PfChargedHadronIso));
       
-      /*====================== IDs ========================*/	                                     
-      nBranches_->tau_decayModeFindingNewDMs                     .push_back(muTau.tauID("decayModeFindingNewDMs"		      ));
-      nBranches_->tau_decayModeFinding	                     .push_back(muTau.tauID("decayModeFinding"			      ));
-      nBranches_->tau_byLooseCombinedIsolationDeltaBetaCorr3Hits .push_back(muTau.tauID("byLooseCombinedIsolationDeltaBetaCorr3Hits"  ));
-      nBranches_->tau_byMediumCombinedIsolationDeltaBetaCorr3Hits.push_back(muTau.tauID("byMediumCombinedIsolationDeltaBetaCorr3Hits" ));
-      nBranches_->tau_byTightCombinedIsolationDeltaBetaCorr3Hits .push_back(muTau.tauID("byTightCombinedIsolationDeltaBetaCorr3Hits"  ));
-      nBranches_->tau_byCombinedIsolationDeltaBetaCorrRaw3Hits   .push_back(muTau.tauID("byCombinedIsolationDeltaBetaCorrRaw3Hits"    ));
-      nBranches_->tau_chargedIsoPtSum                            .push_back(muTau.tauID("chargedIsoPtSum"			      ));
-      nBranches_->tau_neutralIsoPtSum                            .push_back(muTau.tauID("neutralIsoPtSum"			      ));
-      nBranches_->tau_puCorrPtSum                                .push_back(muTau.tauID("puCorrPtSum"				      ));
-      nBranches_->tau_byIsolationMVA3oldDMwoLTraw                .push_back(muTau.tauID("byIsolationMVA3oldDMwoLTraw"		      )); 
-      nBranches_->tau_byVLooseIsolationMVA3oldDMwoLT             .push_back(muTau.tauID("byVLooseIsolationMVA3oldDMwoLT"	      ));
-      nBranches_->tau_byLooseIsolationMVA3oldDMwoLT              .push_back(muTau.tauID("byLooseIsolationMVA3oldDMwoLT" 	      ));
-      nBranches_->tau_byMediumIsolationMVA3oldDMwoLT             .push_back(muTau.tauID("byMediumIsolationMVA3oldDMwoLT"	      ));
-      nBranches_->tau_byTightIsolationMVA3oldDMwoLT              .push_back(muTau.tauID("byTightIsolationMVA3oldDMwoLT" 	      ));
-      nBranches_->tau_byVTightIsolationMVA3oldDMwoLT             .push_back(muTau.tauID("byVTightIsolationMVA3oldDMwoLT"	      ));
-      nBranches_->tau_byVVTightIsolationMVA3oldDMwoLT            .push_back(muTau.tauID("byVVTightIsolationMVA3oldDMwoLT"	      ));
-      nBranches_->tau_byIsolationMVA3oldDMwLTraw                 .push_back(muTau.tauID("byIsolationMVA3oldDMwLTraw"		      ));
-      nBranches_->tau_byVLooseIsolationMVA3oldDMwLT              .push_back(muTau.tauID("byVLooseIsolationMVA3oldDMwLT" 	      ));
-      nBranches_->tau_byLooseIsolationMVA3oldDMwLT               .push_back(muTau.tauID("byLooseIsolationMVA3oldDMwLT"  	      ));
-      nBranches_->tau_byMediumIsolationMVA3oldDMwLT              .push_back(muTau.tauID("byMediumIsolationMVA3oldDMwLT" 	      ));
-      nBranches_->tau_byTightIsolationMVA3oldDMwLT               .push_back(muTau.tauID("byTightIsolationMVA3oldDMwLT"  	      ));
-      nBranches_->tau_byVTightIsolationMVA3oldDMwLT              .push_back(muTau.tauID("byVTightIsolationMVA3oldDMwLT" 	      ));
-      nBranches_->tau_byVVTightIsolationMVA3oldDMwLT             .push_back(muTau.tauID("byVVTightIsolationMVA3oldDMwLT"	      ));
-      nBranches_->tau_byIsolationMVA3newDMwoLTraw                .push_back(muTau.tauID("byIsolationMVA3newDMwoLTraw"		      ));
-      nBranches_->tau_byVLooseIsolationMVA3newDMwoLT             .push_back(muTau.tauID("byVLooseIsolationMVA3newDMwoLT"	      ));
-      nBranches_->tau_byLooseIsolationMVA3newDMwoLT              .push_back(muTau.tauID("byLooseIsolationMVA3newDMwoLT" 	      ));
-      nBranches_->tau_byMediumIsolationMVA3newDMwoLT             .push_back(muTau.tauID("byMediumIsolationMVA3newDMwoLT"	      ));
-      nBranches_->tau_byTightIsolationMVA3newDMwoLT              .push_back(muTau.tauID("byTightIsolationMVA3newDMwoLT" 	      ));
-      nBranches_->tau_byVTightIsolationMVA3newDMwoLT             .push_back(muTau.tauID("byVTightIsolationMVA3newDMwoLT"	      ));
-      nBranches_->tau_byVVTightIsolationMVA3newDMwoLT            .push_back(muTau.tauID("byVVTightIsolationMVA3newDMwoLT"	      ));
-      nBranches_->tau_byIsolationMVA3newDMwLTraw                 .push_back(muTau.tauID("byIsolationMVA3newDMwLTraw"		      ));
-      nBranches_->tau_byVLooseIsolationMVA3newDMwLT              .push_back(muTau.tauID("byVLooseIsolationMVA3newDMwLT" 	      ));
-      nBranches_->tau_byLooseIsolationMVA3newDMwLT               .push_back(muTau.tauID("byLooseIsolationMVA3newDMwLT"  	      ));
-      nBranches_->tau_byMediumIsolationMVA3newDMwLT              .push_back(muTau.tauID("byMediumIsolationMVA3newDMwLT" 	      ));
-      nBranches_->tau_byTightIsolationMVA3newDMwLT               .push_back(muTau.tauID("byTightIsolationMVA3newDMwLT"  	      ));
-      nBranches_->tau_byVTightIsolationMVA3newDMwLT              .push_back(muTau.tauID("byVTightIsolationMVA3newDMwLT" 	      ));
-      nBranches_->tau_byVVTightIsolationMVA3newDMwLT             .push_back(muTau.tauID("byVVTightIsolationMVA3newDMwLT"	      ));
-      nBranches_->tau_againstElectronLoose                       .push_back(muTau.tauID("againstElectronLoose"  		      ));
-      nBranches_->tau_againstElectronMedium                      .push_back(muTau.tauID("againstElectronMedium" 		      ));
-      nBranches_->tau_againstElectronTight                       .push_back(muTau.tauID("againstElectronTight"  		      ));
-      nBranches_->tau_againstElectronMVA5raw                     .push_back(muTau.tauID("againstElectronMVA5raw"		      ));
-      nBranches_->tau_againstElectronMVA5category                .push_back(muTau.tauID("againstElectronMVA5category"		      ));
-      nBranches_->tau_againstElectronVLooseMVA5                  .push_back(muTau.tauID("againstElectronVLooseMVA5"		      ));
-      nBranches_->tau_againstElectronLooseMVA5                   .push_back(muTau.tauID("againstElectronLooseMVA5"		      ));
-      nBranches_->tau_againstElectronMediumMVA5                  .push_back(muTau.tauID("againstElectronMediumMVA5"		      ));
-      nBranches_->tau_againstElectronTightMVA5                   .push_back(muTau.tauID("againstElectronTightMVA5"		      ));
-      nBranches_->tau_againstElectronVTightMVA5                  .push_back(muTau.tauID("againstElectronVTightMVA5"		      ));
-      nBranches_->tau_againstMuonLoose                           .push_back(muTau.tauID("againstMuonLoose"			      ));
-      nBranches_->tau_againstMuonMedium                          .push_back(muTau.tauID("againstMuonMedium"			      ));
-      nBranches_->tau_againstMuonTight                           .push_back(muTau.tauID("againstMuonTight"			      ));
-      nBranches_->tau_againstMuonLoose2                          .push_back(muTau.tauID("againstMuonLoose2"			      ));
-      nBranches_->tau_againstMuonMedium2                         .push_back(muTau.tauID("againstMuonMedium2"			      ));
-      nBranches_->tau_againstMuonTight2                          .push_back(muTau.tauID("againstMuonTight2"			      ));
-      nBranches_->tau_againstMuonLoose3                          .push_back(muTau.tauID("againstMuonLoose3"			      ));
-      nBranches_->tau_againstMuonTight3                          .push_back(muTau.tauID("againstMuonTight3"			      ));
-      nBranches_->tau_againstMuonMVAraw                          .push_back(muTau.tauID("againstMuonMVAraw"			      ));
-      nBranches_->tau_againstMuonLooseMVA                        .push_back(muTau.tauID("againstMuonLooseMVA"			      ));
-      nBranches_->tau_againstMuonMediumMVA                       .push_back(muTau.tauID("againstMuonMediumMVA"  		      ));
-      nBranches_->tau_againstMuonTightMVA                        .push_back(muTau.tauID("againstMuonTightMVA"			      ));         
+      /*====================== IDs ========================*/
+      if (doBoostedTaus_) {
+        nBranches_->tau_decayModeFindingNewDMs                     .push_back(muTau.tauID("decayModeFindingNewDMs"		      ));
+        nBranches_->tau_decayModeFinding	                     .push_back(muTau.tauID("decayModeFinding"			      ));
+        nBranches_->tau_byLooseCombinedIsolationDeltaBetaCorr3Hits .push_back(muTau.tauID("byLooseCombinedIsolationDeltaBetaCorr3Hits"  ));
+        nBranches_->tau_byMediumCombinedIsolationDeltaBetaCorr3Hits.push_back(muTau.tauID("byMediumCombinedIsolationDeltaBetaCorr3Hits" ));
+        nBranches_->tau_byTightCombinedIsolationDeltaBetaCorr3Hits .push_back(muTau.tauID("byTightCombinedIsolationDeltaBetaCorr3Hits"  ));
+        nBranches_->tau_byCombinedIsolationDeltaBetaCorrRaw3Hits   .push_back(muTau.tauID("byCombinedIsolationDeltaBetaCorrRaw3Hits"    ));
+        nBranches_->tau_chargedIsoPtSum                            .push_back(muTau.tauID("chargedIsoPtSum"			      ));
+        nBranches_->tau_neutralIsoPtSum                            .push_back(muTau.tauID("neutralIsoPtSum"			      ));
+        nBranches_->tau_puCorrPtSum                                .push_back(muTau.tauID("puCorrPtSum"				      ));
+        nBranches_->tau_byIsolationMVA3oldDMwoLTraw                .push_back(muTau.tauID("byIsolationMVA3oldDMwoLTraw"		      )); 
+        nBranches_->tau_byVLooseIsolationMVA3oldDMwoLT             .push_back(muTau.tauID("byVLooseIsolationMVA3oldDMwoLT"	      ));
+        nBranches_->tau_byLooseIsolationMVA3oldDMwoLT              .push_back(muTau.tauID("byLooseIsolationMVA3oldDMwoLT" 	      ));
+        nBranches_->tau_byMediumIsolationMVA3oldDMwoLT             .push_back(muTau.tauID("byMediumIsolationMVA3oldDMwoLT"	      ));
+        nBranches_->tau_byTightIsolationMVA3oldDMwoLT              .push_back(muTau.tauID("byTightIsolationMVA3oldDMwoLT" 	      ));
+        nBranches_->tau_byVTightIsolationMVA3oldDMwoLT             .push_back(muTau.tauID("byVTightIsolationMVA3oldDMwoLT"	      ));
+        nBranches_->tau_byVVTightIsolationMVA3oldDMwoLT            .push_back(muTau.tauID("byVVTightIsolationMVA3oldDMwoLT"	      ));
+        nBranches_->tau_byIsolationMVA3oldDMwLTraw                 .push_back(muTau.tauID("byIsolationMVA3oldDMwLTraw"		      ));
+        nBranches_->tau_byVLooseIsolationMVA3oldDMwLT              .push_back(muTau.tauID("byVLooseIsolationMVA3oldDMwLT" 	      ));
+        nBranches_->tau_byLooseIsolationMVA3oldDMwLT               .push_back(muTau.tauID("byLooseIsolationMVA3oldDMwLT"  	      ));
+        nBranches_->tau_byMediumIsolationMVA3oldDMwLT              .push_back(muTau.tauID("byMediumIsolationMVA3oldDMwLT" 	      ));
+        nBranches_->tau_byTightIsolationMVA3oldDMwLT               .push_back(muTau.tauID("byTightIsolationMVA3oldDMwLT"  	      ));
+        nBranches_->tau_byVTightIsolationMVA3oldDMwLT              .push_back(muTau.tauID("byVTightIsolationMVA3oldDMwLT" 	      ));
+        nBranches_->tau_byVVTightIsolationMVA3oldDMwLT             .push_back(muTau.tauID("byVVTightIsolationMVA3oldDMwLT"	      ));
+        nBranches_->tau_byIsolationMVA3newDMwoLTraw                .push_back(muTau.tauID("byIsolationMVA3newDMwoLTraw"		      ));
+        nBranches_->tau_byVLooseIsolationMVA3newDMwoLT             .push_back(muTau.tauID("byVLooseIsolationMVA3newDMwoLT"	      ));
+        nBranches_->tau_byLooseIsolationMVA3newDMwoLT              .push_back(muTau.tauID("byLooseIsolationMVA3newDMwoLT" 	      ));
+        nBranches_->tau_byMediumIsolationMVA3newDMwoLT             .push_back(muTau.tauID("byMediumIsolationMVA3newDMwoLT"	      ));
+        nBranches_->tau_byTightIsolationMVA3newDMwoLT              .push_back(muTau.tauID("byTightIsolationMVA3newDMwoLT" 	      ));
+        nBranches_->tau_byVTightIsolationMVA3newDMwoLT             .push_back(muTau.tauID("byVTightIsolationMVA3newDMwoLT"	      ));
+        nBranches_->tau_byVVTightIsolationMVA3newDMwoLT            .push_back(muTau.tauID("byVVTightIsolationMVA3newDMwoLT"	      ));
+        nBranches_->tau_byIsolationMVA3newDMwLTraw                 .push_back(muTau.tauID("byIsolationMVA3newDMwLTraw"		      ));
+        nBranches_->tau_byVLooseIsolationMVA3newDMwLT              .push_back(muTau.tauID("byVLooseIsolationMVA3newDMwLT" 	      ));
+        nBranches_->tau_byLooseIsolationMVA3newDMwLT               .push_back(muTau.tauID("byLooseIsolationMVA3newDMwLT"  	      ));
+        nBranches_->tau_byMediumIsolationMVA3newDMwLT              .push_back(muTau.tauID("byMediumIsolationMVA3newDMwLT" 	      ));
+        nBranches_->tau_byTightIsolationMVA3newDMwLT               .push_back(muTau.tauID("byTightIsolationMVA3newDMwLT"  	      ));
+        nBranches_->tau_byVTightIsolationMVA3newDMwLT              .push_back(muTau.tauID("byVTightIsolationMVA3newDMwLT" 	      ));
+        nBranches_->tau_byVVTightIsolationMVA3newDMwLT             .push_back(muTau.tauID("byVVTightIsolationMVA3newDMwLT"	      ));
+        nBranches_->tau_againstElectronLoose                       .push_back(muTau.tauID("againstElectronLoose"  		      ));
+        nBranches_->tau_againstElectronMedium                      .push_back(muTau.tauID("againstElectronMedium" 		      ));
+        nBranches_->tau_againstElectronTight                       .push_back(muTau.tauID("againstElectronTight"  		      ));
+        nBranches_->tau_againstElectronMVA5raw                     .push_back(muTau.tauID("againstElectronMVA5raw"		      ));
+        nBranches_->tau_againstElectronMVA5category                .push_back(muTau.tauID("againstElectronMVA5category"		      ));
+        nBranches_->tau_againstElectronVLooseMVA5                  .push_back(muTau.tauID("againstElectronVLooseMVA5"		      ));
+        nBranches_->tau_againstElectronLooseMVA5                   .push_back(muTau.tauID("againstElectronLooseMVA5"		      ));
+        nBranches_->tau_againstElectronMediumMVA5                  .push_back(muTau.tauID("againstElectronMediumMVA5"		      ));
+        nBranches_->tau_againstElectronTightMVA5                   .push_back(muTau.tauID("againstElectronTightMVA5"		      ));
+        nBranches_->tau_againstElectronVTightMVA5                  .push_back(muTau.tauID("againstElectronVTightMVA5"		      ));
+        nBranches_->tau_againstMuonLoose                           .push_back(muTau.tauID("againstMuonLoose"			      ));
+        nBranches_->tau_againstMuonMedium                          .push_back(muTau.tauID("againstMuonMedium"			      ));
+        nBranches_->tau_againstMuonTight                           .push_back(muTau.tauID("againstMuonTight"			      ));
+        nBranches_->tau_againstMuonLoose2                          .push_back(muTau.tauID("againstMuonLoose2"			      ));
+        nBranches_->tau_againstMuonMedium2                         .push_back(muTau.tauID("againstMuonMedium2"			      ));
+        nBranches_->tau_againstMuonTight2                          .push_back(muTau.tauID("againstMuonTight2"			      ));
+        nBranches_->tau_againstMuonLoose3                          .push_back(muTau.tauID("againstMuonLoose3"			      ));
+        nBranches_->tau_againstMuonTight3                          .push_back(muTau.tauID("againstMuonTight3"			      ));
+        nBranches_->tau_againstMuonMVAraw                          .push_back(muTau.tauID("againstMuonMVAraw"			      ));
+        nBranches_->tau_againstMuonLooseMVA                        .push_back(muTau.tauID("againstMuonLooseMVA"			      ));
+        nBranches_->tau_againstMuonMediumMVA                       .push_back(muTau.tauID("againstMuonMediumMVA"  		      ));
+        nBranches_->tau_againstMuonTightMVA                        .push_back(muTau.tauID("againstMuonTightMVA"			      ));         
+      } //doBoostedTaus_
       /*======================================================*/                          
         
   }  

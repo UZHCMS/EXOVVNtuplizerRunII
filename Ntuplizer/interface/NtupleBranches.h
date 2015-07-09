@@ -37,20 +37,15 @@
 class NtupleBranches {
 
 public:
-  NtupleBranches( TTree* tree = 0, bool doPruning = false, bool doTausBoosted = false, bool doHbbTag = false);
+  NtupleBranches( std::map< std::string, bool >& runFlags, TTree* tree = 0);
   ~NtupleBranches( void );
    
-  void branch( void );
+  void branch( std::map< std::string, bool >& runFlags );
   void getEventByLabels( edm::EventBase const & event );
   void reset( void );
   void fillTree( void ){ tree_->Fill(); };
 
   //=================================================================================================================== 
-  /* config variables */
-  bool doPruning_;
-  bool doTausBoosted_;  
-  bool doHbbTag_;
-  
   /* output tree variables*/
     
   /** genParticles */
