@@ -6,10 +6,6 @@ process = cms.Process("Ntuple")
 
 process.load("Configuration.StandardSequences.MagneticField_cff")
 process.load('Configuration.Geometry.GeometryRecoDB_cff')
-process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_cff")
-from Configuration.AlCa.GlobalTag import GlobalTag
-#process.GlobalTag = GlobalTag(process.GlobalTag, 'MCRUN2_74_V9::All')
-process.GlobalTag = GlobalTag(process.GlobalTag, 'auto:run2_mc')
 
 process.TFileService = cms.Service("TFileService",
                                     fileName = cms.string('flatTuple.root')
@@ -21,17 +17,9 @@ import FWCore.ParameterSet.VarParsing as VarParsing
 
 options = VarParsing.VarParsing ('analysis')
 
-options.maxEvents = 100
+options.maxEvents = -1
 
-options.inputFiles ='root://xrootd.unl.edu//store/mc/RunIISpring15DR74/WW_TuneCUETP8M1_13TeV-pythia8/MINIAODSIM/Asympt50ns_MCRUN2_74_V9A-v1/10000/16843F55-DE06-E511-A0EE-008CFA1CB8A8.root'
-# options.inputFiles ='root://xrootd.unl.edu//store/mc/RunIISpring15DR74/RSGravToWW_kMpl01_M-800_TuneCUETP8M1_13TeV-pythia8/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v2/10000/4A29C383-4604-E511-9B87-001EC9AF02D2.root'
-#options.inputFiles =['root://xrootd.unl.edu//store/backfill/2/data/Tier0_Test_SUPERBUNNIES_vocms001/ZeroBias2/MINIAOD/PromptReco-v63/000/246/908/00000/0AAC26C7-850D-E511-8468-02163E01457A.root',
-#                      'root://xrootd.unl.edu//store/backfill/2/data/Tier0_Test_SUPERBUNNIES_vocms001/ZeroBias2/MINIAOD/PromptReco-v63/000/246/908/00000/1CE64589-850D-E511-96D5-02163E011BB0.root',
-#                      'root://xrootd.unl.edu//store/backfill/2/data/Tier0_Test_SUPERBUNNIES_vocms001/ZeroBias2/MINIAOD/PromptReco-v63/000/246/908/00000/44F8DE83-850D-E511-959E-02163E0135BC.root',
-#                      'root://xrootd.unl.edu//store/backfill/2/data/Tier0_Test_SUPERBUNNIES_vocms001/ZeroBias2/MINIAOD/PromptReco-v63/000/246/908/00000/566EECBB-850D-E511-A167-02163E013613.root',
-#                      'root://xrootd.unl.edu//store/backfill/2/data/Tier0_Test_SUPERBUNNIES_vocms001/ZeroBias2/MINIAOD/PromptReco-v63/000/246/908/00000/A253C67E-850D-E511-A95E-02163E0145C5.root',
-#                      'root://xrootd.unl.edu//store/backfill/2/data/Tier0_Test_SUPERBUNNIES_vocms001/ZeroBias2/MINIAOD/PromptReco-v63/000/246/908/00000/AA814B7D-850D-E511-8B4C-02163E0146EE.root'
-#                    ]
+options.inputFiles ='dcap://t3se01.psi.ch:22125//pnfs/psi.ch/cms/trivcat/store/t3groups/uniz-higgs/ExpressPhysics/MINIAOD/Run2015B-Express-v1/MINIAOD_Run2015B-Express-v1_67.root'
 
 options.parseArguments()
 
@@ -51,6 +39,8 @@ process.source = cms.Source("PoolSource",
 
 # run flags
 runOnMC = False
+runOnAOD = False #do not switch it on since the step does not work for the moment
+useJSON = False
 doGenParticles = False
 doGenJets = False
 doGenEvent = False
@@ -63,7 +53,7 @@ doAK4Jets = True
 doVertices = True
 doTriggerDecisions = True
 doTriggerObjects = False
-doHltFilters = True
+doHltFilters = False #does not work for express data
 doMissingEt = True
 doSemileptonicTausBoosted = False #doTausBoosted
 
@@ -71,7 +61,7 @@ doSemileptonicTausBoosted = False #doTausBoosted
 #If you use the softdrop subjets from the slimmedJetsAK8 collection, only CSV seems to be available?
 doAK8reclustering = False
 doAK8softdropReclustering = False
-doBtagging = True #doHbbtag
+doBtagging = False #doHbbtag
 
 #! To add pruned jet and pruned subjet collection (not in MINIAOD)
 doAK8prunedReclustering = False #doPruning
@@ -95,6 +85,35 @@ process.MessageLogger.cerr.INFO = cms.untracked.PSet(
 )
 process.MessageLogger.cerr.FwkReport.reportEvery = 1000
 
+####### Define conditions ##########
+process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_cff")
+from Configuration.AlCa.GlobalTag import GlobalTag
+
+if runOnMC:
+   #process.GlobalTag = GlobalTag(process.GlobalTag, 'MCRUN2_74_V9::All')
+   process.GlobalTag = GlobalTag(process.GlobalTag, 'auto:run2_mc')
+elif not(runOnMC):
+   process.GlobalTag = GlobalTag(process.GlobalTag, 'GR_P_V56')
+   
+######## to run the miniaod step but it doesnt not work! ##########
+if not(runOnMC) and runOnAOD:
+  from SLHCUpgradeSimulations.Configuration.postLS1Customs import customisePostLS1_50ns 
+  process = customisePostLS1_50ns(process)
+  from FWCore.ParameterSet.Utilities import convertToUnscheduled
+  process=convertToUnscheduled(process)
+  process.load('Configuration.StandardSequences.PAT_cff')
+  from PhysicsTools.PatAlgos.slimming.miniAOD_tools import miniAOD_customizeAllData 
+  process = miniAOD_customizeAllData(process)
+
+######### read JSON file for data ##########					                                                             
+if not(runOnMC) and useJSON:
+
+  import FWCore.PythonUtilities.LumiList as LumiList
+  import FWCore.ParameterSet.Types as CfgTypes
+  process.source.lumisToProcess = CfgTypes.untracked(CfgTypes.VLuminosityBlockRange())
+  JSONfile = 'json_DCSONLY_Run2015B.txt'
+  myLumis = LumiList.LumiList(filename = JSONfile).getCMSSWString().split(',')
+  process.source.lumisToProcess.extend(myLumis) 
 
 ####### Redo Jet clustering sequence ##########
 
@@ -401,8 +420,7 @@ if corrMETonTheFly:
 #                        filterParams = pfJetIDSelector.clone(),
 #                        src = cms.InputTag(jetsAK8)
 #                        )
-						                                                             
-                                                                                    
+                                                                                      
 ################## Ntuplizer ###################
 process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     runOnMC = cms.bool(runOnMC),
