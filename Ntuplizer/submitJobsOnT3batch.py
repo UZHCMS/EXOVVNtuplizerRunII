@@ -326,7 +326,7 @@ def checkJobsOutputFromXML(xmlfile):
       filelist = inputFiles.split(",")
       count = 0
       for f in filelist:
-         tfile = ROOT.TFile.Open("dcap://t3se01.psi.ch:22125//pnfs/psi.ch/cms/trivcat"+f)
+         tfile = ROOT.TFile.Open(f)
          ttree = ROOT.TTree()
          tfile.GetObject("Events",ttree)
          count+=ttree.GetEntries()
@@ -340,9 +340,9 @@ def checkJobsOutputFromXML(xmlfile):
          if j == jj and e != ee: print "Job "+j+": found " + jobsevents[j] + " expected " + e    
             
 #-----------------------------------------------------------------------------------------
-def getFileListDAS(dataset,instance="prod/global"):
+def getFileListDAS(dataset,instance):
 
-   cmd = './das_client.py --query="file dataset=%s instance=%s" --limit=1000' %(dataset,instance)
+   cmd = './das_client.py --query="file dataset=%s instance=%s" --limit=2000' %(dataset,instance)
    cmd_out = commands.getoutput( cmd )
    tmpList = cmd_out.split(os.linesep)
    files = []
@@ -466,8 +466,9 @@ if not(opts.useDAS):
    if sample != "": files = getFileListFromSampleT3(sample)
    else: files = getFileListT3(src)   
 else:
-   if sample != "": files = getFileListFromSampleDAS(sample)
-   else: files = getFileListDAS(src)   
+  instance = "prod/global"
+  if sample != "": files = getFileListFromSampleDAS(sample)
+  else: files = getFileListDAS(src,instance)   
 
 print "****************************************"
 print len(files)

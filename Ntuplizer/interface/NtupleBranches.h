@@ -86,6 +86,7 @@ public:
   //std::vector<float>	      jetAK4_jecUp	       ;
   //std::vector<float>	      jetAK4_jecDown	       ; 
   std::vector<bool>              jetAK4_IDLoose        ;
+  std::vector<bool>              jetAK4_IDTight        ;
   std::vector<float>              jetAK4_muf           ;
   std::vector<float>              jetAK4_phf           ;
   std::vector<float>              jetAK4_emf           ;
@@ -257,9 +258,10 @@ public:
   std::vector<float>  	      jetAK8_jec               ;
   //std::vector<float>        jetAK8_jecUp             ;
   //std::vector<float>        jetAK8_jecDown           ;
-  std::vector<bool >  	      jetAK8_IDLoose	       ;
-  std::vector<float>  	      jetAK8_muf	       ;
-  std::vector<float>  	      jetAK8_phf	       ;
+  std::vector<bool >  	      jetAK8_IDLoose      ;
+  std::vector<bool >  	      jetAK8_IDTight      ;
+  std::vector<float>  	      jetAK8_muf          ;
+  std::vector<float>  	      jetAK8_phf          ;
   std::vector<float>  	      jetAK8_emf	       ;
   std::vector<float>  	      jetAK8_nhf	       ;
   std::vector<float>  	      jetAK8_chf	       ;
@@ -366,18 +368,45 @@ public:
   std::vector<float>  	      genJetNoNuAK4_mass        ;
   std::vector<float>  	      genJetNoNuAK4_e           ;
    
+  /*-------------------------AK8 genJets---------------------------*/   
+  int			      ngenJetsAK8               ;
+  std::vector<float>  	      genJetAK8_pt              ;
+  std::vector<float>  	      genJetAK8_eta             ;
+  std::vector<float>  	      genJetAK8_mass            ;
+  std::vector<float>  	      genJetAK8_phi             ;
+  std::vector<float>  	      genJetAK8_e               ;
+  std::vector<float>  	      genJetAK8_prunedmass      ;
+  std::vector<float>  	      genJetAK8_softdropmass    ;
+  // std::vector<float>          genJetNoNuAK8_pt          ;
+  // std::vector<float>          genJetNoNuAK8_mass        ;
+  // std::vector<float>          genJetNoNuAK8_e           ;
+  
   /*---------------------HLT triggers---------------------------*/    
-  bool    isFired_HLT_AK8PFJet360_TrimMass30_v1			 ;
-  bool    isFired_HLT_AK8PFHT700_TrimR0p1PT0p03Mass50_v1	 ;
-  bool    isFired_HLT_AK8DiPFJet280_200_TrimMass30_BTagCSV0p41_v1;
-  bool    isFired_HLT_PFHT650_WideJetMJJ950DEtaJJ1p5_v1		 ;
-  bool    isFired_HLT_PFHT650_WideJetMJJ900DEtaJJ1p5_v1		 ;
-  bool    isFired_HLT_PFHT900_v1		                 ;
-  bool    isFired_HLT_Ele23_CaloIdL_TrackIdL_IsoVL_v1            ;
-  bool    isFired_HLT_Ele32_eta2p1_WP75_Gsf_v1		         ;
-  bool    isFired_HLT_Ele105_CaloIdVT_GsfTrkIdT_v1               ;
-  bool    isFired_HLT_IsoMu24_eta2p1_v1                          ;
-  bool    isFired_HLT_Mu45_eta2p1_v1				 ;
+  bool    isFired_HLT_AK8PFJet360_TrimMass30_v1                   ;
+  bool    isFired_HLT_AK8PFHT700_TrimR0p1PT0p03Mass50_v1          ;
+  bool    isFired_HLT_AK8DiPFJet280_200_TrimMass30_BTagCSV0p41_v1 ;
+  bool    isFired_HLT_PFHT650_WideJetMJJ950DEtaJJ1p5_v1           ;
+  bool    isFired_HLT_PFHT650_WideJetMJJ900DEtaJJ1p5_v1           ;
+  bool    isFired_HLT_PFHT350_v1                                  ;
+  bool    isFired_HLT_PFHT600_v1                                  ;
+  bool    isFired_HLT_PFHT650_v1                                  ;
+  bool    isFired_HLT_PFHT900_v1                                  ;
+	bool    isFired_HLT_HT400_v1                                    ;
+  
+  bool    isFired_HLT_PFHT350_v2                                  ;
+  bool    isFired_HLT_PFHT400_v1                                  ;
+  bool    isFired_HLT_PFHT475_v1                                  ;
+  bool    isFired_HLT_PFHT600_v2                                  ;
+  bool    isFired_HLT_PFHT650_v2                                  ;
+  bool    isFired_HLT_PFHT650_WideJetMJJ900DEtaJJ1p5_v2           ;
+  bool    isFired_HLT_PFHT650_WideJetMJJ950DEtaJJ1p5_v2           ;
+  bool    isFired_HLT_PFHT800_v1                                  ;
+    
+  bool    isFired_HLT_Ele23_CaloIdL_TrackIdL_IsoVL_v1             ;
+  bool    isFired_HLT_Ele32_eta2p1_WP75_Gsf_v1                    ;
+  bool    isFired_HLT_Ele105_CaloIdVT_GsfTrkIdT_v1                ;
+  bool    isFired_HLT_IsoMu24_eta2p1_v1                           ;
+  bool    isFired_HLT_Mu45_eta2p1_v1                              ;
 	 
   std::vector<float>  		    triggerObject_pt	      ;
   std::vector<float>  		    triggerObject_eta	      ;
@@ -399,16 +428,17 @@ public:
   bool passFilterTrkPOG_toomanystrip_;
   bool passFilterTrkPOG_logError_;
   bool passFilterMETFilters_;
+
   /*-------------------------MET--------------------------------*/
-  std::vector<float>                METraw_et		      ;	 
-  std::vector<float>                METraw_phi		      ;
-  std::vector<float>  	            METraw_sumEt	      ;
-  std::vector<float>  	      	    MET_corrPx  	      ;
-  std::vector<float>  	            MET_corrPy  	      ;
-  std::vector<float>  	      	    MET_et		      ;
-  std::vector<float>  	      	    MET_phi		      ;
-  std::vector<float>  	      	    MET_sumEt		      ;
-  std::vector<float>  	      	    MET_T1Uncertainty	      ;
+  std::vector<float>                METraw_et                     ;	 
+  std::vector<float>                METraw_phi                    ;
+  std::vector<float>  	            METraw_sumEt                  ;
+  std::vector<float>  	      	    MET_corrPx                    ;
+  std::vector<float>  	            MET_corrPy                    ;
+  std::vector<float>  	      	    MET_et                        ;
+  std::vector<float>  	      	    MET_phi                       ;
+  std::vector<float>  	      	    MET_sumEt                     ;
+  std::vector<float>  	      	    MET_T1Uncertainty             ;
 
   /*------------------------EVENT infos-------------------------*/    
   int                               EVENT_event            ;

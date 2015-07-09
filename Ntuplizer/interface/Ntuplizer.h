@@ -60,6 +60,7 @@ private:
   edm::EDGetTokenT<pat::JetCollection>                      prunedjetToken_     ;
   edm::EDGetTokenT<pat::JetCollection>                      softdropjetToken_   ;
   edm::EDGetTokenT<reco::GenJetCollection>                  genJetToken_	;
+  edm::EDGetTokenT<pat::JetCollection>                      genJetAK8Token_	;
   
 
   edm::EDGetTokenT<reco::JetFlavourMatchingCollection> 	    flavourToken_	;
