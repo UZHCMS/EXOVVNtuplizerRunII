@@ -24,9 +24,9 @@ import FWCore.ParameterSet.VarParsing as VarParsing
 
 options = VarParsing.VarParsing ('analysis')
 
-options.maxEvents = 1
+options.maxEvents = -1
 
-options.inputFiles = 'root://xrootd.unl.edu//store/express/Run2015B/ExpressPhysics/FEVT/Express-v1/000/250/985/00000/04380D9C-0F24-E511-9772-02163E0127EF.root'
+options.inputFiles = 'root://xrootd.unl.edu//store/express/Run2015B/ExpressPhysics/FEVT/Express-v1/000/251/244/00000/002904BE-BC25-E511-A490-02163E01463E.root'
 
 options.parseArguments()
 

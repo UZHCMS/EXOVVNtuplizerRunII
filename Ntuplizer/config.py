@@ -8,8 +8,6 @@ process.load("Configuration.StandardSequences.MagneticField_cff")
 process.load('Configuration.Geometry.GeometryRecoDB_cff')
 process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_cff")
 from Configuration.AlCa.GlobalTag import GlobalTag
-#process.GlobalTag = GlobalTag(process.GlobalTag, 'MCRUN2_74_V9::All')
-process.GlobalTag = GlobalTag(process.GlobalTag, 'auto:run2_mc')
 
 process.TFileService = cms.Service("TFileService",
                                     fileName = cms.string('flatTuple.root')
@@ -21,17 +19,10 @@ import FWCore.ParameterSet.VarParsing as VarParsing
 
 options = VarParsing.VarParsing ('analysis')
 
-options.maxEvents = 100
+options.maxEvents = -1
 
-options.inputFiles ='file:/shome/jngadiub/EXOVVAnalysisRunII/CMSSW_7_4_3/src/EXOVVNtuplizerRunII/Ntuplizer/test/RSGravToWWToLNQQ_kMpl01_M-1000_TuneCUETP8M1_13TeV-pythia8.root'
-# options.inputFiles ='root://xrootd.unl.edu//store/mc/RunIISpring15DR74/RSGravToWW_kMpl01_M-800_TuneCUETP8M1_13TeV-pythia8/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v2/10000/4A29C383-4604-E511-9B87-001EC9AF02D2.root'
-#options.inputFiles =['root://xrootd.unl.edu//store/backfill/2/data/Tier0_Test_SUPERBUNNIES_vocms001/ZeroBias2/MINIAOD/PromptReco-v63/000/246/908/00000/0AAC26C7-850D-E511-8468-02163E01457A.root',
-#                      'root://xrootd.unl.edu//store/backfill/2/data/Tier0_Test_SUPERBUNNIES_vocms001/ZeroBias2/MINIAOD/PromptReco-v63/000/246/908/00000/1CE64589-850D-E511-96D5-02163E011BB0.root',
-#                      'root://xrootd.unl.edu//store/backfill/2/data/Tier0_Test_SUPERBUNNIES_vocms001/ZeroBias2/MINIAOD/PromptReco-v63/000/246/908/00000/44F8DE83-850D-E511-959E-02163E0135BC.root',
-#                      'root://xrootd.unl.edu//store/backfill/2/data/Tier0_Test_SUPERBUNNIES_vocms001/ZeroBias2/MINIAOD/PromptReco-v63/000/246/908/00000/566EECBB-850D-E511-A167-02163E013613.root',
-#                      'root://xrootd.unl.edu//store/backfill/2/data/Tier0_Test_SUPERBUNNIES_vocms001/ZeroBias2/MINIAOD/PromptReco-v63/000/246/908/00000/A253C67E-850D-E511-A95E-02163E0145C5.root',
-#                      'root://xrootd.unl.edu//store/backfill/2/data/Tier0_Test_SUPERBUNNIES_vocms001/ZeroBias2/MINIAOD/PromptReco-v63/000/246/908/00000/AA814B7D-850D-E511-8B4C-02163E0146EE.root'
-#                    ]
+#options.inputFiles ='dcap://t3se01.psi.ch:22125//pnfs/psi.ch/cms/trivcat/store/user/jngadiub/jobtmp_MINIAOD/MINIAOD-30/MINIAOD.root'
+options.inputFiles ='file:testminiaod_PAT.root'
 
 options.parseArguments()
 
@@ -329,6 +320,12 @@ for idmod in my_id_modules:
 
 runOnMC = False
 
+if runOnMC:
+   #process.GlobalTag = GlobalTag(process.GlobalTag, 'MCRUN2_74_V9::All')
+   process.GlobalTag = GlobalTag(process.GlobalTag, 'auto:run2_mc')
+elif not(runOnMC):
+   process.GlobalTag = GlobalTag(process.GlobalTag, 'GR_P_V56')
+
 jetsAK8 = "slimmedJetsAK8"
 jetsAK8pruned = ""
 # jetsAK8softdrop = "slimmedJetsAK8PFCHSSoftDropPacked" (if you want to add this subjet collection, changes need to be made in plugins/JetsNtuplizer.cc! Not needed to obtain subjets)
@@ -388,8 +385,29 @@ if corrMETonTheFly:
 #                        filterParams = pfJetIDSelector.clone(),
 #                        src = cms.InputTag(jetsAK8)
 #                        )
-						                                                             
-                                                                                    
+
+#to run the miniaod step but it doesnt not work!
+runOnAOD = False
+if runOnAOD:
+  from SLHCUpgradeSimulations.Configuration.postLS1Customs import customisePostLS1_50ns 
+  process = customisePostLS1_50ns(process)
+  from FWCore.ParameterSet.Utilities import convertToUnscheduled
+  process=convertToUnscheduled(process)
+  process.load('Configuration.StandardSequences.PAT_cff')
+  from PhysicsTools.PatAlgos.slimming.miniAOD_tools import miniAOD_customizeAllData 
+  process = miniAOD_customizeAllData(process)
+
+#read JSON file	for data					                                                             
+useJSON = False
+if not(runOnMC) and useJSON:
+
+  import FWCore.PythonUtilities.LumiList as LumiList
+  import FWCore.ParameterSet.Types as CfgTypes
+  process.source.lumisToProcess = CfgTypes.untracked(CfgTypes.VLuminosityBlockRange())
+  JSONfile = 'json_DCSONLY_Run2015B.txt'
+  myLumis = LumiList.LumiList(filename = JSONfile).getCMSSWString().split(',')
+  process.source.lumisToProcess.extend(myLumis) 
+                                                                                      
 ################## Ntuplizer ###################
 process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     runOnMC = cms.bool(runOnMC),
