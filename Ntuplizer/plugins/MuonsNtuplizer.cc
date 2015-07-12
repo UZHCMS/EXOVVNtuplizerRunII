@@ -57,7 +57,20 @@ void MuonsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSet
   event.getByToken(muonToken_	, muons_    ); 
   event.getByToken(verticeToken_, vertices_ ); 
   event.getByToken(rhoToken_	, rho_      );
-
+  
+  // Find the first vertex in the collection that passes good quality criteria
+  reco::VertexCollection::const_iterator firstGoodVertex = vertices_->end();
+  int firstGoodVertexIdx = 0;
+  for( reco::VertexCollection::const_iterator vtx = vertices_->begin(); vtx != vertices_->end(); ++vtx, ++firstGoodVertexIdx){
+    bool isFake = (vtx->chi2()==0 && vtx->ndof()==0);
+    // Check the goodness
+    if( !isFake && vtx->ndof()>=4. && vtx->position().Rho()<=2.0 && fabs(vtx->position().Z())<=24.0) {
+      firstGoodVertex = vtx;
+      break;
+    }
+    
+  }
+   
   int nmus = 0;
 
   for (const pat::Muon &mu : *muons_) {
@@ -71,20 +84,20 @@ void MuonsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSet
     nBranches_->mu_phi    		    .push_back(mu.phi()   );
 
     /*========== IDs ==============*/    
-    nBranches_->mu_isHighPtMuon.push_back(mu.isHighPtMuon(vertices_->at(0)));
-    nBranches_->mu_isTightMuon .push_back(mu.isTightMuon(vertices_->at(0)));
+    nBranches_->mu_isHighPtMuon.push_back(mu.isHighPtMuon(vertices_->at(firstGoodVertexIdx)));
+    nBranches_->mu_isTightMuon .push_back(mu.isTightMuon(vertices_->at(firstGoodVertexIdx)));
     nBranches_->mu_isLooseMuon .push_back(mu.isLooseMuon());
     nBranches_->mu_isPFMuon    .push_back(mu.isPFMuon());   
 
     double rho = *(rho_.product());     
     float deltaR = 0.3;
     double energy = TMath::Pi()*deltaR*deltaR*rho;
-    float dxy = fabs(mu.muonBestTrack()->dxy(vertices_->at(0).position()));
+    float dxy = fabs(mu.muonBestTrack()->dxy(vertices_->at(firstGoodVertexIdx).position()));
 
-    nBranches_->mu_d0  	.push_back(dxy);
-    nBranches_->mu_dz  	.push_back(mu.muonBestTrack()->dz(vertices_->at(0).position()));
+    nBranches_->mu_d0  	       .push_back(dxy);
+    nBranches_->mu_dz  	       .push_back(mu.muonBestTrack()->dz(vertices_->at(firstGoodVertexIdx).position()));
     nBranches_->mu_isGlobalMuon.push_back(mu.isGlobalMuon());  
-    nBranches_->mu_isSoftMuon  .push_back(mu.isSoftMuon(vertices_->at(0)));  
+    nBranches_->mu_isSoftMuon  .push_back(mu.isSoftMuon(vertices_->at(firstGoodVertexIdx)));  
       
     double normChi2	   = -99;
     int    trackerHits     = -99;

@@ -17,9 +17,12 @@ import FWCore.ParameterSet.VarParsing as VarParsing
 
 options = VarParsing.VarParsing ('analysis')
 
-options.maxEvents = -1
+options.maxEvents = 10
 
-options.inputFiles ='dcap://t3se01.psi.ch:22125//pnfs/psi.ch/cms/trivcat/store/t3groups/uniz-higgs/ExpressPhysics/MINIAOD/Run2015B-Express-v1/MINIAOD_Run2015B-Express-v1_67.root'
+#data file
+options.inputFiles ='file:test/ExpressDataTestMINIAOD.root'
+#mc file
+#options.inputFiles = 'file:test/RSGravToWWToLNQQ_kMpl01_M-1000_TuneCUETP8M1_13TeV-pythia8.root'
 
 options.parseArguments()
 
@@ -52,7 +55,7 @@ doAK8Jets = True
 doAK4Jets = True
 doVertices = True
 doTriggerDecisions = True
-doTriggerObjects = False
+doTriggerObjects = True
 doHltFilters = False #does not work for express data
 doMissingEt = True
 doSemileptonicTausBoosted = False #doTausBoosted
@@ -83,7 +86,7 @@ process.MessageLogger.categories.append('Ntuple')
 process.MessageLogger.cerr.INFO = cms.untracked.PSet(
     limit = cms.untracked.int32(5)
 )
-process.MessageLogger.cerr.FwkReport.reportEvery = 1000
+process.MessageLogger.cerr.FwkReport.reportEvery = 1
 
 ####### Define conditions ##########
 process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_cff")

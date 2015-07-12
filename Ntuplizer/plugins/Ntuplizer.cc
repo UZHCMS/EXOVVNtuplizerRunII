@@ -39,7 +39,7 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
 	muonToken_		(consumes<pat::MuonCollection>(iConfig.getParameter<edm::InputTag>("muons"))),
 	electronToken_		(consumes<edm::View<pat::Electron> >(iConfig.getParameter<edm::InputTag>("electrons"))),
 	eleHEEPIdMapToken_      (consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("eleHEEPIdMap"))),
-  eleHEEPId51MapToken_      (consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("eleHEEPId51Map"))),
+        eleHEEPId51MapToken_    (consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("eleHEEPId51Map"))),
 	eleVetoIdMapToken_      (consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("eleVetoIdMap"))),
 	eleLooseIdMapToken_     (consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("eleLooseIdMap"))),
 	eleMediumIdMapToken_    (consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("eleMediumIdMap"))),
@@ -54,7 +54,7 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
 	triggerToken_		(consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("HLT"))),
 	triggerObjects_	        (consumes<pat::TriggerObjectStandAloneCollection>(iConfig.getParameter<edm::InputTag>("triggerobjects"))),
 	triggerPrescales_	(consumes<pat::PackedTriggerPrescales>(iConfig.getParameter<edm::InputTag>("triggerprescales"))),
-  noiseFilterToken_ (consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("noiseFilter")))
+        noiseFilterToken_       (consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("noiseFilter")))
 		
 {
 
@@ -91,9 +91,9 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
   if (runFlags["doAK4Jets"] || runFlags["doAK8Jets"]) {
   
     std::vector<edm::EDGetTokenT<pat::JetCollection>> jetTokens;
-    jetTokens.push_back( jetToken_ 	 );
-    jetTokens.push_back( fatjetToken_ 	 );
-    jetTokens.push_back( prunedjetToken_ 	 );
+    jetTokens.push_back( jetToken_ 	   );
+    jetTokens.push_back( fatjetToken_ 	   );
+    jetTokens.push_back( prunedjetToken_   );
     jetTokens.push_back( softdropjetToken_ );
     //jetTokens.push_back( flavourToken_	 );  
   
@@ -111,14 +111,14 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
        jecAK4chsLabels.push_back(tmpString);
     }
     
-    nTuplizers_["jets"]  	   = new JetsNtuplizer	    ( jetTokens      , 
-                                                      jecAK4chsLabels, 
-						      jecAK8Labels   , 
-						      flavourToken_  , 
-						      rhoToken_      , 
-						      vtxToken_      , 
-						      nBranches_     ,
-                  runFlags       ); 
+    nTuplizers_["jets"] = new JetsNtuplizer( jetTokens      , 
+                                             jecAK4chsLabels, 
+					     jecAK8Labels   , 
+					     flavourToken_  , 
+					     rhoToken_      , 
+					     vtxToken_      , 
+					     nBranches_     ,
+                                             runFlags	   ); 
   }
 
   /*=======================================================================================*/
@@ -135,14 +135,14 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
        jecAK4Labels.push_back(tmpString);
     }
     
-    nTuplizers_["MET"]       = new METsNtuplizer      ( metToken_   , 
-                                                      jetForMetCorrToken_, 
-						      muonToken_  , 
-						      rhoToken_   ,
-						      vtxToken_   , 
-						      jecAK4Labels,
-                  corrFormulas, 
-						      nBranches_ );
+    nTuplizers_["MET"] = new METsNtuplizer( metToken_          , 
+                                            jetForMetCorrToken_, 
+					    muonToken_         ,
+					    rhoToken_	       ,
+					    vtxToken_	       ,
+					    jecAK4Labels       ,
+                                            corrFormulas       ,
+					    nBranches_        );
   }
     
   
@@ -153,11 +153,11 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
   
   /*=======================================================================================*/  
 
-	if (runFlags["doMuons"]) {
-    nTuplizers_["muons"] 	   = new MuonsNtuplizer     ( muonToken_   , 
-                                                      vtxToken_    , 
-						      rhoToken_    , 
-						      nBranches_  );
+  if (runFlags["doMuons"]) {
+    nTuplizers_["muons"]= new MuonsNtuplizer( muonToken_   , 
+                                              vtxToken_    , 
+					      rhoToken_    , 
+					      nBranches_  );
   }
 						      
   if (runFlags["doElectrons"]) {
@@ -170,42 +170,42 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
     eleIdTokens.push_back(eleHEEPIdMapToken_  );
     eleIdTokens.push_back(eleHEEPId51MapToken_  );
     
-    nTuplizers_["electrons"] = new ElectronsNtuplizer ( electronToken_, 
-                                                      vtxToken_     , 
-						      rhoToken_     , 
-						      eleIdTokens   , 
-						      nBranches_   );
+    nTuplizers_["electrons"] = new ElectronsNtuplizer( electronToken_, 
+                                                       vtxToken_     , 
+						       rhoToken_     , 
+						       eleIdTokens   , 
+						       nBranches_   );
   }    
 						      
   if (runFlags["doVertices"]) {
-    nTuplizers_["vertices"]  = new VerticesNtuplizer  ( vtxTokens   , 
-                                                      nBranches_ );
+    nTuplizers_["vertices"] = new VerticesNtuplizer( vtxTokens   , 
+                                                     nBranches_ );
   }
   
-	if (runFlags["doTriggerDecisions"] || runFlags["doTriggerObjects"] || runFlags["doTriggerDecisions"]) {
-    nTuplizers_["triggers"]  = new TriggersNtuplizer  ( triggerToken_    , 
-                                                      triggerObjects_  , 
-						      triggerPrescales_,
-                  noiseFilterToken_,
-						      nBranches_,
-                  iConfig      ,
-                  runFlags       );
+  if (runFlags["doTriggerDecisions"] || runFlags["doTriggerObjects"] || runFlags["doTriggerDecisions"]) {
+    nTuplizers_["triggers"] = new TriggersNtuplizer( triggerToken_    , 
+                                                     triggerObjects_  , 
+						     triggerPrescales_,
+                                                     noiseFilterToken_,
+						     nBranches_       ,
+                                                     iConfig          ,
+                                                     runFlags        );
   }
 
   if (runFlags["doTaus"]) {
-     nTuplizers_["taus"] = new TausNtuplizer ( tauToken_      , 
-                                               tauEleTauToken_, 
-					       tauMuTauToken_ , 
-					       rhoToken_      , 
-					       vtxToken_      , 
-					       nBranches_    ,
-                 runFlags       );
+     nTuplizers_["taus"] = new TausNtuplizer( tauToken_      ,  
+                                              tauEleTauToken_,  
+					      tauMuTauToken_ ,  
+					      rhoToken_      ,  
+					      vtxToken_      ,  
+					      nBranches_     , 
+                                              runFlags      ); 
   }
   /*=======================================================================================*/    
   if ( runFlags["runOnMC"] ){
     
     if (runFlags["doGenJets"])
-      nTuplizers_["genJets"]   = new GenJetsNtuplizer   ( genJetToken_ 	, nBranches_    );
+      nTuplizers_["genJets"] = new GenJetsNtuplizer( genJetToken_, nBranches_ );
     
     if (runFlags["doGenParticles"]) {
       std::vector<edm::EDGetTokenT<reco::GenParticleCollection>> genpTokens;
@@ -230,8 +230,7 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
 ///////////////////////////////////////////////////////////////////////////////////
 Ntuplizer::~Ntuplizer()
 {
-	
-  
+	  
    for( std::map<std::string,CandidateNtuplizer*>::iterator it = nTuplizers_.begin(); it != nTuplizers_.end(); ++it )
       delete it->second;
    
@@ -245,7 +244,11 @@ Ntuplizer::~Ntuplizer()
 void Ntuplizer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup){
   
   nBranches_->reset();
-      
+
+  edm::Handle<reco::VertexCollection> vertices;
+  iEvent.getByToken(vtxToken_, vertices);
+  if( vertices->empty() ) return; // skip the event if no PV found
+          
   nBranches_->EVENT_event     = iEvent.id().event();
   nBranches_->EVENT_run       = iEvent.id().run();
   nBranches_->EVENT_lumiBlock = iEvent.id().luminosityBlock();  
