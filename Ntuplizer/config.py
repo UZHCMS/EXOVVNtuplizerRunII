@@ -38,17 +38,6 @@ process.source = cms.Source("PoolSource",
                             )                     
 
 
-runOnMC = False
-
-####### JSON file ##########
-# if not runOnMC:
-#   import FWCore.PythonUtilities.LumiList as LumiList
-#   import FWCore.ParameterSet.Types as CfgTypes
-#   process.source.lumisToProcess = CfgTypes.untracked(CfgTypes.VLuminosityBlockRange())
-#   JSONfile = 'json_DCSONLY_Run2015B.txt'
-#   myLumis = LumiList.LumiList(filename = JSONfile).getCMSSWString().split(',')
-#   process.source.lumisToProcess.extend(myLumis)
-  
   
 ######## Sequence settings ##########
 
