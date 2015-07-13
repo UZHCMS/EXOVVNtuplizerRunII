@@ -242,10 +242,10 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
      
     for (const pat::Jet &fj : *fatjets_) {
 	  
+
       reco::Candidate::LorentzVector uncorrJet;
       double corr = 1;
 
-    
       if( doCorrOnTheFly_ ){
     
          uncorrJet = fj.correctedP4(0);

@@ -61,7 +61,6 @@ void GenJetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
     nBranches_->genJetAK8_e      	    .push_back(j.energy());
     nBranches_->genJetAK8_prunedmass  .push_back(j.userFloat("ak8GenJetsPrunedMass"));
     nBranches_->genJetAK8_softdropmass.push_back(j.userFloat("ak8GenJetsSoftDropMass"));
-
   }
 }
 

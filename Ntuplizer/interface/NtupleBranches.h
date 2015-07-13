@@ -457,9 +457,9 @@ public:
   std::vector<float>  	      genJetNoNuAK4_mass        ;
   std::vector<float>  	      genJetNoNuAK4_e           ;
    
-
   /*-------------------------AK8 genJets---------------------------*/   
   int			      genJetAK8_N               ;
+
   std::vector<float>  	      genJetAK8_pt              ;
   std::vector<float>  	      genJetAK8_eta             ;
   std::vector<float>  	      genJetAK8_mass            ;
@@ -467,7 +467,6 @@ public:
   std::vector<float>  	      genJetAK8_e               ;
   std::vector<float>  	      genJetAK8_prunedmass      ;
   std::vector<float>  	      genJetAK8_softdropmass    ;
-
   
   /** HLT trigger decisions */
   std::map<std::string,bool> HLT_isFired;

@@ -40,7 +40,6 @@ TriggersNtuplizer::~TriggersNtuplizer( void )
 }
 
 //===================================================================================================================
-
 bool TriggersNtuplizer::findTrigger( std::string trigName ){
 
    if( trigName.find("AK8PFJet360_TrimMass30") != std::string::npos ||

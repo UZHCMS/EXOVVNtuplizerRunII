@@ -20,6 +20,7 @@ options = VarParsing.VarParsing ('analysis')
 options.maxEvents = 100
 
 
+
 options.inputFiles ='dcap://t3se01.psi.ch:22125//pnfs/psi.ch/cms/trivcat/store/t3groups/uniz-higgs/ExpressPhysics/MINIAOD/Run2015B-Express-v1/MINIAOD_Run2015B-Express-v1_67.root'
 # options.inputFiles ='file://shome/thaarres/EXOVVAnalysisRunII/NTUPLIZER/CMSSW_7_4_3/src/EXOVVNtuplizerRunII/Ntuplizer/BulkGravToWW_M_2000.root'
 
@@ -83,7 +84,7 @@ doMETReclustering = False
 corrMETonTheFly = False #If you recluster the MET there is no need for re-correcting. Use it only if you run on default miniAOD met collection.
 
 
-####### Logger ##########
+# ####### Logger ##########
 
 
 process.load("FWCore.MessageLogger.MessageLogger_cfi")
