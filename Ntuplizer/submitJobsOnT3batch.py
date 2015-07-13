@@ -335,7 +335,7 @@ def checkJobsOutputFromXML(xmlfile):
       for f in filelist:
          #tfile = ROOT.TFile.Open("dcap://t3se01.psi.ch:22125//pnfs/psi.ch/cms/trivcat"+f)
          tfile = ROOT.TFile.Open(f)
-	       ttree = ROOT.TTree()
+	 ttree = ROOT.TTree()
          tfile.GetObject("Events",ttree)
          count+=ttree.GetEntries()
       print "Job %s : expected %i events" %(j.get('ID'),count) 
@@ -349,7 +349,6 @@ def checkJobsOutputFromXML(xmlfile):
             
 #-----------------------------------------------------------------------------------------
 def getFileListDAS(dataset,instance="prod/global",run=-1):
-
 
    cmd = './das_client.py --query="file dataset=%s instance=%s" --limit=2000' %(dataset,instance)
    if run != -1: cmd = './das_client.py --query="file run=%i dataset=%s instance=%s" --limit=2000' %(run,dataset,instance)
