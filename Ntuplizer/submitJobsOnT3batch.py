@@ -288,6 +288,9 @@ def submitJobsFromXML(xmlfile,jobslist):
             cmd = "qsub -o %s -e %s -q %s %s %s %s %s %s %s %s %s %s %s" %(root.find('General').find('LocalOutputDir').text,root.find('General').find('LocalOutputDir').text,root.find('General').find('Queue').text,root.find('General').find('BashFile').text,root.find('General').find('OutFile').text,root.find('General').find('SEOutDir').text,root.find('General').find('CMSSWDir').text,root.find('General').find('CMSSWConfigFile').text,j.get('InputFiles'),j.get('MaxEvents'),j.get('ID'),root.find('General').find('JobName').text,root.find('General').find('LocalOutputDir').text)
             cmds.append(cmd) 
 
+   status,cmd_out = commands.getstatusoutput( 'ls '+getLocalJobsDir(localjobdir) )
+   if status: os.system('mkdir '+getLocalJobsDir(localjobdir))
+
    for c in cmds:
       print ""
       print c
@@ -314,6 +317,10 @@ def checkJobsOutputFromXML(xmlfile):
       status,cmd_out = commands.getstatusoutput(checkfile)
       if status: continue
       tfile = ROOT.TFile.Open("dcap://t3se01.psi.ch:22125/"+inputpath)
+      if not tfile.Get("ntuplizer/tree"):
+         print "WARNING: tree not found! Job %s : found 0 events" %(jobid)
+	 jobsevents[jobid] = 0
+	 continue
       ttree = ROOT.TTree()
       tfile.GetObject("ntuplizer/tree",ttree)
       print "Job %s : found %i events" %(jobid,ttree.GetEntries())
@@ -326,8 +333,9 @@ def checkJobsOutputFromXML(xmlfile):
       filelist = inputFiles.split(",")
       count = 0
       for f in filelist:
-         tfile = ROOT.TFile.Open("dcap://t3se01.psi.ch:22125//pnfs/psi.ch/cms/trivcat"+f)
-         ttree = ROOT.TTree()
+         #tfile = ROOT.TFile.Open("dcap://t3se01.psi.ch:22125//pnfs/psi.ch/cms/trivcat"+f)
+         tfile = ROOT.TFile.Open(f)
+	 ttree = ROOT.TTree()
          tfile.GetObject("Events",ttree)
          count+=ttree.GetEntries()
       print "Job %s : expected %i events" %(j.get('ID'),count) 
@@ -337,12 +345,14 @@ def checkJobsOutputFromXML(xmlfile):
    print "Expected %i jobs, found %i" %(len(expevents),len(jobsevents))           
    for j,e in expevents.iteritems():
       for jj,ee in jobsevents.iteritems():
-         if j == jj and e != ee: print "Job "+j+": found " + jobsevents[j] + " expected " + e    
+         if j == jj and e != ee: print "Job "+str(j)+": found " + str(jobsevents[j]) + " expected " + str(e)    
             
 #-----------------------------------------------------------------------------------------
-def getFileListDAS(dataset,instance="prod/global"):
+def getFileListDAS(dataset,instance="prod/global",run=-1):
 
-   cmd = './das_client.py --query="file dataset=%s instance=%s" --limit=1000' %(dataset,instance)
+   cmd = './das_client.py --query="file dataset=%s instance=%s" --limit=2000' %(dataset,instance)
+   if run != -1: cmd = './das_client.py --query="file run=%i dataset=%s instance=%s" --limit=2000' %(run,dataset,instance)
+   print cmd
    cmd_out = commands.getoutput( cmd )
    tmpList = cmd_out.split(os.linesep)
    files = []
@@ -404,7 +414,9 @@ xmlfile = config.get('JobsConfig','xmlfile')
 maxevents = config.getint('JobsConfig','maxevents')
 prefix = config.get('JobsConfig','prefix')
 newdir = config.get('JobsConfig','newdir')
-   
+instance = config.get('JobsConfig','instance')
+run = int(config.get('JobsConfig','run'))
+ 
 #-----------------------------------------------------------------------------------------
 if opts.copyfiles:
 
@@ -445,8 +457,15 @@ if opts.clean:
       print cmd
       os.system(cmd)
     
-   print "rm -rf "+getLocalJobsDir(localjobdir)  
-   os.system("rm -rf "+getLocalJobsDir(localjobdir))
+   print ""
+   cmd = "rm -rf "+getLocalJobsDir(localjobdir)
+   print cmd
+   os.system(cmd)
+   user = commands.getoutput("whoami")
+   dir = '/pnfs/psi.ch/cms/trivcat/store/user/'+user+"/"+outdir
+   cmd = "lcg-del -d srm://t3se01.psi.ch:8443/srm/managerv2?SFN=" + dir
+   print cmd
+   os.system(cmd)
       
    sys.exit()   
 
@@ -467,7 +486,7 @@ if not(opts.useDAS):
    else: files = getFileListT3(src)   
 else:
    if sample != "": files = getFileListFromSampleDAS(sample)
-   else: files = getFileListDAS(src)   
+   else: files = getFileListDAS(src,instance,run)   
 
 print "****************************************"
 print len(files)

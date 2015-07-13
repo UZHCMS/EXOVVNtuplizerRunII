@@ -42,10 +42,6 @@ private:
   
   NtupleBranches* nBranches_;
   std::map<std::string,CandidateNtuplizer*>                 nTuplizers_         ;
-  bool                                                      runOnMC             ;
-  bool                                                      doTausBoostedFlag_  ;
-  bool                                                      doPruningFlag_      ;
-  bool                                                      doHbbTagFlag_       ;
   
   edm::EDGetTokenT<reco::VertexCollection>                  vtxToken_           ;
   edm::EDGetTokenT<double>                                  rhoToken_           ;
@@ -60,6 +56,7 @@ private:
   edm::EDGetTokenT<pat::JetCollection>                      prunedjetToken_     ;
   edm::EDGetTokenT<pat::JetCollection>                      softdropjetToken_   ;
   edm::EDGetTokenT<reco::GenJetCollection>                  genJetToken_	;
+  edm::EDGetTokenT<pat::JetCollection>                      genJetAK8Token_	;
   
 
   edm::EDGetTokenT<reco::JetFlavourMatchingCollection> 	    flavourToken_	;

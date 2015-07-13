@@ -8,10 +8,11 @@
 class TriggersNtuplizer : public CandidateNtuplizer {
 
 public:
-   TriggersNtuplizer(edm::EDGetTokenT<edm::TriggerResults> tokens, edm::EDGetTokenT<pat::TriggerObjectStandAloneCollection> object, edm::EDGetTokenT<pat::PackedTriggerPrescales> prescale, edm::EDGetTokenT<edm::TriggerResults> noiseFilterToken, NtupleBranches* nBranches, const edm::ParameterSet& iConfig );
+   TriggersNtuplizer(edm::EDGetTokenT<edm::TriggerResults> tokens, edm::EDGetTokenT<pat::TriggerObjectStandAloneCollection> object, edm::EDGetTokenT<pat::PackedTriggerPrescales> prescale, edm::EDGetTokenT<edm::TriggerResults> noiseFilterToken, NtupleBranches* nBranches, const edm::ParameterSet& iConfig, std::map< std::string, bool >& runFlags );
    ~TriggersNtuplizer( void );
    
   void fillBranches( edm::Event const & event, const edm::EventSetup& iSetup );
+  bool findTrigger( std::string trigName );
 
 private:
    edm::EDGetTokenT<edm::TriggerResults> 							HLTtriggersToken_;
@@ -38,6 +39,10 @@ private:
    std::string TrkPOG_toomanystrip_NoiseFilter_Selector_;
    std::string TrkPOG_logError_NoiseFilter_Selector_;
    std::string METFilters_Selector_;
+   
+   bool doTriggerDecisions_;
+   bool doTriggerObjects_;
+   bool doHltFilters_;
         
 };
 
