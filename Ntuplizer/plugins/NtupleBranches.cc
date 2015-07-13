@@ -451,11 +451,16 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch("isFired_HLT_PFHT650_WideJetMJJ900DEtaJJ1p5_v2"           , &isFired_HLT_PFHT650_WideJetMJJ900DEtaJJ1p5_v2);
     tree_->Branch("isFired_HLT_PFHT650_WideJetMJJ950DEtaJJ1p5_v2"           , &isFired_HLT_PFHT650_WideJetMJJ950DEtaJJ1p5_v2);
     tree_->Branch("isFired_HLT_PFHT800_v1"                                  , &isFired_HLT_PFHT800_v1);
-    tree_->Branch("isFired_HLT_Ele23_CaloIdL_TrackIdL_IsoVL_v1"             , &isFired_HLT_Ele23_CaloIdL_TrackIdL_IsoVL_v1 	   );
-    tree_->Branch("isFired_HLT_Ele32_eta2p1_WP75_Gsf_v1"                    , &isFired_HLT_Ele32_eta2p1_WP75_Gsf_v1		   );
-    tree_->Branch("isFired_HLT_Ele105_CaloIdVT_GsfTrkIdT_v1"		            , &isFired_HLT_Ele105_CaloIdVT_GsfTrkIdT_v1		   );
-    tree_->Branch("isFired_HLT_IsoMu24_eta2p1_v1"                           , &isFired_HLT_IsoMu24_eta2p1_v1			   );
-    tree_->Branch("isFired_HLT_Mu45_eta2p1_v1"				                      , &isFired_HLT_Mu45_eta2p1_v1  			   );
+    tree_->Branch("isFired_HLT_Ele23_CaloIdL_TrackIdL_IsoVL_v1"            , &isFired_HLT_Ele23_CaloIdL_TrackIdL_IsoVL_v1 	   );
+    tree_->Branch("isFired_HLT_Ele32_eta2p1_WP75_Gsf_v1"                   , &isFired_HLT_Ele32_eta2p1_WP75_Gsf_v1		   );
+    tree_->Branch("isFired_HLT_Ele105_CaloIdVT_GsfTrkIdT_v1"		 , &isFired_HLT_Ele105_CaloIdVT_GsfTrkIdT_v1		   );
+    tree_->Branch("isFired_HLT_Ele105_CaloIdVT_GsfTrkIdT_v2"		 , &isFired_HLT_Ele105_CaloIdVT_GsfTrkIdT_v2		   );
+    tree_->Branch("isFired_HLT_Ele115_CaloIdVT_GsfTrkIdT_v1"		 , &isFired_HLT_Ele115_CaloIdVT_GsfTrkIdT_v1		   );
+    tree_->Branch("isFired_HLT_IsoMu24_eta2p1_v1"                          , &isFired_HLT_IsoMu24_eta2p1_v1			   );
+    tree_->Branch("isFired_HLT_IsoMu24_eta2p1_v2"                          , &isFired_HLT_IsoMu24_eta2p1_v2			   );
+    tree_->Branch("isFired_HLT_Mu45_eta2p1_v1"				 , &isFired_HLT_Mu45_eta2p1_v1  			   );
+    tree_->Branch("isFired_HLT_Mu50_eta2p1_v1"				 , &isFired_HLT_Mu50_eta2p1_v1  			   );
+    
   }
 
   
@@ -948,8 +953,12 @@ void NtupleBranches::reset( void ){
   isFired_HLT_Ele23_CaloIdL_TrackIdL_IsoVL_v1 = false;
   isFired_HLT_Ele32_eta2p1_WP75_Gsf_v1 = false;
   isFired_HLT_Ele105_CaloIdVT_GsfTrkIdT_v1 = false;
+  isFired_HLT_Ele105_CaloIdVT_GsfTrkIdT_v2 = false;
+  isFired_HLT_Ele115_CaloIdVT_GsfTrkIdT_v1 = false;
   isFired_HLT_IsoMu24_eta2p1_v1 = false;
+  isFired_HLT_IsoMu24_eta2p1_v2 = false;
   isFired_HLT_Mu45_eta2p1_v1 = false;
+  isFired_HLT_Mu50_eta2p1_v1 = false;
 
   /** HLT trigger objects */
   triggerObject_pt.clear();

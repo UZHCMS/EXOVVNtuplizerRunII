@@ -486,12 +486,15 @@ public:
   bool    isFired_HLT_PFHT650_WideJetMJJ900DEtaJJ1p5_v2           ;
   bool    isFired_HLT_PFHT650_WideJetMJJ950DEtaJJ1p5_v2           ;
   bool    isFired_HLT_PFHT800_v1                                  ;
-
   bool    isFired_HLT_Ele23_CaloIdL_TrackIdL_IsoVL_v1            ;
   bool    isFired_HLT_Ele32_eta2p1_WP75_Gsf_v1		         ;
   bool    isFired_HLT_Ele105_CaloIdVT_GsfTrkIdT_v1               ;
+  bool    isFired_HLT_Ele105_CaloIdVT_GsfTrkIdT_v2               ;
+  bool    isFired_HLT_Ele115_CaloIdVT_GsfTrkIdT_v1               ;
   bool    isFired_HLT_IsoMu24_eta2p1_v1                          ;
+  bool    isFired_HLT_IsoMu24_eta2p1_v2                          ;
   bool    isFired_HLT_Mu45_eta2p1_v1				 ;
+  bool    isFired_HLT_Mu50_eta2p1_v1				 ;
 	 
   /** HLT trigger objects */
   std::vector<float>  		    triggerObject_pt	      ;

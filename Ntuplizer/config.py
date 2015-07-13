@@ -20,7 +20,7 @@ options = VarParsing.VarParsing ('analysis')
 options.maxEvents = -1
 
 options.inputFiles ='dcap://t3se01.psi.ch:22125//pnfs/psi.ch/cms/trivcat/store/t3groups/uniz-higgs/ExpressPhysics/MINIAOD/Run2015B-Express-v1/MINIAOD_Run2015B-Express-v1_67.root'
-
+# options.inputFiles ='file://shome/thaarres/EXOVVAnalysisRunII/NTUPLIZER/CMSSW_7_4_3/src/EXOVVNtuplizerRunII/Ntuplizer/BulkGravToWW_M_2000.root'
 
 options.parseArguments()
 
@@ -38,23 +38,15 @@ process.source = cms.Source("PoolSource",
 
 
 runOnMC = False
-AODtoMINIAOD = True
 
-if AODtoMINIAOD:
-  from FWCore.ParameterSet.Utilities import convertToUnscheduled
-  #process=convertToUnscheduled(process)
-  process.load('Configuration.StandardSequences.PAT_cff')
-  from PhysicsTools.PatAlgos.slimming.miniAOD_tools import miniAOD_customizeAllData 
-  process = miniAOD_customizeAllData(process)
-  
 ####### JSON file ##########
-if not runOnMC:
-  import FWCore.PythonUtilities.LumiList as LumiList
-  import FWCore.ParameterSet.Types as CfgTypes
-  process.source.lumisToProcess = CfgTypes.untracked(CfgTypes.VLuminosityBlockRange())
-  JSONfile = 'json_DCSONLY_Run2015B.txt'
-  myLumis = LumiList.LumiList(filename = JSONfile).getCMSSWString().split(',')
-  process.source.lumisToProcess.extend(myLumis)
+# if not runOnMC:
+#   import FWCore.PythonUtilities.LumiList as LumiList
+#   import FWCore.ParameterSet.Types as CfgTypes
+#   process.source.lumisToProcess = CfgTypes.untracked(CfgTypes.VLuminosityBlockRange())
+#   JSONfile = 'json_DCSONLY_Run2015B.txt'
+#   myLumis = LumiList.LumiList(filename = JSONfile).getCMSSWString().split(',')
+#   process.source.lumisToProcess.extend(myLumis)
   
   
 ######## Sequence settings ##########

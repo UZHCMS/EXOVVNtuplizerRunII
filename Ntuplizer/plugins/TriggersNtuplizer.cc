@@ -119,22 +119,34 @@ if (doTriggerDecisions_) {
 
 	////////////////// single lepton triggers ///////////////////////////////////
 	unsigned int TrggIndex_HLT_IsoMu24_eta2p1_v1               (trigNames.triggerIndex("HLT_IsoMu24_eta2p1_v1"		 ));
+	unsigned int TrggIndex_HLT_IsoMu24_eta2p1_v2               (trigNames.triggerIndex("HLT_IsoMu24_eta2p1_v2"		 ));
 	unsigned int TrggIndex_HLT_Mu45_eta2p1_v1		   (trigNames.triggerIndex("HLT_Mu45_eta2p1_v1" 		 ));
-        unsigned int TrggIndex_HLT_Ele23_CaloIdL_TrackIdL_IsoVL_v1 (trigNames.triggerIndex("HLT_Ele23_CaloIdL_TrackIdL_IsoVL_v1" ));
+	unsigned int TrggIndex_HLT_Mu50_eta2p1_v1		   (trigNames.triggerIndex("HLT_Mu50_eta2p1_v1" 		 ));
+      unsigned int TrggIndex_HLT_Ele23_CaloIdL_TrackIdL_IsoVL_v1 (trigNames.triggerIndex("HLT_Ele23_CaloIdL_TrackIdL_IsoVL_v1" ));
 	unsigned int TrggIndex_HLT_Ele32_eta2p1_WP75_Gsf_v1	   (trigNames.triggerIndex("HLT_Ele32_eta2p1_WP75_Gsf_v1"	 ));
 	unsigned int TrggIndex_HLT_Ele105_CaloIdVT_GsfTrkIdT_v1	   (trigNames.triggerIndex("HLT_Ele105_CaloIdVT_GsfTrkIdT_v1"	 ));
+	unsigned int TrggIndex_HLT_Ele105_CaloIdVT_GsfTrkIdT_v2	   (trigNames.triggerIndex("HLT_Ele105_CaloIdVT_GsfTrkIdT_v2"	 ));
+	unsigned int TrggIndex_HLT_Ele115_CaloIdVT_GsfTrkIdT_v1	   (trigNames.triggerIndex("HLT_Ele115_CaloIdVT_GsfTrkIdT_v1"	 ));
 
-        nBranches_->isFired_HLT_IsoMu24_eta2p1_v1               = false;  
+      nBranches_->isFired_HLT_IsoMu24_eta2p1_v1               = false;  
+      nBranches_->isFired_HLT_IsoMu24_eta2p1_v2               = false;  
 	nBranches_->isFired_HLT_Mu45_eta2p1_v1 		    	= false;
-        nBranches_->isFired_HLT_Ele23_CaloIdL_TrackIdL_IsoVL_v1 = false;
-        nBranches_->isFired_HLT_Ele32_eta2p1_WP75_Gsf_v1 	= false;
+	nBranches_->isFired_HLT_Mu50_eta2p1_v1 		    	= false;
+      nBranches_->isFired_HLT_Ele23_CaloIdL_TrackIdL_IsoVL_v1 = false;
+      nBranches_->isFired_HLT_Ele32_eta2p1_WP75_Gsf_v1 	= false;
 	nBranches_->isFired_HLT_Ele105_CaloIdVT_GsfTrkIdT_v1 	= false;
+	nBranches_->isFired_HLT_Ele105_CaloIdVT_GsfTrkIdT_v2 	= false;
+	nBranches_->isFired_HLT_Ele115_CaloIdVT_GsfTrkIdT_v1 	= false;
 
-        if( TrggIndex_HLT_IsoMu24_eta2p1_v1    		  < HLTtriggers_->size() ) nBranches_->isFired_HLT_IsoMu24_eta2p1_v1		   = HLTtriggers_->accept(TrggIndex_HLT_IsoMu24_eta2p1_v1		);    
+      if( TrggIndex_HLT_IsoMu24_eta2p1_v1    		  < HLTtriggers_->size() ) nBranches_->isFired_HLT_IsoMu24_eta2p1_v1		   = HLTtriggers_->accept(TrggIndex_HLT_IsoMu24_eta2p1_v1		);    
+      if( TrggIndex_HLT_IsoMu24_eta2p1_v2    		  < HLTtriggers_->size() ) nBranches_->isFired_HLT_IsoMu24_eta2p1_v2		   = HLTtriggers_->accept(TrggIndex_HLT_IsoMu24_eta2p1_v2		);    
 	if( TrggIndex_HLT_Mu45_eta2p1_v1	      	  < HLTtriggers_->size() ) nBranches_->isFired_HLT_Mu45_eta2p1_v1		   = HLTtriggers_->accept(TrggIndex_HLT_Mu45_eta2p1_v1  		);
+	if( TrggIndex_HLT_Mu50_eta2p1_v1	      	  < HLTtriggers_->size() ) nBranches_->isFired_HLT_Mu50_eta2p1_v1		   = HLTtriggers_->accept(TrggIndex_HLT_Mu50_eta2p1_v1  		);
 	if( TrggIndex_HLT_Ele23_CaloIdL_TrackIdL_IsoVL_v1 < HLTtriggers_->size() ) nBranches_->isFired_HLT_Ele23_CaloIdL_TrackIdL_IsoVL_v1 = HLTtriggers_->accept(TrggIndex_HLT_Ele23_CaloIdL_TrackIdL_IsoVL_v1 );
 	if( TrggIndex_HLT_Ele32_eta2p1_WP75_Gsf_v1 	  < HLTtriggers_->size() ) nBranches_->isFired_HLT_Ele32_eta2p1_WP75_Gsf_v1	   = HLTtriggers_->accept(TrggIndex_HLT_Ele32_eta2p1_WP75_Gsf_v1	);    
 	if( TrggIndex_HLT_Ele105_CaloIdVT_GsfTrkIdT_v1 	  < HLTtriggers_->size() ) nBranches_->isFired_HLT_Ele105_CaloIdVT_GsfTrkIdT_v1    = HLTtriggers_->accept(TrggIndex_HLT_Ele105_CaloIdVT_GsfTrkIdT_v1	);
+	if( TrggIndex_HLT_Ele105_CaloIdVT_GsfTrkIdT_v2 	  < HLTtriggers_->size() ) nBranches_->isFired_HLT_Ele105_CaloIdVT_GsfTrkIdT_v2    = HLTtriggers_->accept(TrggIndex_HLT_Ele105_CaloIdVT_GsfTrkIdT_v2	);
+	if( TrggIndex_HLT_Ele115_CaloIdVT_GsfTrkIdT_v1 	  < HLTtriggers_->size() ) nBranches_->isFired_HLT_Ele115_CaloIdVT_GsfTrkIdT_v1    = HLTtriggers_->accept(TrggIndex_HLT_Ele115_CaloIdVT_GsfTrkIdT_v1	);
 }
 	
 	////////////////// Trigger objects ///////////////////////////////////	
