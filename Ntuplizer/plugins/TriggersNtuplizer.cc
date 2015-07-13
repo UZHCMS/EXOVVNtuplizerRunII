@@ -12,7 +12,7 @@ TriggersNtuplizer::TriggersNtuplizer(edm::EDGetTokenT<edm::TriggerResults> token
    , triggerObjects_	( object )	
    , triggerPrescales_	( prescale )
    , noiseFilterToken_	( noiseFilterToken )		
-   , doTriggerDecisions_	( runFlags["doTriggerDecisions"] )
+   , doTriggerDecisions_( runFlags["doTriggerDecisions"] )
    , doTriggerObjects_	( runFlags["doTriggerObjects"] )
    , doHltFilters_	( runFlags["doHltFilters"] )
 {
@@ -40,117 +40,59 @@ TriggersNtuplizer::~TriggersNtuplizer( void )
 }
 
 //===================================================================================================================
+
+bool TriggersNtuplizer::findTrigger( std::string trigName ){
+
+   if( trigName.find("AK8PFJet360_TrimMass30") != std::string::npos ||
+       trigName.find("AK8PFHT700_TrimR0p1PT0p03Mass50") != std::string::npos ||
+       trigName.find("AK8DiPFJet280_200_TrimMass30_BTagCSV0p45") != std::string::npos ||
+       trigName.find("PFHT650_WideJetMJJ950DEtaJJ1p5") != std::string::npos ||
+       trigName.find("PFHT650_WideJetMJJ900DEtaJJ1p5") != std::string::npos ||
+       trigName.find("PFHT400") != std::string::npos ||
+       trigName.find("PFHT475") != std::string::npos ||
+       trigName.find("PFHT600") != std::string::npos ||
+       trigName.find("PFHT650") != std::string::npos ||
+       trigName.find("PFHT800") != std::string::npos ||
+       trigName.find("PFHT900") != std::string::npos ||
+       trigName.find("IsoMu24_eta2p1") != std::string::npos ||
+       trigName.find("Mu45_eta2p1") != std::string::npos ||
+       trigName.find("Mu50_eta2p1") != std::string::npos ||
+       trigName.find("Ele23_CaloIdL_TrackIdL_IsoVL") != std::string::npos ||
+       trigName.find("Ele32_eta2p1_WP75_Gsf") != std::string::npos ||
+       trigName.find("Ele105_CaloIdVT_GsfTrkIdT") != std::string::npos ||
+       trigName.find("Ele105_CaloIdVT_GsfTrkIdT") != std::string::npos ||
+       trigName.find("Ele115_CaloIdVT_GsfTrkIdT") != std::string::npos ||
+       trigName.find("Ele105_CaloIdVT_GsfTrkIdT") != std::string::npos ||
+       trigName.find("Ele105_CaloIdVT_GsfTrkIdT") != std::string::npos ||
+       trigName.find("Ele105_CaloIdVT_GsfTrkIdT") != std::string::npos       
+   ) return true;
+   else
+     return false;
+
+}
+
+//===================================================================================================================
 void TriggersNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetup& iSetup ){
 	
-	event.getByToken(HLTtriggersToken_, HLTtriggers_);	
-	event.getByToken(triggerObjects_  , triggerObjects);
-	event.getByToken(triggerPrescales_, triggerPrescales);
-	
-	const edm::TriggerNames& trigNames = event.triggerNames(*HLTtriggers_);
-	
-if (doTriggerDecisions_) {
-   // for (unsigned int i = 0, n = HLTtriggers_->size(); i < n; ++i) {
-   //   std::cout << "Trigger " << trigNames.triggerName(i) << std::endl;//<< ": " << (HLTtriggers_->accept(i) ? "PASS" : "fail (or not run)") << std::endl;
-   // }
-	
-	////////////////// dijet triggers ///////////////////////////////////
-	unsigned int TrggIndex_HLT_AK8PFJet360_TrimMass30_v1                  (trigNames.triggerIndex("HLT_AK8PFJet360_TrimMass30_v1"));
-	unsigned int TrggIndex_HLT_AK8PFHT700_TrimR0p1PT0p03Mass50_v1         (trigNames.triggerIndex("HLT_AK8PFHT700_TrimR0p1PT0p03Mass50_v1"));
-	unsigned int TrggIndex_HLT_AK8DiPFJet280_200_TrimMass30_BTagCSV0p41_v1(trigNames.triggerIndex("HLT_AK8DiPFJet280_200_TrimMass30_BTagCSV0p41_v1"));
-	unsigned int TrggIndex_HLT_PFHT650_WideJetMJJ950DEtaJJ1p5_v1          (trigNames.triggerIndex("HLT_PFHT650_WideJetMJJ950DEtaJJ1p5_v1"));
-	unsigned int TrggIndex_HLT_PFHT650_WideJetMJJ900DEtaJJ1p5_v1          (trigNames.triggerIndex("HLT_PFHT650_WideJetMJJ900DEtaJJ1p5_v1"));
+  event.getByToken(HLTtriggersToken_, HLTtriggers_);	  
+  event.getByToken(triggerObjects_  , triggerObjects);
+  event.getByToken(triggerPrescales_, triggerPrescales);
+
+  const edm::TriggerNames& trigNames = event.triggerNames(*HLTtriggers_);
+		
+  if (doTriggerDecisions_) {
   
-  unsigned int TrggIndex_HLT_PFHT350_v2                                 (trigNames.triggerIndex("HLT_PFHT350_v2"));
-  unsigned int TrggIndex_HLT_PFHT400_v1                                 (trigNames.triggerIndex("HLT_PFHT400_v1 "));
-  unsigned int TrggIndex_HLT_PFHT475_v1                                 (trigNames.triggerIndex("HLT_PFHT475_v1 "));
-  unsigned int TrggIndex_HLT_PFHT600_v2                                 (trigNames.triggerIndex("HLT_PFHT600_v2"));
-  unsigned int TrggIndex_HLT_PFHT650_v2                                 (trigNames.triggerIndex("HLT_PFHT650_v2"));
-  unsigned int TrggIndex_HLT_PFHT650_WideJetMJJ900DEtaJJ1p5_v2          (trigNames.triggerIndex("HLT_PFHT650_WideJetMJJ900DEtaJJ1p5_v2"));
-  unsigned int TrggIndex_HLT_PFHT650_WideJetMJJ950DEtaJJ1p5_v2          (trigNames.triggerIndex("HLT_PFHT650_WideJetMJJ950DEtaJJ1p5_v2"));
-  unsigned int TrggIndex_HLT_PFHT800_v1                                 (trigNames.triggerIndex("HLT_PFHT800_v1 "));
+  	 for (unsigned int i = 0, n = HLTtriggers_->size(); i < n; ++i) {
+  	  if( findTrigger(trigNames.triggerName(i)) ){
+          std::cout << "Trigger " << trigNames.triggerName(i) << ": " << (HLTtriggers_->accept(i) ? "PASS" : "fail (or not run)") << std::endl;
+   	     nBranches_->HLT_isFired[trigNames.triggerName(i)] = HLTtriggers_->accept(i);
+   	  }
+   	}
+	  
+  } //doTriggerDecisions_
 
-  unsigned int TrggIndex_HLT_PFHT350_v1                                 (trigNames.triggerIndex("HLT_PFHT350_v1"));
-  unsigned int TrggIndex_HLT_PFHT600_v1                                 (trigNames.triggerIndex("HLT_PFHT600_v1"));
-  unsigned int TrggIndex_HLT_PFHT650_v1                                 (trigNames.triggerIndex("HLT_PFHT650_v1"));
-  unsigned int TrggIndex_HLT_PFHT900_v1                                 (trigNames.triggerIndex("HLT_PFHT900_v1"));
-  unsigned int TrggIndex_HLT_HT400_v1                                   (trigNames.triggerIndex("HLT_HT400_v1"));
-
-	nBranches_->isFired_HLT_AK8PFJet360_TrimMass30_v1                   = false;
-	nBranches_->isFired_HLT_AK8PFHT700_TrimR0p1PT0p03Mass50_v1          = false;
-	nBranches_->isFired_HLT_AK8DiPFJet280_200_TrimMass30_BTagCSV0p41_v1 = false;
-	nBranches_->isFired_HLT_PFHT650_WideJetMJJ950DEtaJJ1p5_v1           = false;
-	nBranches_->isFired_HLT_PFHT650_WideJetMJJ900DEtaJJ1p5_v1           = false;
-  
-  nBranches_->isFired_HLT_PFHT350_v1                                  = false;
-  nBranches_->isFired_HLT_PFHT600_v1                                  = false;
-  nBranches_->isFired_HLT_PFHT650_v1                                  = false;
-  nBranches_->isFired_HLT_PFHT900_v1                                  = false;
-	nBranches_->isFired_HLT_HT400_v1                                    = false;
-  
-  nBranches_->isFired_HLT_PFHT350_v2                                  = false;
-  nBranches_->isFired_HLT_PFHT400_v1                                  = false;
-  nBranches_->isFired_HLT_PFHT475_v1                                  = false;
-  nBranches_->isFired_HLT_PFHT600_v2                                  = false;
-  nBranches_->isFired_HLT_PFHT650_v2                                  = false;
-  nBranches_->isFired_HLT_PFHT650_WideJetMJJ900DEtaJJ1p5_v2           = false;
-  nBranches_->isFired_HLT_PFHT650_WideJetMJJ950DEtaJJ1p5_v2           = false;
-  nBranches_->isFired_HLT_PFHT800_v1                                  = false;
-    
 	
-	if( TrggIndex_HLT_AK8PFJet360_TrimMass30_v1                   < HLTtriggers_->size() ) nBranches_->isFired_HLT_AK8PFJet360_TrimMass30_v1                    = HLTtriggers_->accept(TrggIndex_HLT_AK8PFJet360_TrimMass30_v1  );
-	if( TrggIndex_HLT_AK8PFHT700_TrimR0p1PT0p03Mass50_v1          < HLTtriggers_->size() ) nBranches_->isFired_HLT_AK8PFHT700_TrimR0p1PT0p03Mass50_v1           = HLTtriggers_->accept(TrggIndex_HLT_AK8PFHT700_TrimR0p1PT0p03Mass50_v1 );      
-	if( TrggIndex_HLT_AK8DiPFJet280_200_TrimMass30_BTagCSV0p41_v1 < HLTtriggers_->size() ) nBranches_->isFired_HLT_AK8DiPFJet280_200_TrimMass30_BTagCSV0p41_v1  = HLTtriggers_->accept(TrggIndex_HLT_AK8DiPFJet280_200_TrimMass30_BTagCSV0p41_v1  );
-	if( TrggIndex_HLT_PFHT650_WideJetMJJ950DEtaJJ1p5_v1           < HLTtriggers_->size() ) nBranches_->isFired_HLT_PFHT650_WideJetMJJ950DEtaJJ1p5_v1            = HLTtriggers_->accept(TrggIndex_HLT_PFHT650_WideJetMJJ950DEtaJJ1p5_v1  );
-	if( TrggIndex_HLT_PFHT650_WideJetMJJ900DEtaJJ1p5_v1           < HLTtriggers_->size() ) nBranches_->isFired_HLT_PFHT650_WideJetMJJ900DEtaJJ1p5_v1            = HLTtriggers_->accept(TrggIndex_HLT_PFHT650_WideJetMJJ900DEtaJJ1p5_v1  ); 
-	if( TrggIndex_HLT_PFHT350_v1                                  < HLTtriggers_->size() ) nBranches_->isFired_HLT_PFHT350_v1                                   = HLTtriggers_->accept(TrggIndex_HLT_PFHT350_v1 );
-	if( TrggIndex_HLT_PFHT600_v1                                  < HLTtriggers_->size() ) nBranches_->isFired_HLT_PFHT600_v1                                   = HLTtriggers_->accept(TrggIndex_HLT_PFHT600_v1 );
-	if( TrggIndex_HLT_PFHT650_v1                                  < HLTtriggers_->size() ) nBranches_->isFired_HLT_PFHT650_v1                                   = HLTtriggers_->accept(TrggIndex_HLT_PFHT650_v1 );
-	if( TrggIndex_HLT_PFHT900_v1                                  < HLTtriggers_->size() ) nBranches_->isFired_HLT_PFHT900_v1                                   = HLTtriggers_->accept(TrggIndex_HLT_PFHT900_v1 );
-	if( TrggIndex_HLT_HT400_v1                                    < HLTtriggers_->size() ) nBranches_->isFired_HLT_HT400_v1                                     = HLTtriggers_->accept(TrggIndex_HLT_HT400_v1 );
-
-  if( TrggIndex_HLT_PFHT350_v2                                  < HLTtriggers_->size() ) nBranches_->isFired_HLT_PFHT350_v2                                   = HLTtriggers_->accept(TrggIndex_HLT_PFHT350_v2 );
-  if( TrggIndex_HLT_PFHT400_v1                                  < HLTtriggers_->size() ) nBranches_->isFired_HLT_PFHT400_v1                                   = HLTtriggers_->accept(TrggIndex_HLT_PFHT400_v1 );
-  if( TrggIndex_HLT_PFHT475_v1                                  < HLTtriggers_->size() ) nBranches_->isFired_HLT_PFHT475_v1                                   = HLTtriggers_->accept(TrggIndex_HLT_PFHT475_v1 );
-  if( TrggIndex_HLT_PFHT600_v2                                  < HLTtriggers_->size() ) nBranches_->isFired_HLT_PFHT600_v2                                   = HLTtriggers_->accept(TrggIndex_HLT_PFHT600_v2 );
-  if( TrggIndex_HLT_PFHT650_v2                                  < HLTtriggers_->size() ) nBranches_->isFired_HLT_PFHT650_v2                                   = HLTtriggers_->accept(TrggIndex_HLT_PFHT650_v2 );
-  if( TrggIndex_HLT_PFHT650_WideJetMJJ900DEtaJJ1p5_v2           < HLTtriggers_->size() ) nBranches_->isFired_HLT_PFHT650_WideJetMJJ900DEtaJJ1p5_v2            = HLTtriggers_->accept(TrggIndex_HLT_PFHT650_WideJetMJJ900DEtaJJ1p5_v2 );
-  if( TrggIndex_HLT_PFHT650_WideJetMJJ950DEtaJJ1p5_v2           < HLTtriggers_->size() ) nBranches_->isFired_HLT_PFHT650_WideJetMJJ950DEtaJJ1p5_v2            = HLTtriggers_->accept(TrggIndex_HLT_PFHT650_WideJetMJJ950DEtaJJ1p5_v2 );
-  if( TrggIndex_HLT_PFHT800_v1                                  < HLTtriggers_->size() ) nBranches_->isFired_HLT_PFHT800_v1                                   = HLTtriggers_->accept(TrggIndex_HLT_PFHT800_v1 );
-
-	////////////////// single lepton triggers ///////////////////////////////////
-	unsigned int TrggIndex_HLT_IsoMu24_eta2p1_v1               (trigNames.triggerIndex("HLT_IsoMu24_eta2p1_v1"		 ));
-	unsigned int TrggIndex_HLT_IsoMu24_eta2p1_v2               (trigNames.triggerIndex("HLT_IsoMu24_eta2p1_v2"		 ));
-	unsigned int TrggIndex_HLT_Mu45_eta2p1_v1		   (trigNames.triggerIndex("HLT_Mu45_eta2p1_v1" 		 ));
-	unsigned int TrggIndex_HLT_Mu50_eta2p1_v1		   (trigNames.triggerIndex("HLT_Mu50_eta2p1_v1" 		 ));
-      unsigned int TrggIndex_HLT_Ele23_CaloIdL_TrackIdL_IsoVL_v1 (trigNames.triggerIndex("HLT_Ele23_CaloIdL_TrackIdL_IsoVL_v1" ));
-	unsigned int TrggIndex_HLT_Ele32_eta2p1_WP75_Gsf_v1	   (trigNames.triggerIndex("HLT_Ele32_eta2p1_WP75_Gsf_v1"	 ));
-	unsigned int TrggIndex_HLT_Ele105_CaloIdVT_GsfTrkIdT_v1	   (trigNames.triggerIndex("HLT_Ele105_CaloIdVT_GsfTrkIdT_v1"	 ));
-	unsigned int TrggIndex_HLT_Ele105_CaloIdVT_GsfTrkIdT_v2	   (trigNames.triggerIndex("HLT_Ele105_CaloIdVT_GsfTrkIdT_v2"	 ));
-	unsigned int TrggIndex_HLT_Ele115_CaloIdVT_GsfTrkIdT_v1	   (trigNames.triggerIndex("HLT_Ele115_CaloIdVT_GsfTrkIdT_v1"	 ));
-
-      nBranches_->isFired_HLT_IsoMu24_eta2p1_v1               = false;  
-      nBranches_->isFired_HLT_IsoMu24_eta2p1_v2               = false;  
-	nBranches_->isFired_HLT_Mu45_eta2p1_v1 		    	= false;
-	nBranches_->isFired_HLT_Mu50_eta2p1_v1 		    	= false;
-      nBranches_->isFired_HLT_Ele23_CaloIdL_TrackIdL_IsoVL_v1 = false;
-      nBranches_->isFired_HLT_Ele32_eta2p1_WP75_Gsf_v1 	= false;
-	nBranches_->isFired_HLT_Ele105_CaloIdVT_GsfTrkIdT_v1 	= false;
-	nBranches_->isFired_HLT_Ele105_CaloIdVT_GsfTrkIdT_v2 	= false;
-	nBranches_->isFired_HLT_Ele115_CaloIdVT_GsfTrkIdT_v1 	= false;
-
-      if( TrggIndex_HLT_IsoMu24_eta2p1_v1    		  < HLTtriggers_->size() ) nBranches_->isFired_HLT_IsoMu24_eta2p1_v1		   = HLTtriggers_->accept(TrggIndex_HLT_IsoMu24_eta2p1_v1		);    
-      if( TrggIndex_HLT_IsoMu24_eta2p1_v2    		  < HLTtriggers_->size() ) nBranches_->isFired_HLT_IsoMu24_eta2p1_v2		   = HLTtriggers_->accept(TrggIndex_HLT_IsoMu24_eta2p1_v2		);    
-	if( TrggIndex_HLT_Mu45_eta2p1_v1	      	  < HLTtriggers_->size() ) nBranches_->isFired_HLT_Mu45_eta2p1_v1		   = HLTtriggers_->accept(TrggIndex_HLT_Mu45_eta2p1_v1  		);
-	if( TrggIndex_HLT_Mu50_eta2p1_v1	      	  < HLTtriggers_->size() ) nBranches_->isFired_HLT_Mu50_eta2p1_v1		   = HLTtriggers_->accept(TrggIndex_HLT_Mu50_eta2p1_v1  		);
-	if( TrggIndex_HLT_Ele23_CaloIdL_TrackIdL_IsoVL_v1 < HLTtriggers_->size() ) nBranches_->isFired_HLT_Ele23_CaloIdL_TrackIdL_IsoVL_v1 = HLTtriggers_->accept(TrggIndex_HLT_Ele23_CaloIdL_TrackIdL_IsoVL_v1 );
-	if( TrggIndex_HLT_Ele32_eta2p1_WP75_Gsf_v1 	  < HLTtriggers_->size() ) nBranches_->isFired_HLT_Ele32_eta2p1_WP75_Gsf_v1	   = HLTtriggers_->accept(TrggIndex_HLT_Ele32_eta2p1_WP75_Gsf_v1	);    
-	if( TrggIndex_HLT_Ele105_CaloIdVT_GsfTrkIdT_v1 	  < HLTtriggers_->size() ) nBranches_->isFired_HLT_Ele105_CaloIdVT_GsfTrkIdT_v1    = HLTtriggers_->accept(TrggIndex_HLT_Ele105_CaloIdVT_GsfTrkIdT_v1	);
-	if( TrggIndex_HLT_Ele105_CaloIdVT_GsfTrkIdT_v2 	  < HLTtriggers_->size() ) nBranches_->isFired_HLT_Ele105_CaloIdVT_GsfTrkIdT_v2    = HLTtriggers_->accept(TrggIndex_HLT_Ele105_CaloIdVT_GsfTrkIdT_v2	);
-	if( TrggIndex_HLT_Ele115_CaloIdVT_GsfTrkIdT_v1 	  < HLTtriggers_->size() ) nBranches_->isFired_HLT_Ele115_CaloIdVT_GsfTrkIdT_v1    = HLTtriggers_->accept(TrggIndex_HLT_Ele115_CaloIdVT_GsfTrkIdT_v1	);
-}
-	
-	////////////////// Trigger objects ///////////////////////////////////	
-	
+  ////////////////// Trigger objects ///////////////////////////////////		
   if (doTriggerObjects_) {
 
      	std::vector<float> vfilterIDs; vfilterIDs.clear();
@@ -166,7 +108,7 @@ if (doTriggerDecisions_) {
   		for (unsigned h = 0, n = pathNamesLast.size(); h < n; ++h) {
 		
   			bool isBoth = obj.hasPathName( pathNamesLast[h], true , true );
-                          bool isL3   = obj.hasPathName( pathNamesLast[h], false, true );
+                        bool isL3   = obj.hasPathName( pathNamesLast[h], false, true );
 			
   			if( isBoth || isL3 ){
 
@@ -174,7 +116,6 @@ if (doTriggerDecisions_) {
   			   nBranches_->triggerObject_eta .push_back(obj.eta());
   			   nBranches_->triggerObject_phi .push_back(obj.phi());
   			   nBranches_->triggerObject_mass.push_back(obj.mass());
-
 				
   			   for (unsigned h = 0; h < obj.filterIds().size(); ++h) vfilterIDs.push_back( obj.filterIds()[h]); // as defined in http://cmslxr.fnal.gov/lxr/source/DataFormats/HLTReco/interface/TriggerTypeDefs.h
 				
@@ -185,10 +126,14 @@ if (doTriggerDecisions_) {
   			   if( pathNamesLast[h] == "HLT_PFHT650_WideJetMJJ900DEtaJJ1p5_v1") vfiredTrigger.push_back( 4 );
   			   if( pathNamesLast[h] == "HLT_PFHT900_v1") vfiredTrigger.push_back( 5 );
   			   if( pathNamesLast[h] == "HLT_IsoMu24_eta2p1_v1") vfiredTrigger.push_back( 6 );
-  			   if( pathNamesLast[h] == "HLT_Mu45_eta2p1_v1") vfiredTrigger.push_back( 7 );
-  			   if( pathNamesLast[h] == "HLT_Ele23_CaloIdL_TrackIdL_IsoVL_v1") vfiredTrigger.push_back( 8 );
-  			   if( pathNamesLast[h] == "HLT_Ele32_eta2p1_WP75_Gsf_v1") vfiredTrigger.push_back( 9 );
-  			   if( pathNamesLast[h] == "HLT_Ele105_CaloIdVT_GsfTrkIdT_v1") vfiredTrigger.push_back( 10 );
+  			   if( pathNamesLast[h] == "HLT_IsoMu24_eta2p1_v2") vfiredTrigger.push_back( 7 );
+  			   if( pathNamesLast[h] == "HLT_Mu45_eta2p1_v1") vfiredTrigger.push_back( 8 );
+  			   if( pathNamesLast[h] == "HLT_Mu50_eta2p1_v1") vfiredTrigger.push_back( 9 );
+  			   if( pathNamesLast[h] == "HLT_Ele23_CaloIdL_TrackIdL_IsoVL_v1") vfiredTrigger.push_back( 10 );
+  			   if( pathNamesLast[h] == "HLT_Ele32_eta2p1_WP75_Gsf_v1") vfiredTrigger.push_back( 11 );
+  			   if( pathNamesLast[h] == "HLT_Ele105_CaloIdVT_GsfTrkIdT_v1") vfiredTrigger.push_back( 12 );
+  			   if( pathNamesLast[h] == "HLT_Ele105_CaloIdVT_GsfTrkIdT_v2") vfiredTrigger.push_back( 13 );
+  			   if( pathNamesLast[h] == "HLT_Ele115_CaloIdVT_GsfTrkIdT_v1") vfiredTrigger.push_back( 14 );
   			   // else vfiredTrigger.push_back( -99 );
   			}
 			
@@ -199,8 +144,7 @@ if (doTriggerDecisions_) {
 		
   	}
   } //doTriggerObjects_
-  
-  
+    
   // HLT Noise Filters
   if (doHltFilters_) {
     event.getByToken(noiseFilterToken_, noiseFilterBits_);

@@ -348,9 +348,12 @@ def checkJobsOutputFromXML(xmlfile):
          if j == jj and e != ee: print "Job "+str(j)+": found " + str(jobsevents[j]) + " expected " + str(e)    
             
 #-----------------------------------------------------------------------------------------
-def getFileListDAS(dataset,instance):
+def getFileListDAS(dataset,instance="prod/global",run=-1):
+
 
    cmd = './das_client.py --query="file dataset=%s instance=%s" --limit=2000' %(dataset,instance)
+   if run != -1: cmd = './das_client.py --query="file run=%i dataset=%s instance=%s" --limit=2000' %(run,dataset,instance)
+   print cmd
    cmd_out = commands.getoutput( cmd )
    tmpList = cmd_out.split(os.linesep)
    files = []
@@ -413,7 +416,8 @@ maxevents = config.getint('JobsConfig','maxevents')
 prefix = config.get('JobsConfig','prefix')
 newdir = config.get('JobsConfig','newdir')
 instance = config.get('JobsConfig','instance')
-   
+run = int(config.get('JobsConfig','run'))
+ 
 #-----------------------------------------------------------------------------------------
 if opts.copyfiles:
 
@@ -483,7 +487,7 @@ if not(opts.useDAS):
    else: files = getFileListT3(src)   
 else:
    if sample != "": files = getFileListFromSampleDAS(sample)
-   else: files = getFileListDAS(src,instance)   
+   else: files = getFileListDAS(src,instance,run)   
 
 print "****************************************"
 print len(files)

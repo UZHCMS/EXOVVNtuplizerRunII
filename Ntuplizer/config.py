@@ -17,7 +17,8 @@ import FWCore.ParameterSet.VarParsing as VarParsing
 
 options = VarParsing.VarParsing ('analysis')
 
-options.maxEvents = -1
+options.maxEvents = 10
+
 
 options.inputFiles ='dcap://t3se01.psi.ch:22125//pnfs/psi.ch/cms/trivcat/store/t3groups/uniz-higgs/ExpressPhysics/MINIAOD/Run2015B-Express-v1/MINIAOD_Run2015B-Express-v1_67.root'
 # options.inputFiles ='file://shome/thaarres/EXOVVAnalysisRunII/NTUPLIZER/CMSSW_7_4_3/src/EXOVVNtuplizerRunII/Ntuplizer/BulkGravToWW_M_2000.root'
@@ -69,7 +70,7 @@ doAK8Jets = True
 doAK4Jets = True
 doVertices = True
 doTriggerDecisions = True
-doTriggerObjects = False
+doTriggerObjects = True
 doHltFilters = False #does not work for express data
 doMissingEt = True
 doSemileptonicTausBoosted = False #doTausBoosted
@@ -103,7 +104,7 @@ process.MessageLogger.categories.append('Ntuple')
 process.MessageLogger.cerr.INFO = cms.untracked.PSet(
     limit = cms.untracked.int32(1)
 )
-process.MessageLogger.cerr.FwkReport.reportEvery = 1000
+process.MessageLogger.cerr.FwkReport.reportEvery = 1
 
 ####### Define conditions ##########
 process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_cff")
