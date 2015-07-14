@@ -80,15 +80,14 @@ void TriggersNtuplizer::fillBranches( edm::Event const & event, const edm::Event
   const edm::TriggerNames& trigNames = event.triggerNames(*HLTtriggers_);
 		
   if (doTriggerDecisions_) {
-  
   	 for (unsigned int i = 0, n = HLTtriggers_->size(); i < n; ++i) {
   	  if( findTrigger(trigNames.triggerName(i)) ){
+   	     //std::cout << "Trigger " << trigNames.triggerName(i) << ": " << (HLTtriggers_->accept(i) ? "PASS" : "fail (or not run)") << std::endl;
    	     nBranches_->HLT_isFired[trigNames.triggerName(i)] = HLTtriggers_->accept(i);
    	  }
    	}
 	  
   } //doTriggerDecisions_
-
 	
   ////////////////// Trigger objects ///////////////////////////////////		
   if (doTriggerObjects_) {
