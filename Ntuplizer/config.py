@@ -19,10 +19,9 @@ options = VarParsing.VarParsing ('analysis')
 
 options.maxEvents = -1
 
-
-
 options.inputFiles ='root://xrootd.unl.edu//store/data/Run2015B/JetHT/MINIAOD/PromptReco-v1/000/251/168/00000/20CE9858-DB26-E511-8C25-02163E01386E.root'
 # options.inputFiles ='file:///shome/thaarres/EXOVVAnalysisRunII/CMSSW_7_4_3/src/EXOVVNtuplizerRunII/Ntuplizer/BulkGravToWW_M_2000.root'
+
 
 options.parseArguments()
 
