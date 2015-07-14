@@ -310,7 +310,7 @@ def checkJobsOutputFromXML(xmlfile):
    jobsevents = {}
    print "=========================================="          
    for j in jobsdir:
-      a = j.split("-")
+      a = j.rsplit("-",1)
       jobid = a[1]
       inputpath = j+"/"+outfile
       checkfile = "ls -l %s"%(inputpath) 

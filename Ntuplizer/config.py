@@ -19,10 +19,10 @@ options = VarParsing.VarParsing ('analysis')
 
 options.maxEvents = 100
 
-
-
-options.inputFiles ='dcap://t3se01.psi.ch:22125//pnfs/psi.ch/cms/trivcat/store/t3groups/uniz-higgs/ExpressPhysics/MINIAOD/Run2015B-Express-v1/MINIAOD_Run2015B-Express-v1_67.root'
-# options.inputFiles ='file://shome/thaarres/EXOVVAnalysisRunII/NTUPLIZER/CMSSW_7_4_3/src/EXOVVNtuplizerRunII/Ntuplizer/BulkGravToWW_M_2000.root'
+#data file
+options.inputFiles ='file:/shome/jngadiub/EXOVVAnalysisRunII/CMSSW_7_4_3/src/EXOVVNtuplizerRunII/Ntuplizer/test/ExpressDataTestMINIAOD.root'
+#mc file
+#options.inputFiles = 'file:/shome/jngadiub/EXOVVAnalysisRunII/CMSSW_7_4_3/src/EXOVVNtuplizerRunII/Ntuplizer/test/RSGravToWWToLNQQ_kMpl01_M-1000_TuneCUETP8M1_13TeV-pythia8.root'
 
 options.parseArguments()
 
