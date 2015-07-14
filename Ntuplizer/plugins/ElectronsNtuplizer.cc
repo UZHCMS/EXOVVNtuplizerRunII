@@ -150,8 +150,8 @@ void ElectronsNtuplizer::fillBranches( edm::Event const & event, const edm::Even
     nBranches_->el_dEtaIn		    .push_back(ele.deltaEtaSuperClusterTrackAtVtx());
     nBranches_->el_dPhiIn		    .push_back(ele.deltaPhiSuperClusterTrackAtVtx());
     nBranches_->el_hOverE		    .push_back(ele.hcalOverEcal());
-    nBranches_->el_dz  		    .push_back(ele.gsfTrack()->dz( vertices_->at(firstGoodVertexIdx).position()));
-    nBranches_->el_d0  	            .push_back((-1)*ele.gsfTrack()->dxy(vertices_->at(firstGoodVertexIdx).position()));
+    nBranches_->el_dz  		    .push_back(ele.gsfTrack()->dz((*firstGoodVertex).position()));
+    nBranches_->el_d0  	            .push_back((-1)*ele.gsfTrack()->dxy((*firstGoodVertex).position()));
     nBranches_->el_expectedMissingInnerHits.push_back(ele.gsfTrack()->hitPattern().numberOfHits(reco::HitPattern::MISSING_INNER_HITS));
     
     nBranches_->el_dr03EcalRecHitSumEt.push_back(ele.dr03EcalRecHitSumEt());
@@ -261,8 +261,8 @@ bool ElectronsNtuplizer::eleIDpassed(std::string id, const pat::Electron &ele ){
   float absiso = pfIso.sumChargedHadronPt + std::max(0.0 , pfIso.sumNeutralHadronEt + pfIso.sumPhotonEt - 0.5 * pfIso.sumPUPt );
   relIsoWithDBeta_ = absiso/ele.pt();
   // Impact parameter
-  d0_ = (-1) * ele.gsfTrack()->dxy(vertices_->at(firstGoodVertexIdx).position() );
-  dz_ = ele.gsfTrack()->dz( vertices_->at(firstGoodVertexIdx).position() );
+  d0_ = (-1) * ele.gsfTrack()->dxy((*firstGoodVertex).position() );
+  dz_ = ele.gsfTrack()->dz( (*firstGoodVertex).position() );
 
   // Conversion rejection
   expectedMissingInnerHits_ = ele.gsfTrack()->hitPattern().numberOfHits(reco::HitPattern::MISSING_INNER_HITS);
@@ -356,7 +356,7 @@ bool ElectronsNtuplizer::eleIDpassed(std::string id, const pat::Electron &ele ){
   double iso;
   double isoCut;
   double rho = *(rho_.product()); 
-  double dxy = ( vertices_->size() ? ele.gsfTrack()->dxy(vertices_->at(firstGoodVertexIdx).position()) :  ele.gsfTrack()->dxy() );
+  double dxy = ( vertices_->size() ? ele.gsfTrack()->dxy((*firstGoodVertex).position()) :  ele.gsfTrack()->dxy() );
   
   if (ele.gsfTrack().isNonnull()){
   
