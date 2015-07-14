@@ -71,7 +71,8 @@ void ElectronsNtuplizer::fillBranches( edm::Event const & event, const edm::Even
    event.getByToken(electronTightIdMapToken_ , tight_id_decisions  );
   
    // Find the first vertex in the collection that passes good quality criteria
-   reco::VertexCollection::const_iterator firstGoodVertex = vertices_->end();
+   // reco::VertexCollection::const_iterator firstGoodVertex = vertices_->end();
+   reco::VertexCollection::const_iterator firstGoodVertex = vertices_->begin();
    int firstGoodVertexIdx = 0;
    for( reco::VertexCollection::const_iterator vtx = vertices_->begin(); vtx != vertices_->end(); ++vtx, ++firstGoodVertexIdx){
      bool isFake = (vtx->chi2()==0 && vtx->ndof()==0);
@@ -209,7 +210,8 @@ void ElectronsNtuplizer::fillBranches( edm::Event const & event, const edm::Even
 bool ElectronsNtuplizer::eleIDpassed(std::string id, const pat::Electron &ele ){
 
   // Find the first vertex in the collection that passes good quality criteria
-  reco::VertexCollection::const_iterator firstGoodVertex = vertices_->end();
+  // reco::VertexCollection::const_iterator firstGoodVertex = vertices_->end();
+  reco::VertexCollection::const_iterator firstGoodVertex = vertices_->begin();
   int firstGoodVertexIdx = 0;
   for( reco::VertexCollection::const_iterator vtx = vertices_->begin(); vtx != vertices_->end(); ++vtx, ++firstGoodVertexIdx){
     bool isFake = (vtx->chi2()==0 && vtx->ndof()==0);
