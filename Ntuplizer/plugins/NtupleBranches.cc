@@ -606,7 +606,6 @@ void NtupleBranches::reset( void ){
 
   el_SemileptonicPFIso.clear();
   el_SemileptonicCorrPFIso.clear();
-
   
   /** muons */
   mu_N        = 0;
@@ -759,6 +758,7 @@ void NtupleBranches::reset( void ){
   jetAK4_jec.clear();
   //jetAK4_jecUp.clear();
   //jetAK4_jecDown.clear(); 
+  jetAK4_IDTight.clear();
   jetAK4_IDLoose.clear();
   jetAK4_muf.clear();
   jetAK4_phf.clear();

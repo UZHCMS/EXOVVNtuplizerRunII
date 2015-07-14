@@ -17,12 +17,11 @@ import FWCore.ParameterSet.VarParsing as VarParsing
 
 options = VarParsing.VarParsing ('analysis')
 
-options.maxEvents = 100
+options.maxEvents = -1
 
-#data file
-options.inputFiles ='file:/shome/jngadiub/EXOVVAnalysisRunII/CMSSW_7_4_3/src/EXOVVNtuplizerRunII/Ntuplizer/test/ExpressDataTestMINIAOD.root'
-#mc file
-#options.inputFiles = 'file:/shome/jngadiub/EXOVVAnalysisRunII/CMSSW_7_4_3/src/EXOVVNtuplizerRunII/Ntuplizer/test/RSGravToWWToLNQQ_kMpl01_M-1000_TuneCUETP8M1_13TeV-pythia8.root'
+options.inputFiles ='root://xrootd.unl.edu//store/data/Run2015B/JetHT/MINIAOD/PromptReco-v1/000/251/168/00000/20CE9858-DB26-E511-8C25-02163E01386E.root'
+# options.inputFiles ='file:///shome/thaarres/EXOVVAnalysisRunII/CMSSW_7_4_3/src/EXOVVNtuplizerRunII/Ntuplizer/BulkGravToWW_M_2000.root'
+
 
 options.parseArguments()
 
@@ -48,7 +47,7 @@ addAK8GenJets = False
 # run flags
 runOnMC = False
 runOnAOD = False #do not switch it on since the step does not work for the moment
-useJSON = False
+useJSON = True
 doGenParticles = False
 doGenJets = False
 doGenEvent = False
