@@ -74,7 +74,25 @@ bool JetsNtuplizer::looseJetID( const pat::Jet& j ) {
   return (nhf<0.99 && nemf<0.99 && NumConst>1 && muf < 0.8) && ((fabs(eta) <= 2.4 && chf>0 && chMult>0 && cemf<0.99) || fabs(eta)>2.4);        
       		
 }
+//===================================================================================================================
+bool JetsNtuplizer::tightJetID( const pat::Jet& j ) {
 
+
+
+  //In sync with: https://twiki.cern.ch/twiki/bin/viewauth/CMS/JetID#Recommendations_for_8_TeV_data_a
+  double eta = j.eta();		
+  double chf = j.chargedHadronEnergyFraction();
+  double nhf = j.neutralHadronEnergyFraction(); // + j.HFHadronEnergyFraction();
+  double muf = j.muonEnergy()/(j.jecFactor(0) * j.energy());  
+  double nemf = j.neutralEmEnergyFraction();
+  double cemf = j.chargedEmEnergyFraction();
+  int chMult = j.chargedMultiplicity();
+  int neMult = j.neutralMultiplicity();
+  int npr    = chMult + neMult;
+  int NumConst = npr;
+     
+  return (nhf<0.90 && nemf<0.90 && NumConst>1 && muf<0.8) && ((fabs(eta)<=2.4 && chf>0 && chMult>0 && cemf<0.90) || fabs(eta)>2.4);  		
+}
 //===================================================================================================================
 void JetsNtuplizer::initJetCorrFactors( void ){
 
@@ -110,15 +128,17 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
 
   bool doPruning  = event.getByToken(prunedjetInputToken_, prunedjets_ );
   bool doSoftDrop = event.getByToken(softdropjetInputToken_, softdropjets_ );
-  
+
   /****************************************************************/
   if (doAK4Jets_) {
     nBranches_->jetAK4_N = 0;
   
     for (const pat::Jet &j : *jets_) {
 	        
-      bool IDLoose = looseJetID(j);
-      //if( !IDLoose ) continue;
+    bool IDLoose = looseJetID(j);
+    bool IDTight = tightJetID(j);
+    //if( !IDLoose ) continue;
+
 
       reco::Candidate::LorentzVector uncorrJet;
       double corr = 1;
@@ -147,6 +167,7 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
 
       if (corr*uncorrJet.pt() < 20) continue;
     
+
       nBranches_->jetAK4_N++;
 
       nBranches_->jetAK4_pt     	    .push_back(corr*uncorrJet.pt());      
@@ -158,6 +179,7 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
       //nBranches_->jetAK4_jecUp        	.push_back(corrUp);
       //nBranches_->jetAK4_jecDown      	.push_back(corrDown);
       nBranches_->jetAK4_IDLoose      .push_back(IDLoose);
+      nBranches_->jetAK4_IDTight      .push_back(IDTight);
       nBranches_->jetAK4_cm     	    .push_back(j.chargedMultiplicity());
       nBranches_->jetAK4_nm     	    .push_back(j.neutralMultiplicity());
       nBranches_->jetAK4_muf     	    .push_back(j.muonEnergyFraction());
@@ -220,9 +242,10 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
      
     for (const pat::Jet &fj : *fatjets_) {
 	  
+
       reco::Candidate::LorentzVector uncorrJet;
       double corr = 1;
-    
+
       if( doCorrOnTheFly_ ){
     
          uncorrJet = fj.correctedP4(0);
@@ -309,6 +332,7 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
       }
     	                    
       bool IDLoose = looseJetID(fj);
+      bool IDTight = tightJetID(fj);
       //if( !IDLoose ) continue;
 
       nBranches_->jetAK8_N++;	       
@@ -319,6 +343,7 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
       nBranches_->jetAK8_e      	    .push_back(corr*uncorrJet.energy());
       nBranches_->jetAK8_jec    	    .push_back(corr);
       nBranches_->jetAK8_IDLoose      .push_back(IDLoose);
+      nBranches_->jetAK8_IDTight      .push_back(IDTight);
       nBranches_->jetAK8_muf     	    .push_back(fj.muonEnergyFraction());
       nBranches_->jetAK8_phf     	    .push_back(fj.photonEnergyFraction());
       nBranches_->jetAK8_emf     	    .push_back(fj.chargedEmEnergyFraction());
@@ -578,7 +603,6 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
       } 
     }
   } //doAK8Jets
-
 }
 
 

@@ -304,9 +304,11 @@ public:
   std::vector<float>              jetAK4_phi           ;
   std::vector<float>              jetAK4_e             ;
   std::vector<float>              jetAK4_jec           ;
-//std::vector<float>	          jetAK4_jecUp	       ;
-//std::vector<float>	          jetAK4_jecDown       ; 
-  std::vector<bool>               jetAK4_IDLoose       ;
+  //std::vector<float>	      jetAK4_jecUp	       ;
+  //std::vector<float>	      jetAK4_jecDown	       ; 
+  std::vector<bool>              jetAK4_IDLoose        ;
+  std::vector<bool>              jetAK4_IDTight        ;
+
   std::vector<float>              jetAK4_muf           ;
   std::vector<float>              jetAK4_phf           ;
   std::vector<float>              jetAK4_emf           ;
@@ -341,11 +343,13 @@ public:
   std::vector<float>  	      jetAK8_phi               ;
   std::vector<float>  	      jetAK8_e                 ;
   std::vector<float>  	      jetAK8_jec               ;
-//std::vector<float>          jetAK8_jecUp             ;
-//std::vector<float>          jetAK8_jecDown           ;
-  std::vector<bool >  	      jetAK8_IDLoose	       ;
-  std::vector<float>  	      jetAK8_muf	       ;
-  std::vector<float>  	      jetAK8_phf	       ;
+  //std::vector<float>        jetAK8_jecUp             ;
+  //std::vector<float>        jetAK8_jecDown           ;
+  std::vector<bool >  	      jetAK8_IDLoose      ;
+  std::vector<bool >  	      jetAK8_IDTight      ;
+  std::vector<float>  	      jetAK8_muf          ;
+  std::vector<float>  	      jetAK8_phf          ;
+
   std::vector<float>  	      jetAK8_emf	       ;
   std::vector<float>  	      jetAK8_nhf	       ;
   std::vector<float>  	      jetAK8_chf	       ;
@@ -453,6 +457,17 @@ public:
   std::vector<float>  	      genJetNoNuAK4_mass        ;
   std::vector<float>  	      genJetNoNuAK4_e           ;
    
+  /*-------------------------AK8 genJets---------------------------*/   
+  int			      genJetAK8_N               ;
+
+  std::vector<float>  	      genJetAK8_pt              ;
+  std::vector<float>  	      genJetAK8_eta             ;
+  std::vector<float>  	      genJetAK8_mass            ;
+  std::vector<float>  	      genJetAK8_phi             ;
+  std::vector<float>  	      genJetAK8_e               ;
+  std::vector<float>  	      genJetAK8_prunedmass      ;
+  std::vector<float>  	      genJetAK8_softdropmass    ;
+  
   /** HLT trigger decisions */
   std::map<std::string,bool> HLT_isFired;
 	 
@@ -463,6 +478,7 @@ public:
   std::vector<float>  		    triggerObject_mass	      ;
   std::vector< std::vector<float> > triggerObject_filterIDs   ; // as defined in http://cmslxr.fnal.gov/lxr/source/DataFormats/HLTReco/interface/TriggerTypeDefs.h
   std::vector< std::vector<int> >   triggerObject_firedTrigger; // as defined in plugins/TriggersNtuplizer.cc
+
 
   /** HLT filter decisions */
   bool passFilter_HBHE_;
@@ -489,6 +505,7 @@ public:
   std::vector<float>  	      	    MET_phi		      ;
   std::vector<float>  	      	    MET_sumEt		      ;
   std::vector<float>  	      	    MET_T1Uncertainty	      ;
+
 
   /*------------------------EVENT infos-------------------------*/    
   int                               EVENT_event            ;

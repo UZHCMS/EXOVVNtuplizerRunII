@@ -42,11 +42,16 @@ TriggersNtuplizer::~TriggersNtuplizer( void )
 //===================================================================================================================
 bool TriggersNtuplizer::findTrigger( std::string trigName ){
 
-   if( trigName.find("HLT_AK8PFJet360_TrimMass30") != std::string::npos || 
+   if( trigName.find("AK8PFJet360_TrimMass30") != std::string::npos ||
        trigName.find("AK8PFHT700_TrimR0p1PT0p03Mass50") != std::string::npos ||
-       trigName.find("AK8DiPFJet280_200_TrimMass30_BTagCSV0p41") != std::string::npos ||
+       trigName.find("AK8DiPFJet280_200_TrimMass30_BTagCSV0p45") != std::string::npos ||
        trigName.find("PFHT650_WideJetMJJ950DEtaJJ1p5") != std::string::npos ||
        trigName.find("PFHT650_WideJetMJJ900DEtaJJ1p5") != std::string::npos ||
+       trigName.find("PFHT400") != std::string::npos ||
+       trigName.find("PFHT475") != std::string::npos ||
+       trigName.find("PFHT600") != std::string::npos ||
+       trigName.find("PFHT650") != std::string::npos ||
+       trigName.find("PFHT800") != std::string::npos ||
        trigName.find("PFHT900") != std::string::npos ||
        trigName.find("IsoMu24_eta2p1") != std::string::npos ||
        trigName.find("Mu45_eta2p1") != std::string::npos ||
@@ -78,12 +83,12 @@ void TriggersNtuplizer::fillBranches( edm::Event const & event, const edm::Event
   
   	 for (unsigned int i = 0, n = HLTtriggers_->size(); i < n; ++i) {
   	  if( findTrigger(trigNames.triggerName(i)) ){
-   	     //std::cout << "Trigger " << trigNames.triggerName(i) << ": " << (HLTtriggers_->accept(i) ? "PASS" : "fail (or not run)") << std::endl;
    	     nBranches_->HLT_isFired[trigNames.triggerName(i)] = HLTtriggers_->accept(i);
    	  }
    	}
 	  
   } //doTriggerDecisions_
+
 	
   ////////////////// Trigger objects ///////////////////////////////////		
   if (doTriggerObjects_) {

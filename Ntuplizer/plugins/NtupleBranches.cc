@@ -252,6 +252,7 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     } //doTausBoosted
   } //doTaus
       
+
   if (runFlags["doAK4Jets"] || runFlags["doAK8Jets"]) {
     /** energy density */
     tree_->Branch( "rho", &rho );
@@ -259,6 +260,7 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
 
   if (runFlags["doAK4Jets"]) {
     /** AK4 jets */
+
     tree_->Branch( "jetAK4_N"		    , &jetAK4_N 	 );
     tree_->Branch( "jetAK4_pt"		    , &jetAK4_pt	 );
     tree_->Branch( "jetAK4_eta"		    , &jetAK4_eta	 );
@@ -267,6 +269,7 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch( "jetAK4_e"		    , &jetAK4_e 	 );
     tree_->Branch( "jetAK4_jec"		    , &jetAK4_jec 	 );
     tree_->Branch( "jetAK4_IDLoose"	    , &jetAK4_IDLoose	 );
+    tree_->Branch( "jetAK4_IDTight"	    , &jetAK4_IDTight	);
     tree_->Branch( "jetAK4_muf" 	    , &jetAK4_muf	 );
     tree_->Branch( "jetAK4_phf" 	    , &jetAK4_phf	 );
     tree_->Branch( "jetAK4_emf" 	    , &jetAK4_emf	 );
@@ -290,10 +293,12 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch( "jetAK4_vtx3DVal"	    , &jetAK4_vtx3DVal   );
     tree_->Branch( "jetAK4_vtx3DSig"	    , &jetAK4_vtx3DSig   );
   //tree_->Branch( "jetAK4_nSVs"	    , &jetAK4_nSVs	 );
+
   } //doAK4Jets
         
   if (runFlags["doAK8Jets"]) {
     /** AK8 jets */
+
     tree_->Branch( "jetAK8_N"		     , &jetAK8_N 		 );
     tree_->Branch( "jetAK8_pt"		     , &jetAK8_pt		 );
     tree_->Branch( "jetAK8_eta"		     , &jetAK8_eta		 );
@@ -302,6 +307,7 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch( "jetAK8_e"		     , &jetAK8_e 		 );
     tree_->Branch( "jetAK8_jec"		     , &jetAK8_jec 		 );
     tree_->Branch( "jetAK8_IDLoose"	     , &jetAK8_IDLoose		 );
+    tree_->Branch( "jetAK8_IDTight"	    , &jetAK8_IDTight );
     tree_->Branch( "jetAK8_muf" 	     , &jetAK8_muf		 );
     tree_->Branch( "jetAK8_phf" 	     , &jetAK8_phf		 );
     tree_->Branch( "jetAK8_emf" 	     , &jetAK8_emf		 );
@@ -384,6 +390,17 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     //tree_->Branch( "subjetAK8_pruned_jp"       , &subjetAK8_pruned_jp      );
     //tree_->Branch( "subjetAK8_pruned_jbp"      , &subjetAK8_pruned_jbp     );
   
+  
+  tree_->Branch( "genJetAK8_N"		    , &genJetAK8_N 	  );
+  tree_->Branch( "genJetAK8_pt"		    , &genJetAK8_pt	  );
+  tree_->Branch( "genJetAK8_eta"	    , &genJetAK8_eta	  );
+  tree_->Branch( "genJetAK8_mass"	    , &genJetAK8_mass	  );
+  tree_->Branch( "genJetAK8_phi"	    , &genJetAK8_phi	  );
+  tree_->Branch( "genJetAK8_e"		    , &genJetAK8_e 	  );
+  tree_->Branch( "genJetAK8_prunedmass"  , &genJetAK8_prunedmass 	  );
+  tree_->Branch( "genJetAK8_softdropmass", &genJetAK8_softdropmass 	  );
+
+
       // /*----------------------Softdrop AK8 subjets---------------------------*/
       tree_->Branch( "subjetAK8_softdrop_N"      , &subjetAK8_softdrop_N           );
       tree_->Branch( "subjetAK8_softdrop_pt"     , &subjetAK8_softdrop_pt      );
@@ -420,8 +437,8 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
   if (runFlags["doTriggerDecisions"]) {
     /** HLT trigger decisions */
     tree_->Branch("HLT_isFired", &HLT_isFired );
-
   }
+
   
   if (runFlags["doTriggerObjects"]) {
     /** HLT trigger objects */
@@ -465,6 +482,7 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     //tree_->Branch("METdefault_phi"	        , &METdefault_phi    );
     //tree_->Branch("MET_T1Uncertainty"	        , &MET_T1Uncertainty );
   } //doMissingEt
+
 
   /*------------- ------EVENT infos-----------------------------*/
   tree_->Branch("EVENT_event"	 , &EVENT_event     );
@@ -776,6 +794,7 @@ void NtupleBranches::reset( void ){
   //jetAK8_jecUp.clear();
   //jetAK8_jecDown.clear();
   jetAK8_IDLoose.clear();
+  jetAK8_IDTight.clear();
   jetAK8_muf.clear();
   jetAK8_phf.clear();
   jetAK8_emf.clear();
@@ -884,6 +903,15 @@ void NtupleBranches::reset( void ){
   genJetNoNuAK4_pt.clear();
   genJetNoNuAK4_mass.clear();
   genJetNoNuAK4_e.clear();
+  
+  genJetAK8_N = 0;
+  genJetAK8_pt              .clear();
+  genJetAK8_eta             .clear();
+  genJetAK8_mass            .clear();
+  genJetAK8_phi             .clear();
+  genJetAK8_e	              .clear();
+  genJetAK8_prunedmass      .clear();
+  genJetAK8_softdropmass    .clear();
 
   /** HLT trigger decisions */
   HLT_isFired.clear();
