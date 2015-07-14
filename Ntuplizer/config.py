@@ -20,9 +20,9 @@ options = VarParsing.VarParsing ('analysis')
 options.maxEvents = 10
 
 #data file
-options.inputFiles ='file:test/ExpressDataTestMINIAOD.root'
+options.inputFiles ='file:/shome/jngadiub/EXOVVAnalysisRunII/CMSSW_7_4_3/src/EXOVVNtuplizerRunII/Ntuplizer/test/ExpressDataTestMINIAOD.root'
 #mc file
-#options.inputFiles = 'file:test/RSGravToWWToLNQQ_kMpl01_M-1000_TuneCUETP8M1_13TeV-pythia8.root'
+#options.inputFiles = 'file:/shome/jngadiub/EXOVVAnalysisRunII/CMSSW_7_4_3/src/EXOVVNtuplizerRunII/Ntuplizer/test/RSGravToWWToLNQQ_kMpl01_M-1000_TuneCUETP8M1_13TeV-pythia8.root'
 
 options.parseArguments()
 
