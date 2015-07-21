@@ -19,9 +19,10 @@ options = VarParsing.VarParsing ('analysis')
 
 options.maxEvents = -1
 
-options.inputFiles ='root://xrootd.unl.edu//store/data/Run2015B/JetHT/MINIAOD/PromptReco-v1/000/251/168/00000/20CE9858-DB26-E511-8C25-02163E01386E.root'
-# options.inputFiles ='file:///shome/thaarres/EXOVVAnalysisRunII/CMSSW_7_4_3/src/EXOVVNtuplizerRunII/Ntuplizer/BulkGravToWW_M_2000.root'
-
+#data file
+options.inputFiles ='file:/shome/jngadiub/EXOVVAnalysisRunII/CMSSW_7_4_3/src/EXOVVNtuplizerRunII/Ntuplizer/test/ExpressDataTestMINIAOD.root'
+#mc file
+#options.inputFiles = 'file:/shome/jngadiub/EXOVVAnalysisRunII/CMSSW_7_4_3/src/EXOVVNtuplizerRunII/Ntuplizer/test/RSGravToWWToLNQQ_kMpl01_M-1000_TuneCUETP8M1_13TeV-pythia8.root'
 
 options.parseArguments()
 
@@ -96,14 +97,15 @@ process.MessageLogger.cerr.INFO = cms.untracked.PSet(
 process.MessageLogger.cerr.FwkReport.reportEvery = 1
 
 ####### Define conditions ##########
-process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_cff")
+#process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_cff")
+process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_condDBv2_cff')
 from Configuration.AlCa.GlobalTag import GlobalTag
 
 if runOnMC:
    #process.GlobalTag = GlobalTag(process.GlobalTag, 'MCRUN2_74_V9::All')
    process.GlobalTag = GlobalTag(process.GlobalTag, 'auto:run2_mc')
 elif not(runOnMC):
-   process.GlobalTag = GlobalTag(process.GlobalTag, 'GR_P_V56')
+   process.GlobalTag = GlobalTag(process.GlobalTag, '74X_dataRun2_Prompt_v0')
    
 ######## to run the miniaod step but it doesnt not work! ##########
 if not(runOnMC) and runOnAOD:
@@ -509,24 +511,44 @@ jecLevelsAK4chs = []
 jecLevelsAK4 = []
 
 if corrJetsOnTheFly:
-   jecLevelsAK8chs = [
-       'JEC/MCRUN2_74_V9::All_L1FastJet_AK8PFchs.txt', #JEC for 74X
-       'JEC/MCRUN2_74_V9::All_L2Relative_AK8PFchs.txt',
-       'JEC/MCRUN2_74_V9::All_L3Absolute_AK8PFchs.txt'
-     ]
-   jecLevelsAK4chs = [
-       'JEC/MCRUN2_74_V9::All_L1FastJet_AK4PFchs.txt',
-       'JEC/MCRUN2_74_V9::All_L2Relative_AK4PFchs.txt',
-       'JEC/MCRUN2_74_V9::All_L3Absolute_AK4PFchs.txt'
-     ]
-  
+   if runOnMC:
+     jecLevelsAK8chs = [
+     	 'JEC/MCRUN2_74_V9::All_L1FastJet_AK8PFchs.txt', #JEC for 74X
+     	 'JEC/MCRUN2_74_V9::All_L2Relative_AK8PFchs.txt',
+     	 'JEC/MCRUN2_74_V9::All_L3Absolute_AK8PFchs.txt'
+       ]
+     jecLevelsAK4chs = [
+     	 'JEC/MCRUN2_74_V9::All_L1FastJet_AK4PFchs.txt',
+     	 'JEC/MCRUN2_74_V9::All_L2Relative_AK4PFchs.txt',
+     	 'JEC/MCRUN2_74_V9::All_L3Absolute_AK4PFchs.txt'
+       ]
+   else:
+     jecLevelsAK8chs = [
+     	 'JEC/74X_dataRun2_Prompt_v0_AK8PFchs_L1FastJet.txt', #JEC for 74X
+     	 'JEC/74X_dataRun2_Prompt_v0_AK8PFchs_L2Relative.txt',
+     	 'JEC/74X_dataRun2_Prompt_v0_AK8PFchs_L3Absolute.txt',
+	 'JEC/74X_dataRun2_Prompt_v0_AK8PFchs_L2L3Residual.txt'
+       ]
+     jecLevelsAK4chs = [
+     	 'JEC/74X_dataRun2_Prompt_v0_AK4PFchs_L1FastJet.txt',
+     	 'JEC/74X_dataRun2_Prompt_v0_AK4PFchs_L2Relative.txt',
+     	 'JEC/74X_dataRun2_Prompt_v0_AK4PFchs_L3Absolute.txt',
+	 'JEC/74X_dataRun2_Prompt_v0_AK4PFchs_L2L3Residual.txt'
+       ]   
 if corrMETonTheFly:  
-   jecLevelsAK4 = [
-       'JEC/MCRUN2_74_V9::All_L1FastJet_AK4PF.txt',
-       'JEC/MCRUN2_74_V9::All_L2Relative_AK4PF.txt',
-       'JEC/MCRUN2_74_V9::All_L3Absolute_AK4PF.txt'
-     ]   
-				    
+   if runOnMC:
+     jecLevelsAK4 = [				       
+     	 'JEC/MCRUN2_74_V9::All_L1FastJet_AK4PF.txt',  
+     	 'JEC/MCRUN2_74_V9::All_L2Relative_AK4PF.txt', 
+     	 'JEC/MCRUN2_74_V9::All_L3Absolute_AK4PF.txt'  
+       ]
+   else:       					       
+     jecLevelsAK4 = [
+     	 'JEC/74X_dataRun2_Prompt_v0_AK4PF_L1FastJet.txt',
+     	 'JEC/74X_dataRun2_Prompt_v0_AK4PF_L2Relative.txt',
+     	 'JEC/74X_dataRun2_Prompt_v0_AK4PF_L3Absolute.txt',
+	 'JEC/74X_dataRun2_Prompt_v0_AK4PF_L2L3Residual.txt'
+       ]				    
 #from PhysicsTools.SelectorUtils.pfJetIDSelector_cfi import pfJetIDSelector
 #process.goodSlimmedJets = cms.EDFilter("PFJetIDSelectionFunctorFilter",
 #                        filterParams = pfJetIDSelector.clone(),
