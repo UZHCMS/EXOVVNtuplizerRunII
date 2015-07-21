@@ -94,7 +94,7 @@ void TriggersNtuplizer::fillBranches( edm::Event const & event, const edm::Event
 
      	std::vector<float> vfilterIDs; vfilterIDs.clear();
      	std::vector<int> vfiredTrigger; vfiredTrigger.clear();
-	
+		
   	for (pat::TriggerObjectStandAlone obj : *triggerObjects) { 
 	
   		obj.unpackPathNames(trigNames);
@@ -108,7 +108,7 @@ void TriggersNtuplizer::fillBranches( edm::Event const & event, const edm::Event
                         bool isL3   = obj.hasPathName( pathNamesLast[h], false, true );
 			
   			if( isBoth || isL3 ){
-
+		
   			   nBranches_->triggerObject_pt	 .push_back(obj.pt());
   			   nBranches_->triggerObject_eta .push_back(obj.eta());
   			   nBranches_->triggerObject_phi .push_back(obj.phi());

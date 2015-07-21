@@ -26,7 +26,7 @@ options = VarParsing.VarParsing ('analysis')
 
 options.maxEvents = -1
 
-options.inputFiles = 'root://xrootd.unl.edu//store/express/Run2015B/ExpressPhysics/FEVT/Express-v1/000/251/244/00000/002904BE-BC25-E511-A490-02163E01463E.root'
+options.inputFiles = 'root://xrootd.unl.edu//store/data/Run2015B/SingleMuon/AOD/PromptReco-v1/000/251/497/00000/52D69D29-EC28-E511-A51A-02163E011ABC.root'
 
 options.parseArguments()
 
@@ -73,7 +73,7 @@ process.MINIAODoutput = cms.OutputModule("PoolOutputModule",
 
 # Other statements
 from Configuration.AlCa.GlobalTag_condDBv2 import GlobalTag
-process.GlobalTag = GlobalTag(process.GlobalTag, 'GR_P_V56', '')
+process.GlobalTag = GlobalTag(process.GlobalTag, '74X_dataRun2_Prompt_v0', '')
 
 # Path and EndPath definitions
 process.endjob_step = cms.EndPath(process.endOfProcess)
