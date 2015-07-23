@@ -20,9 +20,9 @@ options = VarParsing.VarParsing ('analysis')
 options.maxEvents = -1
 
 #data file
-options.inputFiles ='file:/shome/jngadiub/EXOVVAnalysisRunII/CMSSW_7_4_3/src/EXOVVNtuplizerRunII/Ntuplizer/test/ExpressDataTestMINIAOD.root'
+# options.inputFiles ='file:/shome/jngadiub/EXOVVAnalysisRunII/CMSSW_7_4_3/src/EXOVVNtuplizerRunII/Ntuplizer/test/ExpressDataTestMINIAOD.root'
 #mc file
-#options.inputFiles = 'file:/shome/jngadiub/EXOVVAnalysisRunII/CMSSW_7_4_3/src/EXOVVNtuplizerRunII/Ntuplizer/test/RSGravToWWToLNQQ_kMpl01_M-1000_TuneCUETP8M1_13TeV-pythia8.root'
+options.inputFiles = 'file:/shome/jngadiub/EXOVVAnalysisRunII/CMSSW_7_4_3/src/EXOVVNtuplizerRunII/Ntuplizer/test/RSGravToWWToLNQQ_kMpl01_M-1000_TuneCUETP8M1_13TeV-pythia8.root'
 
 options.parseArguments()
 
@@ -46,7 +46,7 @@ process.source = cms.Source("PoolSource",
 #! Add AK8 gen jet collection with pruned and softdrop mass
 addAK8GenJets = False
 # run flags
-runOnMC = False
+runOnMC = True
 runOnAOD = False #do not switch it on since the step does not work for the moment
 useJSON = True
 doGenParticles = False
@@ -102,8 +102,8 @@ process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_condD
 from Configuration.AlCa.GlobalTag import GlobalTag
 
 if runOnMC:
-   #process.GlobalTag = GlobalTag(process.GlobalTag, 'MCRUN2_74_V9::All')
-   process.GlobalTag = GlobalTag(process.GlobalTag, 'auto:run2_mc')
+   process.GlobalTag = GlobalTag(process.GlobalTag, 'MCRUN2_74_V9')
+   # process.GlobalTag = GlobalTag(process.GlobalTag, 'auto:run2_mc')
 elif not(runOnMC):
    process.GlobalTag = GlobalTag(process.GlobalTag, '74X_dataRun2_Prompt_v0')
    
