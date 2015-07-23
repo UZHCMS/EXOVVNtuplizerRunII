@@ -67,7 +67,7 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
   std::map< std::string, bool > runFlags;
   runFlags["runOnMC"] = iConfig.getParameter<bool>("runOnMC");
   runFlags["doGenParticles"] = iConfig.getParameter<bool>("doGenParticles");
-  runFlags["GenJets"] = iConfig.getParameter<bool>("doGenJets");
+  runFlags["doGenJets"] = iConfig.getParameter<bool>("doGenJets");
   runFlags["doGenEvent"] = iConfig.getParameter<bool>("doGenEvent");
   runFlags["doPileUp"] = iConfig.getParameter<bool>("doPileUp");
   runFlags["doElectrons"] = iConfig.getParameter<bool>("doElectrons");
