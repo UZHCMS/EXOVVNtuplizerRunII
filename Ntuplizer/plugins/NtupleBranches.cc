@@ -55,6 +55,7 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch( "el_phi"		     , &el_phi 	            );
     tree_->Branch( "el_mass"		     , &el_mass	            );
     tree_->Branch( "el_pt"		     , &el_pt  	            );
+    tree_->Branch( "el_et"		     , &el_et  	            );
     tree_->Branch( "el_superCluster_eta"     , &el_superCluster_eta );
   
     tree_->Branch( "el_pfRhoCorrRelIso03"    , &el_pfRhoCorrRelIso03 );
@@ -135,7 +136,8 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch( "mu_chargedHadIso"	     , &mu_chargedHadIso      );
     tree_->Branch( "mu_trackIso"	     , &mu_trackIso	      );
     tree_->Branch( "mu_d0"                   , &mu_d0                 );
-    tree_->Branch( "mu_dz"		     , &mu_dz                 );
+    tree_->Branch( "mu_bestTrack_pt"	     , &mu_bestTrack_pt       );
+    tree_->Branch( "mu_bestTrack_ptErr"	     , &mu_bestTrack_ptErr    );
   
     tree_->Branch( "mu_pfRhoCorrRelIso03Boost", &mu_pfRhoCorrRelIso03Boost );
     tree_->Branch( "mu_pfRhoCorrRelIso04Boost", &mu_pfRhoCorrRelIso04Boost );
@@ -562,6 +564,7 @@ void NtupleBranches::reset( void ){
   el_phi.clear();
   el_mass.clear();
   el_pt.clear();
+  el_et.clear();
   el_superCluster_eta.clear();
 
   el_pfRhoCorrRelIso03.clear();
@@ -650,6 +653,8 @@ void NtupleBranches::reset( void ){
   mu_trackIso.clear();
   mu_d0.clear();
   mu_dz.clear();
+  mu_bestTrack_pt.clear();
+  mu_bestTrack_ptErr.clear();
 
   mu_pfRhoCorrRelIso03Boost.clear();
   mu_pfRhoCorrRelIso04Boost.clear();
