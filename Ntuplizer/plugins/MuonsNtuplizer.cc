@@ -84,27 +84,19 @@ void MuonsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSet
     nBranches_->mu_phi    		    .push_back(mu.phi()   );
 
     /*========== IDs ==============*/    
-    
-//     nBranches_->mu_isHighPtMuon.push_back(mu.isHighPtMuon(vertices_->at(firstGoodVertexIdx)));
-//     nBranches_->mu_isTightMuon .push_back(mu.isTightMuon(vertices_->at(firstGoodVertexIdx)));
-//
-//     float dxy = fabs(mu.muonBestTrack()->dxy(vertices_->at(firstGoodVertexIdx).position()));
-//     nBranches_->mu_d0          .push_back(dxy);
-//     nBranches_->mu_dz          .push_back(mu.muonBestTrack()->dz(vertices_->at(firstGoodVertexIdx).position()));
-//     nBranches_->mu_isSoftMuon  .push_back(mu.isSoftMuon(vertices_->at(firstGoodVertexIdx)));
-//     nBranches_->mu_isLooseMuon .push_back(mu.isLooseMuon());
-//     nBranches_->mu_isPFMuon    .push_back(mu.isPFMuon());
     nBranches_->mu_isHighPtMuon.push_back(mu.isHighPtMuon(*firstGoodVertex));
     nBranches_->mu_isTightMuon .push_back(mu.isTightMuon(*firstGoodVertex));
   
     float dxy = fabs(mu.muonBestTrack()->dxy( (*firstGoodVertex).position() ));
     nBranches_->mu_d0          .push_back(dxy);
     nBranches_->mu_dz          .push_back(mu.muonBestTrack()->dz( (*firstGoodVertex).position() ));
+    nBranches_->mu_bestTrack_pt.push_back(mu.muonBestTrack()->pt());  
+    nBranches_->mu_bestTrack_ptErr.push_back(mu.muonBestTrack()->ptError());
+    
     nBranches_->mu_isSoftMuon  .push_back(mu.isSoftMuon(*firstGoodVertex));
     nBranches_->mu_isLooseMuon .push_back(mu.isLooseMuon());
     nBranches_->mu_isPFMuon    .push_back(mu.isPFMuon());   
-    
-    
+        
     double rho = *(rho_.product());     
     float deltaR = 0.3;
     double energy = TMath::Pi()*deltaR*deltaR*rho;

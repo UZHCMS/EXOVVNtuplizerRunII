@@ -81,7 +81,8 @@ public:
   std::vector<float>  	      el_phi		         ;
   std::vector<float>  	      el_mass		         ;
   std::vector<float>  	      el_pt		         ;
-  std::vector<float>  	      el_superCluster_eta		         ;
+  std::vector<float>  	      el_et		         ;
+  std::vector<float>  	      el_superCluster_eta	 ;
   
   std::vector<float>  	      el_pfRhoCorrRelIso03  	 ;
   std::vector<float>  	      el_pfRhoCorrRelIso04  	 ;
@@ -163,7 +164,9 @@ public:
   std::vector<float>  	      mu_trackIso	         ;
   std::vector<float>          mu_d0			 ;
   std::vector<float>          mu_dz			 ;
-  
+  std::vector<float>  	      mu_bestTrack_pt  	         ;
+  std::vector<float>  	      mu_bestTrack_ptErr  	 ;
+    
   std::vector<float>  	      mu_pfRhoCorrRelIso03Boost  ;
   std::vector<float>  	      mu_pfRhoCorrRelIso04Boost  ;
   std::vector<float>  	      mu_pfDeltaCorrRelIsoBoost  ;

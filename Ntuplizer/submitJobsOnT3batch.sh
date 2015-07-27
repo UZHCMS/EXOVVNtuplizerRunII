@@ -154,6 +154,7 @@ cd $WORKDIR
 
 cp -r $CMSSW_DIR/src/EXOVVNtuplizerRunII/Ntuplizer/JEC .
 cp $CMSSW_DIR/src/EXOVVNtuplizerRunII/Ntuplizer/json_DCSONLY_Run2015B.txt .
+cp $CMSSW_DIR/src/EXOVVNtuplizerRunII/Ntuplizer/Cert_246908-251642_13TeV_PromptReco_Collisions15_JSON.txt .
 
 cmsRun $CMSSW_CONFIG_FILE inputFiles=$5 maxEvents=$6>> myout.txt 2>>myerr.txt
 
