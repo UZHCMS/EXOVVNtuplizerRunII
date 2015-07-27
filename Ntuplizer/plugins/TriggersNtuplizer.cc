@@ -5,16 +5,38 @@
 #include "DataFormats/PatCandidates/interface/TriggerObjectStandAlone.h"
 #include "DataFormats/PatCandidates/interface/PackedTriggerPrescales.h"
 
+#include "FWCore/Framework/interface/Frameworkfwd.h"
+#include "FWCore/Framework/interface/EDAnalyzer.h"
+
+#include "FWCore/Framework/interface/Event.h"
+#include "FWCore/Framework/interface/MakerMacros.h"
+
+#include "FWCore/ParameterSet/interface/ParameterSet.h"
+
+#include "FWCore/ServiceRegistry/interface/Service.h"
+#include "CommonTools/UtilAlgos/interface/TFileService.h"
+
+#include <memory>
+
 //===================================================================================================================        
-TriggersNtuplizer::TriggersNtuplizer(edm::EDGetTokenT<edm::TriggerResults> tokens, edm::EDGetTokenT<pat::TriggerObjectStandAloneCollection> object, edm::EDGetTokenT<pat::PackedTriggerPrescales> prescale, edm::EDGetTokenT<edm::TriggerResults> noiseFilterToken, NtupleBranches* nBranches, const edm::ParameterSet& iConfig, std::map< std::string, bool >& runFlags )
+TriggersNtuplizer::TriggersNtuplizer( edm::EDGetTokenT<edm::TriggerResults> tokens, 
+                                      edm::EDGetTokenT<pat::TriggerObjectStandAloneCollection> object,
+				      edm::EDGetTokenT<pat::PackedTriggerPrescales> prescale, 
+				      edm::EDGetTokenT<edm::TriggerResults> noiseFilterToken, 
+				      edm::EDGetTokenT<bool> HBHENoiseFilterResultToken,
+				      NtupleBranches* nBranches, 
+				      const edm::ParameterSet& iConfig, 
+				      std::map< std::string, bool >& runFlags)
    : CandidateNtuplizer	( nBranches )
    , HLTtriggersToken_	( tokens )
    , triggerObjects_	( object )	
    , triggerPrescales_	( prescale )
-   , noiseFilterToken_	( noiseFilterToken )		
+   , noiseFilterToken_	( noiseFilterToken )
+   , EarlyRunsHBHENoiseFilter_Selector_ ( HBHENoiseFilterResultToken )		
    , doTriggerDecisions_( runFlags["doTriggerDecisions"] )
    , doTriggerObjects_	( runFlags["doTriggerObjects"] )
    , doHltFilters_	( runFlags["doHltFilters"] )
+   , runOnMC_           ( runFlags["runOnMC"] )
 {
    
   HBHENoiseFilter_Selector_ =  iConfig.getParameter<std::string> ("noiseFilterSelection_HBHENoiseFilter");
@@ -145,12 +167,15 @@ void TriggersNtuplizer::fillBranches( edm::Event const & event, const edm::Event
   // HLT Noise Filters
   // for deprecation see https://twiki.cern.ch/twiki/bin/viewauth/CMS/MissingETOptionalFiltersRun2
   if (doHltFilters_) {
+  
     event.getByToken(noiseFilterToken_, noiseFilterBits_);
     const edm::TriggerNames &names = event.triggerNames(*noiseFilterBits_);
   
+    bool HcalNoiseFilter = false;
+    
     for (unsigned int i = 0, n = noiseFilterBits_->size(); i < n; ++i) {
       if (names.triggerName(i) == HBHENoiseFilter_Selector_)
-        nBranches_->passFilter_HBHE_ = noiseFilterBits_->accept(i); // TO BE USED
+        HcalNoiseFilter = noiseFilterBits_->accept(i); // TO BE USED
       if (names.triggerName(i) == CSCHaloNoiseFilter_Selector_)
         nBranches_->passFilter_CSCHalo_ = noiseFilterBits_->accept(i); // TO BE USED
       if (names.triggerName(i) == HCALlaserNoiseFilter_Selector_)
@@ -176,6 +201,22 @@ void TriggersNtuplizer::fillBranches( edm::Event const & event, const edm::Event
       if (names.triggerName(i) == METFilters_Selector_)
         nBranches_->passFilter_METFilters_ = noiseFilterBits_->accept(i); // DEPRECATED
     }
+    
+    if( !runOnMC_ && event.id().run() < 251585 ){
+
+       edm::Handle<bool> HBHENoiseFilterResultHandle;
+       event.getByToken(EarlyRunsHBHENoiseFilter_Selector_, HBHENoiseFilterResultHandle);
+       bool HBHENoiseFilterResult = *HBHENoiseFilterResultHandle;
+       if (!HBHENoiseFilterResultHandle.isValid()) {
+         LogDebug("") << "CaloTowerAnalyzer: Could not find HBHENoiseFilterResult" << std::endl;
+       }
+ 
+       HcalNoiseFilter = HBHENoiseFilterResult;
+             
+    }
+    
+    nBranches_->passFilter_HBHE_ = HcalNoiseFilter; // TO BE USED
+
   } //doHltFilters_
 
 	
