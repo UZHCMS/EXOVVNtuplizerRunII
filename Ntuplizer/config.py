@@ -21,7 +21,7 @@ options.maxEvents = -1
 
 #data file
 # options.inputFiles ='file:/shome/jngadiub/EXOVVAnalysisRunII/CMSSW_7_4_3/src/EXOVVNtuplizerRunII/Ntuplizer/test/ExpressDataTestMINIAOD.root'
-options.inputFiles = '/store/data/Run2015B/SingleMuon/MINIAOD/PromptReco-v1/000/251/883/00000/089D049E-262D-E511-85A7-02163E0146EB.root'
+options.inputFiles = '/store/data/Run2015B/SingleMuon/MINIAOD/PromptReco-v1/000/251/883/00000/E49261AB-492D-E511-9FCA-02163E011E24.root'
 #mc file
 # options.inputFiles = 'file:/shome/jngadiub/EXOVVAnalysisRunII/CMSSW_7_4_3/src/EXOVVNtuplizerRunII/Ntuplizer/test/RSGravToWWToLNQQ_kMpl01_M-1000_TuneCUETP8M1_13TeV-pythia8.root'
 
@@ -50,6 +50,7 @@ addAK8GenJets = False
 runOnMC = False
 runOnAOD = False #do not switch it on since the step does not work for the moment
 useJSON = True
+JSONfile = 'goldenJSON_PromptReco.txt'
 doGenParticles = False
 doGenJets = False
 doGenEvent = False
@@ -63,16 +64,17 @@ doVertices = True
 doTriggerDecisions = True
 doTriggerObjects = True
 doHltFilters = True
+
 # https://twiki.cern.ch/twiki/bin/view/CMSPublic/WorkBookMiniAOD2015#ETmiss_filters
 # For the RunIISpring15DR74 MC campaing, the process name in PAT.
 # For Run2015B PromptReco Data, the process name is RECO.
 # For Run2015B re-MiniAOD Data 17Jul2015, the process name is PAT.
 hltFiltersProcessName = 'RECO'
-if runOnMC:
+if runOnMC or JSONfile.find('reMiniAOD') != -1:
   hltFiltersProcessName = 'PAT'
+  
 doMissingEt = True
 doSemileptonicTausBoosted = False #doTausBoosted
-
 
 #! To recluster and add AK8 Higgs tagging and softdrop subjet b-tagging (both need to be simoultaneously true or false, if not you will have issues with your softdrop subjets!)
 #If you use the softdrop subjets from the slimmedJetsAK8 collection, only CSV seems to be available?
@@ -91,10 +93,7 @@ corrJetsOnTheFly = False
 doMETReclustering = False
 corrMETonTheFly = False #If you recluster the MET there is no need for re-correcting. Use it only if you run on default miniAOD met collection.
 
-
 # ####### Logger ##########
-
-
 process.load("FWCore.MessageLogger.MessageLogger_cfi")
 
 process.MessageLogger.cerr.threshold = 'INFO'
@@ -102,7 +101,7 @@ process.MessageLogger.categories.append('Ntuple')
 process.MessageLogger.cerr.INFO = cms.untracked.PSet(
     limit = cms.untracked.int32(1)
 )
-process.MessageLogger.cerr.FwkReport.reportEvery = 1
+process.MessageLogger.cerr.FwkReport.reportEvery = 1000
 
 ####### Define conditions ##########
 #process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_cff")
@@ -131,7 +130,6 @@ if not(runOnMC) and useJSON:
   import FWCore.PythonUtilities.LumiList as LumiList
   import FWCore.ParameterSet.Types as CfgTypes
   process.source.lumisToProcess = CfgTypes.untracked(CfgTypes.VLuminosityBlockRange())
-  JSONfile = 'json_DCSONLY_Run2015B.txt'
   myLumis = LumiList.LumiList(filename = JSONfile).getCMSSWString().split(',')
   process.source.lumisToProcess.extend(myLumis) 
 
@@ -622,6 +620,7 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     ## Noise Filters ###################################
     # defined here: https://github.com/cms-sw/cmssw/blob/CMSSW_7_4_X/PhysicsTools/PatAlgos/python/slimming/metFilterPaths_cff.py
     noiseFilterSelection_HBHENoiseFilter = cms.string('Flag_HBHENoiseFilter'),
+    noiseFilterSelection_EarlyRunsHBHENoiseFilter = cms.InputTag("HBHENoiseFilterResultProducer", "HBHENoiseFilterResult"),
     noiseFilterSelection_CSCTightHaloFilter = cms.string('Flag_CSCTightHaloFilter'),
     noiseFilterSelection_hcalLaserEventFilter = cms.string('Flag_hcalLaserEventFilter'),
     noiseFilterSelection_EcalDeadCellTriggerPrimitiveFilter = cms.string('Flag_EcalDeadCellTriggerPrimitiveFilter'),
@@ -641,6 +640,6 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
 
 ####### Final path ##########
 process.p = cms.Path()
-if doHltFilters:
-  process.p *= process.HBHENoiseFilterResultProducer
-process.p *= process.ntuplizer
+if doHltFilters and JSONfile.find('reMiniAOD') != -1:
+  process.p += process.HBHENoiseFilterResultProducer
+process.p += process.ntuplizer

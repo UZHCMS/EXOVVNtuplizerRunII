@@ -81,6 +81,7 @@ private:
   edm::EDGetTokenT<pat::PackedTriggerPrescales>             triggerPrescales_   ;
   
   edm::EDGetTokenT<edm::TriggerResults>                     noiseFilterToken_;
+  edm::EDGetTokenT<bool>                                    HBHENoiseFilterResultToken_;
   
 
 };

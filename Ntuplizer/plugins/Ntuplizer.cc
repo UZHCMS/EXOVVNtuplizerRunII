@@ -22,41 +22,42 @@
 Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
 	
 
-	vtxToken_             (consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("vertices"))),
-	rhoToken_             (consumes<double>(iConfig.getParameter<edm::InputTag>("rho"))),
-	puinfoToken_          (consumes<std::vector<PileupSummaryInfo> >(iConfig.getParameter<edm::InputTag>("PUInfo"))),
-	geneventToken_        (consumes<GenEventInfoProduct>(iConfig.getParameter<edm::InputTag>("genEventInfo"))),	
-	genparticleToken_     (consumes<reco::GenParticleCollection>(iConfig.getParameter<edm::InputTag>("genparticles"))),
+	vtxToken_             	    (consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("vertices"))),
+	rhoToken_             	    (consumes<double>(iConfig.getParameter<edm::InputTag>("rho"))),
+	puinfoToken_          	    (consumes<std::vector<PileupSummaryInfo> >(iConfig.getParameter<edm::InputTag>("PUInfo"))),
+	geneventToken_        	    (consumes<GenEventInfoProduct>(iConfig.getParameter<edm::InputTag>("genEventInfo"))),     
+	genparticleToken_     	    (consumes<reco::GenParticleCollection>(iConfig.getParameter<edm::InputTag>("genparticles"))),
 	
-	jetToken_             (consumes<pat::JetCollection>(iConfig.getParameter<edm::InputTag>("jets"))),
-	fatjetToken_          (consumes<pat::JetCollection>(iConfig.getParameter<edm::InputTag>("fatjets"))),
-	prunedjetToken_		(consumes<pat::JetCollection>(iConfig.getParameter<edm::InputTag>("prunedjets"))),
-	softdropjetToken_	(consumes<pat::JetCollection>(iConfig.getParameter<edm::InputTag>("softdropjets"))),
-	genJetToken_		  (consumes<reco::GenJetCollection>(iConfig.getParameter<edm::InputTag>("genJets"))),
-  genJetAK8Token_		(consumes<pat::JetCollection>(iConfig.getParameter<edm::InputTag>("genJetsAK8"))),
+	jetToken_             	    (consumes<pat::JetCollection>(iConfig.getParameter<edm::InputTag>("jets"))),
+	fatjetToken_          	    (consumes<pat::JetCollection>(iConfig.getParameter<edm::InputTag>("fatjets"))),
+	prunedjetToken_	      	    (consumes<pat::JetCollection>(iConfig.getParameter<edm::InputTag>("prunedjets"))),
+	softdropjetToken_     	    (consumes<pat::JetCollection>(iConfig.getParameter<edm::InputTag>("softdropjets"))),
+	genJetToken_	      	    (consumes<reco::GenJetCollection>(iConfig.getParameter<edm::InputTag>("genJets"))),
+        genJetAK8Token_	      	    (consumes<pat::JetCollection>(iConfig.getParameter<edm::InputTag>("genJetsAK8"))),
 	
-	flavourToken_		(consumes<reco::JetFlavourMatchingCollection>(iConfig.getParameter<edm::InputTag>("subjetflavour"))),
+	flavourToken_	      	    (consumes<reco::JetFlavourMatchingCollection>(iConfig.getParameter<edm::InputTag>("subjetflavour"))),
 
-	muonToken_		(consumes<pat::MuonCollection>(iConfig.getParameter<edm::InputTag>("muons"))),
-	electronToken_		(consumes<edm::View<pat::Electron> >(iConfig.getParameter<edm::InputTag>("electrons"))),
-	eleHEEPIdMapToken_      (consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("eleHEEPIdMap"))),
-        eleHEEPId51MapToken_    (consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("eleHEEPId51Map"))),
-	eleVetoIdMapToken_      (consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("eleVetoIdMap"))),
-	eleLooseIdMapToken_     (consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("eleLooseIdMap"))),
-	eleMediumIdMapToken_    (consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("eleMediumIdMap"))),
-	eleTightIdMapToken_     (consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("eleTightIdMap"))),
-	tauToken_		(consumes<pat::TauCollection>(iConfig.getParameter<edm::InputTag>("taus"))),
-	tauEleTauToken_		(consumes<pat::TauCollection>(iConfig.getParameter<edm::InputTag>("tausEleTau"))),
-	tauMuTauToken_		(consumes<pat::TauCollection>(iConfig.getParameter<edm::InputTag>("tausMuTau"))),
+	muonToken_	      	    (consumes<pat::MuonCollection>(iConfig.getParameter<edm::InputTag>("muons"))),
+	electronToken_	      	    (consumes<edm::View<pat::Electron> >(iConfig.getParameter<edm::InputTag>("electrons"))),
+	eleHEEPIdMapToken_    	    (consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("eleHEEPIdMap"))),
+        eleHEEPId51MapToken_  	    (consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("eleHEEPId51Map"))),
+	eleVetoIdMapToken_    	    (consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("eleVetoIdMap"))),
+	eleLooseIdMapToken_   	    (consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("eleLooseIdMap"))),
+	eleMediumIdMapToken_  	    (consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("eleMediumIdMap"))),
+	eleTightIdMapToken_   	    (consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("eleTightIdMap"))),
+	tauToken_	      	    (consumes<pat::TauCollection>(iConfig.getParameter<edm::InputTag>("taus"))),
+	tauEleTauToken_	      	    (consumes<pat::TauCollection>(iConfig.getParameter<edm::InputTag>("tausEleTau"))),
+	tauMuTauToken_	      	    (consumes<pat::TauCollection>(iConfig.getParameter<edm::InputTag>("tausMuTau"))),
 
-	metToken_		(consumes<pat::METCollection>(iConfig.getParameter<edm::InputTag>("mets"))),
-	jetForMetCorrToken_     (consumes<pat::JetCollection>(iConfig.getParameter<edm::InputTag>("jetsForMetCorr"))),
+	metToken_	      	    (consumes<pat::METCollection>(iConfig.getParameter<edm::InputTag>("mets"))),
+	jetForMetCorrToken_   	    (consumes<pat::JetCollection>(iConfig.getParameter<edm::InputTag>("jetsForMetCorr"))),
 
-	triggerToken_		(consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("HLT"))),
-	triggerObjects_	        (consumes<pat::TriggerObjectStandAloneCollection>(iConfig.getParameter<edm::InputTag>("triggerobjects"))),
-	triggerPrescales_	(consumes<pat::PackedTriggerPrescales>(iConfig.getParameter<edm::InputTag>("triggerprescales"))),
-        noiseFilterToken_       (consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("noiseFilter")))
-		
+	triggerToken_	      	    (consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("HLT"))),
+	triggerObjects_	      	    (consumes<pat::TriggerObjectStandAloneCollection>(iConfig.getParameter<edm::InputTag>("triggerobjects"))),
+	triggerPrescales_     	    (consumes<pat::PackedTriggerPrescales>(iConfig.getParameter<edm::InputTag>("triggerprescales"))),
+        noiseFilterToken_     	    (consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("noiseFilter"))),
+        HBHENoiseFilterResultToken_ (consumes<bool>(iConfig.getParameter<edm::InputTag>("noiseFilterSelection_EarlyRunsHBHENoiseFilter")))
+
 {
 
 	
@@ -184,13 +185,14 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
   }
   
   if (runFlags["doTriggerDecisions"] || runFlags["doTriggerObjects"] || runFlags["doTriggerDecisions"]) {
-    nTuplizers_["triggers"] = new TriggersNtuplizer( triggerToken_    , 
-                                                     triggerObjects_  , 
+    nTuplizers_["triggers"] = new TriggersNtuplizer( triggerToken_, 
+                                                     triggerObjects_, 
 						     triggerPrescales_,
                                                      noiseFilterToken_,
-						     nBranches_       ,
-                                                     iConfig          ,
-                                                     runFlags        );
+						     HBHENoiseFilterResultToken_,
+						     nBranches_,
+                                                     iConfig,
+                                                     runFlags );
   }
 
   if (runFlags["doTaus"]) {
@@ -249,7 +251,7 @@ void Ntuplizer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
   edm::Handle<reco::VertexCollection> vertices;
   iEvent.getByToken(vtxToken_, vertices);
   if( vertices->empty() ) return; // skip the event if no PV found
-          
+           
   nBranches_->EVENT_event     = iEvent.id().event();
   nBranches_->EVENT_run       = iEvent.id().run();
   nBranches_->EVENT_lumiBlock = iEvent.id().luminosityBlock();  

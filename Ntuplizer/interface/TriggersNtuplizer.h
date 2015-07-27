@@ -8,25 +8,33 @@
 class TriggersNtuplizer : public CandidateNtuplizer {
 
 public:
-   TriggersNtuplizer(edm::EDGetTokenT<edm::TriggerResults> tokens, edm::EDGetTokenT<pat::TriggerObjectStandAloneCollection> object, edm::EDGetTokenT<pat::PackedTriggerPrescales> prescale, edm::EDGetTokenT<edm::TriggerResults> noiseFilterToken, NtupleBranches* nBranches, const edm::ParameterSet& iConfig, std::map< std::string, bool >& runFlags );
+   TriggersNtuplizer(edm::EDGetTokenT<edm::TriggerResults> tokens, 
+                     edm::EDGetTokenT<pat::TriggerObjectStandAloneCollection> object, 
+		     edm::EDGetTokenT<pat::PackedTriggerPrescales> prescale, 
+		     edm::EDGetTokenT<edm::TriggerResults> noiseFilterToken,
+		     edm::EDGetTokenT<bool> HBHENoiseFilterResultToken, 
+		     NtupleBranches* nBranches, 
+		     const edm::ParameterSet& iConfig, 
+		     std::map< std::string, bool >& runFlags );
    ~TriggersNtuplizer( void );
    
   void fillBranches( edm::Event const & event, const edm::EventSetup& iSetup );
   bool findTrigger( std::string trigName );
 
 private:
-   edm::EDGetTokenT<edm::TriggerResults> 							HLTtriggersToken_;
-   edm::EDGetTokenT<pat::TriggerObjectStandAloneCollection> triggerObjects_;
-   edm::EDGetTokenT<pat::PackedTriggerPrescales>            triggerPrescales_;
-   edm::EDGetTokenT<edm::TriggerResults> 							noiseFilterToken_;
+   edm::EDGetTokenT<edm::TriggerResults> 		     HLTtriggersToken_;
+   edm::EDGetTokenT<pat::TriggerObjectStandAloneCollection>  triggerObjects_;
+   edm::EDGetTokenT<pat::PackedTriggerPrescales>             triggerPrescales_;
+   edm::EDGetTokenT<edm::TriggerResults> 		     noiseFilterToken_;
 	
-   edm::Handle< edm::TriggerResults> 								HLTtriggers_;
-	 edm::Handle<pat::TriggerObjectStandAloneCollection> 		triggerObjects;
- 	 edm::Handle<pat::PackedTriggerPrescales> 						triggerPrescales;
-   edm::Handle< edm::TriggerResults> 								noiseFilterBits_;
+   edm::Handle< edm::TriggerResults> 			     HLTtriggers_;
+   edm::Handle<pat::TriggerObjectStandAloneCollection>	     triggerObjects;
+   edm::Handle<pat::PackedTriggerPrescales>	      	     triggerPrescales;
+   edm::Handle< edm::TriggerResults> 			     noiseFilterBits_;
    
    // HLT Noise Filter names
    std::string HBHENoiseFilter_Selector_;
+   edm::EDGetTokenT<bool> EarlyRunsHBHENoiseFilter_Selector_;
    std::string CSCHaloNoiseFilter_Selector_;
    std::string HCALlaserNoiseFilter_Selector_;
    std::string ECALDeadCellNoiseFilter_Selector_;
@@ -43,6 +51,7 @@ private:
    bool doTriggerDecisions_;
    bool doTriggerObjects_;
    bool doHltFilters_;
+   bool runOnMC_;
         
 };
 
