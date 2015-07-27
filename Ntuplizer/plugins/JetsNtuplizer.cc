@@ -190,6 +190,18 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
       nBranches_->jetAK4_area         .push_back(j.jetArea());	  
       nBranches_->jetAK4_che     	    .push_back(j.chargedHadronEnergy()+j.electronEnergy()+j.muonEnergy());
       nBranches_->jetAK4_ne     	    .push_back(j.neutralHadronEnergy()+j.photonEnergy());
+      
+      nBranches_->jetAK4_hf_hf  	    .push_back(j.HFHadronEnergyFraction());
+      nBranches_->jetAK4_hf_emf  	    .push_back(j.HFEMEnergyFraction());
+      nBranches_->jetAK4_hof     	    .push_back(j.hoEnergyFraction());
+      
+      nBranches_->jetAK4_chm     	    .push_back(j.chargedHadronMultiplicity());
+      nBranches_->jetAK4_neHadMult    .push_back(j.neutralHadronMultiplicity());
+      nBranches_->jetAK4_phoMult      .push_back(j.photonMultiplicity());
+      
+      nBranches_->jetAK4_nemf    	    .push_back(j.neutralEmEnergyFraction());
+      nBranches_->jetAK4_cemf    	    .push_back(j.chargedEmEnergyFraction());
+      
       nBranches_->jetAK4_charge 	    .push_back(j.charge());
       // nBranches_->jetAK4_ssv          .push_back(j.bDiscriminator("pfSimpleSecondaryVertexHighPurBJetTags"));
       nBranches_->jetAK4_cisv    	    .push_back(j.bDiscriminator("pfCombinedInclusiveSecondaryVertexV2BJetTags"));
@@ -354,6 +366,18 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
       nBranches_->jetAK8_nm     	    .push_back(fj.neutralMultiplicity());     				       
       nBranches_->jetAK8_che     	    .push_back(fj.chargedHadronEnergy()+fj.electronEnergy()+fj.muonEnergy());
       nBranches_->jetAK8_ne     	    .push_back(fj.neutralHadronEnergy()+fj.photonEnergy());
+      
+      nBranches_->jetAK8_hf_hf  	    .push_back(fj.HFHadronEnergyFraction());
+      nBranches_->jetAK8_hf_emf  	    .push_back(fj.HFEMEnergyFraction());
+      nBranches_->jetAK8_hof     	    .push_back(fj.hoEnergyFraction());
+      
+      nBranches_->jetAK8_chm     	    .push_back(fj.chargedHadronMultiplicity());
+      nBranches_->jetAK8_neHadMult    .push_back(fj.neutralHadronMultiplicity());
+      nBranches_->jetAK8_phoMult      .push_back(fj.photonMultiplicity());
+      
+      nBranches_->jetAK8_nemf    	    .push_back(fj.neutralEmEnergyFraction());
+      nBranches_->jetAK8_cemf    	    .push_back(fj.chargedEmEnergyFraction());
+      
       nBranches_->jetAK8_charge 	    .push_back(fj.charge());					 
       nBranches_->jetAK8_Hbbtag       .push_back(fj.bDiscriminator("pfBoostedDoubleSecondaryVertexAK8BJetTags"));       
       // nBranches_->jetAK8_ssv          .push_back(fj.bDiscriminator("pfSimpleSecondaryVertexHighPurBJetTags"));

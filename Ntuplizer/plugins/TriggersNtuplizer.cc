@@ -143,37 +143,38 @@ void TriggersNtuplizer::fillBranches( edm::Event const & event, const edm::Event
   } //doTriggerObjects_
     
   // HLT Noise Filters
+  // for deprecation see https://twiki.cern.ch/twiki/bin/viewauth/CMS/MissingETOptionalFiltersRun2
   if (doHltFilters_) {
     event.getByToken(noiseFilterToken_, noiseFilterBits_);
     const edm::TriggerNames &names = event.triggerNames(*noiseFilterBits_);
   
     for (unsigned int i = 0, n = noiseFilterBits_->size(); i < n; ++i) {
       if (names.triggerName(i) == HBHENoiseFilter_Selector_)
-        nBranches_->passFilter_HBHE_ = noiseFilterBits_->accept(i);
+        nBranches_->passFilter_HBHE_ = noiseFilterBits_->accept(i); // TO BE USED
       if (names.triggerName(i) == CSCHaloNoiseFilter_Selector_)
-        nBranches_->passFilter_CSCHalo_ = noiseFilterBits_->accept(i);
+        nBranches_->passFilter_CSCHalo_ = noiseFilterBits_->accept(i); // TO BE USED
       if (names.triggerName(i) == HCALlaserNoiseFilter_Selector_)
-        nBranches_->passFilter_HCALlaser_ = noiseFilterBits_->accept(i);
+        nBranches_->passFilter_HCALlaser_ = noiseFilterBits_->accept(i); // DEPRECATED
       if (names.triggerName(i) == ECALDeadCellNoiseFilter_Selector_)
-        nBranches_->passFilter_ECALDeadCell_ = noiseFilterBits_->accept(i);
+        nBranches_->passFilter_ECALDeadCell_ = noiseFilterBits_->accept(i); // under scrutiny
       if (names.triggerName(i) == GoodVtxNoiseFilter_Selector_)
-        nBranches_->passFilter_GoodVtx_ = noiseFilterBits_->accept(i);
+        nBranches_->passFilter_GoodVtx_ = noiseFilterBits_->accept(i); // TO BE USED
       if (names.triggerName(i) == TrkFailureNoiseFilter_Selector_)
-        nBranches_->passFilter_TrkFailure_ = noiseFilterBits_->accept(i);
+        nBranches_->passFilter_TrkFailure_ = noiseFilterBits_->accept(i); // DEPRECATED
       if (names.triggerName(i) == EEBadScNoiseFilter_Selector_)
-        nBranches_->passFilter_EEBadSc_ = noiseFilterBits_->accept(i);
+        nBranches_->passFilter_EEBadSc_ = noiseFilterBits_->accept(i); // under scrutiny
       if (names.triggerName(i) == ECALlaserNoiseFilter_Selector_)
-        nBranches_->passFilter_ECALlaser_ = noiseFilterBits_->accept(i);
+        nBranches_->passFilter_ECALlaser_ = noiseFilterBits_->accept(i); // DEPRECATED
       if (names.triggerName(i) == TrkPOGNoiseFilter_Selector_)
-        nBranches_->passFilter_TrkPOG_ = noiseFilterBits_->accept(i);
+        nBranches_->passFilter_TrkPOG_ = noiseFilterBits_->accept(i); // DEPRECATED
       if (names.triggerName(i) == TrkPOG_manystrip_NoiseFilter_Selector_)
-        nBranches_->passFilter_TrkPOG_manystrip_ = noiseFilterBits_->accept(i);
+        nBranches_->passFilter_TrkPOG_manystrip_ = noiseFilterBits_->accept(i); // DEPRECATED
       if (names.triggerName(i) == TrkPOG_toomanystrip_NoiseFilter_Selector_)
-        nBranches_->passFilter_TrkPOG_toomanystrip_ = noiseFilterBits_->accept(i);
+        nBranches_->passFilter_TrkPOG_toomanystrip_ = noiseFilterBits_->accept(i); // DEPRECATED
       if (names.triggerName(i) == TrkPOG_logError_NoiseFilter_Selector_)
-        nBranches_->passFilter_TrkPOG_logError_ = noiseFilterBits_->accept(i);
+        nBranches_->passFilter_TrkPOG_logError_ = noiseFilterBits_->accept(i); // DEPRECATED
       if (names.triggerName(i) == METFilters_Selector_)
-        nBranches_->passFilter_METFilters_ = noiseFilterBits_->accept(i);
+        nBranches_->passFilter_METFilters_ = noiseFilterBits_->accept(i); // DEPRECATED
     }
   } //doHltFilters_
 

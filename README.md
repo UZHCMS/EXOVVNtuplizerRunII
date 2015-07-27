@@ -5,8 +5,8 @@ Ntuplizer for searches for heavy resonances decaying to dibosons
 
 ```
 export SCRAM_ARCH=slc6_amd64_gcc491
-cmsrel CMSSW_7_4_3
-cd CMSSW_7_4_3/src
+cmsrel CMSSW_7_4_7_patch2
+cd CMSSW_7_4_7_patch2/src
 cmsenv
 git cms-init
 ```
@@ -21,7 +21,6 @@ git cms-merge-topic -u cms-btv-pog:BoostedDoubleSVTagger-WithWeightFiles-v2_from
 getting the code:
 ```
 git cms-addpkg RecoJets/Configuration
-git cms-merge-topic ikrav:egm_id_74X_v2 #HEEP ID 6.0
 export GITUSER=`git config user.github`
 echo "Your github username has been set to \"$GITUSER\""
 git clone https://github.com/$GITUSER/EXOVVNtuplizerRunII

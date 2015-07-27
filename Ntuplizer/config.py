@@ -20,9 +20,10 @@ options = VarParsing.VarParsing ('analysis')
 options.maxEvents = -1
 
 #data file
-options.inputFiles ='file:/shome/jngadiub/EXOVVAnalysisRunII/CMSSW_7_4_3/src/EXOVVNtuplizerRunII/Ntuplizer/test/ExpressDataTestMINIAOD.root'
+# options.inputFiles ='file:/shome/jngadiub/EXOVVAnalysisRunII/CMSSW_7_4_3/src/EXOVVNtuplizerRunII/Ntuplizer/test/ExpressDataTestMINIAOD.root'
+options.inputFiles = '/store/data/Run2015B/SingleMuon/MINIAOD/PromptReco-v1/000/251/883/00000/089D049E-262D-E511-85A7-02163E0146EB.root'
 #mc file
-#options.inputFiles = 'file:/shome/jngadiub/EXOVVAnalysisRunII/CMSSW_7_4_3/src/EXOVVNtuplizerRunII/Ntuplizer/test/RSGravToWWToLNQQ_kMpl01_M-1000_TuneCUETP8M1_13TeV-pythia8.root'
+# options.inputFiles = 'file:/shome/jngadiub/EXOVVAnalysisRunII/CMSSW_7_4_3/src/EXOVVNtuplizerRunII/Ntuplizer/test/RSGravToWWToLNQQ_kMpl01_M-1000_TuneCUETP8M1_13TeV-pythia8.root'
 
 options.parseArguments()
 
@@ -61,7 +62,14 @@ doAK4Jets = True
 doVertices = True
 doTriggerDecisions = True
 doTriggerObjects = True
-doHltFilters = False #does not work for express data
+doHltFilters = True
+# https://twiki.cern.ch/twiki/bin/view/CMSPublic/WorkBookMiniAOD2015#ETmiss_filters
+# For the RunIISpring15DR74 MC campaing, the process name in PAT.
+# For Run2015B PromptReco Data, the process name is RECO.
+# For Run2015B re-MiniAOD Data 17Jul2015, the process name is PAT.
+hltFiltersProcessName = 'RECO'
+if runOnMC:
+  hltFiltersProcessName = 'PAT'
 doMissingEt = True
 doSemileptonicTausBoosted = False #doTausBoosted
 
@@ -102,8 +110,8 @@ process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_condD
 from Configuration.AlCa.GlobalTag import GlobalTag
 
 if runOnMC:
-   #process.GlobalTag = GlobalTag(process.GlobalTag, 'MCRUN2_74_V9::All')
-   process.GlobalTag = GlobalTag(process.GlobalTag, 'auto:run2_mc')
+   process.GlobalTag = GlobalTag(process.GlobalTag, 'MCRUN2_74_V9')
+   # process.GlobalTag = GlobalTag(process.GlobalTag, 'auto:run2_mc')
 elif not(runOnMC):
    process.GlobalTag = GlobalTag(process.GlobalTag, '74X_dataRun2_Prompt_v0')
    
@@ -459,19 +467,15 @@ for idmod in my_id_modules:
 
 ####### Event filters ###########
 
-# process.load('RecoMET.METFilters.CSCTightHaloFilter_cfi') #DOES NOT WORK
-# process.load('RecoMET.METFilters.eeBadScFilter_cfi') #DOES NOT WORK
-# process.load('RecoMET.METFilters.trackingFailureFilter_cfi') #DOES NOT WORK
-# process.goodVertices = cms.EDFilter(
-#  "VertexSelector",
-#  filter = cms.bool(False),
-#  src = cms.InputTag("offlinePrimaryVertices"),
-#  cut = cms.string("!isFake && ndof > 4 && abs(z) <= 24 && position.rho < 2")
-# )
+##___________________________HCAL_Noise_Filter________________________________||
+if doHltFilters:
+  process.load('CommonTools.RecoAlgos.HBHENoiseFilterResultProducer_cfi')
+  process.HBHENoiseFilterResultProducer.minZeros = cms.int32(99999)
 
-#process.load('RecoMET.METFilters.hcalLaserEventFilter_cfi')
-#process.load('RecoMET.METFilters.EcalDeadCellTriggerPrimitiveFilter_cfi')
-#process.load('CommonTools/RecoAlgos/HBHENoiseFilter_cfi')
+  process.ApplyBaselineHBHENoiseFilter = cms.EDFilter('BooleanFlagFilter',
+     inputLabel = cms.InputTag('HBHENoiseFilterResultProducer','HBHENoiseFilterResult'),
+     reverseDecision = cms.bool(False)
+  )
 
 ####### Ntuplizer initialization ##########
 
@@ -610,7 +614,7 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     HLT = cms.InputTag("TriggerResults","","HLT"),
     triggerobjects = cms.InputTag("selectedPatTrigger"),
     triggerprescales = cms.InputTag("patTrigger"),
-    noiseFilter = cms.InputTag('TriggerResults','','PAT'),
+    noiseFilter = cms.InputTag('TriggerResults','', hltFiltersProcessName),
     jecAK8chsPayloadNames = cms.vstring( jecLevelsAK8chs ),
     jecAK4chsPayloadNames = cms.vstring( jecLevelsAK4chs ),
     jecpath = cms.string(''),
@@ -636,4 +640,7 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
 )
 
 ####### Final path ##########
-process.p = cms.Path(process.ntuplizer) 
+process.p = cms.Path()
+if doHltFilters:
+  process.p *= process.HBHENoiseFilterResultProducer
+process.p *= process.ntuplizer
