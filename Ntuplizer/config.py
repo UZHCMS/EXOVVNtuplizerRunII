@@ -17,11 +17,11 @@ import FWCore.ParameterSet.VarParsing as VarParsing
 
 options = VarParsing.VarParsing ('analysis')
 
-options.maxEvents = 100
+options.maxEvents = -1
 
 #data file
 # options.inputFiles ='file:/shome/jngadiub/EXOVVAnalysisRunII/CMSSW_7_4_3/src/EXOVVNtuplizerRunII/Ntuplizer/test/ExpressDataTestMINIAOD.root'
-options.inputFiles = '/store/data/Run2015B/SingleMuon/MINIAOD/17Jul2015-v1/30000/76384094-172E-E511-833C-0025905C2D98.root'
+options.inputFiles = '/store/data/Run2015B/SingleMuon/MINIAOD/PromptReco-v1/000/251/883/00000/E49261AB-492D-E511-9FCA-02163E011E24.root'
 #mc file
 # options.inputFiles = 'file:/shome/jngadiub/EXOVVAnalysisRunII/CMSSW_7_4_3/src/EXOVVNtuplizerRunII/Ntuplizer/test/RSGravToWWToLNQQ_kMpl01_M-1000_TuneCUETP8M1_13TeV-pythia8.root'
 
@@ -50,7 +50,7 @@ addAK8GenJets = False
 runOnMC = False
 runOnAOD = False #do not switch it on since the step does not work for the moment
 useJSON = True
-JSONfile = 'goldenJSON_reMiniAOD.txt'
+JSONfile = 'goldenJSON_PromptReco.txt'
 doGenParticles = False
 doGenJets = False
 doGenEvent = False
@@ -619,7 +619,7 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     
     ## Noise Filters ###################################
     # defined here: https://github.com/cms-sw/cmssw/blob/CMSSW_7_4_X/PhysicsTools/PatAlgos/python/slimming/metFilterPaths_cff.py
-    noiseFilterSelection_HBHENoiseFilter = cms.string('HBHENoiseFilterResult'),
+    noiseFilterSelection_HBHENoiseFilter = cms.string('Flag_HBHENoiseFilter'),
     noiseFilterSelection_EarlyRunsHBHENoiseFilter = cms.InputTag("HBHENoiseFilterResultProducer", "HBHENoiseFilterResult"),
     noiseFilterSelection_CSCTightHaloFilter = cms.string('Flag_CSCTightHaloFilter'),
     noiseFilterSelection_hcalLaserEventFilter = cms.string('Flag_hcalLaserEventFilter'),
