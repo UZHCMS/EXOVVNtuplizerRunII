@@ -83,6 +83,7 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
   runFlags["doMissingEt"] = iConfig.getParameter<bool>("doMissingEt");
   runFlags["doTausBoosted"] = iConfig.getParameter<bool>("doTausBoosted");
   runFlags["doPruning"] = iConfig.getParameter<bool>("doPruning");
+  runFlags["doHbbTag"] = iConfig.getParameter<bool>("doHbbTag");
   
   std::string jecpath = iConfig.getParameter<std::string>("jecpath");
   
