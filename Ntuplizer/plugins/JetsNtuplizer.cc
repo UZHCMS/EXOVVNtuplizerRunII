@@ -178,8 +178,8 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
       nBranches_->jetAK4_jec    	    .push_back(corr);
       //nBranches_->jetAK4_jecUp        	.push_back(corrUp);
       //nBranches_->jetAK4_jecDown      	.push_back(corrDown);
-      nBranches_->jetAK4_IDLoose      .push_back(IDLoose);
-      nBranches_->jetAK4_IDTight      .push_back(IDTight);
+      nBranches_->jetAK4_IDLoose            .push_back(IDLoose);
+      nBranches_->jetAK4_IDTight            .push_back(IDTight);
       nBranches_->jetAK4_cm     	    .push_back(j.chargedMultiplicity());
       nBranches_->jetAK4_nm     	    .push_back(j.neutralMultiplicity());
       nBranches_->jetAK4_muf     	    .push_back(j.muonEnergyFraction());
@@ -187,7 +187,7 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
       nBranches_->jetAK4_emf     	    .push_back(j.chargedEmEnergyFraction());
       nBranches_->jetAK4_nhf     	    .push_back(j.neutralHadronEnergyFraction());
       nBranches_->jetAK4_chf     	    .push_back(j.chargedHadronEnergyFraction());
-      nBranches_->jetAK4_area         .push_back(j.jetArea());	  
+      nBranches_->jetAK4_area               .push_back(j.jetArea());	  
       nBranches_->jetAK4_che     	    .push_back(j.chargedHadronEnergy()+j.electronEnergy()+j.muonEnergy());
       nBranches_->jetAK4_ne     	    .push_back(j.neutralHadronEnergy()+j.photonEnergy());
       
@@ -196,8 +196,8 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
       nBranches_->jetAK4_hof     	    .push_back(j.hoEnergyFraction());
       
       nBranches_->jetAK4_chm     	    .push_back(j.chargedHadronMultiplicity());
-      nBranches_->jetAK4_neHadMult    .push_back(j.neutralHadronMultiplicity());
-      nBranches_->jetAK4_phoMult      .push_back(j.photonMultiplicity());
+      nBranches_->jetAK4_neHadMult          .push_back(j.neutralHadronMultiplicity());
+      nBranches_->jetAK4_phoMult            .push_back(j.photonMultiplicity());
       
       nBranches_->jetAK4_nemf    	    .push_back(j.neutralEmEnergyFraction());
       nBranches_->jetAK4_cemf    	    .push_back(j.chargedEmEnergyFraction());
@@ -211,7 +211,7 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
       // nBranches_->jetAK4_jbp          .push_back(j.bDiscriminator("pfJetBProbabilityBJetTags"));
       nBranches_->jetAK4_flavour	    .push_back(abs(j.partonFlavour()));
       nBranches_->jetAK4_vtxMass	    .push_back(j.userFloat("vtxMass")); 
-      nBranches_->jetAK4_vtxNtracks   .push_back(j.userFloat("vtxNtracks")); 
+      nBranches_->jetAK4_vtxNtracks         .push_back(j.userFloat("vtxNtracks")); 
       nBranches_->jetAK4_vtx3DVal	    .push_back(j.userFloat("vtx3DVal")); 
       nBranches_->jetAK4_vtx3DSig	    .push_back(j.userFloat("vtx3DSig"));
 	
@@ -228,7 +228,7 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
     std::vector<float> vPrunedSubjeteta    ;
     std::vector<float> vPrunedSubjetmass   ;
     std::vector<float> vPrunedSubjetphi    ;
-    std::vector<float> vPrunedSubjete	 ;
+    std::vector<float> vPrunedSubjete	   ;
     std::vector<int  > vPrunedSubjetcharge ;
     std::vector<int  > vPrunedSubjetflavour;
     std::vector<float> vPrunedSubjetssv    ;
@@ -261,12 +261,12 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
       if( doCorrOnTheFly_ ){
     
          uncorrJet = fj.correctedP4(0);
-         jecAK8_->setJetEta( uncorrJet.eta()	   );
-         jecAK8_->setJetPt ( uncorrJet.pt()	   );
+         jecAK8_->setJetEta( uncorrJet.eta() );
+         jecAK8_->setJetPt ( uncorrJet.pt() );
          jecAK8_->setJetE  ( uncorrJet.energy() );
-         jecAK8_->setJetA  ( fj.jetArea()       );
-         jecAK8_->setRho   ( nBranches_->rho	   );
-         jecAK8_->setNPV   ( vertices_->size()  );
+         jecAK8_->setJetA  ( fj.jetArea() );
+         jecAK8_->setRho   ( nBranches_->rho );
+         jecAK8_->setNPV   ( vertices_->size() );
          corr = jecAK8_->getCorrection();
     
       }

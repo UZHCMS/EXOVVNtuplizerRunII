@@ -91,8 +91,8 @@ void TriggersNtuplizer::fillBranches( edm::Event const & event, const edm::Event
 		
   if (doTriggerDecisions_) {
   	 for (unsigned int i = 0, n = HLTtriggers_->size(); i < n; ++i) {
+   	  //std::cout << "Trigger " << trigNames.triggerName(i) << ": " << (HLTtriggers_->accept(i) ? "PASS" : "fail (or not run)") << std::endl;
   	  if( findTrigger(trigNames.triggerName(i)) ){
-   	     //std::cout << "Trigger " << trigNames.triggerName(i) << ": " << (HLTtriggers_->accept(i) ? "PASS" : "fail (or not run)") << std::endl;
    	     nBranches_->HLT_isFired[trigNames.triggerName(i)] = HLTtriggers_->accept(i);
    	  }
    	}
@@ -190,7 +190,7 @@ void TriggersNtuplizer::fillBranches( edm::Event const & event, const edm::Event
         nBranches_->passFilter_METFilters_ = noiseFilterBits_->accept(i); // DEPRECATED
     }
     
-    if( !runOnMC_ && event.id().run() < 251585 ){
+    if( !runOnMC_ /*&& event.id().run() < 251585*/ ){
 
        edm::Handle<bool> HBHENoiseFilterResultHandle;
        event.getByToken(EarlyRunsHBHENoiseFilter_Selector_, HBHENoiseFilterResultHandle);
