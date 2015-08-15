@@ -20,10 +20,9 @@ options = VarParsing.VarParsing ('analysis')
 options.maxEvents = -1
 
 #data file
-# options.inputFiles ='file:/shome/jngadiub/EXOVVAnalysisRunII/CMSSW_7_4_3/src/EXOVVNtuplizerRunII/Ntuplizer/test/ExpressDataTestMINIAOD.root'
-options.inputFiles = '/store/data/Run2015B/SingleMuon/MINIAOD/PromptReco-v1/000/251/883/00000/E49261AB-492D-E511-9FCA-02163E011E24.root'
+options.inputFiles = 'file:/shome/jngadiub/EXOVVAnalysisRunII/CMSSW_7_4_7_patch2/src/EXOVVNtuplizerRunII/Ntuplizer/test/SingleMuonTestMINIAOD.root'
 #mc file
-# options.inputFiles = 'file:/shome/jngadiub/EXOVVAnalysisRunII/CMSSW_7_4_3/src/EXOVVNtuplizerRunII/Ntuplizer/test/RSGravToWWToLNQQ_kMpl01_M-1000_TuneCUETP8M1_13TeV-pythia8.root'
+#options.inputFiles = 'file:/shome/jngadiub/EXOVVAnalysisRunII/CMSSW_7_4_7_patch2/src/EXOVVNtuplizerRunII/Ntuplizer/test/RSGravToWWToLNQQ_kMpl01_M-1000_TuneCUETP8M1_13TeV-pythia8.root'
 
 options.parseArguments()
 
@@ -466,7 +465,7 @@ for idmod in my_id_modules:
 ####### Event filters ###########
 
 ##___________________________HCAL_Noise_Filter________________________________||
-if doHltFilters:
+if doHltFilters and not(runOnMC):
   process.load('CommonTools.RecoAlgos.HBHENoiseFilterResultProducer_cfi')
   process.HBHENoiseFilterResultProducer.minZeros = cms.int32(99999)
 

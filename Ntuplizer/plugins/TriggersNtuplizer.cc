@@ -190,7 +190,7 @@ void TriggersNtuplizer::fillBranches( edm::Event const & event, const edm::Event
         nBranches_->passFilter_METFilters_ = noiseFilterBits_->accept(i); // DEPRECATED
     }
     
-    if( !runOnMC_ && event.id().run() < 251585 ){
+    if( !runOnMC_ /*&& event.id().run() < 251585*/ ){
 
        edm::Handle<bool> HBHENoiseFilterResultHandle;
        event.getByToken(EarlyRunsHBHENoiseFilter_Selector_, HBHENoiseFilterResultHandle);
