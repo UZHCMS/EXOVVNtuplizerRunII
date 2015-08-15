@@ -338,6 +338,7 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch( "jetAK8_cemf"  	  , &jetAK8_cemf);
     tree_->Branch( "jetAK8_charge" 	     , &jetAK8_charge    	 );
     tree_->Branch( "jetAK8_flavour"	     , &jetAK8_flavour   	 );
+    
     if (runFlags["doHbbTag"]) {
       tree_->Branch( "jetAK8_Hbbtag"	     , &jetAK8_Hbbtag		 );
     }
@@ -835,14 +836,14 @@ void NtupleBranches::reset( void ){
   jetAK8_nm.clear();
   jetAK8_che.clear();
   jetAK8_ne.clear();
-  jetAK4_hf_hf.clear();
-  jetAK4_hf_emf.clear();
-  jetAK4_hof.clear();
-  jetAK4_chm.clear();
-  jetAK4_neHadMult.clear();
-  jetAK4_phoMult.clear();
-  jetAK4_nemf.clear();
-  jetAK4_cemf.clear();
+  jetAK8_hf_hf.clear(); 
+  jetAK8_hf_emf.clear();
+  jetAK8_hof.clear();
+  jetAK8_chm.clear();
+  jetAK8_neHadMult.clear();
+  jetAK8_phoMult.clear();
+  jetAK8_nemf.clear();
+  jetAK8_cemf.clear();
   jetAK8_charge.clear();
   jetAK8_flavour.clear();
   jetAK8_Hbbtag.clear();

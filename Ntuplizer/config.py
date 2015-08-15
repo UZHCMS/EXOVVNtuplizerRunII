@@ -21,9 +21,9 @@ options.maxEvents = -1
 
 #data file
 # options.inputFiles ='file:/shome/jngadiub/EXOVVAnalysisRunII/CMSSW_7_4_3/src/EXOVVNtuplizerRunII/Ntuplizer/test/ExpressDataTestMINIAOD.root'
-options.inputFiles = '/store/data/Run2015B/SingleMuon/MINIAOD/PromptReco-v1/000/251/883/00000/E49261AB-492D-E511-9FCA-02163E011E24.root'
+# options.inputFiles = 'root://xrootd.unl.edu//store/data/Run2015B/JetHT/MINIAOD/PromptReco-v1/000/251/161/00000/CACA9422-9C26-E511-AD2E-02163E0117FF.root'
 #mc file
-# options.inputFiles = 'file:/shome/jngadiub/EXOVVAnalysisRunII/CMSSW_7_4_3/src/EXOVVNtuplizerRunII/Ntuplizer/test/RSGravToWWToLNQQ_kMpl01_M-1000_TuneCUETP8M1_13TeV-pythia8.root'
+options.inputFiles = 'file:/shome/thaarres/EXOVVAnalysisRunII/CMSSW_7_4_7_patch2/src/EXOVVNtuplizerRunII/Ntuplizer/QCD.root'
 
 options.parseArguments()
 
