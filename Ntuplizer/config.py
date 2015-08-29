@@ -147,7 +147,6 @@ process.chs = cms.EDFilter("CandPtrSelector",
 
 process.ak4PFJetsCHS = ak4PFJetsCHS.clone( src = 'chs' )
 process.ak8CHSJets = ak8PFJetsCHS.clone( src = 'chs', jetPtMin = fatjet_ptmin )
-process.ak10CHSJets = ak8PFJetsCHS.clone( src = 'chs', jetPtMin = fatjet_ptmin, rParam = 1.0 )
 
 process.NjettinessAK8 = cms.EDProducer("NjettinessAdder",
              src = cms.InputTag("ak8CHSJets"),
@@ -162,8 +161,9 @@ process.NjettinessAK8 = cms.EDProducer("NjettinessAdder",
              nPass = cms.int32(-999),       # not used by default
              akAxesR0 = cms.double(-999.0)      # not used by default
              )
-			       
-process.ECFAK10 = cms.EDProducer("ECFAdder",
+
+if doAK10trimmedReclustering:			       
+  process.ECFAK10 = cms.EDProducer("ECFAdder",
              src = cms.InputTag("ak10CHSJetsTrimmed"),
              Njets = cms.vuint32(1, 2, 3),
              beta = cms.double(1.0),        # CMS default is 1
@@ -172,7 +172,8 @@ process.ECFAK10 = cms.EDProducer("ECFAdder",
 
 process.ak8CHSJetsPruned = ak8PFJetsCHSPruned.clone( src = 'chs', jetPtMin = fatjet_ptmin )
 process.ak8CHSJetsSoftDrop = ak8PFJetsCHSSoftDrop.clone( src = 'chs', jetPtMin = fatjet_ptmin, beta = betapar  )
-process.ak10CHSJetsTrimmed = ak8PFJetsCHSTrimmed.clone( src = 'chs', jetPtMin = fatjet_ptmin, rParam = 1.0, rFilt = 0.2, trimPtFracMin = 0.05 )
+if doAK10trimmedReclustering:			       
+  process.ak10CHSJetsTrimmed = ak8PFJetsCHSTrimmed.clone( src = 'chs', jetPtMin = fatjet_ptmin, rParam = 1.0, rFilt = 0.2, trimPtFracMin = 0.05 )
 
 
 ####### Add AK8 GenJets ##########
@@ -392,7 +393,8 @@ if doAK8reclustering:
     
   recluster_addBtagging(process, 'ak8CHSJets', 'ak8CHSJetsSoftDrop', genjets_name = lambda s: s.replace('CHS', 'Gen'))
   recluster_addBtagging(process, 'ak8CHSJets', 'ak8CHSJetsPruned', genjets_name = lambda s: s.replace('CHS', 'Gen'))
-  recluster_addBtagging(process, 'ak8CHSJets', 'ak10CHSJetsTrimmed', genjets_name = lambda s: s.replace('CHS', 'Gen'), verbose = False, btagging = False, subjets = False)
+  if doAK10trimmedReclustering:			       
+    recluster_addBtagging(process, 'ak8CHSJets', 'ak10CHSJetsTrimmed', genjets_name = lambda s: s.replace('CHS', 'Gen'), verbose = False, btagging = False, subjets = False)
   
   process.ak8PFJetsCHSPrunedMass = cms.EDProducer("RecoJetDeltaRValueMapProducer",
                                             src = cms.InputTag("ak8CHSJets"),
@@ -427,7 +429,8 @@ if doAK8reclustering:
   process.patJetsAk8CHSJets.userData.userFloats.src += ['NjettinessAK8:tau1','NjettinessAK8:tau2','NjettinessAK8:tau3']
   process.patJetsAk8CHSJets.addTagInfos = True
 
-  process.patJetsAk10CHSJetsTrimmed.userData.userFloats.src += ['ECFAK10:ecf1','ECFAK10:ecf2','ECFAK10:ecf3']
+  if doAK10trimmedReclustering:			       
+    process.patJetsAk10CHSJetsTrimmed.userData.userFloats.src += ['ECFAK10:ecf1','ECFAK10:ecf2','ECFAK10:ecf3']
 
 # ###### Recluster MET ##########
 if doMETReclustering:
