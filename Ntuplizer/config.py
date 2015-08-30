@@ -111,7 +111,7 @@ if runOnMC:
    process.GlobalTag = GlobalTag(process.GlobalTag, 'MCRUN2_74_V9')
    # process.GlobalTag = GlobalTag(process.GlobalTag, 'auto:run2_mc')
 elif not(runOnMC):
-   process.GlobalTag = GlobalTag(process.GlobalTag, '74X_dataRun2_Prompt_v0')
+   process.GlobalTag = GlobalTag(process.GlobalTag, 'Summer15_50nsV5_DATA')
    
 ######## to run the miniaod step but it doesnt not work! ##########
 if not(runOnMC) and runOnAOD:
@@ -556,50 +556,50 @@ jecLevelsAK4 = []
 if corrJetsOnTheFly:
    if runOnMC:
      jecLevelsAK8chs = [
-     	 'JEC/MCRUN2_74_V9::All_L1FastJet_AK8PFchs.txt', #JEC for 74X
-     	 'JEC/MCRUN2_74_V9::All_L2Relative_AK8PFchs.txt',
-     	 'JEC/MCRUN2_74_V9::All_L3Absolute_AK8PFchs.txt'
+     	 'JEC/Summer15_50nsV5_MC_L1FastJet_AK8PFchs.txt', #JEC for 74X
+     	 'JEC/Summer15_50nsV5_MC_L2Relative_AK8PFchs.txt',
+     	 'JEC/Summer15_50nsV5_MC_L3Absolute_AK8PFchs.txt'
        ]
      jecLevelsAK8Groomedchs = [
-     	 'JEC/MCRUN2_74_V9::All_L2Relative_AK8PFchs.txt',
-     	 'JEC/MCRUN2_74_V9::All_L3Absolute_AK8PFchs.txt'
+     	 'JEC/Summer15_50nsV5_MC_L2Relative_AK8PFchs.txt',
+     	 'JEC/Summer15_50nsV5_MC_L3Absolute_AK8PFchs.txt'
        ]
      jecLevelsAK4chs = [
-     	 'JEC/MCRUN2_74_V9::All_L1FastJet_AK4PFchs.txt',
-     	 'JEC/MCRUN2_74_V9::All_L2Relative_AK4PFchs.txt',
-     	 'JEC/MCRUN2_74_V9::All_L3Absolute_AK4PFchs.txt'
+     	 'JEC/Summer15_50nsV5_MC_L1FastJet_AK4PFchs.txt',
+     	 'JEC/Summer15_50nsV5_MC_L2Relative_AK4PFchs.txt',
+     	 'JEC/Summer15_50nsV5_MC_L3Absolute_AK4PFchs.txt'
        ]
    else:
      jecLevelsAK8chs = [
-     	 'JEC/74X_dataRun2_Prompt_v0_AK8PFchs_L1FastJet.txt', #JEC for 74X
-     	 'JEC/74X_dataRun2_Prompt_v0_AK8PFchs_L2Relative.txt',
-     	 'JEC/74X_dataRun2_Prompt_v0_AK8PFchs_L3Absolute.txt',
-	 'JEC/74X_dataRun2_Prompt_v0_AK8PFchs_L2L3Residual.txt'
+     	 'JEC/Summer15_50nsV5_DATA_L1FastJet_AK8PFchs.txt', #JEC for 74X
+     	 'JEC/Summer15_50nsV5_DATA_L2Relative_AK8PFchs.txt',
+     	 'JEC/Summer15_50nsV5_DATA_L3Absolute_AK8PFchs.txt',
+	 'JEC/Summer15_50nsV5_DATA_L2L3Residual_AK8PFchs.txt'
        ]
      jecLevelsAK8Groomedchs = [
-     	 'JEC/74X_dataRun2_Prompt_v0_AK8PFchs_L2Relative.txt',
-     	 'JEC/74X_dataRun2_Prompt_v0_AK8PFchs_L3Absolute.txt',
-	 'JEC/74X_dataRun2_Prompt_v0_AK8PFchs_L2L3Residual.txt'
+     	 'JEC/Summer15_50nsV5_DATA_L2Relative_AK8PFchs.txt',
+     	 'JEC/Summer15_50nsV5_DATA_L3Absolute_AK8PFchs.txt',
+	 'JEC/Summer15_50nsV5_DATA_L2L3Residual_AK8PFchs.txt'
        ]
      jecLevelsAK4chs = [
-     	 'JEC/74X_dataRun2_Prompt_v0_AK4PFchs_L1FastJet.txt',
-     	 'JEC/74X_dataRun2_Prompt_v0_AK4PFchs_L2Relative.txt',
-     	 'JEC/74X_dataRun2_Prompt_v0_AK4PFchs_L3Absolute.txt',
-	 'JEC/74X_dataRun2_Prompt_v0_AK4PFchs_L2L3Residual.txt'
+     	 'JEC/Summer15_50nsV5_DATA_L1FastJet_AK4PFchs.txt',
+     	 'JEC/Summer15_50nsV5_DATA_L2Relative_AK4PFchs.txt',
+     	 'JEC/Summer15_50nsV5_DATA_L3Absolute_AK4PFchs.txt',
+	 'JEC/Summer15_50nsV5_DATA_L2L3Residual_AK4PFchs.txt'
        ]   
 if corrMETonTheFly:  
    if runOnMC:
      jecLevelsAK4 = [				       
-     	 'JEC/MCRUN2_74_V9::All_L1FastJet_AK4PF.txt',  
-     	 'JEC/MCRUN2_74_V9::All_L2Relative_AK4PF.txt', 
-     	 'JEC/MCRUN2_74_V9::All_L3Absolute_AK4PF.txt'  
+     	 'JEC/Summer15_50nsV5_MC_L1FastJet_AK4PF.txt',  
+     	 'JEC/Summer15_50nsV5_MC_L2Relative_AK4PF.txt', 
+     	 'JEC/Summer15_50nsV5_MC_L3Absolute_AK4PF.txt'  
        ]
    else:       					       
      jecLevelsAK4 = [
-     	 'JEC/74X_dataRun2_Prompt_v0_AK4PF_L1FastJet.txt',
-     	 'JEC/74X_dataRun2_Prompt_v0_AK4PF_L2Relative.txt',
-     	 'JEC/74X_dataRun2_Prompt_v0_AK4PF_L3Absolute.txt',
-	 'JEC/74X_dataRun2_Prompt_v0_AK4PF_L2L3Residual.txt'
+     	 'JEC/Summer15_50nsV5_DATA_L1FastJet_AK4PF.txt',
+     	 'JEC/Summer15_50nsV5_DATA_L2Relative_AK4PF.txt',
+     	 'JEC/Summer15_50nsV5_DATA_L3Absolute_AK4PF.txt',
+	 'JEC/Summer15_50nsV5_DATA_L2L3Residual_AK4PF.txt'
        ]				    
 #from PhysicsTools.SelectorUtils.pfJetIDSelector_cfi import pfJetIDSelector
 #process.goodSlimmedJets = cms.EDFilter("PFJetIDSelectionFunctorFilter",
