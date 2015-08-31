@@ -5,7 +5,7 @@
 
 //===================================================================================================================        
 
-JetsNtuplizer::JetsNtuplizer( std::vector<edm::EDGetTokenT<pat::JetCollection>> tokens, std::vector<std::string> jecAK4Labels, std::vector<std::string> jecAK8Labels, edm::EDGetTokenT<reco::JetFlavourMatchingCollection> flavourToken, edm::EDGetTokenT<double> rhoToken, edm::EDGetTokenT<reco::VertexCollection> verticeToken, NtupleBranches* nBranches, std::map< std::string, bool >& runFlags )
+JetsNtuplizer::JetsNtuplizer( std::vector<edm::EDGetTokenT<pat::JetCollection>> tokens, std::vector<std::string> jecAK4Labels, std::vector<std::string> jecAK8Labels, std::vector<std::string> jecAK8GroomedLabels, edm::EDGetTokenT<reco::JetFlavourMatchingCollection> flavourToken, edm::EDGetTokenT<double> rhoToken, edm::EDGetTokenT<reco::VertexCollection> verticeToken, NtupleBranches* nBranches, std::map< std::string, bool >& runFlags )
 
   : CandidateNtuplizer     ( nBranches )
 
@@ -13,6 +13,7 @@ JetsNtuplizer::JetsNtuplizer( std::vector<edm::EDGetTokenT<pat::JetCollection>> 
   , fatjetInputToken_	    ( tokens[1] )
   , prunedjetInputToken_    ( tokens[2] )
   , softdropjetInputToken_  ( tokens[3] )
+  , trimmedjetInputToken_   ( tokens[4] )
   , rhoToken_	       	    ( rhoToken  )
   , verticeToken_     	    ( verticeToken  )
   , doAK4Jets_ (runFlags["doAK4Jets"])
@@ -30,6 +31,9 @@ JetsNtuplizer::JetsNtuplizer( std::vector<edm::EDGetTokenT<pat::JetCollection>> 
 	
      jecAK8PayloadNames_ = jecAK8Labels;
      jecAK8PayloadNames_.pop_back();
+
+     jecAK8GroomedPayloadNames_ = jecAK8GroomedLabels;
+     jecAK8GroomedPayloadNames_.pop_back();
 
       
      initJetCorrFactors();
@@ -106,6 +110,15 @@ void JetsNtuplizer::initJetCorrFactors( void ){
   jecAK8_ = boost::shared_ptr<FactorizedJetCorrector> ( new FactorizedJetCorrector(vPar) );
  
   vPar.clear();
+  for ( std::vector<std::string>::const_iterator payloadBegin = jecAK8GroomedPayloadNames_.begin(), payloadEnd = jecAK8GroomedPayloadNames_.end(), ipayload = payloadBegin; ipayload != payloadEnd; ++ipayload ) {
+    JetCorrectorParameters pars(*ipayload);
+    vPar.push_back(pars);
+  }
+  
+  // Make the FactorizedJetCorrector
+  jecAK8Groomed_ = boost::shared_ptr<FactorizedJetCorrector> ( new FactorizedJetCorrector(vPar) );
+
+  vPar.clear();
   for ( std::vector<std::string>::const_iterator payloadBegin = jecAK4PayloadNames_.begin(), payloadEnd = jecAK4PayloadNames_.end(), ipayload = payloadBegin; ipayload != payloadEnd; ++ipayload ) {
     JetCorrectorParameters pars(*ipayload);
     vPar.push_back(pars);
@@ -128,6 +141,7 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
 
   bool doPruning  = event.getByToken(prunedjetInputToken_, prunedjets_ );
   bool doSoftDrop = event.getByToken(softdropjetInputToken_, softdropjets_ );
+  bool doTrimming  = event.getByToken(trimmedjetInputToken_, trimmedjets_ );
 
   /****************************************************************/
   if (doAK4Jets_) {
@@ -422,21 +436,21 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
       
            uncorrPrunedJet = prunedjet.correctedP4(0);
 
-           jecAK8_->setJetEta( uncorrPrunedJet.eta()    );
-           jecAK8_->setJetPt ( uncorrPrunedJet.pt()     );
-           jecAK8_->setJetE  ( uncorrPrunedJet.energy() );
-           jecAK8_->setJetA  ( prunedjet.jetArea()      );
-           jecAK8_->setRho   ( nBranches_->rho          );
-           jecAK8_->setNPV   ( vertices_->size()        );
-           prunedcorr = jecAK8_->getCorrection();
+           jecAK8Groomed_->setJetEta( uncorrPrunedJet.eta()    );
+           jecAK8Groomed_->setJetPt ( uncorrPrunedJet.pt()     );
+           jecAK8Groomed_->setJetE  ( uncorrPrunedJet.energy() );
+           jecAK8Groomed_->setJetA  ( prunedjet.jetArea()      );
+           jecAK8Groomed_->setRho   ( nBranches_->rho          );
+           jecAK8Groomed_->setNPV   ( vertices_->size()        );
+           prunedcorr = jecAK8Groomed_->getCorrection();
+           nBranches_->jetAK8_pruned_massCorr.push_back(prunedcorr*fj.userFloat("ak8PFJetsCHSPrunedMass"));
+           nBranches_->jetAK8_pruned_jec.push_back(prunedcorr);
          
         }
         else{
-           uncorrPrunedJet = prunedjet.p4();
+           nBranches_->jetAK8_pruned_massCorr.push_back(fj.userFloat("ak8PFJetsCHSPrunedMassCorrected"));
+           nBranches_->jetAK8_pruned_jec.push_back(fj.userFloat("ak8PFJetsCHSPrunedMassCorrected")/fj.userFloat("ak8PFJetsCHSPrunedMass"));
         }
-
-        nBranches_->jetAK8_pruned_massCorr.push_back(prunedcorr*fj.userFloat("ak8PFJetsCHSPrunedMass"));
-        nBranches_->jetAK8_pruned_jec.push_back(prunedcorr);
 
         /****************************************************************/
 
@@ -544,21 +558,20 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
       
            uncorrSoftDropJet = softdropjet.correctedP4(0);
 
-           jecAK8_->setJetEta( uncorrSoftDropJet.eta()    );
-           jecAK8_->setJetPt ( uncorrSoftDropJet.pt()     );
-           jecAK8_->setJetE  ( uncorrSoftDropJet.energy() );
-           jecAK8_->setJetA  ( softdropjet.jetArea()      );
-           jecAK8_->setRho   ( nBranches_->rho            );
-           jecAK8_->setNPV   ( vertices_->size()          );
-           softdropcorr = jecAK8_->getCorrection();
-         
+           jecAK8Groomed_->setJetEta( uncorrSoftDropJet.eta()    );
+           jecAK8Groomed_->setJetPt ( uncorrSoftDropJet.pt()     );
+           jecAK8Groomed_->setJetE  ( uncorrSoftDropJet.energy() );
+           jecAK8Groomed_->setJetA  ( softdropjet.jetArea()      );
+           jecAK8Groomed_->setRho   ( nBranches_->rho            );
+           jecAK8Groomed_->setNPV   ( vertices_->size()          );
+           softdropcorr = jecAK8Groomed_->getCorrection();
+           nBranches_->jetAK8_softdrop_massCorr.push_back(softdropcorr*fj.userFloat("ak8PFJetsCHSSoftDropMass"));
+           nBranches_->jetAK8_softdrop_jec  .push_back(softdropcorr);
         }
         else{
-           uncorrSoftDropJet = softdropjet.p4();
+           nBranches_->jetAK8_softdrop_massCorr.push_back(fj.userFloat("ak8PFJetsCHSSoftDropMassCorrected"));
+           nBranches_->jetAK8_softdrop_jec  .push_back(fj.userFloat("ak8PFJetsCHSSoftDropMassCorrected")/fj.userFloat("ak8PFJetsCHSSoftDropMass"));
         }
-
-        nBranches_->jetAK8_softdrop_massCorr.push_back(softdropcorr*fj.userFloat("ak8PFJetsCHSSoftDropMass"));
-        nBranches_->jetAK8_softdrop_jec  .push_back(softdropcorr);
       
         vSoftDropSubjetpt.clear();
         vSoftDropSubjeteta.clear();
@@ -625,8 +638,46 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
         nBranches_->jetAK8_softdrop_massCorr.push_back(-99);
         nBranches_->jetAK8_softdrop_jec  .push_back(-99);
       } 
+
     }
   } //doAK8Jets
+
+  if( doTrimming ){
+
+    for (const pat::Jet &tj : *trimmedjets_) {
+
+        reco::Candidate::LorentzVector uncorrTrimmedJet = tj.correctedP4(0);
+
+        nBranches_->jetAK10_trimmed_mass .push_back(uncorrTrimmedJet.mass());
+        nBranches_->jetAK10_ecf1	 .push_back(tj.userFloat("ECFAK10:ecf1"));	 
+        nBranches_->jetAK10_ecf2	 .push_back(tj.userFloat("ECFAK10:ecf2"));
+        nBranches_->jetAK10_ecf3	 .push_back(tj.userFloat("ECFAK10:ecf3")); 
+
+        //Compute JEC for trimmed mass
+        double trimmedcorr = 1;
+      
+        if( doCorrOnTheFly_ ){
+      
+           jecAK8Groomed_->setJetEta( uncorrTrimmedJet.eta()    );
+           jecAK8Groomed_->setJetPt ( uncorrTrimmedJet.pt()     );
+           jecAK8Groomed_->setJetE  ( uncorrTrimmedJet.energy() );
+           jecAK8Groomed_->setJetA  ( tj.jetArea()      );
+           jecAK8Groomed_->setRho   ( nBranches_->rho          );
+           jecAK8Groomed_->setNPV   ( vertices_->size()        );
+           trimmedcorr = jecAK8Groomed_->getCorrection();
+           nBranches_->jetAK10_trimmed_massCorr.push_back(trimmedcorr*uncorrTrimmedJet.mass());
+           nBranches_->jetAK10_trimmed_jec.push_back(trimmedcorr);
+         
+        }
+        else{
+           nBranches_->jetAK10_trimmed_massCorr.push_back(tj.mass());
+	   if(uncorrTrimmedJet.mass()>0)
+           nBranches_->jetAK10_trimmed_jec.push_back(tj.mass()/uncorrTrimmedJet.mass());
+	   else
+           nBranches_->jetAK10_trimmed_jec.push_back(1.);
+        }
+      }
+    }
 }
 
 

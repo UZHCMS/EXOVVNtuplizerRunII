@@ -391,13 +391,18 @@ public:
   std::vector<float>  	      jetAK8_tau3              ;    
   std::vector<float>  	      jetAK8_pruned_mass       ;
   std::vector<float>  	      jetAK8_softdrop_mass     ;
+  std::vector<float>	      jetAK10_trimmed_mass     ;
   std::vector<float>  	      jetAK8_pruned_massCorr   ;
   std::vector<float>  	      jetAK8_softdrop_massCorr ;
+  std::vector<float>	      jetAK10_trimmed_massCorr ;
   std::vector<float>  	      jetAK8_pruned_jec        ;
   std::vector<float>  	      jetAK8_softdrop_jec      ;
-  //std::vector<float>	      jetAK8_trimmed_mass      ;
+  std::vector<float>	      jetAK10_trimmed_jec      ;
   //std::vector<float>	      jetAK8_filtered_mass     ;
   //std::vector<float>	      jetAK8_nSubJets	       ;
+  std::vector<float>  	      jetAK10_ecf1              ;
+  std::vector<float>  	      jetAK10_ecf2              ;
+  std::vector<float>  	      jetAK10_ecf3              ;    
     
   /** AK8 jets pruned */
   //int 		     njetsAK8_pruned	   ;

@@ -356,6 +356,12 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch( "jetAK8_softdrop_mass"    , &jetAK8_softdrop_mass     ); 
     tree_->Branch( "jetAK8_softdrop_massCorr", &jetAK8_softdrop_massCorr );
     tree_->Branch( "jetAK8_softdrop_jec"     , &jetAK8_softdrop_jec      );
+    tree_->Branch( "jetAK10_trimmed_mass"    , &jetAK10_trimmed_mass     );
+    tree_->Branch( "jetAK10_trimmed_massCorr", &jetAK10_trimmed_massCorr );
+    tree_->Branch( "jetAK10_trimmed_jec"     , &jetAK10_trimmed_jec      );
+    tree_->Branch( "jetAK10_ecf1"	     , &jetAK10_ecf1		 );
+    tree_->Branch( "jetAK10_ecf2"	     , &jetAK10_ecf2      	 );
+    tree_->Branch( "jetAK10_ecf3"	     , &jetAK10_ecf3	    	 );
 
       // /*----------------------Softdrop AK8 subjets---------------------------*/
       tree_->Branch( "subjetAK8_softdrop_N"      , &subjetAK8_softdrop_N           );
@@ -856,10 +862,16 @@ void NtupleBranches::reset( void ){
   jetAK8_tau3.clear();    
   jetAK8_pruned_mass.clear();
   jetAK8_softdrop_mass.clear();
+  jetAK10_trimmed_mass.clear();
   jetAK8_pruned_massCorr.clear();
   jetAK8_softdrop_massCorr.clear();
+  jetAK10_trimmed_massCorr.clear();
   jetAK8_pruned_jec.clear();
   jetAK8_softdrop_jec.clear();
+  jetAK10_trimmed_jec.clear();
+  jetAK10_ecf1.clear();
+  jetAK10_ecf2.clear();
+  jetAK10_ecf3.clear();    
   //jetAK8_trimmed_mass.clear();
   //jetAK8_filtered_mass.clear();
   //jetAK8_nSubJets.clear();

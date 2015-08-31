@@ -32,6 +32,7 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
 	fatjetToken_          	    (consumes<pat::JetCollection>(iConfig.getParameter<edm::InputTag>("fatjets"))),
 	prunedjetToken_	      	    (consumes<pat::JetCollection>(iConfig.getParameter<edm::InputTag>("prunedjets"))),
 	softdropjetToken_     	    (consumes<pat::JetCollection>(iConfig.getParameter<edm::InputTag>("softdropjets"))),
+	trimmedjetToken_	    (consumes<pat::JetCollection>(iConfig.getParameter<edm::InputTag>("trimmedjets"))),
 	genJetToken_	      	    (consumes<reco::GenJetCollection>(iConfig.getParameter<edm::InputTag>("genJets"))),
         genJetAK8Token_	      	    (consumes<pat::JetCollection>(iConfig.getParameter<edm::InputTag>("genJetsAK8"))),
 	
@@ -97,6 +98,7 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
     jetTokens.push_back( fatjetToken_ 	   );
     jetTokens.push_back( prunedjetToken_   );
     jetTokens.push_back( softdropjetToken_ );
+    jetTokens.push_back( trimmedjetToken_  );
     //jetTokens.push_back( flavourToken_	 );  
   
     std::vector<std::string> jecAK8Labels;
@@ -105,6 +107,12 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
     for( unsigned int v = 0; v < tmpVec.size(); ++v ){
        tmpString = jecpath + tmpVec[v];
        jecAK8Labels.push_back(tmpString);
+    }    
+    std::vector<std::string> jecAK8GroomedLabels;
+    tmpVec.clear(); tmpVec = iConfig.getParameter<std::vector<std::string> >("jecAK8GroomedchsPayloadNames");
+    for( unsigned int v = 0; v < tmpVec.size(); ++v ){
+       tmpString = jecpath + tmpVec[v];
+       jecAK8GroomedLabels.push_back(tmpString);
     }    
     std::vector<std::string> jecAK4chsLabels;
     tmpVec.clear(); tmpVec = iConfig.getParameter<std::vector<std::string> >("jecAK4chsPayloadNames");
@@ -116,6 +124,7 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
     nTuplizers_["jets"] = new JetsNtuplizer( jetTokens      , 
                                              jecAK4chsLabels, 
 					     jecAK8Labels   , 
+					     jecAK8GroomedLabels   , 
 					     flavourToken_  , 
 					     rhoToken_      , 
 					     vtxToken_      , 
