@@ -44,6 +44,7 @@ public:
   edm::EDGetTokenT<pat::JetCollection> 					prunedjetInputToken_ 	;
   edm::EDGetTokenT<pat::JetCollection> 					softdropjetInputToken_ 	;
   edm::EDGetTokenT<pat::JetCollection>                                  trimmedjetInputToken_   ;
+  edm::EDGetTokenT<pat::JetCollection>                                  puppijetInputToken_   ;
   edm::EDGetTokenT<reco::JetFlavourMatchingCollection> 	flavourToken_   		;
   edm::EDGetTokenT<double> 		   						rhoToken_     			;
   edm::EDGetTokenT<reco::VertexCollection>  			verticeToken_ 			;
@@ -53,6 +54,7 @@ public:
   edm::Handle<pat::JetCollection>      					prunedjets_      		;
   edm::Handle<pat::JetCollection>      					softdropjets_      		;
   edm::Handle<pat::JetCollection>                                       trimmedjets_                    ;
+  edm::Handle<pat::JetCollection>                                       puppijets_                    ;
   
   edm::Handle<reco::JetFlavourMatchingCollection> 		jetMC 					;
   edm::Handle< double >                     			rho_        			;

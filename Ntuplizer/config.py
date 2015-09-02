@@ -80,9 +80,11 @@ doAK8softdropReclustering = True
 doBtagging = False #doHbbtag
 
 #! To add pruned jet and pruned subjet collection (not in MINIAOD)
-doAK8prunedReclustering = True #doPruning
+doAK8prunedReclustering = True
 
 doAK10trimmedReclustering = True
+
+doAK8PuppiReclustering = True
 
 # To corr jets on the fly if the JEC in the MC have been changed.
 # NB: this flag corrects the pruned/softdrop jets as well. We should probably add a second flag.
@@ -175,6 +177,14 @@ process.ak8CHSJetsSoftDrop = ak8PFJetsCHSSoftDrop.clone( src = 'chs', jetPtMin =
 if doAK10trimmedReclustering:			       
   process.ak10CHSJetsTrimmed = ak8PFJetsCHSTrimmed.clone( src = 'chs', jetPtMin = fatjet_ptmin, rParam = 1.0, rFilt = 0.2, trimPtFracMin = 0.05 )
 
+if doAK8PuppiReclustering:
+  process.load('CommonTools/PileupAlgos/Puppi_cff')
+  process.puppi.candName = cms.InputTag('packedPFCandidates')
+  process.puppi.vertexName = cms.InputTag('offlineSlimmedPrimaryVertices')  
+  process.ak8PuppiJets = ak8PFJetsCHS.clone( src = 'puppi', jetPtMin = fatjet_ptmin )
+  process.ak8PuppiJetsPruned = ak8PFJetsCHSPruned.clone( src = 'puppi', jetPtMin = fatjet_ptmin )
+  process.ak8PuppiJetsSoftDrop = ak8PFJetsCHSSoftDrop.clone( src = 'puppi', jetPtMin = fatjet_ptmin, beta = betapar  )
+  process.NjettinessAK8Puppi = process.NjettinessAK8.clone( src = 'ak8PuppiJets' )
 
 ####### Add AK8 GenJets ##########
 
@@ -301,7 +311,7 @@ if doAK8reclustering:
       btagDiscriminators = bTagDiscriminators
   ) 
 
-  def recluster_addBtagging(process, fatjets_name, groomed_jets_name, jetcorr_label = 'AK7PFchs', jetcorr_label_subjets = 'AK4PFchs', genjets_name = None, verbose = False, btagging = True, subjets = True):
+  def recluster_addBtagging(process, fatjets_name, groomed_jets_name, jetcorr_label = 'AK8PFchs', jetcorr_label_subjets = 'AK4PFchs', genjets_name = None, verbose = False, btagging = True, subjets = True):
       rParam = getattr(process, fatjets_name).rParam.value()
       algo = None
       if 'ca' in fatjets_name.lower():
@@ -395,6 +405,9 @@ if doAK8reclustering:
   recluster_addBtagging(process, 'ak8CHSJets', 'ak8CHSJetsPruned', genjets_name = lambda s: s.replace('CHS', 'Gen'))
   if doAK10trimmedReclustering:			       
     recluster_addBtagging(process, 'ak8CHSJets', 'ak10CHSJetsTrimmed', genjets_name = lambda s: s.replace('CHS', 'Gen'), verbose = False, btagging = False, subjets = False)
+  if doAK8PuppiReclustering:			       
+    recluster_addBtagging(process, 'ak8PuppiJets', 'ak8PuppiJetsSoftDrop', genjets_name = lambda s: s.replace('Puppi', 'Gen'), verbose = False, btagging = False, subjets = False)
+    recluster_addBtagging(process, 'ak8PuppiJets', 'ak8PuppiJetsPruned', genjets_name = lambda s: s.replace('Puppi', 'Gen'), verbose = False, btagging = False, subjets = False)
   
   process.ak8PFJetsCHSPrunedMass = cms.EDProducer("RecoJetDeltaRValueMapProducer",
                                             src = cms.InputTag("ak8CHSJets"),
@@ -425,12 +438,44 @@ if doAK8reclustering:
                                             )         
 
   process.patJetsAk8CHSJets.userData.userFloats.src += ['ak8PFJetsCHSPrunedMass','ak8PFJetsCHSSoftDropMass','ak8PFJetsCHSPrunedMassCorrected','ak8PFJetsCHSSoftDropMassCorrected']
-
   process.patJetsAk8CHSJets.userData.userFloats.src += ['NjettinessAK8:tau1','NjettinessAK8:tau2','NjettinessAK8:tau3']
   process.patJetsAk8CHSJets.addTagInfos = True
 
   if doAK10trimmedReclustering:			       
     process.patJetsAk10CHSJetsTrimmed.userData.userFloats.src += ['ECFAK10:ecf1','ECFAK10:ecf2','ECFAK10:ecf3']
+    
+  if doAK8PuppiReclustering:
+      process.ak8PFJetsPuppiPrunedMass = cms.EDProducer("RecoJetDeltaRValueMapProducer",
+                                            src = cms.InputTag("ak8PuppiJets"),
+                                            matched = cms.InputTag("ak8PuppiJetsPruned"),
+                                            distMax = cms.double(0.8),
+                                            value = cms.string('mass')
+                                            )
+
+      process.ak8PFJetsPuppiSoftDropMass = cms.EDProducer("RecoJetDeltaRValueMapProducer",
+                                            src = cms.InputTag("ak8PuppiJets"),
+                                            matched = cms.InputTag("ak8PuppiJetsSoftDrop"),                                         
+                                            distMax = cms.double(0.8),
+                                            value = cms.string('mass') 
+                                            )         
+      process.ak8PFJetsPuppiPrunedMassCorrected = cms.EDProducer("RecoJetDeltaRValueMapProducer",
+                                            src = cms.InputTag("ak8PuppiJets"),
+                                            matched = cms.InputTag("patJetsAk8PuppiJetsPruned"),
+                                            distMax = cms.double(0.8),
+                                            value = cms.string('mass')
+                                            )
+
+      process.ak8PFJetsPuppiSoftDropMassCorrected = cms.EDProducer("RecoJetDeltaRValueMapProducer",
+                                            src = cms.InputTag("ak8PuppiJets"),
+                                            matched = cms.InputTag("patJetsAk8PuppiJetsSoftDrop"),                                         
+                                            distMax = cms.double(0.8),
+                                            value = cms.string('mass') 
+                                            )         
+
+      process.patJetsAk8PuppiJets.userData.userFloats.src += ['ak8PFJetsPuppiPrunedMass','ak8PFJetsPuppiSoftDropMass','ak8PFJetsPuppiPrunedMassCorrected','ak8PFJetsPuppiSoftDropMassCorrected']
+      process.patJetsAk8PuppiJets.userData.userFloats.src += ['NjettinessAK8Puppi:tau1','NjettinessAK8Puppi:tau2','NjettinessAK8Puppi:tau3']
+      process.patJetsAk8PuppiJets.addTagInfos = True
+
 
 # ###### Recluster MET ##########
 if doMETReclustering:
@@ -519,6 +564,9 @@ jetsAK8pruned = ""
 # jetsAK8softdrop = "slimmedJetsAK8PFCHSSoftDropPacked" (if you want to add this subjet collection, changes need to be made in plugins/JetsNtuplizer.cc! Not needed to obtain subjets)
 jetsAK8softdrop = ""
 jetsAK10trimmed = ""
+jetsAK8Puppi = ""  
+jetsAK8PuppiPruned = ""  
+jetsAK8PuppiSoftdrop = ""  
 
 METS = "slimmedMETs"
 
@@ -538,6 +586,8 @@ if doAK8prunedReclustering:
   jetsAK8pruned = "patJetsAk8CHSJetsPrunedPacked"
 if doAK10trimmedReclustering:  
   jetsAK10trimmed = "patJetsAk10CHSJetsTrimmed"
+if doAK8PuppiReclustering:  
+  jetsAK8Puppi = "patJetsAk8PuppiJets"  
    
 if doMETReclustering:
   METS = "mySlimmedMETs"
@@ -629,8 +679,9 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     doHltFilters = cms.bool(doHltFilters),
     doMissingEt = cms.bool(doMissingEt),
     doHbbTag = cms.bool(doBtagging),
-    doPruning = cms.bool(doAK8prunedReclustering),
+    doPrunedSubjets = cms.bool(doAK8prunedReclustering),
     doTrimming = cms.bool(doAK10trimmedReclustering),
+    doPuppi = cms.bool(doAK8PuppiReclustering),
     doTausBoosted = cms.bool(doSemileptonicTausBoosted),
     vertices = cms.InputTag("offlineSlimmedPrimaryVertices"),
     muons = cms.InputTag("slimmedMuons"),
@@ -649,6 +700,7 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     prunedjets = cms.InputTag(jetsAK8pruned),
     softdropjets = cms.InputTag(jetsAK8softdrop),
     trimmedjets = cms.InputTag(jetsAK10trimmed),
+    puppijets = cms.InputTag(jetsAK8Puppi),
     genJets = cms.InputTag("slimmedGenJets"),
     genJetsAK8 = cms.InputTag(genAK8),
     subjetflavour = cms.InputTag("AK8byValAlgo"),

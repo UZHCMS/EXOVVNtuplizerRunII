@@ -14,11 +14,11 @@ JetsNtuplizer::JetsNtuplizer( std::vector<edm::EDGetTokenT<pat::JetCollection>> 
   , prunedjetInputToken_    ( tokens[2] )
   , softdropjetInputToken_  ( tokens[3] )
   , trimmedjetInputToken_   ( tokens[4] )
+  , puppijetInputToken_     ( tokens[5] )
   , rhoToken_	       	    ( rhoToken  )
   , verticeToken_     	    ( verticeToken  )
   , doAK4Jets_ (runFlags["doAK4Jets"])
   , doAK8Jets_ (runFlags["doAK8Jets"])
-  , doPruning_ (runFlags["doPruning"])
    //, flavourToken_			( flavourToken 	) //For subjet flavour matching!! Not done yet.
     
 {
@@ -142,6 +142,7 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
   bool doPruning  = event.getByToken(prunedjetInputToken_, prunedjets_ );
   bool doSoftDrop = event.getByToken(softdropjetInputToken_, softdropjets_ );
   bool doTrimming  = event.getByToken(trimmedjetInputToken_, trimmedjets_ );
+  bool doPuppi  = event.getByToken(puppijetInputToken_, puppijets_ );
 
   /****************************************************************/
   if (doAK4Jets_) {
@@ -639,8 +640,62 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
         nBranches_->jetAK8_softdrop_jec  .push_back(-99);
       } 
 
+      /****************************************************************/
+      if( doPuppi ){
+
+        // nBranches_->jetAK8_puppi__N = 0;
+
+        // Loop over  jets, store dR match. Used to obtain subjets.
+        float dRmin =  999. ;
+
+        pat::Jet puppijet;
+
+        for (const pat::Jet &pj : *puppijets_) {
+
+          TLorentzVector jet; jet.SetPtEtaPhiE( pj.pt(), pj.eta(), pj.phi(), pj.energy() );
+
+          float dRtmp   = FatJet.DeltaR(jet);
+          if( dRtmp < dRmin && dRtmp < 0.8 ){ dRmin = dRtmp; puppijet = pj;}
+          else continue;
+
+        }
+
+        nBranches_->jetAK8_puppi_tau1	 .push_back(puppijet.userFloat("NjettinessAK8Puppi:tau1"));	 
+        nBranches_->jetAK8_puppi_tau2	 .push_back(puppijet.userFloat("NjettinessAK8Puppi:tau2"));
+        nBranches_->jetAK8_puppi_tau3	 .push_back(puppijet.userFloat("NjettinessAK8Puppi:tau3")); 
+        nBranches_->jetAK8_puppi_pruned_mass.push_back(puppijet.userFloat("ak8PFJetsPuppiPrunedMass"));
+        nBranches_->jetAK8_puppi_softdrop_mass.push_back(puppijet.userFloat("ak8PFJetsPuppiSoftDropMass"));
+
+        //Compute JEC for pruned mass
+        reco::Candidate::LorentzVector uncorrJet;
+        double corr = 1;
+      
+        if( doCorrOnTheFly_ ){
+           /// APPLYING CHS L2L3 CORRECTIONS FOR NOW, EVEN THOUGH L2L3 PUPPI CORRECTIONS ARE AVAILABLE
+           uncorrJet = fj.correctedP4(0);
+
+           jecAK8Groomed_->setJetEta( uncorrJet.eta()    );
+           jecAK8Groomed_->setJetPt ( uncorrJet.pt()     );
+           jecAK8Groomed_->setJetE  ( uncorrJet.energy() );
+           jecAK8Groomed_->setJetA  ( fj.jetArea()      );
+           jecAK8Groomed_->setRho   ( nBranches_->rho          );
+           jecAK8Groomed_->setNPV   ( vertices_->size()        );
+           corr = jecAK8Groomed_->getCorrection();
+           nBranches_->jetAK8_puppi_pruned_massCorr.push_back(corr*puppijet.userFloat("ak8PFJetsPuppiPrunedMass"));
+           nBranches_->jetAK8_puppi_pruned_jec.push_back(corr);
+           nBranches_->jetAK8_puppi_softdrop_massCorr.push_back(corr*puppijet.userFloat("ak8PFJetsPuppiSoftDropMass"));
+           nBranches_->jetAK8_puppi_softdrop_jec.push_back(corr);
+        }
+        else{
+           nBranches_->jetAK8_puppi_pruned_massCorr.push_back(puppijet.userFloat("ak8PFJetsPuppiPrunedMassCorrected"));
+           nBranches_->jetAK8_puppi_pruned_jec.push_back(puppijet.userFloat("ak8PFJetsPuppiPrunedMassCorrected")/puppijet.userFloat("ak8PFJetsPuppiPrunedMass"));
+           nBranches_->jetAK8_puppi_softdrop_massCorr.push_back(puppijet.userFloat("ak8PFJetsPuppiSoftDropMassCorrected"));
+           nBranches_->jetAK8_puppi_softdrop_jec.push_back(puppijet.userFloat("ak8PFJetsPuppiSoftDropMassCorrected")/puppijet.userFloat("ak8PFJetsPuppiSoftDropMass"));
+        }
+
     }
-  } //doAK8Jets
+
+  } // ak8 jet loop
 
   if( doTrimming ){
 
@@ -678,6 +733,9 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
         }
       }
     }
+
+  } //doAK8Jets
+
 }
 
 
