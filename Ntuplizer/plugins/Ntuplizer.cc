@@ -33,6 +33,7 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
 	prunedjetToken_	      	    (consumes<pat::JetCollection>(iConfig.getParameter<edm::InputTag>("prunedjets"))),
 	softdropjetToken_     	    (consumes<pat::JetCollection>(iConfig.getParameter<edm::InputTag>("softdropjets"))),
 	trimmedjetToken_	    (consumes<pat::JetCollection>(iConfig.getParameter<edm::InputTag>("trimmedjets"))),
+	puppijetToken_	            (consumes<pat::JetCollection>(iConfig.getParameter<edm::InputTag>("puppijets"))),
 	genJetToken_	      	    (consumes<reco::GenJetCollection>(iConfig.getParameter<edm::InputTag>("genJets"))),
         genJetAK8Token_	      	    (consumes<pat::JetCollection>(iConfig.getParameter<edm::InputTag>("genJetsAK8"))),
 	
@@ -83,7 +84,9 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
   runFlags["doHltFilters"] = iConfig.getParameter<bool>("doHltFilters");
   runFlags["doMissingEt"] = iConfig.getParameter<bool>("doMissingEt");
   runFlags["doTausBoosted"] = iConfig.getParameter<bool>("doTausBoosted");
-  runFlags["doPruning"] = iConfig.getParameter<bool>("doPruning");
+  runFlags["doPrunedSubjets"] = iConfig.getParameter<bool>("doPrunedSubjets");
+  runFlags["doTrimming"] = iConfig.getParameter<bool>("doTrimming");
+  runFlags["doPuppi"] = iConfig.getParameter<bool>("doPuppi");
   runFlags["doHbbTag"] = iConfig.getParameter<bool>("doHbbTag");
   
   std::string jecpath = iConfig.getParameter<std::string>("jecpath");
@@ -99,6 +102,7 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
     jetTokens.push_back( prunedjetToken_   );
     jetTokens.push_back( softdropjetToken_ );
     jetTokens.push_back( trimmedjetToken_  );
+    jetTokens.push_back( puppijetToken_  );
     //jetTokens.push_back( flavourToken_	 );  
   
     std::vector<std::string> jecAK8Labels;
@@ -114,6 +118,12 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
        tmpString = jecpath + tmpVec[v];
        jecAK8GroomedLabels.push_back(tmpString);
     }    
+    std::vector<std::string> jecAK8PuppiLabels;
+    tmpVec.clear(); tmpVec = iConfig.getParameter<std::vector<std::string> >("jecAK8PuppiPayloadNames");
+    for( unsigned int v = 0; v < tmpVec.size(); ++v ){
+       tmpString = jecpath + tmpVec[v];
+       jecAK8PuppiLabels.push_back(tmpString);
+    }    
     std::vector<std::string> jecAK4chsLabels;
     tmpVec.clear(); tmpVec = iConfig.getParameter<std::vector<std::string> >("jecAK4chsPayloadNames");
     for( unsigned int v = 0; v < tmpVec.size(); ++v ){
@@ -125,6 +135,7 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
                                              jecAK4chsLabels, 
 					     jecAK8Labels   , 
 					     jecAK8GroomedLabels   , 
+					     jecAK8PuppiLabels   , 
 					     flavourToken_  , 
 					     rhoToken_      , 
 					     vtxToken_      , 

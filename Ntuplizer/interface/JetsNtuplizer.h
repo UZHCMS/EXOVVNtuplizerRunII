@@ -16,7 +16,7 @@ class JetsNtuplizer : public CandidateNtuplizer {
 public:
 //   JetsNtuplizer( std::vector<edm::InputTag> labels, std::vector<std::string> jecCA8Labels, std::vector<std::string> jecAK5Labels, NtupleBranches* nBranches );
 
- JetsNtuplizer( std::vector<edm::EDGetTokenT<pat::JetCollection>> token, std::vector<std::string> jecAK4Labels, std::vector<std::string> jecAK8Labels, std::vector<std::string> jecAK8GroomedLabels, edm::EDGetTokenT<reco::JetFlavourMatchingCollection> flavourToken, edm::EDGetTokenT<double> rhoToken, edm::EDGetTokenT<reco::VertexCollection> verticeToken, NtupleBranches* nBranches, std::map< std::string, bool >& runFlags );
+ JetsNtuplizer( std::vector<edm::EDGetTokenT<pat::JetCollection>> token, std::vector<std::string> jecAK4Labels, std::vector<std::string> jecAK8Labels, std::vector<std::string> jecAK8GroomedLabels, std::vector<std::string> jecAK8PuppiLabels, edm::EDGetTokenT<reco::JetFlavourMatchingCollection> flavourToken, edm::EDGetTokenT<double> rhoToken, edm::EDGetTokenT<reco::VertexCollection> verticeToken, NtupleBranches* nBranches, std::map< std::string, bool >& runFlags );
    ~JetsNtuplizer( void );
 
   bool looseJetID( const pat::Jet& j );
@@ -30,8 +30,10 @@ public:
   
   std::vector<std::string>                    jecAK8PayloadNames_;
   std::vector<std::string>                    jecAK8GroomedPayloadNames_;
+  std::vector<std::string>                    jecAK8PuppiPayloadNames_;
   boost::shared_ptr<FactorizedJetCorrector>   jecAK8_            ;      
   boost::shared_ptr<FactorizedJetCorrector>   jecAK8Groomed_            ;      
+  boost::shared_ptr<FactorizedJetCorrector>   jecAK8Puppi_            ;      
   // boost::shared_ptr<JetCorrectionUncertainty> jecAK8Unc_         ;
   
   std::vector<std::string>                    jecAK4PayloadNames_;
@@ -44,6 +46,7 @@ public:
   edm::EDGetTokenT<pat::JetCollection> 					prunedjetInputToken_ 	;
   edm::EDGetTokenT<pat::JetCollection> 					softdropjetInputToken_ 	;
   edm::EDGetTokenT<pat::JetCollection>                                  trimmedjetInputToken_   ;
+  edm::EDGetTokenT<pat::JetCollection>                                  puppijetInputToken_   ;
   edm::EDGetTokenT<reco::JetFlavourMatchingCollection> 	flavourToken_   		;
   edm::EDGetTokenT<double> 		   						rhoToken_     			;
   edm::EDGetTokenT<reco::VertexCollection>  			verticeToken_ 			;
@@ -53,6 +56,7 @@ public:
   edm::Handle<pat::JetCollection>      					prunedjets_      		;
   edm::Handle<pat::JetCollection>      					softdropjets_      		;
   edm::Handle<pat::JetCollection>                                       trimmedjets_                    ;
+  edm::Handle<pat::JetCollection>                                       puppijets_                    ;
   
   edm::Handle<reco::JetFlavourMatchingCollection> 		jetMC 					;
   edm::Handle< double >                     			rho_        			;

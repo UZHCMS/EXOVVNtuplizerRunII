@@ -403,6 +403,15 @@ public:
   std::vector<float>  	      jetAK10_ecf1              ;
   std::vector<float>  	      jetAK10_ecf2              ;
   std::vector<float>  	      jetAK10_ecf3              ;    
+  std::vector<float>  	      jetAK8_puppi_tau1              ;
+  std::vector<float>  	      jetAK8_puppi_tau2              ;
+  std::vector<float>  	      jetAK8_puppi_tau3              ;    
+  std::vector<float>  	      jetAK8_puppi_pruned_mass       ;
+  std::vector<float>  	      jetAK8_puppi_softdrop_mass     ;
+  std::vector<float>  	      jetAK8_puppi_pruned_massCorr   ;
+  std::vector<float>  	      jetAK8_puppi_softdrop_massCorr ;
+  std::vector<float>  	      jetAK8_puppi_pruned_jec        ;
+  std::vector<float>  	      jetAK8_puppi_softdrop_jec      ;
     
   /** AK8 jets pruned */
   //int 		     njetsAK8_pruned	   ;
