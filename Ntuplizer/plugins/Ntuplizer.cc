@@ -118,6 +118,12 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
        tmpString = jecpath + tmpVec[v];
        jecAK8GroomedLabels.push_back(tmpString);
     }    
+    std::vector<std::string> jecAK8PuppiLabels;
+    tmpVec.clear(); tmpVec = iConfig.getParameter<std::vector<std::string> >("jecAK8PuppiPayloadNames");
+    for( unsigned int v = 0; v < tmpVec.size(); ++v ){
+       tmpString = jecpath + tmpVec[v];
+       jecAK8PuppiLabels.push_back(tmpString);
+    }    
     std::vector<std::string> jecAK4chsLabels;
     tmpVec.clear(); tmpVec = iConfig.getParameter<std::vector<std::string> >("jecAK4chsPayloadNames");
     for( unsigned int v = 0; v < tmpVec.size(); ++v ){
@@ -129,6 +135,7 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
                                              jecAK4chsLabels, 
 					     jecAK8Labels   , 
 					     jecAK8GroomedLabels   , 
+					     jecAK8PuppiLabels   , 
 					     flavourToken_  , 
 					     rhoToken_      , 
 					     vtxToken_      , 

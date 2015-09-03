@@ -5,7 +5,7 @@
 
 //===================================================================================================================        
 
-JetsNtuplizer::JetsNtuplizer( std::vector<edm::EDGetTokenT<pat::JetCollection>> tokens, std::vector<std::string> jecAK4Labels, std::vector<std::string> jecAK8Labels, std::vector<std::string> jecAK8GroomedLabels, edm::EDGetTokenT<reco::JetFlavourMatchingCollection> flavourToken, edm::EDGetTokenT<double> rhoToken, edm::EDGetTokenT<reco::VertexCollection> verticeToken, NtupleBranches* nBranches, std::map< std::string, bool >& runFlags )
+JetsNtuplizer::JetsNtuplizer( std::vector<edm::EDGetTokenT<pat::JetCollection>> tokens, std::vector<std::string> jecAK4Labels, std::vector<std::string> jecAK8Labels, std::vector<std::string> jecAK8GroomedLabels, std::vector<std::string> jecAK8PuppiLabels, edm::EDGetTokenT<reco::JetFlavourMatchingCollection> flavourToken, edm::EDGetTokenT<double> rhoToken, edm::EDGetTokenT<reco::VertexCollection> verticeToken, NtupleBranches* nBranches, std::map< std::string, bool >& runFlags )
 
   : CandidateNtuplizer     ( nBranches )
 
@@ -34,6 +34,9 @@ JetsNtuplizer::JetsNtuplizer( std::vector<edm::EDGetTokenT<pat::JetCollection>> 
 
      jecAK8GroomedPayloadNames_ = jecAK8GroomedLabels;
      jecAK8GroomedPayloadNames_.pop_back();
+
+     jecAK8PuppiPayloadNames_ = jecAK8PuppiLabels;
+     jecAK8PuppiPayloadNames_.pop_back();
 
       
      initJetCorrFactors();
@@ -117,6 +120,15 @@ void JetsNtuplizer::initJetCorrFactors( void ){
   
   // Make the FactorizedJetCorrector
   jecAK8Groomed_ = boost::shared_ptr<FactorizedJetCorrector> ( new FactorizedJetCorrector(vPar) );
+
+  vPar.clear();
+  for ( std::vector<std::string>::const_iterator payloadBegin = jecAK8PuppiPayloadNames_.begin(), payloadEnd = jecAK8PuppiPayloadNames_.end(), ipayload = payloadBegin; ipayload != payloadEnd; ++ipayload ) {
+    JetCorrectorParameters pars(*ipayload);
+    vPar.push_back(pars);
+  }
+  
+  // Make the FactorizedJetCorrector
+  jecAK8Puppi_ = boost::shared_ptr<FactorizedJetCorrector> ( new FactorizedJetCorrector(vPar) );
 
   vPar.clear();
   for ( std::vector<std::string>::const_iterator payloadBegin = jecAK4PayloadNames_.begin(), payloadEnd = jecAK4PayloadNames_.end(), ipayload = payloadBegin; ipayload != payloadEnd; ++ipayload ) {
@@ -671,16 +683,18 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
         double corr = 1;
       
         if( doCorrOnTheFly_ ){
-           /// APPLYING CHS L2L3 CORRECTIONS FOR NOW, EVEN THOUGH L2L3 PUPPI CORRECTIONS ARE AVAILABLE
-           uncorrJet = fj.correctedP4(0);
+           if(puppijet.jecSetsAvailable())
+             uncorrJet = puppijet.correctedP4(0);
+	   else
+             uncorrJet = puppijet.p4();
 
-           jecAK8Groomed_->setJetEta( uncorrJet.eta()    );
-           jecAK8Groomed_->setJetPt ( uncorrJet.pt()     );
-           jecAK8Groomed_->setJetE  ( uncorrJet.energy() );
-           jecAK8Groomed_->setJetA  ( fj.jetArea()      );
-           jecAK8Groomed_->setRho   ( nBranches_->rho          );
-           jecAK8Groomed_->setNPV   ( vertices_->size()        );
-           corr = jecAK8Groomed_->getCorrection();
+           jecAK8Puppi_->setJetEta( uncorrJet.eta()    );
+           jecAK8Puppi_->setJetPt ( uncorrJet.pt()     );
+           jecAK8Puppi_->setJetE  ( uncorrJet.energy() );
+           jecAK8Puppi_->setJetA  ( puppijet.jetArea()      );
+           jecAK8Puppi_->setRho   ( nBranches_->rho          );
+           jecAK8Puppi_->setNPV   ( vertices_->size()        );
+           corr = jecAK8Puppi_->getCorrection();
            nBranches_->jetAK8_puppi_pruned_massCorr.push_back(corr*puppijet.userFloat("ak8PFJetsPuppiPrunedMass"));
            nBranches_->jetAK8_puppi_pruned_jec.push_back(corr);
            nBranches_->jetAK8_puppi_softdrop_massCorr.push_back(corr*puppijet.userFloat("ak8PFJetsPuppiSoftDropMass"));

@@ -16,7 +16,7 @@ class JetsNtuplizer : public CandidateNtuplizer {
 public:
 //   JetsNtuplizer( std::vector<edm::InputTag> labels, std::vector<std::string> jecCA8Labels, std::vector<std::string> jecAK5Labels, NtupleBranches* nBranches );
 
- JetsNtuplizer( std::vector<edm::EDGetTokenT<pat::JetCollection>> token, std::vector<std::string> jecAK4Labels, std::vector<std::string> jecAK8Labels, std::vector<std::string> jecAK8GroomedLabels, edm::EDGetTokenT<reco::JetFlavourMatchingCollection> flavourToken, edm::EDGetTokenT<double> rhoToken, edm::EDGetTokenT<reco::VertexCollection> verticeToken, NtupleBranches* nBranches, std::map< std::string, bool >& runFlags );
+ JetsNtuplizer( std::vector<edm::EDGetTokenT<pat::JetCollection>> token, std::vector<std::string> jecAK4Labels, std::vector<std::string> jecAK8Labels, std::vector<std::string> jecAK8GroomedLabels, std::vector<std::string> jecAK8PuppiLabels, edm::EDGetTokenT<reco::JetFlavourMatchingCollection> flavourToken, edm::EDGetTokenT<double> rhoToken, edm::EDGetTokenT<reco::VertexCollection> verticeToken, NtupleBranches* nBranches, std::map< std::string, bool >& runFlags );
    ~JetsNtuplizer( void );
 
   bool looseJetID( const pat::Jet& j );
@@ -30,8 +30,10 @@ public:
   
   std::vector<std::string>                    jecAK8PayloadNames_;
   std::vector<std::string>                    jecAK8GroomedPayloadNames_;
+  std::vector<std::string>                    jecAK8PuppiPayloadNames_;
   boost::shared_ptr<FactorizedJetCorrector>   jecAK8_            ;      
   boost::shared_ptr<FactorizedJetCorrector>   jecAK8Groomed_            ;      
+  boost::shared_ptr<FactorizedJetCorrector>   jecAK8Puppi_            ;      
   // boost::shared_ptr<JetCorrectionUncertainty> jecAK8Unc_         ;
   
   std::vector<std::string>                    jecAK4PayloadNames_;
