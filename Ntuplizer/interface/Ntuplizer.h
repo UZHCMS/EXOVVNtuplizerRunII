@@ -55,6 +55,10 @@ private:
   edm::EDGetTokenT<pat::JetCollection>                      fatjetToken_        ;
   edm::EDGetTokenT<pat::JetCollection>                      prunedjetToken_     ;
   edm::EDGetTokenT<pat::JetCollection>                      softdropjetToken_   ;
+  edm::EDGetTokenT<pat::JetCollection>                      trimmedjetToken_     ;
+  edm::EDGetTokenT<pat::JetCollection>                      puppijetToken_     ;
+  edm::EDGetTokenT<pat::JetCollection>                      puppiprunedjetToken_     ;
+  edm::EDGetTokenT<pat::JetCollection>                      puppisoftdropjetToken_     ;
   edm::EDGetTokenT<reco::GenJetCollection>                  genJetToken_	;
   edm::EDGetTokenT<pat::JetCollection>                      genJetAK8Token_	;
   
