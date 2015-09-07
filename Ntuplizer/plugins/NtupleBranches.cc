@@ -440,14 +440,14 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
       tree_->Branch( "genJetNoNuAK4_mass"   , &genJetNoNuAK4_mass );
       tree_->Branch( "genJetNoNuAK4_e"	    , &genJetNoNuAK4_e    );
       
-      tree_->Branch( "genJetAK8_N"		    , &genJetAK8_N 	  );
-      tree_->Branch( "genJetAK8_pt"		    , &genJetAK8_pt	  );
-      tree_->Branch( "genJetAK8_eta"	    , &genJetAK8_eta	  );
-      tree_->Branch( "genJetAK8_mass"	    , &genJetAK8_mass	  );
-      tree_->Branch( "genJetAK8_phi"	    , &genJetAK8_phi	  );
-      tree_->Branch( "genJetAK8_e"		    , &genJetAK8_e 	  );
-      tree_->Branch( "genJetAK8_prunedmass"  , &genJetAK8_prunedmass 	  );
-      tree_->Branch( "genJetAK8_softdropmass", &genJetAK8_softdropmass 	  );
+      tree_->Branch( "genJetAK8_N"	     , &genJetAK8_N 	       );
+      tree_->Branch( "genJetAK8_pt"	     , &genJetAK8_pt	       );
+      tree_->Branch( "genJetAK8_eta"	     , &genJetAK8_eta	       );
+      tree_->Branch( "genJetAK8_mass"	     , &genJetAK8_mass	       );
+      tree_->Branch( "genJetAK8_phi"	     , &genJetAK8_phi	       );
+      tree_->Branch( "genJetAK8_e"	     , &genJetAK8_e 	       );
+      tree_->Branch( "genJetAK8_prunedmass"  , &genJetAK8_prunedmass   );
+      tree_->Branch( "genJetAK8_softdropmass", &genJetAK8_softdropmass );
       
     } //runOnMC
   } //doGenJets
