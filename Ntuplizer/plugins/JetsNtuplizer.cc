@@ -24,7 +24,7 @@ JetsNtuplizer::JetsNtuplizer( std::vector<edm::EDGetTokenT<pat::JetCollection>> 
 {
 	
   doCorrOnTheFly_ = false;	
-  if( jecAK4Labels.size() != 0 && jecAK8Labels.size() != 0 ){	
+  if( jecAK4Labels.size() != 0 && jecAK8Labels.size() != 0 && jecAK8GroomedLabels.size() != 0 && jecAK8PuppiLabels.size() != 0 ){	
   
      jecAK4PayloadNames_ = jecAK4Labels;
      jecAK4PayloadNames_.pop_back();
@@ -381,14 +381,14 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
       nBranches_->jetAK8_phi    	    .push_back(fj.phi());
       nBranches_->jetAK8_e      	    .push_back(corr*uncorrJet.energy());
       nBranches_->jetAK8_jec    	    .push_back(corr);
-      nBranches_->jetAK8_IDLoose      .push_back(IDLoose);
-      nBranches_->jetAK8_IDTight      .push_back(IDTight);
+      nBranches_->jetAK8_IDLoose      	    .push_back(IDLoose);
+      nBranches_->jetAK8_IDTight      	    .push_back(IDTight);
       nBranches_->jetAK8_muf     	    .push_back(fj.muonEnergyFraction());
       nBranches_->jetAK8_phf     	    .push_back(fj.photonEnergyFraction());
       nBranches_->jetAK8_emf     	    .push_back(fj.chargedEmEnergyFraction());
       nBranches_->jetAK8_nhf     	    .push_back(fj.neutralHadronEnergyFraction());
       nBranches_->jetAK8_chf     	    .push_back(fj.chargedHadronEnergyFraction());
-      nBranches_->jetAK8_area         .push_back(fj.jetArea());
+      nBranches_->jetAK8_area               .push_back(fj.jetArea());
       nBranches_->jetAK8_cm     	    .push_back(fj.chargedMultiplicity());
       nBranches_->jetAK8_nm     	    .push_back(fj.neutralMultiplicity());     				       
       nBranches_->jetAK8_che     	    .push_back(fj.chargedHadronEnergy()+fj.electronEnergy()+fj.muonEnergy());
@@ -399,26 +399,26 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
       nBranches_->jetAK8_hof     	    .push_back(fj.hoEnergyFraction());
       
       nBranches_->jetAK8_chm     	    .push_back(fj.chargedHadronMultiplicity());
-      nBranches_->jetAK8_neHadMult    .push_back(fj.neutralHadronMultiplicity());
-      nBranches_->jetAK8_phoMult      .push_back(fj.photonMultiplicity());
+      nBranches_->jetAK8_neHadMult          .push_back(fj.neutralHadronMultiplicity());
+      nBranches_->jetAK8_phoMult            .push_back(fj.photonMultiplicity());
       
       nBranches_->jetAK8_nemf    	    .push_back(fj.neutralEmEnergyFraction());
       nBranches_->jetAK8_cemf    	    .push_back(fj.chargedEmEnergyFraction());
       
       nBranches_->jetAK8_charge 	    .push_back(fj.charge());					 
-      nBranches_->jetAK8_Hbbtag       .push_back(fj.bDiscriminator("pfBoostedDoubleSecondaryVertexAK8BJetTags"));       
+      nBranches_->jetAK8_Hbbtag             .push_back(fj.bDiscriminator("pfBoostedDoubleSecondaryVertexAK8BJetTags"));       
       // nBranches_->jetAK8_ssv          .push_back(fj.bDiscriminator("pfSimpleSecondaryVertexHighPurBJetTags"));
-      nBranches_->jetAK8_csv          .push_back(fj.bDiscriminator("pfCombinedInclusiveSecondaryVertexV2BJetTags"));
+      nBranches_->jetAK8_csv                .push_back(fj.bDiscriminator("pfCombinedInclusiveSecondaryVertexV2BJetTags"));
       // nBranches_->jetAK8_tchp         .push_back(fj.bDiscriminator("pfTrackCountingHighPurBJetTags"));
       // nBranches_->jetAK8_tche         .push_back(fj.bDiscriminator("pfTrackCountingHighEffBJetTags"));
       // nBranches_->jetAK8_jp           .push_back(fj.bDiscriminator("pfJetProbabilityBJetTags"));
       // nBranches_->jetAK8_jbp          .push_back(fj.bDiscriminator("pfJetBProbabilityBJetTags"));
-      nBranches_->jetAK8_flavour      .push_back(abs(fj.partonFlavour()));
-      nBranches_->jetAK8_tau1         .push_back(fj.userFloat("NjettinessAK8:tau1"));	   
-      nBranches_->jetAK8_tau2         .push_back(fj.userFloat("NjettinessAK8:tau2"));
-      nBranches_->jetAK8_tau3         .push_back(fj.userFloat("NjettinessAK8:tau3")); 
-      nBranches_->jetAK8_pruned_mass   .push_back(fj.userFloat("ak8PFJetsCHSPrunedMass"));
-      nBranches_->jetAK8_softdrop_mass .push_back(fj.userFloat("ak8PFJetsCHSSoftDropMass"));
+      nBranches_->jetAK8_flavour         .push_back(abs(fj.partonFlavour()));
+      nBranches_->jetAK8_tau1            .push_back(fj.userFloat("NjettinessAK8:tau1"));	   
+      nBranches_->jetAK8_tau2            .push_back(fj.userFloat("NjettinessAK8:tau2"));
+      nBranches_->jetAK8_tau3            .push_back(fj.userFloat("NjettinessAK8:tau3")); 
+      nBranches_->jetAK8_pruned_mass     .push_back(fj.userFloat("ak8PFJetsCHSPrunedMass"));
+      nBranches_->jetAK8_softdrop_mass   .push_back(fj.userFloat("ak8PFJetsCHSSoftDropMass"));
 		  	 
       TLorentzVector FatJet; FatJet.SetPtEtaPhiE( fj.pt(), fj.eta(), fj.phi(), fj.energy() );  
 

@@ -17,7 +17,7 @@ import FWCore.ParameterSet.VarParsing as VarParsing
 
 options = VarParsing.VarParsing ('analysis')
 
-options.maxEvents = -1
+options.maxEvents = 10
 
 #data file
 #options.inputFiles = 'file:/shome/jngadiub/EXOVVAnalysisRunII/CMSSW_7_4_7_patch2/src/EXOVVNtuplizerRunII/Ntuplizer/test/SingleMuonTestMINIAOD.root'
@@ -46,12 +46,12 @@ addAK8GenJets = False
 # run flags
 runOnMC = True
 runOnAOD = False #do not switch it on since the step does not work for the moment
-useJSON = True
+useJSON = False
 JSONfile = 'goldenJSON_PromptReco.txt'
-doGenParticles = False
+doGenParticles = True
 doGenJets = False
-doGenEvent = False
-doPileUp = False
+doGenEvent = True
+doPileUp = True
 doElectrons = True
 doMuons = True
 doTaus = False
@@ -75,22 +75,23 @@ doSemileptonicTausBoosted = False #doTausBoosted
 
 #! To recluster and add AK8 Higgs tagging and softdrop subjet b-tagging (both need to be simoultaneously true or false, if not you will have issues with your softdrop subjets!)
 #If you use the softdrop subjets from the slimmedJetsAK8 collection, only CSV seems to be available?
-doAK8reclustering = False
+doAK8reclustering = True
 doAK8softdropReclustering = False
+if doAK8reclustering == True: doAK8softdropReclustering = True
 doBtagging = False #doHbbtag
 
 #! To add pruned jet and pruned subjet collection (not in MINIAOD)
-doAK8prunedReclustering = False
+doAK8prunedReclustering = True
 
-doAK10trimmedReclustering = True
+doAK10trimmedReclustering = False
 
-doAK8PuppiReclustering = True
+doAK8PuppiReclustering = False
 
 # To corr jets on the fly if the JEC in the MC have been changed.
 # NB: this flag corrects the pruned/softdrop jets as well. We should probably add a second flag.
 corrJetsOnTheFly = True
 
-getJECfromDBfile = True # If not yet in global tag, but db file available
+getJECfromDBfile = False # If not yet in global tag, but db file available
 
 #! To recluster MET with new corrections
 doMETReclustering = False
@@ -104,7 +105,7 @@ process.MessageLogger.categories.append('Ntuple')
 process.MessageLogger.cerr.INFO = cms.untracked.PSet(
     limit = cms.untracked.int32(1)
 )
-process.MessageLogger.cerr.FwkReport.reportEvery = 1000
+process.MessageLogger.cerr.FwkReport.reportEvery = 1
 
 ####### Define conditions ##########
 #process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_cff")
@@ -138,7 +139,7 @@ if not(runOnMC) and useJSON:
 
 ####### Redo Jet clustering sequence ##########
 betapar = cms.double(0.0)
-fatjet_ptmin = 200.0
+fatjet_ptmin = 100.0
 
 from RecoJets.Configuration.RecoPFJets_cff import *
 from RecoJets.JetProducers.AnomalousCellParameters_cfi import *
@@ -455,7 +456,6 @@ if doAK8reclustering:
                                             distMax = cms.double(0.8),
                                             value = cms.string('mass') 
                                             )         
-
     process.ak8PFJetsCHSPrunedMassCorrected = cms.EDProducer("RecoJetDeltaRValueMapProducer",
                                             src = cms.InputTag("ak8CHSJets"),
                                             matched = cms.InputTag("patJetsAk8CHSJetsPrunedPacked"),
@@ -468,8 +468,8 @@ if doAK8reclustering:
                                             matched = cms.InputTag("patJetsAk8CHSJetsSoftDropPacked"),                                         
                                             distMax = cms.double(0.8),
                                             value = cms.string('mass') 
-                                            )         
-
+                                            )    
+					         
     process.patJetsAk8CHSJets.userData.userFloats.src += ['ak8PFJetsCHSPrunedMass','ak8PFJetsCHSSoftDropMass','ak8PFJetsCHSPrunedMassCorrected','ak8PFJetsCHSSoftDropMassCorrected']
     process.patJetsAk8CHSJets.userData.userFloats.src += ['NjettinessAK8:tau1','NjettinessAK8:tau2','NjettinessAK8:tau3']
     process.patJetsAk8CHSJets.addTagInfos = True
@@ -597,7 +597,6 @@ if doHltFilters and not(runOnMC):
   )
 
 ####### Ntuplizer initialization ##########
-
 jetsAK8 = "slimmedJetsAK8"
 jetsAK8pruned = ""
 # jetsAK8softdrop = "slimmedJetsAK8PFCHSSoftDropPacked" (if you want to add this subjet collection, changes need to be made in plugins/JetsNtuplizer.cc! Not needed to obtain subjets)
@@ -641,6 +640,7 @@ jecLevelsAK8chs = []
 jecLevelsAK8Groomedchs = []
 jecLevelsAK4chs = []
 jecLevelsAK4 = []
+jecLevelsAK8Puppi = []
 
 if corrJetsOnTheFly:
    if runOnMC:
@@ -756,7 +756,7 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     corrMetPx = cms.string("+0.1166 + 0.0200*Nvtx"),
     corrMetPy = cms.string("+0.2764 - 0.1280*Nvtx"),
     jecAK4forMetCorr = cms.vstring( jecLevelsAK4 ),
-    jetsForMetCorr = cms.InputTag("selectedPatJets"),
+    jetsForMetCorr = cms.InputTag("slimmedJets"),
     rho = cms.InputTag("fixedGridRhoFastjetAll"),
     genparticles = cms.InputTag("prunedGenParticles"),
     PUInfo = cms.InputTag("addPileupInfo"),
