@@ -153,12 +153,8 @@ fi
 cd $WORKDIR
 
 cp -r $CMSSW_DIR/src/EXOVVNtuplizerRunII/Ntuplizer/JEC .
-cp $CMSSW_DIR/src/EXOVVNtuplizerRunII/Ntuplizer/json_DCSONLY_Run2015B.txt .
-cp $CMSSW_DIR/src/EXOVVNtuplizerRunII/Ntuplizer/Cert_246908-251252_13TeV_PromptReco_Collisions15_JSON.txt .
-cp $CMSSW_DIR/src/EXOVVNtuplizerRunII/Ntuplizer/Cert_246908-251642_13TeV_PromptReco_Collisions15_JSON.txt .
-cp $CMSSW_DIR/src/EXOVVNtuplizerRunII/Ntuplizer/Cert_246908-251883_13TeV_PromptReco_Collisions15_JSON_v2.txt .
-cp $CMSSW_DIR/src/EXOVVNtuplizerRunII/Ntuplizer/goldenJSON_PromptReco.txt .
-cp $CMSSW_DIR/src/EXOVVNtuplizerRunII/Ntuplizer/goldenJSON_reMiniAOD.txt .
+cp $CMSSW_DIR/src/EXOVVNtuplizerRunII/Ntuplizer/*json*.txt .
+cp $CMSSW_DIR/src/EXOVVNtuplizerRunII/Ntuplizer/*JSON*.txt .
 
 cmsRun $CMSSW_CONFIG_FILE inputFiles=$5 maxEvents=$6>> myout.txt 2>>myerr.txt
 
