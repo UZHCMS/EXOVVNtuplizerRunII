@@ -17,14 +17,14 @@ import FWCore.ParameterSet.VarParsing as VarParsing
 
 options = VarParsing.VarParsing ('analysis')
 
-options.maxEvents = 10
+options.maxEvents = -1
 
 #data file
 
-#options.inputFiles = 'file:/shome/jngadiub/EXOVVAnalysisRunII/CMSSW_7_4_7_patch2/src/EXOVVNtuplizerRunII/Ntuplizer/test/SingleMuonTestMINIAOD.root'
+options.inputFiles = 'file:/shome/jngadiub/EXOVVAnalysisRunII/CMSSW_7_4_7_patch2/src/EXOVVNtuplizerRunII/Ntuplizer/test/SingleMuonTestMINIAOD.root'
 
 #mc file
-options.inputFiles = 'file:/shome/jngadiub/EXOVVAnalysisRunII/CMSSW_7_4_7_patch2/src/EXOVVNtuplizerRunII/Ntuplizer/test/RSGravToWWToLNQQ_kMpl01_M-1000_TuneCUETP8M1_13TeV-pythia8.root'
+#options.inputFiles = 'file:/shome/jngadiub/EXOVVAnalysisRunII/CMSSW_7_4_7_patch2/src/EXOVVNtuplizerRunII/Ntuplizer/test/RSGravToWWToLNQQ_kMpl01_M-1000_TuneCUETP8M1_13TeV-pythia8.root'
 
 options.parseArguments()
 
@@ -44,14 +44,15 @@ process.source = cms.Source("PoolSource",
 
 
 #! Add AK8 gen jet collection with pruned and softdrop mass
-addAK8GenJets = False
+addAK8GenJets = True
 # run flags
 runOnMC = True
 runOnAOD = False #do not switch it on since the step does not work for the moment
 useJSON = False
 JSONfile = 'goldenJSON_PromptReco.txt'
+#JSONfile = 'goldenJSON_reMiniAOD.txt'
 doGenParticles = True
-doGenJets = False
+doGenJets = True
 doGenEvent = True
 doPileUp = True
 doElectrons = True
@@ -80,18 +81,18 @@ doSemileptonicTausBoosted = False #doTausBoosted
 doAK8reclustering = True
 doAK8softdropReclustering = False
 if doAK8reclustering == True: doAK8softdropReclustering = True
-doBtagging = False #doHbbtag
+doBtagging = True #doHbbtag
 
 #! To add pruned jet and pruned subjet collection (not in MINIAOD)
 doAK8prunedReclustering = True
 
-doAK10trimmedReclustering = False
+doAK10trimmedReclustering = True
 
-doAK8PuppiReclustering = False
+doAK8PuppiReclustering = True
 
 # To corr jets on the fly if the JEC in the MC have been changed.
 # NB: this flag corrects the pruned/softdrop jets as well. We should probably add a second flag.
-corrJetsOnTheFly = True
+corrJetsOnTheFly = False
 
 getJECfromDBfile = False # If not yet in global tag, but db file available
 
@@ -115,10 +116,10 @@ process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_condD
 from Configuration.AlCa.GlobalTag import GlobalTag
 
 if runOnMC:
-   process.GlobalTag = GlobalTag(process.GlobalTag, 'MCRUN2_74_V9')
+   process.GlobalTag = GlobalTag(process.GlobalTag, '74X_mcRun2_asymptotic_v2')
    # process.GlobalTag = GlobalTag(process.GlobalTag, 'auto:run2_mc')
 elif not(runOnMC):
-   process.GlobalTag = GlobalTag(process.GlobalTag, 'Summer15_50nsV5_DATA')
+   process.GlobalTag = GlobalTag(process.GlobalTag, '74X_dataRun2_v2')
    
 ######## to run the miniaod step but it doesnt not work! ##########
 if not(runOnMC) and runOnAOD:
@@ -796,6 +797,6 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
 
 ####### Final path ##########
 process.p = cms.Path()
-if doHltFilters and JSONfile.find('reMiniAOD') != -1:
+if doHltFilters and (not runOnMC) and JSONfile.find('reMiniAOD') != -1:
   process.p += process.HBHENoiseFilterResultProducer
 process.p += process.ntuplizer
