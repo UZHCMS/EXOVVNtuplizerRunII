@@ -358,6 +358,28 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch( "jetAK8_softdrop_massCorr", &jetAK8_softdrop_massCorr );
     tree_->Branch( "jetAK8_softdrop_jec"     , &jetAK8_softdrop_jec      );
 
+    if (runFlags["doTrimming"]) {
+      /*----------------------AK10 trimming ---------------------------*/   
+     tree_->Branch( "jetAK10_trimmed_mass"    , &jetAK10_trimmed_mass     );
+     tree_->Branch( "jetAK10_trimmed_massCorr", &jetAK10_trimmed_massCorr );
+     tree_->Branch( "jetAK10_trimmed_jec"     , &jetAK10_trimmed_jec      );
+     tree_->Branch( "jetAK10_ecf1"	     , &jetAK10_ecf1		 );
+     tree_->Branch( "jetAK10_ecf2"	     , &jetAK10_ecf2      	 );
+     tree_->Branch( "jetAK10_ecf3"	     , &jetAK10_ecf3	    	 );
+    }
+
+    if (runFlags["doPuppi"]) {
+      /*----------------------PUPPI ---------------------------*/   
+     tree_->Branch( "jetAK8_puppi_pruned_mass"      , &jetAK8_puppi_pruned_mass       );
+     tree_->Branch( "jetAK8_puppi_pruned_massCorr"  , &jetAK8_puppi_pruned_massCorr	 );
+     tree_->Branch( "jetAK8_puppi_pruned_jec"	     , &jetAK8_puppi_pruned_jec        );
+     tree_->Branch( "jetAK8_puppi_softdrop_mass"    , &jetAK8_puppi_softdrop_mass     ); 
+     tree_->Branch( "jetAK8_puppi_softdrop_massCorr", &jetAK8_puppi_softdrop_massCorr );
+     tree_->Branch( "jetAK8_puppi_softdrop_jec"     , &jetAK8_puppi_softdrop_jec      );
+     tree_->Branch( "jetAK8_puppi_tau1"	     , &jetAK8_puppi_tau1		 );
+     tree_->Branch( "jetAK8_puppi_tau2"	     , &jetAK8_puppi_tau2      	 );
+     tree_->Branch( "jetAK8_puppi_tau3"	     , &jetAK8_puppi_tau3	    	 );
+    }
       // /*----------------------Softdrop AK8 subjets---------------------------*/
       tree_->Branch( "subjetAK8_softdrop_N"      , &subjetAK8_softdrop_N           );
       tree_->Branch( "subjetAK8_softdrop_pt"     , &subjetAK8_softdrop_pt      );
@@ -408,7 +430,7 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     //tree_->Branch( "jetAK8softdrop_jbp"    , &jetAK8softdrop_jbp      );
     //tree_->Branch( "jetAK8softdrop_nSVs"   , &jetAK8softdrop_nSVs     );
 	  
-    if (runFlags["doPruning"]) {
+    if (runFlags["doPrunedSubjets"]) {
       /*----------------------Pruned AK8 subjets---------------------------*/   
       tree_->Branch( "subjetAK8_pruned_N"	 , &subjetAK8_pruned_N	     );
       tree_->Branch( "subjetAK8_pruned_pt"       , &subjetAK8_pruned_pt	     );
@@ -441,14 +463,14 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
       tree_->Branch( "genJetNoNuAK4_mass"   , &genJetNoNuAK4_mass );
       tree_->Branch( "genJetNoNuAK4_e"	    , &genJetNoNuAK4_e    );
       
-      tree_->Branch( "genJetAK8_N"		    , &genJetAK8_N 	  );
-      tree_->Branch( "genJetAK8_pt"		    , &genJetAK8_pt	  );
-      tree_->Branch( "genJetAK8_eta"	    , &genJetAK8_eta	  );
-      tree_->Branch( "genJetAK8_mass"	    , &genJetAK8_mass	  );
-      tree_->Branch( "genJetAK8_phi"	    , &genJetAK8_phi	  );
-      tree_->Branch( "genJetAK8_e"		    , &genJetAK8_e 	  );
-      tree_->Branch( "genJetAK8_prunedmass"  , &genJetAK8_prunedmass 	  );
-      tree_->Branch( "genJetAK8_softdropmass", &genJetAK8_softdropmass 	  );
+      tree_->Branch( "genJetAK8_N"	     , &genJetAK8_N 	       );
+      tree_->Branch( "genJetAK8_pt"	     , &genJetAK8_pt	       );
+      tree_->Branch( "genJetAK8_eta"	     , &genJetAK8_eta	       );
+      tree_->Branch( "genJetAK8_mass"	     , &genJetAK8_mass	       );
+      tree_->Branch( "genJetAK8_phi"	     , &genJetAK8_phi	       );
+      tree_->Branch( "genJetAK8_e"	     , &genJetAK8_e 	       );
+      tree_->Branch( "genJetAK8_prunedmass"  , &genJetAK8_prunedmass   );
+      tree_->Branch( "genJetAK8_softdropmass", &genJetAK8_softdropmass );
       
     } //runOnMC
   } //doGenJets
@@ -857,10 +879,25 @@ void NtupleBranches::reset( void ){
   jetAK8_tau3.clear();    
   jetAK8_pruned_mass.clear();
   jetAK8_softdrop_mass.clear();
+  jetAK10_trimmed_mass.clear();
   jetAK8_pruned_massCorr.clear();
   jetAK8_softdrop_massCorr.clear();
+  jetAK10_trimmed_massCorr.clear();
   jetAK8_pruned_jec.clear();
   jetAK8_softdrop_jec.clear();
+  jetAK10_trimmed_jec.clear();
+  jetAK10_ecf1.clear();
+  jetAK10_ecf2.clear();
+  jetAK10_ecf3.clear();    
+  jetAK8_puppi_tau1.clear();
+  jetAK8_puppi_tau2.clear();
+  jetAK8_puppi_tau3.clear();    
+  jetAK8_puppi_pruned_mass.clear();
+  jetAK8_puppi_softdrop_mass.clear();
+  jetAK8_puppi_pruned_massCorr.clear();
+  jetAK8_puppi_softdrop_massCorr.clear();
+  jetAK8_puppi_pruned_jec.clear();
+  jetAK8_puppi_softdrop_jec.clear();
   //jetAK8_trimmed_mass.clear();
   //jetAK8_filtered_mass.clear();
   //jetAK8_nSubJets.clear();
