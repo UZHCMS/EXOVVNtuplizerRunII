@@ -17,7 +17,7 @@ import FWCore.ParameterSet.VarParsing as VarParsing
 
 options = VarParsing.VarParsing ('analysis')
 
-options.maxEvents = 10
+options.maxEvents = -1
 
 #data file
 #options.inputFiles = 'file:/shome/jngadiub/EXOVVAnalysisRunII/CMSSW_7_4_7_patch2/src/EXOVVNtuplizerRunII/Ntuplizer/test/SingleMuonTestMINIAOD.root'
@@ -95,7 +95,7 @@ getJECfromDBfile = False # If not yet in global tag, but db file available
 
 #! To recluster MET with new corrections
 doMETReclustering = False
-corrMETonTheFly = False #If you recluster the MET there is no need for re-correcting. Use it only if you run on default miniAOD met collection.
+corrMETonTheFly = True #If you recluster the MET there is no need for re-correcting. Use it only if you run on default miniAOD met collection.
 
 # ####### Logger ##########
 process.load("FWCore.MessageLogger.MessageLogger_cfi")
@@ -105,7 +105,7 @@ process.MessageLogger.categories.append('Ntuple')
 process.MessageLogger.cerr.INFO = cms.untracked.PSet(
     limit = cms.untracked.int32(1)
 )
-process.MessageLogger.cerr.FwkReport.reportEvery = 1
+process.MessageLogger.cerr.FwkReport.reportEvery = 1000
 
 ####### Define conditions ##########
 #process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_cff")
@@ -431,8 +431,8 @@ def recluster_addBtagging(process, fatjets_name, groomed_jets_name, jetcorr_labe
 	producer.addJetCharge = False
 	producer.addAssociatedTracks = False
 	if not doBtagging:
-	    producer.addDiscriminators = False
-	    producer.addBTagInfo = False
+	    producer.addDiscriminators = True
+	    producer.addBTagInfo = True
 	producer.addGenJetMatch = genjets_name is not None
 	# for fat groomed jets, gen jet match and jet flavor is not working, so switch it off:
 	if name == groomed_jets_name:
@@ -473,6 +473,7 @@ if doAK8reclustering:
     process.patJetsAk8CHSJets.userData.userFloats.src += ['ak8PFJetsCHSPrunedMass','ak8PFJetsCHSSoftDropMass','ak8PFJetsCHSPrunedMassCorrected','ak8PFJetsCHSSoftDropMassCorrected']
     process.patJetsAk8CHSJets.userData.userFloats.src += ['NjettinessAK8:tau1','NjettinessAK8:tau2','NjettinessAK8:tau3']
     process.patJetsAk8CHSJets.addTagInfos = True
+    #process.patJetsAk8CHSJetsSoftDropSubjets.addBTagInfo = True
 
 ################# Recluster trimmed jets ######################
 if doAK10trimmedReclustering:			       
