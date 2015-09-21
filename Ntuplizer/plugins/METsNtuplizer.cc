@@ -3,32 +3,31 @@
 #include <TFormula.h>
 
 //===================================================================================================================        
-// METsNtuplizer::METsNtuplizer( std::vector<edm::EDGetTokenT<pat::METCollection>> tokens, NtupleBranches* nBranches )
-METsNtuplizer::METsNtuplizer( 	std::vector<edm::EDGetTokenT<pat::METCollection>> mettokens , 
-				edm::InputTag	 	   		          pfmetlabel,
- 	 			edm::EDGetTokenT<pat::JetCollection>	 	  jettoken,
-				edm::EDGetTokenT<pat::MuonCollection> 		  muontoken,
-				std::vector<std::string> 		  	  jecAK4labels,
-				std::vector<std::string>	  		  corrformulas,
-				edm::EDGetTokenT<double> 			  rhotoken,
-				edm::EDGetTokenT<reco::VertexCollection> 	  vtxtoken,
-				NtupleBranches* 				  nBranches )
+METsNtuplizer::METsNtuplizer( 	edm::EDGetTokenT<pat::METCollection>     mettoken    , 
+ 	 			edm::EDGetTokenT<pat::JetCollection>	 jettoken    ,
+				edm::EDGetTokenT<pat::MuonCollection> 	 muontoken   ,
+				edm::EDGetTokenT<double> 		 rhotoken    ,
+				edm::EDGetTokenT<reco::VertexCollection> vtxtoken    ,
+				std::vector<std::string> 		 jecAK4labels,
+				std::vector<std::string>	  	 corrformulas,
+				NtupleBranches* 			 nBranches   )
 									
-: CandidateNtuplizer		( nBranches )
-, metInputToken_		( mettokens[0] 	)
-, reclusteredmetInputToken_	( mettokens[1] 	)
-, METsRawLabel_			( pfmetlabel	)									
-, jetInputToken_		( jettoken	)
-, muonInputToken_		( muontoken    	)	
-, jetCorrLabel_			( jecAK4labels  )								
-, corrFormulas_			( corrformulas	)						
-, rhoToken_			( rhotoken     	)	
-, verticeToken_			( vtxtoken 	)														
+: CandidateNtuplizer ( nBranches    )
+, metInputToken_     ( mettoken     )
+, jetInputToken_     ( jettoken     )
+, muonInputToken_    ( muontoken    )	    
+, rhoToken_	     ( rhotoken     )	    
+, verticeToken_	     ( vtxtoken     )														    
+, jetCorrLabel_	     ( jecAK4labels )								    
+, corrFormulas_	     ( corrformulas )						    
 
 {
-	offsetCorrLabel_.push_back(jetCorrLabel_[0]);
-	initJetCorrFactors();
-	 
+        if( jetCorrLabel_.size() != 0 ){
+	   offsetCorrLabel_.push_back(jetCorrLabel_[0]);
+	   initJetCorrFactors();
+	   doCorrOnTheFly_ = true;
+	}
+	else doCorrOnTheFly_ = false;	 
 }
 
 //===================================================================================================================
@@ -164,76 +163,50 @@ void METsNtuplizer::addTypeICorr( edm::Event const & event ){
 //===================================================================================================================
 void METsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetup& iSetup ){
 	
-	bool defaultMET		= event.getByToken(metInputToken_		, METs_ );
-	bool reclusteredMET	= event.getByToken(reclusteredmetInputToken_	, reclusteredMETs_ );
-	if ( METsRawLabel_.label() != "" ) event.getByLabel(METsRawLabel_       , pfMET_ );
-	
-	if(defaultMET){
-		
-		addTypeICorr(event);
-		
-		for (const pat::MET &met : *METs_) {
-			
-			const float rawPt 	= met.shiftedPt(pat::MET::NoShift, pat::MET::Raw);
-	   		const float rawPhi 	= met.shiftedPhi(pat::MET::NoShift, pat::MET::Raw);
-	   		const float rawSumEt    = met.shiftedSumEt(pat::MET::NoShift, pat::MET::Raw);
-		
-	   		TVector2 rawMET_;
-	   		rawMET_.SetMagPhi (rawPt, rawPhi );
-		
-	   		Double_t rawPx = rawMET_.Px();
-	   		Double_t rawPy = rawMET_.Py();
-	   		Double_t rawEt = std::hypot(rawPx,rawPy);
-		
-			nBranches_->METraw_et .push_back(rawEt); 
-			nBranches_->METraw_phi.push_back(rawPhi);
-	   		nBranches_->METraw_sumEt.push_back(rawSumEt);
-		
-			double pxcorr = rawPx+TypeICorrMap_["corrEx"];
-			double pycorr = rawPy+TypeICorrMap_["corrEy"];
-	   		double et     = std::hypot(pxcorr,pycorr);
-		
-	   		double sumEtcorr = rawSumEt+TypeICorrMap_["corrSumEt"];
-			TLorentzVector corrmet; corrmet.SetPxPyPzE(pxcorr,pycorr,0.,et);
-			nBranches_->MET_et .push_back(et);
-			nBranches_->MET_phi.push_back(corrmet.Phi());
-	   		nBranches_->MET_sumEt.push_back(sumEtcorr);
-			nBranches_->MET_corrPx.push_back(TypeICorrMap_["corrEx"]);
-			nBranches_->MET_corrPy.push_back(TypeICorrMap_["corrEy"]);
-			
-			//nBranches_->MET_T1Uncertainty.push_back(met.shiftedPt(pat::MET::NoShift, pat::MET::Type1));
-			
-		} 
-	}  
-	
-	else if (reclusteredMET){
-		
-        nBranches_->METraw_et .push_back((pfMET_->front() ).et());
-        nBranches_->METraw_phi.push_back((pfMET_->front() ).phi());
-  	nBranches_->METraw_sumEt.push_back((pfMET_->front() ).sumEt());
+  event.getByToken(metInputToken_, METs_ );
 
-	for (const pat::MET &met : *reclusteredMETs_) {
-					
-//			const float rawPt 	= met.uncorrectedPt	( pat::MET::UncorrectionType::uncorrALL);
-//	   		const float rawPhi 	= met.uncorrectedPhi( pat::MET::UncorrectionType::uncorrALL);
+  if( doCorrOnTheFly_ ) addTypeICorr(event);
 
-//	   		TVector2 rawMET_;
-//	   		rawMET_.SetMagPhi (rawPt, rawPhi );
+  for (const pat::MET &met : *METs_) {
+  	  
+    //const float rawPt	= met.shiftedPt(pat::MET::NoShift, pat::MET::Raw);
+    //const float rawPhi  = met.shiftedPhi(pat::MET::NoShift, pat::MET::Raw);
+    //const float rawSumEt= met.shiftedSumEt(pat::MET::NoShift, pat::MET::Raw);
+    const float rawPt	 = met.shiftedPt(pat::MET::METUncertainty::NoShift, pat::MET::METUncertaintyLevel::Raw);
+    const float rawPhi   = met.shiftedPhi(pat::MET::METUncertainty::NoShift, pat::MET::METUncertaintyLevel::Raw);
+    const float rawSumEt = met.shiftedSumEt(pat::MET::METUncertainty::NoShift, pat::MET::METUncertaintyLevel::Raw);
+    
+    TVector2 rawMET_;
+    rawMET_.SetMagPhi (rawPt, rawPhi );
 
-//	   		Double_t rawPx = rawMET_.Px();
-//	   		Double_t rawPy = rawMET_.Py();
-//	   		Double_t rawEt = std::hypot(rawPx,rawPy);
-//			//Double_t uncorrSumEt =+ uncorrPtMET;
+    Double_t rawPx = rawMET_.Px();
+    Double_t rawPy = rawMET_.Py();
+    Double_t rawEt = std::hypot(rawPx,rawPy);  
+    
+    nBranches_->METraw_et .push_back(rawEt); 
+    nBranches_->METraw_phi.push_back(rawPhi);
+    nBranches_->METraw_sumEt.push_back(rawSumEt);
 
-//	                nBranches_->METraw_et .push_back(rawEt);
-//	                nBranches_->METraw_phi.push_back(rawPhi);
-// 	   		nBranches_->METraw_sumEt.push_back(rawSumEt);
-			
-			nBranches_->MET_et .push_back(met.et());
-			nBranches_->MET_phi.push_back(met.phi());
-	   		nBranches_->MET_sumEt.push_back(met.sumEt());
+    double pxcorr = met.px();
+    double pycorr = met.py();
+    double et	  = met.et();
+    double sumEtcorr = met.sumEt();
+
+    if( doCorrOnTheFly_ ){
+       pxcorr = rawPx+TypeICorrMap_["corrEx"];
+       pycorr = rawPy+TypeICorrMap_["corrEy"];
+       et     = std::hypot(pxcorr,pycorr);
+       sumEtcorr = rawSumEt+TypeICorrMap_["corrSumEt"];
+    }
+    
+    TLorentzVector corrmet; corrmet.SetPxPyPzE(pxcorr,pycorr,0.,et);
+    nBranches_->MET_et .push_back(et);
+    nBranches_->MET_phi.push_back(corrmet.Phi());
+    nBranches_->MET_sumEt.push_back(sumEtcorr);
+    nBranches_->MET_corrPx.push_back(TypeICorrMap_["corrEx"]);
+    nBranches_->MET_corrPy.push_back(TypeICorrMap_["corrEy"]); 	  
+
+  } 
 		
-		}
-	}
 }
 

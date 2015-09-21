@@ -153,6 +153,8 @@ fi
 cd $WORKDIR
 
 cp -r $CMSSW_DIR/src/EXOVVNtuplizerRunII/Ntuplizer/JEC .
+cp $CMSSW_DIR/src/EXOVVNtuplizerRunII/Ntuplizer/*json*.txt .
+cp $CMSSW_DIR/src/EXOVVNtuplizerRunII/Ntuplizer/*JSON*.txt .
 
 cmsRun $CMSSW_CONFIG_FILE inputFiles=$5 maxEvents=$6>> myout.txt 2>>myerr.txt
 
