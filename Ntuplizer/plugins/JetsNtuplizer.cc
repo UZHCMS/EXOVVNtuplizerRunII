@@ -707,9 +707,11 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
            nBranches_->jetAK8_puppi_softdrop_jec.push_back(puppijet.userFloat("ak8PFJetsPuppiSoftDropMassCorrected")/puppijet.userFloat("ak8PFJetsPuppiSoftDropMass"));
         }
 
-    }
+      }
 
-  } // ak8 jet loop
+    } // ak8 jet loop
+
+  } //doAK8Jets
 
   if( doTrimming ){
 
@@ -745,10 +747,8 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
 	   else
            nBranches_->jetAK10_trimmed_jec.push_back(1.);
         }
-      }
     }
-
-  } //doAK8Jets
+  }
 
 }
 
