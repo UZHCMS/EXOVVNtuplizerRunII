@@ -10,7 +10,7 @@ TausNtuplizer::TausNtuplizer( edm::EDGetTokenT<pat::TauCollection> tauToken,edm:
 			      edm::EDGetTokenT<double> rhoToken, 
 			      edm::EDGetTokenT<reco::VertexCollection> verticeToken,
 			      NtupleBranches* nBranches,
-            std::map< std::string, bool >& runFlags )
+			      std::map< std::string, bool >& runFlags )
   : CandidateNtuplizer( nBranches )
   , tauInputToken_ (tauToken)
   , tauEleTauInputToken_ ( tauEleTauToken)
@@ -32,17 +32,17 @@ TausNtuplizer::~TausNtuplizer( void )
 //===================================================================================================================
 void TausNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetup& iSetup ){
  
-    bool doTausBoosted = event.getByToken( tauInputToken_ , taus_ ); 
-    if ( !doTausBoosted ) return;
-    
+ 
+
+  if ( !doBoostedTaus_ ) return;
     event.getByToken( tauEleTauInputToken_ , eleTaus_  ); 
     event.getByToken( tauMuTauInputToken_  , muTaus_   );  
     event.getByToken( rhoToken_	 	   , rho_      );
     event.getByToken( verticeToken_ 	   , vertices_ );
-    
+    event.getByToken(  tauInputToken_ , taus_ ); 
     /********************************************************************/    
     for( size_t t = 0; t < taus_->size(); ++t ){
-
+      std::cout<< "In slimmed taus " <<std::endl;
       pat::Tau tau = (*taus_)[t];
     
       nBranches_->tau_pdgId  	     	      .push_back(tau.pdgId());
@@ -81,7 +81,7 @@ void TausNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
 
       /*====================== IDs ========================*/	                         
       nBranches_->tau_decayModeFindingNewDMs                     .push_back(tau.tauID("decayModeFindingNewDMs"  		    ));
-      nBranches_->tau_decayModeFinding	                     .push_back(tau.tauID("decayModeFinding"			    ));
+      nBranches_->tau_decayModeFinding	                         .push_back(tau.tauID("decayModeFinding"			    ));
       nBranches_->tau_byLooseCombinedIsolationDeltaBetaCorr3Hits .push_back(tau.tauID("byLooseCombinedIsolationDeltaBetaCorr3Hits"  ));
       nBranches_->tau_byMediumCombinedIsolationDeltaBetaCorr3Hits.push_back(tau.tauID("byMediumCombinedIsolationDeltaBetaCorr3Hits" ));
       nBranches_->tau_byTightCombinedIsolationDeltaBetaCorr3Hits .push_back(tau.tauID("byTightCombinedIsolationDeltaBetaCorr3Hits"  ));
@@ -145,7 +145,7 @@ void TausNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
 
   /********************************************************************/      
   for( size_t t = 0; t < eleTaus_->size(); ++t ){
- 
+  
       pat::Tau eleTau = (*eleTaus_)[t];
               
       nBranches_->tau_pdgId  		      .push_back(eleTau.pdgId());
@@ -248,7 +248,7 @@ void TausNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
 
   /********************************************************************/        
   for( size_t t = 0; t < muTaus_->size(); ++t ){
-
+ 
       pat::Tau muTau = (*muTaus_)[t];
        
       nBranches_->tau_pdgId  		       .push_back(muTau.pdgId());
@@ -287,7 +287,7 @@ void TausNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
       nBranches_->tau_chargedHadIsoBoost    .push_back(muTau.userIsolation(pat::PfChargedHadronIso));
       
       /*====================== IDs ========================*/
-      if (doBoostedTaus_) {
+     
         nBranches_->tau_decayModeFindingNewDMs                     .push_back(muTau.tauID("decayModeFindingNewDMs"		      ));
         nBranches_->tau_decayModeFinding	                     .push_back(muTau.tauID("decayModeFinding"			      ));
         nBranches_->tau_byLooseCombinedIsolationDeltaBetaCorr3Hits .push_back(muTau.tauID("byLooseCombinedIsolationDeltaBetaCorr3Hits"  ));
@@ -347,10 +347,10 @@ void TausNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
         nBranches_->tau_againstMuonLooseMVA                        .push_back(muTau.tauID("againstMuonLooseMVA"			      ));
         nBranches_->tau_againstMuonMediumMVA                       .push_back(muTau.tauID("againstMuonMediumMVA"  		      ));
         nBranches_->tau_againstMuonTightMVA                        .push_back(muTau.tauID("againstMuonTightMVA"			      ));         
-      } //doBoostedTaus_
+      
       /*======================================================*/                          
         
-  }  
+  }
         
   nBranches_->tau_N =  taus_->size() +eleTaus_->size()+ muTaus_->size();
   
