@@ -98,6 +98,13 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch( "el_isHeep51Electron"	, &el_isHeep51Electron         );
     tree_->Branch( "el_isLooseElectron"	        , &el_isLooseElectron          );
   
+    tree_->Branch( "el_isVetoElectronBoosted"	, &el_isVetoElectronBoosted           );
+    tree_->Branch( "el_isMediumElectronBoosted"	, &el_isMediumElectronBoosted         );
+    tree_->Branch( "el_isTightElectronBoosted"  , &el_isTightElectronBoosted          );  
+    tree_->Branch( "el_isHeepElectronBoosted"   , &el_isHeepElectronBoosted           );
+    tree_->Branch( "el_isHeep51ElectronBoosted"	, &el_isHeep51ElectronBoosted         );
+    tree_->Branch( "el_isLooseElectronBoosted"  , &el_isLooseElectronBoosted          );
+  
     tree_->Branch( "el_pfRhoCorrRelIso03Boost"  , &el_pfRhoCorrRelIso03Boost   );
     tree_->Branch( "el_pfRhoCorrRelIso04Boost"  , &el_pfRhoCorrRelIso04Boost   );
     tree_->Branch( "el_pfDeltaCorrRelIsoBoost"  , &el_pfDeltaCorrRelIsoBoost   );
@@ -638,6 +645,13 @@ void NtupleBranches::reset( void ){
   el_isHeepElectron.clear();
   el_isHeep51Electron.clear();
   el_isLooseElectron.clear();
+  el_isVetoElectronBoosted.clear();
+  el_isMediumElectronBoosted.clear();
+  el_isTightElectronBoosted.clear();
+  el_isHeepElectronBoosted.clear();
+  el_isHeep51ElectronBoosted.clear();
+  el_isLooseElectronBoosted.clear();
+
   el_pfRhoCorrRelIso03Boost.clear();
   el_pfRhoCorrRelIso04Boost.clear();
   el_pfDeltaCorrRelIsoBoost.clear();

@@ -73,7 +73,15 @@ bool TriggersNtuplizer::findTrigger( std::string trigName ){
        trigName.find("Ele23_CaloIdL_TrackIdL_IsoVL") != std::string::npos ||
        trigName.find("Ele32_eta2p1_WP75_Gsf") != std::string::npos ||
        trigName.find("Ele105_CaloIdVT_GsfTrkIdT") != std::string::npos ||
-       trigName.find("Ele115_CaloIdVT_GsfTrkIdT") != std::string::npos       
+       trigName.find("Ele115_CaloIdVT_GsfTrkIdT") != std::string::npos ||
+       trigName.find("HLT_Ele22_eta2p1_WPLoose_Gsf_LooseIsoPFTau20") != std::string::npos ||
+       trigName.find("HLT_Ele27_eta2p1_WPLoose_Gsf_DoubleMediumIsoPFTau35") != std::string::npos ||
+       trigName.find("HLT_Ele27_eta2p1_WPLoose_Gsf_LooseIsoPFTau20") != std::string::npos ||
+       trigName.find("HLT_IsoMu16_eta2p1_MET30_JetIDCleaned_LooseIsoPFTau50") != std::string::npos ||
+       trigName.find("HLT_IsoMu17_eta2p1_LooseIsoPFTau20") != std::string::npos ||
+       trigName.find("HLT_IsoMu17_eta2p1_MediumIsoPFTau") != std::string::npos ||
+       trigName.find("HLT_IsoMu20_eta2p1_LooseIsoPFTau20") != std::string::npos ||
+       trigName.find("HLT_LooseIsoPFTau50") != std::string::npos
    ) return true;
    else
      return false;
@@ -304,7 +312,7 @@ void TriggersNtuplizer::fillBranches( edm::Event const & event, const edm::Event
 //Trigger HLT_L2Mu40_NoVertex_3Sta_NoBPTX3BX_NoHalo_v1
 //Trigger HLT_LooseIsoPFTau50_Trk30_eta2p1_v1
 //Trigger HLT_LooseIsoPFTau50_Trk30_eta2p1_MET120_v1
-//Trigger HLT_LooseIsoPFTau50_Trk30_eta2p1_MET80_v1
+//Trigger HLT_LooseIsoPTFau50_Trk30_eta2p1_MET80_v1
 //Trigger HLT_Mu17_Mu8_DZ_v1
 //Trigger HLT_Mu17_TkMu8_DZ_v1
 //Trigger HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_v1
