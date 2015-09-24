@@ -172,9 +172,9 @@ void METsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
     //const float rawPt	= met.shiftedPt(pat::MET::NoShift, pat::MET::Raw);
     //const float rawPhi  = met.shiftedPhi(pat::MET::NoShift, pat::MET::Raw);
     //const float rawSumEt= met.shiftedSumEt(pat::MET::NoShift, pat::MET::Raw);
-    const float rawPt	 = met.shiftedPt(pat::MET::METUncertainty::NoShift, pat::MET::METUncertaintyLevel::Raw);
-    const float rawPhi   = met.shiftedPhi(pat::MET::METUncertainty::NoShift, pat::MET::METUncertaintyLevel::Raw);
-    const float rawSumEt = met.shiftedSumEt(pat::MET::METUncertainty::NoShift, pat::MET::METUncertaintyLevel::Raw);
+    const float rawPt	 = met.uncorPt();//met.shiftedPt(pat::MET::METUncertainty::NoShift, pat::MET::METUncertaintyLevel::Raw);
+    const float rawPhi   = met.uncorPhi();//met.shiftedPhi(pat::MET::METUncertainty::NoShift, pat::MET::METUncertaintyLevel::Raw);
+    const float rawSumEt = met.uncorSumEt();//met.shiftedSumEt(pat::MET::METUncertainty::NoShift, pat::MET::METUncertaintyLevel::Raw);
     
     TVector2 rawMET_;
     rawMET_.SetMagPhi (rawPt, rawPhi );
