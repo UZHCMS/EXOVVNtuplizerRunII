@@ -20,7 +20,7 @@ options = VarParsing.VarParsing ('analysis')
 options.maxEvents = -1
 
 #data file
-options.inputFiles = 'file:/shome/jngadiub/EXOVVAnalysisRunII/CMSSW_7_4_7_patch2/src/EXOVVNtuplizerRunII/Ntuplizer/test/SingleMuonTestMINIAOD.root'
+options.inputFiles = '/store/data/Run2015D/SingleMuon/MINIAOD/PromptReco-v3/000/256/728/00000/3ABED78F-455F-E511-B394-02163E011CE5.root'
 #mc file
 #options.inputFiles = 'file:/shome/jngadiub/EXOVVAnalysisRunII/CMSSW_7_4_7_patch2/src/EXOVVNtuplizerRunII/Ntuplizer/test/RSGravToWWToLNQQ_kMpl01_M-1000_TuneCUETP8M1_13TeV-pythia8.root'
 
@@ -42,17 +42,18 @@ process.source = cms.Source("PoolSource",
 
 
 #! Add AK8 gen jet collection with pruned and softdrop mass
-addAK8GenJets = True
+addAK8GenJets = False
 # run flags
-runOnMC = True
-runOnAOD = False #do not switch it on since the step does not work for the moment
+runOnMC = False
 useJSON = False
-JSONfile = 'goldenJSON_PromptReco.txt'
+JSONfile = 'json_DCSONLY_Run2015D.txt'
+#JSONfile = 'goldenJSON_PromptReco.txt'
 #JSONfile = 'goldenJSON_reMiniAOD.txt'
-doGenParticles = True
-doGenJets = True
-doGenEvent = True
-doPileUp = True
+bunchSpacing = 25
+doGenParticles = False
+doGenJets = False
+doGenEvent = False
+doPileUp = False
 doElectrons = True
 doMuons = True
 doTaus = False
@@ -76,17 +77,17 @@ doSemileptonicTausBoosted = False #doTausBoosted
 
 #! To recluster and add AK8 Higgs tagging and softdrop subjet b-tagging (both need to be simoultaneously true or false, if not you will have issues with your softdrop subjets!)
 #If you use the softdrop subjets from the slimmedJetsAK8 collection, only CSV seems to be available?
-doAK8reclustering = True
+doAK8reclustering = False
 doAK8softdropReclustering = False
 if doAK8reclustering == True: doAK8softdropReclustering = True
-doBtagging = True #doHbbtag
+doBtagging = False #doHbbtag
 
 #! To add pruned jet and pruned subjet collection (not in MINIAOD)
-doAK8prunedReclustering = True
+doAK8prunedReclustering = False
 
-doAK10trimmedReclustering = True
+doAK10trimmedReclustering = False
 
-doAK8PuppiReclustering = True
+doAK8PuppiReclustering = False
 
 # To corr jets on the fly if the JEC in the MC have been changed.
 # NB: this flag corrects the pruned/softdrop jets as well. We should probably add a second flag.
@@ -96,7 +97,7 @@ getJECfromDBfile = False # If not yet in global tag, but db file available
 
 #! To recluster MET with new corrections
 doMETReclustering = False
-corrMETonTheFly = True #If you recluster the MET there is no need for re-correcting. Use it only if you run on default miniAOD met collection.
+corrMETonTheFly = False #If you recluster the MET there is no need for re-correcting. Use it only if you run on default miniAOD met collection.
 
 # ####### Logger ##########
 process.load("FWCore.MessageLogger.MessageLogger_cfi")
@@ -119,16 +120,6 @@ if runOnMC:
 elif not(runOnMC):
    process.GlobalTag = GlobalTag(process.GlobalTag, '74X_dataRun2_v2')
    
-######## to run the miniaod step but it doesnt not work! ##########
-if not(runOnMC) and runOnAOD:
-  from SLHCUpgradeSimulations.Configuration.postLS1Customs import customisePostLS1_50ns 
-  process = customisePostLS1_50ns(process)
-  from FWCore.ParameterSet.Utilities import convertToUnscheduled
-  process=convertToUnscheduled(process)
-  process.load('Configuration.StandardSequences.PAT_cff')
-  from PhysicsTools.PatAlgos.slimming.miniAOD_tools import miniAOD_customizeAllData 
-  process = miniAOD_customizeAllData(process)
-
 ######### read JSON file for data ##########					                                                             
 if not(runOnMC) and useJSON:
 
@@ -644,63 +635,68 @@ jecLevelsAK4chs = []
 jecLevelsAK4 = []
 jecLevelsAK8Puppi = []
 
+JECprefix = "Summer15_50nsV5"
+if bunchSpacing == 25:
+   JECprefix = "Summer15_25nsV2"
+
 if corrJetsOnTheFly:
    if runOnMC:
      jecLevelsAK8chs = [
-     	 'JEC/Summer15_50nsV5_MC_L1FastJet_AK8PFchs.txt', #JEC for 74X
-     	 'JEC/Summer15_50nsV5_MC_L2Relative_AK8PFchs.txt',
-     	 'JEC/Summer15_50nsV5_MC_L3Absolute_AK8PFchs.txt'
+     	 'JEC/%s_MC_L1FastJet_AK8PFchs.txt'%(JECprefix), #JEC for 74X
+     	 'JEC/%s_MC_L2Relative_AK8PFchs.txt'%(JECprefix),
+     	 'JEC/%s_MC_L3Absolute_AK8PFchs.txt'%(JECprefix)
        ]
      jecLevelsAK8Groomedchs = [
-     	 'JEC/Summer15_50nsV5_MC_L2Relative_AK8PFchs.txt',
-     	 'JEC/Summer15_50nsV5_MC_L3Absolute_AK8PFchs.txt'
+     	 'JEC/%s_MC_L2Relative_AK8PFchs.txt'%(JECprefix),
+     	 'JEC/%s_MC_L3Absolute_AK8PFchs.txt'%(JECprefix)
        ]
      jecLevelsAK8Puppi = [
-     	 'JEC/Summer15_50nsV5_MC_L2Relative_AK8PFPuppi.txt',
-     	 'JEC/Summer15_50nsV5_MC_L3Absolute_AK8PFPuppi.txt'
+     	 'JEC/%s_MC_L2Relative_AK8PFPuppi.txt'%(JECprefix),
+     	 'JEC/%s_MC_L3Absolute_AK8PFPuppi.txt'%(JECprefix)
        ]
      jecLevelsAK4chs = [
-     	 'JEC/Summer15_50nsV5_MC_L1FastJet_AK4PFchs.txt',
-     	 'JEC/Summer15_50nsV5_MC_L2Relative_AK4PFchs.txt',
-     	 'JEC/Summer15_50nsV5_MC_L3Absolute_AK4PFchs.txt'
+     	 'JEC/%s_MC_L1FastJet_AK4PFchs.txt'%(JECprefix),
+     	 'JEC/%s_MC_L2Relative_AK4PFchs.txt'%(JECprefix),
+     	 'JEC/%s_MC_L3Absolute_AK4PFchs.txt'%(JECprefix)
        ]
    else:
      jecLevelsAK8chs = [
-     	 'JEC/Summer15_50nsV5_DATA_L1FastJet_AK8PFchs.txt', #JEC for 74X
-     	 'JEC/Summer15_50nsV5_DATA_L2Relative_AK8PFchs.txt',
-     	 'JEC/Summer15_50nsV5_DATA_L3Absolute_AK8PFchs.txt',
-	 'JEC/Summer15_50nsV5_DATA_L2L3Residual_AK8PFchs.txt'
+     	 'JEC/%s_DATA_L1FastJet_AK8PFchs.txt'%(JECprefix), #JEC for 74X
+     	 'JEC/%s_DATA_L2Relative_AK8PFchs.txt'%(JECprefix),
+     	 'JEC/%s_DATA_L3Absolute_AK8PFchs.txt'%(JECprefix),
+	 'JEC/%s_DATA_L2L3Residual_AK8PFchs.txt'%(JECprefix)
        ]
      jecLevelsAK8Groomedchs = [
-     	 'JEC/Summer15_50nsV5_DATA_L2Relative_AK8PFchs.txt',
-     	 'JEC/Summer15_50nsV5_DATA_L3Absolute_AK8PFchs.txt',
-	 'JEC/Summer15_50nsV5_DATA_L2L3Residual_AK8PFchs.txt'
+     	 'JEC/%s_DATA_L2Relative_AK8PFchs.txt'%(JECprefix),
+     	 'JEC/%s_DATA_L3Absolute_AK8PFchs.txt'%(JECprefix),
+	 'JEC/%s_DATA_L2L3Residual_AK8PFchs.txt'%(JECprefix)
        ]
      jecLevelsAK8Puppi = [
-     	 'JEC/Summer15_50nsV5_DATA_L2Relative_AK8PFPuppi.txt',
-     	 'JEC/Summer15_50nsV5_DATA_L3Absolute_AK8PFPuppi.txt'
-	 'JEC/Summer15_50nsV5_DATA_L2L3Residual_AK8PFPuppi.txt'
+     	 'JEC/%s_DATA_L2Relative_AK8PFPuppi.txt'%(JECprefix),
+     	 'JEC/%s_DATA_L3Absolute_AK8PFPuppi.txt'%(JECprefix),
+	 'JEC/%s_DATA_L2L3Residual_AK8PFPuppi.txt'%(JECprefix)
        ]
      jecLevelsAK4chs = [
-     	 'JEC/Summer15_50nsV5_DATA_L1FastJet_AK4PFchs.txt',
-     	 'JEC/Summer15_50nsV5_DATA_L2Relative_AK4PFchs.txt',
-     	 'JEC/Summer15_50nsV5_DATA_L3Absolute_AK4PFchs.txt',
-	 'JEC/Summer15_50nsV5_DATA_L2L3Residual_AK4PFchs.txt'
+     	 'JEC/%s_DATA_L1FastJet_AK4PFchs.txt'%(JECprefix),
+     	 'JEC/%s_DATA_L2Relative_AK4PFchs.txt'%(JECprefix),
+     	 'JEC/%s_DATA_L3Absolute_AK4PFchs.txt'%(JECprefix),
+	 'JEC/%s_DATA_L2L3Residual_AK4PFchs.txt'%(JECprefix)
        ]   
 if corrMETonTheFly:  
    if runOnMC:
      jecLevelsAK4 = [				       
-     	 'JEC/Summer15_50nsV5_MC_L1FastJet_AK4PF.txt',  
-     	 'JEC/Summer15_50nsV5_MC_L2Relative_AK4PF.txt', 
-     	 'JEC/Summer15_50nsV5_MC_L3Absolute_AK4PF.txt'  
+     	 'JEC/%s_MC_L1FastJet_AK4PF.txt'%(JECprefix),  
+     	 'JEC/%s_MC_L2Relative_AK4PF.txt'%(JECprefix), 
+     	 'JEC/%s_MC_L3Absolute_AK4PF.txt'%(JECprefix)  
        ]
    else:       					       
      jecLevelsAK4 = [
-     	 'JEC/Summer15_50nsV5_DATA_L1FastJet_AK4PF.txt',
-     	 'JEC/Summer15_50nsV5_DATA_L2Relative_AK4PF.txt',
-     	 'JEC/Summer15_50nsV5_DATA_L3Absolute_AK4PF.txt',
-	 'JEC/Summer15_50nsV5_DATA_L2L3Residual_AK4PF.txt'
-       ]				    
+     	 'JEC/%s_DATA_L1FastJet_AK4PF.txt'%(JECprefix),
+     	 'JEC/%s_DATA_L2Relative_AK4PF.txt'%(JECprefix),
+     	 'JEC/%s_DATA_L3Absolute_AK4PF.txt'%(JECprefix),
+	 'JEC/%s_DATA_L2L3Residual_AK4PF.txt'%(JECprefix)
+       ]	
+      			    
 #from PhysicsTools.SelectorUtils.pfJetIDSelector_cfi import pfJetIDSelector
 #process.goodSlimmedJets = cms.EDFilter("PFJetIDSelectionFunctorFilter",
 #                        filterParams = pfJetIDSelector.clone(),
