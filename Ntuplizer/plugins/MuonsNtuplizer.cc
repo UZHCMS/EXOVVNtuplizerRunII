@@ -6,12 +6,15 @@
 MuonsNtuplizer::MuonsNtuplizer( edm::EDGetTokenT<pat::MuonCollection>    muonToken   , 
                                 edm::EDGetTokenT<reco::VertexCollection> verticeToken, 
 				edm::EDGetTokenT<double>                 rhoToken    , 
-				NtupleBranches* nBranches )
+				edm::EDGetTokenT<pat::TauCollection>     mutauToken  ,
+				NtupleBranches* nBranches,
+				std::map< std::string, bool >& runFlags  )
 	: CandidateNtuplizer( nBranches    )
 	, muonToken_	    ( muonToken    )
 	, verticeToken_     ( verticeToken )
 	, rhoToken_	    ( rhoToken     )
-	   
+	, mutauToken_       ( mutauToken   )  
+	, doBoostedTaus_    ( runFlags["doBoostedTaus"]  )
 {
 }
 
@@ -29,35 +32,69 @@ float MuonPFIso(pat::Muon muon, bool highpt){
   float sumPhotonEt = muon.pfIsolationR04().sumPhotonEt;
   float sumPUPt = muon.pfIsolationR04().sumPUPt;
   float iso = (sumChargedHadronPt + std::max( 0. ,sumNeutralHadronEt + sumPhotonEt - 0.5 * sumPUPt));// / muon.pt()
-  //  if(highpt){
-  //     reco::TrackRef cktTrack = (muon::tevOptimized(muon, 200, 17., 40., 0.25)).first;
-  //     iso = (sumChargedHadronPt+ std::max ( 0. , sumNeutralHadronEt + sumPhotonEt - 0.5* sumPUPt ) )/cktTrack->pt();
-  //   }
+ 
   return iso;
 }
 
-//===================================================================================================================
-float MuonCorrPFIso(pat::Muon muon, bool highpt){
 
-  float sumChargedHadronPt = muon.userIsolation(pat::PfChargedHadronIso);//pfIsolationR04().sumChargedHadronPt;
-  float sumNeutralHadronEt = muon.userIsolation(pat::PfNeutralHadronIso);//pfIsolationR04().sumNeutralHadronEt;
-  float sumPhotonEt = muon.userIsolation(pat::PfGammaIso);//pfIsolationR04().sumPhotonEt;
-  float sumPUPt = muon.userIsolation(pat::User2Iso);//pfIsolationR04().sumPUPt;
-  float iso = (sumChargedHadronPt+ std::max( 0., sumNeutralHadronEt + sumPhotonEt - 0.5 * sumPUPt ));// /muon.pt()
-  // if(highpt){ 
-  //     reco::TrackRef cktTrack = (muon::tevOptimized(muon, 200, 17., 40., 0.25)).first;
-  //     iso = (sumChargedHadronPt+ std::max(0., sumNeutralHadronEt + sumPhotonEt - 0.5 * sumPUPt))/cktTrack->pt();
-  //   }
+
+
+//===================================================================================================================
+float MuonCorrPFIso(pat::Muon muon, bool highpt, edm::Handle<pat::TauCollection>  taus_){
+  double TauSumChargedHadronPt = 0.;
+  double TauSumNeutralHadronEt = 0.;
+  double TauSumPhotonEt        = 0.;
+  double dRmin = 0.4;
+  pat::TauRef matchedTau;
+  size_t numTaus = taus_->size();
+  for(size_t tauIndex = 0; tauIndex < numTaus; ++tauIndex){
+	pat::TauRef tau(taus_, tauIndex);
+	double dR = reco::deltaR(muon.eta(), muon.phi(), tau->eta(), tau->phi());
+	if ( dR < dRmin &&
+		tau->pt()>20 && 
+		fabs(tau->eta())<2.4 && 
+		tau->tauID("decayModeFindingNewDMs")>0.5 && 
+		tau->tauID("againstMuonLoose")>0.5 && 
+		tau->tauID("againstElectronLoose")>0.5 && 
+		tau->tauID("byVLooseIsolationMVA3newDMwoLT")>0.5) {
+		  matchedTau = tau;
+		  dRmin = dR;
+	}
+  }
+  if(matchedTau.isNonnull()){
+	for(size_t Ind1=0; Ind1<matchedTau->signalChargedHadrCands().size(); Ind1++){
+	  double dRConst = reco::deltaR(muon.eta(), muon.phi(), matchedTau->signalChargedHadrCands()[Ind1]->eta(), matchedTau->signalChargedHadrCands()[Ind1]->phi());
+	  if (dRConst <0.4)    	TauSumChargedHadronPt = TauSumChargedHadronPt + matchedTau->signalChargedHadrCands()[Ind1]->pt();
+	}
+	for(size_t Ind2=0; Ind2<matchedTau->signalNeutrHadrCands().size(); Ind2++){
+	  double dRConst = reco::deltaR(muon.eta(), muon.phi(), matchedTau->signalNeutrHadrCands()[Ind2]->eta(), matchedTau->signalNeutrHadrCands()[Ind2]->phi()); 
+	  if (dRConst <0.4)  	TauSumNeutralHadronEt = TauSumNeutralHadronEt + matchedTau->signalNeutrHadrCands()[Ind2]->pt();
+	}
+	for(size_t Ind3=0; Ind3<matchedTau->signalGammaCands().size(); Ind3++){
+	  double dRConst = reco::deltaR(muon.eta(), muon.phi(), matchedTau->signalGammaCands()[Ind3]->eta(), matchedTau->signalGammaCands()[Ind3]->phi()); 
+	  if (dRConst <0.4)  	TauSumPhotonEt = TauSumPhotonEt + matchedTau->signalGammaCands()[Ind3]->pt();
+	}
+  }
+  float sumChargedHadronPt = std::max(0., muon.pfIsolationR04().sumChargedHadronPt-TauSumChargedHadronPt);
+  float sumNeutralEt       = std::max(0., muon.pfIsolationR04().sumNeutralHadronEt-TauSumNeutralHadronEt+muon.pfIsolationR04().sumPhotonEt-TauSumPhotonEt);
+  
+  float sumPUPt            = muon.pfIsolationR04().sumPUPt;
+  float iso = (sumChargedHadronPt+ std::max(0., sumNeutralEt - 0.5 * sumPUPt));
   return iso;
+ 
+  
 }
   
 //===================================================================================================================
 void MuonsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetup& iSetup ){
+  // bool doTausBoosted = event.getByToken( tauInputToken_ , taus_ ); 
 
   event.getByToken(muonToken_	, muons_    ); 
   event.getByToken(verticeToken_, vertices_ ); 
   event.getByToken(rhoToken_	, rho_      );
-  
+  event.getByToken(mutauToken_   , taus_    );  
+
+
   // Find the first vertex in the collection that passes good quality criteria
   // reco::VertexCollection::const_iterator firstGoodVertex = vertices_->end();
    reco::VertexCollection::const_iterator firstGoodVertex = vertices_->begin();
@@ -150,7 +187,7 @@ void MuonsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSet
     nBranches_->mu_neutralHadIsoBoost    .push_back(mu.userIsolation(pat::PfNeutralHadronIso));
     nBranches_->mu_chargedHadIsoBoost    .push_back(mu.userIsolation(pat::PfChargedHadronIso));
     nBranches_->mu_SemileptonicPFIso	  .push_back(MuonPFIso(mu,true));  
-    nBranches_->mu_SemileptonicCorrPFIso .push_back(MuonCorrPFIso(mu,true));
+    if (doBoostedTaus_)  nBranches_->mu_SemileptonicCorrPFIso .push_back(MuonCorrPFIso(mu,true, taus_));
 
     /*=======================*/
 

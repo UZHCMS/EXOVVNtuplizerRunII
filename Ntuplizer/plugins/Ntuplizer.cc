@@ -83,7 +83,7 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
   runFlags["doTriggerObjects"] = iConfig.getParameter<bool>("doTriggerObjects");
   runFlags["doHltFilters"] = iConfig.getParameter<bool>("doHltFilters");
   runFlags["doMissingEt"] = iConfig.getParameter<bool>("doMissingEt");
-  runFlags["doTausBoosted"] = iConfig.getParameter<bool>("doTausBoosted");
+  runFlags["doBoostedTaus"] = iConfig.getParameter<bool>("doBoostedTaus");
   runFlags["doPrunedSubjets"] = iConfig.getParameter<bool>("doPrunedSubjets");
   runFlags["doTrimming"] = iConfig.getParameter<bool>("doTrimming");
   runFlags["doPuppi"] = iConfig.getParameter<bool>("doPuppi");
@@ -179,7 +179,9 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
     nTuplizers_["muons"]= new MuonsNtuplizer( muonToken_   , 
                                               vtxToken_    , 
 					      rhoToken_    , 
-					      nBranches_  );
+					      tauMuTauToken_ ,
+					      nBranches_  ,
+					      runFlags     );
   }
 						      
   if (runFlags["doElectrons"]) {
@@ -196,7 +198,9 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
                                                        vtxToken_     , 
 						       rhoToken_     , 
 						       eleIdTokens   , 
-						       nBranches_   );
+						       tauEleTauToken_ ,
+						       nBranches_  ,
+						       runFlags     );
   }    
 						      
   if (runFlags["doVertices"]) {

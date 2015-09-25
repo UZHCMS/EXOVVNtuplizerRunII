@@ -22,7 +22,7 @@ options.maxEvents = -1
 #data file
 options.inputFiles = '/store/data/Run2015D/SingleMuon/MINIAOD/PromptReco-v3/000/256/728/00000/3ABED78F-455F-E511-B394-02163E011CE5.root'
 #mc file
-#options.inputFiles = 'file:/shome/jngadiub/EXOVVAnalysisRunII/CMSSW_7_4_7_patch2/src/EXOVVNtuplizerRunII/Ntuplizer/test/RSGravToWWToLNQQ_kMpl01_M-1000_TuneCUETP8M1_13TeV-pythia8.root'
+options.inputFiles = 'root://t3dcachedb.psi.ch:1094/pnfs/psi.ch/cms/trivcat/store/user/cgalloni/RSGravitonToZZToLLQQ_kMpl01_M_2500_Tune4C_13TeV_pythia8/MiniAOD_TauBoosted/miniAOD_999.root'
 
 options.parseArguments()
 
@@ -625,6 +625,10 @@ if doMETReclustering:
 
 if doSemileptonicTausBoosted:
   TAUS = "slimmedTaus"
+  MUTAUS = "slimmedTausMuTau"
+  ELETAUS = "slimmedTausBoosted"     
+else:
+  TAUS = "slimmedTaus"
   MUTAUS = "slimmedTaus"
   ELETAUS = "slimmedTaus"     
 
@@ -728,7 +732,7 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     doPrunedSubjets = cms.bool(doAK8prunedReclustering),
     doTrimming = cms.bool(doAK10trimmedReclustering),
     doPuppi = cms.bool(doAK8PuppiReclustering),
-    doTausBoosted = cms.bool(doSemileptonicTausBoosted),
+    doBoostedTaus = cms.bool(doSemileptonicTausBoosted),
     vertices = cms.InputTag("offlineSlimmedPrimaryVertices"),
     muons = cms.InputTag("slimmedMuons"),
     electrons = cms.InputTag("slimmedElectrons"),
