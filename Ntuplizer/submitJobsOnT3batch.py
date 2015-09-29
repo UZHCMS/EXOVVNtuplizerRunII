@@ -333,8 +333,8 @@ def checkJobsOutputFromXML(xmlfile):
       filelist = inputFiles.split(",")
       count = 0
       for f in filelist:
-         #tfile = ROOT.TFile.Open("dcap://t3se01.psi.ch:22125//pnfs/psi.ch/cms/trivcat"+f)
-         tfile = ROOT.TFile.Open(f)
+         if f.find('xrootd') == -1: tfile = ROOT.TFile.Open("dcap://t3se01.psi.ch:22125//pnfs/psi.ch/cms/trivcat"+f)
+         else: tfile = ROOT.TFile.Open(f)
 	 ttree = ROOT.TTree()
          tfile.GetObject("Events",ttree)
          count+=ttree.GetEntries()
