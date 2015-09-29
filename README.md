@@ -59,3 +59,37 @@ doAK8prunedReclustering = False
 doMETReclustering = False
 ```
 If you want to use Higgs tagger the first three flags must all be set to True.
+
+## installation instructions for CMSSW_7_4_12
+
+```
+export SCRAM_ARCH=slc6_amd64_gcc491
+cmsrel CMSSW_7_4_12_patch2
+cd CMSSW_7_4_12_patch2/src
+cmsenv
+git cms-init
+```
+
+For the boosted Hbb tagger (will add a lot of packages that will take a long time to compile):
+```
+git remote add btv-cmssw https://github.com/cms-btv-pog/cmssw.git
+git fetch btv-cmssw
+git cms-merge-topic -u cms-btv-pog:BoostedDoubleSVTagger-WithWeightFiles-v2_from-CMSSW_7_4_1
+```
+
+getting the code:
+```
+git cms-addpkg RecoJets/Configuration
+export GITUSER=`git config user.github`
+echo "Your github username has been set to \"$GITUSER\""
+git clone https://github.com/$GITUSER/EXOVVNtuplizerRunII
+cd EXOVVNtuplizerRunII
+git remote add UZHCMS https://github.com/UZHCMS/EXOVVNtuplizerRunII
+git fetch UZHCMS
+git checkout -b CMSSW_7_4_12 UZHCMS/CMSSW_7_4_12
+cd $CMSSW_BASE/src
+scram b distclean
+scram b -j8
+cd EXOVVNtuplizerRunII/Ntuplizer
+```
+

@@ -44,7 +44,7 @@ process.source = cms.Source("PoolSource",
 addAK8GenJets = False
 # run flags
 runOnMC = False
-useJSON = False
+useJSON = True
 JSONfile = 'json_DCSONLY_Run2015D.txt'
 #JSONfile = 'goldenJSON_PromptReco.txt'
 #JSONfile = 'goldenJSON_reMiniAOD.txt'
@@ -90,13 +90,13 @@ doAK8PuppiReclustering = False
 
 # To corr jets on the fly if the JEC in the MC have been changed.
 # NB: this flag corrects the pruned/softdrop jets as well. We should probably add a second flag.
-corrJetsOnTheFly = False
+corrJetsOnTheFly = True
 
 getJECfromDBfile = False # If not yet in global tag, but db file available
 
 #! To recluster MET with new corrections
 doMETReclustering = False
-corrMETonTheFly = False #If you recluster the MET there is no need for re-correcting. Use it only if you run on default miniAOD met collection.
+corrMETonTheFly = True #If you recluster the MET there is no need for re-correcting. Use it only if you run on default miniAOD met collection.
 
 # ####### Logger ##########
 process.load("FWCore.MessageLogger.MessageLogger_cfi")
