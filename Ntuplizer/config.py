@@ -582,12 +582,12 @@ for idmod in my_id_modules:
 ##___________________________HCAL_Noise_Filter________________________________||
 if doHltFilters and not(runOnMC):
   process.load('CommonTools.RecoAlgos.HBHENoiseFilterResultProducer_cfi')
-  process.HBHENoiseFilterResultProducer.minZeros = cms.int32(99999)
+  #process.HBHENoiseFilterResultProducer.minZeros = cms.int32(99999)
 
-  process.ApplyBaselineHBHENoiseFilter = cms.EDFilter('BooleanFlagFilter',
-     inputLabel = cms.InputTag('HBHENoiseFilterResultProducer','HBHENoiseFilterResultRun2Loose'),
-     reverseDecision = cms.bool(False)
-  )
+  #process.ApplyBaselineHBHENoiseFilter = cms.EDFilter('BooleanFlagFilter',
+  #   inputLabel = cms.InputTag('HBHENoiseFilterResultProducer','HBHENoiseFilterResultRun2Loose'),
+  #   reverseDecision = cms.bool(False)
+  #)
 
 ####### Ntuplizer initialization ##########
 jetsAK8 = "slimmedJetsAK8"
@@ -776,7 +776,8 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     ## Noise Filters ###################################
     # defined here: https://github.com/cms-sw/cmssw/blob/CMSSW_7_4_X/PhysicsTools/PatAlgos/python/slimming/metFilterPaths_cff.py
     noiseFilterSelection_HBHENoiseFilter = cms.string('Flag_HBHENoiseFilter'),
-    noiseFilterSelection_EarlyRunsHBHENoiseFilter = cms.InputTag("HBHENoiseFilterResultProducer", "HBHENoiseFilterResultRun2Loose"),
+    noiseFilterSelection_HBHENoiseFilterLoose = cms.InputTag("HBHENoiseFilterResultProducer", "HBHENoiseFilterResultRun2Loose"),
+    noiseFilterSelection_HBHENoiseFilterTight = cms.InputTag("HBHENoiseFilterResultProducer", "HBHENoiseFilterResultRun2Tight"),
     noiseFilterSelection_CSCTightHaloFilter = cms.string('Flag_CSCTightHaloFilter'),
     noiseFilterSelection_hcalLaserEventFilter = cms.string('Flag_hcalLaserEventFilter'),
     noiseFilterSelection_EcalDeadCellTriggerPrimitiveFilter = cms.string('Flag_EcalDeadCellTriggerPrimitiveFilter'),

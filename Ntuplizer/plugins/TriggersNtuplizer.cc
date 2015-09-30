@@ -10,7 +10,8 @@ TriggersNtuplizer::TriggersNtuplizer( edm::EDGetTokenT<edm::TriggerResults> toke
                                       edm::EDGetTokenT<pat::TriggerObjectStandAloneCollection> object,
 				      edm::EDGetTokenT<pat::PackedTriggerPrescales> prescale, 
 				      edm::EDGetTokenT<edm::TriggerResults> noiseFilterToken, 
-				      edm::EDGetTokenT<bool> HBHENoiseFilterResultToken,
+				      edm::EDGetTokenT<bool> HBHENoiseFilterLooseResultToken,
+				      edm::EDGetTokenT<bool> HBHENoiseFilterTightResultToken,
 				      NtupleBranches* nBranches, 
 				      const edm::ParameterSet& iConfig, 
 				      std::map< std::string, bool >& runFlags)
@@ -19,7 +20,8 @@ TriggersNtuplizer::TriggersNtuplizer( edm::EDGetTokenT<edm::TriggerResults> toke
    , triggerObjects_	( object )	
    , triggerPrescales_	( prescale )
    , noiseFilterToken_	( noiseFilterToken )
-   , EarlyRunsHBHENoiseFilter_Selector_ ( HBHENoiseFilterResultToken )		
+   , HBHENoiseFilterLoose_Selector_ ( HBHENoiseFilterLooseResultToken )		
+   , HBHENoiseFilterTight_Selector_ ( HBHENoiseFilterTightResultToken )		
    , doTriggerDecisions_( runFlags["doTriggerDecisions"] )
    , doTriggerObjects_	( runFlags["doTriggerObjects"] )
    , doHltFilters_	( runFlags["doHltFilters"] )
@@ -200,15 +202,25 @@ void TriggersNtuplizer::fillBranches( edm::Event const & event, const edm::Event
     
     if( !runOnMC_ /*&& event.id().run() < 251585*/ ){
 
-       edm::Handle<bool> HBHENoiseFilterResultHandle;
-       event.getByToken(EarlyRunsHBHENoiseFilter_Selector_, HBHENoiseFilterResultHandle);
-       bool HBHENoiseFilterResult = *HBHENoiseFilterResultHandle;
-       if (!HBHENoiseFilterResultHandle.isValid()) {
+       edm::Handle<bool> HBHENoiseFilterLooseResultHandle;
+       event.getByToken(HBHENoiseFilterLoose_Selector_, HBHENoiseFilterLooseResultHandle);
+       bool HBHENoiseFilterLooseResult = *HBHENoiseFilterLooseResultHandle;
+       if (!HBHENoiseFilterLooseResultHandle.isValid()) {
          LogDebug("") << "CaloTowerAnalyzer: Could not find HBHENoiseFilterResult" << std::endl;
        }
  
-       HcalNoiseFilter = HBHENoiseFilterResult;
-             
+       HcalNoiseFilter = HBHENoiseFilterLooseResult;
+       nBranches_->passFilter_HBHELoose_ = HBHENoiseFilterLooseResult;
+
+       edm::Handle<bool> HBHENoiseFilterTightResultHandle;
+       event.getByToken(HBHENoiseFilterTight_Selector_, HBHENoiseFilterTightResultHandle);
+       bool HBHENoiseFilterTightResult = *HBHENoiseFilterTightResultHandle;
+       if (!HBHENoiseFilterTightResultHandle.isValid()) {
+         LogDebug("") << "CaloTowerAnalyzer: Could not find HBHENoiseFilterResult" << std::endl;
+       }
+ 
+       nBranches_->passFilter_HBHETight_ = HBHENoiseFilterTightResult;
+                    
     }
     
     nBranches_->passFilter_HBHE_ = HcalNoiseFilter; // TO BE USED

@@ -58,7 +58,8 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
 	triggerObjects_	      	    (consumes<pat::TriggerObjectStandAloneCollection>(iConfig.getParameter<edm::InputTag>("triggerobjects"))),
 	triggerPrescales_     	    (consumes<pat::PackedTriggerPrescales>(iConfig.getParameter<edm::InputTag>("triggerprescales"))),
         noiseFilterToken_     	    (consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("noiseFilter"))),
-        HBHENoiseFilterResultToken_ (consumes<bool>(iConfig.getParameter<edm::InputTag>("noiseFilterSelection_EarlyRunsHBHENoiseFilter")))
+        HBHENoiseFilterLooseResultToken_(consumes<bool>(iConfig.getParameter<edm::InputTag>("noiseFilterSelection_HBHENoiseFilterLoose"))),
+        HBHENoiseFilterTightResultToken_(consumes<bool>(iConfig.getParameter<edm::InputTag>("noiseFilterSelection_HBHENoiseFilterTight")))
 
 {
 
@@ -213,7 +214,8 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
                                                      triggerObjects_, 
 						     triggerPrescales_,
                                                      noiseFilterToken_,
-						     HBHENoiseFilterResultToken_,
+						     HBHENoiseFilterLooseResultToken_,
+						     HBHENoiseFilterTightResultToken_,
 						     nBranches_,
                                                      iConfig,
                                                      runFlags );
