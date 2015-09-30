@@ -12,7 +12,8 @@ public:
                      edm::EDGetTokenT<pat::TriggerObjectStandAloneCollection> object, 
 		     edm::EDGetTokenT<pat::PackedTriggerPrescales> prescale, 
 		     edm::EDGetTokenT<edm::TriggerResults> noiseFilterToken,
-		     edm::EDGetTokenT<bool> HBHENoiseFilterResultToken, 
+		     edm::EDGetTokenT<bool> HBHENoiseFilterLooseResultToken, 
+		     edm::EDGetTokenT<bool> HBHENoiseFilterTightResultToken, 
 		     NtupleBranches* nBranches, 
 		     const edm::ParameterSet& iConfig, 
 		     std::map< std::string, bool >& runFlags );
@@ -34,7 +35,8 @@ private:
    
    // HLT Noise Filter names
    std::string HBHENoiseFilter_Selector_;
-   edm::EDGetTokenT<bool> EarlyRunsHBHENoiseFilter_Selector_;
+   edm::EDGetTokenT<bool> HBHENoiseFilterLoose_Selector_;
+   edm::EDGetTokenT<bool> HBHENoiseFilterTight_Selector_;
    std::string CSCHaloNoiseFilter_Selector_;
    std::string HCALlaserNoiseFilter_Selector_;
    std::string ECALDeadCellNoiseFilter_Selector_;
