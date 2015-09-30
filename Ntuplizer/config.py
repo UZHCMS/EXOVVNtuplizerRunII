@@ -17,10 +17,10 @@ import FWCore.ParameterSet.VarParsing as VarParsing
 
 options = VarParsing.VarParsing ('analysis')
 
-options.maxEvents = -1
+options.maxEvents = 2000
 
 #data file
-options.inputFiles = '/store/data/Run2015D/SingleMuon/MINIAOD/PromptReco-v3/000/256/728/00000/3ABED78F-455F-E511-B394-02163E011CE5.root'
+options.inputFiles = '/store/data/Run2015D/JetHT/MINIAOD/PromptReco-v3/000/256/630/00000/86ACFECD-3C5F-E511-B8F2-02163E014374.root'
 #mc file
 #options.inputFiles = 'root://t3dcachedb.psi.ch:1094/pnfs/psi.ch/cms/trivcat/store/user/cgalloni/RSGravitonToZZToLLQQ_kMpl01_M_2500_Tune4C_13TeV_pythia8/MiniAOD_TauBoosted/miniAOD_999.root'
 
@@ -46,7 +46,7 @@ addAK8GenJets = False
 # run flags
 runOnMC = False
 useJSON = True
-JSONfile = 'json_DCSONLY_Run2015D.txt'
+JSONfile = 'Cert_246908-256869_13TeV_PromptReco_Collisions15_25ns_JSON.txt'
 #JSONfile = 'goldenJSON_PromptReco.txt'
 #JSONfile = 'goldenJSON_reMiniAOD.txt'
 bunchSpacing = 25
@@ -585,7 +585,7 @@ if doHltFilters and not(runOnMC):
   process.HBHENoiseFilterResultProducer.minZeros = cms.int32(99999)
 
   process.ApplyBaselineHBHENoiseFilter = cms.EDFilter('BooleanFlagFilter',
-     inputLabel = cms.InputTag('HBHENoiseFilterResultProducer','HBHENoiseFilterResult'),
+     inputLabel = cms.InputTag('HBHENoiseFilterResultProducer','HBHENoiseFilterResultRun2Loose'),
      reverseDecision = cms.bool(False)
   )
 
@@ -776,7 +776,7 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     ## Noise Filters ###################################
     # defined here: https://github.com/cms-sw/cmssw/blob/CMSSW_7_4_X/PhysicsTools/PatAlgos/python/slimming/metFilterPaths_cff.py
     noiseFilterSelection_HBHENoiseFilter = cms.string('Flag_HBHENoiseFilter'),
-    noiseFilterSelection_EarlyRunsHBHENoiseFilter = cms.InputTag("HBHENoiseFilterResultProducer", "HBHENoiseFilterResult"),
+    noiseFilterSelection_EarlyRunsHBHENoiseFilter = cms.InputTag("HBHENoiseFilterResultProducer", "HBHENoiseFilterResultRun2Loose"),
     noiseFilterSelection_CSCTightHaloFilter = cms.string('Flag_CSCTightHaloFilter'),
     noiseFilterSelection_hcalLaserEventFilter = cms.string('Flag_hcalLaserEventFilter'),
     noiseFilterSelection_EcalDeadCellTriggerPrimitiveFilter = cms.string('Flag_EcalDeadCellTriggerPrimitiveFilter'),
