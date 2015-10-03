@@ -47,18 +47,21 @@ cd EXOVVNtuplizerRunII/Ntuplizer
 
 to run:
 ```
-cmsRun config.py
+cmsRun config_data.py (for data)
+cmsRun config_MC.py (for MC)
 ```
 
-to recluster jets and MET, the following flags can be changed:
+the flags for running on data can be changed in python/ntuplizerOptions_data_cfi.py
+the flags for running on MC can be changed in python/ntuplizerOptions_MC_cfi.py
+
+to recluster jets and MET, or to add the Higgs-tagger the following flags can be changed:
 ```
-doAK8reclustering = False
-doAK8softdropReclustering = False
-doBtagging = False
-doAK8prunedReclustering = False
-doMETReclustering = False
+config["DOAK8RECLUSTERING"] = False
+config["DOHBBTAG"] = False
+config["DOAK8PRUNEDRECLUSTERING"] = False
+config["DOMETRECLUSTERING"] = False
 ```
-If you want to use Higgs tagger the first three flags must all be set to True.
+If you want to use Higgs tagger the first two flags must all be set to True.
 
 ## installation instructions for CMSSW_7_4_12
 
