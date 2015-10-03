@@ -21,5 +21,11 @@ void GenEventNtuplizer::fillBranches( edm::Event const & event, const edm::Event
   
   nBranches_->genWeight=geneventInfo_->weight();
   nBranches_->qScale=geneventInfo_->qScale();
+  nBranches_->PDF_x.push_back((geneventInfo_->pdf()->x).first);
+  nBranches_->PDF_x.push_back((geneventInfo_->pdf()->x).second);
+  nBranches_->PDF_xPDF.push_back((geneventInfo_->pdf()->xPDF).first);
+  nBranches_->PDF_xPDF.push_back((geneventInfo_->pdf()->xPDF).second);
+  nBranches_->PDF_id.push_back((geneventInfo_->pdf()->id).first);
+  nBranches_->PDF_id.push_back((geneventInfo_->pdf()->id).second);
 
 }
