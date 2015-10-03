@@ -536,7 +536,7 @@ for idmod in my_id_modules:
 ####### Event filters ###########
 
 ##___________________________HCAL_Noise_Filter________________________________||
-if config["DOTRIGGEROBJECTS"] and not(config["RUNONMC"]):
+if config["DOHLTFILTERS"] and not(config["RUNONMC"]):
   process.load('CommonTools.RecoAlgos.HBHENoiseFilterResultProducer_cfi')
   process.HBHENoiseFilterResultProducer.minZeros = cms.int32(99999)
 
@@ -682,7 +682,7 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     doVertices	      = cms.bool(config["DOVERTICES"]),
     doTriggerDecisions= cms.bool(config["DOTRIGGERDECISIONS"]),
     doTriggerObjects  = cms.bool(config["DOTRIGGEROBJECTS"]),
-    doHltFilters      = cms.bool(config["DOTRIGGEROBJECTS"]),
+    doHltFilters      = cms.bool(config["DOHLTFILTERS"]),
     doMissingEt       = cms.bool(config["DOMISSINGET"]),
     doHbbTag	      = cms.bool(config["DOHBBTAG"]),
     doPrunedSubjets   = cms.bool(config["DOAK8PRUNEDRECLUSTERING"]),
@@ -752,6 +752,6 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
 
 ####### Final path ##########
 process.p = cms.Path()
-if config["DOTRIGGEROBJECTS"] and (not config["RUNONMC"]) and config["JSONFILE"].find('reMiniAOD') != -1:
+if config["DOHLTFILTERS"] and (not config["RUNONMC"]) and config["JSONFILE"].find('reMiniAOD') != -1:
   process.p += process.HBHENoiseFilterResultProducer
 process.p += process.ntuplizer
