@@ -23,7 +23,7 @@ options.maxEvents = -1
 
 #options.inputFiles = 'file:/shome/jngadiub/EXOVVAnalysisRunII/CMSSW_7_4_7_patch2/src/EXOVVNtuplizerRunII/Ntuplizer/test/SingleMuonTestMINIAOD.root'
 #mc file
-options.inputFiles = 'root://t3dcachedb.psi.ch:1094/pnfs/psi.ch/cms/trivcat/store/user/cgalloni/RSGravitonToZZToLLQQ_kMpl01_M_2500_Tune4C_13TeV_pythia8/MiniAOD_TauBoosted/miniAOD_999.root'
+options.inputFiles = 'file:/shome/thaarres/EXOVVAnalysisRunII/CMSSW_7_4_7_patch2/src/EXOVVNtuplizerRunII/Ntuplizer/DYJets.root'
 options.parseArguments()
 
 process.options  = cms.untracked.PSet( 
@@ -76,17 +76,17 @@ doSemileptonicTausBoosted = False #doTausBoosted
 
 #! To recluster and add AK8 Higgs tagging and softdrop subjet b-tagging (both need to be simoultaneously true or false, if not you will have issues with your softdrop subjets!)
 #If you use the softdrop subjets from the slimmedJetsAK8 collection, only CSV seems to be available?
-doAK8reclustering = True
+doAK8reclustering = False
 doAK8softdropReclustering = False
 if doAK8reclustering == True: doAK8softdropReclustering = True
-doBtagging = True #doHbbtag
+doBtagging = False #doHbbtag
 
 #! To add pruned jet and pruned subjet collection (not in MINIAOD)
-doAK8prunedReclustering = True
+doAK8prunedReclustering = False
 
-doAK10trimmedReclustering = True
+doAK10trimmedReclustering = False
 
-doAK8PuppiReclustering = True
+doAK8PuppiReclustering = False
 
 # To corr jets on the fly if the JEC in the MC have been changed.
 # NB: this flag corrects the pruned/softdrop jets as well. We should probably add a second flag.
