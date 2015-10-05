@@ -71,7 +71,10 @@ public:
   float                           lheNj                ;
   float                           genWeight            ;
   float                           qScale               ;
-        
+  std::vector<int  >              PDF_id               ;
+  std::vector<float>              PDF_x                ;
+  std::vector<float>              PDF_xPDF             ;
+          
   /** electrons */
   int 	                      el_N		         ;
   std::vector<int>  	      el_pdgId	                 ;
