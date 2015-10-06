@@ -21,7 +21,8 @@ import FWCore.ParameterSet.VarParsing as VarParsing
 options = VarParsing.VarParsing ('analysis')
 
 
-options.maxEvents = 2000
+options.maxEvents = -1
+
 
 #data file
 
@@ -102,6 +103,7 @@ process.chs = cms.EDFilter("CandPtrSelector",
 )
 
 process.ak4PFJetsCHS = ak4PFJetsCHS.clone( src = 'chs' )
+process.ak4PFJetsCHS.doAreaFastjet = True
 process.ak8CHSJets = ak8PFJetsCHS.clone( src = 'chs', jetPtMin = fatjet_ptmin )
 
 process.NjettinessAK8 = cms.EDProducer("NjettinessAdder",
@@ -471,51 +473,46 @@ if config["DOAK8PUPPIRECLUSTERING"]:
 # ###### Recluster MET ##########
 if config["DOMETRECLUSTERING"]:
 
-  from RecoJets.JetProducers.ak4PFJets_cfi import ak4PFJets
-  process.ak4PFJets = ak4PFJets.clone(src = "packedPFCandidates")
-  process.ak4PFJets.doAreaFastjet = True
-
   from PhysicsTools.PatAlgos.tools.jetTools import switchJetCollection
-  switchJetCollection(process,
-            jetSource = cms.InputTag('ak4PFJets'),
-  		      jetCorrections = ('AK4PF', ['L1FastJet', 'L2Relative', 'L3Absolute'], ''),
-  		      genParticles = cms.InputTag('prunedGenParticles'),
-  		      pvSource = cms.InputTag('offlineSlimmedPrimaryVertices')
-  		      )
-  		      
-  from RecoMET.METProducers.PFMET_cfi import pfMet
-  process.pfMet = pfMet.clone(src = "packedPFCandidates")
-  process.pfMet.calculateSignificance = False
-  		      
-  from JetMETCorrections.Type1MET.correctedMet_cff import pfMetT1
-  process.pfMetT1 = pfMetT1.clone()
-
-  from PhysicsTools.PatUtils.tools.runType1PFMEtUncertainties import runType1PFMEtUncertainties
-  runType1PFMEtUncertainties(process,addToPatDefaultSequence=False,
-            jetCollection="selectedPatJets",
-  			     photonCollection="slimmedPhotons",
-  			     electronCollection="slimmedElectrons",
-  			     muonCollection="slimmedMuons",
-  			     tauCollection="slimmedTaus",
-  			     makeType1p2corrPFMEt=False)
-  			     
-  process.patMETs.addGenMET  = cms.bool(False)
+		  
+  if config["RUNONMC"]:
+     switchJetCollection(process,
+                         jetSource = cms.InputTag('ak4PFJetsCHS'),
+		         jetCorrections = ('AK4PFchs', ['L1FastJet', 'L2Relative', 'L3Absolute'], ''),
+		         genParticles = cms.InputTag('prunedGenParticles'),
+		         pvSource = cms.InputTag('offlineSlimmedPrimaryVertices')
+     )
+  else:
+     switchJetCollection(process,
+                         jetSource = cms.InputTag('ak4PFJetsCHS'),
+		         jetCorrections = ('AK4PFchs', ['L1FastJet', 'L2Relative', 'L3Absolute','L2L3Residual'], ''),
+		         genParticles = cms.InputTag('prunedGenParticles'),
+		         pvSource = cms.InputTag('offlineSlimmedPrimaryVertices')
+     )
+		  		
   process.patJets.addGenJetMatch = cms.bool(False) 
   process.patJets.addGenPartonMatch = cms.bool(False) 
   process.patJets.addPartonJetMatch = cms.bool(False) 
+  
+  from PhysicsTools.PatUtils.tools.runMETCorrectionsAndUncertainties import runMetCorAndUncFromMiniAOD
 
-  from PhysicsTools.PatAlgos.tools.metTools import addMETCollection
-  addMETCollection(process, labelName = 'patMET'    , metSource = 'pfMetT1'  ) # T1
-  addMETCollection(process, labelName = 'patPFMet'  , metSource = 'pfMet'    ) # RAW
-  		       
-  from PhysicsTools.PatAlgos.slimming.slimmedMETs_cfi import slimmedMETs
-  process.mySlimmedMETs = slimmedMETs.clone()
-  process.mySlimmedMETs.src = cms.InputTag("patMET")
-  process.mySlimmedMETs.rawUncertainties   = cms.InputTag("patPFMet") # only central value
-  process.mySlimmedMETs.type1Uncertainties = cms.InputTag("patPFMetT1")    # only central value for now
-  del process.mySlimmedMETs.type1p2Uncertainties # not available
-  del process.mySlimmedMETs.caloMET
-        
+  #default configuration for miniAOD reprocessing, change the isData flag to run on data
+  #for a full met computation, remove the pfCandColl input
+  runMetCorAndUncFromMiniAOD(process,
+                           isData=not(config["RUNONMC"]),
+                           )
+  process.patPFMetT1T2Corr.type1JetPtThreshold = cms.double(15.0)
+  process.patPFMetT2Corr.type1JetPtThreshold = cms.double(15.0)
+  process.slimmedMETs.t01Variation = cms.InputTag("slimmedMETs","","RECO")
+  
+  if config["RUNONMC"]:
+    process.patPFMetT1T2Corr.jetCorrLabelRes = cms.InputTag("L3Absolute")
+    process.patPFMetT1T2SmearCorr.jetCorrLabelRes = cms.InputTag("L3Absolute")
+    process.patPFMetT2Corr.jetCorrLabelRes = cms.InputTag("L3Absolute")
+    process.patPFMetT2SmearCorr.jetCorrLabelRes = cms.InputTag("L3Absolute")
+    process.shiftedPatJetEnDown.jetCorrLabelUpToL3Res = cms.InputTag("ak4PFCHSL1FastL2L3Corrector")
+    process.shiftedPatJetEnUp.jetCorrLabelUpToL3Res = cms.InputTag("ak4PFCHSL1FastL2L3Corrector")
+			           
 ####### Adding HEEP id ##########
 
 from PhysicsTools.SelectorUtils.tools.vid_id_tools import *
@@ -549,6 +546,7 @@ if config["DOHLTFILTERS"] and not(config["RUNONMC"]):
   #)
 
 ####### Ntuplizer initialization ##########
+jetsAK4 = "slimmedJets"
 jetsAK8 = "slimmedJetsAK8"
 jetsAK8pruned = ""
 # jetsAK8softdrop = "slimmedJetsAK8PFCHSSoftDropPacked" (if you want to add this subjet collection, changes need to be made in plugins/JetsNtuplizer.cc! Not needed to obtain subjets)
@@ -559,6 +557,8 @@ jetsAK8PuppiPruned = ""
 jetsAK8PuppiSoftdrop = ""  
 
 METS = "slimmedMETs"
+if config["DOMETRECLUSTERING"]:
+  jetsAK4 = "selectedPatJets"
 
 TAUS = ""
 MUTAUS = ""
@@ -578,9 +578,6 @@ if config["DOAK10TRIMMEDRECLUSTERING"]:
   jetsAK10trimmed = "patJetsAk10CHSJetsTrimmed"
 if config["DOAK8PUPPIRECLUSTERING"]:  
   jetsAK8Puppi = "patJetsAk8PuppiJets"  
-   
-if config["DOMETRECLUSTERING"]:
-  METS = "mySlimmedMETs"
 
 if config["DOSEMILEPTONICTAUSBOOSTED"]:
   TAUS = "slimmedTaus"
@@ -597,6 +594,7 @@ jecLevelsAK8Groomedchs = []
 jecLevelsAK4chs = []
 jecLevelsAK4 = []
 jecLevelsAK8Puppi = []
+jecLevelsForMET = []
 
 JECprefix = "Summer15_50nsV5"
 if config["BUNCHSPACING"] == 25 and config["RUNONMC"]:
@@ -649,17 +647,17 @@ if config["CORRJETSONTHEFLY"]:
        ]   
 if config["CORRMETONTHEFLY"]:  
    if config["RUNONMC"]:
-     jecLevelsAK4 = [				       
-     	 'JEC/%s_MC_L1FastJet_AK4PF.txt'%(JECprefix),  
-     	 'JEC/%s_MC_L2Relative_AK4PF.txt'%(JECprefix), 
-     	 'JEC/%s_MC_L3Absolute_AK4PF.txt'%(JECprefix)  
+     jecLevelsForMET = [				       
+     	 'JEC/%s_MC_L1FastJet_AK4PFchs.txt'%(JECprefix),
+     	 'JEC/%s_MC_L2Relative_AK4PFchs.txt'%(JECprefix),
+     	 'JEC/%s_MC_L3Absolute_AK4PFchs.txt'%(JECprefix)
        ]
    else:       					       
-     jecLevelsAK4 = [
-     	 'JEC/%s_DATA_L1FastJet_AK4PF.txt'%(JECprefix),
-     	 'JEC/%s_DATA_L2Relative_AK4PF.txt'%(JECprefix),
-     	 'JEC/%s_DATA_L3Absolute_AK4PF.txt'%(JECprefix),
-	 'JEC/%s_DATA_L2L3Residual_AK4PF.txt'%(JECprefix)
+     jecLevelsForMET = [
+     	 'JEC/%s_DATA_L1FastJet_AK4PFchs.txt'%(JECprefix),
+     	 'JEC/%s_DATA_L2Relative_AK4PFchs.txt'%(JECprefix),
+     	 'JEC/%s_DATA_L3Absolute_AK4PFchs.txt'%(JECprefix),
+	 'JEC/%s_DATA_L2L3Residual_AK4PFchs.txt'%(JECprefix)
        ]	
       			    
 #from PhysicsTools.SelectorUtils.pfJetIDSelector_cfi import pfJetIDSelector
@@ -706,7 +704,7 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     taus = cms.InputTag(TAUS),
     tausMuTau = cms.InputTag(MUTAUS),
     tausEleTau = cms.InputTag(ELETAUS),
-    jets = cms.InputTag("slimmedJets"),
+    jets = cms.InputTag(jetsAK4),
     fatjets = cms.InputTag(jetsAK8),
     prunedjets = cms.InputTag(jetsAK8pruned),
     softdropjets = cms.InputTag(jetsAK8softdrop),
@@ -718,8 +716,8 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     mets = cms.InputTag(METS),
     corrMetPx = cms.string("+0.1166 + 0.0200*Nvtx"),
     corrMetPy = cms.string("+0.2764 - 0.1280*Nvtx"),
-    jecAK4forMetCorr = cms.vstring( jecLevelsAK4 ),
-    jetsForMetCorr = cms.InputTag("slimmedJets"),
+    jecAK4forMetCorr = cms.vstring( jecLevelsForMET ),
+    jetsForMetCorr = cms.InputTag(jetsAK4),
     rho = cms.InputTag("fixedGridRhoFastjetAll"),
     genparticles = cms.InputTag("prunedGenParticles"),
     PUInfo = cms.InputTag("addPileupInfo"),
