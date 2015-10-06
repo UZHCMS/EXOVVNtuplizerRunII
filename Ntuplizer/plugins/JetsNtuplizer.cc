@@ -200,9 +200,6 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
       //double corrDown = corr * ( 1 - fabs(jecAK4Unc_->getUncertainty(-1)) );
 
       if (corr*uncorrJet.pt() < 20) continue;
-      
-     
-
       nBranches_->jetAK4_N++;
 
       nBranches_->jetAK4_pt     	    .push_back(corr*uncorrJet.pt());      
@@ -572,6 +569,11 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
         // nBranches_->subjetAK8_pruned_tche.push_back(vPrunedSubjettche      );
         // nBranches_->subjetAK8_pruned_jp.push_back(vPrunedSubjetjp          );
         // nBranches_->subjetAK8_pruned_jbp.push_back(vPrunedSubjetjbp        );
+        if(isMC){
+          nBranches_->subjetAK8_pruned_partonFlavour.push_back(vPrunedSubjetPartonFlavour);
+          nBranches_->subjetAK8_pruned_hadronFlavour.push_back(vPrunedSubjetHadronFlavour);          
+        }
+        
       }
       else{
         nBranches_->jetAK8_pruned_massCorr.push_back(-99);

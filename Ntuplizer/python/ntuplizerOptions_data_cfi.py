@@ -4,7 +4,7 @@ config = dict()
 
 #--------- general ----------#
 config["RUNONMC"] = False
-config["USEJSON"] = True
+config["USEJSON"] = False
 config["JSONFILE"] = "goldenJSON_PromptReco.txt"
 config["BUNCHSPACING"] = 25
 
@@ -38,5 +38,5 @@ config["DOMETRECLUSTERING"] = False
 
 #--------- JEC ----------#
 config["CORRJETSONTHEFLY"] = True
-config["CORRMETONTHEFLY"] = True 
+config["CORRMETONTHEFLY"] = True
 config["GETJECFROMDBFILE"] = False # If not yet in global tag, but db file available
