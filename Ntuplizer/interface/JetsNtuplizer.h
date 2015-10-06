@@ -66,6 +66,7 @@ public:
   bool doAK4Jets_;
   bool doAK8Jets_;
   bool doPruning_;
+  bool runOnMC_;
   
 };
 
