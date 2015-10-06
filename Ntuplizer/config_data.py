@@ -10,8 +10,8 @@ process.load('Configuration.Geometry.GeometryRecoDB_cff')
 process.TFileService = cms.Service("TFileService",
                                     fileName = cms.string('flatTuple.root')
                                    )
-
 from EXOVVNtuplizerRunII.Ntuplizer.ntuplizerOptions_data_cfi import config
+
 				   
 ####### Config parser ##########
 
@@ -19,7 +19,9 @@ import FWCore.ParameterSet.VarParsing as VarParsing
 
 options = VarParsing.VarParsing ('analysis')
 
+
 options.maxEvents = -1
+
 
 #data file
 options.inputFiles = '/store/data/Run2015D/SingleMuon/MINIAOD/PromptReco-v3/000/256/728/00000/3ABED78F-455F-E511-B394-02163E011CE5.root'
@@ -42,6 +44,7 @@ process.source = cms.Source("PoolSource",
 
 ######## Sequence settings ##########
 
+
 # https://twiki.cern.ch/twiki/bin/view/CMSPublic/WorkBookMiniAOD2015#ETmiss_filters
 # For the RunIISpring15DR74 MC campaing, the process name in PAT.
 # For Run2015B PromptReco Data, the process name is RECO.
@@ -54,6 +57,7 @@ if config["RUNONMC"] or config["JSONFILE"].find('reMiniAOD') != -1:
 #If you use the softdrop subjets from the slimmedJetsAK8 collection, only CSV seems to be available?
 doAK8softdropReclustering = False
 if config["DOAK8RECLUSTERING"] == True: doAK8softdropReclustering = True
+
 
 # ####### Logger ##########
 process.load("FWCore.MessageLogger.MessageLogger_cfi")
@@ -115,7 +119,6 @@ process.NjettinessAK8 = cms.EDProducer("NjettinessAdder",
              nPass = cms.int32(-999),       # not used by default
              akAxesR0 = cms.double(-999.0)      # not used by default
              )
-
 if config["DOAK10TRIMMEDRECLUSTERING"]:			       
   process.ECFAK10 = cms.EDProducer("ECFAdder",
              src = cms.InputTag("ak10CHSJetsTrimmed"),
@@ -138,6 +141,7 @@ if config["DOAK8PUPPIRECLUSTERING"]:
   process.ak8PuppiJetsPruned = ak8PFJetsCHSPruned.clone( src = 'puppi', jetPtMin = fatjet_ptmin )
   process.ak8PuppiJetsSoftDrop = ak8PFJetsCHSSoftDrop.clone( src = 'puppi', jetPtMin = fatjet_ptmin, beta = betapar  )
   process.NjettinessAK8Puppi = process.NjettinessAK8.clone( src = 'ak8PuppiJets' )
+
 
 if config["GETJECFROMDBFILE"]:
   process.load("CondCore.DBCommon.CondDBCommon_cfi")
@@ -165,6 +169,7 @@ if config["GETJECFROMDBFILE"]:
             ),
             connect = cms.string('sqlite:JEC/Summer15_50nsV5_MC.db')
             )
+
   if not config["RUNONMC"]:
     process.jec.toGet[0].tag =  cms.string('JetCorrectorParametersCollection_Summer15_50nsV5_DATA_AK4PFchs')
     process.jec.toGet[1].tag =  cms.string('JetCorrectorParametersCollection_Summer15_50nsV5_DATA_AK8PFchs')
@@ -343,6 +348,7 @@ def recluster_addBtagging(process, fatjets_name, groomed_jets_name, jetcorr_labe
 	)
 
     # patify groomed fat jets, with b-tagging:
+
     if config["RUNONMC"]:
       jetcorr_levels_groomed = cms.vstring(['L2Relative', 'L3Absolute']) # NO L1 corretion for groomed jets
     else:
@@ -531,6 +537,7 @@ for idmod in my_id_modules:
 ####### Event filters ###########
 
 ##___________________________HCAL_Noise_Filter________________________________||
+
 if config["DOHLTFILTERS"] and not(config["RUNONMC"]):
   process.load('CommonTools.RecoAlgos.HBHENoiseFilterResultProducer_cfi')
   process.HBHENoiseFilterResultProducer.minZeros = cms.int32(99999)

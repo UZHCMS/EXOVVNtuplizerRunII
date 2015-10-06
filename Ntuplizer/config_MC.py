@@ -19,12 +19,17 @@ import FWCore.ParameterSet.VarParsing as VarParsing
 
 options = VarParsing.VarParsing ('analysis')
 
+
 options.maxEvents = -1
 
+
 #data file
+
 #options.inputFiles = '/store/data/Run2015D/SingleMuon/MINIAOD/PromptReco-v3/000/256/728/00000/3ABED78F-455F-E511-B394-02163E011CE5.root'
 #mc file
+
 options.inputFiles = 'file:/shome/jngadiub/EXOVVAnalysisRunII/CMSSW_7_4_7_patch2/src/EXOVVNtuplizerRunII/Ntuplizer/test/RSGravToWWToLNQQ_kMpl01_M-1000_TuneCUETP8M1_13TeV-pythia8.root'
+
 
 options.parseArguments()
 
@@ -52,6 +57,7 @@ if config["RUNONMC"] or config["JSONFILE"].find('reMiniAOD') != -1:
   
 #! To recluster and add AK8 Higgs tagging and softdrop subjet b-tagging (both need to be simoultaneously true or false, if not you will have issues with your softdrop subjets!)
 #If you use the softdrop subjets from the slimmedJetsAK8 collection, only CSV seems to be available?
+
 doAK8softdropReclustering = False
 if config["DOAK8RECLUSTERING"] == True: doAK8softdropReclustering = True
 
