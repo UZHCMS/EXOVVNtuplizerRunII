@@ -194,7 +194,6 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
 
       if (corr*uncorrJet.pt() < 20) continue;
     
-
       nBranches_->jetAK4_N++;
 
       nBranches_->jetAK4_pt     	    .push_back(corr*uncorrJet.pt());      
