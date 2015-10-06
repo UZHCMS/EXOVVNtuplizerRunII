@@ -341,7 +341,11 @@ public:
   std::vector<float>              jetAK4_nemf          ;
   std::vector<float>              jetAK4_cemf          ;
   std::vector<int>                jetAK4_charge	       ;
-  std::vector<int>                jetAK4_flavour       ;
+  std::vector<int>                jetAK4_partonFlavour ;
+  std::vector<int>                jetAK4_hadronFlavour ;
+  std::vector<int>                jetAK4_genParton_pdgID;
+  std::vector<int>                jetAK4_nbHadrons     ;
+  std::vector<int>                jetAK4_ncHadrons     ;
 //std::vector<float>              jetAK4_ssv           ;
   std::vector<float>              jetAK4_cisv 	       ;         
 //std::vector<float>  	          jetAK4_tchp 	       ;
@@ -388,7 +392,11 @@ public:
   std::vector<float>          jetAK8_nemf          ;
   std::vector<float>          jetAK8_cemf          ;
   std::vector<int  >  	      jetAK8_charge	       ;
-  std::vector<int  >  	      jetAK8_flavour	       ;
+  std::vector<int>            jetAK8_partonFlavour ;
+  std::vector<int>            jetAK8_hadronFlavour ;
+  std::vector<int>            jetAK8_genParton_pdgID;
+  std::vector<int>            jetAK8_nbHadrons     ;
+  std::vector<int>            jetAK8_ncHadrons     ;
   std::vector<float>  	      jetAK8_Hbbtag 	       ;
 //std::vector<float>          jetAK8_ssv               ;
   std::vector<float>  	      jetAK8_csv 	       ;    
@@ -465,7 +473,8 @@ public:
   std::vector< std::vector<float> > subjetAK8_pruned_phi    ;
   std::vector< std::vector<float> > subjetAK8_pruned_e      ;
   std::vector< std::vector<int  > > subjetAK8_pruned_charge ;
-  std::vector< std::vector<int  > > subjetAK8_pruned_flavour;
+  std::vector< std::vector<int  > > subjetAK8_pruned_partonFlavour;
+  std::vector< std::vector<int  > > subjetAK8_pruned_hadronFlavour;
 //std::vector< std::vector<float> > subjetAK8_pruned_ssv    ;
   std::vector< std::vector<float> > subjetAK8_pruned_csv    ;    
 //std::vector< std::vector<float> > subjetAK8_pruned_tchp   ;
@@ -481,7 +490,8 @@ public:
   std::vector< std::vector<float> > subjetAK8_softdrop_phi    ;
   std::vector< std::vector<float> > subjetAK8_softdrop_e      ;
   std::vector< std::vector<int  > > subjetAK8_softdrop_charge ;
-  std::vector< std::vector<int  > > subjetAK8_softdrop_flavour;
+  std::vector< std::vector<int  > > subjetAK8_softdrop_partonFlavour;
+  std::vector< std::vector<int  > > subjetAK8_softdrop_hadronFlavour;
 //std::vector< std::vector<float> > subjetAK8_softdrop_ssv    ;
   std::vector< std::vector<float> > subjetAK8_softdrop_csv    ;
 //std::vector< std::vector<float> > subjetAK8_softdrop_tchp   ;
