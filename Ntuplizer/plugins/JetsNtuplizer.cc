@@ -243,11 +243,11 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
       nBranches_->jetAK4_vtx3DVal	    .push_back(j.userFloat("vtx3DVal")); 
       nBranches_->jetAK4_vtx3DSig	    .push_back(j.userFloat("vtx3DSig"));
       if(isMC){
-         int genP_pdgId = j.genParton() ? j.genParton()->pdgId() : -99; //det default to -99 when no genParton is found!!!
-          nBranches_->jetAK4_partonFlavour.push_back(j.partonFlavour()); // b,c can be identified by either j.hadronFlavour() (hadron definition) or j.partonFlavour() (physics definition)
-          nBranches_->jetAK4_hadronFlavour.push_back(j.hadronFlavour()); // g,u,d,s can be identified by j.partonFlavour() (physics definition)
-          nBranches_->jetAK4_genParton_pdgID  .push_back(genP_pdgId);
-          nBranches_->jetAK4_nbHadrons         .push_back((j.jetFlavourInfo().getbHadrons()).size()); //gluon splitting to bb can be identified roughly by (j.partonFlavour()==21 &% len(j.jetFlavourInfo().getbHadrons())==2 )
+         int genP_pdgId = j.genParton() ? j.genParton()->pdgId() : -99; // default to -99 when no genParton is found!!!
+          nBranches_->jetAK4_partonFlavour.push_back(j.partonFlavour()); //Algorithmic definition! g,u,d,s can be identified by j.partonFlavour() 
+          nBranches_->jetAK4_hadronFlavour.push_back(j.hadronFlavour()); //Hadron flavour. b,c can be identified by either j.hadronFlavour() (hadron definition) or j.partonFlavour() (parton definition)
+          nBranches_->jetAK4_genParton_pdgID  .push_back(genP_pdgId); //Physics definition! see https://twiki.cern.ch/twiki/bin/view/CMSPublic/WorkBookMiniAOD2015#MC_Truth
+          nBranches_->jetAK4_nbHadrons         .push_back((j.jetFlavourInfo().getbHadrons()).size()); 
           nBranches_->jetAK4_ncHadrons         .push_back((j.jetFlavourInfo().getcHadrons()).size());
         }
 	
