@@ -1,5 +1,6 @@
 #include "../interface/METsNtuplizer.h"
 #include "DataFormats/PatCandidates/interface/MET.h"
+#include "CommonTools/Utils/interface/StringCutObjectSelector.h"
 #include <TFormula.h>
 
 //===================================================================================================================        
@@ -114,9 +115,11 @@ void METsNtuplizer::addTypeICorr( edm::Event const & event ){
    bool skipEM_                    = true; 
    double skipEMfractionThreshold_ = 0.9;
    bool skipMuons_                 = true;
+   std::string skipMuonSelection_string = "isGlobalMuon | isStandAloneMuon";
+   StringCutObjectSelector<reco::Candidate>* skipMuonSelection_ = new StringCutObjectSelector<reco::Candidate>(skipMuonSelection_string,true);
   
    double jetCorrEtaMax_           = 9.9;
-   double type1JetPtThreshold_     = 10.0;
+   double type1JetPtThreshold_     = 15.0;
    
    double corrEx    = 0;
    double corrEy    = 0;
@@ -130,34 +133,39 @@ void METsNtuplizer::addTypeICorr( edm::Event const & event ){
      reco::Candidate::LorentzVector rawJetP4 = jet.correctedP4(0); 
      double corr = getJEC(rawJetP4, jet, jetCorrEtaMax_, jetCorrLabel_);    
          
-     if ( skipMuons_ && jet.muonMultiplicity() != 0 ) {
-		 
-		 for (const pat::Muon &muon : *muons_) {
-			 if( !muon.isGlobalMuon() && !muon.isStandAloneMuon() ) continue;
-			 TLorentzVector muonV; muonV.SetPtEtaPhiE(muon.p4().pt(),muon.p4().eta(),muon.p4().phi(),muon.p4().e());
-			 TLorentzVector jetV; jetV.SetPtEtaPhiE(jet.p4().pt(),jet.p4().eta(),jet.p4().phi(),jet.p4().e());
-			 if( muonV.DeltaR(jetV) < 0.5 ){
-				 reco::Candidate::LorentzVector muonP4 = muon.p4();
-				 rawJetP4 -= muonP4;
-			 }
-		 }
-	 }
-     
+     if ( skipMuons_ ) {
+       const std::vector<reco::CandidatePtr> & cands = jet.daughterPtrVector();
+       for ( std::vector<reco::CandidatePtr>::const_iterator cand = cands.begin();
+             cand != cands.end(); ++cand ) {
+     	 const reco::PFCandidate *pfcand = dynamic_cast<const reco::PFCandidate *>(cand->get());
+     	 const reco::Candidate *mu = (pfcand != 0 ? ( pfcand->muonRef().isNonnull() ? pfcand->muonRef().get() : 0) : cand->get());
+         if ( mu != 0 && (*skipMuonSelection_)(*mu) ) {
+           reco::Candidate::LorentzVector muonP4 = (*cand)->p4();
+           rawJetP4 -= muonP4;
+         }
+       }
+     }
+           
      reco::Candidate::LorentzVector corrJetP4 = corr*rawJetP4;     
- 
+       
      if ( corrJetP4.pt() > type1JetPtThreshold_ ) {
-		 reco::Candidate::LorentzVector tmpP4 = jet.correctedP4(0);
-		 corr = getJECOffset(tmpP4, jet, jetCorrEtaMax_, offsetCorrLabel_);
-		 reco::Candidate::LorentzVector rawJetP4offsetCorr = corr*rawJetP4;
-		 
-		 corrEx    -= (corrJetP4.px() - rawJetP4offsetCorr.px());
-		 corrEy    -= (corrJetP4.py() - rawJetP4offsetCorr.py());
-		 corrSumEt += (corrJetP4.Et() - rawJetP4offsetCorr.Et());
-	 }
+
+	reco::Candidate::LorentzVector tmpP4 = jet.correctedP4(0);
+	corr = getJECOffset(tmpP4, jet, jetCorrEtaMax_, offsetCorrLabel_);
+	reco::Candidate::LorentzVector rawJetP4offsetCorr = corr*rawJetP4;
+	
+	corrEx    -= (corrJetP4.px() - rawJetP4offsetCorr.px());
+	corrEy    -= (corrJetP4.py() - rawJetP4offsetCorr.py());
+	corrSumEt += (corrJetP4.Et() - rawJetP4offsetCorr.Et());
+	
+     }
+     
  }
+ 
  TypeICorrMap_["corrEx"]    = corrEx;
  TypeICorrMap_["corrEy"]    = corrEy;
  TypeICorrMap_["corrSumEt"] = corrSumEt;
+ 
 }
 
 //===================================================================================================================
@@ -205,7 +213,7 @@ void METsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
     nBranches_->MET_sumEt.push_back(sumEtcorr);
     nBranches_->MET_corrPx.push_back(TypeICorrMap_["corrEx"]);
     nBranches_->MET_corrPy.push_back(TypeICorrMap_["corrEy"]); 	  
-
+    
   } 
 		
 }
