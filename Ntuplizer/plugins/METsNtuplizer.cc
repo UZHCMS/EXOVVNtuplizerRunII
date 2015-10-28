@@ -124,15 +124,15 @@ void METsNtuplizer::addTypeICorr( edm::Event const & event ){
    double corrEx    = 0;
    double corrEy    = 0;
    double corrSumEt = 0;
-   
+
    for (const pat::Jet &jet : *jets_) {
-	   
+	     	   
      double emEnergyFraction = jet.chargedEmEnergyFraction() + jet.neutralEmEnergyFraction();
      if ( skipEM_ && emEnergyFraction > skipEMfractionThreshold_ ) continue;
      
      reco::Candidate::LorentzVector rawJetP4 = jet.correctedP4(0); 
      double corr = getJEC(rawJetP4, jet, jetCorrEtaMax_, jetCorrLabel_);    
-         
+              
      if ( skipMuons_ ) {
        const std::vector<reco::CandidatePtr> & cands = jet.daughterPtrVector();
        for ( std::vector<reco::CandidatePtr>::const_iterator cand = cands.begin();
@@ -183,7 +183,7 @@ void METsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
     const float rawPt	 = met.uncorPt();//met.shiftedPt(pat::MET::METUncertainty::NoShift, pat::MET::METUncertaintyLevel::Raw);
     const float rawPhi   = met.uncorPhi();//met.shiftedPhi(pat::MET::METUncertainty::NoShift, pat::MET::METUncertaintyLevel::Raw);
     const float rawSumEt = met.uncorSumEt();//met.shiftedSumEt(pat::MET::METUncertainty::NoShift, pat::MET::METUncertaintyLevel::Raw);
-    
+        
     TVector2 rawMET_;
     rawMET_.SetMagPhi (rawPt, rawPhi );
 

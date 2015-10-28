@@ -20,14 +20,11 @@ import FWCore.ParameterSet.VarParsing as VarParsing
 
 options = VarParsing.VarParsing ('analysis')
 
-
 options.maxEvents = -1
-
 
 #data file
 
-options.inputFiles = '/store/data/Run2015D/JetHT/MINIAOD/PromptReco-v3/000/256/630/00000/86ACFECD-3C5F-E511-B8F2-02163E014374.root'
-
+options.inputFiles = '/store/data/Run2015D/SingleMuon/MINIAOD/05Oct2015-v1/10000/021FD3F0-876F-E511-99D2-0025905A6060.root'
 
 options.parseArguments()
 
@@ -74,11 +71,17 @@ process.MessageLogger.cerr.FwkReport.reportEvery = 1000
 process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_condDBv2_cff')
 from Configuration.AlCa.GlobalTag import GlobalTag
 
-if config["RUNONMC"]:
-   process.GlobalTag = GlobalTag(process.GlobalTag, '74X_mcRun2_asymptotic_v2')
-   # process.GlobalTag = GlobalTag(process.GlobalTag, 'auto:run2_mc')
+GT = ''
+if config["RUNONMC"]: GT = '74X_mcRun2_asymptotic_v2'
 elif not(config["RUNONMC"]):
-   process.GlobalTag = GlobalTag(process.GlobalTag, '74X_dataRun2_v2')
+   GT = '74X_dataRun2_v2'
+   if config["JSONFILE"].find('reMiniAOD') != -1: GT = '74X_dataRun2_reMiniAOD_v0'
+   elif config["JSONFILE"].find('PromptReco-v4') != -1: GT = '74X_dataRun2_Prompt_v4'
+
+print "*************************************** GLOBAL TAG *************************************************" 
+print GT
+print "****************************************************************************************************" 
+process.GlobalTag = GlobalTag(process.GlobalTag, GT)
    
 ######### read JSON file for data ##########					                                                             
 if not(config["RUNONMC"]) and config["USEJSON"]:
@@ -595,6 +598,8 @@ jecLevelsAK4chs = []
 jecLevelsAK4 = []
 jecLevelsAK8Puppi = []
 jecLevelsForMET = []
+jecAK8chsUncFile = "JEC/Summer15_25nsV5_DATA_Uncertainty_AK8PFchs.txt"
+jecAK4chsUncFile = "JEC/Summer15_25nsV5_DATA_Uncertainty_AK4PFchs.txt"
 
 JECprefix = "Summer15_50nsV5"
 if config["BUNCHSPACING"] == 25 and config["RUNONMC"]:
@@ -727,9 +732,11 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     triggerprescales = cms.InputTag("patTrigger"),
     noiseFilter = cms.InputTag('TriggerResults','', hltFiltersProcessName),
     jecAK8chsPayloadNames = cms.vstring( jecLevelsAK8chs ),
+    jecAK8chsUnc = cms.string( jecAK8chsUncFile ),
     jecAK8GroomedchsPayloadNames = cms.vstring( jecLevelsAK8Groomedchs ),
     jecAK8PuppiPayloadNames = cms.vstring( jecLevelsAK8Puppi ),
     jecAK4chsPayloadNames = cms.vstring( jecLevelsAK4chs ),
+    jecAK4chsUnc = cms.string( jecAK4chsUncFile ),
     jecpath = cms.string(''),
     
     ## Noise Filters ###################################

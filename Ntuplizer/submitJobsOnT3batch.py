@@ -423,6 +423,55 @@ if opts.copyfiles:
    jobsdir = getJobsDirs(outdir,jobname)
    user = commands.getoutput("whoami")	
     
+   print ""
+   print "" 
+   print "..... Copying configuration ......" 
+   checkdir = "ls -l " + newdir + "/config"
+   status,cmd_out = commands.getstatusoutput(checkdir)
+   if status: 
+     cmd = "gfal-mkdir srm://t3se01.psi.ch:8443/srm/managerv2?SFN=%s"%(newdir+"/config")
+     #print cmd
+     os.system(cmd)
+   else:
+     cmd = "uberftp t3se01.psi.ch 'ls %s'" %(newdir+"/config")
+     ls_la = commands.getoutput(cmd)
+
+     list_ = []
+     list_.extend(ls_la.split(os.linesep))   
+     dirs = []
+     for a in list_:
+     	b = a.split(" ")
+     	status = os.path.exists(newdir + "/config/" + b[-1:][0].strip('\r'))
+     	if status:
+	   cmd = "gfal-rm srm://t3se01.psi.ch:8443/srm/managerv2?SFN=%s"%(newdir + "/config/" + b[-1:][0].strip('\r'))
+	   #print cmd
+	   os.system(cmd)
+
+   cmd = "lcg-cp -b -D srmv2 " + xmlfile + " srm://t3se01.psi.ch:8443/srm/managerv2?SFN=%s"%(newdir+"/config/"+xmlfile.rsplit("/",1)[1])
+   print cmd  
+   os.system(cmd)    
+   cmd = "lcg-cp -b -D srmv2 " + cmsswdir + "/src/" + cfg + " srm://t3se01.psi.ch:8443/srm/managerv2?SFN=%s"%(newdir+"/config/"+cfg.rsplit("/",1)[1])
+   print cmd  
+   os.system(cmd)
+   f = open(cmsswdir + "/src/" + cfg, 'r')
+   ismc = False
+   for l in f:
+      if l.find("ntuplizerOptions_MC_cfi") != -1: ismc = True
+   f.close()
+   if ismc:
+      cmd = "lcg-cp -b -D srmv2 python/ntuplizerOptions_MC_cfi.py srm://t3se01.psi.ch:8443/srm/managerv2?SFN=%s"%(newdir+"/config/ntuplizerOptions_MC_cfi.py")
+   else:
+      cmd = "lcg-cp -b -D srmv2 python/ntuplizerOptions_data_cfi.py srm://t3se01.psi.ch:8443/srm/managerv2?SFN=%s"%(newdir+"/config/ntuplizerOptions_data_cfi.py")   
+   print cmd   
+   os.system(cmd)
+   cmd = "lcg-cp -b -D srmv2 " + opts.config[0] + " srm://t3se01.psi.ch:8443/srm/managerv2?SFN=%s"%(newdir+"/config/"+opts.config[0].rsplit("/",1)[1])   
+   print cmd
+   os.system(cmd)
+
+   print ""
+   print ""
+   print "..... Copying job files ......" 
+    
    for j in jobsdir:
       jobid = j.rsplit("-",1)[1]
       inputpath = "srm://t3se01.psi.ch:8443/srm/managerv2?SFN="+j+"/"+outfile

@@ -85,8 +85,7 @@ public:
   std::vector<float>  	      el_mass		         ;
   std::vector<float>  	      el_pt		         ;
   std::vector<float>  	      el_et		         ;
-  std::vector<float>  	      el_superCluster_eta	 ;
-  
+  std::vector<float>  	      el_superCluster_eta	 ;  
   std::vector<float>  	      el_pfRhoCorrRelIso03  	 ;
   std::vector<float>  	      el_pfRhoCorrRelIso04  	 ;
   std::vector<float>  	      el_pfDeltaCorrRelIso  	 ;
@@ -95,16 +94,13 @@ public:
   std::vector<float>  	      el_neutralHadIso	     	 ;
   std::vector<float>  	      el_chargedHadIso	     	 ;
   std::vector<float>  	      el_trackIso	         ;            
-
-
   std::vector<float>  	      el_pfRhoCorrRelIso03Boost  ;
   std::vector<float>  	      el_pfRhoCorrRelIso04Boost  ;
   std::vector<float>  	      el_pfDeltaCorrRelIsoBoost  ;
   std::vector<float>  	      el_pfRelIsoBoost  	 ;    
   std::vector<float>  	      el_photonIsoBoost 	 ;
   std::vector<float>  	      el_neutralHadIsoBoost      ;
-  std::vector<float>  	      el_chargedHadIsoBoost      ;
-  
+  std::vector<float>  	      el_chargedHadIsoBoost      ;  
   std::vector<int>	      el_passConversionVeto	 ;
   std::vector<float>          el_full5x5_sigmaIetaIeta	 ;
   std::vector<float>          el_dEtaIn		         ;
@@ -113,10 +109,8 @@ public:
   std::vector<float>          el_relIsoWithDBeta	 ;
   std::vector<float>          el_ooEmooP		 ;
   std::vector<int>	      el_expectedMissingInnerHits;
-
   std::vector<float>          el_d0			 ;
   std::vector<float>          el_dz			 ;
-
   std::vector<float>          el_dr03EcalRecHitSumEt      ;
   std::vector<float>          el_dr03HcalDepth1TowerSumEt ;
   std::vector<float>          el_rho                      ;
@@ -128,24 +122,20 @@ public:
   std::vector<float>          el_dr03TkSumPt              ;
   std::vector<float>          el_superCluster_e           ;
   std::vector<float>          el_hadronicOverEm           ;
-
   std::vector<int>	      el_isVetoElectron	          ;
   std::vector<int>	      el_isMediumElectron	  ;
   std::vector<int>	      el_isTightElectron	  ;    
   std::vector<int  >  	      el_isHeepElectron	          ;
   std::vector<int  >  	      el_isHeep51Electron         ;
-  std::vector<int  >  	      el_isLooseElectron	  ;
- 
+  std::vector<int  >  	      el_isLooseElectron	  ; 
   std::vector<int>	      el_isVetoElectronBoosted	  ;
   std::vector<int>	      el_isMediumElectronBoosted  ;
   std::vector<int>	      el_isTightElectronBoosted	  ;    
   std::vector<int  >  	      el_isHeepElectronBoosted	  ;
   std::vector<int  >  	      el_isHeep51ElectronBoosted  ;
-  std::vector<int  >  	      el_isLooseElectronBoosted	  ;
-  
+  std::vector<int  >  	      el_isLooseElectronBoosted	  ;  
   std::vector<float>  	      el_SemileptonicPFIso 	 ;//  Isolations for semileptonic tau channel  
   std::vector<float>  	      el_SemileptonicCorrPFIso   ;// the simple PF one and the corrected one for the tau presence
-
 
   /** muons */
   int 	                      mu_N		         ;
@@ -155,15 +145,12 @@ public:
   std::vector<float>  	      mu_eta		         ;
   std::vector<float>  	      mu_phi		         ;
   std::vector<float>  	      mu_mass		         ;
-  std::vector<float>  	      mu_pt		         ;
-  
-  
+  std::vector<float>  	      mu_pt		         ;    
   std::vector<int  >          mu_isHighPtMuon		 ;
   std::vector<int  >          mu_isTightMuon		 ;
   std::vector<int  >          mu_isLooseMuon		 ;
   std::vector<int  >          mu_isPFMuon		 ;
-  std::vector<int  >          mu_isSoftMuon		 ; 
-  
+  std::vector<int  >          mu_isSoftMuon		 ;   
   std::vector<float>  	      mu_pfRhoCorrRelIso03  	 ;
   std::vector<float>  	      mu_pfRhoCorrRelIso04  	 ;
   std::vector<float>  	      mu_pfDeltaCorrRelIso  	 ;
@@ -175,23 +162,20 @@ public:
   std::vector<float>          mu_d0			 ;
   std::vector<float>          mu_dz			 ;
   std::vector<float>  	      mu_bestTrack_pt  	         ;
-  std::vector<float>  	      mu_bestTrack_ptErr  	 ;
-    
+  std::vector<float>  	      mu_bestTrack_ptErr  	 ;    
   std::vector<float>  	      mu_pfRhoCorrRelIso03Boost  ;
   std::vector<float>  	      mu_pfRhoCorrRelIso04Boost  ;
   std::vector<float>  	      mu_pfDeltaCorrRelIsoBoost  ;
   std::vector<float>  	      mu_pfRelIsoBoost  	 ;    
   std::vector<float>  	      mu_photonIsoBoost 	 ;
   std::vector<float>  	      mu_neutralHadIsoBoost      ;
-  std::vector<float>  	      mu_chargedHadIsoBoost      ;
-  
+  std::vector<float>  	      mu_chargedHadIsoBoost      ;  
   std::vector<float>  	      mu_normChi2  	         ;
   std::vector<int  >  	      mu_isGlobalMuon	         ;
   std::vector<int  >  	      mu_trackerHits	         ;
   std::vector<int  >  	      mu_matchedStations         ;
   std::vector<int  >  	      mu_pixelHits 	         ;
   std::vector<int  >  	      mu_globalHits	         ;
-
   std::vector<float>  	      mu_SemileptonicPFIso 	 ;//  Isolations for semileptonic tau channel  
   std::vector<float>  	      mu_SemileptonicCorrPFIso   ;// the simple PF one and the corrected one for the tau presence
 
@@ -203,8 +187,7 @@ public:
   std::vector<float>  	      tau_eta		         ;
   std::vector<float>  	      tau_phi		         ;
   std::vector<float>  	      tau_mass		         ;
-  std::vector<float>  	      tau_pt		         ;
-  
+  std::vector<float>  	      tau_pt		         ;  
   std::vector<float>  	      tau_pfRhoCorrRelIso03  	 ;
   std::vector<float>  	      tau_pfRhoCorrRelIso04  	 ;
   std::vector<float>  	      tau_pfDeltaCorrRelIso  	 ;
@@ -213,16 +196,14 @@ public:
   std::vector<float>  	      tau_neutralHadIso	     	 ;
   std::vector<float>  	      tau_chargedHadIso	     	 ;
   std::vector<float>  	      tau_trackIso	         ;
-  std::vector<float>          tau_d0			 ;
-  
+  std::vector<float>          tau_d0			 ;  
   std::vector<float>  	      tau_pfRhoCorrRelIso03Boost ;
   std::vector<float>  	      tau_pfRhoCorrRelIso04Boost ;
   std::vector<float>  	      tau_pfDeltaCorrRelIsoBoost ;
   std::vector<float>  	      tau_pfRelIsoBoost  	 ;    
   std::vector<float>  	      tau_photonIsoBoost 	 ;
   std::vector<float>  	      tau_neutralHadIsoBoost     ;
-  std::vector<float>  	      tau_chargedHadIsoBoost     ;
-  
+  std::vector<float>  	      tau_chargedHadIsoBoost     ;  
   std::vector<int  >  	      tau_TauType	         ;  
   
   /** tau discriminants */
@@ -306,8 +287,6 @@ public:
 
   /** energy density */
   float                             rho;
-
-
     
   /** AK4 jets */
   int                             jetAK4_N             ;
@@ -317,11 +296,10 @@ public:
   std::vector<float>              jetAK4_phi           ;
   std::vector<float>              jetAK4_e             ;
   std::vector<float>              jetAK4_jec           ;
-  //std::vector<float>	      jetAK4_jecUp	       ;
-  //std::vector<float>	      jetAK4_jecDown	       ; 
-  std::vector<bool>              jetAK4_IDLoose        ;
-  std::vector<bool>              jetAK4_IDTight        ;
-
+  std::vector<float>	          jetAK4_jecUp	       ;
+  std::vector<float>	          jetAK4_jecDown       ; 
+  std::vector<bool>               jetAK4_IDLoose       ;
+  std::vector<bool>               jetAK4_IDTight       ;
   std::vector<float>              jetAK4_muf           ;
   std::vector<float>              jetAK4_phf           ;
   std::vector<float>              jetAK4_emf           ;
@@ -346,19 +324,11 @@ public:
   std::vector<int>                jetAK4_genParton_pdgID;
   std::vector<int>                jetAK4_nbHadrons     ;
   std::vector<int>                jetAK4_ncHadrons     ;
-//std::vector<float>              jetAK4_ssv           ;
   std::vector<float>              jetAK4_cisv 	       ;         
-//std::vector<float>  	          jetAK4_tchp 	       ;
-//std::vector<float>  	          jetAK4_tche 	       ;
-//std::vector<float>  	          jetAK4_jp	       ;
-//std::vector<float>  	          jetAK4_jbp  	       ;
   std::vector<float>              jetAK4_vtxMass       ;
   std::vector<float>              jetAK4_vtxNtracks    ;
   std::vector<float>              jetAK4_vtx3DVal      ;
   std::vector<float>              jetAK4_vtx3DSig      ; 
-//std::vector<int  >              jetAK4_nSVs          ;
-
-
 
   /** AK8 jets */
   int 	        	      jetAK8_N                 ;
@@ -368,13 +338,12 @@ public:
   std::vector<float>  	      jetAK8_phi               ;
   std::vector<float>  	      jetAK8_e                 ;
   std::vector<float>  	      jetAK8_jec               ;
-  //std::vector<float>        jetAK8_jecUp             ;
-  //std::vector<float>        jetAK8_jecDown           ;
-  std::vector<bool >  	      jetAK8_IDLoose      ;
-  std::vector<bool >  	      jetAK8_IDTight      ;
-  std::vector<float>  	      jetAK8_muf          ;
-  std::vector<float>  	      jetAK8_phf          ;
-
+  std::vector<float>          jetAK8_jecUp             ;
+  std::vector<float>          jetAK8_jecDown           ;
+  std::vector<bool >  	      jetAK8_IDLoose           ;
+  std::vector<bool >  	      jetAK8_IDTight           ;
+  std::vector<float>  	      jetAK8_muf               ;
+  std::vector<float>  	      jetAK8_phf               ;
   std::vector<float>  	      jetAK8_emf	       ;
   std::vector<float>  	      jetAK8_nhf	       ;
   std::vector<float>  	      jetAK8_chf	       ;
@@ -383,88 +352,48 @@ public:
   std::vector<int  >          jetAK8_nm 	       ;
   std::vector<float>          jetAK8_che	       ;
   std::vector<float>          jetAK8_ne 	       ;
-  std::vector<float>          jetAK8_hf_hf         ;
-  std::vector<float>          jetAK8_hf_emf        ;
-  std::vector<float>          jetAK8_hof           ;
-  std::vector<int>            jetAK8_chm           ;
-  std::vector<int>            jetAK8_neHadMult     ;
-  std::vector<int>            jetAK8_phoMult       ;
-  std::vector<float>          jetAK8_nemf          ;
-  std::vector<float>          jetAK8_cemf          ;
+  std::vector<float>          jetAK8_hf_hf             ;
+  std::vector<float>          jetAK8_hf_emf            ;
+  std::vector<float>          jetAK8_hof               ;
+  std::vector<int>            jetAK8_chm               ;
+  std::vector<int>            jetAK8_neHadMult         ;
+  std::vector<int>            jetAK8_phoMult           ;
+  std::vector<float>          jetAK8_nemf              ;
+  std::vector<float>          jetAK8_cemf              ;
   std::vector<int  >  	      jetAK8_charge	       ;
-  std::vector<int>            jetAK8_partonFlavour ;
-  std::vector<int>            jetAK8_hadronFlavour ;
-  std::vector<int>            jetAK8_genParton_pdgID;
-  std::vector<int>            jetAK8_nbHadrons     ;
-  std::vector<int>            jetAK8_ncHadrons     ;
+  std::vector<int>            jetAK8_partonFlavour     ;
+  std::vector<int>            jetAK8_hadronFlavour     ;
+  std::vector<int>            jetAK8_genParton_pdgID   ;
+  std::vector<int>            jetAK8_nbHadrons         ;
+  std::vector<int>            jetAK8_ncHadrons         ;
   std::vector<float>  	      jetAK8_Hbbtag 	       ;
-//std::vector<float>          jetAK8_ssv               ;
   std::vector<float>  	      jetAK8_csv 	       ;    
-//std::vector<float>          jetAK8_tchp              ;
-//std::vector<float>          jetAK8_tche              ;
-//std::vector<float>          jetAK8_jp                ;
-//std::vector<float>          jetAK8_jbp               ;
   std::vector<float>  	      jetAK8_tau1              ;
   std::vector<float>  	      jetAK8_tau2              ;
-  std::vector<float>  	      jetAK8_tau3              ;    
+  std::vector<float>  	      jetAK8_tau3              ; 
+
+  /** AK8 jets pruned */     
   std::vector<float>  	      jetAK8_pruned_mass       ;
-  std::vector<float>  	      jetAK8_softdrop_mass     ;
-  std::vector<float>	      jetAK10_trimmed_mass     ;
   std::vector<float>  	      jetAK8_pruned_massCorr   ;
-  std::vector<float>  	      jetAK8_softdrop_massCorr ;
-  std::vector<float>	      jetAK10_trimmed_massCorr ;
   std::vector<float>  	      jetAK8_pruned_jec        ;
-  std::vector<float>  	      jetAK8_softdrop_jec      ;
-  std::vector<float>	      jetAK10_trimmed_jec      ;
-  //std::vector<float>	      jetAK8_filtered_mass     ;
-  //std::vector<float>	      jetAK8_nSubJets	       ;
-  std::vector<float>  	      jetAK10_ecf1              ;
-  std::vector<float>  	      jetAK10_ecf2              ;
-  std::vector<float>  	      jetAK10_ecf3              ;    
-  std::vector<float>  	      jetAK8_puppi_tau1              ;
-  std::vector<float>  	      jetAK8_puppi_tau2              ;
-  std::vector<float>  	      jetAK8_puppi_tau3              ;    
-  std::vector<float>  	      jetAK8_puppi_pruned_mass       ;
-  std::vector<float>  	      jetAK8_puppi_softdrop_mass     ;
-  std::vector<float>  	      jetAK8_puppi_pruned_massCorr   ;
-  std::vector<float>  	      jetAK8_puppi_softdrop_massCorr ;
-  std::vector<float>  	      jetAK8_puppi_pruned_jec        ;
-  std::vector<float>  	      jetAK8_puppi_softdrop_jec      ;
-    
-  /** AK8 jets pruned */
-  //int 		     njetsAK8_pruned	   ;
-  //std::vector<float>       jetAK8_pruned_pt	   ;
-  //std::vector<float>       jetAK8_pruned_eta     ;
-  //std::vector<float>       jetAK8_pruned_mass    ;
-  //std::vector<float>       jetAK8_pruned_phi     ;
-  //std::vector<float>       jetAK8_pruned_e	   ;
-  //std::vector<int  >       jetAK8_pruned_charge  ;
-  //std::vector<int  >       jetAK8_pruned_flavour ;
-  //std::vector<float>       jetAK8_pruned_ssv     ;
-  //std::vector<float>       jetAK8_pruned_csv     ;
-  //std::vector<float>       jetAK8_pruned_tchp    ;
-  //std::vector<float>       jetAK8_pruned_tche    ;
-  //std::vector<float>       jetAK8_pruned_jp	   ;
-  //std::vector<float>       jetAK8_pruned_jbp     ;
-  //std::vector<int  >       jetAK8_pruned_nSVs    ;
-	
-  /** AK8 jets softdrop */
-  //int 	             njetsAK8_softdrop         ;
-  //std::vector<float>	     jetAK8_softdrop_pt        ;
-  //std::vector<float>	     jetAK8_softdrop_eta       ;
-  //std::vector<float>	     jetAK8_softdrop_mass      ;
-  //std::vector<float>	     jetAK8_softdrop_phi       ;
-  //std::vector<float>	     jetAK8_softdrop_e	       ;
-  //std::vector<int  >	     jetAK8_softdrop_charge    ;
-  //std::vector<int  >	     jetAK8_softdrop_flavour   ;
-  //std::vector<float>	     jetAK8_softdrop_ssv       ;
-  //std::vector<float>	     jetAK8_softdrop_csv       ;
-  //std::vector<float>	     jetAK8_softdrop_tchp      ;
-  //std::vector<float>	     jetAK8_softdrop_tche      ;
-  //std::vector<float>	     jetAK8_softdrop_jp        ;
-  //std::vector<float>	     jetAK8_softdrop_jbp       ;
-  //std::vector<int  >       jetAK8_softdrop_nSVs      ;
-    
+  std::vector<float>  	      jetAK8_pruned_jecUp      ;
+  std::vector<float>  	      jetAK8_pruned_jecDown    ;  
+  //int 		      njetsAK8_pruned	       ;
+  //std::vector<float>        jetAK8_pruned_pt         ;
+  //std::vector<float>        jetAK8_pruned_eta        ;
+  //std::vector<float>        jetAK8_pruned_mass       ;
+  //std::vector<float>        jetAK8_pruned_phi        ;
+  //std::vector<float>        jetAK8_pruned_e	       ;
+  //std::vector<int  >        jetAK8_pruned_charge     ;
+  //std::vector<int  >        jetAK8_pruned_flavour    ;
+  //std::vector<float>        jetAK8_pruned_ssv        ;
+  //std::vector<float>        jetAK8_pruned_csv        ;
+  //std::vector<float>        jetAK8_pruned_tchp       ;
+  //std::vector<float>        jetAK8_pruned_tche       ;
+  //std::vector<float>        jetAK8_pruned_jp         ;
+  //std::vector<float>        jetAK8_pruned_jbp        ;
+  //std::vector<int  >        jetAK8_pruned_nSVs       ;
+
   /** pruned AK8 subjets  */
   std::vector<int>    	            subjetAK8_pruned_N      ;
   std::vector< std::vector<float> > subjetAK8_pruned_pt     ;
@@ -475,13 +404,28 @@ public:
   std::vector< std::vector<int  > > subjetAK8_pruned_charge ;
   std::vector< std::vector<int  > > subjetAK8_pruned_partonFlavour;
   std::vector< std::vector<int  > > subjetAK8_pruned_hadronFlavour;
-//std::vector< std::vector<float> > subjetAK8_pruned_ssv    ;
   std::vector< std::vector<float> > subjetAK8_pruned_csv    ;    
-//std::vector< std::vector<float> > subjetAK8_pruned_tchp   ;
-//std::vector< std::vector<float> > subjetAK8_pruned_tche   ;
-//std::vector< std::vector<float> > subjetAK8_pruned_jp     ;
-//std::vector< std::vector<float> > subjetAK8_pruned_jbp    ;
-	
+
+  /** AK8 jets softdrop */    
+  std::vector<float>  	      jetAK8_softdrop_mass     ;
+  std::vector<float>  	      jetAK8_softdrop_massCorr ;
+  std::vector<float>  	      jetAK8_softdrop_jec      ;
+  //int 	              njetsAK8_softdrop        ;
+  //std::vector<float>	      jetAK8_softdrop_pt       ;
+  //std::vector<float>	      jetAK8_softdrop_eta      ;
+  //std::vector<float>	      jetAK8_softdrop_mass     ;
+  //std::vector<float>	      jetAK8_softdrop_phi      ;
+  //std::vector<float>	      jetAK8_softdrop_e        ;
+  //std::vector<int  >	      jetAK8_softdrop_charge   ;
+  //std::vector<int  >	      jetAK8_softdrop_flavour  ;
+  //std::vector<float>	      jetAK8_softdrop_ssv      ;
+  //std::vector<float>	      jetAK8_softdrop_csv      ;
+  //std::vector<float>	      jetAK8_softdrop_tchp     ;
+  //std::vector<float>	      jetAK8_softdrop_tche     ;
+  //std::vector<float>	      jetAK8_softdrop_jp       ;
+  //std::vector<float>	      jetAK8_softdrop_jbp      ;
+  //std::vector<int  >        jetAK8_softdrop_nSVs     ;
+
   /** softdrop AK8 subjets */
   std::vector<int>                  subjetAK8_softdrop_N      ;
   std::vector< std::vector<float> > subjetAK8_softdrop_pt     ;
@@ -492,12 +436,26 @@ public:
   std::vector< std::vector<int  > > subjetAK8_softdrop_charge ;
   std::vector< std::vector<int  > > subjetAK8_softdrop_partonFlavour;
   std::vector< std::vector<int  > > subjetAK8_softdrop_hadronFlavour;
-//std::vector< std::vector<float> > subjetAK8_softdrop_ssv    ;
   std::vector< std::vector<float> > subjetAK8_softdrop_csv    ;
-//std::vector< std::vector<float> > subjetAK8_softdrop_tchp   ;
-//std::vector< std::vector<float> > subjetAK8_softdrop_tche   ;
-//std::vector< std::vector<float> > subjetAK8_softdrop_jp     ;
-//std::vector< std::vector<float> > subjetAK8_softdrop_jbp    ;
+
+  /** puppi and ATLAS */    
+  std::vector<float>	      jetAK10_trimmed_mass           ;
+  std::vector<float>	      jetAK10_trimmed_massCorr       ;
+  std::vector<float>	      jetAK10_trimmed_jec            ;
+  //std::vector<float>	      jetAK8_filtered_mass           ;
+  //std::vector<float>	      jetAK8_nSubJets	             ;
+  std::vector<float>  	      jetAK10_ecf1                   ;
+  std::vector<float>  	      jetAK10_ecf2                   ;
+  std::vector<float>  	      jetAK10_ecf3                   ;
+  std::vector<float>  	      jetAK8_puppi_tau1              ;
+  std::vector<float>  	      jetAK8_puppi_tau2              ;
+  std::vector<float>  	      jetAK8_puppi_tau3              ;    
+  std::vector<float>  	      jetAK8_puppi_pruned_mass       ;
+  std::vector<float>  	      jetAK8_puppi_softdrop_mass     ;
+  std::vector<float>  	      jetAK8_puppi_pruned_massCorr   ;
+  std::vector<float>  	      jetAK8_puppi_softdrop_massCorr ;
+  std::vector<float>  	      jetAK8_puppi_pruned_jec        ;
+  std::vector<float>  	      jetAK8_puppi_softdrop_jec      ;    	   
 
   /** AK4 genJets*/
   int			      genJetAK4_N               ;

@@ -5,7 +5,7 @@ config = dict()
 #--------- general ----------#
 config["RUNONMC"] = True
 config["USEJSON"] = False
-config["JSONFILE"] = 'goldenJSON_PromptReco.txt'
+config["JSONFILE"] = "JSON_Run2015D_PromptReco-v4.txt"
 config["BUNCHSPACING"] = 25
 
 #--------- basic sequences ----------#
@@ -38,5 +38,5 @@ config["DOMETRECLUSTERING"] = False
 
 #--------- JEC ----------#
 config["CORRJETSONTHEFLY"] = True
-config["CORRMETONTHEFLY"] = True
+config["CORRMETONTHEFLY"] = False
 config["GETJECFROMDBFILE"] = False # If not yet in global tag, but db file available
