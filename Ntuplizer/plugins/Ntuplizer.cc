@@ -113,6 +113,7 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
        tmpString = jecpath + tmpVec[v];
        jecAK8Labels.push_back(tmpString);
     }    
+    jecAK8Labels.push_back( iConfig.getParameter<std::string>("jecAK8chsUnc") );
     std::vector<std::string> jecAK8GroomedLabels;
     tmpVec.clear(); tmpVec = iConfig.getParameter<std::vector<std::string> >("jecAK8GroomedchsPayloadNames");
     for( unsigned int v = 0; v < tmpVec.size(); ++v ){
@@ -131,6 +132,7 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
        tmpString = jecpath + tmpVec[v];
        jecAK4chsLabels.push_back(tmpString);
     }
+    jecAK4chsLabels.push_back( iConfig.getParameter<std::string>("jecAK4chsUnc") );
     
     nTuplizers_["jets"] = new JetsNtuplizer( jetTokens      , 
                                              jecAK4chsLabels, 
@@ -281,7 +283,7 @@ void Ntuplizer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
   nBranches_->EVENT_event     = iEvent.id().event();
   nBranches_->EVENT_run       = iEvent.id().run();
   nBranches_->EVENT_lumiBlock = iEvent.id().luminosityBlock();  
-     
+         
   for( std::map<std::string,CandidateNtuplizer*>::iterator it = nTuplizers_.begin(); it != nTuplizers_.end(); ++it )
     (it->second)->fillBranches( iEvent, iSetup );
   

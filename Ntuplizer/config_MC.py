@@ -12,6 +12,7 @@ process.TFileService = cms.Service("TFileService",
                                    )
 
 from EXOVVNtuplizerRunII.Ntuplizer.ntuplizerOptions_MC_cfi import config
+
 				   
 ####### Config parser ##########
 
@@ -23,10 +24,7 @@ options.maxEvents = -1
 
 #data file
 
-#options.inputFiles = '/store/data/Run2015D/SingleMuon/MINIAOD/PromptReco-v3/000/256/728/00000/3ABED78F-455F-E511-B394-02163E011CE5.root'
-#mc file
-options.inputFiles = 'file:/shome/jngadiub/EXOVVAnalysisRunII/CMSSW_7_4_7_patch2/src/EXOVVNtuplizerRunII/Ntuplizer/test/RSGravToWWToLNQQ_kMpl01_M-1000_TuneCUETP8M1_13TeV-pythia8.root'
-
+options.inputFiles = '/store/mc/RunIISpring15MiniAODv2/WJetsToLNu_HT-100To200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/74X_mcRun2_asymptotic_v2-v1/10000/003F1529-D36D-E511-9E33-001E6724816F.root'
 
 options.parseArguments()
 
@@ -65,6 +63,7 @@ process.MessageLogger.categories.append('Ntuple')
 process.MessageLogger.cerr.INFO = cms.untracked.PSet(
     limit = cms.untracked.int32(1)
 )
+
 process.MessageLogger.cerr.FwkReport.reportEvery = 1000
 
 ####### Define conditions ##########
@@ -72,11 +71,17 @@ process.MessageLogger.cerr.FwkReport.reportEvery = 1000
 process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_condDBv2_cff')
 from Configuration.AlCa.GlobalTag import GlobalTag
 
-if config["RUNONMC"]:
-   process.GlobalTag = GlobalTag(process.GlobalTag, '74X_mcRun2_asymptotic_v2')
-   # process.GlobalTag = GlobalTag(process.GlobalTag, 'auto:run2_mc')
+GT = ''
+if config["RUNONMC"]: GT = '74X_mcRun2_asymptotic_v2'
 elif not(config["RUNONMC"]):
-   process.GlobalTag = GlobalTag(process.GlobalTag, '74X_dataRun2_v2')
+   GT = '74X_dataRun2_v2'
+   if config["JSONFILE"].find('reMiniAOD') != -1: GT = '74X_dataRun2_reMiniAOD_v0'
+   elif config["JSONFILE"].find('PromptReco-v4') != -1: GT = '74X_dataRun2_Prompt_v4'
+
+print "*************************************** GLOBAL TAG *************************************************" 
+print GT
+print "****************************************************************************************************" 
+process.GlobalTag = GlobalTag(process.GlobalTag, GT)
    
 ######### read JSON file for data ##########					                                                             
 if not(config["RUNONMC"]) and config["USEJSON"]:
@@ -129,6 +134,7 @@ if config["DOAK10TRIMMEDRECLUSTERING"]:
 process.ak8CHSJetsPruned = ak8PFJetsCHSPruned.clone( src = 'chs', jetPtMin = fatjet_ptmin )
 process.ak8CHSJetsSoftDrop = ak8PFJetsCHSSoftDrop.clone( src = 'chs', jetPtMin = fatjet_ptmin, beta = betapar  )
 
+
 if config["DOAK10TRIMMEDRECLUSTERING"]:			       
   process.ak10CHSJetsTrimmed = ak8PFJetsCHSTrimmed.clone( src = 'chs', jetPtMin = fatjet_ptmin, rParam = 1.0, rFilt = 0.2, trimPtFracMin = 0.05 )
 
@@ -177,7 +183,6 @@ if config["GETJECFROMDBFILE"]:
 
 
 ####### Add AK8 GenJets ##########
-
 if config["ADDAK8GENJETS"]:
 
   from RecoJets.Configuration.RecoGenJets_cff import ak8GenJets
@@ -391,7 +396,7 @@ def recluster_addBtagging(process, fatjets_name, groomed_jets_name, jetcorr_labe
 	    producer.getJetMCFlavour = False
 
 ################# Recluster jets with b-tagging ######################
-if config["DOAK8RECLUSTERING"]:  
+if config["DOAK8RECLUSTERING"]: 
     recluster_addBtagging(process, 'ak8CHSJets', 'ak8CHSJetsSoftDrop', genjets_name = lambda s: s.replace('CHS', 'Gen'))
     recluster_addBtagging(process, 'ak8CHSJets', 'ak8CHSJetsPruned', genjets_name = lambda s: s.replace('CHS', 'Gen'))
     process.ak8PFJetsCHSPrunedMass = cms.EDProducer("RecoJetDeltaRValueMapProducer",
@@ -427,7 +432,7 @@ if config["DOAK8RECLUSTERING"]:
     #process.patJetsAk8CHSJetsSoftDropSubjets.addBTagInfo = True
 
 ################# Recluster trimmed jets ######################
-if config["DOAK10TRIMMEDRECLUSTERING"]:			       
+if config["DOAK10TRIMMEDRECLUSTERING"]:	
     recluster_addBtagging(process, 'ak8CHSJets', 'ak10CHSJetsTrimmed', genjets_name = lambda s: s.replace('CHS', 'Gen'), verbose = False, btagging = False, subjets = False)
     process.patJetsAk10CHSJetsTrimmed.userData.userFloats.src += ['ECFAK10:ecf1','ECFAK10:ecf2','ECFAK10:ecf3']
     
@@ -466,6 +471,7 @@ if config["DOAK8PUPPIRECLUSTERING"]:
     process.patJetsAk8PuppiJets.userData.userFloats.src += ['ak8PFJetsPuppiPrunedMass','ak8PFJetsPuppiSoftDropMass','ak8PFJetsPuppiPrunedMassCorrected','ak8PFJetsPuppiSoftDropMassCorrected']
     process.patJetsAk8PuppiJets.userData.userFloats.src += ['NjettinessAK8Puppi:tau1','NjettinessAK8Puppi:tau2','NjettinessAK8Puppi:tau3']
     process.patJetsAk8PuppiJets.addTagInfos = True
+
 
 # ###### Recluster MET ##########
 if config["DOMETRECLUSTERING"]:
@@ -509,7 +515,7 @@ if config["DOMETRECLUSTERING"]:
     process.patPFMetT2SmearCorr.jetCorrLabelRes = cms.InputTag("L3Absolute")
     process.shiftedPatJetEnDown.jetCorrLabelUpToL3Res = cms.InputTag("ak4PFCHSL1FastL2L3Corrector")
     process.shiftedPatJetEnUp.jetCorrLabelUpToL3Res = cms.InputTag("ak4PFCHSL1FastL2L3Corrector")
-        
+			           
 ####### Adding HEEP id ##########
 
 from PhysicsTools.SelectorUtils.tools.vid_id_tools import *
@@ -575,9 +581,6 @@ if config["DOAK10TRIMMEDRECLUSTERING"]:
   jetsAK10trimmed = "patJetsAk10CHSJetsTrimmed"
 if config["DOAK8PUPPIRECLUSTERING"]:  
   jetsAK8Puppi = "patJetsAk8PuppiJets"  
-   
-if config["DOMETRECLUSTERING"]:
-  METS = "mySlimmedMETs"
 
 if config["DOSEMILEPTONICTAUSBOOSTED"]:
   TAUS = "slimmedTaus"
@@ -595,6 +598,8 @@ jecLevelsAK4chs = []
 jecLevelsAK4 = []
 jecLevelsAK8Puppi = []
 jecLevelsForMET = []
+jecAK8chsUncFile = "JEC/Summer15_25nsV5_DATA_Uncertainty_AK8PFchs.txt"
+jecAK4chsUncFile = "JEC/Summer15_25nsV5_DATA_Uncertainty_AK4PFchs.txt"
 
 JECprefix = "Summer15_50nsV5"
 if config["BUNCHSPACING"] == 25 and config["RUNONMC"]:
@@ -704,7 +709,7 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     taus = cms.InputTag(TAUS),
     tausMuTau = cms.InputTag(MUTAUS),
     tausEleTau = cms.InputTag(ELETAUS),
-    jets = cms.InputTag( jetsAK4 ),
+    jets = cms.InputTag(jetsAK4),
     fatjets = cms.InputTag(jetsAK8),
     prunedjets = cms.InputTag(jetsAK8pruned),
     softdropjets = cms.InputTag(jetsAK8softdrop),
@@ -717,19 +722,21 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     corrMetPx = cms.string("+0.1166 + 0.0200*Nvtx"),
     corrMetPy = cms.string("+0.2764 - 0.1280*Nvtx"),
     jecAK4forMetCorr = cms.vstring( jecLevelsForMET ),
-    jetsForMetCorr = cms.InputTag( jetsAK4 ),
+    jetsForMetCorr = cms.InputTag(jetsAK4),
     rho = cms.InputTag("fixedGridRhoFastjetAll"),
     genparticles = cms.InputTag("prunedGenParticles"),
-    PUInfo = cms.InputTag("addPileupInfo"),
+    PUInfo = cms.InputTag("slimmedAddPileupInfo"),
     genEventInfo = cms.InputTag("generator"),
     HLT = cms.InputTag("TriggerResults","","HLT"),
     triggerobjects = cms.InputTag("selectedPatTrigger"),
     triggerprescales = cms.InputTag("patTrigger"),
     noiseFilter = cms.InputTag('TriggerResults','', hltFiltersProcessName),
     jecAK8chsPayloadNames = cms.vstring( jecLevelsAK8chs ),
+    jecAK8chsUnc = cms.string( jecAK8chsUncFile ),
     jecAK8GroomedchsPayloadNames = cms.vstring( jecLevelsAK8Groomedchs ),
     jecAK8PuppiPayloadNames = cms.vstring( jecLevelsAK8Puppi ),
     jecAK4chsPayloadNames = cms.vstring( jecLevelsAK4chs ),
+    jecAK4chsUnc = cms.string( jecAK4chsUncFile ),
     jecpath = cms.string(''),
     
     ## Noise Filters ###################################

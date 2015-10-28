@@ -24,43 +24,43 @@ public:
 
   void fillBranches( edm::Event const & event, const edm::EventSetup& iSetup );
   void initJetCorrFactors( void );
-  
-  
+  void initJetCorrUncertainty( void );
+    
  private:
   
-  std::vector<std::string>                    jecAK8PayloadNames_;
+  std::vector<std::string>                    jecAK8PayloadNames_       ;
   std::vector<std::string>                    jecAK8GroomedPayloadNames_;
-  std::vector<std::string>                    jecAK8PuppiPayloadNames_;
-  boost::shared_ptr<FactorizedJetCorrector>   jecAK8_            ;      
-  boost::shared_ptr<FactorizedJetCorrector>   jecAK8Groomed_            ;      
-  boost::shared_ptr<FactorizedJetCorrector>   jecAK8Puppi_            ;      
-  // boost::shared_ptr<JetCorrectionUncertainty> jecAK8Unc_         ;
+  std::vector<std::string>                    jecAK8PuppiPayloadNames_  ;
+  boost::shared_ptr<FactorizedJetCorrector>   jecAK8_                   ;
+  boost::shared_ptr<FactorizedJetCorrector>   jecAK8Groomed_            ;
+  boost::shared_ptr<FactorizedJetCorrector>   jecAK8Puppi_              ;
+  boost::shared_ptr<JetCorrectionUncertainty> jecAK8Unc_	   	;
+  std::string                      	      jecAK8UncName_	    	;
+  std::vector<std::string>                    jecAK4PayloadNames_	;
+  boost::shared_ptr<FactorizedJetCorrector>   jecAK4_            	;
+  boost::shared_ptr<JetCorrectionUncertainty> jecAK4Unc_	  	;
+  std::string                      	      jecAK4UncName_	    	;
   
-  std::vector<std::string>                    jecAK4PayloadNames_;
-  boost::shared_ptr<FactorizedJetCorrector>   jecAK4_            ;
-  // boost::shared_ptr<JetCorrectionUncertainty> jecAK4Unc_         ;
+  edm::EDGetTokenT<pat::JetCollection> 		       jetInputToken_	       ;
+  edm::EDGetTokenT<pat::JetCollection> 		       fatjetInputToken_       ;
+  edm::EDGetTokenT<pat::JetCollection> 		       prunedjetInputToken_    ;
+  edm::EDGetTokenT<pat::JetCollection> 		       softdropjetInputToken_  ;
+  edm::EDGetTokenT<pat::JetCollection>                 trimmedjetInputToken_   ;
+  edm::EDGetTokenT<pat::JetCollection>                 puppijetInputToken_     ;
+  edm::EDGetTokenT<reco::JetFlavourMatchingCollection> flavourToken_	       ;
+  edm::EDGetTokenT<double> 		   	       rhoToken_	       ;
+  edm::EDGetTokenT<reco::VertexCollection>  	       verticeToken_	       ;
   
+  edm::Handle<pat::JetCollection>      		       jets_		       ;
+  edm::Handle<pat::JetCollection>      		       fatjets_ 	       ;
+  edm::Handle<pat::JetCollection>      		       prunedjets_	       ;
+  edm::Handle<pat::JetCollection>      		       softdropjets_	       ;
+  edm::Handle<pat::JetCollection>                      trimmedjets_	       ;
+  edm::Handle<pat::JetCollection>                      puppijets_	       ;
   
-  edm::EDGetTokenT<pat::JetCollection> 					jetInputToken_     		;
-  edm::EDGetTokenT<pat::JetCollection> 					fatjetInputToken_  		;
-  edm::EDGetTokenT<pat::JetCollection> 					prunedjetInputToken_ 	;
-  edm::EDGetTokenT<pat::JetCollection> 					softdropjetInputToken_ 	;
-  edm::EDGetTokenT<pat::JetCollection>                                  trimmedjetInputToken_   ;
-  edm::EDGetTokenT<pat::JetCollection>                                  puppijetInputToken_   ;
-  edm::EDGetTokenT<reco::JetFlavourMatchingCollection> 	flavourToken_   		;
-  edm::EDGetTokenT<double> 		   						rhoToken_     			;
-  edm::EDGetTokenT<reco::VertexCollection>  			verticeToken_ 			;
-  
-  edm::Handle<pat::JetCollection>      					jets_      				;
-  edm::Handle<pat::JetCollection>      					fatjets_      			;
-  edm::Handle<pat::JetCollection>      					prunedjets_      		;
-  edm::Handle<pat::JetCollection>      					softdropjets_      		;
-  edm::Handle<pat::JetCollection>                                       trimmedjets_                    ;
-  edm::Handle<pat::JetCollection>                                       puppijets_                    ;
-  
-  edm::Handle<reco::JetFlavourMatchingCollection> 		jetMC 					;
-  edm::Handle< double >                     			rho_        			;
-  edm::Handle<reco::VertexCollection> 	     			vertices_     			;
+  edm::Handle<reco::JetFlavourMatchingCollection>      jetMC		       ;
+  edm::Handle< double >                     	       rho_		       ;
+  edm::Handle<reco::VertexCollection> 	     	       vertices_ 	       ;
   
   bool doCorrOnTheFly_;
   bool doAK4Jets_;
