@@ -87,6 +87,6 @@ private:
   edm::EDGetTokenT<edm::TriggerResults>                     noiseFilterToken_;
   edm::EDGetTokenT<bool>                                    HBHENoiseFilterLooseResultToken_;
   edm::EDGetTokenT<bool>                                    HBHENoiseFilterTightResultToken_;
-  
+  edm::EDGetTokenT<bool>                                    HBHENoiseIsoFilterResultToken_;  
 
 };

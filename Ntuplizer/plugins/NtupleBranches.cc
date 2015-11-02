@@ -488,6 +488,7 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch("passFilter_HBHE"                 ,&passFilter_HBHE_                ,"passFilter_HBHE_/O");
     tree_->Branch("passFilter_HBHELoose"            ,&passFilter_HBHELoose_	      ,"passFilter_HBHELoose_/O");
     tree_->Branch("passFilter_HBHETight"            ,&passFilter_HBHETight_	      ,"passFilter_HBHETight_/O");
+    tree_->Branch("passFilter_HBHEIso"              ,&passFilter_HBHEIso_	      ,"passFilter_HBHEIso_/O");
     tree_->Branch("passFilter_CSCHalo"              ,&passFilter_CSCHalo_             ,"passFilter_CSCHalo_/O");
     tree_->Branch("passFilter_HCALlaser"            ,&passFilter_HCALlaser_           ,"passFilter_HCALlaser_/O");
     tree_->Branch("passFilter_ECALDeadCell"         ,&passFilter_ECALDeadCell_        ,"passFilter_ECALDeadCell_/O");
@@ -980,6 +981,7 @@ void NtupleBranches::reset( void ){
   passFilter_HBHE_                  = false;
   passFilter_HBHELoose_             = false;
   passFilter_HBHETight_             = false;
+  passFilter_HBHEIso_               = false;
   passFilter_CSCHalo_               = false;
   passFilter_HCALlaser_             = false;
   passFilter_ECALDeadCell_          = false;

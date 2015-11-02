@@ -11,7 +11,7 @@ process.TFileService = cms.Service("TFileService",
                                     fileName = cms.string('flatTuple.root')
                                    )
 
-from EXOVVNtuplizerRunII.Ntuplizer.ntuplizerOptions_MC_cfi import config
+from EXOVVNtuplizerRunII.Ntuplizer.ntuplizerOptions_data_reMiniAOD_cfi import config
 
 				   
 ####### Config parser ##########
@@ -24,7 +24,7 @@ options.maxEvents = -1
 
 #data file
 
-options.inputFiles = '/store/mc/RunIISpring15MiniAODv2/WJetsToLNu_HT-100To200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/74X_mcRun2_asymptotic_v2-v1/10000/003F1529-D36D-E511-9E33-001E6724816F.root'
+options.inputFiles = '/store/data/Run2015D/SingleMuon/MINIAOD/05Oct2015-v1/10000/021FD3F0-876F-E511-99D2-0025905A6060.root'
 
 options.parseArguments()
 
@@ -721,7 +721,7 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     jetsForMetCorr = cms.InputTag(jetsAK4),
     rho = cms.InputTag("fixedGridRhoFastjetAll"),
     genparticles = cms.InputTag("prunedGenParticles"),
-    PUInfo = cms.InputTag("slimmedAddPileupInfo"),
+    PUInfo = cms.InputTag("addPileupInfo"),
     genEventInfo = cms.InputTag("generator"),
     HLT = cms.InputTag("TriggerResults","","HLT"),
     triggerobjects = cms.InputTag("selectedPatTrigger"),
@@ -740,7 +740,7 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     noiseFilterSelection_HBHENoiseFilter = cms.string('Flag_HBHENoiseFilter'),
     noiseFilterSelection_HBHENoiseFilterLoose = cms.InputTag("HBHENoiseFilterResultProducer", "HBHENoiseFilterResultRun2Loose"),
     noiseFilterSelection_HBHENoiseFilterTight = cms.InputTag("HBHENoiseFilterResultProducer", "HBHENoiseFilterResultRun2Tight"),
-    noiseFilterSelection_HBHENoiseIsoFilter = cms.InputTag("HBHENoiseFilterResultProducer", "HBHEIsoNoiseFilterResult"),
+    noiseFilterSelection_HBHENoiseIsoFilter = cms.InputTag("HBHENoiseFilterResultProducer", "HBHEIsoNoiseFilterResult"),  
     noiseFilterSelection_CSCTightHaloFilter = cms.string('Flag_CSCTightHaloFilter'),
     noiseFilterSelection_hcalLaserEventFilter = cms.string('Flag_hcalLaserEventFilter'),
     noiseFilterSelection_EcalDeadCellTriggerPrimitiveFilter = cms.string('Flag_EcalDeadCellTriggerPrimitiveFilter'),
