@@ -136,6 +136,7 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch( "mu_chargedHadIso"	      , &mu_chargedHadIso     	   );
     tree_->Branch( "mu_trackIso"	      , &mu_trackIso	      	   );
     tree_->Branch( "mu_d0"                    , &mu_d0  	      	   );
+    tree_->Branch( "mu_dz"                    , &mu_dz  	      	   );
     tree_->Branch( "mu_bestTrack_pt"	      , &mu_bestTrack_pt      	   );
     tree_->Branch( "mu_bestTrack_ptErr"	      , &mu_bestTrack_ptErr        );
     tree_->Branch( "mu_pfRhoCorrRelIso03Boost", &mu_pfRhoCorrRelIso03Boost );
