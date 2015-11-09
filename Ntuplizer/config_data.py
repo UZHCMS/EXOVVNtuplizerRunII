@@ -556,8 +556,8 @@ jetsAK8PuppiPruned = ""
 jetsAK8PuppiSoftdrop = ""  
 
 METS = "slimmedMETs"
-if config["DOMETRECLUSTERING"]:
-  jetsAK4 = "selectedPatJets"
+if config["DOMETRECLUSTERING"]: jetsAK4 = "selectedPatJets"
+if config["USENOHF"]: METS = "slimmedMETsNoHF"  
 
 TAUS = ""
 MUTAUS = ""

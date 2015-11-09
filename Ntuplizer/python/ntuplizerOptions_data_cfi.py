@@ -5,8 +5,9 @@ config = dict()
 #--------- general ----------#
 config["RUNONMC"] = False
 config["USEJSON"] = True
-config["JSONFILE"] = "Cert_246908-258750_13TeV_PromptReco_Collisions15_25ns_JSON_Silver.txt"
+config["JSONFILE"] = "Cert_246908-259891_13TeV_PromptReco_Collisions15_25ns_JSON_Silver.txt"
 config["BUNCHSPACING"] = 25
+config["USENOHF"] = False
 
 #--------- basic sequences ----------#
 config["DOGENPARTICLES"] = False

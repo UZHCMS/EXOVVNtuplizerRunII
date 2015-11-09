@@ -72,7 +72,8 @@ bool TriggersNtuplizer::findTrigger( std::string trigName ){
        trigName.find("IsoMu20_eta2p1") != std::string::npos ||
        trigName.find("IsoMu24_eta2p1") != std::string::npos ||
        trigName.find("Mu45_eta2p1") != std::string::npos ||
-       trigName.find("Mu50_eta2p1") != std::string::npos ||
+       //trigName.find("Mu50_eta2p1") != std::string::npos ||
+       trigName.find("Mu50") != std::string::npos ||
        trigName.find("Ele27_eta2p1_WPLoose") != std::string::npos ||
        trigName.find("Ele23_CaloIdL_TrackIdL_IsoVL") != std::string::npos ||
        trigName.find("Ele32_eta2p1_WP75_Gsf") != std::string::npos ||
