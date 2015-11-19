@@ -12,6 +12,7 @@ TriggersNtuplizer::TriggersNtuplizer( edm::EDGetTokenT<edm::TriggerResults> toke
 				      edm::EDGetTokenT<edm::TriggerResults> noiseFilterToken, 
 				      edm::EDGetTokenT<bool> HBHENoiseFilterLooseResultToken,
 				      edm::EDGetTokenT<bool> HBHENoiseFilterTightResultToken,
+				      edm::EDGetTokenT<bool> HBHENoiseIsoFilterResultToken,
 				      NtupleBranches* nBranches, 
 				      const edm::ParameterSet& iConfig, 
 				      std::map< std::string, bool >& runFlags)
@@ -20,15 +21,16 @@ TriggersNtuplizer::TriggersNtuplizer( edm::EDGetTokenT<edm::TriggerResults> toke
    , triggerObjects_	( object )	
    , triggerPrescales_	( prescale )
    , noiseFilterToken_	( noiseFilterToken )
-   , HBHENoiseFilterLoose_Selector_ ( HBHENoiseFilterLooseResultToken )		
-   , HBHENoiseFilterTight_Selector_ ( HBHENoiseFilterTightResultToken )		
+   , HBHENoiseFilterLoose_Selector_( HBHENoiseFilterLooseResultToken )
+   , HBHENoiseFilterTight_Selector_( HBHENoiseFilterTightResultToken )
+   , HBHENoiseIsoFilter_Selector_( HBHENoiseIsoFilterResultToken )
    , doTriggerDecisions_( runFlags["doTriggerDecisions"] )
    , doTriggerObjects_	( runFlags["doTriggerObjects"] )
    , doHltFilters_	( runFlags["doHltFilters"] )
    , runOnMC_           ( runFlags["runOnMC"] )
 {
    
-  HBHENoiseFilter_Selector_ =  iConfig.getParameter<std::string> ("noiseFilterSelection_HBHENoiseFilter");
+  HBHENoiseFilter_Selector_ =  iConfig.getParameter<std::string> ("noiseFilterSelection_HBHENoiseFilter");  
   CSCHaloNoiseFilter_Selector_ =  iConfig.getParameter<std::string> ("noiseFilterSelection_CSCTightHaloFilter");
   HCALlaserNoiseFilter_Selector_ =  iConfig.getParameter<std::string> ("noiseFilterSelection_hcalLaserEventFilter");
   ECALDeadCellNoiseFilter_Selector_ =  iConfig.getParameter<std::string> ("noiseFilterSelection_EcalDeadCellTriggerPrimitiveFilter");
@@ -70,7 +72,8 @@ bool TriggersNtuplizer::findTrigger( std::string trigName ){
        trigName.find("IsoMu20_eta2p1") != std::string::npos ||
        trigName.find("IsoMu24_eta2p1") != std::string::npos ||
        trigName.find("Mu45_eta2p1") != std::string::npos ||
-       trigName.find("Mu50_eta2p1") != std::string::npos ||
+       //trigName.find("Mu50_eta2p1") != std::string::npos ||
+       trigName.find("Mu50") != std::string::npos ||
        trigName.find("Ele27_eta2p1_WPLoose") != std::string::npos ||
        trigName.find("Ele23_CaloIdL_TrackIdL_IsoVL") != std::string::npos ||
        trigName.find("Ele32_eta2p1_WP75_Gsf") != std::string::npos ||
@@ -168,12 +171,10 @@ void TriggersNtuplizer::fillBranches( edm::Event const & event, const edm::Event
   
     event.getByToken(noiseFilterToken_, noiseFilterBits_);
     const edm::TriggerNames &names = event.triggerNames(*noiseFilterBits_);
-  
-    bool HcalNoiseFilter = false;
-    
+      
     for (unsigned int i = 0, n = noiseFilterBits_->size(); i < n; ++i) {
       if (names.triggerName(i) == HBHENoiseFilter_Selector_)
-        HcalNoiseFilter = noiseFilterBits_->accept(i); // TO BE USED
+        nBranches_->passFilter_HBHE_ = noiseFilterBits_->accept(i);
       if (names.triggerName(i) == CSCHaloNoiseFilter_Selector_)
         nBranches_->passFilter_CSCHalo_ = noiseFilterBits_->accept(i); // TO BE USED
       if (names.triggerName(i) == HCALlaserNoiseFilter_Selector_)
@@ -200,7 +201,7 @@ void TriggersNtuplizer::fillBranches( edm::Event const & event, const edm::Event
         nBranches_->passFilter_METFilters_ = noiseFilterBits_->accept(i); // DEPRECATED
     }
     
-    if( !runOnMC_ /*&& event.id().run() < 251585*/ ){
+    //if( !runOnMC_ /*&& event.id().run() < 251585*/ ){
 
        edm::Handle<bool> HBHENoiseFilterLooseResultHandle;
        event.getByToken(HBHENoiseFilterLoose_Selector_, HBHENoiseFilterLooseResultHandle);
@@ -209,7 +210,6 @@ void TriggersNtuplizer::fillBranches( edm::Event const & event, const edm::Event
          LogDebug("") << "CaloTowerAnalyzer: Could not find HBHENoiseFilterResult" << std::endl;
        }
  
-       HcalNoiseFilter = HBHENoiseFilterLooseResult;
        nBranches_->passFilter_HBHELoose_ = HBHENoiseFilterLooseResult;
 
        edm::Handle<bool> HBHENoiseFilterTightResultHandle;
@@ -220,11 +220,18 @@ void TriggersNtuplizer::fillBranches( edm::Event const & event, const edm::Event
        }
  
        nBranches_->passFilter_HBHETight_ = HBHENoiseFilterTightResult;
-                    
-    }
+ 
+        edm::Handle<bool> HBHENoiseIsoFilterResultHandle;
+       event.getByToken(HBHENoiseIsoFilter_Selector_, HBHENoiseIsoFilterResultHandle);
+       bool HBHENoiseIsoFilterResult = *HBHENoiseIsoFilterResultHandle;
+       if (!HBHENoiseIsoFilterResultHandle.isValid()) {
+         LogDebug("") << "CaloTowerAnalyzer: Could not find HBHENoiseFilterResult" << std::endl;
+       }
+ 
+       nBranches_->passFilter_HBHEIso_ = HBHENoiseIsoFilterResult;
+                          
+    //}
     
-    nBranches_->passFilter_HBHE_ = HcalNoiseFilter; // TO BE USED
-
   } //doHltFilters_
 
 	

@@ -539,14 +539,10 @@ for idmod in my_id_modules:
 ####### Event filters ###########
 
 ##___________________________HCAL_Noise_Filter________________________________||
-if config["DOHLTFILTERS"] and not(config["RUNONMC"]):
-  process.load('CommonTools.RecoAlgos.HBHENoiseFilterResultProducer_cfi')
-  #process.HBHENoiseFilterResultProducer.minZeros = cms.int32(99999)
-
-  #process.ApplyBaselineHBHENoiseFilter = cms.EDFilter('BooleanFlagFilter',
-  #   inputLabel = cms.InputTag('HBHENoiseFilterResultProducer','HBHENoiseFilterResultRun2Loose'),
-  #   reverseDecision = cms.bool(False)
-  #)
+if config["DOHLTFILTERS"]:
+ process.load('CommonTools.RecoAlgos.HBHENoiseFilterResultProducer_cfi')
+ process.HBHENoiseFilterResultProducer.minZeros = cms.int32(99999)
+ process.HBHENoiseFilterResultProducer.IgnoreTS4TS5ifJetInLowBVRegion=cms.bool(False) 
 
 ####### Ntuplizer initialization ##########
 jetsAK4 = "slimmedJets"
@@ -560,8 +556,8 @@ jetsAK8PuppiPruned = ""
 jetsAK8PuppiSoftdrop = ""  
 
 METS = "slimmedMETs"
-if config["DOMETRECLUSTERING"]:
-  jetsAK4 = "selectedPatJets"
+if config["DOMETRECLUSTERING"]: jetsAK4 = "selectedPatJets"
+if config["USENOHF"]: METS = "slimmedMETsNoHF"  
 
 TAUS = ""
 MUTAUS = ""
@@ -744,6 +740,7 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     noiseFilterSelection_HBHENoiseFilter = cms.string('Flag_HBHENoiseFilter'),
     noiseFilterSelection_HBHENoiseFilterLoose = cms.InputTag("HBHENoiseFilterResultProducer", "HBHENoiseFilterResultRun2Loose"),
     noiseFilterSelection_HBHENoiseFilterTight = cms.InputTag("HBHENoiseFilterResultProducer", "HBHENoiseFilterResultRun2Tight"),
+    noiseFilterSelection_HBHENoiseIsoFilter = cms.InputTag("HBHENoiseFilterResultProducer", "HBHEIsoNoiseFilterResult"),    
     noiseFilterSelection_CSCTightHaloFilter = cms.string('Flag_CSCTightHaloFilter'),
     noiseFilterSelection_hcalLaserEventFilter = cms.string('Flag_hcalLaserEventFilter'),
     noiseFilterSelection_EcalDeadCellTriggerPrimitiveFilter = cms.string('Flag_EcalDeadCellTriggerPrimitiveFilter'),
@@ -763,6 +760,6 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
 
 ####### Final path ##########
 process.p = cms.Path()
-if config["DOHLTFILTERS"] and (not config["RUNONMC"]) and config["JSONFILE"].find('reMiniAOD') != -1:
-  process.p += process.HBHENoiseFilterResultProducer
+if config["DOHLTFILTERS"]:
+ process.p += process.HBHENoiseFilterResultProducer
 process.p += process.ntuplizer

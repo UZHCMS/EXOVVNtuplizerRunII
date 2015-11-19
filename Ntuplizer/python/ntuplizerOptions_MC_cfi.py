@@ -7,6 +7,7 @@ config["RUNONMC"] = True
 config["USEJSON"] = False
 config["JSONFILE"] = "JSON_Run2015D_PromptReco-v4.txt"
 config["BUNCHSPACING"] = 25
+config["USENOHF"] = True
 
 #--------- basic sequences ----------#
 config["DOGENPARTICLES"] = True

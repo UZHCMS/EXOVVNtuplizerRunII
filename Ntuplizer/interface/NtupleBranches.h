@@ -495,6 +495,7 @@ public:
   bool passFilter_HBHE_;
   bool passFilter_HBHELoose_;
   bool passFilter_HBHETight_;
+  bool passFilter_HBHEIso_;
   bool passFilter_CSCHalo_;
   bool passFilter_HCALlaser_;
   bool passFilter_ECALDeadCell_;

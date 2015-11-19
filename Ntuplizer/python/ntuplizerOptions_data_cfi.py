@@ -4,9 +4,10 @@ config = dict()
 
 #--------- general ----------#
 config["RUNONMC"] = False
-config["USEJSON"] = False
-config["JSONFILE"] = "JSON_Run2015D_PromptReco-v4.txt"
+config["USEJSON"] = True
+config["JSONFILE"] = "Cert_246908-259891_13TeV_PromptReco_Collisions15_25ns_JSON_Silver.txt"
 config["BUNCHSPACING"] = 25
+config["USENOHF"] = False
 
 #--------- basic sequences ----------#
 config["DOGENPARTICLES"] = False
@@ -27,8 +28,8 @@ config["DOSEMILEPTONICTAUSBOOSTED"] = False
 
 #--------- AK8 jets reclustering ----------#
 config["ADDAK8GENJETS"] = False #! Add AK8 gen jet collection with pruned and softdrop mass
-config["DOAK8RECLUSTERING"] = True
-config["DOAK8PRUNEDRECLUSTERING"] = True #! To add pruned jet and pruned subjet collection (not in MINIAOD)
+config["DOAK8RECLUSTERING"] = False
+config["DOAK8PRUNEDRECLUSTERING"] = False #! To add pruned jet and pruned subjet collection (not in MINIAOD)
 config["DOAK8PUPPIRECLUSTERING"] = False #ATLAS sequence
 config["DOAK10TRIMMEDRECLUSTERING"] = False
 config["DOHBBTAG"] = False #Higgs-tagger
