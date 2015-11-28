@@ -92,6 +92,27 @@ if not(config["RUNONMC"]) and config["USEJSON"]:
   myLumis = LumiList.LumiList(filename = config["JSONFILE"]).getCMSSWString().split(',')
   process.source.lumisToProcess.extend(myLumis) 
 
+  if config["FILTEREVENTS"]:
+  
+   fname = ""
+   if (options.inputFiles)[0].find("SingleMuon") != -1: fname = "SingleMuon_csc2015_Nov14.txt"
+   elif (options.inputFiles)[0].find("SingleElectron") != -1: fname = "SingleElectron_csc2015_Nov14.txt"
+   elif (options.inputFiles)[0].find("JetHT") != -1: fname = "JetHT_csc2015_Nov27.txt"
+   else:
+    print "** WARNING: EVENT LIST NOT FOUND! exiting... "
+    sys.exit()
+   
+   print "** FILTERING EVENT LIST: %s" %fname 
+   listEventsToSkip = []
+   fileEventsToSkip = open(fname,"r")
+
+   for line in fileEventsToSkip:
+     cleanLine = line.rstrip()
+     listEventsToSkip.append(cleanLine+"-"+cleanLine)
+
+   rangeEventsToSkip = cms.untracked.VEventRange(listEventsToSkip)
+   process.source.eventsToSkip = rangeEventsToSkip
+
 ####### Redo Jet clustering sequence ##########
 betapar = cms.double(0.0)
 fatjet_ptmin = 100.0
@@ -594,14 +615,14 @@ jecLevelsAK4chs = []
 jecLevelsAK4 = []
 jecLevelsAK8Puppi = []
 jecLevelsForMET = []
-jecAK8chsUncFile = "JEC/Summer15_25nsV5_DATA_Uncertainty_AK8PFchs.txt"
-jecAK4chsUncFile = "JEC/Summer15_25nsV5_DATA_Uncertainty_AK4PFchs.txt"
+jecAK8chsUncFile = "JEC/Summer15_25nsV6_DATA_Uncertainty_AK8PFchs.txt"
+jecAK4chsUncFile = "JEC/Summer15_25nsV6_DATA_Uncertainty_AK4PFchs.txt"
 
 JECprefix = "Summer15_50nsV5"
 if config["BUNCHSPACING"] == 25 and config["RUNONMC"]:
    JECprefix = "Summer15_25nsV2"
 elif config["BUNCHSPACING"] == 25 and not(config["RUNONMC"]):   
-   JECprefix = "Summer15_25nsV5"
+   JECprefix = "Summer15_25nsV6"
 
 if config["CORRJETSONTHEFLY"]:
    if config["RUNONMC"]:
