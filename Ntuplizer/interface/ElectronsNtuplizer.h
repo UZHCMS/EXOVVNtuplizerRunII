@@ -10,7 +10,7 @@ public:
                       edm::EDGetTokenT<reco::VertexCollection>             verticeToken , 
 		      edm::EDGetTokenT<double>  		           rhoToken     ,
                       std::vector<edm::EDGetTokenT<edm::ValueMap<bool> > > eleIDtokens  ,
-		      edm::EDGetTokenT<pat::TauCollection>                 eletauToken  ,
+		      edm::EDGetTokenT<pat::TauCollection>                 boostedtauToken  ,
 		      NtupleBranches*				           nBranches    ,
 		      std::map< std::string, bool >&                       runFlags 
 		      );
@@ -32,7 +32,7 @@ private:
    edm::EDGetTokenT<edm::ValueMap<bool> >    electronTightIdMapToken_;
    edm::EDGetTokenT<edm::ValueMap<bool> >    electronHEEPIdMapToken_;
    edm::EDGetTokenT<edm::ValueMap<bool> >    electronHEEPId51MapToken_;
-   edm::EDGetTokenT<pat::TauCollection>      eletauToken_  ;
+   edm::EDGetTokenT<pat::TauCollection>      boostedtauToken_  ;
    edm::Handle<edm::View<pat::Electron> >    electrons_    ;
    edm::Handle<reco::VertexCollection> 	     vertices_     ;
    edm::Handle<double> 			     rho_	   ;

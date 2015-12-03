@@ -6,14 +6,14 @@
 MuonsNtuplizer::MuonsNtuplizer( edm::EDGetTokenT<pat::MuonCollection>    muonToken   , 
                                 edm::EDGetTokenT<reco::VertexCollection> verticeToken, 
 				edm::EDGetTokenT<double>                 rhoToken    , 
-				edm::EDGetTokenT<pat::TauCollection>     mutauToken  ,
+				edm::EDGetTokenT<pat::TauCollection>     boostedtauToken  ,
 				NtupleBranches* nBranches,
 				std::map< std::string, bool >& runFlags  )
 	: CandidateNtuplizer( nBranches    )
 	, muonToken_	    ( muonToken    )
 	, verticeToken_     ( verticeToken )
 	, rhoToken_	    ( rhoToken     )
-	, mutauToken_       ( mutauToken   )  
+	, boostedtauToken_  ( boostedtauToken   )  
 	, doBoostedTaus_    ( runFlags["doBoostedTaus"]  )
 {
 }
@@ -53,10 +53,11 @@ float MuonCorrPFIso(pat::Muon muon, bool highpt, edm::Handle<pat::TauCollection>
 	if ( dR < dRmin &&
 		tau->pt()>20 && 
 		fabs(tau->eta())<2.4 && 
-		tau->tauID("decayModeFindingNewDMs")>0.5 && 
-		tau->tauID("againstMuonLoose")>0.5 && 
-		tau->tauID("againstElectronLoose")>0.5 && 
-		tau->tauID("byVLooseIsolationMVA3newDMwoLT")>0.5) {
+		tau->tauID("decayModeFindingNewDMs")>0.5 // && 
+		// tau->tauID("againstMuonLoose")>0.5 && 
+		// tau->tauID("againstElectronLoose")>0.5 && 
+		// tau->tauID("byVLooseIsolationMVA3newDMwoLT")>0.5
+	     ) {
 		  matchedTau = tau;
 		  dRmin = dR;
 	}
@@ -92,7 +93,7 @@ void MuonsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSet
   event.getByToken(muonToken_	, muons_    ); 
   event.getByToken(verticeToken_, vertices_ ); 
   event.getByToken(rhoToken_	, rho_      );
-  event.getByToken(mutauToken_   , taus_    );  
+  event.getByToken(boostedtauToken_   , taus_    );  
 
 
   // Find the first vertex in the collection that passes good quality criteria

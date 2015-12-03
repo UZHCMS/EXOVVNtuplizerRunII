@@ -83,10 +83,18 @@ bool TriggersNtuplizer::findTrigger( std::string trigName ){
        trigName.find("HLT_Ele27_eta2p1_WPLoose_Gsf_DoubleMediumIsoPFTau35") != std::string::npos ||
        trigName.find("HLT_Ele27_eta2p1_WPLoose_Gsf_LooseIsoPFTau20") != std::string::npos ||
        trigName.find("HLT_IsoMu16_eta2p1_MET30_JetIDCleaned_LooseIsoPFTau50") != std::string::npos ||
-       trigName.find("HLT_IsoMu17_eta2p1_LooseIsoPFTau20") != std::string::npos ||
+     
        trigName.find("HLT_IsoMu17_eta2p1_MediumIsoPFTau") != std::string::npos ||
-       trigName.find("HLT_IsoMu20_eta2p1_LooseIsoPFTau20") != std::string::npos ||
-       trigName.find("HLT_LooseIsoPFTau50") != std::string::npos
+       trigName.find("HLT_LooseIsoPFTau50") != std::string::npos||
+       trigName.find("HLT_IsoMu17_eta2p1_LooseIsoPFTau20") != std::string::npos||
+       trigName.find("HLT_IsoMu24_eta2p1") != std::string::npos||
+       trigName.find("HLT_IsoMu17_eta2p1") != std::string::npos||
+       trigName.find("HLT_Ele22_eta2p1_WP75_Gsf_LooseIsoPFTau20") != std::string::npos||
+       trigName.find("HLT_Ele32_eta2p1_WP75_Gsf") != std::string::npos||
+       trigName.find("HLT_Ele23_WPLoose_Gsf") != std::string::npos||
+       trigName.find("HLTHLT_DoubleMediumIsoPFTau40_Trk1_eta2p1_Reg") != std::string::npos
+
+
    ) return true;
    else
      return false;
@@ -136,7 +144,7 @@ void TriggersNtuplizer::fillBranches( edm::Event const & event, const edm::Event
   			   nBranches_->triggerObject_eta .push_back(obj.eta());
   			   nBranches_->triggerObject_phi .push_back(obj.phi());
   			   nBranches_->triggerObject_mass.push_back(obj.mass());
-				
+			
   			   for (unsigned h = 0; h < obj.filterIds().size(); ++h) vfilterIDs.push_back( obj.filterIds()[h]); // as defined in http://cmslxr.fnal.gov/lxr/source/DataFormats/HLTReco/interface/TriggerTypeDefs.h
 				
   			   if( pathNamesLast[h] == "HLT_AK8PFJet360_TrimMass30_v1") vfiredTrigger.push_back( 0 );

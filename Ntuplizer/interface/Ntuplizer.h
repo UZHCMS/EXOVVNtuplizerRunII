@@ -74,8 +74,8 @@ private:
   edm::EDGetTokenT<edm::ValueMap<bool> >                    eleMediumIdMapToken_;
   edm::EDGetTokenT<edm::ValueMap<bool> >                    eleTightIdMapToken_ ;
   edm::EDGetTokenT<pat::TauCollection> 	    		    tauToken_		;
-  edm::EDGetTokenT<pat::TauCollection> 	    		    tauEleTauToken_	;
-  edm::EDGetTokenT<pat::TauCollection> 	    		    tauMuTauToken_	;
+  edm::EDGetTokenT<pat::TauCollection> 	    		    tauBoostedTauToken_	;
+
 
   edm::EDGetTokenT<pat::METCollection> 	    		    metToken_		;
   edm::EDGetTokenT<pat::JetCollection>                      jetForMetCorrToken_ ;

@@ -25,7 +25,7 @@ config["DOTRIGGERDECISIONS"] = True
 config["DOTRIGGEROBJECTS"] = True
 config["DOHLTFILTERS"] = True
 config["DOMISSINGET"] = True
-config["DOSEMILEPTONICTAUSBOOSTED"] = False
+config["DOTAUSBOOSTED"] = False
 
 #--------- AK8 jets reclustering ----------#
 config["ADDAK8GENJETS"] = False #! Add AK8 gen jet collection with pruned and softdrop mass

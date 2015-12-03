@@ -48,8 +48,7 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
 	eleMediumIdMapToken_  	    (consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("eleMediumIdMap"))),
 	eleTightIdMapToken_   	    (consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("eleTightIdMap"))),
 	tauToken_	      	    (consumes<pat::TauCollection>(iConfig.getParameter<edm::InputTag>("taus"))),
-	tauEleTauToken_	      	    (consumes<pat::TauCollection>(iConfig.getParameter<edm::InputTag>("tausEleTau"))),
-	tauMuTauToken_	      	    (consumes<pat::TauCollection>(iConfig.getParameter<edm::InputTag>("tausMuTau"))),
+	tauBoostedTauToken_	    (consumes<pat::TauCollection>(iConfig.getParameter<edm::InputTag>("tausBoostedTau"))),
 
 	metToken_	      	    (consumes<pat::METCollection>(iConfig.getParameter<edm::InputTag>("mets"))),
 	jetForMetCorrToken_   	    (consumes<pat::JetCollection>(iConfig.getParameter<edm::InputTag>("jetsForMetCorr"))),
@@ -183,7 +182,7 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
     nTuplizers_["muons"]= new MuonsNtuplizer( muonToken_   , 
                                               vtxToken_    , 
 					      rhoToken_    , 
-					      tauMuTauToken_ ,
+					      tauBoostedTauToken_ ,
 					      nBranches_  ,
 					      runFlags     );
   }
@@ -202,7 +201,7 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
                                                        vtxToken_     , 
 						       rhoToken_     , 
 						       eleIdTokens   , 
-						       tauEleTauToken_ ,
+						       tauBoostedTauToken_ ,
 						       nBranches_  ,
 						       runFlags     );
   }    
@@ -227,8 +226,7 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
 
   if (runFlags["doTaus"]) {
      nTuplizers_["taus"] = new TausNtuplizer( tauToken_      ,  
-                                              tauEleTauToken_,  
-					      tauMuTauToken_ ,  
+                                              tauBoostedTauToken_,  
 					      rhoToken_      ,  
 					      vtxToken_      ,  
 					      nBranches_     , 
