@@ -560,8 +560,8 @@ if config["DOMETRECLUSTERING"]:
   jetsAK4 = "selectedPatJets"
 
 TAUS = ""
-MUTAUS = ""
-ELETAUS = ""
+BOOSTEDTAUS = ""
+
 genAK8 = ""
 
 if config["ADDAK8GENJETS"]:
@@ -578,14 +578,13 @@ if config["DOAK10TRIMMEDRECLUSTERING"]:
 if config["DOAK8PUPPIRECLUSTERING"]:  
   jetsAK8Puppi = "patJetsAk8PuppiJets"  
 
-if config["DOSEMILEPTONICTAUSBOOSTED"]:
+if config["DOTAUSBOOSTED"]:
   TAUS = "slimmedTaus"
-  MUTAUS = "slimmedTausMuTau"
-  ELETAUS = "slimmedTausBoosted"     
+  BOOSTEDTAUS = "slimmedTausBoosted"     
 else:
   TAUS = "slimmedTaus"
-  MUTAUS = "slimmedTaus"
-  ELETAUS = "slimmedTaus"     
+  BOOSTEDTAUS = "slimmedTausBoosted"  
+  
 
 ######## JEC ########
 jecLevelsAK8chs = []
@@ -692,7 +691,7 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     doPrunedSubjets   = cms.bool(config["DOAK8PRUNEDRECLUSTERING"]),
     doTrimming        = cms.bool(config["DOAK10TRIMMEDRECLUSTERING"]),
     doPuppi           = cms.bool(config["DOAK8PUPPIRECLUSTERING"]),
-    doBoostedTaus     = cms.bool(config["DOSEMILEPTONICTAUSBOOSTED"]),
+    doBoostedTaus     = cms.bool(config["DOTAUSBOOSTED"]),
     vertices = cms.InputTag("offlineSlimmedPrimaryVertices"),
     muons = cms.InputTag("slimmedMuons"),
     electrons = cms.InputTag("slimmedElectrons"),
@@ -703,8 +702,7 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     eleMediumIdMap = cms.InputTag("egmGsfElectronIDs:cutBasedElectronID-PHYS14-PU20bx25-V2-standalone-medium"),
     eleTightIdMap = cms.InputTag("egmGsfElectronIDs:cutBasedElectronID-PHYS14-PU20bx25-V2-standalone-tight"),
     taus = cms.InputTag(TAUS),
-    tausMuTau = cms.InputTag(MUTAUS),
-    tausEleTau = cms.InputTag(ELETAUS),
+    tausBoostedTau = cms.InputTag(BOOSTEDTAUS),
     jets = cms.InputTag(jetsAK4),
     fatjets = cms.InputTag(jetsAK8),
     prunedjets = cms.InputTag(jetsAK8pruned),
