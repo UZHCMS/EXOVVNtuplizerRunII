@@ -266,6 +266,12 @@ public:
   std::vector<float>  	      tau_againstMuonLooseMVA			      ;
   std::vector<float>  	      tau_againstMuonMediumMVA			      ;
   std::vector<float>  	      tau_againstMuonTightMVA			      ;
+  std::vector<float>  	      tau_byPileupWeightedIsolationRaw3Hits	      ;
+  std::vector<float>  	      tau_byLoosePileupWeightedIsolation3Hits 	      ;
+  std::vector<float>  	      tau_byMediumPileupWeightedIsolation3Hits	      ;
+  std::vector<float>  	      tau_byTightPileupWeightedIsolation3Hits	      ;
+  std::vector<float>  	      tau_byPhotonPtSumOutsideSignalCone	      ;
+  std::vector<float>  	      tau_footprintCorrection			      ;
     
 /* /\*----------------------Tau tracks---------------------------*\/ */
   
