@@ -184,7 +184,7 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch( "tau_chargedHadIsoBoost"      , &tau_chargedHadIsoBoost     );  
     tree_->Branch( "tau_TauType"		 , &tau_TauType		       );
   
-    if ( runFlags["doTausBoosted"] ){
+    if ( runFlags["doBoostedTaus"] ){
       /** tau discriminants */
       tree_->Branch( "tau_decayModeFindingNewDMs"	              , &tau_decayModeFindingNewDMs			 );
       tree_->Branch( "tau_decayModeFinding"  			      , &tau_decayModeFinding				 );
@@ -245,6 +245,13 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
       tree_->Branch( "tau_againstMuonLooseMVA"			      , &tau_againstMuonLooseMVA 			 );
       tree_->Branch( "tau_againstMuonMediumMVA"			      , &tau_againstMuonMediumMVA			 );
       tree_->Branch( "tau_againstMuonTightMVA"			      , &tau_againstMuonTightMVA 			 );
+      tree_->Branch( "tau_byPileupWeightedIsolationRaw3Hits"	      , &tau_byPileupWeightedIsolationRaw3Hits		 );
+      tree_->Branch( "tau_byLoosePileupWeightedIsolation3Hits"	      , &tau_byLoosePileupWeightedIsolation3Hits	 );
+      tree_->Branch( "tau_byMediumPileupWeightedIsolation3Hits"	      , &tau_byMediumPileupWeightedIsolation3Hits	 );
+      tree_->Branch( "tau_byTightPileupWeightedIsolation3Hits"	      , &tau_byTightPileupWeightedIsolation3Hits	 ); 
+      tree_->Branch( "tau_byPhotonPtSumOutsideSignalCone"	      , &tau_byPhotonPtSumOutsideSignalCone	 );
+      tree_->Branch( "tau_footprintCorrection"	                      , &tau_footprintCorrection	 );
+
     } //doTausBoosted
   } //doTaus
       
@@ -771,6 +778,14 @@ void NtupleBranches::reset( void ){
   tau_againstMuonLooseMVA.clear();
   tau_againstMuonMediumMVA.clear();
   tau_againstMuonTightMVA.clear();
+  tau_byPileupWeightedIsolationRaw3Hits          .clear();
+  tau_byLoosePileupWeightedIsolation3Hits        .clear();
+  tau_byMediumPileupWeightedIsolation3Hits       .clear();
+  tau_byTightPileupWeightedIsolation3Hits        .clear();
+  tau_byPhotonPtSumOutsideSignalCone             .clear();
+  tau_footprintCorrection                        .clear();
+  
+
   
   /** energy density */
   rho = 0;
