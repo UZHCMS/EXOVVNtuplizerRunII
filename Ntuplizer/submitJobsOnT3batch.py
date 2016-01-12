@@ -447,10 +447,10 @@ if opts.copyfiles:
 	   #print cmd
 	   os.system(cmd)
 
-   cmd = "lcg-cp -b -D srmv2 " + xmlfile + " srm://t3se01.psi.ch:8443/srm/managerv2?SFN=%s"%(newdir+"/config/"+xmlfile.rsplit("/",1)[1])
+   cmd = "lcg-cp -b -D srmv2 " + xmlfile + " srm://t3se01.psi.ch:8443/srm/managerv2?SFN=%s"%(newdir+"/config/"+os.path.basename(xmlfile))
    print cmd  
    os.system(cmd)    
-   cmd = "lcg-cp -b -D srmv2 " + cmsswdir + "/src/" + cfg + " srm://t3se01.psi.ch:8443/srm/managerv2?SFN=%s"%(newdir+"/config/"+cfg.rsplit("/",1)[1])
+   cmd = "lcg-cp -b -D srmv2 " + cmsswdir + "/src/" + cfg + " srm://t3se01.psi.ch:8443/srm/managerv2?SFN=%s"%(newdir+"/config/"+os.path.basename(cfg))
    print cmd  
    os.system(cmd)
    f = open(cmsswdir + "/src/" + cfg, 'r')
@@ -464,7 +464,7 @@ if opts.copyfiles:
       cmd = "lcg-cp -b -D srmv2 python/ntuplizerOptions_data_cfi.py srm://t3se01.psi.ch:8443/srm/managerv2?SFN=%s"%(newdir+"/config/ntuplizerOptions_data_cfi.py")   
    print cmd   
    os.system(cmd)
-   cmd = "lcg-cp -b -D srmv2 " + opts.config[0] + " srm://t3se01.psi.ch:8443/srm/managerv2?SFN=%s"%(newdir+"/config/"+opts.config[0].rsplit("/",1)[1])   
+   cmd = "lcg-cp -b -D srmv2 " + opts.config[0] + " srm://t3se01.psi.ch:8443/srm/managerv2?SFN=%s"%(newdir+"/config/"+os.path.basename(opts.config[0]))
    print cmd
    os.system(cmd)
 

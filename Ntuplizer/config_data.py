@@ -95,9 +95,9 @@ if not(config["RUNONMC"]) and config["USEJSON"]:
   if config["FILTEREVENTS"]:
   
    fname = ""
-   if (options.inputFiles)[0].find("SingleMuon") != -1: fname = "SingleMuon_csc2015_Nov14.txt"
-   elif (options.inputFiles)[0].find("SingleElectron") != -1: fname = "SingleElectron_csc2015_Nov14.txt"
-   elif (options.inputFiles)[0].find("JetHT") != -1: fname = "JetHT_csc2015_Nov27.txt"
+   if (options.inputFiles)[0].find("SingleMuon") != -1: fname = "RunLumiEventLists/SingleMuon_csc2015_Nov14.txt"
+   elif (options.inputFiles)[0].find("SingleElectron") != -1: fname = "RunLumiEventLists/SingleElectron_csc2015_Nov14.txt"
+   elif (options.inputFiles)[0].find("JetHT") != -1: fname = "RunLumiEventLists/JetHT_csc2015_Nov27.txt"
    else:
     print "** WARNING: EVENT LIST NOT FOUND! exiting... "
     sys.exit()
