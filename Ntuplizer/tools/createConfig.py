@@ -31,23 +31,22 @@ def main():
   
   with open(fileList) as fileListFile:
     for sample in fileListFile:
+      sample = sample.strip("\n")
       print "Working on sample:", sample
       createConfig(sample, templateCfg, pnfs, isData)
 
     
 def createConfig(sample, templateCfg, pnfs, isData):
-  sample = sample.strip("\n")
   sampleBase = sample.split("/")[1]
-  print sampleBase
   cfgFile = open(sampleBase+".cfg", "w")
   with open(templateCfg) as templateCfgFile:
     for line in templateCfgFile:
       if (line.find("src") < 0):
-        print line.replace("FULLSAMPLE", sample).replace("SAMPLE", sampleBase).strip("\n")
+        # print line.replace("FULLSAMPLE", sample).replace("SAMPLE", sampleBase).strip("\n")
         cfgFile.write(line.replace("FULLSAMPLE", sample).replace("SAMPLE", sampleBase))
       else:
         sampleLocation = findSampleLocation(sample, pnfs, isData)
-        print line.replace("FULLSAMPLE", sampleLocation).replace("SAMPLE", sampleBase).strip("\n")
+        # print line.replace("FULLSAMPLE", sampleLocation).replace("SAMPLE", sampleBase).strip("\n")
         cfgFile.write(line.replace("FULLSAMPLE", sampleLocation).replace("SAMPLE", sampleBase))
   cfgFile.close()
 
@@ -55,15 +54,16 @@ def createConfig(sample, templateCfg, pnfs, isData):
 def findSampleLocation(sample, pnfs, isData):
   splitSample = sample.split("/")
   sampleBase = splitSample[1]
-  campaign = splitSample[2].split("-")[0]
+  campaign = splitSample[2].split("-",1)[0]
+  scenario = splitSample[2].split("-",1)[1]
   sampleType = splitSample[3]
-  subDir = "%s/%s/%s" %(campaign, sampleBase, sampleType)
+  subDir = "%s/%s/%s/%s" %(campaign, sampleBase, sampleType, scenario)
   if isData:
     pnfs = pnfs+"/data"
   else:
     pnfs = pnfs+"/mc"
   fullPath = "%s/%s" %(pnfs, subDir)
-  print fullPath
+  # print fullPath
   for subdir, dirs, files in os.walk(fullPath):
     for file in files:
       if (file.find(".root") >= 0):
