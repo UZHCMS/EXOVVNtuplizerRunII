@@ -62,7 +62,7 @@ def findSampleLocation(sample, pnfs, isData):
     pnfs = pnfs+"/data"
   else:
     pnfs = pnfs+"/mc"
-  fullPath = "%s/%s" %(pnfs, subDir)
+  fullPath = "%s/%s/" %(pnfs, subDir)
   # print fullPath
   for subdir, dirs, files in os.walk(fullPath):
     for file in files:
