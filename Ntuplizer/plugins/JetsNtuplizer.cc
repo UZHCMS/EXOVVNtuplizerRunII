@@ -239,7 +239,7 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
      nBranches_->jetAK4_nemf	  .push_back(j.neutralEmEnergyFraction());
      nBranches_->jetAK4_cemf	  .push_back(j.chargedEmEnergyFraction());   
      nBranches_->jetAK4_charge    .push_back(j.charge());
-     nBranches_->jetAK4_cisv	  .push_back(j.bDiscriminator("pfCombinedInclusiveSecondaryVertexV2BJetTags"));
+     nBranches_->jetAK4_csv	  .push_back(j.bDiscriminator("pfCombinedInclusiveSecondaryVertexV2BJetTags"));
      nBranches_->jetAK4_vtxMass   .push_back(j.userFloat("vtxMass")); 
      nBranches_->jetAK4_vtxNtracks.push_back(j.userFloat("vtxNtracks")); 
      nBranches_->jetAK4_vtx3DVal  .push_back(j.userFloat("vtx3DVal")); 
