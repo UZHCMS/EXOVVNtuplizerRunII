@@ -330,7 +330,7 @@ public:
   std::vector<int>                jetAK4_genParton_pdgID;
   std::vector<int>                jetAK4_nbHadrons     ;
   std::vector<int>                jetAK4_ncHadrons     ;
-  std::vector<float>              jetAK4_cisv 	       ;         
+  std::vector<float>              jetAK4_csv  	       ;         
   std::vector<float>              jetAK4_vtxMass       ;
   std::vector<float>              jetAK4_vtxNtracks    ;
   std::vector<float>              jetAK4_vtx3DVal      ;

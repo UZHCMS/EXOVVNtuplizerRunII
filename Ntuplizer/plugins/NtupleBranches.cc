@@ -294,7 +294,7 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch( "jetAK4_nemf"  	    , &jetAK4_nemf       );
     tree_->Branch( "jetAK4_cemf"  	    , &jetAK4_cemf       );
     tree_->Branch( "jetAK4_charge" 	    , &jetAK4_charge     );
-    tree_->Branch( "jetAK4_cisv"	    , &jetAK4_cisv	 );
+    tree_->Branch( "jetAK4_csv"	     , &jetAK4_csv	 );
     tree_->Branch( "jetAK4_vtxMass"	    , &jetAK4_vtxMass    );
     tree_->Branch( "jetAK4_vtxNtracks"      , &jetAK4_vtxNtracks );
     tree_->Branch( "jetAK4_vtx3DVal"	    , &jetAK4_vtx3DVal   );
@@ -826,7 +826,7 @@ void NtupleBranches::reset( void ){
   jetAK4_genParton_pdgID.clear();
   jetAK4_nbHadrons.clear();
   jetAK4_ncHadrons.clear();
-  jetAK4_cisv.clear();
+  jetAK4_csv.clear();
   jetAK4_vtxMass.clear();
   jetAK4_vtxNtracks.clear();
   jetAK4_vtx3DVal.clear();
