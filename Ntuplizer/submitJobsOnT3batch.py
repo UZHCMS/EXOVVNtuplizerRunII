@@ -35,186 +35,23 @@ def getJobsDirs(outdir,jobname):
 #-----------------------------------------------------------------------------------------
 def getFileListT3(src):
 
-   cmd = "uberftp t3se01.psi.ch 'ls %s'" %src
-   ls_la = commands.getoutput(cmd)
-
-   list_ = []
-   list_.extend(ls_la.split(os.linesep))   
-   dirs = []
-   for a in list_:
-      b = a.split(" ")
-      status = os.path.isdir(src + b[-1:][0].strip('\r'))
-      if status: dirs.append(src + b[-1:][0].strip('\r'))
-
-   if len(dirs) == 0: dirs.append(src)
+  # find all .root files in src directory and add to fileList
+  fileList = []
+  for subdir, dirs, files in os.walk(src):
+    for file in files:
+      if (file.find(".root") >= 0):
+        print os.path.join(src, file)
+        fileList.append(os.path.join(src, subdir, file))
    
-   files = []
-   for d in dirs:
-      ls_la = commands.getoutput("ls " + d)
-      list_ = []
-      list_.extend(ls_la.split(os.linesep))
-      for a in list_:
-         b = a.split(" ")
-         if b[-1:][0].find("root") != -1:
-            files.append(d.replace('/pnfs/psi.ch/cms/trivcat','')+"/"+b[-1:][0])
    
-   if len(files) == 0 :
-      print ("No files found in the directory %s" %(src))
-      sys.exit()
-   else:
-      print ("Found %i files in the directory %s" %(len(files),src))  
+  if len(fileList) == 0:
+    print ("No files found in the directory %s" %(src))
+    sys.exit(1)
+  else:
+    print ("Found %i files in the directory %s" %(len(fileList),src))  
    
-   return files   
+  return fileList   
 
-#-----------------------------------------------------------------------------------------
-def getFileListFromSampleT3(sample):
-
-   path = ""
-   if sample == "WJetsToLNu_HT-100to200":
-      path = "/pnfs/psi.ch/cms/trivcat/store/mc/Phys14DR/WJetsToLNu_HT-100to200_Tune4C_13TeV-madgraph-tauola/MINIAODSIM/PU20bx25_PHYS14_25_V1-v1/"
-   elif sample == "WJetsToLNu_HT-200to400":
-      path = "/pnfs/psi.ch/cms/trivcat/store/mc/Phys14DR/WJetsToLNu_HT-200to400_Tune4C_13TeV-madgraph-tauola/MINIAODSIM/PU20bx25_PHYS14_25_V1-v1/"
-   elif sample == "WJetsToLNu_HT-400to600":
-      path = "/pnfs/psi.ch/cms/trivcat/store/mc/Phys14DR/WJetsToLNu_HT-400to600_Tune4C_13TeV-madgraph-tauola/MINIAODSIM/PU20bx25_PHYS14_25_V1-v1/"
-   elif sample == "WJetsToLNu_HT-600toInf":
-      path = "/pnfs/psi.ch/cms/trivcat/store/mc/Phys14DR/WJetsToLNu_HT-600toInf_Tune4C_13TeV-madgraph-tauola/MINIAODSIM/PU20bx25_PHYS14_25_V1-v1/"         
-   elif sample == "TBarToLeptons_s-channel":
-      path = "/pnfs/psi.ch/cms/trivcat/store/mc/Phys14DR/TBarToLeptons_s-channel-CSA14_Tune4C_13TeV-aMCatNLO-tauola/MINIAODSIM/PU20bx25_PHYS14_25_V1-v1/"    
-   elif sample == "TBarToLeptons_t-channel":
-      path = "/pnfs/psi.ch/cms/trivcat/store/mc/Phys14DR/TBarToLeptons_t-channel_Tune4C_CSA14_13TeV-aMCatNLO-tauola/MINIAODSIM/PU20bx25_PHYS14_25_V1-v1/"   
-   elif sample == "TTJets":
-      path = "/pnfs/psi.ch/cms/trivcat/store/mc/Phys14DR/TTJets_MSDecaysCKM_central_Tune4C_13TeV-madgraph-tauola/MINIAODSIM/PU20bx25_PHYS14_25_V1-v1/"     
-   elif sample == "TToLeptons_s-channel":
-      path = "/pnfs/psi.ch/cms/trivcat/store/mc/Phys14DR/TToLeptons_s-channel-CSA14_Tune4C_13TeV-aMCatNLO-tauola/MINIAODSIM/PU20bx25_PHYS14_25_V1-v1/"   
-   elif sample == "TToLeptons_t-channel":
-      path = "/pnfs/psi.ch/cms/trivcat/store/mc/Phys14DR/TToLeptons_t-channel-CSA14_Tune4C_13TeV-aMCatNLO-tauola/MINIAODSIM/PU20bx25_PHYS14_25_V1-v1/"   
-   elif sample == "T_tW-channel":
-      path = "/pnfs/psi.ch/cms/trivcat/store/mc/Phys14DR/T_tW-channel-DR_Tune4C_13TeV-CSA14-powheg-tauola/MINIAODSIM/PU20bx25_PHYS14_25_V1-v1/"    
-   elif sample == "Tbar_tW-channel":
-      path = "/pnfs/psi.ch/cms/trivcat/store/mc/Phys14DR/Tbar_tW-channel-DR_Tune4C_13TeV-CSA14-powheg-tauola/MINIAODSIM/PU20bx25_PHYS14_25_V1-v1/"   
-   elif sample == "VV":
-      path = "/pnfs/psi.ch/cms/trivcat/store/user/jngadiub/Phys14/VV/"
-   elif sample == "QCD_HT_500To1000_ext":
-      path = "/pnfs/psi.ch/cms/trivcat/store/mc/Phys14DR/QCD_HT-500To1000_13TeV-madgraph/MINIAODSIM/PU20bx25_PHYS14_25_V1_ext1-v1/"   
-   elif sample == "QCD_HT_250To500_ext":
-      path = "/pnfs/psi.ch/cms/trivcat/store/mc/Phys14DR/QCD_HT_250To500_13TeV-madgraph/MINIAODSIM/PU20bx25_PHYS14_25_V1_ext1-v2/"   
-   elif sample == "QCD_HT_1000ToInf_ext":
-      dataset ="/pnfs/psi.ch/cms/trivcat/store/mc/Phys14DR/QCD_HT_1000ToInf_13TeV-madgraph/MINIAODSIM/PU20bx25_PHYS14_25_V1_ext1-v1/"   
-   elif sample == "QCD_HT-500To1000":
-      path = "/pnfs/psi.ch/cms/trivcat/store/mc/Phys14DR/QCD_HT-500To1000_13TeV-madgraph/MINIAODSIM/PU20bx25_PHYS14_25_V1-v1/"          
-   elif sample == "QCD_HT_1000ToInf":
-      path = "/pnfs/psi.ch/cms/trivcat/store/mc/Phys14DR/QCD_HT_1000ToInf_13TeV-madgraph/MINIAODSIM/PU20bx25_PHYS14_25_V1-v1/"            
-   elif sample == "QCD_HT_250To500":
-      path = "/pnfs/psi.ch/cms/trivcat/store/mc/Phys14DR/QCD_HT_250To500_13TeV-madgraph/MINIAODSIM/PU20bx25_PHYS14_25_V1-v1/"         
-   elif sample == "QCD_Pt-1000to1400":
-      path = "/pnfs/psi.ch/cms/trivcat/store/mc/Phys14DR/QCD_Pt-1000to1400_Tune4C_13TeV_pythia8/MINIAODSIM/PU20bx25_trkalmb_castor_PHYS14_25_V1-v1/"         
-   elif sample == "QCD_Pt-1400to1800":
-      path = "/pnfs/psi.ch/cms/trivcat/store/mc/Phys14DR/QCD_Pt-1400to1800_Tune4C_13TeV_pythia8/MINIAODSIM/PU20bx25_trkalmb_castor_PHYS14_25_V1-v1/"         
-   elif sample == "QCD_Pt-15to3000":
-      path = "/pnfs/psi.ch/cms/trivcat/store/mc/Phys14DR/QCD_Pt-15to3000_Tune4C_Flat_13TeV_pythia8/MINIAODSIM/PU20bx25_trkalmb_PHYS14_25_V1-v1/"      
-   elif sample == "QCD_Pt-1800to2400":
-      path = "/pnfs/psi.ch/cms/trivcat/store/mc/Phys14DR/QCD_Pt-1800to2400_Tune4C_13TeV_pythia8/MINIAODSIM/PU20bx25_trkalmb_PHYS14_25_V1-v2/"         
-   elif sample == "QCD_Pt-2400to3200":
-      path = "/pnfs/psi.ch/cms/trivcat/store/mc/Phys14DR/QCD_Pt-2400to3200_Tune4C_13TeV_pythia8/MINIAODSIM/PU20bx25_trkalmb_PHYS14_25_V1-v1/"         
-   elif sample == "QCD_Pt-300to470":
-      path = "/pnfs/psi.ch/cms/trivcat/store/mc/Phys14DR/QCD_Pt-300to470_Tune4C_13TeV_pythia8/MINIAODSIM/PU20bx25_trkalmb_castor_PHYS14_25_V1-v2/"         
-   elif sample == "QCD_Pt-3200":
-      path = "/pnfs/psi.ch/cms/trivcat/store/mc/Phys14DR/QCD_Pt-3200_Tune4C_13TeV_pythia8/MINIAODSIM/PU20bx25_trkalmb_PHYS14_25_V1-v1/"         
-   elif sample == "QCD_Pt-470to600":
-      path = "/pnfs/psi.ch/cms/trivcat/store/mc/Phys14DR/QCD_Pt-470to600_Tune4C_13TeV_pythia8/MINIAODSIM/PU20bx25_trkalmb_castor_PHYS14_25_V1-v2/"         
-   elif sample == "QCD_Pt_600to800":
-      path = "/pnfs/psi.ch/cms/trivcat/store/mc/Phys14DR/QCD_Pt-600to800_Tune4C_13TeV_pythia8/MINIAODSIM/PU20bx25_trkalmb_castor_PHYS14_25_V1-v1/"         
-   elif sample == "QCD_Pt_800to1000":
-      path = "/pnfs/psi.ch/cms/trivcat/store/mc/Phys14DR/QCD_Pt-800to1000_Tune4C_13TeV_pythia8/MINIAODSIM/PU20bx25_trkalmb_castor_PHYS14_25_V1-v2/"         
-   elif sample == "RSGravitonToWW_M_1000":
-      path = "/pnfs/psi.ch/cms/trivcat/store/mc/Phys14DR/RSGravitonToWW_kMpl01_M_1000_Tune4C_13TeV_pythia8/MINIAODSIM/PU20bx25_tsg_PHYS14_25_V1-v2/"         
-   elif sample == "RSGravitonToWW_M_2000":
-      path = "/pnfs/psi.ch/cms/trivcat/store/mc/Phys14DR/RSGravitonToWW_kMpl01_M_2000_Tune4C_13TeV_pythia8/MINIAODSIM/PU20bx25_PHYS14_25_V1-v1/"        
-   elif sample == "RSGravitonToWW_M_3000":
-      path = "/pnfs/psi.ch/cms/trivcat/store/mc/Phys14DR/RSGravitonToWW_kMpl01_M_3000_Tune4C_13TeV_pythia8/MINIAODSIM/PU20bx25_PHYS14_25_V1-v1/"   
-   elif sample == "RSGravitonToWW_M_4000":
-      path = "/pnfs/psi.ch/cms/trivcat/store/mc/Phys14DR/RSGravitonToWW_kMpl01_M_4000_Tune4C_13TeV_pythia8/MINIAODSIM/PU20bx25_PHYS14_25_V1-v1/"
-   else:
-      print "Sample %s unknown! Exiting..." %sample
-      sys.exit()
-   
-   return getFileListT3(path) 
-
-#-----------------------------------------------------------------------------------------
-def getFileListFromSampleDAS(sample):
-
-   dataset = ""
-   instance = "prod/global"
-   if sample == "WJetsToLNu_HT-100to200":
-      dataset="/WJetsToLNu_HT-100to200_Tune4C_13TeV-madgraph-tauola/Phys14DR-PU20bx25_PHYS14_25_V1-v1/MINIAODSIM"
-   elif sample == "WJetsToLNu_HT-200to400":
-      dataset = "/WJetsToLNu_HT-200to400_Tune4C_13TeV-madgraph-tauola/Phys14DR-PU20bx25_PHYS14_25_V1-v1/MINIAODSIM"
-   elif sample == "WJetsToLNu_HT-400to600":
-      dataset = "/WJetsToLNu_HT-400to600_Tune4C_13TeV-madgraph-tauola/Phys14DR-PU20bx25_PHYS14_25_V1-v1/MINIAODSIM"  
-   elif sample == "WJetsToLNu_HT-600toInf":
-      dataset = "/WJetsToLNu_HT-600toInf_Tune4C_13TeV-madgraph-tauola/Phys14DR-PU20bx25_PHYS14_25_V1-v1/MINIAODSIM" 
-   elif sample == "TBarToLeptons_s-channel":
-      dataset = "/TBarToLeptons_s-channel-CSA14_Tune4C_13TeV-aMCatNLO-tauola/Phys14DR-PU20bx25_PHYS14_25_V1-v1/MINIAODSIM" 
-   elif sample == "TBarToLeptons_t-channel":
-      dataset = "/TBarToLeptons_t-channel_Tune4C_CSA14_13TeV-aMCatNLO-tauola/Phys14DR-PU20bx25_PHYS14_25_V1-v1/MINIAODSIM"
-   elif sample == "TTJets":
-      dataset = "/TTJets_MSDecaysCKM_central_Tune4C_13TeV-madgraph-tauola/Phys14DR-PU20bx25_PHYS14_25_V1-v1/MINIAODSIM"  
-   elif sample == "TToLeptons_s-channel":
-      dataset = "/TToLeptons_s-channel-CSA14_Tune4C_13TeV-aMCatNLO-tauola/Phys14DR-PU20bx25_PHYS14_25_V1-v1/MINIAODSIM"
-   elif sample == "TToLeptons_t-channel":
-      dataset = "/TToLeptons_t-channel-CSA14_Tune4C_13TeV-aMCatNLO-tauola/Phys14DR-PU20bx25_PHYS14_25_V1-v1/MINIAODSIM"
-   elif sample == "T_tW-channel":
-      dataset = "/T_tW-channel-DR_Tune4C_13TeV-CSA14-powheg-tauola/Phys14DR-PU20bx25_PHYS14_25_V1-v1/MINIAODSIM" 
-   elif sample == "Tbar_tW-channel":
-      dataset = "/Tbar_tW-channel-DR_Tune4C_13TeV-CSA14-powheg-tauola/Phys14DR-PU20bx25_PHYS14_25_V1-v1/MINIAODSIM"
-   elif sample == "VV":
-      dataset = "/LOWW-lvjj-PTWgt180/qili-Q-Test-v3-7d492cb64f2cdaff326f939f96e45c96/USER"
-      instance = "prod/phys03"
-   elif sample == "QCD_HT_500To1000_ext":
-      dataset = "/QCD_HT-500To1000_13TeV-madgraph/Phys14DR-PU20bx25_PHYS14_25_V1_ext1-v1/MINIAODSIM"
-   elif sample == "QCD_HT_250To500_ext":
-      dataset = "/QCD_HT_250To500_13TeV-madgraph/Phys14DR-PU20bx25_PHYS14_25_V1_ext1-v2/MINIAODSIM"
-   elif sample == "QCD_HT_1000ToInf_ext":
-      dataset ="/QCD_HT_1000ToInf_13TeV-madgraph/Phys14DR-PU20bx25_PHYS14_25_V1_ext1-v1/MINIAODSIM"
-   elif sample == "QCD_HT-500To1000":
-      dataset = "/QCD_HT-500To1000_13TeV-madgraph/Phys14DR-PU20bx25_PHYS14_25_V1-v1/MINIAODSIM"       
-   elif sample == "QCD_HT_1000ToInf":
-      dataset = "/QCD_HT_1000ToInf_13TeV-madgraph/Phys14DR-PU20bx25_PHYS14_25_V1-v1/MINIAODSIM"      
-   elif sample == "QCD_HT_250To500":
-      dataset = "/QCD_HT_250To500_13TeV-madgraph/Phys14DR-PU20bx25_PHYS14_25_V1-v1/MINIAODSIM"      
-   elif sample == "QCD_Pt-1000to1400":
-      dataset = "/QCD_Pt-1000to1400_Tune4C_13TeV_pythia8/Phys14DR-PU20bx25_trkalmb_castor_PHYS14_25_V1-v1/MINIAODSIM"      
-   elif sample == "QCD_Pt-1400to1800":
-      dataset = "/QCD_Pt-1400to1800_Tune4C_13TeV_pythia8/Phys14DR-PU20bx25_trkalmb_castor_PHYS14_25_V1-v1/MINIAODSIM"      
-   elif sample == "QCD_Pt-15to3000":
-      dataset = "/QCD_Pt-15to3000_Tune4C_Flat_13TeV_pythia8/Phys14DR-PU20bx25_trkalmb_PHYS14_25_V1-v1/MINIAODSIM"      
-   elif sample == "QCD_Pt-1800to2400":
-      dataset = "/QCD_Pt-1800to2400_Tune4C_13TeV_pythia8/Phys14DR-PU20bx25_trkalmb_PHYS14_25_V1-v2/MINIAODSIM"      
-   elif sample == "QCD_Pt-2400to3200":
-      dataset = "/QCD_Pt-2400to3200_Tune4C_13TeV_pythia8/Phys14DR-PU20bx25_trkalmb_PHYS14_25_V1-v1/MINIAODSIM"      
-   elif sample == "QCD_Pt-300to470":
-      dataset = "/QCD_Pt-300to470_Tune4C_13TeV_pythia8/Phys14DR-PU20bx25_trkalmb_castor_PHYS14_25_V1-v2/MINIAODSIM"      
-   elif sample == "QCD_Pt-3200":
-      dataset = "/QCD_Pt-3200_Tune4C_13TeV_pythia8/Phys14DR-PU20bx25_trkalmb_PHYS14_25_V1-v1/MINIAODSIM"      
-   elif sample == "QCD_Pt-470to600":
-      dataset = "/QCD_Pt-470to600_Tune4C_13TeV_pythia8/Phys14DR-PU20bx25_trkalmb_castor_PHYS14_25_V1-v2/MINIAODSIM"      
-   elif sample == "QCD_Pt_600to800":
-      dataset = "/QCD_Pt-600to800_Tune4C_13TeV_pythia8/Phys14DR-PU20bx25_trkalmb_castor_PHYS14_25_V1-v1/MINIAODSIM"      
-   elif sample == "QCD_Pt_800to1000":
-      dataset = "/QCD_Pt-800to1000_Tune4C_13TeV_pythia8/Phys14DR-PU20bx25_trkalmb_castor_PHYS14_25_V1-v2/MINIAODSIM"      
-   elif sample == "RSGravitonToWW_M_1000":
-      dataset = "/RSGravitonToWW_kMpl01_M_1000_Tune4C_13TeV_pythia8/Phys14DR-PU20bx25_tsg_PHYS14_25_V1-v2/MINIAODSIM"      
-   elif sample == "RSGravitonToWW_M_2000":
-      dataset = "/RSGravitonToWW_kMpl01_M_2000_Tune4C_13TeV_pythia8/Phys14DR-PU20bx25_PHYS14_25_V1-v1/MINIAODSIM"      
-   elif sample == "RSGravitonToWW_M_3000":
-      dataset = "/RSGravitonToWW_kMpl01_M_3000_Tune4C_13TeV_pythia8/Phys14DR-PU20bx25_PHYS14_25_V1-v1/MINIAODSIM"
-   elif sample == "RSGravitonToWW_M_4000":
-      dataset = "/RSGravitonToWW_kMpl01_M_4000_Tune4C_13TeV_pythia8/Phys14DR-PU20bx25_PHYS14_25_V1-v1/MINIAODSIM"
-   else:
-      print "Sample %s unknown! Exiting..." %sample
-      sys.exit()
-   
-   return getFileListDAS(dataset,instance) 
 
 #-----------------------------------------------------------------------------------------
 def writeXMLfile(xmlfile,cmds):
@@ -401,7 +238,6 @@ config = ConfigParser.ConfigParser()
 config.read(opts.config)
 nfiles = config.getint('JobsConfig','nfiles')
 src = config.get('JobsConfig','src')
-sample = config.get('JobsConfig','sample')
 outdir = config.get('JobsConfig','outdir')
 localjobdir = config.get('JobsConfig','localjobdir')
 jobname = config.get('JobsConfig','jobname')
@@ -531,11 +367,9 @@ if opts.resubmit != "-1":
 files = []
 
 if not(opts.useDAS):
-   if sample != "": files = getFileListFromSampleT3(sample)
-   else: files = getFileListT3(src)   
+   files = getFileListT3(src)   
 else:
-   if sample != "": files = getFileListFromSampleDAS(sample)
-   else: files = getFileListDAS(src,instance,run)   
+   files = getFileListDAS(src,instance,run)   
 
 print "****************************************"
 print len(files)
