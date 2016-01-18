@@ -4,6 +4,15 @@ import os
 import sys
 from optparse import OptionParser
 
+class SampleObject():
+  def __init__(self, sample):
+    self.fullName = sample.strip("\n")
+    splitSample = self.fullName.split("/")
+    self.base = splitSample[1]
+    self.campaign = splitSample[2].split("-",1)[0]
+    self.scenario = splitSample[2].split("-",1)[1]
+    self.type = splitSample[3]
+
 def main():
 
   parser = OptionParser(usage="usage: %prog [options] filelist")
@@ -31,33 +40,32 @@ def main():
   
   with open(fileList) as fileListFile:
     for sample in fileListFile:
-      sample = sample.strip("\n")
-      print "Working on sample:", sample
+      if sample.startswith("#") or sample.isspace():
+        continue
+      sample = SampleObject(sample)
+      print "Working on sample:", sample.fullName
       createConfig(sample, templateCfg, pnfs, isData)
 
     
 def createConfig(sample, templateCfg, pnfs, isData):
-  sampleBase = sample.split("/")[1]
-  cfgFile = open(sampleBase+".cfg", "w")
+  cfgFileName = "%s_%s_%s.cfg" %(sample.base, sample.campaign, sample.scenario)
+  cfgFile = open(cfgFileName, "w")
   with open(templateCfg) as templateCfgFile:
     for line in templateCfgFile:
+      if line.startswith("#") or line.isspace():
+        continue
       if (line.find("src") < 0):
-        # print line.replace("FULLSAMPLE", sample).replace("SAMPLE", sampleBase).strip("\n")
-        cfgFile.write(line.replace("FULLSAMPLE", sample).replace("SAMPLE", sampleBase))
+        # print line.replace("FULLSAMPLE", sample.fullName).replace("SAMPLE", sample.base).strip("\n")
+        cfgFile.write(line.replace("FULLSAMPLE", sample.fullName).replace("SAMPLE", sample.base))
       else:
         sampleLocation = findSampleLocation(sample, pnfs, isData)
-        # print line.replace("FULLSAMPLE", sampleLocation).replace("SAMPLE", sampleBase).strip("\n")
-        cfgFile.write(line.replace("FULLSAMPLE", sampleLocation).replace("SAMPLE", sampleBase))
+        # print line.replace("FULLSAMPLE", sampleLocation).replace("SAMPLE", sample.base).strip("\n")
+        cfgFile.write(line.replace("FULLSAMPLE", sampleLocation).replace("SAMPLE", sample.base))
   cfgFile.close()
 
 
 def findSampleLocation(sample, pnfs, isData):
-  splitSample = sample.split("/")
-  sampleBase = splitSample[1]
-  campaign = splitSample[2].split("-",1)[0]
-  scenario = splitSample[2].split("-",1)[1]
-  sampleType = splitSample[3]
-  subDir = "%s/%s/%s/%s" %(campaign, sampleBase, sampleType, scenario)
+  subDir = "%s/%s/%s/%s" %(sample.campaign, sample.base, sample.type, sample.scenario)
   if isData:
     pnfs = pnfs+"/data"
   else:
@@ -68,8 +76,8 @@ def findSampleLocation(sample, pnfs, isData):
     for file in files:
       if (file.find(".root") >= 0):
         return fullPath
-  print "No ROOT file found for sample", sample, "- using global data set name."
-  return sample
+  print "No ROOT file found for sample", sample.fullName, "- using global data set name."
+  return sample.fullName
 
 
 if __name__ == "__main__":
