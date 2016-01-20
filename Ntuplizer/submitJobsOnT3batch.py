@@ -41,7 +41,7 @@ def getFileListT3(src):
     for file in files:
       if (file.find(".root") >= 0):
         print os.path.join(src, file)
-        fileList.append(os.path.join(src, subdir, file))
+        fileList.append(os.path.join(src, subdir, file).replace("/pnfs/psi.ch/cms/trivcat",""))
    
    
   if len(fileList) == 0:
