@@ -21,17 +21,6 @@ git fetch btv-cmssw
 git cms-merge-topic -u cms-btv-pog:BoostedDoubleSVTagger-WithWeightFiles-v2_from-CMSSW_7_4_1
 ```
 
-For energy correlation function and D2 (ATLAS W-tagger):
-```
-git cms-merge-topic ahinzmann:ecf_74
-```
-
-For PUPPI v8:
-```
-git cms-addpkg CommonTools/PileupAlgos
-git cms-merge-topic nhanvtran:puppi-etadep-746p2-v8
-```
-
 
 ### getting the code
 
