@@ -28,9 +28,9 @@ git cms-merge-topic -u cms-btv-pog:BoostedDoubleSVTagger-WithWeightFiles-v2_from
 git cms-addpkg RecoJets/Configuration
 export GITUSER=`git config user.github`
 echo "Your github username has been set to \"$GITUSER\""
-git clone https://github.com/$GITUSER/EXOVVNtuplizerRunII
+git clone git@github.com:${GITUSER}/EXOVVNtuplizerRunII.git
 cd EXOVVNtuplizerRunII
-git remote add UZHCMS https://github.com/UZHCMS/EXOVVNtuplizerRunII
+git remote add UZHCMS git@github.com:UZHCMS/EXOVVNtuplizerRunII.git
 git fetch UZHCMS
 git checkout -b DevelopmentBranch UZHCMS/master
 cd $CMSSW_BASE/src
