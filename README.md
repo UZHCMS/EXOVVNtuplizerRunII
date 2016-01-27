@@ -25,7 +25,6 @@ git cms-merge-topic -u cms-btv-pog:BoostedDoubleSVTagger-WithWeightFiles-v2_from
 ### getting the code
 
 ```
-git cms-addpkg RecoJets/Configuration
 export GITUSER=`git config user.github`
 echo "Your github username has been set to \"$GITUSER\""
 git clone git@github.com:${GITUSER}/EXOVVNtuplizerRunII.git
@@ -58,5 +57,31 @@ config["DOMETRECLUSTERING"] = False
 ```
 If you want to use Higgs tagger the first two flags must all be set to True.
 
+### Batch submission
 
+#### Config file creation
 
+Config file creation can be done via the [createConfig.py](Ntuplizer/tools/createConfig.py) script. It requires a text file with a list of input data sets, see e.g. [samples/QCD_HT_RunIISpring15MiniAODv2.txt](Ntuplizer/samples/QCD_HT_RunIISpring15MiniAODv2.txt). To run:
+```
+python tools/createConfig.py samples/QCD_HT_RunIISpring15MiniAODv2.txt
+```
+When running over *data*, this requires the ```-d``` flag. The script will automatically determine if the data sets are available on the T3 storage element. Also, ```--help``` will provide more information (e.g. allows changing the default number of jobs per event). If you run the script from a different directory, you need to provide the location of the [template file](Ntuplizer/submitJobsOnT3batch.cfg).
+
+#### Job submission
+
+Submit your jobs using the [submitJobsOnT3batch.py](Ntuplizer/submitJobsOnT3batch.py) script with the generated config files like this:
+```
+python submitJobsOnT3batch.py myconfig.cfg
+```
+Once the jobs are done, they can be checked for completeness like this:
+```
+python submitJobsOnT3batch.py myconfig.cfg --check
+```
+Resubmit jobs like this:
+```
+python submitJobsOnT3batch.py myconfig.cfg --resubmit 1,4,7
+```
+And eventually copied to the SE (path given in the config file):
+```
+python submitJobsOnT3batch.py myconfig.cfg --copy
+```
