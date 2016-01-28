@@ -378,6 +378,11 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
 
     if (runFlags["doPuppi"]) {
       /*----------------------PUPPI ---------------------------*/   
+     tree_->Branch( "jetAK8_puppi_pt"        , &jetAK8_puppi_pt    	);
+     tree_->Branch( "jetAK8_puppi_eta"       , &jetAK8_puppi_eta	);
+     tree_->Branch( "jetAK8_puppi_mass"      , &jetAK8_puppi_mass	 );
+     tree_->Branch( "jetAK8_puppi_phi"       , &jetAK8_puppi_phi	);
+     tree_->Branch( "jetAK8_puppi_e"	     , &jetAK8_puppi_e	);
      tree_->Branch( "jetAK8_puppi_pruned_mass"      , &jetAK8_puppi_pruned_mass       );
      tree_->Branch( "jetAK8_puppi_pruned_massCorr"  , &jetAK8_puppi_pruned_massCorr   );
      tree_->Branch( "jetAK8_puppi_pruned_jec"	    , &jetAK8_puppi_pruned_jec        );
@@ -958,6 +963,11 @@ void NtupleBranches::reset( void ){
   jetAK8_subjet_softdrop_csv.clear();
 
   /** puppi and ATLAS */      
+  jetAK8_puppi_pt.clear();
+  jetAK8_puppi_eta.clear();
+  jetAK8_puppi_mass.clear();    
+  jetAK8_puppi_eta.clear();
+  jetAK8_puppi_e.clear();
   jetAK8_puppi_tau1.clear();
   jetAK8_puppi_tau2.clear();
   jetAK8_puppi_tau3.clear();    

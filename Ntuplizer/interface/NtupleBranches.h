@@ -459,6 +459,11 @@ public:
   std::vector<float>  	      jetAK10_ecf1                   ;
   std::vector<float>  	      jetAK10_ecf2                   ;
   std::vector<float>  	      jetAK10_ecf3                   ;
+  std::vector<float>  	      jetAK8_puppi_pt                ;
+  std::vector<float>  	      jetAK8_puppi_eta               ;
+  std::vector<float>  	      jetAK8_puppi_mass              ;    
+  std::vector<float>  	      jetAK8_puppi_phi               ;    
+  std::vector<float>  	      jetAK8_puppi_e                 ;    
   std::vector<float>  	      jetAK8_puppi_tau1              ;
   std::vector<float>  	      jetAK8_puppi_tau2              ;
   std::vector<float>  	      jetAK8_puppi_tau3              ;    
