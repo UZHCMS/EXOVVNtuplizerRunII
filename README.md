@@ -17,9 +17,9 @@ git cms-init
 For Fall15(76):
 
 ```
-export SCRAM_ARCH=slc6_amd64_gcc491
-cmsrel CMSSW_7_4_12_patch2
-cd CMSSW_7_4_12_patch2/src
+export SCRAM_ARCH=slc6_amd64_gcc493
+cmsrel CMSSW_7_6_3_patch2
+cd CMSSW_7_6_3_patch2/src
 cmsenv
 git cms-init
 ```
