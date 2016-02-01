@@ -585,6 +585,16 @@ METS = "slimmedMETs"
 if config["DOMETRECLUSTERING"]: jetsAK4 = "selectedPatJets"
 if config["USENOHF"]: METS = "slimmedMETsNoHF"  
 
+##___________________ MET significance and covariance matrix ______________________##
+
+if config["DOMETSVFIT"]:
+  print "Using event pfMET covariance for SVfit"
+  process.load("RecoMET.METProducers.METSignificance_cfi")
+  process.load("RecoMET.METProducers.METSignificanceParams_cfi")
+  process.METSequence = cms.Sequence (process.METSignificance)
+
+##___________________ taus ______________________##
+
 TAUS = ""
 BOOSTEDTAUS = ""
 genAK8 = ""
@@ -717,6 +727,7 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     doTrimming        = cms.bool(config["DOAK10TRIMMEDRECLUSTERING"]),
     doPuppi           = cms.bool(config["DOAK8PUPPIRECLUSTERING"]),
     doBoostedTaus     = cms.bool(config["DOTAUSBOOSTED"]),
+    doMETSVFIT        = cms.bool(config["DOMETSVFIT"]),
     vertices = cms.InputTag("offlineSlimmedPrimaryVertices"),
     muons = cms.InputTag("slimmedMuons"),
     electrons = cms.InputTag("slimmedElectrons"),

@@ -256,6 +256,8 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
   } //doTaus
       
 
+ 
+
   if (runFlags["doAK4Jets"] || runFlags["doAK8Jets"]) {
     /** energy density */
     tree_->Branch( "rho", &rho );
@@ -539,7 +541,15 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch("MET_sumEt"	                , &MET_sumEt 	     ); 
   } //doMissingEt
 
+  if ( runFlags["doMETSVFIT"] ){
+    /** MET SVift*/
+    tree_->Branch( "MET_significance"                                 , &MET_significance );
+    tree_->Branch( "MET_cov00"                                        , &MET_cov00 );
+    tree_->Branch( "MET_cov10"                                        , &MET_cov10 );
+    tree_->Branch( "MET_cov11"                                        , &MET_cov11 );
 
+  }
+  
   /*------------- ------EVENT infos-----------------------------*/
   tree_->Branch("EVENT_event"	 , &EVENT_event     );
   tree_->Branch("EVENT_run"	 , &EVENT_run	    );
@@ -1049,6 +1059,11 @@ void NtupleBranches::reset( void ){
   MET_sumEt.clear();
   MET_T1Uncertainty.clear();
 
+  /** MET SVift*/
+  MET_significance.clear();
+  MET_cov00.clear();
+  MET_cov10.clear();
+  MET_cov11.clear();
   /*------------------------EVENT infos-------------------------*/    
   EVENT_event = 0;
   EVENT_run = 0;

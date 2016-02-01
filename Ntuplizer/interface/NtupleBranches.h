@@ -537,6 +537,12 @@ public:
   std::vector<float>  	      	    MET_sumEt		      ;
   std::vector<float>  	      	    MET_T1Uncertainty	      ;
 
+  /** MET SVift*/
+  std::vector<float>                MET_significance	      ;	 
+  std::vector<float>                MET_cov00	      ;	 
+  std::vector<float>                MET_cov10	      ;	 
+  std::vector<float>                MET_cov11	      ;	 
+  
 
   /*------------------------EVENT infos-------------------------*/    
   int                               EVENT_event            ;

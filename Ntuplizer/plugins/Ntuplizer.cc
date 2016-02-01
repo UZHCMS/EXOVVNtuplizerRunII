@@ -89,7 +89,8 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
   runFlags["doTrimming"] = iConfig.getParameter<bool>("doTrimming");
   runFlags["doPuppi"] = iConfig.getParameter<bool>("doPuppi");
   runFlags["doHbbTag"] = iConfig.getParameter<bool>("doHbbTag");
-  
+  runFlags["doMETSVFIT"] = iConfig.getParameter<bool>("doMETSVFIT");
+
   std::string jecpath = iConfig.getParameter<std::string>("jecpath");
   
   nBranches_ = new NtupleBranches( runFlags, tree );
@@ -167,7 +168,8 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
 					    vtxToken_	       ,
 					    jecAK4Labels       ,
                                             corrFormulas       ,
-					    nBranches_        );
+					    nBranches_         ,
+					    runFlags  );
   }
     
   
