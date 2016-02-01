@@ -15,7 +15,8 @@ public:
 		  edm::EDGetTokenT<reco::VertexCollection> vtxtoken    ,
 		  std::vector<std::string>		   jecAK4labels,
 		  std::vector<std::string>		   corrformulas,
-		  NtupleBranches*			   nBranches  );
+		  NtupleBranches*			   nBranches   ,
+		  std::map< std::string, bool >&                       runFlags );
    ~METsNtuplizer( void );
    
    void 	fillBranches      ( edm::Event const & event, const edm::EventSetup& iSetup );
@@ -49,6 +50,8 @@ public:
     TFormula* corrPy_;
 
     bool doCorrOnTheFly_;
+    bool doMETSVFIT_;
+
 };
 
 #endif // METsNtuplizer_H

@@ -11,7 +11,8 @@ METsNtuplizer::METsNtuplizer( 	edm::EDGetTokenT<pat::METCollection>     mettoken
 				edm::EDGetTokenT<reco::VertexCollection> vtxtoken    ,
 				std::vector<std::string> 		 jecAK4labels,
 				std::vector<std::string>	  	 corrformulas,
-				NtupleBranches* 			 nBranches   )
+				NtupleBranches* 			 nBranches   , 
+				std::map< std::string, bool >&                        runFlags 	)
 									
 : CandidateNtuplizer ( nBranches    )
 , metInputToken_     ( mettoken     )
@@ -20,7 +21,8 @@ METsNtuplizer::METsNtuplizer( 	edm::EDGetTokenT<pat::METCollection>     mettoken
 , rhoToken_	     ( rhotoken     )	    
 , verticeToken_	     ( vtxtoken     )														    
 , jetCorrLabel_	     ( jecAK4labels )								    
-, corrFormulas_	     ( corrformulas )						    
+, corrFormulas_	     ( corrformulas )	
+, doMETSVFIT_        ( runFlags["doMETSVFIT"]  )					    
 
 {
         if( jetCorrLabel_.size() != 0 ){
@@ -212,9 +214,30 @@ void METsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
     nBranches_->MET_phi.push_back(corrmet.Phi());
     nBranches_->MET_sumEt.push_back(sumEtcorr);
     nBranches_->MET_corrPx.push_back(TypeICorrMap_["corrEx"]);
-    nBranches_->MET_corrPy.push_back(TypeICorrMap_["corrEy"]); 	  
-    
+    nBranches_->MET_corrPy.push_back(TypeICorrMap_["corrEy"]); 	 
+ 
+   
   } 
-		
+
+  if (doMETSVFIT_) {
+  edm::Handle<double> significanceHandle;
+  edm::Handle<math::Error<2>::type> covHandle;
+
+  event.getByLabel ("METSignificance", "METSignificance", significanceHandle);
+  event.getByLabel ("METSignificance", "METCovariance", covHandle);
+ 
+  nBranches_->MET_significance.push_back( (*significanceHandle));
+  nBranches_->MET_cov00.push_back(    (*covHandle)(0,0));
+  nBranches_->MET_cov10.push_back(    (*covHandle)(1,0));
+  nBranches_->MET_cov11.push_back(    (*covHandle)(1,1));
+  //FROM LOW MASS ANALYSIS
+  // covMET[0][0] = (*covHandle)(0,0);
+  // covMET[1][0] = (*covHandle)(1,0);
+  // covMET[0][1] = covMET[1][0]; // (1,0) is the only one saved
+  // covMET[1][1] = (*covHandle)(1,1);
+  
+  }
+
+
 }
 

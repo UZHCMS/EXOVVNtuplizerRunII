@@ -3,7 +3,7 @@ import FWCore.ParameterSet.Config as cms
 config = dict()
 
 #--------- general ----------#
-config["FALL15"] = True
+config["FALL15"] = False
 config["RUNONMC"] = True
 config["USEJSON"] = False
 config["JSONFILE"] = "JSON/JSON_Run2015D_PromptReco-v4.txt"
@@ -17,7 +17,7 @@ config["DOGENEVENT"] = True
 config["DOPILEUP"] = True
 config["DOELECTRONS"] = True
 config["DOMUONS"] = True
-config["DOTAUS"] = False
+config["DOTAUS"] = True
 config["DOAK8JETS"] = True
 config["DOAK4JETS"] = True
 config["DOVERTICES"] = True
@@ -26,6 +26,7 @@ config["DOTRIGGEROBJECTS"] = True
 config["DOHLTFILTERS"] = True
 config["DOMISSINGET"] = True
 config["DOTAUSBOOSTED"] = False
+config["DOMETSVFIT"] = False
 
 #--------- AK8 jets reclustering ----------#
 config["ADDAK8GENJETS"] = False #! Add AK8 gen jet collection with pruned and softdrop mass
