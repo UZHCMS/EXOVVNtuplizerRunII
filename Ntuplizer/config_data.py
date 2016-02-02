@@ -24,7 +24,7 @@ options.maxEvents = -1
 
 #data file
 
-options.inputFiles = '/store/data/Run2015D/SingleMuon/MINIAOD/05Oct2015-v1/10000/021FD3F0-876F-E511-99D2-0025905A6060.root'
+options.inputFiles = 'dcap://t3se01.psi.ch/pnfs/psi.ch/cms/trivcat/store/data/Run2015D/JetHT/MINIAOD/05Oct2015-v1/50000/BA58FDB9-B16F-E511-B75C-0025907277BE.root'
 
 options.parseArguments()
 
