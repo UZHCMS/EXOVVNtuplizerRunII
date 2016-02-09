@@ -459,6 +459,11 @@ public:
   std::vector<float>  	      jetAK10_ecf1                   ;
   std::vector<float>  	      jetAK10_ecf2                   ;
   std::vector<float>  	      jetAK10_ecf3                   ;
+  std::vector<float>  	      jetAK8_puppi_pt                ;
+  std::vector<float>  	      jetAK8_puppi_eta               ;
+  std::vector<float>  	      jetAK8_puppi_mass              ;    
+  std::vector<float>  	      jetAK8_puppi_phi               ;    
+  std::vector<float>  	      jetAK8_puppi_e                 ;    
   std::vector<float>  	      jetAK8_puppi_tau1              ;
   std::vector<float>  	      jetAK8_puppi_tau2              ;
   std::vector<float>  	      jetAK8_puppi_tau3              ;    
@@ -532,6 +537,12 @@ public:
   std::vector<float>  	      	    MET_sumEt		      ;
   std::vector<float>  	      	    MET_T1Uncertainty	      ;
 
+  /** MET SVift*/
+  std::vector<float>                MET_significance	      ;	 
+  std::vector<float>                MET_cov00	      ;	 
+  std::vector<float>                MET_cov10	      ;	 
+  std::vector<float>                MET_cov11	      ;	 
+  
 
   /*------------------------EVENT infos-------------------------*/    
   int                               EVENT_event            ;

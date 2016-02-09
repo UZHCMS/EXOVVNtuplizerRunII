@@ -756,22 +756,22 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
           else continue;
 
         }
-
+	
+	if(puppijet.pt()>0.1) {
+	
         nBranches_->jetAK8_puppi_tau1	 .push_back(puppijet.userFloat("NjettinessAK8Puppi:tau1"));	 
         nBranches_->jetAK8_puppi_tau2	 .push_back(puppijet.userFloat("NjettinessAK8Puppi:tau2"));
         nBranches_->jetAK8_puppi_tau3	 .push_back(puppijet.userFloat("NjettinessAK8Puppi:tau3")); 
-        nBranches_->jetAK8_puppi_pruned_mass.push_back(puppijet.userFloat("ak8PFJetsPuppiPrunedMass"));
+        //nBranches_->jetAK8_puppi_pruned_mass.push_back(puppijet.userFloat("ak8PFJetsPuppiPrunedMass"));
         nBranches_->jetAK8_puppi_softdrop_mass.push_back(puppijet.userFloat("ak8PFJetsPuppiSoftDropMass"));
 
         //Compute JEC for pruned mass
-        reco::Candidate::LorentzVector uncorrJet;
+        reco::Candidate::LorentzVector uncorrJet=puppijet.p4();
         double corr = 1;
       
         if( doCorrOnTheFly_ ){
            if(puppijet.jecSetsAvailable())
              uncorrJet = puppijet.correctedP4(0);
-	   else
-             uncorrJet = puppijet.p4();
 
            jecAK8Puppi_->setJetEta( uncorrJet.eta()    );
            jecAK8Puppi_->setJetPt ( uncorrJet.pt()     );
@@ -780,17 +780,40 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
            jecAK8Puppi_->setRho   ( nBranches_->rho          );
            jecAK8Puppi_->setNPV   ( vertices_->size()        );
            corr = jecAK8Puppi_->getCorrection();
-           nBranches_->jetAK8_puppi_pruned_massCorr.push_back(corr*puppijet.userFloat("ak8PFJetsPuppiPrunedMass"));
-           nBranches_->jetAK8_puppi_pruned_jec.push_back(corr);
+           //nBranches_->jetAK8_puppi_pruned_massCorr.push_back(corr*puppijet.userFloat("ak8PFJetsPuppiPrunedMass"));
+           //nBranches_->jetAK8_puppi_pruned_jec.push_back(corr);
            nBranches_->jetAK8_puppi_softdrop_massCorr.push_back(corr*puppijet.userFloat("ak8PFJetsPuppiSoftDropMass"));
            nBranches_->jetAK8_puppi_softdrop_jec.push_back(corr);
         }
         else{
-           nBranches_->jetAK8_puppi_pruned_massCorr.push_back(puppijet.userFloat("ak8PFJetsPuppiPrunedMassCorrected"));
-           nBranches_->jetAK8_puppi_pruned_jec.push_back(puppijet.userFloat("ak8PFJetsPuppiPrunedMassCorrected")/puppijet.userFloat("ak8PFJetsPuppiPrunedMass"));
+           //nBranches_->jetAK8_puppi_pruned_massCorr.push_back(puppijet.userFloat("ak8PFJetsPuppiPrunedMassCorrected"));
+           //nBranches_->jetAK8_puppi_pruned_jec.push_back(puppijet.userFloat("ak8PFJetsPuppiPrunedMassCorrected")/puppijet.userFloat("ak8PFJetsPuppiPrunedMass"));
            nBranches_->jetAK8_puppi_softdrop_massCorr.push_back(puppijet.userFloat("ak8PFJetsPuppiSoftDropMassCorrected"));
            nBranches_->jetAK8_puppi_softdrop_jec.push_back(puppijet.userFloat("ak8PFJetsPuppiSoftDropMassCorrected")/puppijet.userFloat("ak8PFJetsPuppiSoftDropMass"));
         }
+
+        nBranches_->jetAK8_puppi_pt     	    .push_back(corr*uncorrJet.pt());                   
+        nBranches_->jetAK8_puppi_eta    	    .push_back(puppijet.eta());
+        nBranches_->jetAK8_puppi_mass   	    .push_back(corr*uncorrJet.mass());
+        nBranches_->jetAK8_puppi_phi    	    .push_back(puppijet.phi());
+        nBranches_->jetAK8_puppi_e      	    .push_back(corr*uncorrJet.energy());
+
+        } else {
+        nBranches_->jetAK8_puppi_tau1	 .push_back(-99);	 
+        nBranches_->jetAK8_puppi_tau2	 .push_back(-99);
+        nBranches_->jetAK8_puppi_tau3	 .push_back(-99); 
+        //nBranches_->jetAK8_puppi_pruned_mass.push_back(-99);
+        nBranches_->jetAK8_puppi_softdrop_mass.push_back(-99);
+        //nBranches_->jetAK8_puppi_pruned_massCorr.push_back(-99);
+        //nBranches_->jetAK8_puppi_pruned_jec.push_back(-99);
+        nBranches_->jetAK8_puppi_softdrop_massCorr.push_back(-99);
+        nBranches_->jetAK8_puppi_softdrop_jec.push_back(-99);
+        nBranches_->jetAK8_puppi_pt     	    .push_back(-99);                   
+        nBranches_->jetAK8_puppi_eta    	    .push_back(-99);
+        nBranches_->jetAK8_puppi_mass   	    .push_back(-99);
+        nBranches_->jetAK8_puppi_phi    	    .push_back(-99);
+        nBranches_->jetAK8_puppi_e      	    .push_back(-99);
+	}
 
       }
 

@@ -24,7 +24,10 @@ options.maxEvents = -1
 
 #data file
 
-options.inputFiles = '/store/mc/RunIISpring15MiniAODv2/WJetsToLNu_HT-100To200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/74X_mcRun2_asymptotic_v2-v1/10000/003F1529-D36D-E511-9E33-001E6724816F.root'
+#options.inputFiles = '/store/mc/RunIISpring15MiniAODv2/WJetsToLNu_HT-100To200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/74X_mcRun2_asymptotic_v2-v1/10000/003F1529-D36D-E511-9E33-001E6724816F.root'
+options.inputFiles = 'dcap://t3se01.psi.ch:22125//pnfs/psi.ch/cms/trivcat/store/mc/RunIIFall15MiniAODv2/WprimeToWhToWhadhbb_narrow_M-1000_13TeV-madgraph/MINIAODSIM/PU25nsData2015v1_76X_mcRun2_asymptotic_v12-v1/00000/8EE77064-42B8-E511-8BA1-003048895D40.root'
+#options.inputFiles = 'xroot://t3dcachedb.psi.ch:1094//pnfs/psi.ch/cms/trivcat/store/user/cgalloni/RunII/RadionTohhTohtatahbb_narrow_M-1000_13TeV-madgraph/MiniAOD_TauBoosted_v0667_maxDepth100_jetPt100/miniAOD_4.root'
+#options.inputFiles = 'dcap://t3se01.psi.ch:22125//pnfs/psi.ch/cms/trivcat/store/user/cgalloni/RunII/RadionTohhTohtatahbb_narrow_M-1000_13TeV-madgraph/MiniAOD_TauBoosted_v0667_maxDepth100_jetPt100/miniAOD_4.root'
 
 options.parseArguments()
 
@@ -72,8 +75,12 @@ process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_condD
 from Configuration.AlCa.GlobalTag import GlobalTag
 
 GT = ''
-if config["RUNONMC"]: GT = '74X_mcRun2_asymptotic_v2'
-elif not(config["RUNONMC"]):
+if config["FALL15"]:
+ if config["RUNONMC"]: GT = '76X_mcRun2_asymptotic_v12'
+ elif not(config["RUNONMC"]): GT = '76X_dataRun2_v15'
+else:
+ if config["RUNONMC"]: GT = '74X_mcRun2_asymptotic_v2'
+ elif not(config["RUNONMC"]):
    GT = '74X_dataRun2_v2'
    if config["JSONFILE"].find('reMiniAOD') != -1: GT = '74X_dataRun2_reMiniAOD_v0'
    elif config["JSONFILE"].find('PromptReco-v4') != -1: GT = '74X_dataRun2_Prompt_v4'
@@ -116,10 +123,10 @@ process.NjettinessAK8 = cms.EDProducer("NjettinessAdder",
              measureDefinition = cms.uint32( 0 ), # CMS default is normalized measure
              beta = cms.double(1.0),        # CMS default is 1
              R0 = cms.double( 0.8 ),        # CMS default is jet cone size
-             Rcutoff = cms.double( -999.0),      # not used by default
+             Rcutoff = cms.double( 999.0),      # not used by default
              # variables for axes definition :
              axesDefinition = cms.uint32( 6 ),    # CMS default is 1-pass KT axes
-             nPass = cms.int32(-999),       # not used by default
+             nPass = cms.int32(999),       # not used by default
              akAxesR0 = cms.double(-999.0)      # not used by default
              )
 
@@ -140,6 +147,7 @@ if config["DOAK10TRIMMEDRECLUSTERING"]:
 
 if config["DOAK8PUPPIRECLUSTERING"]:
   process.load('CommonTools/PileupAlgos/Puppi_cff')
+  process.puppi.useExistingWeights = True
   process.puppi.candName = cms.InputTag('packedPFCandidates')
   process.puppi.vertexName = cms.InputTag('offlineSlimmedPrimaryVertices')  
   process.ak8PuppiJets = ak8PFJetsCHS.clone( src = 'puppi', jetPtMin = fatjet_ptmin )
@@ -195,10 +203,10 @@ if config["ADDAK8GENJETS"]:
                               measureDefinition = cms.uint32( 0 ), # CMS default is normalized measure
                               beta = cms.double(1.0),              # CMS default is 1
                               R0 = cms.double( 0.8 ),              # CMS default is jet cone size
-                              Rcutoff = cms.double( -999.0),       # not used by default
+                              Rcutoff = cms.double( 999.0),       # not used by default
                               # variables for axes definition :
                               axesDefinition = cms.uint32( 6 ),    # CMS default is 1-pass KT axes
-                              nPass = cms.int32(-999),             # not used by default
+                              nPass = cms.int32(999),             # not used by default
                               akAxesR0 = cms.double(-999.0)        # not used by default
                               )
 
@@ -468,7 +476,8 @@ if config["DOAK8PUPPIRECLUSTERING"]:
     					  value = cms.string('mass') 
     					  )	    
 
-    process.patJetsAk8PuppiJets.userData.userFloats.src += ['ak8PFJetsPuppiPrunedMass','ak8PFJetsPuppiSoftDropMass','ak8PFJetsPuppiPrunedMassCorrected','ak8PFJetsPuppiSoftDropMassCorrected']
+    process.patJetsAk8PuppiJets.userData.userFloats.src += ['ak8PFJetsPuppiSoftDropMass','ak8PFJetsPuppiSoftDropMassCorrected']
+    #process.patJetsAk8PuppiJets.userData.userFloats.src += ['ak8PFJetsPuppiPrunedMass','ak8PFJetsPuppiPrunedMassCorrected']
     process.patJetsAk8PuppiJets.userData.userFloats.src += ['NjettinessAK8Puppi:tau1','NjettinessAK8Puppi:tau2','NjettinessAK8Puppi:tau3']
     process.patJetsAk8PuppiJets.addTagInfos = True
 
@@ -552,13 +561,20 @@ jetsAK8pruned = ""
 jetsAK8softdrop = ""
 jetsAK10trimmed = ""
 jetsAK8Puppi = ""  
-jetsAK8PuppiPruned = ""  
-jetsAK8PuppiSoftdrop = ""  
 
 METS = "slimmedMETs"
 if config["DOMETRECLUSTERING"]: jetsAK4 = "selectedPatJets"
 if config["USENOHF"]: METS = "slimmedMETsNoHF"  
 
+##___________________ MET significance and covariance matrix ______________________##
+
+if config["DOMETSVFIT"]:
+  print "Using event pfMET covariance for SVfit"
+  process.load("RecoMET.METProducers.METSignificance_cfi")
+  process.load("RecoMET.METProducers.METSignificanceParams_cfi")
+  process.METSequence = cms.Sequence (process.METSignificance)
+
+##___________________ taus ______________________##
 TAUS = ""
 BOOSTEDTAUS = ""
 genAK8 = ""
@@ -612,8 +628,8 @@ if config["CORRJETSONTHEFLY"]:
      	 'JEC/%s_MC_L3Absolute_AK8PFchs.txt'%(JECprefix)
        ]
      jecLevelsAK8Puppi = [
-     	 'JEC/%s_MC_L2Relative_AK8PFPuppi.txt'%(JECprefix),
-     	 'JEC/%s_MC_L3Absolute_AK8PFPuppi.txt'%(JECprefix)
+     	 'JEC/Summer15_50nsV5_MC_L2Relative_AK8PFPuppi.txt',
+     	 'JEC/Summer15_50nsV5_MC_L3Absolute_AK8PFPuppi.txt'
        ]
      jecLevelsAK4chs = [
      	 'JEC/%s_MC_L1FastJet_AK4PFchs.txt'%(JECprefix),
@@ -633,9 +649,9 @@ if config["CORRJETSONTHEFLY"]:
 	 'JEC/%s_DATA_L2L3Residual_AK8PFchs.txt'%(JECprefix)
        ]
      jecLevelsAK8Puppi = [
-     	 'JEC/%s_DATA_L2Relative_AK8PFPuppi.txt'%(JECprefix),
-     	 'JEC/%s_DATA_L3Absolute_AK8PFPuppi.txt'%(JECprefix),
-	 'JEC/%s_DATA_L2L3Residual_AK8PFPuppi.txt'%(JECprefix)
+     	 'JEC/Summer15_50nsV5_DATA_L2Relative_AK8PFPuppi.txt',
+     	 'JEC/Summer15_50nsV5_DATA_L3Absolute_AK8PFPuppi.txt',
+	 'JEC/Summer15_50nsV5_DATA_L2L3Residual_AK8PFPuppi.txt'
        ]
      jecLevelsAK4chs = [
      	 'JEC/%s_DATA_L1FastJet_AK4PFchs.txt'%(JECprefix),
@@ -690,6 +706,7 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     doTrimming        = cms.bool(config["DOAK10TRIMMEDRECLUSTERING"]),
     doPuppi           = cms.bool(config["DOAK8PUPPIRECLUSTERING"]),
     doBoostedTaus     = cms.bool(config["DOTAUSBOOSTED"]),
+    doMETSVFIT        = cms.bool(config["DOMETSVFIT"]),
     vertices = cms.InputTag("offlineSlimmedPrimaryVertices"),
     muons = cms.InputTag("slimmedMuons"),
     electrons = cms.InputTag("slimmedElectrons"),

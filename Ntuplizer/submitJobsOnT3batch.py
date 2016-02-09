@@ -211,8 +211,6 @@ parser.add_option("-c", "--copy", dest="copyfiles", default=False, action="store
                               help="copy job output")
 parser.add_option("--clean", "--clean", dest="clean", default=False, action="store_true",
                               help="clean job dir")
-parser.add_option("--useDAS", "--useDAS", dest="useDAS", default=False, action="store_true",
-                              help="use das query")
 parser.add_option("--check", "--checkoutput", dest="checkoutput", default=False, action="store_true",
                               help="check jobs output")
 parser.add_option("-r", "--resubmit", dest="resubmit", default="-1", action="store", type="string",
@@ -227,9 +225,9 @@ if opts.config =="":
 if opts.help:
    print ""
    print "Usage for testing: "
-   print "          python submitJobsOnT3batch.py -C submitJobsOnT3batch.cfg --test --useDAS"
+   print "          python submitJobsOnT3batch.py -C submitJobsOnT3batch.cfg --test"
    print "Or: "
-   print "          python submitJobsOnT3batch.py -C submitJobsOnT3batch.cfg --useDAS"
+   print "          python submitJobsOnT3batch.py -C submitJobsOnT3batch.cfg"
    print ""
    sys.exit()
    
@@ -252,6 +250,12 @@ prefix = config.get('JobsConfig','prefix')
 newdir = config.get('JobsConfig','newdir')
 instance = config.get('JobsConfig','instance')
 run = int(config.get('JobsConfig','run'))
+
+# check if input data are on local SE (path starting with/containing /pnfs) or if CMS dataset name has been given
+# in case CMS dataset name has been given, need to use DAS script later to determine file names
+useDAS = True
+if (src.find("/pnfs") >= 0):
+  useDAS = False
  
 #-----------------------------------------------------------------------------------------
 if opts.copyfiles:
@@ -366,7 +370,7 @@ if opts.resubmit != "-1":
 #-----------------------------------------------------------------------------------------	 
 files = []
 
-if not(opts.useDAS):
+if not(useDAS):
    files = getFileListT3(src)   
 else:
    files = getFileListDAS(src,instance,run)   
@@ -388,7 +392,7 @@ while it < len(files):
   for f in newlist:
     if f != "":
        print "    * %s" %(f)
-       if not(opts.useDAS): inputFiles+=f+"," 
+       if not(useDAS): inputFiles+=f+"," 
        else: inputFiles+="root://xrootd.unl.edu/%s," %(f)	  
   tmpList = list(inputFiles)
   tmpList.pop(len(tmpList)-1)

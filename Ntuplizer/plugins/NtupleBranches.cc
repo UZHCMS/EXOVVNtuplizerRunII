@@ -256,6 +256,8 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
   } //doTaus
       
 
+ 
+
   if (runFlags["doAK4Jets"] || runFlags["doAK8Jets"]) {
     /** energy density */
     tree_->Branch( "rho", &rho );
@@ -378,6 +380,11 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
 
     if (runFlags["doPuppi"]) {
       /*----------------------PUPPI ---------------------------*/   
+     tree_->Branch( "jetAK8_puppi_pt"        , &jetAK8_puppi_pt    	);
+     tree_->Branch( "jetAK8_puppi_eta"       , &jetAK8_puppi_eta	);
+     tree_->Branch( "jetAK8_puppi_mass"      , &jetAK8_puppi_mass	 );
+     tree_->Branch( "jetAK8_puppi_phi"       , &jetAK8_puppi_phi	);
+     tree_->Branch( "jetAK8_puppi_e"	     , &jetAK8_puppi_e	);
      tree_->Branch( "jetAK8_puppi_pruned_mass"      , &jetAK8_puppi_pruned_mass       );
      tree_->Branch( "jetAK8_puppi_pruned_massCorr"  , &jetAK8_puppi_pruned_massCorr   );
      tree_->Branch( "jetAK8_puppi_pruned_jec"	    , &jetAK8_puppi_pruned_jec        );
@@ -534,7 +541,15 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch("MET_sumEt"	                , &MET_sumEt 	     ); 
   } //doMissingEt
 
+  if ( runFlags["doMETSVFIT"] ){
+    /** MET SVift*/
+    tree_->Branch( "MET_significance"                                 , &MET_significance );
+    tree_->Branch( "MET_cov00"                                        , &MET_cov00 );
+    tree_->Branch( "MET_cov10"                                        , &MET_cov10 );
+    tree_->Branch( "MET_cov11"                                        , &MET_cov11 );
 
+  }
+  
   /*------------- ------EVENT infos-----------------------------*/
   tree_->Branch("EVENT_event"	 , &EVENT_event     );
   tree_->Branch("EVENT_run"	 , &EVENT_run	    );
@@ -958,6 +973,11 @@ void NtupleBranches::reset( void ){
   jetAK8_subjet_softdrop_csv.clear();
 
   /** puppi and ATLAS */      
+  jetAK8_puppi_pt.clear();
+  jetAK8_puppi_eta.clear();
+  jetAK8_puppi_mass.clear();    
+  jetAK8_puppi_eta.clear();
+  jetAK8_puppi_e.clear();
   jetAK8_puppi_tau1.clear();
   jetAK8_puppi_tau2.clear();
   jetAK8_puppi_tau3.clear();    
@@ -1039,6 +1059,11 @@ void NtupleBranches::reset( void ){
   MET_sumEt.clear();
   MET_T1Uncertainty.clear();
 
+  /** MET SVift*/
+  MET_significance.clear();
+  MET_cov00.clear();
+  MET_cov10.clear();
+  MET_cov11.clear();
   /*------------------------EVENT infos-------------------------*/    
   EVENT_event = 0;
   EVENT_run = 0;

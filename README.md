@@ -4,6 +4,8 @@ Ntuplizer for searches for heavy resonances decaying to dibosons
 
 ## installation instructions
 
+For Spring15(74):
+
 ```
 export SCRAM_ARCH=slc6_amd64_gcc491
 cmsrel CMSSW_7_4_12_patch2
@@ -11,6 +13,18 @@ cd CMSSW_7_4_12_patch2/src
 cmsenv
 git cms-init
 ```
+
+For Fall15(76):
+
+```
+export SCRAM_ARCH=slc6_amd64_gcc493
+cmsrel CMSSW_7_6_3_patch2
+cd CMSSW_7_6_3_patch2/src
+cmsenv
+git cms-init
+```
+
+The flags for running on Spring15(74) or Fall15(76) samples have to be changed with config["FALL15"]=False/True in python/ntuplizerOptions_*_cfi.py
 
 ### optional packages
 
@@ -21,27 +35,15 @@ git fetch btv-cmssw
 git cms-merge-topic -u cms-btv-pog:BoostedDoubleSVTagger-WithWeightFiles-v2_from-CMSSW_7_4_1
 ```
 
-For energy correlation function and D2 (ATLAS W-tagger):
-```
-git cms-merge-topic ahinzmann:ecf_74
-```
-
-For PUPPI v8:
-```
-git cms-addpkg CommonTools/PileupAlgos
-git cms-merge-topic nhanvtran:puppi-etadep-746p2-v8
-```
-
 
 ### getting the code
 
 ```
-git cms-addpkg RecoJets/Configuration
 export GITUSER=`git config user.github`
 echo "Your github username has been set to \"$GITUSER\""
-git clone https://github.com/$GITUSER/EXOVVNtuplizerRunII
+git clone git@github.com:${GITUSER}/EXOVVNtuplizerRunII.git
 cd EXOVVNtuplizerRunII
-git remote add UZHCMS https://github.com/UZHCMS/EXOVVNtuplizerRunII
+git remote add UZHCMS git@github.com:UZHCMS/EXOVVNtuplizerRunII.git
 git fetch UZHCMS
 git checkout -b DevelopmentBranch UZHCMS/master
 cd $CMSSW_BASE/src
@@ -69,5 +71,31 @@ config["DOMETRECLUSTERING"] = False
 ```
 If you want to use Higgs tagger the first two flags must all be set to True.
 
+### Batch submission
 
+#### Config file creation
 
+Config file creation can be done via the [createConfig.py](Ntuplizer/tools/createConfig.py) script. It requires a text file with a list of input data sets, see e.g. [samples/QCD_HT_RunIISpring15MiniAODv2.txt](Ntuplizer/samples/QCD_HT_RunIISpring15MiniAODv2.txt). To run:
+```
+python tools/createConfig.py samples/QCD_HT_RunIISpring15MiniAODv2.txt
+```
+When running over *data*, this requires the ```-d``` flag. The script will automatically determine if the data sets are available on the T3 storage element. Also, ```--help``` will provide more information (e.g. allows changing the default number of jobs per event). If you run the script from a different directory, you need to provide the location of the [template file](Ntuplizer/submitJobsOnT3batch.cfg).
+
+#### Job submission
+
+Submit your jobs using the [submitJobsOnT3batch.py](Ntuplizer/submitJobsOnT3batch.py) script with the generated config files like this:
+```
+python submitJobsOnT3batch.py myconfig.cfg
+```
+Once the jobs are done, they can be checked for completeness like this:
+```
+python submitJobsOnT3batch.py myconfig.cfg --check
+```
+Resubmit jobs like this:
+```
+python submitJobsOnT3batch.py myconfig.cfg --resubmit 1,4,7
+```
+And eventually copied to the SE (path given in the config file):
+```
+python submitJobsOnT3batch.py myconfig.cfg --copy
+```
