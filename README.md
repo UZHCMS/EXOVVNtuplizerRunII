@@ -85,17 +85,17 @@ When running over *data*, this requires the ```-d``` flag. The script will autom
 
 Submit your jobs using the [submitJobsOnT3batch.py](Ntuplizer/submitJobsOnT3batch.py) script with the generated config files like this:
 ```
-python submitJobsOnT3batch.py myconfig.cfg
+python submitJobsOnT3batch.py -C myconfig.cfg
 ```
 Once the jobs are done, they can be checked for completeness like this:
 ```
-python submitJobsOnT3batch.py myconfig.cfg --check
+python submitJobsOnT3batch.py -C myconfig.cfg --check
 ```
 Resubmit jobs like this:
 ```
-python submitJobsOnT3batch.py myconfig.cfg --resubmit 1,4,7
+python submitJobsOnT3batch.py -C myconfig.cfg --resubmit 1,4,7
 ```
 And eventually copied to the SE (path given in the config file):
 ```
-python submitJobsOnT3batch.py myconfig.cfg --copy
+python submitJobsOnT3batch.py -C myconfig.cfg --copy
 ```
