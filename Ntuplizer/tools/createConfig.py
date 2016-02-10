@@ -88,6 +88,9 @@ def createConfig(sample, templateCfg, pnfs):
       line = line.replace("SAMPLE", sample.name)
       line = line.replace("NFILES", nfiles)
       line = line.replace("CMSSW_BASE", cmsswBase)
+      if sample.isData:
+        # change this if the config names should ever change
+        line = line.replace("config_MC.py", "config_data.py")
       cfgFile.write(line)
   cfgFile.close()
 
