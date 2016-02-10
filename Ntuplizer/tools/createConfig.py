@@ -32,7 +32,7 @@ def main():
                     help="template file for config [default: %default]")
   parser.add_option("-p", "--pnfs", dest="pnfs", default="/pnfs/psi.ch/cms/trivcat/store", action="store",
                     help="/pnfs base location for data sets (assumes next subdirectory is either mc or data) [default: %default]")
-  parser.add_option("-n", "--nfiles", dest="nfiles", default="10", action="store",
+  parser.add_option("-n", "--nfiles", dest="nfiles", default="5", action="store",
                     help="number of files per job [default: %default]")
 
   
@@ -69,6 +69,7 @@ def main():
         continue
       sample = SampleObject(sample, isData)
       print "Working on sample:", sample.fullName
+      print "Sample name:", sample.name
       createConfig(sample, templateCfg, pnfs)
 
     
