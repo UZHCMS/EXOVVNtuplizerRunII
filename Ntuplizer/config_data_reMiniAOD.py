@@ -116,10 +116,10 @@ process.NjettinessAK8 = cms.EDProducer("NjettinessAdder",
              measureDefinition = cms.uint32( 0 ), # CMS default is normalized measure
              beta = cms.double(1.0),        # CMS default is 1
              R0 = cms.double( 0.8 ),        # CMS default is jet cone size
-             Rcutoff = cms.double( -999.0),      # not used by default
+             Rcutoff = cms.double( 999.0),      # not used by default
              # variables for axes definition :
              axesDefinition = cms.uint32( 6 ),    # CMS default is 1-pass KT axes
-             nPass = cms.int32(-999),       # not used by default
+             nPass = cms.int32(999),       # not used by default
              akAxesR0 = cms.double(-999.0)      # not used by default
              )
 
@@ -140,6 +140,7 @@ if config["DOAK10TRIMMEDRECLUSTERING"]:
 
 if config["DOAK8PUPPIRECLUSTERING"]:
   process.load('CommonTools/PileupAlgos/Puppi_cff')
+  process.puppi.useExistingWeights = True
   process.puppi.candName = cms.InputTag('packedPFCandidates')
   process.puppi.vertexName = cms.InputTag('offlineSlimmedPrimaryVertices')  
   process.ak8PuppiJets = ak8PFJetsCHS.clone( src = 'puppi', jetPtMin = fatjet_ptmin )
@@ -195,10 +196,10 @@ if config["ADDAK8GENJETS"]:
                               measureDefinition = cms.uint32( 0 ), # CMS default is normalized measure
                               beta = cms.double(1.0),              # CMS default is 1
                               R0 = cms.double( 0.8 ),              # CMS default is jet cone size
-                              Rcutoff = cms.double( -999.0),       # not used by default
+                              Rcutoff = cms.double( 999.0),       # not used by default
                               # variables for axes definition :
                               axesDefinition = cms.uint32( 6 ),    # CMS default is 1-pass KT axes
-                              nPass = cms.int32(-999),             # not used by default
+                              nPass = cms.int32(999),             # not used by default
                               akAxesR0 = cms.double(-999.0)        # not used by default
                               )
 
@@ -468,7 +469,8 @@ if config["DOAK8PUPPIRECLUSTERING"]:
     					  value = cms.string('mass') 
     					  )	    
 
-    process.patJetsAk8PuppiJets.userData.userFloats.src += ['ak8PFJetsPuppiPrunedMass','ak8PFJetsPuppiSoftDropMass','ak8PFJetsPuppiPrunedMassCorrected','ak8PFJetsPuppiSoftDropMassCorrected']
+    process.patJetsAk8PuppiJets.userData.userFloats.src += ['ak8PFJetsPuppiSoftDropMass','ak8PFJetsPuppiSoftDropMassCorrected']
+    #process.patJetsAk8PuppiJets.userData.userFloats.src += ['ak8PFJetsPuppiPrunedMass','ak8PFJetsPuppiPrunedMassCorrected']
     process.patJetsAk8PuppiJets.userData.userFloats.src += ['NjettinessAK8Puppi:tau1','NjettinessAK8Puppi:tau2','NjettinessAK8Puppi:tau3']
     process.patJetsAk8PuppiJets.addTagInfos = True
 
@@ -552,16 +554,23 @@ jetsAK8pruned = ""
 jetsAK8softdrop = ""
 jetsAK10trimmed = ""
 jetsAK8Puppi = ""  
-jetsAK8PuppiPruned = ""  
-jetsAK8PuppiSoftdrop = ""  
 
 METS = "slimmedMETs"
 if config["DOMETRECLUSTERING"]:
   jetsAK4 = "selectedPatJets"
 
+##___________________ MET significance and covariance matrix ______________________##
+
+if config["DOMETSVFIT"]:
+  print "Using event pfMET covariance for SVfit"
+  process.load("RecoMET.METProducers.METSignificance_cfi")
+  process.load("RecoMET.METProducers.METSignificanceParams_cfi")
+  process.METSequence = cms.Sequence (process.METSignificance)
+
+##___________________ taus ______________________##
 TAUS = ""
-MUTAUS = ""
-ELETAUS = ""
+BOOSTEDTAUS = ""
+
 genAK8 = ""
 
 if config["ADDAK8GENJETS"]:
@@ -578,14 +587,13 @@ if config["DOAK10TRIMMEDRECLUSTERING"]:
 if config["DOAK8PUPPIRECLUSTERING"]:  
   jetsAK8Puppi = "patJetsAk8PuppiJets"  
 
-if config["DOSEMILEPTONICTAUSBOOSTED"]:
+if config["DOTAUSBOOSTED"]:
   TAUS = "slimmedTaus"
-  MUTAUS = "slimmedTausMuTau"
-  ELETAUS = "slimmedTausBoosted"     
+  BOOSTEDTAUS = "slimmedTausBoosted"     
 else:
   TAUS = "slimmedTaus"
-  MUTAUS = "slimmedTaus"
-  ELETAUS = "slimmedTaus"     
+  BOOSTEDTAUS = "slimmedTausBoosted"  
+  
 
 ######## JEC ########
 jecLevelsAK8chs = []
@@ -615,8 +623,8 @@ if config["CORRJETSONTHEFLY"]:
      	 'JEC/%s_MC_L3Absolute_AK8PFchs.txt'%(JECprefix)
        ]
      jecLevelsAK8Puppi = [
-     	 'JEC/%s_MC_L2Relative_AK8PFPuppi.txt'%(JECprefix),
-     	 'JEC/%s_MC_L3Absolute_AK8PFPuppi.txt'%(JECprefix)
+     	 'JEC/Summer15_50nsV5_MC_L2Relative_AK8PFPuppi.txt',
+     	 'JEC/Summer15_50nsV5_MC_L3Absolute_AK8PFPuppi.txt'
        ]
      jecLevelsAK4chs = [
      	 'JEC/%s_MC_L1FastJet_AK4PFchs.txt'%(JECprefix),
@@ -636,9 +644,9 @@ if config["CORRJETSONTHEFLY"]:
 	 'JEC/%s_DATA_L2L3Residual_AK8PFchs.txt'%(JECprefix)
        ]
      jecLevelsAK8Puppi = [
-     	 'JEC/%s_DATA_L2Relative_AK8PFPuppi.txt'%(JECprefix),
-     	 'JEC/%s_DATA_L3Absolute_AK8PFPuppi.txt'%(JECprefix),
-	 'JEC/%s_DATA_L2L3Residual_AK8PFPuppi.txt'%(JECprefix)
+     	 'JEC/Summer15_50nsV5_DATA_L2Relative_AK8PFPuppi.txt',
+     	 'JEC/Summer15_50nsV5_DATA_L3Absolute_AK8PFPuppi.txt',
+	 'JEC/Summer15_50nsV5_DATA_L2L3Residual_AK8PFPuppi.txt'
        ]
      jecLevelsAK4chs = [
      	 'JEC/%s_DATA_L1FastJet_AK4PFchs.txt'%(JECprefix),
@@ -692,7 +700,8 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     doPrunedSubjets   = cms.bool(config["DOAK8PRUNEDRECLUSTERING"]),
     doTrimming        = cms.bool(config["DOAK10TRIMMEDRECLUSTERING"]),
     doPuppi           = cms.bool(config["DOAK8PUPPIRECLUSTERING"]),
-    doBoostedTaus     = cms.bool(config["DOSEMILEPTONICTAUSBOOSTED"]),
+    doBoostedTaus     = cms.bool(config["DOTAUSBOOSTED"]),
+    doMETSVFIT        = cms.bool(config["DOMETSVFIT"]),
     vertices = cms.InputTag("offlineSlimmedPrimaryVertices"),
     muons = cms.InputTag("slimmedMuons"),
     electrons = cms.InputTag("slimmedElectrons"),
@@ -703,8 +712,7 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     eleMediumIdMap = cms.InputTag("egmGsfElectronIDs:cutBasedElectronID-PHYS14-PU20bx25-V2-standalone-medium"),
     eleTightIdMap = cms.InputTag("egmGsfElectronIDs:cutBasedElectronID-PHYS14-PU20bx25-V2-standalone-tight"),
     taus = cms.InputTag(TAUS),
-    tausMuTau = cms.InputTag(MUTAUS),
-    tausEleTau = cms.InputTag(ELETAUS),
+    tausBoostedTau = cms.InputTag(BOOSTEDTAUS),
     jets = cms.InputTag(jetsAK4),
     fatjets = cms.InputTag(jetsAK8),
     prunedjets = cms.InputTag(jetsAK8pruned),

@@ -27,7 +27,7 @@ ElectronsNtuplizer::ElectronsNtuplizer( edm::EDGetTokenT<edm::View<pat::Electron
                                         edm::EDGetTokenT<reco::VertexCollection>              verticeToken , 
 					edm::EDGetTokenT<double>                              rhoToken     ,
                                         std::vector< edm::EDGetTokenT<edm::ValueMap<bool> > > eleIDtokens  ,
-					edm::EDGetTokenT<pat::TauCollection>                  eletauToken  ,
+					edm::EDGetTokenT<pat::TauCollection>                  boostedtauToken  ,
 					NtupleBranches*                                       nBranches  ,
 					std::map< std::string, bool >&                        runFlags 
 					)
@@ -41,7 +41,7 @@ ElectronsNtuplizer::ElectronsNtuplizer( edm::EDGetTokenT<edm::View<pat::Electron
 	, electronTightIdMapToken_ ( eleIDtokens[3] )
 	, electronHEEPIdMapToken_  ( eleIDtokens[4] )
         , electronHEEPId51MapToken_( eleIDtokens[5] )
-	, eletauToken_		   ( eletauToken    )
+	, boostedtauToken_		   ( boostedtauToken    )
 	, doBoostedTaus_   	   ( runFlags["doBoostedTaus"]  )
 {
 
@@ -76,10 +76,12 @@ float ElectronCorrPFIso(pat::Electron ele, double Aeff03, float rho, edm::Handle
 				if ( dR < dRmin &&
 				     tau->pt()>20 && 
 				     fabs(tau->eta())<2.4 && 
-				     tau->tauID("decayModeFindingNewDMs")>0.5 && 
-				     tau->tauID("againstMuonLoose")>0.5 && 
-				     tau->tauID("againstElectronLoose")>0.5 && 
-				     tau->tauID("byVLooseIsolationMVA3newDMwoLT")>0.5) {
+				     tau->tauID("decayModeFindingNewDMs")>0.5 // && 
+				     // tau->tauID("againstMuonLoose")>0.5
+				     // && 
+				     // tau->tauID("againstElectronLoose")>0.5 && 
+				     // tau->tauID("byVLooseIsolationMVA3newDMwoLT")>0.5
+				     ) {
 				  matchedTau = tau;
 				  dRmin = dR;
 				}
@@ -116,7 +118,7 @@ void ElectronsNtuplizer::fillBranches( edm::Event const & event, const edm::Even
    event.getByToken(electronToken_ , electrons_ ); 
    event.getByToken(verticeToken_  , vertices_  );
    event.getByToken(rhoToken_	   , rho_       );
-   event.getByToken(eletauToken_   , taus_      );
+   event.getByToken(boostedtauToken_   , taus_      );
  
    event.getByToken(electronHEEPIdMapToken_  , heep_id_decisions   );
    event.getByToken(electronHEEPId51MapToken_, heep_id51_decisions );

@@ -25,7 +25,7 @@ HN_NAME=`whoami`
 
 # set DBG=1 for additional debug output in the job report files
 # DBG=2 will also give detailed output on SRM operations
-DBG=2
+DBG=1
 
 #### The following configurations you should not need to change
 # The SE's user home area (SRMv2 URL)
@@ -153,9 +153,8 @@ fi
 cd $WORKDIR
 
 cp -r $CMSSW_DIR/src/EXOVVNtuplizerRunII/Ntuplizer/JEC .
-cp $CMSSW_DIR/src/EXOVVNtuplizerRunII/Ntuplizer/*json*.txt .
-cp $CMSSW_DIR/src/EXOVVNtuplizerRunII/Ntuplizer/*JSON*.txt .
-cp $CMSSW_DIR/src/EXOVVNtuplizerRunII/Ntuplizer/*csc2015*.txt .
+cp -r $CMSSW_DIR/src/EXOVVNtuplizerRunII/Ntuplizer/JSON .
+cp -r $CMSSW_DIR/src/EXOVVNtuplizerRunII/Ntuplizer/RunLumiEventLists .
 
 cmsRun $CMSSW_CONFIG_FILE inputFiles=$5 maxEvents=$6>> myout.txt 2>>myerr.txt
 

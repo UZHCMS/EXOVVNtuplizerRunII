@@ -57,24 +57,29 @@ bool TriggersNtuplizer::findTrigger( std::string trigName ){
 
    if( trigName.find("AK8PFJet360_TrimMass30") != std::string::npos ||
        trigName.find("AK8PFHT700_TrimR0p1PT0p03Mass50") != std::string::npos ||
+       trigName.find("AK8PFHT650_TrimR0p1PT0p03Mass50") != std::string::npos ||
+       trigName.find("AK8PFHT660_TrimR0p1PT0p03Mass50_BTagCSV_p20") != std::string::npos ||
        trigName.find("AK8DiPFJet280_200_TrimMass30_BTagCSV0p45") != std::string::npos ||
+       trigName.find("AK8DiPFJet280_200_TrimMass30_BTagCSV_p20") != std::string::npos ||
+       trigName.find("AK8DiPFJet250_200_TrimMass30_BTagCSV_p20") != std::string::npos ||
        trigName.find("PFHT650_WideJetMJJ950DEtaJJ1p5") != std::string::npos ||
        trigName.find("PFHT650_WideJetMJJ900DEtaJJ1p5") != std::string::npos ||
        trigName.find("PFHT400_v") != std::string::npos ||
-       trigName.find("PFHT475") != std::string::npos ||
-       trigName.find("PFHT600") != std::string::npos ||
-       trigName.find("PFHT650") != std::string::npos ||
-       trigName.find("PFHT800") != std::string::npos ||
-       trigName.find("PFHT900") != std::string::npos ||
-       trigName.find("PFHT900") != std::string::npos ||
-       trigName.find("PFJet320") != std::string::npos ||
-       trigName.find("PFJet450") != std::string::npos ||         
+       trigName.find("PFHT475_v") != std::string::npos ||
+       trigName.find("PFHT600_v") != std::string::npos ||
+       trigName.find("PFHT650_v") != std::string::npos ||
+       trigName.find("PFHT800_v") != std::string::npos ||
+       trigName.find("PFHT900_V") != std::string::npos ||
+       trigName.find("PFHT900_V") != std::string::npos ||
+       trigName.find("PFJet320_v") != std::string::npos ||
+       trigName.find("PFJet450_v") != std::string::npos ||         
        trigName.find("IsoMu20_eta2p1") != std::string::npos ||
        trigName.find("IsoMu24_eta2p1") != std::string::npos ||
        trigName.find("Mu45_eta2p1") != std::string::npos ||
        //trigName.find("Mu50_eta2p1") != std::string::npos ||
        trigName.find("Mu50") != std::string::npos ||
        trigName.find("Ele27_eta2p1_WPLoose") != std::string::npos ||
+       trigName.find("HLT_Ele27_eta2p1_WP75_Gsf") != std::string::npos ||
        trigName.find("Ele23_CaloIdL_TrackIdL_IsoVL") != std::string::npos ||
        trigName.find("Ele32_eta2p1_WP75_Gsf") != std::string::npos ||
        trigName.find("Ele105_CaloIdVT_GsfTrkIdT") != std::string::npos ||
@@ -83,10 +88,26 @@ bool TriggersNtuplizer::findTrigger( std::string trigName ){
        trigName.find("HLT_Ele27_eta2p1_WPLoose_Gsf_DoubleMediumIsoPFTau35") != std::string::npos ||
        trigName.find("HLT_Ele27_eta2p1_WPLoose_Gsf_LooseIsoPFTau20") != std::string::npos ||
        trigName.find("HLT_IsoMu16_eta2p1_MET30_JetIDCleaned_LooseIsoPFTau50") != std::string::npos ||
-       trigName.find("HLT_IsoMu17_eta2p1_LooseIsoPFTau20") != std::string::npos ||
-       trigName.find("HLT_IsoMu17_eta2p1_MediumIsoPFTau") != std::string::npos ||
-       trigName.find("HLT_IsoMu20_eta2p1_LooseIsoPFTau20") != std::string::npos ||
-       trigName.find("HLT_LooseIsoPFTau50") != std::string::npos
+     
+       //H->tautau triggers
+       trigName.find("HLT_LooseIsoPFTau50") != std::string::npos||
+       trigName.find("HLT_IsoMu17_eta2p1_LooseIsoPFTau20") != std::string::npos||
+       trigName.find("HLT_IsoMu24_eta2p1") != std::string::npos||
+       trigName.find("HLT_IsoMu17_eta2p1") != std::string::npos||
+       trigName.find("HLT_IsoMu18_v") != std::string::npos||
+       trigName.find("HLT_IsoMu27_v") != std::string::npos||
+       trigName.find("HLT_IsoMu20_v") != std::string::npos||
+       trigName.find("HLT_Ele22_eta2p1_WP75_Gsf_LooseIsoPFTau20") != std::string::npos||
+       trigName.find("HLT_Ele22_eta2p1_WP75_Gsf_v") != std::string::npos||
+       trigName.find("HLT_Ele32_eta2p1_WP75_Gsf") != std::string::npos||
+       trigName.find("HLT_Ele23_WPLoose_Gsf") != std::string::npos||
+       trigName.find("HLT_DoubleMediumIsoPFTau40_Trk1_eta2p1_Reg") != std::string::npos||
+       trigName.find("HLT_DoubleMediumIsoPFTau35_Trk1_eta2p1_Reg") != std::string::npos||
+
+       //Alternative triggers
+       trigName.find("HLT_PFMET120_PFMHT120_IDTight") != std::string::npos||
+       trigName.find("HLT_MonoCentralPFJet80_PFMETNoMu120_JetIdCleaned_PFMHTNoMu120_IDTight")!= std::string::npos||
+       trigName.find("HLT_PFMETNoMu120_JetIdCleaned_PFMHTNoMu120_IDTight")!= std::string::npos
    ) return true;
    else
      return false;
@@ -104,7 +125,7 @@ void TriggersNtuplizer::fillBranches( edm::Event const & event, const edm::Event
 		
   if (doTriggerDecisions_) {
   	 for (unsigned int i = 0, n = HLTtriggers_->size(); i < n; ++i) {
-   	  //std::cout << "Trigger " << trigNames.triggerName(i) << ": " << (HLTtriggers_->accept(i) ? "PASS" : "fail (or not run)") << std::endl;
+	   //std::cout << "Trigger " << trigNames.triggerName(i) << ": " << (HLTtriggers_->accept(i) ? "PASS" : "fail (or not run)") << std::endl;
   	  if( findTrigger(trigNames.triggerName(i)) ){
    	     nBranches_->HLT_isFired[trigNames.triggerName(i)] = HLTtriggers_->accept(i);
    	  }
@@ -136,11 +157,11 @@ void TriggersNtuplizer::fillBranches( edm::Event const & event, const edm::Event
   			   nBranches_->triggerObject_eta .push_back(obj.eta());
   			   nBranches_->triggerObject_phi .push_back(obj.phi());
   			   nBranches_->triggerObject_mass.push_back(obj.mass());
-				
+			
   			   for (unsigned h = 0; h < obj.filterIds().size(); ++h) vfilterIDs.push_back( obj.filterIds()[h]); // as defined in http://cmslxr.fnal.gov/lxr/source/DataFormats/HLTReco/interface/TriggerTypeDefs.h
 				
   			   if( pathNamesLast[h] == "HLT_AK8PFJet360_TrimMass30_v1") vfiredTrigger.push_back( 0 );
-  			   if( pathNamesLast[h] == "HT_AK8PFHT700_TrimR0p1PT0p03Mass50_v1") vfiredTrigger.push_back( 1 );
+  			   if( pathNamesLast[h] == "HLT_AK8PFHT700_TrimR0p1PT0p03Mass50_v1") vfiredTrigger.push_back( 1 );
   			   if( pathNamesLast[h] == "HLT_AK8DiPFJet280_200_TrimMass30_BTagCSV0p41_v1") vfiredTrigger.push_back( 2 );
   			   if( pathNamesLast[h] == "HLT_PFHT650_WideJetMJJ950DEtaJJ1p5_v1") vfiredTrigger.push_back( 3 );
   			   if( pathNamesLast[h] == "HLT_PFHT650_WideJetMJJ900DEtaJJ1p5_v1") vfiredTrigger.push_back( 4 );
@@ -154,6 +175,8 @@ void TriggersNtuplizer::fillBranches( edm::Event const & event, const edm::Event
   			   if( pathNamesLast[h] == "HLT_Ele105_CaloIdVT_GsfTrkIdT_v1") vfiredTrigger.push_back( 12 );
   			   if( pathNamesLast[h] == "HLT_Ele105_CaloIdVT_GsfTrkIdT_v2") vfiredTrigger.push_back( 13 );
   			   if( pathNamesLast[h] == "HLT_Ele115_CaloIdVT_GsfTrkIdT_v1") vfiredTrigger.push_back( 14 );
+			  
+
   			   // else vfiredTrigger.push_back( -99 );
   			}
 			

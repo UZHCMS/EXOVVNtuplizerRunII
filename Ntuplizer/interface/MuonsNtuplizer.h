@@ -9,7 +9,7 @@ public:
    MuonsNtuplizer( edm::EDGetTokenT<pat::MuonCollection>    muonToken   , 
                    edm::EDGetTokenT<reco::VertexCollection> verticeToken, 
 		   edm::EDGetTokenT<double>		    rhoToken	, 
-		   edm::EDGetTokenT<pat::TauCollection>     mutauToken  ,
+		   edm::EDGetTokenT<pat::TauCollection>     boostedtauToken  ,
 		   NtupleBranches*                          nBranches   ,
 		   std::map< std::string, bool >&           runFlags
 		   );
@@ -21,7 +21,7 @@ private:
    edm::EDGetTokenT<pat::MuonCollection>    muonToken_   ;
    edm::EDGetTokenT<reco::VertexCollection> verticeToken_;
    edm::EDGetTokenT<double> 		    rhoToken_    ;
-   edm::EDGetTokenT<pat::TauCollection>     mutauToken_  ; 
+   edm::EDGetTokenT<pat::TauCollection>     boostedtauToken_  ; 
   
    edm::Handle<pat::MuonCollection> 	    muons_       ;
    edm::Handle<reco::VertexCollection> 	    vertices_    ;
