@@ -69,6 +69,7 @@ def main():
         continue
       sample = SampleObject(sample, isData)
       print "Working on sample:", sample.fullName
+      print "Sample name:", sample.name
       createConfig(sample, templateCfg, pnfs)
 
     
