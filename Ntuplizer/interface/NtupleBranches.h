@@ -266,6 +266,12 @@ public:
   std::vector<float>  	      tau_againstMuonLooseMVA			      ;
   std::vector<float>  	      tau_againstMuonMediumMVA			      ;
   std::vector<float>  	      tau_againstMuonTightMVA			      ;
+  std::vector<float>  	      tau_byPileupWeightedIsolationRaw3Hits	      ;
+  std::vector<float>  	      tau_byLoosePileupWeightedIsolation3Hits 	      ;
+  std::vector<float>  	      tau_byMediumPileupWeightedIsolation3Hits	      ;
+  std::vector<float>  	      tau_byTightPileupWeightedIsolation3Hits	      ;
+  std::vector<float>  	      tau_byPhotonPtSumOutsideSignalCone	      ;
+  std::vector<float>  	      tau_footprintCorrection			      ;
     
 /* /\*----------------------Tau tracks---------------------------*\/ */
   
@@ -324,7 +330,7 @@ public:
   std::vector<int>                jetAK4_genParton_pdgID;
   std::vector<int>                jetAK4_nbHadrons     ;
   std::vector<int>                jetAK4_ncHadrons     ;
-  std::vector<float>              jetAK4_cisv 	       ;         
+  std::vector<float>              jetAK4_csv  	       ;         
   std::vector<float>              jetAK4_vtxMass       ;
   std::vector<float>              jetAK4_vtxNtracks    ;
   std::vector<float>              jetAK4_vtx3DVal      ;
@@ -395,21 +401,26 @@ public:
   //std::vector<int  >        jetAK8_pruned_nSVs       ;
 
   /** pruned AK8 subjets  */
-  std::vector<int>    	            subjetAK8_pruned_N      ;
-  std::vector< std::vector<float> > subjetAK8_pruned_pt     ;
-  std::vector< std::vector<float> > subjetAK8_pruned_eta    ;
-  std::vector< std::vector<float> > subjetAK8_pruned_mass   ;
-  std::vector< std::vector<float> > subjetAK8_pruned_phi    ;
-  std::vector< std::vector<float> > subjetAK8_pruned_e      ;
-  std::vector< std::vector<int  > > subjetAK8_pruned_charge ;
-  std::vector< std::vector<int  > > subjetAK8_pruned_partonFlavour;
-  std::vector< std::vector<int  > > subjetAK8_pruned_hadronFlavour;
-  std::vector< std::vector<float> > subjetAK8_pruned_csv    ;    
+  std::vector<int>    	            jetAK8_subjet_pruned_N      ;
+  std::vector< std::vector<float> > jetAK8_subjet_pruned_pt     ;
+  std::vector< std::vector<float> > jetAK8_subjet_pruned_eta    ;
+  std::vector< std::vector<float> > jetAK8_subjet_pruned_mass   ;
+  std::vector< std::vector<float> > jetAK8_subjet_pruned_phi    ;
+  std::vector< std::vector<float> > jetAK8_subjet_pruned_e      ;
+  std::vector< std::vector<int  > > jetAK8_subjet_pruned_charge ;
+  std::vector< std::vector<int  > > jetAK8_subjet_pruned_genParton_pdgID ;
+  std::vector< std::vector<int  > > jetAK8_subjet_pruned_nbHadrons ;
+  std::vector< std::vector<int  > > jetAK8_subjet_pruned_ncHadrons ;
+  std::vector< std::vector<int  > > jetAK8_subjet_pruned_partonFlavour;
+  std::vector< std::vector<int  > > jetAK8_subjet_pruned_hadronFlavour;
+  std::vector< std::vector<float> > jetAK8_subjet_pruned_csv    ;    
 
   /** AK8 jets softdrop */    
   std::vector<float>  	      jetAK8_softdrop_mass     ;
   std::vector<float>  	      jetAK8_softdrop_massCorr ;
   std::vector<float>  	      jetAK8_softdrop_jec      ;
+  std::vector<float>  	      jetAK8_softdrop_jecUp    ;
+  std::vector<float>  	      jetAK8_softdrop_jecDown  ;
   //int 	              njetsAK8_softdrop        ;
   //std::vector<float>	      jetAK8_softdrop_pt       ;
   //std::vector<float>	      jetAK8_softdrop_eta      ;
@@ -427,16 +438,19 @@ public:
   //std::vector<int  >        jetAK8_softdrop_nSVs     ;
 
   /** softdrop AK8 subjets */
-  std::vector<int>                  subjetAK8_softdrop_N      ;
-  std::vector< std::vector<float> > subjetAK8_softdrop_pt     ;
-  std::vector< std::vector<float> > subjetAK8_softdrop_eta    ;
-  std::vector< std::vector<float> > subjetAK8_softdrop_mass   ;
-  std::vector< std::vector<float> > subjetAK8_softdrop_phi    ;
-  std::vector< std::vector<float> > subjetAK8_softdrop_e      ;
-  std::vector< std::vector<int  > > subjetAK8_softdrop_charge ;
-  std::vector< std::vector<int  > > subjetAK8_softdrop_partonFlavour;
-  std::vector< std::vector<int  > > subjetAK8_softdrop_hadronFlavour;
-  std::vector< std::vector<float> > subjetAK8_softdrop_csv    ;
+  std::vector<int>                  jetAK8_subjet_softdrop_N      ;
+  std::vector< std::vector<float> > jetAK8_subjet_softdrop_pt     ;
+  std::vector< std::vector<float> > jetAK8_subjet_softdrop_eta    ;
+  std::vector< std::vector<float> > jetAK8_subjet_softdrop_mass   ;
+  std::vector< std::vector<float> > jetAK8_subjet_softdrop_phi    ;
+  std::vector< std::vector<float> > jetAK8_subjet_softdrop_e      ;
+  std::vector< std::vector<int  > > jetAK8_subjet_softdrop_charge ;
+  std::vector< std::vector<int  > > jetAK8_subjet_softdrop_genParton_pdgID ;
+  std::vector< std::vector<int  > > jetAK8_subjet_softdrop_nbHadrons ;
+  std::vector< std::vector<int  > > jetAK8_subjet_softdrop_ncHadrons ;
+  std::vector< std::vector<int  > > jetAK8_subjet_softdrop_partonFlavour;
+  std::vector< std::vector<int  > > jetAK8_subjet_softdrop_hadronFlavour;
+  std::vector< std::vector<float> > jetAK8_subjet_softdrop_csv    ;
 
   /** puppi and ATLAS */    
   std::vector<float>	      jetAK10_trimmed_mass           ;
@@ -447,6 +461,11 @@ public:
   std::vector<float>  	      jetAK10_ecf1                   ;
   std::vector<float>  	      jetAK10_ecf2                   ;
   std::vector<float>  	      jetAK10_ecf3                   ;
+  std::vector<float>  	      jetAK8_puppi_pt                ;
+  std::vector<float>  	      jetAK8_puppi_eta               ;
+  std::vector<float>  	      jetAK8_puppi_mass              ;    
+  std::vector<float>  	      jetAK8_puppi_phi               ;    
+  std::vector<float>  	      jetAK8_puppi_e                 ;    
   std::vector<float>  	      jetAK8_puppi_tau1              ;
   std::vector<float>  	      jetAK8_puppi_tau2              ;
   std::vector<float>  	      jetAK8_puppi_tau3              ;    
@@ -520,6 +539,12 @@ public:
   std::vector<float>  	      	    MET_sumEt		      ;
   std::vector<float>  	      	    MET_T1Uncertainty	      ;
 
+  /** MET SVift*/
+  std::vector<float>                MET_significance	      ;	 
+  std::vector<float>                MET_cov00	      ;	 
+  std::vector<float>                MET_cov10	      ;	 
+  std::vector<float>                MET_cov11	      ;	 
+  
 
   /*------------------------EVENT infos-------------------------*/    
   int                               EVENT_event            ;

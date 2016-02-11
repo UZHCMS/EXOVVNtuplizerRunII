@@ -184,7 +184,7 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch( "tau_chargedHadIsoBoost"      , &tau_chargedHadIsoBoost     );  
     tree_->Branch( "tau_TauType"		 , &tau_TauType		       );
   
-    if ( runFlags["doTausBoosted"] ){
+    if ( runFlags["doBoostedTaus"] ){
       /** tau discriminants */
       tree_->Branch( "tau_decayModeFindingNewDMs"	              , &tau_decayModeFindingNewDMs			 );
       tree_->Branch( "tau_decayModeFinding"  			      , &tau_decayModeFinding				 );
@@ -245,9 +245,18 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
       tree_->Branch( "tau_againstMuonLooseMVA"			      , &tau_againstMuonLooseMVA 			 );
       tree_->Branch( "tau_againstMuonMediumMVA"			      , &tau_againstMuonMediumMVA			 );
       tree_->Branch( "tau_againstMuonTightMVA"			      , &tau_againstMuonTightMVA 			 );
+      tree_->Branch( "tau_byPileupWeightedIsolationRaw3Hits"	      , &tau_byPileupWeightedIsolationRaw3Hits		 );
+      tree_->Branch( "tau_byLoosePileupWeightedIsolation3Hits"	      , &tau_byLoosePileupWeightedIsolation3Hits	 );
+      tree_->Branch( "tau_byMediumPileupWeightedIsolation3Hits"	      , &tau_byMediumPileupWeightedIsolation3Hits	 );
+      tree_->Branch( "tau_byTightPileupWeightedIsolation3Hits"	      , &tau_byTightPileupWeightedIsolation3Hits	 ); 
+      tree_->Branch( "tau_byPhotonPtSumOutsideSignalCone"	      , &tau_byPhotonPtSumOutsideSignalCone	 );
+      tree_->Branch( "tau_footprintCorrection"	                      , &tau_footprintCorrection	 );
+
     } //doTausBoosted
   } //doTaus
       
+
+ 
 
   if (runFlags["doAK4Jets"] || runFlags["doAK8Jets"]) {
     /** energy density */
@@ -287,7 +296,7 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch( "jetAK4_nemf"  	    , &jetAK4_nemf       );
     tree_->Branch( "jetAK4_cemf"  	    , &jetAK4_cemf       );
     tree_->Branch( "jetAK4_charge" 	    , &jetAK4_charge     );
-    tree_->Branch( "jetAK4_cisv"	    , &jetAK4_cisv	 );
+    tree_->Branch( "jetAK4_csv"	     , &jetAK4_csv	 );
     tree_->Branch( "jetAK4_vtxMass"	    , &jetAK4_vtxMass    );
     tree_->Branch( "jetAK4_vtxNtracks"      , &jetAK4_vtxNtracks );
     tree_->Branch( "jetAK4_vtx3DVal"	    , &jetAK4_vtx3DVal   );
@@ -358,7 +367,9 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch( "jetAK8_softdrop_mass"    , &jetAK8_softdrop_mass     ); 
     tree_->Branch( "jetAK8_softdrop_massCorr", &jetAK8_softdrop_massCorr );
     tree_->Branch( "jetAK8_softdrop_jec"     , &jetAK8_softdrop_jec      );
-
+    tree_->Branch( "jetAK8_softdrop_jecUp"   , &jetAK8_softdrop_jecUp    );
+    tree_->Branch( "jetAK8_softdrop_jecDown" , &jetAK8_softdrop_jecDown  );
+  
     if (runFlags["doTrimming"]) {
       /*----------------------AK10 trimming ---------------------------*/   
      tree_->Branch( "jetAK10_trimmed_mass"    , &jetAK10_trimmed_mass     );
@@ -371,6 +382,11 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
 
     if (runFlags["doPuppi"]) {
       /*----------------------PUPPI ---------------------------*/   
+     tree_->Branch( "jetAK8_puppi_pt"        , &jetAK8_puppi_pt    	);
+     tree_->Branch( "jetAK8_puppi_eta"       , &jetAK8_puppi_eta	);
+     tree_->Branch( "jetAK8_puppi_mass"      , &jetAK8_puppi_mass	 );
+     tree_->Branch( "jetAK8_puppi_phi"       , &jetAK8_puppi_phi	);
+     tree_->Branch( "jetAK8_puppi_e"	     , &jetAK8_puppi_e	);
      tree_->Branch( "jetAK8_puppi_pruned_mass"      , &jetAK8_puppi_pruned_mass       );
      tree_->Branch( "jetAK8_puppi_pruned_massCorr"  , &jetAK8_puppi_pruned_massCorr   );
      tree_->Branch( "jetAK8_puppi_pruned_jec"	    , &jetAK8_puppi_pruned_jec        );
@@ -382,64 +398,40 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
      tree_->Branch( "jetAK8_puppi_tau3"	            , &jetAK8_puppi_tau3	      );
     }
       // /*----------------------Softdrop AK8 subjets---------------------------*/
-      tree_->Branch( "subjetAK8_softdrop_N"            , &subjetAK8_softdrop_N  	   );
-      tree_->Branch( "subjetAK8_softdrop_pt"           , &subjetAK8_softdrop_pt      	   );
-      tree_->Branch( "subjetAK8_softdrop_eta"          , &subjetAK8_softdrop_eta     	   );
-      tree_->Branch( "subjetAK8_softdrop_mass"         , &subjetAK8_softdrop_mass    	   );
-      tree_->Branch( "subjetAK8_softdrop_phi"          , &subjetAK8_softdrop_phi     	   );
-      tree_->Branch( "subjetAK8_softdrop_e"            , &subjetAK8_softdrop_e       	   );
-      tree_->Branch( "subjetAK8_softdrop_charge"       , &subjetAK8_softdrop_charge        );
-      tree_->Branch( "subjetAK8_softdrop_partonFlavour", &subjetAK8_softdrop_partonFlavour );
-      tree_->Branch( "subjetAK8_softdrop_hadronFlavour", &subjetAK8_softdrop_hadronFlavour );
-      tree_->Branch( "subjetAK8_softdrop_csv"          , &subjetAK8_softdrop_csv           );
-    
-    // /*----------------------AK8 jets pruned-----------------------*/
-    // tree_->Branch( "njetsAK8pruned"   , &njetsAK8pruned   );
-    // tree_->Branch( "jetAK8pruned_pt"   , &jetAK8pruned_pt   );
-    // tree_->Branch( "jetAK8pruned_eta"   , &jetAK8pruned_eta   );
-    // tree_->Branch( "jetAK8pruned_mass"   , &jetAK8pruned_mass    );
-    // tree_->Branch( "jetAK8pruned_phi"   , &jetAK8pruned_phi   );
-    // tree_->Branch( "jetAK8pruned_e"   , &jetAK8pruned_e   );
-    // tree_->Branch( "jetAK8pruned_flavour", &jetAK8pruned_flavour );
-    // tree_->Branch( "jetAK8pruned_charge" , &jetAK8pruned_charge  );
-    // tree_->Branch( "jetAK8pruned_ssv"   , &jetAK8pruned_ssv   );
-    // tree_->Branch( "jetAK8pruned_csv"   , &jetAK8pruned_csv   );
-    // tree_->Branch( "jetAK8pruned_tchp"   , &jetAK8pruned_tchp    );
-    // tree_->Branch( "jetAK8pruned_tche"   , &jetAK8pruned_tche    );
-    // tree_->Branch( "jetAK8pruned_jp"   , &jetAK8pruned_jp   );
-    // tree_->Branch( "jetAK8pruned_jbp"   , &jetAK8pruned_jbp   );
-    // tree_->Branch( "jetAK8pruned_nSVs"   , &jetAK8pruned_nSVs    );
-  
-    // /*----------------------AK8 jets softdrop-----------------------*/
-    //tree_->Branch( "njetsAK8softdrop"	     , &njetsAK8softdrop	);
-    //tree_->Branch( "jetAK8softdrop_pt"     , &jetAK8softdrop_pt       );
-    //tree_->Branch( "jetAK8softdrop_eta"    , &jetAK8softdrop_eta      );
-    //tree_->Branch( "jetAK8softdrop_mass"   , &jetAK8softdrop_mass     );
-    //tree_->Branch( "jetAK8softdrop_phi"    , &jetAK8softdrop_phi      );
-    //tree_->Branch( "jetAK8softdrop_e"	     , &jetAK8softdrop_e        );
-    //tree_->Branch( "jetAK8softdrop_flavour", &jetAK8softdrop_flavour  );
-    //tree_->Branch( "jetAK8softdrop_charge" , &jetAK8softdrop_charge   );
-    //tree_->Branch( "jetAK8softdrop_ssv"    , &jetAK8softdrop_ssv      );
-    //tree_->Branch( "jetAK8softdrop_csv"    , &jetAK8softdrop_csv      );
-    //tree_->Branch( "jetAK8softdrop_tchp"   , &jetAK8softdrop_tchp     );
-    //tree_->Branch( "jetAK8softdrop_tche"   , &jetAK8softdrop_tche     );
-    //tree_->Branch( "jetAK8softdrop_jp"     , &jetAK8softdrop_jp       );
-    //tree_->Branch( "jetAK8softdrop_jbp"    , &jetAK8softdrop_jbp      );
-    //tree_->Branch( "jetAK8softdrop_nSVs"   , &jetAK8softdrop_nSVs     );
-	  
+      tree_->Branch( "jetAK8_subjet_softdrop_N"            , &jetAK8_subjet_softdrop_N  	   );
+      tree_->Branch( "jetAK8_subjet_softdrop_pt"           , &jetAK8_subjet_softdrop_pt      	   );
+      tree_->Branch( "jetAK8_subjet_softdrop_eta"          , &jetAK8_subjet_softdrop_eta     	   );
+      tree_->Branch( "jetAK8_subjet_softdrop_mass"         , &jetAK8_subjet_softdrop_mass    	   );
+      tree_->Branch( "jetAK8_subjet_softdrop_phi"          , &jetAK8_subjet_softdrop_phi     	   );
+      tree_->Branch( "jetAK8_subjet_softdrop_e"            , &jetAK8_subjet_softdrop_e       	   );
+      tree_->Branch( "jetAK8_subjet_softdrop_charge"       , &jetAK8_subjet_softdrop_charge        );
+      if ( runFlags["runOnMC"] ){
+        tree_->Branch( "jetAK8_subjet_softdrop_genParton_pdgID", &jetAK8_subjet_softdrop_genParton_pdgID );
+        tree_->Branch( "jetAK8_subjet_softdrop_nbHadrons", &jetAK8_subjet_softdrop_nbHadrons );
+        tree_->Branch( "jetAK8_subjet_softdrop_ncHadrons", &jetAK8_subjet_softdrop_ncHadrons );
+        tree_->Branch( "jetAK8_subjet_softdrop_partonFlavour", &jetAK8_subjet_softdrop_partonFlavour );
+        tree_->Branch( "jetAK8_subjet_softdrop_hadronFlavour", &jetAK8_subjet_softdrop_hadronFlavour );
+      }
+      tree_->Branch( "jetAK8_subjet_softdrop_csv"          , &jetAK8_subjet_softdrop_csv           );
+    	  
     if (runFlags["doPrunedSubjets"]) {
     
       /*----------------------Pruned AK8 subjets---------------------------*/   
-      tree_->Branch( "subjetAK8_pruned_N"	     , &subjetAK8_pruned_N	       );
-      tree_->Branch( "subjetAK8_pruned_pt"           , &subjetAK8_pruned_pt	       );
-      tree_->Branch( "subjetAK8_pruned_eta"          , &subjetAK8_pruned_eta	       );
-      tree_->Branch( "subjetAK8_pruned_mass"         , &subjetAK8_pruned_mass	       );
-      tree_->Branch( "subjetAK8_pruned_phi"          , &subjetAK8_pruned_phi	       );
-      tree_->Branch( "subjetAK8_pruned_e"            , &subjetAK8_pruned_e	       );
-      tree_->Branch( "subjetAK8_pruned_charge"       , &subjetAK8_pruned_charge        );
-      tree_->Branch( "subjetAK8_pruned_partonFlavour", &subjetAK8_pruned_partonFlavour );
-      tree_->Branch( "subjetAK8_pruned_hadronFlavour", &subjetAK8_pruned_hadronFlavour );
-      tree_->Branch( "subjetAK8_pruned_csv"          , &subjetAK8_pruned_csv           );
+      tree_->Branch( "jetAK8_subjet_pruned_N"	         , &jetAK8_subjet_pruned_N	       );
+      tree_->Branch( "jetAK8_subjet_pruned_pt"           , &jetAK8_subjet_pruned_pt	       );
+      tree_->Branch( "jetAK8_subjet_pruned_eta"          , &jetAK8_subjet_pruned_eta	       );
+      tree_->Branch( "jetAK8_subjet_pruned_mass"         , &jetAK8_subjet_pruned_mass	       );
+      tree_->Branch( "jetAK8_subjet_pruned_phi"          , &jetAK8_subjet_pruned_phi	       );
+      tree_->Branch( "jetAK8_subjet_pruned_e"            , &jetAK8_subjet_pruned_e	       );
+      tree_->Branch( "jetAK8_subjet_pruned_charge"       , &jetAK8_subjet_pruned_charge        );
+      if ( runFlags["runOnMC"] ){
+        tree_->Branch( "jetAK8_subjet_pruned_genParton_pdgID", &jetAK8_subjet_pruned_genParton_pdgID );
+        tree_->Branch( "jetAK8_subjet_pruned_nbHadrons"      , &jetAK8_subjet_pruned_nbHadrons );
+        tree_->Branch( "jetAK8_subjet_pruned_ncHadrons"      , &jetAK8_subjet_pruned_ncHadrons );
+        tree_->Branch( "jetAK8_subjet_pruned_partonFlavour"  , &jetAK8_subjet_pruned_partonFlavour );
+        tree_->Branch( "jetAK8_subjet_pruned_hadronFlavour"  , &jetAK8_subjet_pruned_hadronFlavour );
+      }
+      tree_->Branch( "jetAK8_subjet_pruned_csv"              , &jetAK8_subjet_pruned_csv           );
   
     } //doPruning
   } //doAK8Jets
@@ -516,7 +508,15 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch("MET_sumEt"	                , &MET_sumEt 	     ); 
   } //doMissingEt
 
+  if ( runFlags["doMETSVFIT"] ){
+    /** MET SVift*/
+    tree_->Branch( "MET_significance"                                 , &MET_significance );
+    tree_->Branch( "MET_cov00"                                        , &MET_cov00 );
+    tree_->Branch( "MET_cov10"                                        , &MET_cov10 );
+    tree_->Branch( "MET_cov11"                                        , &MET_cov11 );
 
+  }
+  
   /*------------- ------EVENT infos-----------------------------*/
   tree_->Branch("EVENT_event"	 , &EVENT_event     );
   tree_->Branch("EVENT_run"	 , &EVENT_run	    );
@@ -771,6 +771,14 @@ void NtupleBranches::reset( void ){
   tau_againstMuonLooseMVA.clear();
   tau_againstMuonMediumMVA.clear();
   tau_againstMuonTightMVA.clear();
+  tau_byPileupWeightedIsolationRaw3Hits          .clear();
+  tau_byLoosePileupWeightedIsolation3Hits        .clear();
+  tau_byMediumPileupWeightedIsolation3Hits       .clear();
+  tau_byTightPileupWeightedIsolation3Hits        .clear();
+  tau_byPhotonPtSumOutsideSignalCone             .clear();
+  tau_footprintCorrection                        .clear();
+  
+
   
   /** energy density */
   rho = 0;
@@ -811,7 +819,7 @@ void NtupleBranches::reset( void ){
   jetAK4_genParton_pdgID.clear();
   jetAK4_nbHadrons.clear();
   jetAK4_ncHadrons.clear();
-  jetAK4_cisv.clear();
+  jetAK4_csv.clear();
   jetAK4_vtxMass.clear();
   jetAK4_vtxNtracks.clear();
   jetAK4_vtx3DVal.clear();
@@ -865,67 +873,50 @@ void NtupleBranches::reset( void ){
   jetAK8_pruned_jec.clear();
   jetAK8_pruned_jecUp.clear();
   jetAK8_pruned_jecDown.clear();  
-  //njetsAK8_pruned = 0;
-  //jetAK8_pruned_pt.clear();
-  //jetAK8_pruned_eta.clear();
-  //jetAK8_pruned_mass.clear();
-  //jetAK8_pruned_phi.clear();
-  //jetAK8_pruned_e.clear();
-  //jetAK8_pruned_charge.clear();
-  //jetAK8_pruned_flavour.clear();
-  //jetAK8_pruned_ssv.clear();
-  //jetAK8_pruned_csv.clear();
-  //jetAK8_pruned_tchp.clear();
-  //jetAK8_pruned_tche.clear();
-  //jetAK8_pruned_jp.clear();
-  //jetAK8_pruned_jbp.clear();
-  //jetAK8_pruned_nSVs.clear();
 
   /** pruned AK8 subjets  */
-  subjetAK8_pruned_N.clear();
-  subjetAK8_pruned_pt.clear();
-  subjetAK8_pruned_eta.clear();
-  subjetAK8_pruned_mass.clear();
-  subjetAK8_pruned_phi.clear();
-  subjetAK8_pruned_e.clear();
-  subjetAK8_pruned_charge.clear();
-  subjetAK8_pruned_partonFlavour.clear();
-  subjetAK8_pruned_hadronFlavour.clear();
-  subjetAK8_pruned_csv.clear();    
+  jetAK8_subjet_pruned_N.clear();
+  jetAK8_subjet_pruned_pt.clear();
+  jetAK8_subjet_pruned_eta.clear();
+  jetAK8_subjet_pruned_mass.clear();
+  jetAK8_subjet_pruned_phi.clear();
+  jetAK8_subjet_pruned_e.clear();
+  jetAK8_subjet_pruned_charge.clear();
+  jetAK8_subjet_pruned_genParton_pdgID.clear();
+  jetAK8_subjet_pruned_nbHadrons	 .clear();
+  jetAK8_subjet_pruned_ncHadrons	.clear();
+  jetAK8_subjet_pruned_partonFlavour.clear();
+  jetAK8_subjet_pruned_hadronFlavour.clear();
+  jetAK8_subjet_pruned_csv.clear();    
   
   /** AK8 jets softdrop */  
   jetAK8_softdrop_massCorr.clear();    
   jetAK8_softdrop_mass.clear();
   jetAK8_softdrop_jec.clear();
-  //njetsAK8_softdrop = 0;
-  //jetAK8_softdrop_pt.clear();
-  //jetAK8_softdrop_eta.clear();
-  //jetAK8_softdrop_mass.clear();
-  //jetAK8_softdrop_phi.clear();
-  //jetAK8_softdrop_e.clear();
-  //jetAK8_softdrop_charge.clear();
-  //jetAK8_softdrop_flavour.clear();
-  //jetAK8_softdrop_ssv.clear();
-  //jetAK8_softdrop_csv.clear();
-  //jetAK8_softdrop_tchp.clear();
-  //jetAK8_softdrop_tche.clear();
-  //jetAK8_softdrop_jp.clear();
-  //jetAK8_softdrop_jbp.clear();
-  //jetAK8_softdrop_nSVs.clear();
-
+  jetAK8_softdrop_jecUp.clear();
+  jetAK8_softdrop_jecDown.clear();
+  
   /** softdrop AK8 subjets */
-  subjetAK8_softdrop_N.clear();
-  subjetAK8_softdrop_pt.clear();
-  subjetAK8_softdrop_eta.clear();
-  subjetAK8_softdrop_mass.clear();
-  subjetAK8_softdrop_phi.clear();
-  subjetAK8_softdrop_e.clear();
-  subjetAK8_softdrop_charge.clear();
-  subjetAK8_softdrop_partonFlavour.clear();
-  subjetAK8_softdrop_hadronFlavour.clear();
-  subjetAK8_softdrop_csv.clear();
+  jetAK8_subjet_softdrop_N.clear();
+  jetAK8_subjet_softdrop_pt.clear();
+  jetAK8_subjet_softdrop_eta.clear();
+  jetAK8_subjet_softdrop_mass.clear();
+  jetAK8_subjet_softdrop_phi.clear();
+  jetAK8_subjet_softdrop_e.clear();
+  jetAK8_subjet_softdrop_charge.clear();
+  jetAK8_subjet_softdrop_genParton_pdgID.clear();
+  jetAK8_subjet_softdrop_nbHadrons	 .clear();
+  jetAK8_subjet_softdrop_ncHadrons	.clear();
+  jetAK8_subjet_softdrop_partonFlavour.clear();
+  jetAK8_subjet_softdrop_hadronFlavour.clear();
+  jetAK8_subjet_softdrop_csv.clear();
 
   /** puppi and ATLAS */      
+  jetAK8_puppi_pt.clear();
+  jetAK8_puppi_eta.clear();
+  jetAK8_puppi_mass.clear();    
+  jetAK8_puppi_eta.clear();
+  jetAK8_puppi_e.clear();
   jetAK8_puppi_tau1.clear();
   jetAK8_puppi_tau2.clear();
   jetAK8_puppi_tau3.clear();    
@@ -1007,6 +998,11 @@ void NtupleBranches::reset( void ){
   MET_sumEt.clear();
   MET_T1Uncertainty.clear();
 
+  /** MET SVift*/
+  MET_significance.clear();
+  MET_cov00.clear();
+  MET_cov10.clear();
+  MET_cov11.clear();
   /*------------------------EVENT infos-------------------------*/    
   EVENT_event = 0;
   EVENT_run = 0;

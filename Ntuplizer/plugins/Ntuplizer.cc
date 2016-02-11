@@ -48,8 +48,7 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
 	eleMediumIdMapToken_  	    (consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("eleMediumIdMap"))),
 	eleTightIdMapToken_   	    (consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("eleTightIdMap"))),
 	tauToken_	      	    (consumes<pat::TauCollection>(iConfig.getParameter<edm::InputTag>("taus"))),
-	tauEleTauToken_	      	    (consumes<pat::TauCollection>(iConfig.getParameter<edm::InputTag>("tausEleTau"))),
-	tauMuTauToken_	      	    (consumes<pat::TauCollection>(iConfig.getParameter<edm::InputTag>("tausMuTau"))),
+	tauBoostedTauToken_	    (consumes<pat::TauCollection>(iConfig.getParameter<edm::InputTag>("tausBoostedTau"))),
 
 	metToken_	      	    (consumes<pat::METCollection>(iConfig.getParameter<edm::InputTag>("mets"))),
 	jetForMetCorrToken_   	    (consumes<pat::JetCollection>(iConfig.getParameter<edm::InputTag>("jetsForMetCorr"))),
@@ -90,7 +89,8 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
   runFlags["doTrimming"] = iConfig.getParameter<bool>("doTrimming");
   runFlags["doPuppi"] = iConfig.getParameter<bool>("doPuppi");
   runFlags["doHbbTag"] = iConfig.getParameter<bool>("doHbbTag");
-  
+  runFlags["doMETSVFIT"] = iConfig.getParameter<bool>("doMETSVFIT");
+
   std::string jecpath = iConfig.getParameter<std::string>("jecpath");
   
   nBranches_ = new NtupleBranches( runFlags, tree );
@@ -104,7 +104,7 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
     jetTokens.push_back( prunedjetToken_   );
     jetTokens.push_back( softdropjetToken_ );
     jetTokens.push_back( trimmedjetToken_  );
-    jetTokens.push_back( puppijetToken_  );
+    jetTokens.push_back( puppijetToken_    );
     //jetTokens.push_back( flavourToken_	 );  
   
     std::vector<std::string> jecAK8Labels;
@@ -121,12 +121,14 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
        tmpString = jecpath + tmpVec[v];
        jecAK8GroomedLabels.push_back(tmpString);
     }    
+    
     std::vector<std::string> jecAK8PuppiLabels;
     tmpVec.clear(); tmpVec = iConfig.getParameter<std::vector<std::string> >("jecAK8PuppiPayloadNames");
     for( unsigned int v = 0; v < tmpVec.size(); ++v ){
        tmpString = jecpath + tmpVec[v];
        jecAK8PuppiLabels.push_back(tmpString);
     }    
+    
     std::vector<std::string> jecAK4chsLabels;
     tmpVec.clear(); tmpVec = iConfig.getParameter<std::vector<std::string> >("jecAK4chsPayloadNames");
     for( unsigned int v = 0; v < tmpVec.size(); ++v ){
@@ -168,7 +170,8 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
 					    vtxToken_	       ,
 					    jecAK4Labels       ,
                                             corrFormulas       ,
-					    nBranches_        );
+					    nBranches_         ,
+					    runFlags  );
   }
     
   
@@ -183,7 +186,7 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
     nTuplizers_["muons"]= new MuonsNtuplizer( muonToken_   , 
                                               vtxToken_    , 
 					      rhoToken_    , 
-					      tauMuTauToken_ ,
+					      tauBoostedTauToken_ ,
 					      nBranches_  ,
 					      runFlags     );
   }
@@ -202,7 +205,7 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
                                                        vtxToken_     , 
 						       rhoToken_     , 
 						       eleIdTokens   , 
-						       tauEleTauToken_ ,
+						       tauBoostedTauToken_ ,
 						       nBranches_  ,
 						       runFlags     );
   }    
@@ -227,8 +230,7 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
 
   if (runFlags["doTaus"]) {
      nTuplizers_["taus"] = new TausNtuplizer( tauToken_      ,  
-                                              tauEleTauToken_,  
-					      tauMuTauToken_ ,  
+                                              tauBoostedTauToken_,  
 					      rhoToken_      ,  
 					      vtxToken_      ,  
 					      nBranches_     , 
