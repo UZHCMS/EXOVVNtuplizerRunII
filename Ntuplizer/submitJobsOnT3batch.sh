@@ -25,7 +25,7 @@ HN_NAME=`whoami`
 
 # set DBG=1 for additional debug output in the job report files
 # DBG=2 will also give detailed output on SRM operations
-DBG=1
+DBG=2
 
 #### The following configurations you should not need to change
 # The SE's user home area (SRMv2 URL)

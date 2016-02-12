@@ -107,7 +107,7 @@ def findSampleLocation(sample, pnfs):
     for file in files:
       if (file.find(".root") >= 0):
         return fullPath
-  print "No ROOT file found for sample", sample.fullName, "- using global data set name."
+  print "No ROOT file found for sample", sample.fullName, " in ", fullPath,"- using global data set name."
   return sample.fullName
 
 
