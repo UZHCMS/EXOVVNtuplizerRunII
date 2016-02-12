@@ -713,7 +713,6 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
            jecAK8Groomed_->setRho   ( nBranches_->rho          );
            jecAK8Groomed_->setNPV   ( vertices_->size()        );
            softdropcorr = jecAK8Groomed_->getCorrection();
-	   std::cerr << softdropcorr << std::endl;
            nBranches_->jetAK8_softdrop_massCorr.push_back(softdropcorr*fj.userFloat("ak8PFJetsCHSSoftDropMass"));
            nBranches_->jetAK8_softdrop_jec.push_back(softdropcorr);
 	          
