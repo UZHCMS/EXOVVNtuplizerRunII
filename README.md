@@ -22,6 +22,7 @@ cmsrel CMSSW_7_6_3_patch2
 cd CMSSW_7_6_3_patch2/src
 cmsenv
 git cms-init
+git cms-merge-topic nhanvtran:Puppi76X-backportFrom80X
 ```
 
 The flags for running on Spring15(74) or Fall15(76) samples have to be changed with config["FALL15"]=False/True in python/ntuplizerOptions_*_cfi.py
