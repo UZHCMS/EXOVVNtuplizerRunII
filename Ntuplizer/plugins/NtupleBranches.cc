@@ -367,6 +367,8 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch( "jetAK8_softdrop_mass"    , &jetAK8_softdrop_mass     ); 
     tree_->Branch( "jetAK8_softdrop_massCorr", &jetAK8_softdrop_massCorr );
     tree_->Branch( "jetAK8_softdrop_jec"     , &jetAK8_softdrop_jec      );
+    tree_->Branch( "jetAK8_softdrop_jecUp"   , &jetAK8_softdrop_jecUp      );
+    tree_->Branch( "jetAK8_softdrop_jecDown" , &jetAK8_softdrop_jecDown    );
 
     if (runFlags["doTrimming"]) {
       /*----------------------AK10 trimming ---------------------------*/   
@@ -941,6 +943,8 @@ void NtupleBranches::reset( void ){
   jetAK8_softdrop_massCorr.clear();    
   jetAK8_softdrop_mass.clear();
   jetAK8_softdrop_jec.clear();
+  jetAK8_softdrop_jecUp.clear();
+  jetAK8_softdrop_jecDown.clear();  
   //njetsAK8_softdrop = 0;
   //jetAK8_softdrop_pt.clear();
   //jetAK8_softdrop_eta.clear();

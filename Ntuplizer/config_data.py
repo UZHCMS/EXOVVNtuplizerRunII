@@ -628,11 +628,15 @@ jecLevelsAK4chs = []
 jecLevelsAK4 = []
 jecLevelsAK8Puppi = []
 jecLevelsForMET = []
-jecAK8chsUncFile = "JEC/Summer15_25nsV6_DATA_Uncertainty_AK8PFchs.txt"
-jecAK4chsUncFile = "JEC/Summer15_25nsV6_DATA_Uncertainty_AK4PFchs.txt"
+jecAK8chsUncFile = "JEC/Summer15_25nsV7_DATA_Uncertainty_AK8PFchs.txt"
+jecAK4chsUncFile = "JEC/Summer15_25nsV7_DATA_Uncertainty_AK4PFchs.txt"
 
 JECprefix = "Summer15_50nsV5"
-if config["BUNCHSPACING"] == 25 and config["RUNONMC"]:
+if config["BUNCHSPACING"] == 25 and config["RUNONMC"] and config["FALL15"]:
+   JECprefix = "Fall15_25nsV1"
+elif config["BUNCHSPACING"] == 25 and not(config["RUNONMC"]) and config["FALL15"]:
+   error,"these JEC do not exist yet"
+elif config["BUNCHSPACING"] == 25 and config["RUNONMC"]:
    JECprefix = "Summer15_25nsV7"
 elif config["BUNCHSPACING"] == 25 and not(config["RUNONMC"]):   
    JECprefix = "Summer15_25nsV7"
