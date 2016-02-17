@@ -393,7 +393,8 @@ while it < len(files):
     if f != "":
        print "    * %s" %(f)
        if not(useDAS): inputFiles+=f+"," 
-       else: inputFiles+="root://xrootd.unl.edu/%s," %(f)	  
+       # else: inputFiles+="root://xrootd.unl.edu/%s," %(f)
+       else: inputFiles+="root://xrootd-cms.infn.it/%s," %(f) 
   tmpList = list(inputFiles)
   tmpList.pop(len(tmpList)-1)
   inputFiles = "".join(tmpList)
