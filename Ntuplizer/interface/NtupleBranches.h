@@ -420,7 +420,7 @@ public:
   std::vector<float>  	      jetAK8_softdrop_massCorr ;
   std::vector<float>  	      jetAK8_softdrop_jec      ;
   std::vector<float>  	      jetAK8_softdrop_jecUp    ;
-  std::vector<float>  	      jetAK8_softdrop_jecDown  ;
+  std::vector<float>  	      jetAK8_softdrop_jecDown  ;  
   //int 	              njetsAK8_softdrop        ;
   //std::vector<float>	      jetAK8_softdrop_pt       ;
   //std::vector<float>	      jetAK8_softdrop_eta      ;

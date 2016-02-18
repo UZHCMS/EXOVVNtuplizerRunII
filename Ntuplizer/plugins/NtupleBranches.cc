@@ -367,9 +367,9 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch( "jetAK8_softdrop_mass"    , &jetAK8_softdrop_mass     ); 
     tree_->Branch( "jetAK8_softdrop_massCorr", &jetAK8_softdrop_massCorr );
     tree_->Branch( "jetAK8_softdrop_jec"     , &jetAK8_softdrop_jec      );
-    tree_->Branch( "jetAK8_softdrop_jecUp"   , &jetAK8_softdrop_jecUp    );
-    tree_->Branch( "jetAK8_softdrop_jecDown" , &jetAK8_softdrop_jecDown  );
-  
+    tree_->Branch( "jetAK8_softdrop_jecUp"   , &jetAK8_softdrop_jecUp      );
+    tree_->Branch( "jetAK8_softdrop_jecDown" , &jetAK8_softdrop_jecDown    );
+
     if (runFlags["doTrimming"]) {
       /*----------------------AK10 trimming ---------------------------*/   
      tree_->Branch( "jetAK10_trimmed_mass"    , &jetAK10_trimmed_mass     );
@@ -894,8 +894,23 @@ void NtupleBranches::reset( void ){
   jetAK8_softdrop_mass.clear();
   jetAK8_softdrop_jec.clear();
   jetAK8_softdrop_jecUp.clear();
-  jetAK8_softdrop_jecDown.clear();
-  
+  jetAK8_softdrop_jecDown.clear();  
+  //njetsAK8_softdrop = 0;
+  //jetAK8_softdrop_pt.clear();
+  //jetAK8_softdrop_eta.clear();
+  //jetAK8_softdrop_mass.clear();
+  //jetAK8_softdrop_phi.clear();
+  //jetAK8_softdrop_e.clear();
+  //jetAK8_softdrop_charge.clear();
+  //jetAK8_softdrop_flavour.clear();
+  //jetAK8_softdrop_ssv.clear();
+  //jetAK8_softdrop_csv.clear();
+  //jetAK8_softdrop_tchp.clear();
+  //jetAK8_softdrop_tche.clear();
+  //jetAK8_softdrop_jp.clear();
+  //jetAK8_softdrop_jbp.clear();
+  //jetAK8_softdrop_nSVs.clear();
+
   /** softdrop AK8 subjets */
   jetAK8_subjet_softdrop_N.clear();
   jetAK8_subjet_softdrop_pt.clear();
