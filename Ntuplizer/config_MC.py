@@ -24,10 +24,7 @@ options.maxEvents = 1
 
 #data file
 
-#options.inputFiles = '/store/mc/RunIISpring15MiniAODv2/WJetsToLNu_HT-100To200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/74X_mcRun2_asymptotic_v2-v1/10000/003F1529-D36D-E511-9E33-001E6724816F.root'
-options.inputFiles = 'dcap://t3se01.psi.ch:22125//pnfs/psi.ch/cms/trivcat/store/mc/RunIIFall15MiniAODv2/WprimeToWhToWhadhbb_narrow_M-1000_13TeV-madgraph/MINIAODSIM/PU25nsData2015v1_76X_mcRun2_asymptotic_v12-v1/00000/8EE77064-42B8-E511-8BA1-003048895D40.root'
-#options.inputFiles = 'xroot://t3dcachedb.psi.ch:1094//pnfs/psi.ch/cms/trivcat/store/user/cgalloni/RunII/RadionTohhTohtatahbb_narrow_M-1000_13TeV-madgraph/MiniAOD_TauBoosted_v0667_maxDepth100_jetPt100/miniAOD_4.root'
-#options.inputFiles = 'dcap://t3se01.psi.ch:22125//pnfs/psi.ch/cms/trivcat/store/user/cgalloni/RunII/RadionTohhTohtatahbb_narrow_M-1000_13TeV-madgraph/MiniAOD_TauBoosted_v0667_maxDepth100_jetPt100/miniAOD_4.root'
+options.inputFiles = '/store/mc/RunIISpring15MiniAODv2/WprimeToWZToWlepZhad_narrow_M-800_13TeV-madgraph/MINIAODSIM/74X_mcRun2_asymptotic_v2-v1/10000/0EBC38BA-B172-E511-A91B-00221956A348.root'
 
 options.parseArguments()
 
@@ -67,7 +64,7 @@ process.MessageLogger.cerr.INFO = cms.untracked.PSet(
     limit = cms.untracked.int32(1)
 )
 
-process.MessageLogger.cerr.FwkReport.reportEvery = 1
+process.MessageLogger.cerr.FwkReport.reportEvery = 1000
 
 ####### Define conditions ##########
 #process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_cff")
@@ -607,14 +604,24 @@ jecLevelsAK4chs = []
 jecLevelsAK4 = []
 jecLevelsAK8Puppi = []
 jecLevelsForMET = []
-jecAK8chsUncFile = "JEC/Summer15_25nsV7_DATA_Uncertainty_AK8PFchs.txt"
-jecAK4chsUncFile = "JEC/Summer15_25nsV7_DATA_Uncertainty_AK4PFchs.txt"
+#jecAK8chsUncFile = "JEC/Summer15_25nsV7_DATA_Uncertainty_AK8PFchs.txt"
+#jecAK4chsUncFile = "JEC/Summer15_25nsV7_DATA_Uncertainty_AK4PFchs.txt"
+#JAM config
+jecAK8chsUncFile = "JEC/Summer15_25nsV6_DATA_Uncertainty_AK8PFchs.txt"
+jecAK4chsUncFile = "JEC/Summer15_25nsV6_DATA_Uncertainty_AK4PFchs.txt"
 
+#JECprefix = "Summer15_50nsV5"
+#if config["BUNCHSPACING"] == 25 and config["RUNONMC"]:
+#   JECprefix = "Summer15_25nsV7"
+#elif config["BUNCHSPACING"] == 25 and not(config["RUNONMC"]):   
+#   JECprefix = "Summer15_25nsV7"
+
+#JAM config
 JECprefix = "Summer15_50nsV5"
 if config["BUNCHSPACING"] == 25 and config["RUNONMC"]:
-   JECprefix = "Summer15_25nsV7"
+   JECprefix = "Summer15_25nsV2"
 elif config["BUNCHSPACING"] == 25 and not(config["RUNONMC"]):   
-   JECprefix = "Summer15_25nsV7"
+   JECprefix = "Summer15_25nsV5"
 
 if config["CORRJETSONTHEFLY"]:
    if config["RUNONMC"]:
