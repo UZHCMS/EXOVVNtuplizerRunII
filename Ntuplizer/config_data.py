@@ -635,7 +635,8 @@ JECprefix = "Summer15_50nsV5"
 if config["BUNCHSPACING"] == 25 and config["RUNONMC"] and config["FALL15"]:
    JECprefix = "Fall15_25nsV1"
 elif config["BUNCHSPACING"] == 25 and not(config["RUNONMC"]) and config["FALL15"]:
-   error,"these JEC do not exist yet"
+   # error,"these JEC do not exist yet"
+   JECprefix = "Fall15_25nsV2"
 elif config["BUNCHSPACING"] == 25 and config["RUNONMC"]:
    JECprefix = "Summer15_25nsV7"
 elif config["BUNCHSPACING"] == 25 and not(config["RUNONMC"]):   
