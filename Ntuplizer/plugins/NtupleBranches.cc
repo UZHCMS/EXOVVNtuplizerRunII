@@ -979,6 +979,7 @@ void NtupleBranches::reset( void ){
   /** puppi and ATLAS */      
   jetAK8_puppi_pt.clear();
   jetAK8_puppi_eta.clear();
+  jetAK8_puppi_phi.clear();
   jetAK8_puppi_mass.clear();    
   jetAK8_puppi_eta.clear();
   jetAK8_puppi_e.clear();
