@@ -20,7 +20,7 @@ import FWCore.ParameterSet.VarParsing as VarParsing
 
 options = VarParsing.VarParsing ('analysis')
 
-options.maxEvents = -1
+options.maxEvents = 100
 
 #data file
 
@@ -607,12 +607,12 @@ jecLevelsAK4chs = []
 jecLevelsAK4 = []
 jecLevelsAK8Puppi = []
 jecLevelsForMET = []
-jecAK8chsUncFile = "JEC/Summer15_25nsV7_DATA_Uncertainty_AK8PFchs.txt"
-jecAK4chsUncFile = "JEC/Summer15_25nsV7_DATA_Uncertainty_AK4PFchs.txt"
+jecAK8chsUncFile = "JEC/Fall15_25nsV2_MC_Uncertainty_AK8PFchs.txt"
+jecAK4chsUncFile = "JEC/Fall15_25nsV2_MC_Uncertainty_AK4PFchs.txt"
 
 JECprefix = "Summer15_50nsV5"
 if config["BUNCHSPACING"] == 25 and config["RUNONMC"] and config["FALL15"]:
-   JECprefix = "Fall15_25nsV1"
+   JECprefix = "Fall15_25nsV2"
 elif config["BUNCHSPACING"] == 25 and not(config["RUNONMC"]) and config["FALL15"]:
    error,"these JEC do not exist yet"
 if config["BUNCHSPACING"] == 25 and config["RUNONMC"]:

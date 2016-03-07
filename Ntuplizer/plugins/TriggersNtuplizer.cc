@@ -60,8 +60,7 @@ bool TriggersNtuplizer::findTrigger( std::string trigName ){
        trigName.find("AK8PFHT700_TrimR0p1PT0p03Mass50") != std::string::npos ||
        trigName.find("AK8PFHT650_TrimR0p1PT0p03Mass50") != std::string::npos ||
        trigName.find("AK8PFHT660_TrimR0p1PT0p03Mass50_BTagCSV_p20") != std::string::npos ||
-       trigName.find("AK8DiPFJet280_200_TrimMass30_BTagCSV0p45") != std::string::npos ||
-       trigName.find("AK8DiPFJet280_200_TrimMass30_BTagCSV_p20") != std::string::npos ||
+       trigName.find("AK8DiPFJet280_200_TrimMass30_BTagCSV") != std::string::npos ||
        trigName.find("AK8DiPFJet250_200_TrimMass30_BTagCSV_p20") != std::string::npos ||
        trigName.find("PFHT650_WideJetMJJ950DEtaJJ1p5") != std::string::npos ||
        trigName.find("PFHT650_WideJetMJJ900DEtaJJ1p5") != std::string::npos ||
@@ -70,8 +69,7 @@ bool TriggersNtuplizer::findTrigger( std::string trigName ){
        trigName.find("PFHT600_v") != std::string::npos ||
        trigName.find("PFHT650_v") != std::string::npos ||
        trigName.find("PFHT800_v") != std::string::npos ||
-       trigName.find("PFHT900_V") != std::string::npos ||
-       trigName.find("PFHT900_V") != std::string::npos ||
+       trigName.find("PFHT900_v") != std::string::npos ||
        trigName.find("PFJet320_v") != std::string::npos ||
        trigName.find("PFJet450_v") != std::string::npos ||         
        trigName.find("IsoMu20_eta2p1") != std::string::npos ||
@@ -200,7 +198,7 @@ void TriggersNtuplizer::fillBranches( edm::Event const & event, const edm::Event
       if (names.triggerName(i) == HBHENoiseFilter_Selector_)
         nBranches_->passFilter_HBHE_ = noiseFilterBits_->accept(i);
       if (names.triggerName(i) == CSCHaloNoiseFilter_Selector_)
-        nBranches_->passFilter_CSCHalo_ = noiseFilterBits_->accept(i); // TO BE USED
+        nBranches_->passFilter_CSCHalo_ = noiseFilterBits_->accept(i); // DEPRECATED	
       if (names.triggerName(i) == CSCTightHalo2015Filter_Selector_)
         nBranches_->passFilter_CSCTightHalo2015_ = noiseFilterBits_->accept(i); // TO BE USED
       if (names.triggerName(i) == HCALlaserNoiseFilter_Selector_)
