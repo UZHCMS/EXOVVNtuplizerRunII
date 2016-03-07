@@ -20,7 +20,7 @@ import FWCore.ParameterSet.VarParsing as VarParsing
 
 options = VarParsing.VarParsing ('analysis')
 
-options.maxEvents = 1
+options.maxEvents = -1
 
 #data file
 
@@ -29,7 +29,6 @@ options.inputFiles = 'dcap://t3se01.psi.ch:22125//pnfs/psi.ch/cms/trivcat/store/
 #options.inputFiles = 'xroot://t3dcachedb.psi.ch:1094//pnfs/psi.ch/cms/trivcat/store/user/cgalloni/RunII/RadionTohhTohtatahbb_narrow_M-1000_13TeV-madgraph/MiniAOD_TauBoosted_v0667_maxDepth100_jetPt100/miniAOD_4.root'
 #options.inputFiles = 'dcap://t3se01.psi.ch:22125//pnfs/psi.ch/cms/trivcat/store/user/cgalloni/RunII/RadionTohhTohtatahbb_narrow_M-1000_13TeV-madgraph/MiniAOD_TauBoosted_v0667_maxDepth100_jetPt100/miniAOD_4.root'
 #options.inputFiles = '/store/user/cgalloni/MiniAOD_191115/RadionTohhTohtatahbb_narrow_M-1000_13TeV-madgraph/BoostedTaus_RadionTohhTohtatahbb_narrow_M-1000_13TeV-madgraph_v0/151119_130555/0000/miniAOD_1.root'
-
 options.parseArguments()
 
 process.options  = cms.untracked.PSet( 
@@ -608,28 +607,18 @@ jecLevelsAK4chs = []
 jecLevelsAK4 = []
 jecLevelsAK8Puppi = []
 jecLevelsForMET = []
-#jecAK8chsUncFile = "JEC/Summer15_25nsV7_DATA_Uncertainty_AK8PFchs.txt"
-#jecAK4chsUncFile = "JEC/Summer15_25nsV7_DATA_Uncertainty_AK4PFchs.txt"
-#JAM config
-jecAK8chsUncFile = "JEC/Summer15_25nsV6_DATA_Uncertainty_AK8PFchs.txt"
-jecAK4chsUncFile = "JEC/Summer15_25nsV6_DATA_Uncertainty_AK4PFchs.txt"
+jecAK8chsUncFile = "JEC/Fall15_25nsV2_MC_Uncertainty_AK8PFchs.txt"
+jecAK4chsUncFile = "JEC/Fall15_25nsV2_MC_Uncertainty_AK4PFchs.txt"
 
-#JECprefix = "Summer15_50nsV5"
-#if config["BUNCHSPACING"] == 25 and config["RUNONMC"]:
-#   JECprefix = "Summer15_25nsV7"
-#elif config["BUNCHSPACING"] == 25 and not(config["RUNONMC"]):   
-#   JECprefix = "Summer15_25nsV7"
-
-#JAM config
 JECprefix = "Summer15_50nsV5"
 if config["BUNCHSPACING"] == 25 and config["RUNONMC"] and config["FALL15"]:
-   JECprefix = "Fall15_25nsV1"
+   JECprefix = "Fall15_25nsV2"
 elif config["BUNCHSPACING"] == 25 and not(config["RUNONMC"]) and config["FALL15"]:
    error,"these JEC do not exist yet"
 if config["BUNCHSPACING"] == 25 and config["RUNONMC"]:
-   JECprefix = "Summer15_25nsV2"
+   JECprefix = "Summer15_25nsV7"
 elif config["BUNCHSPACING"] == 25 and not(config["RUNONMC"]):   
-   JECprefix = "Summer15_25nsV5"
+   JECprefix = "Summer15_25nsV7"
 
 if config["CORRJETSONTHEFLY"]:
    if config["RUNONMC"]:
@@ -643,8 +632,8 @@ if config["CORRJETSONTHEFLY"]:
      	 'JEC/%s_MC_L3Absolute_AK8PFchs.txt'%(JECprefix)
        ]
      jecLevelsAK8Puppi = [
-     	 'JEC/Summer15_50nsV5_MC_L2Relative_AK8PFPuppi.txt',
-     	 'JEC/Summer15_50nsV5_MC_L3Absolute_AK8PFPuppi.txt'
+     	 'JEC/%s_MC_L2Relative_AK8PFPuppi.txt'%(JECprefix),
+     	 'JEC/%s_MC_L3Absolute_AK8PFPuppi.txt'%(JECprefix)
        ]
      jecLevelsAK4chs = [
      	 'JEC/%s_MC_L1FastJet_AK4PFchs.txt'%(JECprefix),
@@ -652,8 +641,6 @@ if config["CORRJETSONTHEFLY"]:
      	 'JEC/%s_MC_L3Absolute_AK4PFchs.txt'%(JECprefix)
        ]
    else:
-     jecAK8chsUncFile = ""
-     jecAK4chsUncFile = ""
      jecLevelsAK8chs = [
      	 'JEC/%s_DATA_L1FastJet_AK8PFchs.txt'%(JECprefix), #JEC for 74X
      	 'JEC/%s_DATA_L2Relative_AK8PFchs.txt'%(JECprefix),
@@ -666,9 +653,9 @@ if config["CORRJETSONTHEFLY"]:
 	 'JEC/%s_DATA_L2L3Residual_AK8PFchs.txt'%(JECprefix)
        ]
      jecLevelsAK8Puppi = [
-     	 'JEC/Summer15_50nsV5_DATA_L2Relative_AK8PFPuppi.txt',
-     	 'JEC/Summer15_50nsV5_DATA_L3Absolute_AK8PFPuppi.txt',
-	 'JEC/Summer15_50nsV5_DATA_L2L3Residual_AK8PFPuppi.txt'
+     	 'JEC/%s_DATA_L2Relative_AK8PFPuppi.txt'%(JECprefix),
+     	 'JEC/%s_DATA_L3Absolute_AK8PFPuppi.txt'%(JECprefix),
+	 'JEC/%s_DATA_L2L3Residual_AK8PFPuppi.txt'%(JECprefix)
        ]
      jecLevelsAK4chs = [
      	 'JEC/%s_DATA_L1FastJet_AK4PFchs.txt'%(JECprefix),
