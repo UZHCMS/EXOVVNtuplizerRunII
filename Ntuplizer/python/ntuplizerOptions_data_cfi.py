@@ -6,8 +6,8 @@ config = dict()
 config["FALL15"] = True
 config["RUNONMC"] = False
 config["USEJSON"] = True
-config["JSONFILE"] = "JSON/Cert_246908-260627_13TeV_PromptReco_Collisions15_25ns_JSON_Silver_v2.txt"
-config["FILTEREVENTS"] = True
+config["JSONFILE"] = "JSON/Cert_13TeV_16Dec2015ReReco_Collisions15_25ns_JSON_Silver_v2.txt"
+config["FILTEREVENTS"] = False
 config["BUNCHSPACING"] = 25
 config["USENOHF"] = False
 
