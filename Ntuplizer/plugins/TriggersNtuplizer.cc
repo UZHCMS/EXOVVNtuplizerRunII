@@ -32,6 +32,7 @@ TriggersNtuplizer::TriggersNtuplizer( edm::EDGetTokenT<edm::TriggerResults> toke
    
   HBHENoiseFilter_Selector_ =  iConfig.getParameter<std::string> ("noiseFilterSelection_HBHENoiseFilter");  
   CSCHaloNoiseFilter_Selector_ =  iConfig.getParameter<std::string> ("noiseFilterSelection_CSCTightHaloFilter");
+  CSCTightHalo2015Filter_Selector_ =  iConfig.getParameter<std::string> ("noiseFilterSelection_CSCTightHalo2015Filter");
   HCALlaserNoiseFilter_Selector_ =  iConfig.getParameter<std::string> ("noiseFilterSelection_hcalLaserEventFilter");
   ECALDeadCellNoiseFilter_Selector_ =  iConfig.getParameter<std::string> ("noiseFilterSelection_EcalDeadCellTriggerPrimitiveFilter");
   GoodVtxNoiseFilter_Selector_ =  iConfig.getParameter<std::string> ("noiseFilterSelection_goodVertices");
@@ -200,6 +201,8 @@ void TriggersNtuplizer::fillBranches( edm::Event const & event, const edm::Event
         nBranches_->passFilter_HBHE_ = noiseFilterBits_->accept(i);
       if (names.triggerName(i) == CSCHaloNoiseFilter_Selector_)
         nBranches_->passFilter_CSCHalo_ = noiseFilterBits_->accept(i); // TO BE USED
+      if (names.triggerName(i) == CSCTightHalo2015Filter_Selector_)
+        nBranches_->passFilter_CSCTightHalo2015_ = noiseFilterBits_->accept(i); // TO BE USED
       if (names.triggerName(i) == HCALlaserNoiseFilter_Selector_)
         nBranches_->passFilter_HCALlaser_ = noiseFilterBits_->accept(i); // DEPRECATED
       if (names.triggerName(i) == ECALDeadCellNoiseFilter_Selector_)

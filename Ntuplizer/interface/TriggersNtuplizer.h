@@ -40,6 +40,7 @@ private:
    edm::EDGetTokenT<bool> HBHENoiseFilterTight_Selector_;
    edm::EDGetTokenT<bool> HBHENoiseIsoFilter_Selector_;
    std::string CSCHaloNoiseFilter_Selector_;
+   std::string CSCTightHalo2015Filter_Selector_;
    std::string HCALlaserNoiseFilter_Selector_;
    std::string ECALDeadCellNoiseFilter_Selector_;
    std::string GoodVtxNoiseFilter_Selector_;
