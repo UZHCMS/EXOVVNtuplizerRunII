@@ -67,6 +67,7 @@ public:
   bool doAK8Jets_;
   bool doPruning_;
   bool runOnMC_;
+
 };
 
 #endif // JetsNtuplizer_H

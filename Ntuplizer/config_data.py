@@ -628,12 +628,12 @@ jecLevelsAK4chs = []
 jecLevelsAK4 = []
 jecLevelsAK8Puppi = []
 jecLevelsForMET = []
-jecAK8chsUncFile = "JEC/Summer15_25nsV7_DATA_Uncertainty_AK8PFchs.txt"
-jecAK4chsUncFile = "JEC/Summer15_25nsV7_DATA_Uncertainty_AK4PFchs.txt"
+jecAK8chsUncFile = "JEC/Fall15_25nsV2_DATA_Uncertainty_AK8PFchs.txt"
+jecAK4chsUncFile = "JEC/Fall15_25nsV2_DATA_Uncertainty_AK4PFchs.txt"
 
 JECprefix = "Summer15_50nsV5"
 if config["BUNCHSPACING"] == 25 and config["RUNONMC"] and config["FALL15"]:
-   JECprefix = "Fall15_25nsV1"
+   JECprefix = "Fall15_25nsV2"
 elif config["BUNCHSPACING"] == 25 and not(config["RUNONMC"]) and config["FALL15"]:
    # error,"these JEC do not exist yet"
    JECprefix = "Fall15_25nsV2"
@@ -781,6 +781,7 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     noiseFilterSelection_HBHENoiseFilterTight = cms.InputTag("HBHENoiseFilterResultProducer", "HBHENoiseFilterResultRun2Tight"),
     noiseFilterSelection_HBHENoiseIsoFilter = cms.InputTag("HBHENoiseFilterResultProducer", "HBHEIsoNoiseFilterResult"),    
     noiseFilterSelection_CSCTightHaloFilter = cms.string('Flag_CSCTightHaloFilter'),
+    noiseFilterSelection_CSCTightHalo2015Filter = cms.string('Flag_CSCTightHalo2015Filter'),
     noiseFilterSelection_hcalLaserEventFilter = cms.string('Flag_hcalLaserEventFilter'),
     noiseFilterSelection_EcalDeadCellTriggerPrimitiveFilter = cms.string('Flag_EcalDeadCellTriggerPrimitiveFilter'),
     noiseFilterSelection_goodVertices = cms.string('Flag_goodVertices'),
