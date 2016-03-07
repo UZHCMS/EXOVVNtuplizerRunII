@@ -43,5 +43,5 @@ config["DOMETRECLUSTERING"] = False
 
 #--------- JEC ----------#
 config["CORRJETSONTHEFLY"] = True
-config["CORRMETONTHEFLY"] = False
+config["CORRMETONTHEFLY"] = True
 config["GETJECFROMDBFILE"] = False # If not yet in global tag, but db file available
