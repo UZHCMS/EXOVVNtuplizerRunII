@@ -479,9 +479,9 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
   if (runFlags["doHltFilters"]) {
     /** HLT filter decisions */
     tree_->Branch("passFilter_HBHE"                 ,&passFilter_HBHE_                ,"passFilter_HBHE_/O");
-    tree_->Branch("passFilter_HBHELoose"            ,&passFilter_HBHELoose_	      ,"passFilter_HBHELoose_/O");
-    tree_->Branch("passFilter_HBHETight"            ,&passFilter_HBHETight_	      ,"passFilter_HBHETight_/O");
-    tree_->Branch("passFilter_HBHEIso"              ,&passFilter_HBHEIso_	      ,"passFilter_HBHEIso_/O");
+    tree_->Branch("passFilter_HBHELoose"            ,&passFilter_HBHELoose_	          ,"passFilter_HBHELoose_/O");
+    tree_->Branch("passFilter_HBHETight"            ,&passFilter_HBHETight_	          ,"passFilter_HBHETight_/O");
+    tree_->Branch("passFilter_HBHEIso"              ,&passFilter_HBHEIso_	            ,"passFilter_HBHEIso_/O");
     tree_->Branch("passFilter_CSCHalo"              ,&passFilter_CSCHalo_             ,"passFilter_CSCHalo_/O");
     tree_->Branch("passFilter_CSCTightHalo2015"     ,&passFilter_CSCTightHalo2015_    ,"passFilter_CSCTightHalo2015_/O");
     tree_->Branch("passFilter_HCALlaser"            ,&passFilter_HCALlaser_           ,"passFilter_HCALlaser_/O");
