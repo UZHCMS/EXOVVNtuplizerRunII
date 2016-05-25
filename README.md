@@ -4,40 +4,24 @@ Ntuplizer for searches for heavy resonances decaying to dibosons
 
 ## installation instructions
 
-For Spring15(74):
+
+For Spring16(80):
 
 ```
-export SCRAM_ARCH=slc6_amd64_gcc491
-cmsrel CMSSW_7_4_12_patch2
-cd CMSSW_7_4_12_patch2/src
+
+cmsrel CMSSW_8_0_7
+cd CMSSW_8_0_7
 cmsenv
 git cms-init
-```
-
-For Fall15(76):
 
 ```
-export SCRAM_ARCH=slc6_amd64_gcc493
-cmsrel CMSSW_7_6_3_patch2
-cd CMSSW_7_6_3_patch2/src
-cmsenv
-git cms-init
-git cms-merge-topic nhanvtran:Puppi76X-backportFrom80X
-```
-
-The flags for running on Spring15(74) or Fall15(76) samples have to be changed with config["FALL15"]=False/True in python/ntuplizerOptions_*_cfi.py
-
-### optional packages
-
-For the boosted Hbb tagger (will add a lot of packages that will take a long time to compile):
-```
-git remote add btv-cmssw https://github.com/cms-btv-pog/cmssw.git
-git fetch btv-cmssw
-git cms-merge-topic -u cms-btv-pog:BoostedDoubleSVTagger-WithWeightFiles-v2_from-CMSSW_7_4_1
-```
 
 
-### getting the code
+
+The flags for running on Spring15(74) or Fall15(76) or Spring16(80) samples have to be changed with config["FALL15"]=False/True and config["SPRING16"]=False/True in python/ntuplizerOptions_*_cfi.py
+
+
+### getting the code for Spring16
 
 ```
 export GITUSER=`git config user.github`
@@ -46,12 +30,13 @@ git clone git@github.com:${GITUSER}/EXOVVNtuplizerRunII.git
 cd EXOVVNtuplizerRunII
 git remote add UZHCMS git@github.com:UZHCMS/EXOVVNtuplizerRunII.git
 git fetch UZHCMS
-git checkout -b DevelopmentBranch UZHCMS/master
+git checkout -b DevelopmentBranch UZHCMS/80X_ntuplizer
 cd $CMSSW_BASE/src
 scram b distclean
 scram b -j8
 cd EXOVVNtuplizerRunII/Ntuplizer
 ```
+
 
 ### running
 
