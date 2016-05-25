@@ -25,8 +25,8 @@ options.maxEvents = -1
 #data file
 
 # options.inputFiles = '/store/data/Run2015D/SingleMuon/MINIAOD/05Oct2015-v1/10000/021FD3F0-876F-E511-99D2-0025905A6060.root'
-options.inputFiles = 'dcap://t3se01.psi.ch:22125//pnfs/psi.ch/cms/trivcat/store/data/Run2015D/JetHT/MINIAOD/16Dec2015-v1/00000/301A497D-70B0-E511-9630-002590D0AFA8.root'
-
+#options.inputFiles = 'dcap://t3se01.psi.ch:22125//pnfs/psi.ch/cms/trivcat/store/data/Run2015D/JetHT/MINIAOD/16Dec2015-v1/00000/301A497D-70B0-E511-9630-002590D0AFA8.root'
+options.inputFiles = '/store/data/Run2016B/JetHT/MINIAOD/PromptReco-v2/000/273/158/00000/1E4ABD0D-DA19-E611-9396-02163E014258.root'
 options.parseArguments()
 
 process.options  = cms.untracked.PSet( 
@@ -76,6 +76,9 @@ GT = ''
 if config["FALL15"]:
  if config["RUNONMC"]: GT = '76X_mcRun2_asymptotic_v12'
  elif not(config["RUNONMC"]): GT = '76X_dataRun2_v15'
+elif config["SPRING16"]:
+  if config["RUNONMC"]: GT = '80X_mcRun2_asymptotic_2016_miniAODv2'
+  elif not(config["RUNONMC"]): GT = '80X_dataRun2_Prompt_v8'
 else:
  if config["RUNONMC"]: GT = '74X_mcRun2_asymptotic_v2'
  elif not(config["RUNONMC"]):
@@ -628,8 +631,8 @@ jecLevelsAK4chs = []
 jecLevelsAK4 = []
 jecLevelsAK8Puppi = []
 jecLevelsForMET = []
-jecAK8chsUncFile = "JEC/Fall15_25nsV2_DATA_Uncertainty_AK8PFchs.txt"
-jecAK4chsUncFile = "JEC/Fall15_25nsV2_DATA_Uncertainty_AK4PFchs.txt"
+#jecAK8chsUncFile = "JEC/Fall15_25nsV2_DATA_Uncertainty_AK8PFchs.txt"
+#jecAK4chsUncFile = "JEC/Fall15_25nsV2_DATA_Uncertainty_AK4PFchs.txt"
 
 JECprefix = "Summer15_50nsV5"
 if config["BUNCHSPACING"] == 25 and config["RUNONMC"] and config["FALL15"]:
@@ -641,6 +644,10 @@ elif config["BUNCHSPACING"] == 25 and config["RUNONMC"]:
    JECprefix = "Summer15_25nsV7"
 elif config["BUNCHSPACING"] == 25 and not(config["RUNONMC"]):   
    JECprefix = "Summer15_25nsV7"
+
+jecAK8chsUncFile = "JEC/%s_MC_Uncertainty_AK8PFchs.txt"%(JECprefix)
+jecAK4chsUncFile = "JEC/%s_MC_Uncertainty_AK4PFchs.txt"%(JECprefix)
+
 
 if config["CORRJETSONTHEFLY"]:
    if config["RUNONMC"]:

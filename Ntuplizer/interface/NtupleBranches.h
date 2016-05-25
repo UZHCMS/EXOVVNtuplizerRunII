@@ -216,63 +216,81 @@ public:
   std::vector<float>  	      tau_chargedIsoPtSum			      ;
   std::vector<float>  	      tau_neutralIsoPtSum			      ;
   std::vector<float>  	      tau_puCorrPtSum				      ;
-  std::vector<float>  	      tau_byIsolationMVA3oldDMwoLTraw		      ;
-  std::vector<float>  	      tau_byVLooseIsolationMVA3oldDMwoLT	      ;
-  std::vector<float>  	      tau_byLooseIsolationMVA3oldDMwoLT		      ;
-  std::vector<float>  	      tau_byMediumIsolationMVA3oldDMwoLT	      ;
-  std::vector<float>  	      tau_byTightIsolationMVA3oldDMwoLT		      ;
-  std::vector<float>  	      tau_byVTightIsolationMVA3oldDMwoLT	      ;
-  std::vector<float>  	      tau_byVVTightIsolationMVA3oldDMwoLT	      ;
-  std::vector<float>  	      tau_byIsolationMVA3oldDMwLTraw		      ;
-  std::vector<float>  	      tau_byVLooseIsolationMVA3oldDMwLT		      ;
-  std::vector<float>  	      tau_byLooseIsolationMVA3oldDMwLT		      ;
-  std::vector<float>  	      tau_byMediumIsolationMVA3oldDMwLT		      ;
-  std::vector<float>  	      tau_byTightIsolationMVA3oldDMwLT		      ;
-  std::vector<float>  	      tau_byVTightIsolationMVA3oldDMwLT		      ;
-  std::vector<float>  	      tau_byVVTightIsolationMVA3oldDMwLT	      ;
-  std::vector<float>  	      tau_byIsolationMVA3newDMwoLTraw		      ;
-  std::vector<float>  	      tau_byVLooseIsolationMVA3newDMwoLT	      ;
-  std::vector<float>  	      tau_byLooseIsolationMVA3newDMwoLT		      ;
-  std::vector<float>  	      tau_byMediumIsolationMVA3newDMwoLT	      ;
-  std::vector<float>  	      tau_byTightIsolationMVA3newDMwoLT		      ;
-  std::vector<float>  	      tau_byVTightIsolationMVA3newDMwoLT	      ;
-  std::vector<float>  	      tau_byVVTightIsolationMVA3newDMwoLT	      ;
-  std::vector<float>  	      tau_byIsolationMVA3newDMwLTraw		      ;
-  std::vector<float>  	      tau_byVLooseIsolationMVA3newDMwLT		      ;
-  std::vector<float>  	      tau_byLooseIsolationMVA3newDMwLT		      ;
-  std::vector<float>  	      tau_byMediumIsolationMVA3newDMwLT		      ;
-  std::vector<float>  	      tau_byTightIsolationMVA3newDMwLT		      ;
-  std::vector<float>  	      tau_byVTightIsolationMVA3newDMwLT		      ;
-  std::vector<float>  	      tau_byVVTightIsolationMVA3newDMwLT	      ;
-  std::vector<float>  	      tau_againstElectronLoose			      ;
-  std::vector<float>  	      tau_againstElectronMedium			      ;
-  std::vector<float>  	      tau_againstElectronTight			      ;
-  std::vector<float>  	      tau_againstElectronMVA5raw		      ;
-  std::vector<float>  	      tau_againstElectronMVA5category		      ;
-  std::vector<float>  	      tau_againstElectronVLooseMVA5 		      ;
-  std::vector<float>  	      tau_againstElectronLooseMVA5  		      ;
-  std::vector<float>  	      tau_againstElectronMediumMVA5 		      ;
-  std::vector<float>  	      tau_againstElectronTightMVA5  		      ;
-  std::vector<float>  	      tau_againstElectronVTightMVA5 		      ;
-  std::vector<float>  	      tau_againstMuonLoose  			      ;
-  std::vector<float>  	      tau_againstMuonMedium 			      ;
-  std::vector<float>  	      tau_againstMuonTight  			      ;
-  std::vector<float>  	      tau_againstMuonLoose2 			      ;
-  std::vector<float>  	      tau_againstMuonMedium2			      ;
-  std::vector<float>  	      tau_againstMuonTight2 			      ;
-  std::vector<float>  	      tau_againstMuonLoose3 			      ;
-  std::vector<float>  	      tau_againstMuonTight3 			      ;
-  std::vector<float>  	      tau_againstMuonMVAraw 			      ;
-  std::vector<float>  	      tau_againstMuonLooseMVA			      ;
-  std::vector<float>  	      tau_againstMuonMediumMVA			      ;
-  std::vector<float>  	      tau_againstMuonTightMVA			      ;
-  std::vector<float>  	      tau_byPileupWeightedIsolationRaw3Hits	      ;
-  std::vector<float>  	      tau_byLoosePileupWeightedIsolation3Hits 	      ;
-  std::vector<float>  	      tau_byMediumPileupWeightedIsolation3Hits	      ;
-  std::vector<float>  	      tau_byTightPileupWeightedIsolation3Hits	      ;
-  std::vector<float>  	      tau_byPhotonPtSumOutsideSignalCone	      ;
+  std::vector<float>  	      tau_chargedIsoPtSumdR03			      ;
+  std::vector<float>  	      tau_footprintCorrectiondR03			      ;
+  std::vector<float>  	      tau_neutralIsoPtSumdR03			      ;
+  std::vector<float>  	      tau_neutralIsoPtSumWeight			      ;
+  std::vector<float>  	      tau_neutralIsoPtSumWeightdR03			      ;
+  std::vector<float>  	      tau_photonPtSumOutsideSignalConedR03			      ;
+
+  std::vector<float>  	      tau_byIsolationMVArun2v1DBdR03oldDMwLTraw			      ;
+  std::vector<float>  	      tau_byIsolationMVArun2v1DBnewDMwLTraw			      ;
+  std::vector<float>  	      tau_byIsolationMVArun2v1DBoldDMwLTraw			      ;
+  std::vector<float>  	      tau_byIsolationMVArun2v1PWdR03oldDMwLTraw			      ;
+  std::vector<float>  	      tau_byIsolationMVArun2v1PWnewDMwLTraw			      ;
+  std::vector<float>  	      tau_byIsolationMVArun2v1PWoldDMwLTraw			      ;
+  std::vector<float>  	      tau_byLooseIsolationMVArun2v1DBdR03oldDMwLT			      ;
+  std::vector<float>  	      tau_byLooseIsolationMVArun2v1DBnewDMwLT			      ;
+  std::vector<float>  	      tau_byLooseIsolationMVArun2v1DBoldDMwLT			      ;
+  std::vector<float>  	      tau_byLooseIsolationMVArun2v1PWdR03oldDMwLT			      ;
+  std::vector<float>  	      tau_byLooseIsolationMVArun2v1PWnewDMwLT			      ;
+  std::vector<float>  	      tau_byLooseIsolationMVArun2v1PWoldDMwLT			      ;
+
+  std::vector<float>  	      tau_byMediumIsolationMVArun2v1DBdR03oldDMwLT			      ;
+  std::vector<float>  	      tau_byMediumIsolationMVArun2v1DBnewDMwLT			      ;
+  std::vector<float>  	      tau_byMediumIsolationMVArun2v1DBoldDMwLT			      ;
+  std::vector<float>  	      tau_byMediumIsolationMVArun2v1PWdR03oldDMwLT			      ;
+  std::vector<float>  	      tau_byMediumIsolationMVArun2v1PWnewDMwLT			      ;
+  std::vector<float>  	      tau_byMediumIsolationMVArun2v1PWoldDMwLT;
+ 
+  std::vector<float>  	      tau_byTightIsolationMVArun2v1DBdR03oldDMwLT			      ;
+  std::vector<float>  	      tau_byTightIsolationMVArun2v1DBnewDMwLT			      ;
+  std::vector<float>  	      tau_byTightIsolationMVArun2v1DBoldDMwLT			      ;
+  std::vector<float>  	      tau_byTightIsolationMVArun2v1PWdR03oldDMwLT			      ;
+  std::vector<float>  	      tau_byTightIsolationMVArun2v1PWnewDMwLT			      ;
+  std::vector<float>  	      tau_byTightIsolationMVArun2v1PWoldDMwLT			      ;
+  std::vector<float>  	      tau_byVLooseIsolationMVArun2v1DBdR03oldDMwLT			      ;
+
+  std::vector<float>  	      tau_byVLooseIsolationMVArun2v1DBnewDMwLT			      ;
+  std::vector<float>  	      tau_byVLooseIsolationMVArun2v1DBoldDMwLT			      ;
+  std::vector<float>  	      tau_byVLooseIsolationMVArun2v1PWdR03oldDMwLT			      ;
+  std::vector<float>  	      tau_byVLooseIsolationMVArun2v1PWnewDMwLT			      ;
+  std::vector<float>  	      tau_byVLooseIsolationMVArun2v1PWoldDMwLT			      ;
+  std::vector<float>  	      tau_byVTightIsolationMVArun2v1DBdR03oldDMwLT			      ;
+  std::vector<float>  	      tau_byVTightIsolationMVArun2v1DBnewDMwLT			      ;
+  std::vector<float>  	      tau_byVTightIsolationMVArun2v1DBoldDMwLT			      ;
+
+  std::vector<float>  	      tau_byVTightIsolationMVArun2v1PWdR03oldDMwLT			      ;
+  std::vector<float>  	      tau_byVTightIsolationMVArun2v1PWnewDMwLT			      ;
+  std::vector<float>  	      tau_byVTightIsolationMVArun2v1PWoldDMwLT			      ;
+  std::vector<float>  	      tau_byVVTightIsolationMVArun2v1DBdR03oldDMwLT			      ;
+  std::vector<float>  	      tau_byVVTightIsolationMVArun2v1DBnewDMwLT			      ;
+  std::vector<float>  	      tau_byVVTightIsolationMVArun2v1DBoldDMwLT			      ;
+  std::vector<float>  	      tau_byVVTightIsolationMVArun2v1PWdR03oldDMwLT			      ;
+  std::vector<float>  	      tau_byVVTightIsolationMVArun2v1PWnewDMwLT			      ;
+
+  std::vector<float>  	      tau_byVVTightIsolationMVArun2v1PWoldDMwLT			      ;
+
+
+  std::vector<float>  	      tau_againstElectronMVA6raw			      ;
+  std::vector<float>  	      tau_againstElectronMVA6category			      ;
+  std::vector<float>  	      tau_againstElectronVLooseMVA6			      ;
+  std::vector<float>  	      tau_againstElectronLooseMVA6			      ;
+  std::vector<float>  	      tau_againstElectronMediumMVA6			      ;
+  std::vector<float>  	      tau_againstElectronTightMVA6			      ;
+  std::vector<float>  	      tau_againstElectronVTightMVA6			      ;
+      
+
+  std::vector<float>  	      tau_againstMuonLoose3			      ;
+  std::vector<float>  	      tau_againstMuonTight3			      ; 
+      
+ 
+  std::vector<float>  	      tau_byPhotonPtSumOutsideSignalCone			      ;
   std::vector<float>  	      tau_footprintCorrection			      ;
-    
+
+
+
+  
 /* /\*----------------------Tau tracks---------------------------*\/ */
   
 /*     std::vector<int>    nCharCand              ; */

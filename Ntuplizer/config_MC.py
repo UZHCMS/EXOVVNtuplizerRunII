@@ -25,7 +25,8 @@ options.maxEvents = 100
 #data file
 
 #options.inputFiles = '/store/mc/RunIISpring15MiniAODv2/WJetsToLNu_HT-100To200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/74X_mcRun2_asymptotic_v2-v1/10000/003F1529-D36D-E511-9E33-001E6724816F.root'
-options.inputFiles = 'dcap://t3se01.psi.ch:22125//pnfs/psi.ch/cms/trivcat/store/mc/RunIIFall15MiniAODv2/WprimeToWhToWhadhbb_narrow_M-1000_13TeV-madgraph/MINIAODSIM/PU25nsData2015v1_76X_mcRun2_asymptotic_v12-v1/00000/8EE77064-42B8-E511-8BA1-003048895D40.root'
+options.inputFiles = '/store/mc/RunIISpring16MiniAODv1/RadionToWWToWlepWhad_width0p3_M-3000_TuneCUETP8M1_13TeV-madgraph-pythia8/MINIAODSIM/PUSpring16RAWAODSIM_80X_mcRun2_asymptotic_2016_v3-v1/50000/20BB570E-2F16-E611-BF25-02163E015F8E.root'
+#options.inputFiles = 'dcap://t3se01.psi.ch:22125//pnfs/psi.ch/cms/trivcat/store/mc/RunIIFall15MiniAODv2/WprimeToWhToWhadhbb_narrow_M-1000_13TeV-madgraph/MINIAODSIM/PU25nsData2015v1_76X_mcRun2_asymptotic_v12-v1/00000/8EE77064-42B8-E511-8BA1-003048895D40.root'
 #options.inputFiles = 'xroot://t3dcachedb.psi.ch:1094//pnfs/psi.ch/cms/trivcat/store/user/cgalloni/RunII/RadionTohhTohtatahbb_narrow_M-1000_13TeV-madgraph/MiniAOD_TauBoosted_v0667_maxDepth100_jetPt100/miniAOD_4.root'
 #options.inputFiles = 'dcap://t3se01.psi.ch:22125//pnfs/psi.ch/cms/trivcat/store/user/cgalloni/RunII/RadionTohhTohtatahbb_narrow_M-1000_13TeV-madgraph/MiniAOD_TauBoosted_v0667_maxDepth100_jetPt100/miniAOD_4.root'
 #options.inputFiles = '/store/user/cgalloni/MiniAOD_191115/RadionTohhTohtatahbb_narrow_M-1000_13TeV-madgraph/BoostedTaus_RadionTohhTohtatahbb_narrow_M-1000_13TeV-madgraph_v0/151119_130555/0000/miniAOD_1.root'
@@ -78,12 +79,17 @@ GT = ''
 if config["FALL15"]:
  if config["RUNONMC"]: GT = '76X_mcRun2_asymptotic_v12'
  elif not(config["RUNONMC"]): GT = '76X_dataRun2_v15'
+elif config["SPRING16"]:
+  if config["RUNONMC"]: GT = '80X_mcRun2_asymptotic_2016_miniAODv2'
+  elif not(config["RUNONMC"]): GT = '80X_dataRun2_Prompt_v8'
 else:
  if config["RUNONMC"]: GT = '74X_mcRun2_asymptotic_v2'
  elif not(config["RUNONMC"]):
    GT = '74X_dataRun2_v2'
    if config["JSONFILE"].find('reMiniAOD') != -1: GT = '74X_dataRun2_reMiniAOD_v0'
    elif config["JSONFILE"].find('PromptReco-v4') != -1: GT = '74X_dataRun2_Prompt_v4'
+ 
+
 
 print "*************************************** GLOBAL TAG *************************************************" 
 print GT
@@ -607,18 +613,26 @@ jecLevelsAK4chs = []
 jecLevelsAK4 = []
 jecLevelsAK8Puppi = []
 jecLevelsForMET = []
-jecAK8chsUncFile = "JEC/Fall15_25nsV2_MC_Uncertainty_AK8PFchs.txt"
-jecAK4chsUncFile = "JEC/Fall15_25nsV2_MC_Uncertainty_AK4PFchs.txt"
+#jecAK8chsUncFile = "JEC/Fall15_25nsV2_MC_Uncertainty_AK8PFchs.txt"
+#jecAK4chsUncFile = "JEC/Fall15_25nsV2_MC_Uncertainty_AK4PFchs.txt"
 
 JECprefix = "Summer15_50nsV5"
 if config["BUNCHSPACING"] == 25 and config["RUNONMC"] and config["FALL15"]:
    JECprefix = "Fall15_25nsV2"
 elif config["BUNCHSPACING"] == 25 and not(config["RUNONMC"]) and config["FALL15"]:
    error,"these JEC do not exist yet"
+elif config["BUNCHSPACING"] == 25 and config["RUNONMC"] and config["SPRING16"]:
+   JECprefix = "Spring16_25nsV1"
+elif config["BUNCHSPACING"] == 25 and not(config["RUNONMC"]) and config["SPRING16"]:
+   error,"these JEC do not exist yet"
 elif config["BUNCHSPACING"] == 25 and config["RUNONMC"]:
    JECprefix = "Summer15_25nsV7"
 elif config["BUNCHSPACING"] == 25 and not(config["RUNONMC"]):   
    JECprefix = "Summer15_25nsV7"
+
+jecAK8chsUncFile = "JEC/%s_MC_Uncertainty_AK8PFchs.txt"%(JECprefix)
+jecAK4chsUncFile = "JEC/%s_MC_Uncertainty_AK4PFchs.txt"%(JECprefix)
+
 
 if config["CORRJETSONTHEFLY"]:
    if config["RUNONMC"]:
