@@ -3,10 +3,11 @@ import FWCore.ParameterSet.Config as cms
 config = dict()
 
 #--------- general ----------#
-config["FALL15"] = True
+config["FALL15"] = False
+config["SPRING16"] = True
 config["RUNONMC"] = False
 config["USEJSON"] = True
-config["JSONFILE"] = "JSON/Cert_13TeV_16Dec2015ReReco_Collisions15_25ns_JSON_Silver_v2.txt"
+config["JSONFILE"] = "JSON/Cert_271036-273450_13TeV_PromptReco_Collisions16_JSON_NoL1T.txt"
 config["FILTEREVENTS"] = False
 config["BUNCHSPACING"] = 25
 config["USENOHF"] = False
@@ -18,7 +19,7 @@ config["DOGENEVENT"] = False
 config["DOPILEUP"] = False
 config["DOELECTRONS"] = True
 config["DOMUONS"] = True
-config["DOTAUS"] = False
+config["DOTAUS"] = True
 config["DOAK8JETS"] = True
 config["DOAK4JETS"] = True
 config["DOVERTICES"] = True
@@ -26,7 +27,7 @@ config["DOTRIGGERDECISIONS"] = True
 config["DOTRIGGEROBJECTS"] = True
 config["DOHLTFILTERS"] = True
 config["DOMISSINGET"] = True
-config["DOTAUSBOOSTED"] = False
+config["DOTAUSBOOSTED"] = True
 config["DOMETSVFIT"] = False
 
 

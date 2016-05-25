@@ -195,62 +195,81 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
       tree_->Branch( "tau_chargedIsoPtSum"			      , &tau_chargedIsoPtSum			         );
       tree_->Branch( "tau_neutralIsoPtSum"			      , &tau_neutralIsoPtSum			         );
       tree_->Branch( "tau_puCorrPtSum"				      , &tau_puCorrPtSum 				 );
-      tree_->Branch( "tau_byIsolationMVA3oldDMwoLTraw"		      , &tau_byIsolationMVA3oldDMwoLTraw 		 );
-      tree_->Branch( "tau_byVLooseIsolationMVA3oldDMwoLT"	      , &tau_byVLooseIsolationMVA3oldDMwoLT	         );
-      tree_->Branch( "tau_byLooseIsolationMVA3oldDMwoLT"	      , &tau_byLooseIsolationMVA3oldDMwoLT	         );
-      tree_->Branch( "tau_byMediumIsolationMVA3oldDMwoLT"	      , &tau_byMediumIsolationMVA3oldDMwoLT	         );
-      tree_->Branch( "tau_byTightIsolationMVA3oldDMwoLT"	      , &tau_byTightIsolationMVA3oldDMwoLT	         );
-      tree_->Branch( "tau_byVTightIsolationMVA3oldDMwoLT"	      , &tau_byVTightIsolationMVA3oldDMwoLT	         );
-      tree_->Branch( "tau_byVVTightIsolationMVA3oldDMwoLT"	      , &tau_byVVTightIsolationMVA3oldDMwoLT	         );
-      tree_->Branch( "tau_byIsolationMVA3oldDMwLTraw"		      , &tau_byIsolationMVA3oldDMwLTraw  		 );
-      tree_->Branch( "tau_byVLooseIsolationMVA3oldDMwLT"	      , &tau_byVLooseIsolationMVA3oldDMwLT		 );
-      tree_->Branch( "tau_byLooseIsolationMVA3oldDMwLT"		      , &tau_byLooseIsolationMVA3oldDMwLT		 );
-      tree_->Branch( "tau_byMediumIsolationMVA3oldDMwLT"	      , &tau_byMediumIsolationMVA3oldDMwLT		 );
-      tree_->Branch( "tau_byTightIsolationMVA3oldDMwLT"		      , &tau_byTightIsolationMVA3oldDMwLT		 );
-      tree_->Branch( "tau_byVTightIsolationMVA3oldDMwLT"	      , &tau_byVTightIsolationMVA3oldDMwLT	         );
-      tree_->Branch( "tau_byVVTightIsolationMVA3oldDMwLT"	      , &tau_byVVTightIsolationMVA3oldDMwLT	         );
-      tree_->Branch( "tau_byIsolationMVA3newDMwoLTraw"		      , &tau_byIsolationMVA3newDMwoLTraw 		 );
-      tree_->Branch( "tau_byVLooseIsolationMVA3newDMwoLT"	      , &tau_byVLooseIsolationMVA3newDMwoLT	         );
-      tree_->Branch( "tau_byLooseIsolationMVA3newDMwoLT"	      , &tau_byLooseIsolationMVA3newDMwoLT	         );
-      tree_->Branch( "tau_byMediumIsolationMVA3newDMwoLT"	      , &tau_byMediumIsolationMVA3newDMwoLT	         );
-      tree_->Branch( "tau_byTightIsolationMVA3newDMwoLT"	      , &tau_byTightIsolationMVA3newDMwoLT	         );
-      tree_->Branch( "tau_byVTightIsolationMVA3newDMwoLT"	      , &tau_byVTightIsolationMVA3newDMwoLT	         );
-      tree_->Branch( "tau_byVVTightIsolationMVA3newDMwoLT"	      , &tau_byVVTightIsolationMVA3newDMwoLT	         );
-      tree_->Branch( "tau_byIsolationMVA3newDMwLTraw"		      , &tau_byIsolationMVA3newDMwLTraw  		 );
-      tree_->Branch( "tau_byVLooseIsolationMVA3newDMwLT"	      , &tau_byVLooseIsolationMVA3newDMwLT		 );
-      tree_->Branch( "tau_byLooseIsolationMVA3newDMwLT"		      , &tau_byLooseIsolationMVA3newDMwLT		 );
-      tree_->Branch( "tau_byMediumIsolationMVA3newDMwLT"	      , &tau_byMediumIsolationMVA3newDMwLT		 );
-      tree_->Branch( "tau_byTightIsolationMVA3newDMwLT"		      , &tau_byTightIsolationMVA3newDMwLT		 );
-      tree_->Branch( "tau_byVTightIsolationMVA3newDMwLT"	      , &tau_byVTightIsolationMVA3newDMwLT	         );
-      tree_->Branch( "tau_byVVTightIsolationMVA3newDMwLT"	      , &tau_byVVTightIsolationMVA3newDMwLT	         );
-      tree_->Branch( "tau_againstElectronLoose"			      , &tau_againstElectronLoose			 );
-      tree_->Branch( "tau_againstElectronMedium"		      , &tau_againstElectronMedium			 );
-      tree_->Branch( "tau_againstElectronTight"			      , &tau_againstElectronTight			 );
-      tree_->Branch( "tau_againstElectronMVA5raw"		      , &tau_againstElectronMVA5raw			 );
-      tree_->Branch( "tau_againstElectronMVA5category"		      , &tau_againstElectronMVA5category 		 );
-      tree_->Branch( "tau_againstElectronVLooseMVA5" 		      , &tau_againstElectronVLooseMVA5			 );
-      tree_->Branch( "tau_againstElectronLooseMVA5"  		      , &tau_againstElectronLooseMVA5			 );
-      tree_->Branch( "tau_againstElectronMediumMVA5" 		      , &tau_againstElectronMediumMVA5			 );
-      tree_->Branch( "tau_againstElectronTightMVA5"  		      , &tau_againstElectronTightMVA5			 );
-      tree_->Branch( "tau_againstElectronVTightMVA5" 		      , &tau_againstElectronVTightMVA5			 );
-      tree_->Branch( "tau_againstMuonLoose"  			      , &tau_againstMuonLoose				 );
-      tree_->Branch( "tau_againstMuonMedium" 			      , &tau_againstMuonTight				 );
-      tree_->Branch( "tau_againstMuonTight"  			      , &tau_againstMuonTight				 );
-      tree_->Branch( "tau_againstMuonLoose2" 			      , &tau_againstMuonLoose2				 );
-      tree_->Branch( "tau_againstMuonMedium2"			      , &tau_againstMuonMedium2  			 );
-      tree_->Branch( "tau_againstMuonTight2" 			      , &tau_againstMuonLoose3				 );
-      tree_->Branch( "tau_againstMuonLoose3" 			      , &tau_againstMuonLoose3				 );
-      tree_->Branch( "tau_againstMuonTight3" 			      , &tau_againstMuonTight3				 );
-      tree_->Branch( "tau_againstMuonMVAraw" 			      , &tau_againstMuonMVAraw				 );
-      tree_->Branch( "tau_againstMuonLooseMVA"			      , &tau_againstMuonLooseMVA 			 );
-      tree_->Branch( "tau_againstMuonMediumMVA"			      , &tau_againstMuonMediumMVA			 );
-      tree_->Branch( "tau_againstMuonTightMVA"			      , &tau_againstMuonTightMVA 			 );
-      tree_->Branch( "tau_byPileupWeightedIsolationRaw3Hits"	      , &tau_byPileupWeightedIsolationRaw3Hits		 );
-      tree_->Branch( "tau_byLoosePileupWeightedIsolation3Hits"	      , &tau_byLoosePileupWeightedIsolation3Hits	 );
-      tree_->Branch( "tau_byMediumPileupWeightedIsolation3Hits"	      , &tau_byMediumPileupWeightedIsolation3Hits	 );
-      tree_->Branch( "tau_byTightPileupWeightedIsolation3Hits"	      , &tau_byTightPileupWeightedIsolation3Hits	 ); 
-      tree_->Branch( "tau_byPhotonPtSumOutsideSignalCone"	      , &tau_byPhotonPtSumOutsideSignalCone	 );
-      tree_->Branch( "tau_footprintCorrection"	                      , &tau_footprintCorrection	 );
+     
+
+      tree_->Branch( "tau_chargedIsoPtSumdR03"                       , &tau_chargedIsoPtSumdR03);
+      tree_->Branch( "tau_footprintCorrectiondR03"                    , &tau_footprintCorrectiondR03);
+      tree_->Branch( "tau_neutralIsoPtSumdR03"                        , &tau_neutralIsoPtSumdR03);
+      tree_->Branch( "tau_neutralIsoPtSumWeight"                      , &tau_neutralIsoPtSumWeight);
+      tree_->Branch( "tau_neutralIsoPtSumWeightdR03"                  , &tau_neutralIsoPtSumWeightdR03);
+      tree_->Branch( "tau_photonPtSumOutsideSignalConedR03"           , &tau_photonPtSumOutsideSignalConedR03);
+
+      tree_->Branch( "tau_byIsolationMVArun2v1DBdR03oldDMwLTraw"      , &tau_byIsolationMVArun2v1DBdR03oldDMwLTraw);
+      tree_->Branch( "tau_byIsolationMVArun2v1DBnewDMwLTraw"          , &tau_byIsolationMVArun2v1DBnewDMwLTraw);
+      tree_->Branch( "tau_byIsolationMVArun2v1DBoldDMwLTraw"          , &tau_byIsolationMVArun2v1DBoldDMwLTraw);
+      tree_->Branch( "tau_byIsolationMVArun2v1PWdR03oldDMwLTraw"      , &tau_byIsolationMVArun2v1PWdR03oldDMwLTraw);
+      tree_->Branch( "tau_byIsolationMVArun2v1PWnewDMwLTraw"          , &tau_byIsolationMVArun2v1PWnewDMwLTraw);
+      tree_->Branch( "tau_byIsolationMVArun2v1PWoldDMwLTraw"          , &tau_byIsolationMVArun2v1PWoldDMwLTraw);
+      tree_->Branch( "tau_byLooseIsolationMVArun2v1DBdR03oldDMwLT"    , &tau_byLooseIsolationMVArun2v1DBdR03oldDMwLT);
+      tree_->Branch( "tau_byLooseIsolationMVArun2v1DBnewDMwLT"        , &tau_byLooseIsolationMVArun2v1DBnewDMwLT);
+      tree_->Branch( "tau_byLooseIsolationMVArun2v1DBoldDMwLT"        , &tau_byLooseIsolationMVArun2v1DBoldDMwLT);
+      tree_->Branch( "tau_byLooseIsolationMVArun2v1PWdR03oldDMwLT"   , &tau_byLooseIsolationMVArun2v1PWdR03oldDMwLT);
+      tree_->Branch( "tau_byLooseIsolationMVArun2v1PWnewDMwLT"        , &tau_byLooseIsolationMVArun2v1PWnewDMwLT);
+      tree_->Branch( "tau_byLooseIsolationMVArun2v1PWoldDMwLT"        , &tau_byLooseIsolationMVArun2v1PWoldDMwLT);
+      tree_->Branch( "tau_byMediumIsolationMVArun2v1DBdR03oldDMwLT"    , &tau_byMediumIsolationMVArun2v1DBdR03oldDMwLT);
+      tree_->Branch( "tau_byMediumIsolationMVArun2v1DBnewDMwLT"        , &tau_byMediumIsolationMVArun2v1DBnewDMwLT);
+      tree_->Branch( "tau_byMediumIsolationMVArun2v1DBoldDMwLT"        , &tau_byMediumIsolationMVArun2v1DBoldDMwLT);
+      tree_->Branch( "tau_byMediumIsolationMVArun2v1PWdR03oldDMwLT"    , &tau_byMediumIsolationMVArun2v1PWdR03oldDMwLT);
+      tree_->Branch( "tau_byMediumIsolationMVArun2v1PWnewDMwLT"        , &tau_byMediumIsolationMVArun2v1PWnewDMwLT);
+      tree_->Branch( "tau_byMediumIsolationMVArun2v1PWoldDMwLT"        , &tau_byMediumIsolationMVArun2v1PWoldDMwLT);
+
+
+      tree_->Branch( "tau_byTightIsolationMVArun2v1DBdR03oldDMwLT"     , &tau_byTightIsolationMVArun2v1DBdR03oldDMwLT);
+      tree_->Branch( "tau_byTightIsolationMVArun2v1DBnewDMwLT"         , &tau_byTightIsolationMVArun2v1DBnewDMwLT);
+      tree_->Branch( "tau_byTightIsolationMVArun2v1DBoldDMwLT"         , &tau_byTightIsolationMVArun2v1DBoldDMwLT);
+      tree_->Branch( "tau_byTightIsolationMVArun2v1PWdR03oldDMwLT"     , &tau_byTightIsolationMVArun2v1PWdR03oldDMwLT);
+      tree_->Branch( "tau_byTightIsolationMVArun2v1PWnewDMwLT"         , &tau_byTightIsolationMVArun2v1PWnewDMwLT);
+      tree_->Branch( "tau_byTightIsolationMVArun2v1PWoldDMwLT"         , &tau_byTightIsolationMVArun2v1PWoldDMwLT);
+      tree_->Branch( "tau_byVLooseIsolationMVArun2v1DBdR03oldDMwLT"    , &tau_byVLooseIsolationMVArun2v1DBdR03oldDMwLT);
+
+      tree_->Branch( "tau_byVLooseIsolationMVArun2v1DBnewDMwLT"        , &tau_byVLooseIsolationMVArun2v1DBnewDMwLT);
+      tree_->Branch( "tau_byVLooseIsolationMVArun2v1DBoldDMwLT"        , &tau_byVLooseIsolationMVArun2v1DBoldDMwLT);
+      tree_->Branch( "tau_byVLooseIsolationMVArun2v1PWdR03oldDMwLT"    , &tau_byVLooseIsolationMVArun2v1PWdR03oldDMwLT);
+      tree_->Branch( "tau_byVLooseIsolationMVArun2v1PWnewDMwLT"        , &tau_byVLooseIsolationMVArun2v1PWnewDMwLT);
+      tree_->Branch( "tau_byVLooseIsolationMVArun2v1PWoldDMwLT"        , &tau_byVLooseIsolationMVArun2v1PWoldDMwLT);
+      tree_->Branch( "tau_byVTightIsolationMVArun2v1DBdR03oldDMwLT"    , &tau_byVTightIsolationMVArun2v1DBdR03oldDMwLT);
+      tree_->Branch( "tau_byVTightIsolationMVArun2v1DBnewDMwLT"        , &tau_byVTightIsolationMVArun2v1DBnewDMwLT);
+      tree_->Branch( "tau_byVTightIsolationMVArun2v1DBoldDMwLT"        , &tau_byVTightIsolationMVArun2v1DBoldDMwLT);
+
+      tree_->Branch( "tau_byVTightIsolationMVArun2v1PWdR03oldDMwLT"     , &tau_byVTightIsolationMVArun2v1PWdR03oldDMwLT);
+      tree_->Branch( "tau_byVTightIsolationMVArun2v1PWnewDMwLT"         , &tau_byVTightIsolationMVArun2v1PWnewDMwLT);
+      tree_->Branch( "tau_byVTightIsolationMVArun2v1PWoldDMwLT"         , &tau_byVTightIsolationMVArun2v1PWoldDMwLT);
+      tree_->Branch( "tau_byVVTightIsolationMVArun2v1DBdR03oldDMwLT"    , &tau_byVVTightIsolationMVArun2v1DBdR03oldDMwLT);
+      tree_->Branch( "tau_byVVTightIsolationMVArun2v1DBnewDMwLT"        , &tau_byVVTightIsolationMVArun2v1DBnewDMwLT);
+      tree_->Branch( "tau_byVVTightIsolationMVArun2v1DBoldDMwLT"        , &tau_byVVTightIsolationMVArun2v1DBoldDMwLT);
+      tree_->Branch( "tau_byVVTightIsolationMVArun2v1PWdR03oldDMwLT"    , &tau_byVVTightIsolationMVArun2v1PWdR03oldDMwLT);
+      tree_->Branch( "tau_byVVTightIsolationMVArun2v1PWnewDMwLT"        , &tau_byVVTightIsolationMVArun2v1PWnewDMwLT);
+
+      tree_->Branch( "tau_byVVTightIsolationMVArun2v1PWoldDMwLT"        , &tau_byVVTightIsolationMVArun2v1PWoldDMwLT);
+
+
+
+
+      tree_->Branch( "tau_againstElectronMVA6raw"                     , &tau_againstElectronMVA6raw);
+      tree_->Branch( "tau_againstElectronMVA6category"                , &tau_againstElectronMVA6category);
+      tree_->Branch( "tau_againstElectronVLooseMVA6"                  , &tau_againstElectronVLooseMVA6);
+      tree_->Branch( "tau_againstElectronLooseMVA6"                   , &tau_againstElectronLooseMVA6);
+      tree_->Branch( "tau_againstElectronMediumMVA6"                  , &tau_againstElectronMediumMVA6);
+      tree_->Branch( "tau_againstElectronTightMVA6"                   , &tau_againstElectronTightMVA6);
+      tree_->Branch( "tau_againstElectronVTightMVA6"                  , &tau_againstElectronVTightMVA6);
+      
+
+      tree_->Branch( "tau_againstMuonLoose3"                          , &tau_againstMuonLoose3);
+      tree_->Branch( "tau_againstMuonTight3"                          , &tau_againstMuonTight3); 
+      
+      tree_->Branch( "tau_byPhotonPtSumOutsideSignalCone"             , &tau_byPhotonPtSumOutsideSignalCone);
+      tree_->Branch( "tau_footprintCorrection"                        , &tau_footprintCorrection);
+
 
     } //doTausBoosted
   } //doTaus
@@ -722,63 +741,82 @@ void NtupleBranches::reset( void ){
   tau_chargedIsoPtSum.clear();
   tau_neutralIsoPtSum.clear();
   tau_puCorrPtSum.clear();
-  tau_byIsolationMVA3oldDMwoLTraw.clear();
-  tau_byVLooseIsolationMVA3oldDMwoLT.clear();
-  tau_byLooseIsolationMVA3oldDMwoLT.clear();
-  tau_byMediumIsolationMVA3oldDMwoLT.clear();
-  tau_byTightIsolationMVA3oldDMwoLT.clear();
-  tau_byVTightIsolationMVA3oldDMwoLT.clear();
-  tau_byVVTightIsolationMVA3oldDMwoLT.clear();
-  tau_byIsolationMVA3oldDMwLTraw.clear();
-  tau_byVLooseIsolationMVA3oldDMwLT.clear();
-  tau_byLooseIsolationMVA3oldDMwLT.clear();
-  tau_byMediumIsolationMVA3oldDMwLT.clear();
-  tau_byTightIsolationMVA3oldDMwLT.clear();
-  tau_byVTightIsolationMVA3oldDMwLT.clear();
-  tau_byVVTightIsolationMVA3oldDMwLT.clear();
-  tau_byIsolationMVA3newDMwoLTraw.clear();
-  tau_byVLooseIsolationMVA3newDMwoLT.clear();
-  tau_byLooseIsolationMVA3newDMwoLT.clear();
-  tau_byMediumIsolationMVA3newDMwoLT.clear();
-  tau_byTightIsolationMVA3newDMwoLT.clear();
-  tau_byVTightIsolationMVA3newDMwoLT.clear();
-  tau_byVVTightIsolationMVA3newDMwoLT.clear();
-  tau_byIsolationMVA3newDMwLTraw.clear();
-  tau_byVLooseIsolationMVA3newDMwLT.clear();
-  tau_byLooseIsolationMVA3newDMwLT.clear();
-  tau_byMediumIsolationMVA3newDMwLT.clear();
-  tau_byTightIsolationMVA3newDMwLT.clear();
-  tau_byVTightIsolationMVA3newDMwLT.clear();
-  tau_byVVTightIsolationMVA3newDMwLT.clear();
-  tau_againstElectronLoose.clear();
-  tau_againstElectronMedium.clear();
-  tau_againstElectronTight.clear();
-  tau_againstElectronMVA5raw.clear();
-  tau_againstElectronMVA5category.clear();
-  tau_againstElectronVLooseMVA5.clear();
-  tau_againstElectronLooseMVA5.clear();
-  tau_againstElectronMediumMVA5.clear();
-  tau_againstElectronTightMVA5.clear();
-  tau_againstElectronVTightMVA5.clear();
-  tau_againstMuonLoose.clear();
-  tau_againstMuonMedium.clear();
-  tau_againstMuonTight.clear();
-  tau_againstMuonLoose2.clear();
-  tau_againstMuonMedium2.clear();
-  tau_againstMuonTight2.clear();
-  tau_againstMuonLoose3.clear();
-  tau_againstMuonTight3.clear();
-  tau_againstMuonMVAraw.clear();
-  tau_againstMuonLooseMVA.clear();
-  tau_againstMuonMediumMVA.clear();
-  tau_againstMuonTightMVA.clear();
-  tau_byPileupWeightedIsolationRaw3Hits          .clear();
-  tau_byLoosePileupWeightedIsolation3Hits        .clear();
-  tau_byMediumPileupWeightedIsolation3Hits       .clear();
-  tau_byTightPileupWeightedIsolation3Hits        .clear();
-  tau_byPhotonPtSumOutsideSignalCone             .clear();
-  tau_footprintCorrection                        .clear();
+
   
+  tau_chargedIsoPtSumdR03.clear();
+  tau_footprintCorrectiondR03.clear();
+  tau_neutralIsoPtSumdR03.clear();
+  tau_neutralIsoPtSumWeight.clear();
+  tau_neutralIsoPtSumWeightdR03.clear();
+  tau_photonPtSumOutsideSignalConedR03.clear();
+
+  tau_byIsolationMVArun2v1DBdR03oldDMwLTraw.clear();
+  tau_byIsolationMVArun2v1DBnewDMwLTraw.clear();
+  tau_byIsolationMVArun2v1DBoldDMwLTraw.clear();
+  tau_byIsolationMVArun2v1PWdR03oldDMwLTraw.clear();
+  tau_byIsolationMVArun2v1PWnewDMwLTraw.clear();
+  tau_byIsolationMVArun2v1PWoldDMwLTraw.clear();
+  tau_byLooseIsolationMVArun2v1DBdR03oldDMwLT.clear();
+  tau_byLooseIsolationMVArun2v1DBnewDMwLT.clear();
+  tau_byLooseIsolationMVArun2v1DBoldDMwLT.clear();
+  tau_byLooseIsolationMVArun2v1PWdR03oldDMwLT.clear();
+  tau_byLooseIsolationMVArun2v1PWnewDMwLT.clear();
+  tau_byLooseIsolationMVArun2v1PWoldDMwLT.clear();
+  
+  tau_byMediumIsolationMVArun2v1DBdR03oldDMwLT.clear();
+  tau_byMediumIsolationMVArun2v1DBnewDMwLT.clear();
+  tau_byMediumIsolationMVArun2v1DBoldDMwLT.clear();
+  tau_byMediumIsolationMVArun2v1PWdR03oldDMwLT.clear();
+  tau_byMediumIsolationMVArun2v1PWnewDMwLT.clear();
+  tau_byMediumIsolationMVArun2v1PWoldDMwLT.clear();
+
+  tau_byTightIsolationMVArun2v1DBdR03oldDMwLT.clear();
+  tau_byTightIsolationMVArun2v1DBnewDMwLT.clear();
+  tau_byTightIsolationMVArun2v1DBoldDMwLT.clear();
+  tau_byTightIsolationMVArun2v1PWdR03oldDMwLT.clear();
+  tau_byTightIsolationMVArun2v1PWnewDMwLT.clear();
+  tau_byTightIsolationMVArun2v1PWoldDMwLT.clear();
+  tau_byVLooseIsolationMVArun2v1DBdR03oldDMwLT.clear();
+
+  tau_byVLooseIsolationMVArun2v1DBnewDMwLT.clear();
+  tau_byVLooseIsolationMVArun2v1DBoldDMwLT.clear();
+  tau_byVLooseIsolationMVArun2v1PWdR03oldDMwLT.clear();
+  tau_byVLooseIsolationMVArun2v1PWnewDMwLT.clear();
+  tau_byVLooseIsolationMVArun2v1PWoldDMwLT.clear();
+  tau_byVTightIsolationMVArun2v1DBdR03oldDMwLT.clear();
+  tau_byVTightIsolationMVArun2v1DBnewDMwLT.clear();
+  tau_byVTightIsolationMVArun2v1DBoldDMwLT.clear();
+
+  tau_byVTightIsolationMVArun2v1PWdR03oldDMwLT.clear();
+  tau_byVTightIsolationMVArun2v1PWnewDMwLT.clear();
+  tau_byVTightIsolationMVArun2v1PWoldDMwLT.clear();
+  tau_byVVTightIsolationMVArun2v1DBdR03oldDMwLT.clear();
+  tau_byVVTightIsolationMVArun2v1DBnewDMwLT.clear();
+  tau_byVVTightIsolationMVArun2v1DBoldDMwLT.clear();
+  tau_byVVTightIsolationMVArun2v1PWdR03oldDMwLT.clear();
+  tau_byVVTightIsolationMVArun2v1PWnewDMwLT.clear();
+
+  tau_byVVTightIsolationMVArun2v1PWoldDMwLT.clear();
+
+
+
+
+  tau_againstElectronMVA6raw.clear();
+  tau_againstElectronMVA6category.clear();
+  tau_againstElectronVLooseMVA6.clear();
+  tau_againstElectronLooseMVA6.clear();
+  tau_againstElectronMediumMVA6.clear();
+  tau_againstElectronTightMVA6.clear();
+  tau_againstElectronVTightMVA6.clear();
+      
+
+  tau_againstMuonLoose3.clear();
+  tau_againstMuonTight3.clear(); 
+      
+  tau_byPhotonPtSumOutsideSignalCone.clear();
+  tau_footprintCorrection.clear();
+
+
 
   
   /** energy density */
