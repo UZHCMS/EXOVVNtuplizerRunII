@@ -25,11 +25,24 @@ git cms-init
 git cms-merge-topic nhanvtran:Puppi76X-backportFrom80X
 ```
 
-The flags for running on Spring15(74) or Fall15(76) samples have to be changed with config["FALL15"]=False/True in python/ntuplizerOptions_*_cfi.py
+For Fall16(80):
+
+```
+
+cmsrel CMSSW_8_0_7
+cd CMSSW_8_0_7
+cmsenv
+git cms-init
+
+```
+
+
+
+The flags for running on Spring15(74) or Fall15(76) or Spring16(80) samples have to be changed with config["FALL15"]=False/True and config["SPRING16"]=False/True in python/ntuplizerOptions_*_cfi.py
 
 ### optional packages
 
-For the boosted Hbb tagger (will add a lot of packages that will take a long time to compile):
+Necessary just before CMSSW_7_4_16: for the boosted Hbb tagger (will add a lot of packages that will take a long time to compile):
 ```
 git remote add btv-cmssw https://github.com/cms-btv-pog/cmssw.git
 git fetch btv-cmssw
@@ -37,7 +50,7 @@ git cms-merge-topic -u cms-btv-pog:BoostedDoubleSVTagger-WithWeightFiles-v2_from
 ```
 
 
-### getting the code
+### getting the code for Fall15 and Spring15
 
 ```
 export GITUSER=`git config user.github`
@@ -52,6 +65,23 @@ scram b distclean
 scram b -j8
 cd EXOVVNtuplizerRunII/Ntuplizer
 ```
+
+### getting the code for Spring16
+
+```
+export GITUSER=`git config user.github`
+echo "Your github username has been set to \"$GITUSER\""
+git clone git@github.com:${GITUSER}/EXOVVNtuplizerRunII.git
+cd EXOVVNtuplizerRunII
+git remote add UZHCMS git@github.com:UZHCMS/EXOVVNtuplizerRunII.git
+git fetch UZHCMS
+git checkout -b DevelopmentBranch UZHCMS/80X_ntuplizer
+cd $CMSSW_BASE/src
+scram b distclean
+scram b -j8
+cd EXOVVNtuplizerRunII/Ntuplizer
+```
+
 
 ### running
 
