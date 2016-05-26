@@ -50,7 +50,7 @@ process.source = cms.Source("PoolSource",
 hltFiltersProcessName = 'RECO'
 if config["RUNONMC"] or config["JSONFILE"].find('reMiniAOD') != -1:
   hltFiltersProcessName = 'PAT'
-reclusterPuppi=(not 'MiniAODv2' in options.inputFiles[0])
+reclusterPuppi=False
 if reclusterPuppi:
   print "RECLUSTERING PUPPI (since not running of Spring16MiniAODv2)"
 
