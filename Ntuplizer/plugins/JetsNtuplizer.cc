@@ -17,6 +17,7 @@ JetsNtuplizer::JetsNtuplizer( std::vector<edm::EDGetTokenT<pat::JetCollection>> 
   , verticeToken_     	    ( verticeToken )
   , doAK4Jets_ (runFlags["doAK4Jets"])
   , doAK8Jets_ (runFlags["doAK8Jets"])
+  , doPuppiRecluster_ (runFlags["doPuppiRecluster"])
   , runOnMC_   (runFlags["runOnMC"])
    //, flavourToken_			( flavourToken 	) //For subjet flavour matching!! Not done yet.
     
@@ -165,7 +166,8 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
   bool doPruning  = event.getByToken(prunedjetInputToken_, prunedjets_ );
   bool doSoftDrop = event.getByToken(softdropjetInputToken_, softdropjets_ );
   bool doTrimming  = event.getByToken(trimmedjetInputToken_, trimmedjets_ );
-  bool doPuppi  = event.getByToken(puppijetInputToken_, puppijets_ );
+  bool doPuppi  = doPuppiRecluster_;
+  if (doPuppi) doPuppi=event.getByToken(puppijetInputToken_, puppijets_ );
   bool isMC = runOnMC_;
 
   /****************************************************************/
@@ -300,6 +302,24 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
     std::vector<float> vSoftDropSubjettche   ;
     std::vector<float> vSoftDropSubjetjp     ;
     std::vector<float> vSoftDropSubjetjbp    ;
+     
+    std::vector<float> vPuppiSoftDropSubjetpt     ;
+    std::vector<float> vPuppiSoftDropSubjeteta    ;
+    std::vector<float> vPuppiSoftDropSubjetmass   ;
+    std::vector<float> vPuppiSoftDropSubjetphi    ;
+    std::vector<float> vPuppiSoftDropSubjete      ;
+    std::vector<int  > vPuppiSoftDropSubjetcharge ;
+    std::vector<int  > vPuppiSoftDropSubjetGenPartonPdgId;
+    std::vector<int  > vPuppiSoftDropSubjetnbHadrons;
+    std::vector<int  > vPuppiSoftDropSubjetncHadrons;
+    std::vector<int  > vPuppiSoftDropSubjetPartonFlavour;
+    std::vector<int  > vPuppiSoftDropSubjetHadronFlavour;
+    std::vector<float> vPuppiSoftDropSubjetssv    ;
+    std::vector<float> vPuppiSoftDropSubjetcsv    ;
+    std::vector<float> vPuppiSoftDropSubjettchp   ;
+    std::vector<float> vPuppiSoftDropSubjettche   ;
+    std::vector<float> vPuppiSoftDropSubjetjp     ;
+    std::vector<float> vPuppiSoftDropSubjetjbp    ;
      
     for (const pat::Jet &fj : *fatjets_) {
 	  
@@ -841,6 +861,101 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
         nBranches_->jetAK8_puppi_e      	    .push_back(-99);
 	}
 
+      } //doPuppi
+      else{
+        double puppi_pt  = fj.userFloat("ak8PFJetsPuppiValueMap:pt");
+        double puppi_mass  = fj.userFloat("ak8PFJetsPuppiValueMap:mass");
+        double puppi_eta  = fj.userFloat("ak8PFJetsPuppiValueMap:eta");
+        double puppi_phi  = fj.userFloat("ak8PFJetsPuppiValueMap:phi");
+        nBranches_->jetAK8_puppi_pt     	    .push_back(puppi_pt);                   
+        nBranches_->jetAK8_puppi_eta    	    .push_back(puppi_eta);
+        nBranches_->jetAK8_puppi_mass   	    .push_back(puppi_mass);
+        nBranches_->jetAK8_puppi_phi    	    .push_back(puppi_phi);
+        TLorentzVector puppi;
+        puppi.SetPtEtaPhiM(puppi_pt,puppi_eta,puppi_phi,puppi_mass);
+        nBranches_->jetAK8_puppi_e      	    .push_back(puppi.E());
+        nBranches_->jetAK8_puppi_tau1	 .push_back(fj.userFloat("ak8PFJetsPuppiValueMap:NjettinessAK8PuppiTau1"));	 
+        nBranches_->jetAK8_puppi_tau2	 .push_back(fj.userFloat("ak8PFJetsPuppiValueMap:NjettinessAK8PuppiTau2"));
+        nBranches_->jetAK8_puppi_tau3	 .push_back(fj.userFloat("ak8PFJetsPuppiValueMap:NjettinessAK8PuppiTau3")); 
+
+        TLorentzVector puppi_softdrop, puppi_softdrop_subjet;
+        auto const & sdSubjetsPuppi = fj.subjets("SoftDropPuppi");
+        for ( auto const & it : sdSubjetsPuppi ) {
+          puppi_softdrop_subjet.SetPtEtaPhiM(it->correctedP4(0).pt(),it->correctedP4(0).eta(),it->correctedP4(0).phi(),it->correctedP4(0).mass());
+          puppi_softdrop+=puppi_softdrop_subjet;
+        }
+
+        nBranches_->jetAK8_puppi_softdrop_mass.push_back(puppi_softdrop.M());
+
+        double puppi_softdropcorr = 1;
+        if( doCorrOnTheFly_ ){
+           // Using puppi corrections for softdrop puppi jets. Approximation!
+           jecAK8Puppi_->setJetEta( puppi_softdrop.Eta()    );
+           jecAK8Puppi_->setJetPt ( puppi_softdrop.Pt()     );
+           jecAK8Puppi_->setJetE  ( puppi_softdrop.E() );
+           jecAK8Puppi_->setJetA  ( fj.jetArea()             );
+           jecAK8Puppi_->setRho   ( nBranches_->rho          );
+           jecAK8Puppi_->setNPV   ( vertices_->size()        );
+           puppi_softdropcorr = jecAK8Puppi_->getCorrection();
+           nBranches_->jetAK8_puppi_softdrop_massCorr.push_back(puppi_softdropcorr*puppi_softdrop.M());
+           nBranches_->jetAK8_puppi_softdrop_jec.push_back(puppi_softdropcorr);
+	          
+        }
+	else{
+	      
+           nBranches_->jetAK8_puppi_softdrop_massCorr.push_back(-99);
+           nBranches_->jetAK8_puppi_softdrop_jec.push_back(-99);
+	   
+	}
+
+        vPuppiSoftDropSubjetpt.clear();
+        vPuppiSoftDropSubjeteta.clear();
+        vPuppiSoftDropSubjetmass.clear();
+        vPuppiSoftDropSubjetphi.clear();
+        vPuppiSoftDropSubjete.clear();
+        vPuppiSoftDropSubjetcharge.clear();
+        vPuppiSoftDropSubjetPartonFlavour.clear();
+        vPuppiSoftDropSubjetHadronFlavour.clear();
+        vPuppiSoftDropSubjetcsv.clear();
+      
+        nsubjets = 0;
+      
+        const std::vector<edm::Ptr<pat::Jet> > &wSubjets = fj.subjets("SoftDropPuppi");
+    
+      	for ( const pat::Jet & puppi_softdropsubjet : wSubjets ) {
+	
+           if( puppi_softdropsubjet.pt() < 0.01 ) continue;
+         
+           nsubjets++;
+
+           vPuppiSoftDropSubjetpt.push_back(puppi_softdropsubjet.pt());
+           vPuppiSoftDropSubjeteta.push_back(puppi_softdropsubjet.eta());
+           vPuppiSoftDropSubjetmass.push_back(puppi_softdropsubjet.mass());
+           vPuppiSoftDropSubjetphi.push_back(puppi_softdropsubjet.phi());
+           vPuppiSoftDropSubjete.push_back(puppi_softdropsubjet.energy());
+           vPuppiSoftDropSubjetPartonFlavour.push_back(abs(puppi_softdropsubjet.partonFlavour()));
+           vPuppiSoftDropSubjetHadronFlavour.push_back(abs(puppi_softdropsubjet.hadronFlavour()));
+           vPuppiSoftDropSubjetcharge.push_back(puppi_softdropsubjet.charge());
+           vPuppiSoftDropSubjetcsv.push_back(puppi_softdropsubjet.bDiscriminator("pfCombinedInclusiveSecondaryVertexV2BJetTags") );
+         
+         } 
+
+        nBranches_->jetAK8_subjet_puppi_softdrop_N.push_back(nsubjets);
+        nBranches_->jetAK8_subjet_puppi_softdrop_pt.push_back(vPuppiSoftDropSubjetpt);
+        nBranches_->jetAK8_subjet_puppi_softdrop_eta.push_back(vPuppiSoftDropSubjeteta);
+        nBranches_->jetAK8_subjet_puppi_softdrop_mass.push_back(vPuppiSoftDropSubjetmass);
+        nBranches_->jetAK8_subjet_puppi_softdrop_phi.push_back(vPuppiSoftDropSubjetphi);
+        nBranches_->jetAK8_subjet_puppi_softdrop_e.push_back(vPuppiSoftDropSubjete);
+        nBranches_->jetAK8_subjet_puppi_softdrop_charge.push_back(vPuppiSoftDropSubjetcharge);
+        nBranches_->jetAK8_subjet_puppi_softdrop_csv.push_back(vPuppiSoftDropSubjetcsv);
+
+        if(isMC){
+	
+          nBranches_->jetAK8_subjet_puppi_softdrop_partonFlavour.push_back(vPuppiSoftDropSubjetPartonFlavour);
+          nBranches_->jetAK8_subjet_puppi_softdrop_hadronFlavour.push_back(vPuppiSoftDropSubjetHadronFlavour);
+	  
+        }
+			
       }
 
     } // ak8 jet loop
