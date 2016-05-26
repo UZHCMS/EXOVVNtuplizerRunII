@@ -25,7 +25,8 @@ options.maxEvents = 100
 #data file
 
 #options.inputFiles = '/store/mc/RunIISpring15MiniAODv2/WJetsToLNu_HT-100To200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/74X_mcRun2_asymptotic_v2-v1/10000/003F1529-D36D-E511-9E33-001E6724816F.root'
-options.inputFiles = '/store/mc/RunIISpring16MiniAODv1/RadionToWWToWlepWhad_width0p3_M-3000_TuneCUETP8M1_13TeV-madgraph-pythia8/MINIAODSIM/PUSpring16RAWAODSIM_80X_mcRun2_asymptotic_2016_v3-v1/50000/20BB570E-2F16-E611-BF25-02163E015F8E.root'
+#options.inputFiles = '/store/mc/RunIISpring16MiniAODv1/RadionToWWToWlepWhad_width0p3_M-3000_TuneCUETP8M1_13TeV-madgraph-pythia8/MINIAODSIM/PUSpring16RAWAODSIM_80X_mcRun2_asymptotic_2016_v3-v1/50000/20BB570E-2F16-E611-BF25-02163E015F8E.root'
+options.inputFiles = '/store/mc/RunIISpring16MiniAODv2/WJetsToQQ_HT-600ToInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/PUSpring16_80X_mcRun2_asymptotic_2016_miniAODv2_v0-v1/30000/0EA1D6CA-931A-E611-BFCD-BCEE7B2FE01D.root'
 #options.inputFiles = 'dcap://t3se01.psi.ch:22125//pnfs/psi.ch/cms/trivcat/store/mc/RunIIFall15MiniAODv2/WprimeToWhToWhadhbb_narrow_M-1000_13TeV-madgraph/MINIAODSIM/PU25nsData2015v1_76X_mcRun2_asymptotic_v12-v1/00000/8EE77064-42B8-E511-8BA1-003048895D40.root'
 #options.inputFiles = 'xroot://t3dcachedb.psi.ch:1094//pnfs/psi.ch/cms/trivcat/store/user/cgalloni/RunII/RadionTohhTohtatahbb_narrow_M-1000_13TeV-madgraph/MiniAOD_TauBoosted_v0667_maxDepth100_jetPt100/miniAOD_4.root'
 #options.inputFiles = 'dcap://t3se01.psi.ch:22125//pnfs/psi.ch/cms/trivcat/store/user/cgalloni/RunII/RadionTohhTohtatahbb_narrow_M-1000_13TeV-madgraph/MiniAOD_TauBoosted_v0667_maxDepth100_jetPt100/miniAOD_4.root'
@@ -53,6 +54,9 @@ process.source = cms.Source("PoolSource",
 hltFiltersProcessName = 'RECO'
 if config["RUNONMC"] or config["JSONFILE"].find('reMiniAOD') != -1:
   hltFiltersProcessName = 'PAT'
+reclusterPuppi=(not 'MiniAODv2' in options.inputFiles[0])
+if reclusterPuppi:
+  print "RECLUSTERING PUPPI (since not running of Spring16MiniAODv2)"
   
 #! To recluster and add AK8 Higgs tagging and softdrop subjet b-tagging (both need to be simoultaneously true or false, if not you will have issues with your softdrop subjets!)
 #If you use the softdrop subjets from the slimmedJetsAK8 collection, only CSV seems to be available?
@@ -76,19 +80,8 @@ process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_condD
 from Configuration.AlCa.GlobalTag import GlobalTag
 
 GT = ''
-if config["FALL15"]:
- if config["RUNONMC"]: GT = '76X_mcRun2_asymptotic_v12'
- elif not(config["RUNONMC"]): GT = '76X_dataRun2_v15'
-elif config["SPRING16"]:
-  if config["RUNONMC"]: GT = '80X_mcRun2_asymptotic_2016_miniAODv2'
-  elif not(config["RUNONMC"]): GT = '80X_dataRun2_Prompt_v8'
-else:
- if config["RUNONMC"]: GT = '74X_mcRun2_asymptotic_v2'
- elif not(config["RUNONMC"]):
-   GT = '74X_dataRun2_v2'
-   if config["JSONFILE"].find('reMiniAOD') != -1: GT = '74X_dataRun2_reMiniAOD_v0'
-   elif config["JSONFILE"].find('PromptReco-v4') != -1: GT = '74X_dataRun2_Prompt_v4'
- 
+if config["RUNONMC"]: GT = '80X_mcRun2_asymptotic_2016_miniAODv2'
+elif not(config["RUNONMC"]): GT = '80X_dataRun2_Prompt_v8'
 
 
 print "*************************************** GLOBAL TAG *************************************************" 
@@ -151,7 +144,7 @@ process.ak8CHSJetsSoftDrop = ak8PFJetsCHSSoftDrop.clone( src = 'chs', jetPtMin =
 if config["DOAK10TRIMMEDRECLUSTERING"]:			       
   process.ak10CHSJetsTrimmed = ak8PFJetsCHSTrimmed.clone( src = 'chs', jetPtMin = fatjet_ptmin, rParam = 1.0, rFilt = 0.2, trimPtFracMin = 0.05 )
 
-if config["DOAK8PUPPIRECLUSTERING"]:
+if reclusterPuppi:
   process.load('CommonTools/PileupAlgos/Puppi_cff')
   process.puppi.useExistingWeights = True
   process.puppi.candName = cms.InputTag('packedPFCandidates')
@@ -451,7 +444,7 @@ if config["DOAK10TRIMMEDRECLUSTERING"]:
     process.patJetsAk10CHSJetsTrimmed.userData.userFloats.src += ['ECFAK10:ecf1','ECFAK10:ecf2','ECFAK10:ecf3']
     
 ################# Recluster puppi jets ######################
-if config["DOAK8PUPPIRECLUSTERING"]:
+if reclusterPuppi:
     recluster_addBtagging(process, 'ak8PuppiJets', 'ak8PuppiJetsSoftDrop', jetcorr_label = 'AK8PFPuppi', genjets_name = lambda s: s.replace('Puppi', 'Gen'), verbose = False, btagging = False, subjets = False)
     recluster_addBtagging(process, 'ak8PuppiJets', 'ak8PuppiJetsPruned', jetcorr_label = 'AK8PFPuppi', genjets_name = lambda s: s.replace('Puppi', 'Gen'), verbose = False, btagging = False, subjets = False)
   
@@ -596,7 +589,7 @@ if config["DOAK8PRUNEDRECLUSTERING"]:
   jetsAK8pruned = "patJetsAk8CHSJetsPrunedPacked"
 if config["DOAK10TRIMMEDRECLUSTERING"]:  
   jetsAK10trimmed = "patJetsAk10CHSJetsTrimmed"
-if config["DOAK8PUPPIRECLUSTERING"]:  
+if reclusterPuppi:  
   jetsAK8Puppi = "patJetsAk8PuppiJets"  
 
 if config["DOTAUSBOOSTED"]:
@@ -613,22 +606,11 @@ jecLevelsAK4chs = []
 jecLevelsAK4 = []
 jecLevelsAK8Puppi = []
 jecLevelsForMET = []
-#jecAK8chsUncFile = "JEC/Fall15_25nsV2_MC_Uncertainty_AK8PFchs.txt"
-#jecAK4chsUncFile = "JEC/Fall15_25nsV2_MC_Uncertainty_AK4PFchs.txt"
 
-JECprefix = "Summer15_50nsV5"
-if config["BUNCHSPACING"] == 25 and config["RUNONMC"] and config["FALL15"]:
-   JECprefix = "Fall15_25nsV2"
-elif config["BUNCHSPACING"] == 25 and not(config["RUNONMC"]) and config["FALL15"]:
-   error,"these JEC do not exist yet"
-elif config["BUNCHSPACING"] == 25 and config["RUNONMC"] and config["SPRING16"]:
+if config["BUNCHSPACING"] == 25 and config["RUNONMC"] and config["SPRING16"]:
    JECprefix = "Spring16_25nsV1"
 elif config["BUNCHSPACING"] == 25 and not(config["RUNONMC"]) and config["SPRING16"]:
    error,"these JEC do not exist yet"
-elif config["BUNCHSPACING"] == 25 and config["RUNONMC"]:
-   JECprefix = "Summer15_25nsV7"
-elif config["BUNCHSPACING"] == 25 and not(config["RUNONMC"]):   
-   JECprefix = "Summer15_25nsV7"
 
 jecAK8chsUncFile = "JEC/%s_MC_Uncertainty_AK8PFchs.txt"%(JECprefix)
 jecAK4chsUncFile = "JEC/%s_MC_Uncertainty_AK4PFchs.txt"%(JECprefix)
@@ -722,7 +704,7 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     doHbbTag	      = cms.bool(config["DOHBBTAG"]),
     doPrunedSubjets   = cms.bool(config["DOAK8PRUNEDRECLUSTERING"]),
     doTrimming        = cms.bool(config["DOAK10TRIMMEDRECLUSTERING"]),
-    doPuppi           = cms.bool(config["DOAK8PUPPIRECLUSTERING"]),
+    doPuppi           = cms.bool(config["DOAK8PUPPI"]),
     doBoostedTaus     = cms.bool(config["DOTAUSBOOSTED"]),
     doMETSVFIT        = cms.bool(config["DOMETSVFIT"]),
     vertices = cms.InputTag("offlineSlimmedPrimaryVertices"),

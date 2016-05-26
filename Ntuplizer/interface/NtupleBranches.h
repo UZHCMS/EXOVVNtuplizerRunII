@@ -470,6 +470,21 @@ public:
   std::vector< std::vector<int  > > jetAK8_subjet_softdrop_hadronFlavour;
   std::vector< std::vector<float> > jetAK8_subjet_softdrop_csv    ;
 
+  /** puppi_softdrop AK8 subjets */
+  std::vector<int>                  jetAK8_subjet_puppi_softdrop_N      ;
+  std::vector< std::vector<float> > jetAK8_subjet_puppi_softdrop_pt     ;
+  std::vector< std::vector<float> > jetAK8_subjet_puppi_softdrop_eta    ;
+  std::vector< std::vector<float> > jetAK8_subjet_puppi_softdrop_mass   ;
+  std::vector< std::vector<float> > jetAK8_subjet_puppi_softdrop_phi    ;
+  std::vector< std::vector<float> > jetAK8_subjet_puppi_softdrop_e      ;
+  std::vector< std::vector<int  > > jetAK8_subjet_puppi_softdrop_charge ;
+  std::vector< std::vector<int  > > jetAK8_subjet_puppi_softdrop_genParton_pdgID ;
+  std::vector< std::vector<int  > > jetAK8_subjet_puppi_softdrop_nbHadrons ;
+  std::vector< std::vector<int  > > jetAK8_subjet_puppi_softdrop_ncHadrons ;
+  std::vector< std::vector<int  > > jetAK8_subjet_puppi_softdrop_partonFlavour;
+  std::vector< std::vector<int  > > jetAK8_subjet_puppi_softdrop_hadronFlavour;
+  std::vector< std::vector<float> > jetAK8_subjet_puppi_softdrop_csv    ;
+
   /** puppi and ATLAS */    
   std::vector<float>	      jetAK10_trimmed_mass           ;
   std::vector<float>	      jetAK10_trimmed_massCorr       ;

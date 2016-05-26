@@ -65,7 +65,7 @@ public:
   bool doCorrOnTheFly_;
   bool doAK4Jets_;
   bool doAK8Jets_;
-  bool doPruning_;
+  bool doPuppiRecluster_;
   bool runOnMC_;
 
 };

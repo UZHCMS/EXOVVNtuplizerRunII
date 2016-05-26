@@ -90,6 +90,7 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
   runFlags["doPuppi"] = iConfig.getParameter<bool>("doPuppi");
   runFlags["doHbbTag"] = iConfig.getParameter<bool>("doHbbTag");
   runFlags["doMETSVFIT"] = iConfig.getParameter<bool>("doMETSVFIT");
+  runFlags["doPuppiRecluster"] = iConfig.getParameter<edm::InputTag>("puppijets").label()!="";
 
   std::string jecpath = iConfig.getParameter<std::string>("jecpath");
   

@@ -50,7 +50,10 @@ process.source = cms.Source("PoolSource",
 hltFiltersProcessName = 'RECO'
 if config["RUNONMC"] or config["JSONFILE"].find('reMiniAOD') != -1:
   hltFiltersProcessName = 'PAT'
-  
+reclusterPuppi=(not 'MiniAODv2' in options.inputFiles[0])
+if reclusterPuppi:
+  print "RECLUSTERING PUPPI (since not running of Spring16MiniAODv2)"
+
 #! To recluster and add AK8 Higgs tagging and softdrop subjet b-tagging (both need to be simoultaneously true or false, if not you will have issues with your softdrop subjets!)
 #If you use the softdrop subjets from the slimmedJetsAK8 collection, only CSV seems to be available?
 doAK8softdropReclustering = False
@@ -73,18 +76,8 @@ process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_condD
 from Configuration.AlCa.GlobalTag import GlobalTag
 
 GT = ''
-if config["FALL15"]:
- if config["RUNONMC"]: GT = '76X_mcRun2_asymptotic_v12'
- elif not(config["RUNONMC"]): GT = '76X_dataRun2_v15'
-elif config["SPRING16"]:
-  if config["RUNONMC"]: GT = '80X_mcRun2_asymptotic_2016_miniAODv2'
-  elif not(config["RUNONMC"]): GT = '80X_dataRun2_Prompt_v8'
-else:
- if config["RUNONMC"]: GT = '74X_mcRun2_asymptotic_v2'
- elif not(config["RUNONMC"]):
-   GT = '74X_dataRun2_v2'
-   if config["JSONFILE"].find('reMiniAOD') != -1: GT = '74X_dataRun2_reMiniAOD_v0'
-   elif config["JSONFILE"].find('PromptReco-v4') != -1: GT = '74X_dataRun2_Prompt_v4'
+if config["RUNONMC"]: GT = '80X_mcRun2_asymptotic_2016_miniAODv2'
+elif not(config["RUNONMC"]): GT = '80X_dataRun2_Prompt_v8'
 
 print "*************************************** GLOBAL TAG *************************************************" 
 print GT
@@ -167,7 +160,7 @@ process.ak8CHSJetsSoftDrop = ak8PFJetsCHSSoftDrop.clone( src = 'chs', jetPtMin =
 if config["DOAK10TRIMMEDRECLUSTERING"]:			       
   process.ak10CHSJetsTrimmed = ak8PFJetsCHSTrimmed.clone( src = 'chs', jetPtMin = fatjet_ptmin, rParam = 1.0, rFilt = 0.2, trimPtFracMin = 0.05 )
 
-if config["DOAK8PUPPIRECLUSTERING"]:
+if reclusterPuppi:
   process.load('CommonTools/PileupAlgos/Puppi_cff')
   process.puppi.useExistingWeights = True
   process.puppi.candName = cms.InputTag('packedPFCandidates')
@@ -467,7 +460,7 @@ if config["DOAK10TRIMMEDRECLUSTERING"]:
     process.patJetsAk10CHSJetsTrimmed.userData.userFloats.src += ['ECFAK10:ecf1','ECFAK10:ecf2','ECFAK10:ecf3']
     
 ################# Recluster puppi jets ######################
-if config["DOAK8PUPPIRECLUSTERING"]:
+if reclusterPuppi:
     recluster_addBtagging(process, 'ak8PuppiJets', 'ak8PuppiJetsSoftDrop', jetcorr_label = 'AK8PFPuppi', genjets_name = lambda s: s.replace('Puppi', 'Gen'), verbose = False, btagging = False, subjets = False)
     recluster_addBtagging(process, 'ak8PuppiJets', 'ak8PuppiJetsPruned', jetcorr_label = 'AK8PFPuppi', genjets_name = lambda s: s.replace('Puppi', 'Gen'), verbose = False, btagging = False, subjets = False)
   
@@ -613,7 +606,7 @@ if config["DOAK8PRUNEDRECLUSTERING"]:
   jetsAK8pruned = "patJetsAk8CHSJetsPrunedPacked"
 if config["DOAK10TRIMMEDRECLUSTERING"]:  
   jetsAK10trimmed = "patJetsAk10CHSJetsTrimmed"
-if config["DOAK8PUPPIRECLUSTERING"]:  
+if reclusterPuppi:  
   jetsAK8Puppi = "patJetsAk8PuppiJets"  
 
 if config["DOTAUSBOOSTED"]:
@@ -631,19 +624,11 @@ jecLevelsAK4chs = []
 jecLevelsAK4 = []
 jecLevelsAK8Puppi = []
 jecLevelsForMET = []
-#jecAK8chsUncFile = "JEC/Fall15_25nsV2_DATA_Uncertainty_AK8PFchs.txt"
-#jecAK4chsUncFile = "JEC/Fall15_25nsV2_DATA_Uncertainty_AK4PFchs.txt"
 
-JECprefix = "Summer15_50nsV5"
-if config["BUNCHSPACING"] == 25 and config["RUNONMC"] and config["FALL15"]:
-   JECprefix = "Fall15_25nsV2"
-elif config["BUNCHSPACING"] == 25 and not(config["RUNONMC"]) and config["FALL15"]:
-   # error,"these JEC do not exist yet"
-   JECprefix = "Fall15_25nsV2"
-elif config["BUNCHSPACING"] == 25 and config["RUNONMC"]:
-   JECprefix = "Summer15_25nsV7"
-elif config["BUNCHSPACING"] == 25 and not(config["RUNONMC"]):   
-   JECprefix = "Summer15_25nsV7"
+if config["BUNCHSPACING"] == 25 and config["RUNONMC"] and config["SPRING16"]:
+   JECprefix = "Spring16_25nsV1"
+elif config["BUNCHSPACING"] == 25 and not(config["RUNONMC"]) and config["SPRING16"]:
+   error,"these JEC do not exist yet"
 
 jecAK8chsUncFile = "JEC/%s_MC_Uncertainty_AK8PFchs.txt"%(JECprefix)
 jecAK4chsUncFile = "JEC/%s_MC_Uncertainty_AK4PFchs.txt"%(JECprefix)
@@ -737,7 +722,7 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     doHbbTag	      = cms.bool(config["DOHBBTAG"]),
     doPrunedSubjets   = cms.bool(config["DOAK8PRUNEDRECLUSTERING"]),
     doTrimming        = cms.bool(config["DOAK10TRIMMEDRECLUSTERING"]),
-    doPuppi           = cms.bool(config["DOAK8PUPPIRECLUSTERING"]),
+    doPuppi           = cms.bool(config["DOAK8PUPPI"]),
     doBoostedTaus     = cms.bool(config["DOTAUSBOOSTED"]),
     doMETSVFIT        = cms.bool(config["DOMETSVFIT"]),
     vertices = cms.InputTag("offlineSlimmedPrimaryVertices"),

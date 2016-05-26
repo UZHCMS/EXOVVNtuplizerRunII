@@ -3,7 +3,6 @@ import FWCore.ParameterSet.Config as cms
 config = dict()
 
 #--------- general ----------#
-config["FALL15"] = False
 config["SPRING16"] = True
 config["RUNONMC"] = True
 config["USEJSON"] = False
@@ -34,8 +33,8 @@ config["DOMETSVFIT"] = False
 config["ADDAK8GENJETS"] = False #! Add AK8 gen jet collection with pruned and softdrop mass
 config["DOAK8RECLUSTERING"] = False
 config["DOAK8PRUNEDRECLUSTERING"] = False #! To add pruned jet and pruned subjet collection (not in MINIAOD)
-config["DOAK8PUPPIRECLUSTERING"] = True
-config["DOAK10TRIMMEDRECLUSTERING"] = True #ATLAS sequence
+config["DOAK8PUPPI"] = True
+config["DOAK10TRIMMEDRECLUSTERING"] = False #ATLAS sequence
 config["DOHBBTAG"] = False #Higgs-tagger
 
 #--------- MET reclustering ----------#
