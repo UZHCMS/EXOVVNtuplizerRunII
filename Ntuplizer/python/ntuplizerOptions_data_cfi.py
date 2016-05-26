@@ -42,6 +42,6 @@ config["DOHBBTAG"] = False #Higgs-tagger
 config["DOMETRECLUSTERING"] = False
 
 #--------- JEC ----------#
-config["CORRJETSONTHEFLY"] = True
-config["CORRMETONTHEFLY"] = True
+config["CORRJETSONTHEFLY"] = False #JEC not available yet
+config["CORRMETONTHEFLY"] = False #JEC not available yet
 config["GETJECFROMDBFILE"] = False # If not yet in global tag, but db file available
