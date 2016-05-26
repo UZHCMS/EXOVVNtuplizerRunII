@@ -557,8 +557,8 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
         }
 	else{
 	      
-           nBranches_->jetAK8_pruned_massCorr.push_back(-1);
-           nBranches_->jetAK8_pruned_jec.push_back(-1);
+           nBranches_->jetAK8_pruned_massCorr.push_back(-99);
+           nBranches_->jetAK8_pruned_jec.push_back(-99);
 	   
 	}
 
@@ -725,8 +725,8 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
         }
 	else{
 	      
-           nBranches_->jetAK8_softdrop_massCorr.push_back(-1);
-           nBranches_->jetAK8_softdrop_jec.push_back(-1);
+           nBranches_->jetAK8_softdrop_massCorr.push_back(-99);
+           nBranches_->jetAK8_softdrop_jec.push_back(-99);
 	   
 	}
 
@@ -845,15 +845,15 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
         nBranches_->jetAK8_puppi_e      	    .push_back(corr*uncorrJet.energy());
 
         } else {
-        nBranches_->jetAK8_puppi_tau1	 .push_back(-1);	 
-        nBranches_->jetAK8_puppi_tau2	 .push_back(-1);
-        nBranches_->jetAK8_puppi_tau3	 .push_back(-1); 
-        //nBranches_->jetAK8_puppi_pruned_mass.push_back(-1);
-        nBranches_->jetAK8_puppi_softdrop_mass.push_back(-1);
-        //nBranches_->jetAK8_puppi_pruned_massCorr.push_back(-1);
-        //nBranches_->jetAK8_puppi_pruned_jec.push_back(-1);
-        nBranches_->jetAK8_puppi_softdrop_massCorr.push_back(-1);
-        nBranches_->jetAK8_puppi_softdrop_jec.push_back(-1);
+        nBranches_->jetAK8_puppi_tau1	 .push_back(-99);	 
+        nBranches_->jetAK8_puppi_tau2	 .push_back(-99);
+        nBranches_->jetAK8_puppi_tau3	 .push_back(-99); 
+        //nBranches_->jetAK8_puppi_pruned_mass.push_back(-99);
+        nBranches_->jetAK8_puppi_softdrop_mass.push_back(-99);
+        //nBranches_->jetAK8_puppi_pruned_massCorr.push_back(-99);
+        //nBranches_->jetAK8_puppi_pruned_jec.push_back(-99);
+        nBranches_->jetAK8_puppi_softdrop_massCorr.push_back(-99);
+        nBranches_->jetAK8_puppi_softdrop_jec.push_back(-99);
         nBranches_->jetAK8_puppi_pt     	    .push_back(-99);                   
         nBranches_->jetAK8_puppi_eta    	    .push_back(-99);
         nBranches_->jetAK8_puppi_mass   	    .push_back(-99);
@@ -903,8 +903,8 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
         }
 	else{
 	      
-           nBranches_->jetAK8_puppi_softdrop_massCorr.push_back(-1);
-           nBranches_->jetAK8_puppi_softdrop_jec.push_back(-1);
+           nBranches_->jetAK8_puppi_softdrop_massCorr.push_back(-99);
+           nBranches_->jetAK8_puppi_softdrop_jec.push_back(-99);
 	   
 	}
 
