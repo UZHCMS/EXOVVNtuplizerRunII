@@ -2,6 +2,7 @@
 #include "DataFormats/PatCandidates/interface/MET.h"
 #include "CommonTools/Utils/interface/StringCutObjectSelector.h"
 #include <TFormula.h>
+#include "FWCore/Framework/interface/ConsumesCollector.h"
 
 //===================================================================================================================        
 METsNtuplizer::METsNtuplizer( 	edm::EDGetTokenT<pat::METCollection>     mettoken    , 
@@ -9,6 +10,9 @@ METsNtuplizer::METsNtuplizer( 	edm::EDGetTokenT<pat::METCollection>     mettoken
 				edm::EDGetTokenT<pat::MuonCollection> 	 muontoken   ,
 				edm::EDGetTokenT<double> 		 rhotoken    ,
 				edm::EDGetTokenT<reco::VertexCollection> vtxtoken    ,
+				edm::EDGetTokenT<double>	      metSigtoken    ,
+				edm::EDGetTokenT<math::Error<2>::type> metCovtoken ,
+
 				std::vector<std::string> 		 jecAK4labels,
 				std::vector<std::string>	  	 corrformulas,
 				NtupleBranches* 			 nBranches   , 
@@ -19,7 +23,9 @@ METsNtuplizer::METsNtuplizer( 	edm::EDGetTokenT<pat::METCollection>     mettoken
 , jetInputToken_     ( jettoken     )
 , muonInputToken_    ( muontoken    )	    
 , rhoToken_	     ( rhotoken     )	    
-, verticeToken_	     ( vtxtoken     )														    
+, verticeToken_	     ( vtxtoken     )	
+, metSigToken_       ( metSigtoken  )
+, metCovToken_  	(metCovtoken)										    
 , jetCorrLabel_	     ( jecAK4labels )								    
 , corrFormulas_	     ( corrformulas )	
 , doMETSVFIT_        ( runFlags["doMETSVFIT"]  )					    
@@ -220,11 +226,12 @@ void METsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
   } 
 
   if (doMETSVFIT_) {
-  edm::Handle<double> significanceHandle;
-  edm::Handle<math::Error<2>::type> covHandle;
+ 
 
-  event.getByLabel ("METSignificance", "METSignificance", significanceHandle);
-  event.getByLabel ("METSignificance", "METCovariance", covHandle);
+    event.getByToken (metSigToken_, significanceHandle);
+    event.getByToken (metCovToken_, covHandle);
+  //event.getByLabel ("METSignificance", "METSignificance", significanceHandle);
+  //event.getByLabel ("METSignificance", "METCovariance", covHandle);
  
   nBranches_->MET_significance.push_back( (*significanceHandle));
   nBranches_->MET_cov00.push_back(    (*covHandle)(0,0));

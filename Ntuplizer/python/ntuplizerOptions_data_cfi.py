@@ -27,7 +27,7 @@ config["DOTRIGGEROBJECTS"] = True
 config["DOHLTFILTERS"] = True
 config["DOMISSINGET"] = True
 config["DOTAUSBOOSTED"] = True
-config["DOMETSVFIT"] = False
+config["DOMETSVFIT"] = True
 
 
 #--------- AK8 jets reclustering ----------#
@@ -36,7 +36,7 @@ config["DOAK8RECLUSTERING"] =False
 config["DOAK8PRUNEDRECLUSTERING"] = False #! To add pruned jet and pruned subjet collection (not in MINIAOD)
 config["DOAK8PUPPI"] = True
 config["DOAK10TRIMMEDRECLUSTERING"] = False #ATLAS sequence
-config["DOHBBTAG"] = False #Higgs-tagger
+config["DOHBBTAG"] = True #Higgs-tagger
 
 #--------- MET reclustering ----------#
 config["DOMETRECLUSTERING"] = False
