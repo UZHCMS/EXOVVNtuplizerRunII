@@ -1,0 +1,2 @@
+/JetHT/Run2016B-PromptReco-v1/MINIAOD
+/JetHT/Run2016B-PromptReco-v2/MINIAOD
