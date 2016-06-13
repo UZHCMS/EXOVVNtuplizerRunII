@@ -11,7 +11,7 @@ process.TFileService = cms.Service("TFileService",
                                     fileName = cms.string('flatTuple.root')
                                    )
 
-from EXOVVNtuplizerRunII.Ntuplizer.ntuplizerOptions_data_cfi import config
+from EXOVVNtuplizerRunII.Ntuplizer.ntuplizerOptions_data_crab_cfi import config
 
 				   
 ####### Config parser ##########
@@ -194,13 +194,13 @@ if config["GETJECFROMDBFILE"]:
                  label  = cms.untracked.string('AK8PFPuppi')
                  ),
             ),
-            connect = cms.string('sqlite:JEC/Summer15_50nsV5_MC.db')
+            connect = cms.string('sqlite:Summer15_50nsV5_MC.db')
             )
   if not config["RUNONMC"]:
     process.jec.toGet[0].tag =  cms.string('JetCorrectorParametersCollection_Summer15_50nsV5_DATA_AK4PFchs')
     process.jec.toGet[1].tag =  cms.string('JetCorrectorParametersCollection_Summer15_50nsV5_DATA_AK8PFchs')
     process.jec.toGet[2].tag =  cms.string('JetCorrectorParametersCollection_Summer15_50nsV5_DATA_AK8PFPuppi')
-    process.jec.connect = cms.string('sqlite:JEC/Summer15_50nsV5_DATA.db')
+    process.jec.connect = cms.string('sqlite:Summer15_50nsV5_DATA.db')
   process.es_prefer_jec = cms.ESPrefer('PoolDBESSource','jec')
 
 
@@ -629,68 +629,69 @@ jecLevelsForMET = []
 if config["BUNCHSPACING"] == 25 and config["RUNONMC"] and config["SPRING16"]:
    JECprefix = "Spring16_25nsV3"
 elif config["BUNCHSPACING"] == 25 and not(config["RUNONMC"]) and config["SPRING16"]:
-   JECprefix = "Spring16_25nsV3"
+    print"these JEC do not exist yet"
+    JECprefix = "Spring16_25nsV3"
 
-jecAK8chsUncFile = "JEC/%s_DATA_Uncertainty_AK8PFchs.txt"%(JECprefix)
-jecAK4chsUncFile = "JEC/%s_DATA_Uncertainty_AK4PFchs.txt"%(JECprefix)
+jecAK8chsUncFile = "%s_DATA_Uncertainty_AK8PFchs.txt"%(JECprefix)
+jecAK4chsUncFile = "%s_DATA_Uncertainty_AK4PFchs.txt"%(JECprefix)
 
 
 if config["CORRJETSONTHEFLY"]:
    if config["RUNONMC"]:
      jecLevelsAK8chs = [
-     	 'JEC/%s_MC_L1FastJet_AK8PFchs.txt'%(JECprefix), #JEC for 74X
-     	 'JEC/%s_MC_L2Relative_AK8PFchs.txt'%(JECprefix),
-     	 'JEC/%s_MC_L3Absolute_AK8PFchs.txt'%(JECprefix)
+     	 '%s_MC_L1FastJet_AK8PFchs.txt'%(JECprefix), #JEC for 74X
+     	 '%s_MC_L2Relative_AK8PFchs.txt'%(JECprefix),
+     	 '%s_MC_L3Absolute_AK8PFchs.txt'%(JECprefix)
        ]
      jecLevelsAK8Groomedchs = [
-     	 'JEC/%s_MC_L2Relative_AK8PFchs.txt'%(JECprefix),
-     	 'JEC/%s_MC_L3Absolute_AK8PFchs.txt'%(JECprefix)
+     	 '%s_MC_L2Relative_AK8PFchs.txt'%(JECprefix),
+     	 '%s_MC_L3Absolute_AK8PFchs.txt'%(JECprefix)
        ]
      jecLevelsAK8Puppi = [
-     	 'JEC/%s_MC_L2Relative_AK8PFPuppi.txt'%(JECprefix),
-     	 'JEC/%s_MC_L3Absolute_AK8PFPuppi.txt'%(JECprefix)
+     	 '%s_MC_L2Relative_AK8PFPuppi.txt'%(JECprefix),
+     	 '%s_MC_L3Absolute_AK8PFPuppi.txt'%(JECprefix)
        ]
      jecLevelsAK4chs = [
-     	 'JEC/%s_MC_L1FastJet_AK4PFchs.txt'%(JECprefix),
-     	 'JEC/%s_MC_L2Relative_AK4PFchs.txt'%(JECprefix),
-     	 'JEC/%s_MC_L3Absolute_AK4PFchs.txt'%(JECprefix)
+     	 '%s_MC_L1FastJet_AK4PFchs.txt'%(JECprefix),
+     	 '%s_MC_L2Relative_AK4PFchs.txt'%(JECprefix),
+     	 '%s_MC_L3Absolute_AK4PFchs.txt'%(JECprefix)
        ]
    else:
      jecLevelsAK8chs = [
-     	 'JEC/%s_DATA_L1FastJet_AK8PFchs.txt'%(JECprefix), #JEC for 74X
-     	 'JEC/%s_DATA_L2Relative_AK8PFchs.txt'%(JECprefix),
-     	 'JEC/%s_DATA_L3Absolute_AK8PFchs.txt'%(JECprefix),
-	 'JEC/%s_DATA_L2L3Residual_AK4PFchs.txt'%(JECprefix)# just for spring16V3 using the ones from ak4 instead that AK8PFpuppi
+     	 '%s_DATA_L1FastJet_AK8PFchs.txt'%(JECprefix), #JEC for 74X
+     	 '%s_DATA_L2Relative_AK8PFchs.txt'%(JECprefix),
+     	 '%s_DATA_L3Absolute_AK8PFchs.txt'%(JECprefix),
+	 '%s_DATA_L2L3Residual_AK4PFchs.txt'%(JECprefix)# just for spring16V3 using the ones from ak4 instead that AK8PFpuppi
        ]
      jecLevelsAK8Groomedchs = [
-     	 'JEC/%s_DATA_L2Relative_AK8PFchs.txt'%(JECprefix),
-     	 'JEC/%s_DATA_L3Absolute_AK8PFchs.txt'%(JECprefix),
-	 'JEC/%s_DATA_L2L3Residual_AK4PFchs.txt'%(JECprefix)# just for spring16V3 using the ones from ak4 instead that AK8PFpuppi
+     	 '%s_DATA_L2Relative_AK8PFchs.txt'%(JECprefix),
+     	 '%s_DATA_L3Absolute_AK8PFchs.txt'%(JECprefix),
+	 '%s_DATA_L2L3Residual_AK4PFchs.txt'%(JECprefix)# just for spring16V3 using the ones from ak4 instead that AK8PFpuppi
        ]
      jecLevelsAK8Puppi = [
-     	 'JEC/%s_DATA_L2Relative_AK8PFPuppi.txt'%(JECprefix),
-     	 'JEC/%s_DATA_L3Absolute_AK8PFPuppi.txt'%(JECprefix),
-	 'JEC/%s_DATA_L2L3Residual_AK4PFchs.txt'%(JECprefix)# just for spring16V3 using the ones from ak4 instead that AK8PFpuppi
+     	 '%s_DATA_L2Relative_AK8PFPuppi.txt'%(JECprefix),
+     	 '%s_DATA_L3Absolute_AK8PFPuppi.txt'%(JECprefix),
+	 '%s_DATA_L2L3Residual_AK4PFchs.txt'%(JECprefix)# just for spring16V3 using the ones from ak4 instead that AK8PFpuppi
        ]
      jecLevelsAK4chs = [
-     	 'JEC/%s_DATA_L1FastJet_AK4PFchs.txt'%(JECprefix),
-     	 'JEC/%s_DATA_L2Relative_AK4PFchs.txt'%(JECprefix),
-     	 'JEC/%s_DATA_L3Absolute_AK4PFchs.txt'%(JECprefix),
-	 'JEC/%s_DATA_L2L3Residual_AK4PFchs.txt'%(JECprefix)
+     	 '%s_DATA_L1FastJet_AK4PFchs.txt'%(JECprefix),
+     	 '%s_DATA_L2Relative_AK4PFchs.txt'%(JECprefix),
+     	 '%s_DATA_L3Absolute_AK4PFchs.txt'%(JECprefix),
+	 '%s_DATA_L2L3Residual_AK4PFchs.txt'%(JECprefix)
        ]   
 if config["CORRMETONTHEFLY"]:  
    if config["RUNONMC"]:
      jecLevelsForMET = [				       
-     	 'JEC/%s_MC_L1FastJet_AK4PFchs.txt'%(JECprefix),
-     	 'JEC/%s_MC_L2Relative_AK4PFchs.txt'%(JECprefix),
-     	 'JEC/%s_MC_L3Absolute_AK4PFchs.txt'%(JECprefix)
+     	 '%s_MC_L1FastJet_AK4PFchs.txt'%(JECprefix),
+     	 '%s_MC_L2Relative_AK4PFchs.txt'%(JECprefix),
+     	 '%s_MC_L3Absolute_AK4PFchs.txt'%(JECprefix)
        ]
    else:       					       
      jecLevelsForMET = [
-     	 'JEC/%s_DATA_L1FastJet_AK4PFchs.txt'%(JECprefix),
-     	 'JEC/%s_DATA_L2Relative_AK4PFchs.txt'%(JECprefix),
-     	 'JEC/%s_DATA_L3Absolute_AK4PFchs.txt'%(JECprefix),
-	 'JEC/%s_DATA_L2L3Residual_AK4PFchs.txt'%(JECprefix)
+     	 '%s_DATA_L1FastJet_AK4PFchs.txt'%(JECprefix),
+     	 '%s_DATA_L2Relative_AK4PFchs.txt'%(JECprefix),
+     	 '%s_DATA_L3Absolute_AK4PFchs.txt'%(JECprefix),
+	 '%s_DATA_L2L3Residual_AK4PFchs.txt'%(JECprefix)
        ]	
       			    
 #from PhysicsTools.SelectorUtils.pfJetIDSelector_cfi import pfJetIDSelector

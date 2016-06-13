@@ -11,7 +11,7 @@ process.TFileService = cms.Service("TFileService",
                                     fileName = cms.string('flatTuple.root')
                                    )
 
-from EXOVVNtuplizerRunII.Ntuplizer.ntuplizerOptions_data_cfi import config
+from EXOVVNtuplizerRunII.Ntuplizer.ntuplizerOptions_MC_crab_miniAODv2_cfi import config
 
 				   
 ####### Config parser ##########
@@ -20,13 +20,17 @@ import FWCore.ParameterSet.VarParsing as VarParsing
 
 options = VarParsing.VarParsing ('analysis')
 
-options.maxEvents = -1
+options.maxEvents = 100
 
 #data file
 
-# options.inputFiles = '/store/data/Run2015D/SingleMuon/MINIAOD/05Oct2015-v1/10000/021FD3F0-876F-E511-99D2-0025905A6060.root'
-#options.inputFiles = 'dcap://t3se01.psi.ch:22125//pnfs/psi.ch/cms/trivcat/store/data/Run2015D/JetHT/MINIAOD/16Dec2015-v1/00000/301A497D-70B0-E511-9630-002590D0AFA8.root'
-options.inputFiles = '/store/data/Run2016B/JetHT/MINIAOD/PromptReco-v2/000/273/158/00000/1E4ABD0D-DA19-E611-9396-02163E014258.root'
+#options.inputFiles = '/store/mc/RunIISpring15MiniAODv2/WJetsToLNu_HT-100To200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/74X_mcRun2_asymptotic_v2-v1/10000/003F1529-D36D-E511-9E33-001E6724816F.root'
+#options.inputFiles = '/store/mc/RunIISpring16MiniAODv1/RadionToWWToWlepWhad_width0p3_M-3000_TuneCUETP8M1_13TeV-madgraph-pythia8/MINIAODSIM/PUSpring16RAWAODSIM_80X_mcRun2_asymptotic_2016_v3-v1/50000/20BB570E-2F16-E611-BF25-02163E015F8E.root'
+options.inputFiles = '/store/mc/RunIISpring16MiniAODv2/WJetsToQQ_HT-600ToInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/PUSpring16_80X_mcRun2_asymptotic_2016_miniAODv2_v0-v1/30000/0EA1D6CA-931A-E611-BFCD-BCEE7B2FE01D.root'
+#options.inputFiles = 'dcap://t3se01.psi.ch:22125//pnfs/psi.ch/cms/trivcat/store/mc/RunIIFall15MiniAODv2/WprimeToWhToWhadhbb_narrow_M-1000_13TeV-madgraph/MINIAODSIM/PU25nsData2015v1_76X_mcRun2_asymptotic_v12-v1/00000/8EE77064-42B8-E511-8BA1-003048895D40.root'
+#options.inputFiles = 'xroot://t3dcachedb.psi.ch:1094//pnfs/psi.ch/cms/trivcat/store/user/cgalloni/RunII/RadionTohhTohtatahbb_narrow_M-1000_13TeV-madgraph/MiniAOD_TauBoosted_v0667_maxDepth100_jetPt100/miniAOD_4.root'
+#options.inputFiles = 'dcap://t3se01.psi.ch:22125//pnfs/psi.ch/cms/trivcat/store/user/cgalloni/RunII/RadionTohhTohtatahbb_narrow_M-1000_13TeV-madgraph/MiniAOD_TauBoosted_v0667_maxDepth100_jetPt100/miniAOD_4.root'
+#options.inputFiles = '/store/user/cgalloni/MiniAOD_191115/RadionTohhTohtatahbb_narrow_M-1000_13TeV-madgraph/BoostedTaus_RadionTohhTohtatahbb_narrow_M-1000_13TeV-madgraph_v0/151119_130555/0000/miniAOD_1.root'
 options.parseArguments()
 
 process.options  = cms.untracked.PSet( 
@@ -50,10 +54,13 @@ process.source = cms.Source("PoolSource",
 hltFiltersProcessName = 'RECO'
 if config["RUNONMC"] or config["JSONFILE"].find('reMiniAOD') != -1:
   hltFiltersProcessName = 'PAT'
-reclusterPuppi=False
+reclusterPuppi=(not 'MiniAODv2' in options.inputFiles[0])
+if config["DOAK8PUPPIRECLUSTERING"]: reclusterPuppi=True
 if reclusterPuppi:
   print "RECLUSTERING PUPPI (since not running of Spring16MiniAODv2)"
-
+else:
+  print "NOT RECLUSTERING PUPPI (since running of Spring16MiniAODv2)"
+  
 #! To recluster and add AK8 Higgs tagging and softdrop subjet b-tagging (both need to be simoultaneously true or false, if not you will have issues with your softdrop subjets!)
 #If you use the softdrop subjets from the slimmedJetsAK8 collection, only CSV seems to be available?
 doAK8softdropReclustering = False
@@ -79,6 +86,7 @@ GT = ''
 if config["RUNONMC"]: GT = '80X_mcRun2_asymptotic_2016_miniAODv2'
 elif not(config["RUNONMC"]): GT = '80X_dataRun2_Prompt_v8'
 
+
 print "*************************************** GLOBAL TAG *************************************************" 
 print GT
 print "****************************************************************************************************" 
@@ -92,27 +100,6 @@ if not(config["RUNONMC"]) and config["USEJSON"]:
   process.source.lumisToProcess = CfgTypes.untracked(CfgTypes.VLuminosityBlockRange())
   myLumis = LumiList.LumiList(filename = config["JSONFILE"]).getCMSSWString().split(',')
   process.source.lumisToProcess.extend(myLumis) 
-
-  if config["FILTEREVENTS"]:
-  
-   fname = ""
-   if (options.inputFiles)[0].find("SingleMuon") != -1: fname = "RunLumiEventLists/SingleMuon_csc2015_Nov14.txt"
-   elif (options.inputFiles)[0].find("SingleElectron") != -1: fname = "RunLumiEventLists/SingleElectron_csc2015_Nov14.txt"
-   elif (options.inputFiles)[0].find("JetHT") != -1: fname = "RunLumiEventLists/JetHT_csc2015_Nov27.txt"
-   else:
-    print "** WARNING: EVENT LIST NOT FOUND! exiting... "
-    sys.exit()
-   
-   print "** FILTERING EVENT LIST: %s" %fname 
-   listEventsToSkip = []
-   fileEventsToSkip = open(fname,"r")
-
-   for line in fileEventsToSkip:
-     cleanLine = line.rstrip()
-     listEventsToSkip.append(cleanLine+"-"+cleanLine)
-
-   rangeEventsToSkip = cms.untracked.VEventRange(listEventsToSkip)
-   process.source.eventsToSkip = rangeEventsToSkip
 
 ####### Redo Jet clustering sequence ##########
 betapar = cms.double(0.0)
@@ -194,13 +181,13 @@ if config["GETJECFROMDBFILE"]:
                  label  = cms.untracked.string('AK8PFPuppi')
                  ),
             ),
-            connect = cms.string('sqlite:JEC/Summer15_50nsV5_MC.db')
+            connect = cms.string('sqlite:Summer15_50nsV5_MC.db')
             )
   if not config["RUNONMC"]:
     process.jec.toGet[0].tag =  cms.string('JetCorrectorParametersCollection_Summer15_50nsV5_DATA_AK4PFchs')
     process.jec.toGet[1].tag =  cms.string('JetCorrectorParametersCollection_Summer15_50nsV5_DATA_AK8PFchs')
     process.jec.toGet[2].tag =  cms.string('JetCorrectorParametersCollection_Summer15_50nsV5_DATA_AK8PFPuppi')
-    process.jec.connect = cms.string('sqlite:JEC/Summer15_50nsV5_DATA.db')
+    process.jec.connect = cms.string('sqlite:Summer15_50nsV5_DATA.db')
   process.es_prefer_jec = cms.ESPrefer('PoolDBESSource','jec')
 
 
@@ -555,7 +542,6 @@ process.egmGsfElectronIDSequence = cms.Sequence(process.egmGsfElectronIDs)
 my_id_modules = ['RecoEgamma.ElectronIdentification.Identification.heepElectronID_HEEPV51_cff',
                  'RecoEgamma.ElectronIdentification.Identification.heepElectronID_HEEPV60_cff',
                  'RecoEgamma.ElectronIdentification.Identification.cutBasedElectronID_Spring15_25ns_V1_cff']
-                 
 
 #add them to the VID producer
 for idmod in my_id_modules:
@@ -591,7 +577,6 @@ if config["DOMETSVFIT"]:
   process.METSequence = cms.Sequence (process.METSignificance)
 
 ##___________________ taus ______________________##
-
 TAUS = ""
 BOOSTEDTAUS = ""
 genAK8 = ""
@@ -615,9 +600,8 @@ if config["DOTAUSBOOSTED"]:
   BOOSTEDTAUS = "slimmedTausBoosted"     
 else:
   TAUS = "slimmedTaus"
-  BOOSTEDTAUS = "slimmedTaus" 
-  
-
+  BOOSTEDTAUS = "slimmedTaus"
+ 
 ######## JEC ########
 jecLevelsAK8chs = []
 jecLevelsAK8Groomedchs = []
@@ -627,70 +611,70 @@ jecLevelsAK8Puppi = []
 jecLevelsForMET = []
 
 if config["BUNCHSPACING"] == 25 and config["RUNONMC"] and config["SPRING16"]:
-   JECprefix = "Spring16_25nsV3"
+  JECprefix = "Spring16_25nsV3"
 elif config["BUNCHSPACING"] == 25 and not(config["RUNONMC"]) and config["SPRING16"]:
-   JECprefix = "Spring16_25nsV3"
+  JECprefix = "Spring16_25nsV3"
 
-jecAK8chsUncFile = "JEC/%s_DATA_Uncertainty_AK8PFchs.txt"%(JECprefix)
-jecAK4chsUncFile = "JEC/%s_DATA_Uncertainty_AK4PFchs.txt"%(JECprefix)
+jecAK8chsUncFile = "%s_MC_Uncertainty_AK8PFchs.txt"%(JECprefix)
+jecAK4chsUncFile = "%s_MC_Uncertainty_AK4PFchs.txt"%(JECprefix)
 
 
 if config["CORRJETSONTHEFLY"]:
    if config["RUNONMC"]:
      jecLevelsAK8chs = [
-     	 'JEC/%s_MC_L1FastJet_AK8PFchs.txt'%(JECprefix), #JEC for 74X
-     	 'JEC/%s_MC_L2Relative_AK8PFchs.txt'%(JECprefix),
-     	 'JEC/%s_MC_L3Absolute_AK8PFchs.txt'%(JECprefix)
+     	 '%s_MC_L1FastJet_AK8PFchs.txt'%(JECprefix), #JEC for 74X
+     	 '%s_MC_L2Relative_AK8PFchs.txt'%(JECprefix),
+     	 '%s_MC_L3Absolute_AK8PFchs.txt'%(JECprefix)
        ]
      jecLevelsAK8Groomedchs = [
-     	 'JEC/%s_MC_L2Relative_AK8PFchs.txt'%(JECprefix),
-     	 'JEC/%s_MC_L3Absolute_AK8PFchs.txt'%(JECprefix)
+     	 '%s_MC_L2Relative_AK8PFchs.txt'%(JECprefix),
+     	 '%s_MC_L3Absolute_AK8PFchs.txt'%(JECprefix)
        ]
      jecLevelsAK8Puppi = [
-     	 'JEC/%s_MC_L2Relative_AK8PFPuppi.txt'%(JECprefix),
-     	 'JEC/%s_MC_L3Absolute_AK8PFPuppi.txt'%(JECprefix)
+     	 '%s_MC_L2Relative_AK8PFPuppi.txt'%(JECprefix),
+     	 '%s_MC_L3Absolute_AK8PFPuppi.txt'%(JECprefix)
        ]
      jecLevelsAK4chs = [
-     	 'JEC/%s_MC_L1FastJet_AK4PFchs.txt'%(JECprefix),
-     	 'JEC/%s_MC_L2Relative_AK4PFchs.txt'%(JECprefix),
-     	 'JEC/%s_MC_L3Absolute_AK4PFchs.txt'%(JECprefix)
+     	 '%s_MC_L1FastJet_AK4PFchs.txt'%(JECprefix),
+     	 '%s_MC_L2Relative_AK4PFchs.txt'%(JECprefix),
+     	 '%s_MC_L3Absolute_AK4PFchs.txt'%(JECprefix)
        ]
    else:
      jecLevelsAK8chs = [
-     	 'JEC/%s_DATA_L1FastJet_AK8PFchs.txt'%(JECprefix), #JEC for 74X
-     	 'JEC/%s_DATA_L2Relative_AK8PFchs.txt'%(JECprefix),
-     	 'JEC/%s_DATA_L3Absolute_AK8PFchs.txt'%(JECprefix),
-	 'JEC/%s_DATA_L2L3Residual_AK4PFchs.txt'%(JECprefix)# just for spring16V3 using the ones from ak4 instead that AK8PFpuppi
+     	 '%s_DATA_L1FastJet_AK8PFchs.txt'%(JECprefix), #JEC for 74X
+     	 '%s_DATA_L2Relative_AK8PFchs.txt'%(JECprefix),
+     	 '%s_DATA_L3Absolute_AK8PFchs.txt'%(JECprefix),
+	 '%s_DATA_L2L3Residual_AK4PFchs.txt'%(JECprefix)# just for spring16V3 using the ones from ak4 instead that AK8PFpuppi
        ]
      jecLevelsAK8Groomedchs = [
-     	 'JEC/%s_DATA_L2Relative_AK8PFchs.txt'%(JECprefix),
-     	 'JEC/%s_DATA_L3Absolute_AK8PFchs.txt'%(JECprefix),
-	 'JEC/%s_DATA_L2L3Residual_AK4PFchs.txt'%(JECprefix)# just for spring16V3 using the ones from ak4 instead that AK8PFpuppi
+     	 '%s_DATA_L2Relative_AK8PFchs.txt'%(JECprefix),
+     	 '%s_DATA_L3Absolute_AK8PFchs.txt'%(JECprefix),
+	 '%s_DATA_L2L3Residual_AK4PFchs.txt'%(JECprefix)# just for spring16V3 using the ones from ak4 instead that AK8PFpuppi
        ]
      jecLevelsAK8Puppi = [
-     	 'JEC/%s_DATA_L2Relative_AK8PFPuppi.txt'%(JECprefix),
-     	 'JEC/%s_DATA_L3Absolute_AK8PFPuppi.txt'%(JECprefix),
-	 'JEC/%s_DATA_L2L3Residual_AK4PFchs.txt'%(JECprefix)# just for spring16V3 using the ones from ak4 instead that AK8PFpuppi
+     	 '%s_DATA_L2Relative_AK8PFPuppi.txt'%(JECprefix),
+     	 '%s_DATA_L3Absolute_AK8PFPuppi.txt'%(JECprefix),
+	 '%s_DATA_L2L3Residual_AK4PFchs.txt'%(JECprefix)# just for spring16V3 using the ones from ak4 instead that AK8PFpuppi
        ]
      jecLevelsAK4chs = [
-     	 'JEC/%s_DATA_L1FastJet_AK4PFchs.txt'%(JECprefix),
-     	 'JEC/%s_DATA_L2Relative_AK4PFchs.txt'%(JECprefix),
-     	 'JEC/%s_DATA_L3Absolute_AK4PFchs.txt'%(JECprefix),
-	 'JEC/%s_DATA_L2L3Residual_AK4PFchs.txt'%(JECprefix)
+     	 '%s_DATA_L1FastJet_AK4PFchs.txt'%(JECprefix),
+     	 '%s_DATA_L2Relative_AK4PFchs.txt'%(JECprefix),
+     	 '%s_DATA_L3Absolute_AK4PFchs.txt'%(JECprefix),
+	 '%s_DATA_L2L3Residual_AK4PFchs.txt'%(JECprefix)
        ]   
 if config["CORRMETONTHEFLY"]:  
    if config["RUNONMC"]:
      jecLevelsForMET = [				       
-     	 'JEC/%s_MC_L1FastJet_AK4PFchs.txt'%(JECprefix),
-     	 'JEC/%s_MC_L2Relative_AK4PFchs.txt'%(JECprefix),
-     	 'JEC/%s_MC_L3Absolute_AK4PFchs.txt'%(JECprefix)
+     	 '%s_MC_L1FastJet_AK4PFchs.txt'%(JECprefix),
+     	 '%s_MC_L2Relative_AK4PFchs.txt'%(JECprefix),
+     	 '%s_MC_L3Absolute_AK4PFchs.txt'%(JECprefix)
        ]
    else:       					       
      jecLevelsForMET = [
-     	 'JEC/%s_DATA_L1FastJet_AK4PFchs.txt'%(JECprefix),
-     	 'JEC/%s_DATA_L2Relative_AK4PFchs.txt'%(JECprefix),
-     	 'JEC/%s_DATA_L3Absolute_AK4PFchs.txt'%(JECprefix),
-	 'JEC/%s_DATA_L2L3Residual_AK4PFchs.txt'%(JECprefix)
+     	 '%s_DATA_L1FastJet_AK4PFchs.txt'%(JECprefix),
+     	 '%s_DATA_L2Relative_AK4PFchs.txt'%(JECprefix),
+     	 '%s_DATA_L3Absolute_AK4PFchs.txt'%(JECprefix),
+	 '%s_DATA_L2L3Residual_AK4PFchs.txt'%(JECprefix)
        ]	
       			    
 #from PhysicsTools.SelectorUtils.pfJetIDSelector_cfi import pfJetIDSelector
@@ -753,7 +737,7 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     jetsForMetCorr = cms.InputTag(jetsAK4),
     rho = cms.InputTag("fixedGridRhoFastjetAll"),
     genparticles = cms.InputTag("prunedGenParticles"),
-    PUInfo = cms.InputTag("addPileupInfo"),
+    PUInfo = cms.InputTag("slimmedAddPileupInfo"),
     genEventInfo = cms.InputTag("generator"),
     HLT = cms.InputTag("TriggerResults","","HLT"),
     triggerobjects = cms.InputTag("selectedPatTrigger"),
@@ -772,7 +756,7 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     noiseFilterSelection_HBHENoiseFilter = cms.string('Flag_HBHENoiseFilter'),
     noiseFilterSelection_HBHENoiseFilterLoose = cms.InputTag("HBHENoiseFilterResultProducer", "HBHENoiseFilterResultRun2Loose"),
     noiseFilterSelection_HBHENoiseFilterTight = cms.InputTag("HBHENoiseFilterResultProducer", "HBHENoiseFilterResultRun2Tight"),
-    noiseFilterSelection_HBHENoiseIsoFilter = cms.InputTag("HBHENoiseFilterResultProducer", "HBHEIsoNoiseFilterResult"),    
+    noiseFilterSelection_HBHENoiseIsoFilter = cms.InputTag("HBHENoiseFilterResultProducer", "HBHEIsoNoiseFilterResult"),
     noiseFilterSelection_CSCTightHaloFilter = cms.string('Flag_CSCTightHaloFilter'),
     noiseFilterSelection_CSCTightHalo2015Filter = cms.string('Flag_CSCTightHalo2015Filter'),
     noiseFilterSelection_hcalLaserEventFilter = cms.string('Flag_hcalLaserEventFilter'),
