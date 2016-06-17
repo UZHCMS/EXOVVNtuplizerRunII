@@ -9,8 +9,12 @@ class SampleObject():
     self.fullName = sample.strip("\n")
     splitSample = self.fullName.split("/")
     self.base = splitSample[1]
-    self.campaign = splitSample[2].split("-",1)[0]
-    self.scenario = splitSample[2].split("-",1)[1]
+    if len(splitSample[2].split("-",1)[0])<len(splitSample[2].split("_",1)[0]):
+      self.campaign = splitSample[2].split("-",1)[0]
+      self.scenario = splitSample[2].split("-",1)[1]
+    else:
+      self.campaign = splitSample[2].split("_",1)[0]
+      self.scenario = splitSample[2].split("_",1)[1]
     self.type = splitSample[3]
     self.isData = isData
     self.name = "%s_%s_%s" %(self.base, self.campaign, self.scenario)
