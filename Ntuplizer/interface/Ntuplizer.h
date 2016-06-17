@@ -78,6 +78,8 @@ private:
 
 
   edm::EDGetTokenT<pat::METCollection> 	    		    metToken_		;
+  edm::EDGetTokenT<double> 	    		            metSigToken_		;
+  edm::EDGetTokenT<math::Error<2>::type> 	     	    metCovToken_		;
   edm::EDGetTokenT<pat::JetCollection>                      jetForMetCorrToken_ ;
   
   edm::EDGetTokenT<edm::TriggerResults>                     triggerToken_       ;

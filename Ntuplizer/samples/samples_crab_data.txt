@@ -1,0 +1,6 @@
+/JetHT/Run2016B-PromptReco-v1/MINIAOD
+/JetHT/Run2016B-PromptReco-v2/MINIAOD
+/SingleElectron/Run2016B-PromptReco-v1/MINIAOD
+/SingleElectron/Run2016B-PromptReco-v2/MINIAOD
+/SingleMuon/Run2016B-PromptReco-v1/MINIAOD
+/SingleMuon/Run2016B-PromptReco-v2/MINIAOD

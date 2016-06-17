@@ -51,6 +51,9 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
 	tauBoostedTauToken_	    (consumes<pat::TauCollection>(iConfig.getParameter<edm::InputTag>("tausBoostedTau"))),
 
 	metToken_	      	    (consumes<pat::METCollection>(iConfig.getParameter<edm::InputTag>("mets"))),
+	metSigToken_	      	    (consumes<double>(edm::InputTag("METSignificance","METSignificance"))),
+	metCovToken_	      	    (consumes<math::Error<2>::type>(edm::InputTag("METSignificance","METCovariance"))),
+
 	jetForMetCorrToken_   	    (consumes<pat::JetCollection>(iConfig.getParameter<edm::InputTag>("jetsForMetCorr"))),
 
 	triggerToken_	      	    (consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("HLT"))),
@@ -169,6 +172,8 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
 					    muonToken_         ,
 					    rhoToken_	       ,
 					    vtxToken_	       ,
+					    metSigToken_       ,
+					    metCovToken_       ,
 					    jecAK4Labels       ,
                                             corrFormulas       ,
 					    nBranches_         ,

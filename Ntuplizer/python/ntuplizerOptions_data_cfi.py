@@ -6,7 +6,7 @@ config = dict()
 config["SPRING16"] = True
 config["RUNONMC"] = False
 config["USEJSON"] = True
-config["JSONFILE"] = "JSON/Cert_271036-273450_13TeV_PromptReco_Collisions16_JSON_NoL1T.txt"
+config["JSONFILE"] = "JSON/Cert_271036-274443_13TeV_PromptReco_Collisions16_JSON.txt"
 config["FILTEREVENTS"] = False
 config["BUNCHSPACING"] = 25
 config["USENOHF"] = False
@@ -27,7 +27,7 @@ config["DOTRIGGEROBJECTS"] = True
 config["DOHLTFILTERS"] = True
 config["DOMISSINGET"] = True
 config["DOTAUSBOOSTED"] = True
-config["DOMETSVFIT"] = False
+config["DOMETSVFIT"] = True
 
 
 #--------- AK8 jets reclustering ----------#
@@ -36,12 +36,12 @@ config["DOAK8RECLUSTERING"] =False
 config["DOAK8PRUNEDRECLUSTERING"] = False #! To add pruned jet and pruned subjet collection (not in MINIAOD)
 config["DOAK8PUPPI"] = True
 config["DOAK10TRIMMEDRECLUSTERING"] = False #ATLAS sequence
-config["DOHBBTAG"] = False #Higgs-tagger
+config["DOHBBTAG"] = True #Higgs-tagger
 
 #--------- MET reclustering ----------#
 config["DOMETRECLUSTERING"] = False
 
 #--------- JEC ----------#
-config["CORRJETSONTHEFLY"] = True
-config["CORRMETONTHEFLY"] = True
+config["CORRJETSONTHEFLY"] = True #JEC not available yet
+config["CORRMETONTHEFLY"] = True #JEC not available yet
 config["GETJECFROMDBFILE"] = False # If not yet in global tag, but db file available

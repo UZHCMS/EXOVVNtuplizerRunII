@@ -87,21 +87,33 @@ bool TriggersNtuplizer::findTrigger( std::string trigName ){
        trigName.find("HLT_Ele27_eta2p1_WPLoose_Gsf_DoubleMediumIsoPFTau35") != std::string::npos ||
        trigName.find("HLT_Ele27_eta2p1_WPLoose_Gsf_LooseIsoPFTau20") != std::string::npos ||
        trigName.find("HLT_IsoMu16_eta2p1_MET30_JetIDCleaned_LooseIsoPFTau50") != std::string::npos ||
-     
+       trigName.find("HLT_IsoMu16_eta2p1_MET30_LooseIsoPFTau50_Trk30_eta2p1_v1") != std::string::npos ||
        //H->tautau triggers
        trigName.find("HLT_LooseIsoPFTau50") != std::string::npos||
        trigName.find("HLT_IsoMu17_eta2p1_LooseIsoPFTau20") != std::string::npos||
        trigName.find("HLT_IsoMu24_eta2p1") != std::string::npos||
        trigName.find("HLT_IsoMu17_eta2p1") != std::string::npos||
        trigName.find("HLT_IsoMu18_v") != std::string::npos||
+       trigName.find("HLT_IsoMu22_v") != std::string::npos||
        trigName.find("HLT_IsoMu27_v") != std::string::npos||
        trigName.find("HLT_IsoMu20_v") != std::string::npos||
+       trigName.find("HLT_IsoMu24_v") != std::string::npos||
+       trigName.find("HLT_IsoTkMu18_v") != std::string::npos||
+       trigName.find("HLT_IsoTkMu20_v") != std::string::npos||
+       trigName.find("HLT_IsoTkMu22_v") != std::string::npos||
+       trigName.find("HLT_IsoTkMu24_v") != std::string::npos||
+       trigName.find("HLT_IsoTkMu27_v") != std::string::npos||
        trigName.find("HLT_Ele22_eta2p1_WP75_Gsf_LooseIsoPFTau20") != std::string::npos||
+       trigName.find("HLT_Ele25_eta2p1") != std::string::npos||
        trigName.find("HLT_Ele22_eta2p1_WP75_Gsf_v") != std::string::npos||
        trigName.find("HLT_Ele32_eta2p1_WP75_Gsf") != std::string::npos||
        trigName.find("HLT_Ele23_WPLoose_Gsf") != std::string::npos||
+       trigName.find("HLT_Ele23_WPTight_Gsf") != std::string::npos||
+       trigName.find("HLT_Ele27_WPLoose_Gsf") != std::string::npos||
+       trigName.find("HLT_Ele27_WPTight_Gsf") != std::string::npos||
        trigName.find("HLT_DoubleMediumIsoPFTau40_Trk1_eta2p1_Reg") != std::string::npos||
        trigName.find("HLT_DoubleMediumIsoPFTau35_Trk1_eta2p1_Reg") != std::string::npos||
+
 
        //Alternative triggers
        trigName.find("HLT_PFMET120_PFMHT120_IDTight") != std::string::npos||
@@ -124,7 +136,7 @@ void TriggersNtuplizer::fillBranches( edm::Event const & event, const edm::Event
 		
   if (doTriggerDecisions_) {
   	 for (unsigned int i = 0, n = HLTtriggers_->size(); i < n; ++i) {
-	   //std::cout << "Trigger " << trigNames.triggerName(i) << ": " << (HLTtriggers_->accept(i) ? "PASS" : "fail (or not run)") << std::endl;
+	   // std::cout << "Trigger " << trigNames.triggerName(i) << ": " << (HLTtriggers_->accept(i) ? "PASS" : "fail (or not run)") << std::endl;
   	  if( findTrigger(trigNames.triggerName(i)) ){
    	     nBranches_->HLT_isFired[trigNames.triggerName(i)] = HLTtriggers_->accept(i);
    	  }
