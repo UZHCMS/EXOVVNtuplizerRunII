@@ -379,7 +379,7 @@ bool ElectronsNtuplizer::eleIDpassedBoosted(std::string id, const pat::Electron 
 	      fabs(dz_) 	        < 0.41 &&			      
 	      expectedMissingInnerHits_ <= 2.000000 &&
 	      passConversionVeto_ 
-	      ) isVetoElectron = true;
+	      ) isLooseElectron = true;
 	  
 	  if( passConversionVeto_		   &&
 	      full5x5_sigmaIetaIeta_    < 0.0101 &&
