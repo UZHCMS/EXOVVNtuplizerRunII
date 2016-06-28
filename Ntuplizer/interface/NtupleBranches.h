@@ -561,6 +561,11 @@ public:
   bool passFilter_TrkPOG_toomanystrip_;
   bool passFilter_TrkPOG_logError_;
   bool passFilter_METFilters_;
+  bool passFilter_CSCTightHaloTrkMuUnvetoFilter_   ;
+  bool passFilter_globalTightHalo2016_             ;
+  bool passFilter_HcalStripHalo_                   ;
+  bool passFilter_chargedHadronTrackResolution_    ;
+  bool passFilter_muonBadTrack_                    ;
   
   /** MET */
   std::vector<float>                METraw_et		      ;	 
