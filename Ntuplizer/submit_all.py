@@ -78,7 +78,7 @@ def main():
     config.Data.unitsPerJob = 5
     config.Data.ignoreLocality = False
     config.Data.publication = False    
-    config.Data.outLFNDirBase = '/store/user/cgalloni/Ntuple_80_270516'
+    config.Data.outLFNDirBase = '/store/user/cgalloni/Ntuple_80_280616'
 
     config.section_("Site")
     config.Site.storageSite = 'T3_CH_PSI'
@@ -112,9 +112,9 @@ def main():
 
         ptbin = job.split('/')[1]
         cond = job.split('/')[2]
-        config.General.requestName =  ptbin +"_v2"
+        config.General.requestName =  ptbin 
         config.Data.inputDataset = job
-        config.Data.outputDatasetTag = ptbin +"_v2"
+        config.Data.outputDatasetTag = ptbin 
         print "ptbin :%s and cond: %s " %(ptbin, cond)
         print 'Submitting ' + config.General.requestName + ', dataset = ' + job
         print 'Configuration :'

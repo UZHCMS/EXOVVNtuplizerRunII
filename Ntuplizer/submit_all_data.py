@@ -77,10 +77,10 @@ def main():
     # config.Data.inputDBS = 'phys03' #to be commented in case of global#
     config.Data.splitting = 'LumiBased'#'LumiBased'#
     config.Data.unitsPerJob = 50
-    config.Data.runRange= "274443-275125"
+    #config.Data.runRange= "274443-275125"
     config.Data.ignoreLocality = True
     config.Data.publication = False    
-    config.Data.outLFNDirBase = '/store/user/cgalloni/Ntuple_80_270516'
+    config.Data.outLFNDirBase = '/store/user/cgalloni/Ntuple_80_280616'
     config.Data.lumiMask      = '/mnt/t3nfs01/data01/shome/cgalloni/RunII/CMSSW_8_0_9/src/EXOVVNtuplizerRunII/Ntuplizer/JSON/Cert_271036-275125_13TeV_PromptReco_Collisions16_JSON.txt'
     config.section_("Site")
     config.Site.storageSite = 'T3_CH_PSI'
@@ -115,9 +115,9 @@ def main():
         ptbin = job.split('/')[1]
         cond = job.split('/')[2]
         
-        config.General.requestName = ptbin +'_'+ cond +'_V3_2p6fb_4fb'
+        config.General.requestName = ptbin +'_'+ cond
         config.Data.inputDataset = job
-        config.Data.outputDatasetTag =  ptbin +'_'+ cond +'_V3_2p6fb_4fb'
+        config.Data.outputDatasetTag =  ptbin +'_'+ cond
         print "ptbin :%s and cond: %s " %(ptbin, cond)
         print 'Submitting ' + config.General.requestName + ', dataset = ' + job
         print 'Configuration :'
