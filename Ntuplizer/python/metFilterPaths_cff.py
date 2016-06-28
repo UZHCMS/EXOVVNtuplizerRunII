@@ -16,6 +16,18 @@ Flag_trackingFailureFilter = cms.Path(goodVertices + trackingFailureFilter)
 Flag_eeBadScFilter = cms.Path(eeBadScFilter)
 Flag_ecalLaserCorrFilter = cms.Path(ecalLaserCorrFilter)
 Flag_trkPOGFilters = cms.Path(trkPOGFilters)
+
+# NEW ICHEP!! *Not added to All_METFilters
+    
+Flag_CSCTightHaloTrkMuUnvetoFilter = cms.Path(CSCTightHaloTrkMuUnvetoFilter)
+Flag_CSCTightHalo2015Filter = cms.Path(CSCTightHalo2015Filter)
+Flag_globalTightHalo2016Filter = cms.Path(globalTightHalo2016Filter)
+Flag_globalSuperTightHalo2016Filter = cms.Path(globalSuperTightHalo2016Filter)
+Flag_HcalStripHaloFilter = cms.Path(HcalStripHaloFilter)
+Flag_chargedHadronTrackResolutionFilter = cms.Path(chargedHadronTrackResolutionFilter)
+Flag_muonBadTrackFilter = cms.Path(muonBadTrackFilter)
+
+
 # and the sub-filters
 Flag_trkPOG_manystripclus53X = cms.Path(~manystripclus53X)
 Flag_trkPOG_toomanystripclus53X = cms.Path(~toomanystripclus53X)

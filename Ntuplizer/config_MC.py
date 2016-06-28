@@ -26,7 +26,7 @@ options.maxEvents = 100
 
 
 #options.inputFiles = '/store/mc/RunIISpring16MiniAODv1/RadionTohhTohtatahbb_narrow_M-2000_13TeV-madgraph/MINIAODSIM/PUSpring16RAWAODSIM_80X_mcRun2_asymptotic_2016_v3-v1/70000/B0C98A71-791E-E611-9952-00259073E4E8.root'
-options.inputFiles = '/store/mc/RunIISpring16MiniAODv1/RadionToWWToWlepWhad_width0p3_M-3000_TuneCUETP8M1_13TeV-madgraph-pythia8/MINIAODSIM/PUSpring16RAWAODSIM_80X_mcRun2_asymptotic_2016_v3-v1/50000/20BB570E-2F16-E611-BF25-02163E015F8E.root'
+options.inputFiles = '/store/mc/RunIISpring16MiniAODv2/ZprimeToWW_narrow_M-800_13TeV-madgraph/MINIAODSIM/PUSpring16RAWAODSIM_80X_mcRun2_asymptotic_2016_miniAODv2_v0-v1/60000/2C6DE685-3226-E611-B6B5-842B2B766849.root'
 #options.inputFiles = '/store/mc/RunIISpring16MiniAODv2/WJetsToQQ_HT-600ToInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/PUSpring16_80X_mcRun2_asymptotic_2016_miniAODv2_v0-v1/30000/0EA1D6CA-931A-E611-BFCD-BCEE7B2FE01D.root'
 #options.inputFiles = 'dcap://t3se01.psi.ch:22125//pnfs/psi.ch/cms/trivcat/store/mc/RunIIFall15MiniAODv2/WprimeToWhToWhadhbb_narrow_M-1000_13TeV-madgraph/MINIAODSIM/PU25nsData2015v1_76X_mcRun2_asymptotic_v12-v1/00000/8EE77064-42B8-E511-8BA1-003048895D40.root'
 #options.inputFiles = 'xroot://t3dcachedb.psi.ch:1094//pnfs/psi.ch/cms/trivcat/store/user/cgalloni/RunII/RadionTohhTohtatahbb_narrow_M-1000_13TeV-madgraph/MiniAOD_TauBoosted_v0667_maxDepth100_jetPt100/miniAOD_4.root'
@@ -554,6 +554,14 @@ if config["DOHLTFILTERS"]:
  process.load('CommonTools.RecoAlgos.HBHENoiseFilterResultProducer_cfi')
  process.HBHENoiseFilterResultProducer.minZeros = cms.int32(99999)
  process.HBHENoiseFilterResultProducer.IgnoreTS4TS5ifJetInLowBVRegion=cms.bool(False) 
+ ##___________________________BadChargedCandidate_Noise_Filter________________________________|| 
+ process.load('Configuration.StandardSequences.Services_cff')
+ process.load('RecoMET.METFilters.BadChargedCandidateFilter_cfi')
+ # process.load('EXOVVNtuplizerRunII.Ntuplizer.BadChargedCandidateFilter_cfi')
+ process.BadChargedCandidateFilter.muons = cms.InputTag("slimmedMuons")
+ process.BadChargedCandidateFilter.PFCandidates = cms.InputTag("packedPFCandidates")
+ process.BadChargedCandidateFilter.debug = cms.bool(False)
+ process.BadChargedCandidateSequence = cms.Sequence (process.BadChargedCandidateFilter)
 
 ####### Ntuplizer initialization ##########
 jetsAK4 = "slimmedJets"
@@ -766,6 +774,15 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     noiseFilterSelection_eeBadScFilter = cms.string('Flag_eeBadScFilter'),
     noiseFilterSelection_ecalLaserCorrFilter = cms.string('Flag_ecalLaserCorrFilter'),
     noiseFilterSelection_trkPOGFilters = cms.string('Flag_trkPOGFilters'),
+    
+    #New for ICHEP 2016
+    noiseFilterSelection_CSCTightHaloTrkMuUnvetoFilter = cms.string('Flag_CSCTightHaloTrkMuUnvetoFilter'),
+    noiseFilterSelection_globalTightHalo2016Filter = cms.string('Flag_globalTightHalo2016Filter'),
+    noiseFilterSelection_globalSuperTightHalo2016Filter = cms.string('Flag_globalSuperTightHalo2016Filter'),
+    noiseFilterSelection_HcalStripHaloFilter = cms.string('Flag_HcalStripHaloFilter'),
+    noiseFilterSelection_chargedHadronTrackResolutionFilter = cms.string('Flag_chargedHadronTrackResolutionFilter'),
+    noiseFilterSelection_muonBadTrackFilter = cms.string('Flag_muonBadTrackFilter'),
+    
     # and the sub-filters
     noiseFilterSelection_trkPOG_manystripclus53X = cms.string('Flag_trkPOG_manystripclus53X'),
     noiseFilterSelection_trkPOG_toomanystripclus53X = cms.string('Flag_trkPOG_toomanystripclus53X'),
@@ -779,4 +796,5 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
 process.p = cms.Path()
 if config["DOHLTFILTERS"]:
  process.p += process.HBHENoiseFilterResultProducer
+ process.p += process.BadChargedCandidateSequence
 process.p += process.ntuplizer

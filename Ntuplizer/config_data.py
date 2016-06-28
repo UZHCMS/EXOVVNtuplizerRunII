@@ -568,6 +568,15 @@ if config["DOHLTFILTERS"]:
  process.load('CommonTools.RecoAlgos.HBHENoiseFilterResultProducer_cfi')
  process.HBHENoiseFilterResultProducer.minZeros = cms.int32(99999)
  process.HBHENoiseFilterResultProducer.IgnoreTS4TS5ifJetInLowBVRegion=cms.bool(False) 
+ ##___________________________BadChargedCandidate_Noise_Filter________________________________|| 
+ process.load('Configuration.StandardSequences.Services_cff')
+ process.load('RecoMET.METFilters.BadChargedCandidateFilter_cfi')
+ # process.load('EXOVVNtuplizerRunII.Ntuplizer.BadChargedCandidateFilter_cfi')
+ process.BadChargedCandidateFilter.muons = cms.InputTag("slimmedMuons")
+ process.BadChargedCandidateFilter.PFCandidates = cms.InputTag("packedPFCandidates")
+ process.BadChargedCandidateFilter.debug = cms.bool(False)
+ process.BadChargedCandidateSequence = cms.Sequence (process.BadChargedCandidateFilter)
+ 
 
 ####### Ntuplizer initialization ##########
 jetsAK4 = "slimmedJets"
@@ -782,6 +791,15 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     noiseFilterSelection_eeBadScFilter = cms.string('Flag_eeBadScFilter'),
     noiseFilterSelection_ecalLaserCorrFilter = cms.string('Flag_ecalLaserCorrFilter'),
     noiseFilterSelection_trkPOGFilters = cms.string('Flag_trkPOGFilters'),
+    
+    #New for ICHEP 2016
+    noiseFilterSelection_CSCTightHaloTrkMuUnvetoFilter = cms.string('Flag_CSCTightHaloTrkMuUnvetoFilter'),
+    noiseFilterSelection_globalTightHalo2016Filter = cms.string('Flag_globalTightHalo2016Filter'),
+    noiseFilterSelection_globalSuperTightHalo2016Filter = cms.string('Flag_globalSuperTightHalo2016Filter'),
+    noiseFilterSelection_HcalStripHaloFilter = cms.string('Flag_HcalStripHaloFilter'),
+    noiseFilterSelection_chargedHadronTrackResolutionFilter = cms.string('Flag_chargedHadronTrackResolutionFilter'),
+    noiseFilterSelection_muonBadTrackFilter = cms.string('Flag_muonBadTrackFilter'),
+    
     # and the sub-filters
     noiseFilterSelection_trkPOG_manystripclus53X = cms.string('Flag_trkPOG_manystripclus53X'),
     noiseFilterSelection_trkPOG_toomanystripclus53X = cms.string('Flag_trkPOG_toomanystripclus53X'),
@@ -795,4 +813,5 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
 process.p = cms.Path()
 if config["DOHLTFILTERS"]:
  process.p += process.HBHENoiseFilterResultProducer
+ process.p += process.BadChargedCandidateSequence
 process.p += process.ntuplizer

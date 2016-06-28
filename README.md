@@ -9,10 +9,11 @@ For Spring16(80):
 
 ```
 
-cmsrel CMSSW_8_0_7
-cd CMSSW_8_0_7
+cmsrel CMSSW_8_0_11
+cd CMSSW_8_0_11
 cmsenv
 git cms-init
+git cms-merge-topic -u cms-met:CMSSW_8_0_X-METFilterUpdate
 
 ```
 
