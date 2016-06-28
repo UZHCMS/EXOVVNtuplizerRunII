@@ -1,5 +1,5 @@
 ####### Process initialization ##########
-
+#### To use with MC MiniAOD_v1 ####
 import FWCore.ParameterSet.Config as cms
 
 process = cms.Process("Ntuple")

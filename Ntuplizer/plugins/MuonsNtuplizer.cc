@@ -53,10 +53,10 @@ float MuonCorrPFIso(pat::Muon muon, bool highpt, edm::Handle<pat::TauCollection>
 	if ( dR < dRmin &&
 		tau->pt()>20 && 
 		fabs(tau->eta())<2.4 && 
-	     tau->tauID("decayModeFindingNewDMs")>0.5 // && 
+	     tau->tauID("decayModeFindingNewDMs")>0.5 && 
 	     // tau->tauID("againstMuonLoose")>0.5 //&& 
-		// tau->tauID("againstElectronLoose")>0.5 && 
-		// tau->tauID("byVLooseIsolationMVA3newDMwoLT")>0.5
+	     // tau->tauID("againstElectronLoose")>0.5 && 
+	     tau->tauID("byVLooseIsolationMVArun2v1PWnewDMwLT")>0.5
 	     ) {
 		  matchedTau = tau;
 		  dRmin = dR;
