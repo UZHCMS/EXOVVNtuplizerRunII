@@ -269,14 +269,12 @@ if opts.copyfiles:
    checkdir = "ls -l " + newdir + "/config"
    status,cmd_out = commands.getstatusoutput(checkdir)
    if status: 
-     cmd = "gfal-mkdir srm://t3se01.psi.ch:8443/srm/managerv2?SFN=%s"%(newdir+"/config")
+     # cmd = "gfal-mkdir srm://t3se01.psi.ch:8443/srm/managerv2?SFN=%s"%(newdir+"/config")
      cmd = "srmmkdir srm://t3se01.psi.ch/%s"%(newdir+"/config") #No gFAL!
      # cmd = "env -i X509_USER_PROXY=~/.x509up_u`id -u` gfal-mkdir -p gsiftp://t3se01.psi.ch%s" %(newdir)
      print cmd
      os.system(cmd)
-     # cmd = "env -i X509_USER_PROXY=~/.x509up_u`id -u` gfal-mkdir -p gsiftp://t3se01.psi.ch%s" %(newdir+"/config")
-     print cmd
-     os.system(cmd)
+     
    else:
      cmd = "uberftp t3se01.psi.ch 'ls %s'" %(newdir+"/config")
      ls_la = commands.getoutput(cmd)
@@ -288,7 +286,7 @@ if opts.copyfiles:
        b = a.split(" ")
        status = os.path.exists(newdir + "/config/" + b[-1:][0].strip('\r'))
        if status:
-         cmd = "gfal-rm srm://t3se01.psi.ch:8443/srm/managerv2?SFN=%s"%(newdir + "/config/" + b[-1:][0].strip('\r'))
+         # cmd = "gfal-rm srm://t3se01.psi.ch:8443/srm/managerv2?SFN=%s"%(newdir + "/config/" + b[-1:][0].strip('\r'))
          cmd = "srm-rm srm://t3se01.psi.ch%s"%(newdir + "/config/" + b[-1:][0].strip('\r')) #No gFAL!
          os.system(cmd)
    
@@ -325,16 +323,16 @@ if opts.copyfiles:
    for j in jobsdir:
       jobid = j.rsplit("-",1)[1]
       # inputpath = "srm://t3se01.psi.ch:8443/srm/managerv2?SFN="+j+"/"+outfile
-     #  outputpath = "srm://t3se01.psi.ch:8443/srm/managerv2?SFN=%s"%(newdir+"/"+prefix+"_"+jobid+".root")
+      # outputpath = "srm://t3se01.psi.ch:8443/srm/managerv2?SFN=%s"%(newdir+"/"+prefix+"_"+jobid+".root")
       inputpath = "root://t3dcachedb.psi.ch:1094//"+j+"/"+outfile #USE XROOTD!!
       outputpath = "root://t3dcachedb.psi.ch:1094//%s"%(newdir+"/"+prefix+"_"+jobid+".root") #USE XROOTD!!
       checkfile = "ls -l %s"%(newdir+"/"+prefix+"_"+jobid+".root") 
       status,cmd_out = commands.getstatusoutput(checkfile)
       if not(status): 
-         cmd = "gfal-rm %s"%(outputpath)
+         # cmd = "gfal-rm %s"%(outputpath)
          cmd = "srmrm %s"%(outputpath)
-	 print cmd
-	 os.system(cmd)
+         print cmd
+         os.system(cmd)
       # cmd = "gfal-copy %s %s" %(inputpath,outputpath)
       cmd = "xrdcp -d 1 %s %s -f" %(inputpath,outputpath)#TEST
       print cmd
