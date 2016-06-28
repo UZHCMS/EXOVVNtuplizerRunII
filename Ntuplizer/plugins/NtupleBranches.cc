@@ -532,6 +532,14 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch("passFilter_TrkPOG_toomanystrip"  ,&passFilter_TrkPOG_toomanystrip_ ,"passFilter_TrkPOG_toomanystrip_/O");
     tree_->Branch("passFilter_TrkPOG_logError"      ,&passFilter_TrkPOG_logError_     ,"passFilter_TrkPOG_logError_/O");
     tree_->Branch("passFilter_METFilters"           ,&passFilter_METFilters_          ,"passFilter_METFilters_/O");
+    
+     //NEW FOR ICHEP
+    tree_->Branch("passFilter_CSCTightHaloTrkMuUnvetoFilter", &passFilter_CSCTightHaloTrkMuUnvetoFilter_   ,"passFilter_CSCTightHaloTrkMuUnvetoFilter_/O");
+    tree_->Branch("passFilter_globalTightHalo2016"          , &passFilter_globalTightHalo2016_             ,"passFilter_globalTightHalo2016_/O");
+    tree_->Branch("passFilter_HcalStripHalo"                , &passFilter_HcalStripHalo_                   ,"passFilter_HcalStripHalo_/O");
+    tree_->Branch("passFilter_chargedHadronTrackResolution" , &passFilter_chargedHadronTrackResolution_    ,"passFilter_chargedHadronTrackResolution_/O");
+    tree_->Branch("passFilter_muonBadTrack"                 , &passFilter_muonBadTrack_                    ,"passFilter_muonBadTrack_/O");
+    
   } //do HltFilters
 
   if (runFlags["doMissingEt"]) {
@@ -1075,6 +1083,12 @@ void NtupleBranches::reset( void ){
   passFilter_TrkPOG_toomanystrip_   = false;
   passFilter_TrkPOG_logError_       = false;
   passFilter_METFilters_            = false;
+   //NEW FOR ICHEP
+  passFilter_CSCTightHaloTrkMuUnvetoFilter_   = false;
+  passFilter_globalTightHalo2016_             = false;
+  passFilter_HcalStripHalo_                   = false;
+  passFilter_chargedHadronTrackResolution_    = false;
+  passFilter_muonBadTrack_                    = false;
 
   /** MET */
   METraw_et.clear();	 
