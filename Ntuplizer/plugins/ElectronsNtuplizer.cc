@@ -76,11 +76,11 @@ float ElectronCorrPFIso(pat::Electron ele, double Aeff03, float rho, edm::Handle
 				if ( dR < dRmin &&
 				     tau->pt()>20 && 
 				     fabs(tau->eta())<2.4 && 
-				     tau->tauID("decayModeFindingNewDMs")>0.5 // && 
+				     tau->tauID("decayModeFindingNewDMs")>0.5  && 
 				     // tau->tauID("againstMuonLoose")>0.5
 				     // && 
 				     // tau->tauID("againstElectronLoose")>0.5 && 
-				     // tau->tauID("byVLooseIsolationMVA3newDMwoLT")>0.5
+				     tau->tauID("byVLooseIsolationMVArun2v1PWnewDMwLT")>0.5
 				     ) {
 				  matchedTau = tau;
 				  dRmin = dR;
@@ -379,7 +379,7 @@ bool ElectronsNtuplizer::eleIDpassedBoosted(std::string id, const pat::Electron 
 	      fabs(dz_) 	        < 0.41 &&			      
 	      expectedMissingInnerHits_ <= 2.000000 &&
 	      passConversionVeto_ 
-	      ) isVetoElectron = true;
+	      ) isLooseElectron = true;
 	  
 	  if( passConversionVeto_		   &&
 	      full5x5_sigmaIetaIeta_    < 0.0101 &&
