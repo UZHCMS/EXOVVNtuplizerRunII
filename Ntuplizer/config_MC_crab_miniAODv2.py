@@ -573,7 +573,7 @@ jetsAK10trimmed = ""
 jetsAK8Puppi = ""  
 
 METS = "slimmedMETs"
-if config["DOMETRECLUSTERIN"]: jetsAK4 = "selectedPatJets"
+if config["DOMETRECLUSTERING"]: jetsAK4 = "selectedPatJets"
 if config["USENOHF"]: METS = "slimmedMETsNoHF"  
 
 ##___________________ MET significance and covariance matrix ______________________##
