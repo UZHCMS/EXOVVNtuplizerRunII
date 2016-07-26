@@ -80,12 +80,12 @@ def main():
     config.section_("Data")
     config.Data.inputDataset = None
     # config.Data.inputDBS = 'phys03' #to be commented in case of global#
-   # config.Data.splitting = 'FileBased'#
+    # config.Data.splitting = 'LumiBased'#
     config.Data.splitting = 'FileBased'
     config.Data.unitsPerJob = 1
     config.Data.ignoreLocality = True
     config.Data.publication = False    
-    config.Data.outLFNDirBase = '/store/user/cgalloni/Ntuple_80_260716'
+    config.Data.outLFNDirBase = '/store/user/cgalloni/Ntuple_80_270716'
 
     config.section_("Site")
     config.Site.storageSite = 'T2_CH_CSCS'
