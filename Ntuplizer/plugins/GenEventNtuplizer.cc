@@ -1,9 +1,10 @@
 #include "../interface/GenEventNtuplizer.h"
 
 //===================================================================================================================
-GenEventNtuplizer::GenEventNtuplizer( std::vector< edm::EDGetTokenT< GenEventInfoProduct > > tokens, NtupleBranches* nBranches )
+GenEventNtuplizer::GenEventNtuplizer( std::vector< edm::EDGetTokenT< GenEventInfoProduct > > tokens, NtupleBranches* nBranches,  std::vector< edm::EDGetTokenT< LHEEventProduct > > tokens_lhe )
    : CandidateNtuplizer( nBranches )
    , geneventToken_( tokens[0] )
+   , lheEventProductToken_( tokens_lhe[0])
 {
 
 }
@@ -28,4 +29,33 @@ void GenEventNtuplizer::fillBranches( edm::Event const & event, const edm::Event
   nBranches_->PDF_id.push_back((geneventInfo_->pdf()->id).first);
   nBranches_->PDF_id.push_back((geneventInfo_->pdf()->id).second);
   
+
+
+  //gen Parton HT
+  //taken from https://github.com/IHEP-CMS/BSMFramework/blob/CMSSW_805p1/BSM3G_TNT_Maker/src/EventInfoSelector.cc#L63-L80
+  //Definition taken from https://github.com/cmkuo/ggAnalysis/blob/a24edc65be23b402d761c75545192ce79cddf316/ggNtuplizer/plugins/ggNtuplizer_genParticles.cc#L201 
+  //Zaixing has a somehow different, but likely equivalent implementation
+  //https://github.com/zaixingmao/FSA/blob/miniAOD_dev_7_4_14/DataFormats/src/PATFinalStateEvent.cc#L153
+
+
+  event.getByToken(lheEventProductToken_, lheEventProduct_);
+  float lheHt_ = 0.;
+
+  if(lheEventProduct_.isValid()){
+  
+    const lhef::HEPEUP& lheEvent = lheEventProduct_->hepeup();
+    std::vector<lhef::HEPEUP::FiveVector> lheParticles = lheEvent.PUP;
+    size_t numParticles = lheParticles.size();
+    for(size_t idxParticle = 0; idxParticle < numParticles; ++idxParticle){
+      int absPdgId = TMath::Abs(lheEvent.IDUP[idxParticle]);
+      int status = lheEvent.ISTUP[idxParticle];
+      if(status == 1 && ((absPdgId >= 1 && absPdgId <= 6) || absPdgId == 21)){ // quarks and gluons
+	lheHt_ += TMath::Sqrt(TMath::Power(lheParticles[idxParticle][0], 2.) + TMath::Power(lheParticles[idxParticle][1], 2.)); // first entry is px, second py
+      } 
+    }
+  }
+  nBranches_->lheV_pt = 0.;
+  nBranches_->lheNj = 0;
+  nBranches_->lheHT = lheHt_;
+ 
 }

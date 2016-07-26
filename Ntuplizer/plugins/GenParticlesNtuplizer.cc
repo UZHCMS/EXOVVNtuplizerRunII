@@ -53,8 +53,6 @@ GenParticlesNtuplizer::~GenParticlesNtuplizer( void )
       nBranches_->genParticle_dau   .push_back( vDau  );      
     }
 
-    nBranches_->lheV_pt = 0.;
-    nBranches_->lheNj = 0;
-    nBranches_->lheHT = 0.;
+    
 }
 
