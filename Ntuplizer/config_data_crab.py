@@ -77,7 +77,7 @@ from Configuration.AlCa.GlobalTag import GlobalTag
 
 GT = ''
 if config["RUNONMC"]: GT = '80X_mcRun2_asymptotic_2016_miniAODv2'
-elif not(config["RUNONMC"]): GT = '80X_dataRun2_Prompt_v8'
+elif not(config["RUNONMC"]): GT = '80X_dataRun2_Prompt_ICHEP16JEC_v0'
 
 print "*************************************** GLOBAL TAG *************************************************" 
 print GT
@@ -636,10 +636,10 @@ jecLevelsAK8Puppi = []
 jecLevelsForMET = []
 
 if config["BUNCHSPACING"] == 25 and config["RUNONMC"] and config["SPRING16"]:
-   JECprefix = "Spring16_25nsV3"
+   JECprefix = "Spring16_25nsV6"
 elif config["BUNCHSPACING"] == 25 and not(config["RUNONMC"]) and config["SPRING16"]:
     print"these JEC do not exist yet"
-    JECprefix = "Spring16_25nsV3"
+    JECprefix = "Spring16_25nsV6"
 
 jecAK8chsUncFile = "%s_DATA_Uncertainty_AK8PFchs.txt"%(JECprefix)
 jecAK4chsUncFile = "%s_DATA_Uncertainty_AK4PFchs.txt"%(JECprefix)
@@ -765,6 +765,7 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     genparticles = cms.InputTag("prunedGenParticles"),
     PUInfo = cms.InputTag("addPileupInfo"),
     genEventInfo = cms.InputTag("generator"),
+    externallheProducer = cms.InputTag("externalLHEProducer"),
     HLT = cms.InputTag("TriggerResults","","HLT"),
     triggerobjects = cms.InputTag("selectedPatTrigger"),
     triggerprescales = cms.InputTag("patTrigger"),

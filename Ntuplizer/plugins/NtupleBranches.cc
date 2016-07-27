@@ -135,6 +135,7 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch( "mu_neutralHadIso"	      , &mu_neutralHadIso     	   );
     tree_->Branch( "mu_chargedHadIso"	      , &mu_chargedHadIso     	   );
     tree_->Branch( "mu_trackIso"	      , &mu_trackIso	      	   );
+    tree_->Branch( "mu_trackCorrIso"	      , &mu_trackCorrIso	   );
     tree_->Branch( "mu_d0"                    , &mu_d0  	      	   );
     tree_->Branch( "mu_dz"                    , &mu_dz  	      	   );
     tree_->Branch( "mu_bestTrack_pt"	      , &mu_bestTrack_pt      	   );
@@ -326,6 +327,10 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
       tree_->Branch( "jetAK4_genParton_pdgID" , &jetAK4_genParton_pdgID);
       tree_->Branch( "jetAK4_nbHadrons"       , &jetAK4_nbHadrons);
       tree_->Branch( "jetAK4_ncHadrons"       , &jetAK4_ncHadrons);
+      tree_->Branch( "jetAK4_jer_sf"          , &jetAK4_jer_sf);
+      tree_->Branch( "jetAK4_jer_sf_up"          , &jetAK4_jer_sf_up);
+      tree_->Branch( "jetAK4_jer_sf_down"          , &jetAK4_jer_sf_down);
+      tree_->Branch( "jetAK4_jer_sigma_pt"          , &jetAK4_jer_sigma_pt);
     }
 
   } //doAK4Jets
@@ -369,8 +374,19 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
       tree_->Branch( "jetAK8_genParton_pdgID" , &jetAK8_genParton_pdgID);
       tree_->Branch( "jetAK8_nbHadrons"       , &jetAK8_nbHadrons);
       tree_->Branch( "jetAK8_ncHadrons"       , &jetAK8_ncHadrons);
+
+      tree_->Branch( "jetAK8_jer_sf"          , &jetAK8_jer_sf);
+      tree_->Branch( "jetAK8_jer_sf_up"          , &jetAK8_jer_sf_up);
+      tree_->Branch( "jetAK8_jer_sf_down"          , &jetAK8_jer_sf_down);
+      tree_->Branch( "jetAK8_jer_sigma_pt"          , &jetAK8_jer_sigma_pt);
+     
+      tree_->Branch( "jetAK8Puppi_jer_sf"          , &jetAK8Puppi_jer_sf);
+      tree_->Branch( "jetAK8Puppi_jer_sf_up"          , &jetAK8Puppi_jer_sf_up);
+      tree_->Branch( "jetAK8Puppi_jer_sf_down"          , &jetAK8Puppi_jer_sf_down);
+      tree_->Branch( "jetAK8Puppi_jer_sigma_pt"          , &jetAK8Puppi_jer_sigma_pt);
+
+      
     }
-    
     if (runFlags["doHbbTag"]) {
       tree_->Branch( "jetAK8_Hbbtag"	     , &jetAK8_Hbbtag		 );
     }
@@ -710,6 +726,7 @@ void NtupleBranches::reset( void ){
   mu_neutralHadIso.clear();
   mu_chargedHadIso.clear();
   mu_trackIso.clear();
+  mu_trackCorrIso.clear();
   mu_d0.clear();
   mu_dz.clear();
   mu_bestTrack_pt.clear();
@@ -889,6 +906,12 @@ void NtupleBranches::reset( void ){
   jetAK4_vtxNtracks.clear();
   jetAK4_vtx3DVal.clear();
   jetAK4_vtx3DSig.clear();
+  
+  jetAK4_jer_sf.clear(); 
+  jetAK4_jer_sf_up.clear(); 
+  jetAK4_jer_sf_down.clear(); 
+  jetAK4_jer_sigma_pt.clear(); 
+
 
   /** AK8 jets */  
   jetAK8_N = 0;
@@ -931,6 +954,16 @@ void NtupleBranches::reset( void ){
   jetAK8_tau1.clear();
   jetAK8_tau2.clear();
   jetAK8_tau3.clear();    
+
+  jetAK8Puppi_jer_sf.clear(); 
+  jetAK8Puppi_jer_sf_up.clear(); 
+  jetAK8Puppi_jer_sf_down.clear(); 
+  jetAK8Puppi_jer_sigma_pt.clear(); 
+  jetAK8_jer_sf.clear(); 
+  jetAK8_jer_sf_up.clear(); 
+  jetAK8_jer_sf_down.clear(); 
+  jetAK8_jer_sigma_pt.clear(); 
+
 
   /** AK8 jets pruned */  
   jetAK8_pruned_mass.clear();

@@ -619,9 +619,9 @@ jecLevelsAK8Puppi = []
 jecLevelsForMET = []
 
 if config["BUNCHSPACING"] == 25 and config["RUNONMC"] and config["SPRING16"]:
-   JECprefix = "Spring16_25nsV3"
+   JECprefix = "Spring16_25nsV6"
 elif config["BUNCHSPACING"] == 25 and not(config["RUNONMC"]) and config["SPRING16"]:
-   JECprefix = "Spring16_25nsV3"
+   JECprefix = "Spring16_25nsV6"
 
 jecAK8chsUncFile = "JEC/%s_MC_Uncertainty_AK8PFchs.txt"%(JECprefix)
 jecAK4chsUncFile = "JEC/%s_MC_Uncertainty_AK4PFchs.txt"%(JECprefix)
@@ -694,7 +694,19 @@ if config["CORRMETONTHEFLY"]:
 #                        filterParams = pfJetIDSelector.clone(),
 #                        src = cms.InputTag(jetsAK8)
 #                        )
-                                                                                      
+                          
+
+######## JER ########
+JERprefix = "Spring16_25nsV6"
+jerAK8chsFile_res = "JER/%s_MC_PtResolution_AK8PFchs.txt"%(JERprefix)
+jerAK4chsFile_res = "JER/%s_MC_PtResolution_AK4PFchs.txt"%(JERprefix)
+jerAK8PuppiFile_res = "JER/%s_MC_PtResolution_AK8PFPuppi.txt"%(JERprefix)
+jerAK4PuppiFile_res = "JER/%s_MC_PtResolution_AK4PFPuppi.txt"%(JERprefix)
+jerAK8chsFile_sf = "JER/%s_MC_SF_AK8PFchs.txt"%(JERprefix)
+jerAK4chsFile_sf = "JER/%s_MC_SF_AK4PFchs.txt"%(JERprefix)
+jerAK8PuppiFile_sf = "JER/%s_MC_SF_AK8PFPuppi.txt"%(JERprefix)
+jerAK4PuppiFile_sf = "JER/%s_MC_SF_AK4PFPuppi.txt"%(JERprefix)
+     
 ################## Ntuplizer ###################
 process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     runOnMC	      = cms.bool(config["RUNONMC"]),
@@ -747,6 +759,7 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     genparticles = cms.InputTag("prunedGenParticles"),
     PUInfo = cms.InputTag("slimmedAddPileupInfo"),
     genEventInfo = cms.InputTag("generator"),
+    externallheProducer = cms.InputTag("externalLHEProducer"),
     HLT = cms.InputTag("TriggerResults","","HLT"),
     triggerobjects = cms.InputTag("selectedPatTrigger"),
     triggerprescales = cms.InputTag("patTrigger"),
@@ -758,6 +771,15 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     jecAK4chsPayloadNames = cms.vstring( jecLevelsAK4chs ),
     jecAK4chsUnc = cms.string( jecAK4chsUncFile ),
     jecpath = cms.string(''),
+    jerAK8chs_res_PayloadNames = cms.string( jerAK8chsFile_res ),
+    jerAK4chs_res_PayloadNames = cms.string( jerAK4chsFile_res ),
+    jerAK8Puppi_res_PayloadNames = cms.string(  jerAK8PuppiFile_res ),
+    jerAK4Puppi_res_PayloadNames = cms.string(  jerAK4PuppiFile_res ),
+    jerAK8chs_sf_PayloadNames = cms.string( jerAK8chsFile_sf ),
+    jerAK4chs_sf_PayloadNames = cms.string( jerAK4chsFile_sf ),
+    jerAK8Puppi_sf_PayloadNames = cms.string(  jerAK8PuppiFile_sf ),
+    jerAK4Puppi_sf_PayloadNames = cms.string(  jerAK4PuppiFile_sf ),
+
     
     ## Noise Filters ###################################
     # defined here: https://github.com/cms-sw/cmssw/blob/CMSSW_7_4_X/PhysicsTools/PatAlgos/python/slimming/metFilterPaths_cff.py
