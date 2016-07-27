@@ -52,7 +52,7 @@ def main():
     config.JobType.pluginName = 'Analysis'
     config.JobType.psetName = options.config
     config.JobType.allowUndistributedCMSSW = True
-   # config.JobType.pyCfgParams = ['DataProcessing=MC25ns_MiniAODv2','lheLabel=externalLHEProducer']
+    # config.JobType.pyCfgParams = ['DataProcessing=MC25ns_MiniAODv2','lheLabel=externalLHEProducer']
     config.JobType.inputFiles = [
                                  './JEC/Spring16_25nsV6_MC_L1FastJet_AK8PFchs.txt',
                                  './JEC/Spring16_25nsV6_MC_L2Relative_AK8PFchs.txt',
@@ -80,7 +80,8 @@ def main():
     config.section_("Data")
     config.Data.inputDataset = None
     # config.Data.inputDBS = 'phys03' #to be commented in case of global#
-    # config.Data.splitting = 'LumiBased'#
+    #config.Data.splitting = 'LumiBased'#
+    #config.Data.unitsPerJob = 10
     config.Data.splitting = 'FileBased'
     config.Data.unitsPerJob = 1
     config.Data.ignoreLocality = True
@@ -89,8 +90,8 @@ def main():
 
     config.section_("Site")
     config.Site.storageSite = 'T2_CH_CSCS'
-
-
+    config.Site.blacklist=['T2_US_Nebraska','T2_US_Wisconsin','T2_FR_IPHC','T2_EE_Estonia','T2_DE_RWTH']
+    #config.Site.whitelist=['T2_US_Nebraska','T2_US_Wisconsin','T2_FR_IPHC','T2_EE_Estonia',
     print 'Using config ' + options.config
     print 'Writing to directory ' + options.dir
 
@@ -119,9 +120,9 @@ def main():
 
         ptbin = job.split('/')[1]
         cond = job.split('/')[2]
-        config.General.requestName =  ptbin 
+        config.General.requestName =  ptbin + '_v15p9'
         config.Data.inputDataset = job
-        config.Data.outputDatasetTag = ptbin
+        config.Data.outputDatasetTag = ptbin + '_v15p9'
         print "ptbin :%s and cond: %s " %(ptbin, cond)
         print 'Submitting ' + config.General.requestName + ', dataset = ' + job
         print 'Configuration :'
