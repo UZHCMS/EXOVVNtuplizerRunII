@@ -53,7 +53,7 @@ def main():
     config.JobType.allowUndistributedCMSSW = True
    # config.JobType.pyCfgParams = ['DataProcessing=MC25ns_MiniAODv2','lheLabel=externalLHEProducer']
     config.JobType.inputFiles = [
-        './JSON/Cert_271036-276811_13TeV_PromptReco_Collisions16_JSON.txt',
+        './JSON/Cert_271036-277148_13TeV_PromptReco_Collisions16_JSON_NoL1T.txt',
         './JEC/Spring16_25nsV6_DATA_Uncertainty_AK8PFchs.txt',
         './JEC/Spring16_25nsV6_DATA_Uncertainty_AK4PFchs.txt',
         './JEC/Spring16_25nsV6_DATA_L1FastJet_AK8PFchs.txt', 
@@ -81,9 +81,11 @@ def main():
     config.Data.ignoreLocality = True
     config.Data.publication = False    
     config.Data.outLFNDirBase = '/store/user/cgalloni/Ntuple_80_270716'
-    config.Data.lumiMask      = '/mnt/t3nfs01/data01/shome/cgalloni/RunII/CMSSW_8_0_11/src/EXOVVNtuplizerRunII/Ntuplizer/JSON/Cert_271036-276811_13TeV_PromptReco_Collisions16_JSON.txt'
+    config.Data.lumiMask      = '/mnt/t3nfs01/data01/shome/cgalloni/RunII/CMSSW_8_0_11/src/EXOVVNtuplizerRunII/Ntuplizer/JSON/Cert_271036-277148_13TeV_PromptReco_Collisions16_JSON_NoL1T.txt'
     config.section_("Site")
     config.Site.storageSite = 'T2_CH_CSCS'
+    config.Site.blacklist=['T2_US_Nebraska','T2_US_Wisconsin','T2_FR_IPHC','T2_EE_Estonia','T2_DE_RWTH']
+    #config.Site.whitelist=['T2_US_Nebraska','T2_US_Wisconsin','T2_FR_IPHC','T2_EE_Estonia',
 
 
     print 'Using config ' + options.config
@@ -115,9 +117,9 @@ def main():
         ptbin = job.split('/')[1]
         cond = job.split('/')[2]
         
-        config.General.requestName = ptbin +'_'+ cond 
+        config.General.requestName = ptbin +'_'+ cond +'_15p9fb'
         config.Data.inputDataset = job
-        config.Data.outputDatasetTag =  ptbin +'_'+ cond
+        config.Data.outputDatasetTag =  ptbin +'_'+ cond +'_15p9fb'
         print "ptbin :%s and cond: %s " %(ptbin, cond)
         print 'Submitting ' + config.General.requestName + ', dataset = ' + job
         print 'Configuration :'
