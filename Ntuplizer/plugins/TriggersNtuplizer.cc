@@ -83,7 +83,7 @@ bool TriggersNtuplizer::findTrigger( std::string trigName ){
        trigName.find("IsoMu24_eta2p1") != std::string::npos ||
        trigName.find("Mu45_eta2p1") != std::string::npos ||
        //trigName.find("Mu50_eta2p1") != std::string::npos ||
-       trigName.find("Mu50") != std::string::npos ||
+       trigName.find("HLT_Mu50_v") != std::string::npos ||
        trigName.find("Ele27_eta2p1_WPLoose") != std::string::npos ||
        trigName.find("HLT_Ele27_eta2p1_WP75_Gsf") != std::string::npos ||
        trigName.find("Ele23_CaloIdL_TrackIdL_IsoVL") != std::string::npos ||
@@ -105,6 +105,7 @@ bool TriggersNtuplizer::findTrigger( std::string trigName ){
        trigName.find("HLT_IsoMu27_v") != std::string::npos||
        trigName.find("HLT_IsoMu20_v") != std::string::npos||
        trigName.find("HLT_IsoMu24_v") != std::string::npos||
+       trigName.find("HLT_TkMu50_v") != std::string::npos||
        trigName.find("HLT_IsoTkMu18_v") != std::string::npos||
        trigName.find("HLT_IsoTkMu20_v") != std::string::npos||
        trigName.find("HLT_IsoTkMu22_v") != std::string::npos||

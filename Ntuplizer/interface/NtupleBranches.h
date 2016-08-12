@@ -159,6 +159,7 @@ public:
   std::vector<float>  	      mu_neutralHadIso	     	 ;
   std::vector<float>  	      mu_chargedHadIso	     	 ;
   std::vector<float>  	      mu_trackIso	         ;
+  std::vector<float>  	      mu_trackCorrIso	         ;
   std::vector<float>          mu_d0			 ;
   std::vector<float>          mu_dz			 ;
   std::vector<float>  	      mu_bestTrack_pt  	         ;
@@ -353,6 +354,11 @@ public:
   std::vector<float>              jetAK4_vtxNtracks    ;
   std::vector<float>              jetAK4_vtx3DVal      ;
   std::vector<float>              jetAK4_vtx3DSig      ; 
+  std::vector<float>              jetAK4_jer_sf        ; 
+  std::vector<float>              jetAK4_jer_sf_up     ; 
+  std::vector<float>              jetAK4_jer_sf_down   ; 
+  std::vector<float>              jetAK4_jer_sigma_pt  ; 
+
 
   /** AK8 jets */
   int 	        	      jetAK8_N                 ;
@@ -395,6 +401,12 @@ public:
   std::vector<float>  	      jetAK8_tau1              ;
   std::vector<float>  	      jetAK8_tau2              ;
   std::vector<float>  	      jetAK8_tau3              ; 
+  std::vector<float>              jetAK8_jer_sf        ; 
+  std::vector<float>              jetAK8_jer_sf_up     ; 
+  std::vector<float>              jetAK8_jer_sf_down   ; 
+  std::vector<float>              jetAK8_jer_sigma_pt  ; 
+
+
 
   /** AK8 jets pruned */     
   std::vector<float>  	      jetAK8_pruned_mass       ;
@@ -507,7 +519,13 @@ public:
   std::vector<float>  	      jetAK8_puppi_pruned_massCorr   ;
   std::vector<float>  	      jetAK8_puppi_softdrop_massCorr ;
   std::vector<float>  	      jetAK8_puppi_pruned_jec        ;
-  std::vector<float>  	      jetAK8_puppi_softdrop_jec      ;    	   
+  std::vector<float>  	      jetAK8_puppi_softdrop_jec      ;    
+
+  std::vector<float>              jetAK8Puppi_jer_sf        ; 
+  std::vector<float>              jetAK8Puppi_jer_sf_up     ; 
+  std::vector<float>              jetAK8Puppi_jer_sf_down   ; 
+  std::vector<float>              jetAK8Puppi_jer_sigma_pt  ; 
+	   
 
   /** AK4 genJets*/
   int			      genJetAK4_N               ;

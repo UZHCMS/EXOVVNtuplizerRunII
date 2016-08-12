@@ -26,6 +26,7 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
 	rhoToken_             	    (consumes<double>(iConfig.getParameter<edm::InputTag>("rho"))),
 	puinfoToken_          	    (consumes<std::vector<PileupSummaryInfo> >(iConfig.getParameter<edm::InputTag>("PUInfo"))),
 	geneventToken_        	    (consumes<GenEventInfoProduct>(iConfig.getParameter<edm::InputTag>("genEventInfo"))),     
+	lheEventProductToken_       (consumes<LHEEventProduct>(iConfig.getParameter<edm::InputTag>("externallheProducer"))),     
 	genparticleToken_     	    (consumes<reco::GenParticleCollection>(iConfig.getParameter<edm::InputTag>("genparticles"))),
 	
 	jetToken_             	    (consumes<pat::JetCollection>(iConfig.getParameter<edm::InputTag>("jets"))),
@@ -141,6 +142,22 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
     }
     jecAK4chsLabels.push_back( iConfig.getParameter<std::string>("jecAK4chsUnc") );
     
+  
+    std::vector<std::string> jerAK8chsFileLabels;
+    jerAK8chsFileLabels.push_back( iConfig.getParameter<std::string>("jerAK8chs_res_PayloadNames") );
+    jerAK8chsFileLabels.push_back( iConfig.getParameter<std::string>("jerAK8chs_sf_PayloadNames") );
+    std::vector<std::string> jerAK4chsFileLabels;
+    jerAK4chsFileLabels.push_back( iConfig.getParameter<std::string>("jerAK4chs_res_PayloadNames") );
+     jerAK4chsFileLabels.push_back( iConfig.getParameter<std::string>("jerAK4chs_sf_PayloadNames") );
+     std::vector<std::string> jerAK8PuppiFileLabels;
+    jerAK8PuppiFileLabels.push_back( iConfig.getParameter<std::string>("jerAK8Puppi_res_PayloadNames") );
+    jerAK8PuppiFileLabels.push_back( iConfig.getParameter<std::string>("jerAK8Puppi_sf_PayloadNames") );
+
+    std::vector<std::string> jerAK4PuppiFileLabels;
+    jerAK4PuppiFileLabels.push_back( iConfig.getParameter<std::string>("jerAK4Puppi_res_PayloadNames") );
+    jerAK4PuppiFileLabels.push_back( iConfig.getParameter<std::string>("jerAK4Puppi_sf_PayloadNames") );
+
+
     nTuplizers_["jets"] = new JetsNtuplizer( jetTokens      , 
                                              jecAK4chsLabels, 
 					     jecAK8Labels   , 
@@ -150,7 +167,12 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
 					     rhoToken_      , 
 					     vtxToken_      , 
 					     nBranches_     ,
-                                             runFlags	   ); 
+                                             runFlags	    ,
+					     jerAK8chsFileLabels,
+					     jerAK4chsFileLabels,
+					     jerAK8PuppiFileLabels,
+					     jerAK4PuppiFileLabels
+					     ); 
   }
 
   /*=======================================================================================*/
@@ -263,7 +285,9 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
     if (runFlags["doGenEvent"]) {
       std::vector<edm::EDGetTokenT< GenEventInfoProduct > > geneTokens;
       geneTokens.push_back( geneventToken_ );
-      nTuplizers_["genEvent"] = new GenEventNtuplizer( geneTokens, nBranches_ );
+      std::vector<edm::EDGetTokenT<  LHEEventProduct > > lheTokens;
+      lheTokens.push_back( lheEventProductToken_);
+      nTuplizers_["genEvent"] = new GenEventNtuplizer( geneTokens, nBranches_ , lheTokens);
     }
   }
 }

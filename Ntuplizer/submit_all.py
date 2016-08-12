@@ -52,21 +52,27 @@ def main():
     config.JobType.pluginName = 'Analysis'
     config.JobType.psetName = options.config
     config.JobType.allowUndistributedCMSSW = True
-   # config.JobType.pyCfgParams = ['DataProcessing=MC25ns_MiniAODv2','lheLabel=externalLHEProducer']
+    # config.JobType.pyCfgParams = ['DataProcessing=MC25ns_MiniAODv2','lheLabel=externalLHEProducer']
     config.JobType.inputFiles = [
-                                 './JEC/Spring16_25nsV3_MC_L1FastJet_AK8PFchs.txt',
-                                 './JEC/Spring16_25nsV3_MC_L2Relative_AK8PFchs.txt',
-                                 './JEC/Spring16_25nsV3_MC_L3Absolute_AK8PFchs.txt',
-                                 './JEC/Spring16_25nsV3_MC_L2Relative_AK8PFPuppi.txt',
-                                 './JEC/Spring16_25nsV3_MC_L3Absolute_AK8PFPuppi.txt',
-                                 './JEC/Spring16_25nsV3_MC_L1FastJet_AK4PFchs.txt', 
-                                 './JEC/Spring16_25nsV3_MC_L2Relative_AK4PFchs.txt', 
-                                 './JEC/Spring16_25nsV3_MC_L3Absolute_AK4PFchs.txt',
-                                 './JEC/Spring16_25nsV3_MC_Uncertainty_AK4PFchs.txt',
-                                 './JEC/Spring16_25nsV3_MC_Uncertainty_AK8PFchs.txt',
+                                 './JEC/Spring16_25nsV6_MC_L1FastJet_AK8PFchs.txt',
+                                 './JEC/Spring16_25nsV6_MC_L2Relative_AK8PFchs.txt',
+                                 './JEC/Spring16_25nsV6_MC_L3Absolute_AK8PFchs.txt',
+                                 './JEC/Spring16_25nsV6_MC_L2Relative_AK8PFPuppi.txt',
+                                 './JEC/Spring16_25nsV6_MC_L3Absolute_AK8PFPuppi.txt',
+                                 './JEC/Spring16_25nsV6_MC_L1FastJet_AK4PFchs.txt', 
+                                 './JEC/Spring16_25nsV6_MC_L2Relative_AK4PFchs.txt', 
+                                 './JEC/Spring16_25nsV6_MC_L3Absolute_AK4PFchs.txt',
+                                 './JEC/Spring16_25nsV6_MC_Uncertainty_AK4PFchs.txt',
+                                 './JEC/Spring16_25nsV6_MC_Uncertainty_AK8PFchs.txt',
+                                 './JER/Spring16_25nsV6_MC_PtResolution_AK8PFchs.txt',
+                                 './JER/Spring16_25nsV6_MC_PtResolution_AK4PFchs.txt',
+                                 './JER/Spring16_25nsV6_MC_PtResolution_AK8PFPuppi.txt',
+                                 './JER/Spring16_25nsV6_MC_PtResolution_AK4PFPuppi.txt',
+                                 './JER/Spring16_25nsV6_MC_SF_AK8PFchs.txt',
+                                 './JER/Spring16_25nsV6_MC_SF_AK4PFchs.txt',
+                                 './JER/Spring16_25nsV6_MC_SF_AK8PFPuppi.txt',
+                                 './JER/Spring16_25nsV6_MC_SF_AK4PFPuppi.txt',
                                  './JSON/Cert_246908-260627_13TeV_PromptReco_Collisions15_25ns_JSON_Silver_v2.txt',
-                                 './JSON/Cert_246908-260627_13TeV_PromptReco_Collisions15_25ns_JSON_Silver_v2.txt',
-                                 './JSON/JSON_Run2015D_PromptReco-v4.txt',
                                  './JSON/JSON_Run2015D_PromptReco-v4.txt',
                                  './JSON/Cert_271036-273450_13TeV_PromptReco_Collisions16_JSON_NoL1T.txt'
                                ]
@@ -74,16 +80,18 @@ def main():
     config.section_("Data")
     config.Data.inputDataset = None
     # config.Data.inputDBS = 'phys03' #to be commented in case of global#
-    config.Data.splitting = 'FileBased'#
-    config.Data.unitsPerJob = 5
-    config.Data.ignoreLocality = False
+    #config.Data.splitting = 'LumiBased'#
+    #config.Data.unitsPerJob = 10
+    config.Data.splitting = 'FileBased'
+    config.Data.unitsPerJob = 1
+    config.Data.ignoreLocality = True
     config.Data.publication = False    
-    config.Data.outLFNDirBase = '/store/user/cgalloni/Ntuple_80_280616'
+    config.Data.outLFNDirBase = '/store/user/cgalloni/Ntuple_80_270716'
 
     config.section_("Site")
-    config.Site.storageSite = 'T3_CH_PSI'
-
-
+    config.Site.storageSite = 'T2_CH_CSCS'
+    config.Site.blacklist=['T2_US_Nebraska','T2_US_Wisconsin','T2_FR_IPHC','T2_EE_Estonia','T2_DE_RWTH']
+    #config.Site.whitelist=['T2_US_Nebraska','T2_US_Wisconsin','T2_FR_IPHC','T2_EE_Estonia',
     print 'Using config ' + options.config
     print 'Writing to directory ' + options.dir
 
@@ -112,9 +120,9 @@ def main():
 
         ptbin = job.split('/')[1]
         cond = job.split('/')[2]
-        config.General.requestName =  ptbin 
+        config.General.requestName =  ptbin + '_v15p9'
         config.Data.inputDataset = job
-        config.Data.outputDatasetTag = ptbin 
+        config.Data.outputDatasetTag = ptbin + '_v15p9'
         print "ptbin :%s and cond: %s " %(ptbin, cond)
         print 'Submitting ' + config.General.requestName + ', dataset = ' + job
         print 'Configuration :'

@@ -16,7 +16,12 @@
 #include "DataFormats/PatCandidates/interface/PackedTriggerPrescales.h"
 #include "../interface/NtupleBranches.h"
 
-
+#include "SimDataFormats/GeneratorProducts/interface/GenEventInfoProduct.h"
+#include "SimDataFormats/GeneratorProducts/interface/GenRunInfoProduct.h"
+#include "FWCore/Framework/interface/ConsumesCollector.h"
+#include "SimDataFormats/GeneratorProducts/interface/LHEEventProduct.h"
+#include "SimDataFormats/GeneratorProducts/interface/LHERunInfoProduct.h"
+#include "GeneratorInterface/LHEInterface/interface/LHEEvent.h"
 class NtupleBranches;
 class CandidateNtuplizer;
 
@@ -47,7 +52,7 @@ private:
   edm::EDGetTokenT<double>                                  rhoToken_           ;
   edm::EDGetTokenT< std::vector<PileupSummaryInfo> >        puinfoToken_        ;
   edm::EDGetTokenT< GenEventInfoProduct >                   geneventToken_      ;
-
+  edm::EDGetTokenT<LHEEventProduct>	                    lheEventProductToken_;
   
   edm::EDGetTokenT<reco::GenParticleCollection>             genparticleToken_   ;
   

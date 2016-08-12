@@ -53,20 +53,20 @@ def main():
     config.JobType.allowUndistributedCMSSW = True
    # config.JobType.pyCfgParams = ['DataProcessing=MC25ns_MiniAODv2','lheLabel=externalLHEProducer']
     config.JobType.inputFiles = [
-        './JSON/Cert_271036-275125_13TeV_PromptReco_Collisions16_JSON.txt',
-        './JEC/Spring16_25nsV3_DATA_Uncertainty_AK8PFchs.txt',
-        './JEC/Spring16_25nsV3_DATA_Uncertainty_AK4PFchs.txt',
-        './JEC/Spring16_25nsV3_DATA_L1FastJet_AK8PFchs.txt', 
-        './JEC/Spring16_25nsV3_DATA_L2Relative_AK8PFchs.txt',
-        './JEC/Spring16_25nsV3_DATA_L3Absolute_AK8PFchs.txt',
-        './JEC/Spring16_25nsV3_DATA_L2L3Residual_AK8PFchs.txt',
-        './JEC/Spring16_25nsV3_DATA_L2Relative_AK8PFPuppi.txt',
-        './JEC/Spring16_25nsV3_DATA_L3Absolute_AK8PFPuppi.txt',
-        './JEC/Spring16_25nsV3_DATA_L2L3Residual_AK8PFPuppi.txt',
-        './JEC/Spring16_25nsV3_DATA_L1FastJet_AK4PFchs.txt',
-        './JEC/Spring16_25nsV3_DATA_L2Relative_AK4PFchs.txt',
-        './JEC/Spring16_25nsV3_DATA_L3Absolute_AK4PFchs.txt',
-        './JEC/Spring16_25nsV3_DATA_L2L3Residual_AK4PFchs.txt',
+        './JSON/Cert_271036-277148_13TeV_PromptReco_Collisions16_JSON_NoL1T.txt',
+        './JEC/Spring16_25nsV6_DATA_Uncertainty_AK8PFchs.txt',
+        './JEC/Spring16_25nsV6_DATA_Uncertainty_AK4PFchs.txt',
+        './JEC/Spring16_25nsV6_DATA_L1FastJet_AK8PFchs.txt', 
+        './JEC/Spring16_25nsV6_DATA_L2Relative_AK8PFchs.txt',
+        './JEC/Spring16_25nsV6_DATA_L3Absolute_AK8PFchs.txt',
+        './JEC/Spring16_25nsV6_DATA_L2L3Residual_AK8PFchs.txt',
+        './JEC/Spring16_25nsV6_DATA_L2Relative_AK8PFPuppi.txt',
+        './JEC/Spring16_25nsV6_DATA_L3Absolute_AK8PFPuppi.txt',
+        './JEC/Spring16_25nsV6_DATA_L2L3Residual_AK8PFPuppi.txt',
+        './JEC/Spring16_25nsV6_DATA_L1FastJet_AK4PFchs.txt',
+        './JEC/Spring16_25nsV6_DATA_L2Relative_AK4PFchs.txt',
+        './JEC/Spring16_25nsV6_DATA_L3Absolute_AK4PFchs.txt',
+        './JEC/Spring16_25nsV6_DATA_L2L3Residual_AK4PFchs.txt',
         
 
 ]
@@ -76,14 +76,16 @@ def main():
     config.Data.inputDataset = None
     # config.Data.inputDBS = 'phys03' #to be commented in case of global#
     config.Data.splitting = 'LumiBased'#'LumiBased'#
-    config.Data.unitsPerJob = 50
-    #config.Data.runRange= "274443-275125"
+    config.Data.unitsPerJob = 20
+    #config.Data.runRange= "275125-275783"
     config.Data.ignoreLocality = True
     config.Data.publication = False    
-    config.Data.outLFNDirBase = '/store/user/cgalloni/Ntuple_80_280616'
-    config.Data.lumiMask      = '/mnt/t3nfs01/data01/shome/cgalloni/RunII/CMSSW_8_0_9/src/EXOVVNtuplizerRunII/Ntuplizer/JSON/Cert_271036-275125_13TeV_PromptReco_Collisions16_JSON.txt'
+    config.Data.outLFNDirBase = '/store/user/cgalloni/Ntuple_80_270716'
+    config.Data.lumiMask      = '/mnt/t3nfs01/data01/shome/cgalloni/RunII/CMSSW_8_0_11/src/EXOVVNtuplizerRunII/Ntuplizer/JSON/Cert_271036-277148_13TeV_PromptReco_Collisions16_JSON_NoL1T.txt'
     config.section_("Site")
-    config.Site.storageSite = 'T3_CH_PSI'
+    config.Site.storageSite = 'T2_CH_CSCS'
+    config.Site.blacklist=['T2_US_Nebraska','T2_US_Wisconsin','T2_FR_IPHC','T2_EE_Estonia','T2_DE_RWTH']
+    #config.Site.whitelist=['T2_US_Nebraska','T2_US_Wisconsin','T2_FR_IPHC','T2_EE_Estonia',
 
 
     print 'Using config ' + options.config
@@ -115,9 +117,9 @@ def main():
         ptbin = job.split('/')[1]
         cond = job.split('/')[2]
         
-        config.General.requestName = ptbin +'_'+ cond
+        config.General.requestName = ptbin +'_'+ cond +'_15p9fb'
         config.Data.inputDataset = job
-        config.Data.outputDatasetTag =  ptbin +'_'+ cond
+        config.Data.outputDatasetTag =  ptbin +'_'+ cond +'_15p9fb'
         print "ptbin :%s and cond: %s " %(ptbin, cond)
         print 'Submitting ' + config.General.requestName + ', dataset = ' + job
         print 'Configuration :'
