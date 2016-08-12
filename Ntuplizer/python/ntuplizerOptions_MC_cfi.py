@@ -13,7 +13,7 @@ config["FILTEREVENTS"] = False
 
 #--------- basic sequences ----------#
 config["DOGENPARTICLES"] = True
-config["DOGENJETS"] = False
+config["DOGENJETS"] = True
 config["DOGENEVENT"] = True
 config["DOPILEUP"] = True
 config["DOELECTRONS"] = True
@@ -30,7 +30,7 @@ config["DOTAUSBOOSTED"] = True
 config["DOMETSVFIT"] = True
 
 #--------- AK8 jets reclustering ----------#
-config["ADDAK8GENJETS"] = False #! Add AK8 gen jet collection with pruned and softdrop mass
+config["ADDAK8GENJETS"] = True #! Add AK8 gen jet collection with pruned and softdrop mass
 config["DOAK8RECLUSTERING"] = False
 config["DOAK8PRUNEDRECLUSTERING"] = False #! To add pruned jet and pruned subjet collection (not in MINIAOD)
 config["DOAK8PUPPI"] = True
