@@ -56,6 +56,7 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch( "el_e" 		     	, &el_e 	               );
     tree_->Branch( "el_eta"		     	, &el_eta	               );
     tree_->Branch( "el_phi"		     	, &el_phi	               );
+    tree_->Branch( "el_nonTrigMVAID"	     	, &el_nonTrigMVAID             );
     tree_->Branch( "el_mass"		     	, &el_mass	               );
     tree_->Branch( "el_pt"		     	, &el_pt	               );
     tree_->Branch( "el_et"		     	, &el_et	               );
@@ -646,6 +647,7 @@ void NtupleBranches::reset( void ){
   el_e.clear();
   el_eta.clear();
   el_phi.clear();
+  el_nonTrigMVAID.clear();
   el_mass.clear();
   el_pt.clear();
   el_et.clear();

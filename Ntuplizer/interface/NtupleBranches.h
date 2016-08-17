@@ -82,6 +82,7 @@ public:
   std::vector<float>  	      el_e 		         ;
   std::vector<float>  	      el_eta		         ;
   std::vector<float>  	      el_phi		         ;
+  std::vector<float>  	      el_nonTrigMVAID	         ;
   std::vector<float>  	      el_mass		         ;
   std::vector<float>  	      el_pt		         ;
   std::vector<float>  	      el_et		         ;
