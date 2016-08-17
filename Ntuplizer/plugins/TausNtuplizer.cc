@@ -52,6 +52,11 @@ void TausNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
       nBranches_->tau_phi    	     	      .push_back(tau.phi());
       nBranches_->tau_d0	      	      .push_back(tau.dxy());
       nBranches_->tau_TauType	     	      .push_back(1);
+      nBranches_->tau_decayMode	     	      .push_back(tau.decayMode());
+
+      // YT added : 17 Aug 2016
+      pat::PackedCandidate const* packedLeadTauCand = dynamic_cast<pat::PackedCandidate const*>(tau.leadChargedHadrCand().get());
+      nBranches_->tau_dz	      	      .push_back(fabs(packedLeadTauCand->dz()));
          
       /*====================== ISO ========================*/	         
       double rho = *(rho_.product());
@@ -186,7 +191,12 @@ void TausNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
       nBranches_->tau_phi    		      .push_back(boostedTau.phi());
       nBranches_->tau_TauType		      .push_back(2);
       nBranches_->tau_d0	              .push_back(boostedTau.dxy());
-      
+      nBranches_->tau_decayMode		      .push_back(boostedTau.decayMode());
+
+      // YT added : 17 Aug 2016
+      pat::PackedCandidate const* packedLeadTauCand = dynamic_cast<pat::PackedCandidate const*>(boostedTau.leadChargedHadrCand().get());
+      nBranches_->tau_dz	      	      .push_back(fabs(packedLeadTauCand->dz()));
+
       /*====================== ISO ========================*/	          
       double rho = *(rho_.product());
       float  deltaR = 0.3;

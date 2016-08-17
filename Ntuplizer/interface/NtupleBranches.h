@@ -173,6 +173,8 @@ public:
   std::vector<float>  	      mu_chargedHadIsoBoost      ;  
   std::vector<float>  	      mu_normChi2  	         ;
   std::vector<int  >  	      mu_isGlobalMuon	         ;
+  std::vector<int  >  	      mu_isTrackerMuon	         ; // YT added
+  std::vector<int  >  	      mu_isMediumMuon	         ; // YT added
   std::vector<int  >  	      mu_trackerHits	         ;
   std::vector<int  >  	      mu_matchedStations         ;
   std::vector<int  >  	      mu_pixelHits 	         ;
@@ -198,6 +200,7 @@ public:
   std::vector<float>  	      tau_chargedHadIso	     	 ;
   std::vector<float>  	      tau_trackIso	         ;
   std::vector<float>          tau_d0			 ;  
+  std::vector<float>          tau_dz			 ;  // YT added
   std::vector<float>  	      tau_pfRhoCorrRelIso03Boost ;
   std::vector<float>  	      tau_pfRhoCorrRelIso04Boost ;
   std::vector<float>  	      tau_pfDeltaCorrRelIsoBoost ;
@@ -206,6 +209,7 @@ public:
   std::vector<float>  	      tau_neutralHadIsoBoost     ;
   std::vector<float>  	      tau_chargedHadIsoBoost     ;  
   std::vector<int  >  	      tau_TauType	         ;  
+  std::vector<int  >  	      tau_decayMode	         ;  // YT added
   
   /** tau discriminants */
   std::vector<float>  	      tau_decayModeFindingNewDMs	              ;
