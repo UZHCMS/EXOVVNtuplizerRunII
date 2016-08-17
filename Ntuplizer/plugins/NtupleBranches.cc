@@ -157,7 +157,6 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch( "mu_globalHits"	      , &mu_globalHits        	   );
     tree_->Branch( "mu_SemileptonicPFIso"     , &mu_SemileptonicPFIso	   );
     tree_->Branch( "mu_SemileptonicCorrPFIso" , &mu_SemileptonicCorrPFIso  );
-    tree_->Branch( "mu_relIso"                , &mu_relIso                 );
   } //doMuons
   
   if ( runFlags["doTaus"] ){
@@ -753,7 +752,6 @@ void NtupleBranches::reset( void ){
   mu_globalHits.clear();
   mu_SemileptonicPFIso.clear();
   mu_SemileptonicCorrPFIso.clear();
-  mu_relIso.clear();
 
   /** taus */
   tau_N       = 0;
@@ -782,6 +780,7 @@ void NtupleBranches::reset( void ){
   tau_neutralHadIsoBoost.clear();
   tau_chargedHadIsoBoost.clear();
   tau_TauType.clear();
+  tau_decayMode.clear();
 
   /** tau discriminants */
   tau_decayModeFindingNewDMs.clear();

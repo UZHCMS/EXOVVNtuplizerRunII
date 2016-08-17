@@ -182,11 +182,6 @@ public:
   std::vector<float>  	      mu_SemileptonicPFIso 	 ;//  Isolations for semileptonic tau channel  
   std::vector<float>  	      mu_SemileptonicCorrPFIso   ;// the simple PF one and the corrected one for the tau presence
 
-  // YT added : 17 Aug 2016
-  // This is the relative muon isolation, used by several analyses, and equivalent to mu_SemileptonicPFIso variable (already defined) divided by muon pT
-  // One can reconstruct relIso by using already defined varaibles (i.e. it is redundant), but I made this new variable, as the name, mu_SemileptonicPFIso, is a little bit confusing (it is not only for semileptonic analysis ...)
-  std::vector<float>  	      mu_relIso                  ; 
-
   /** taus */
   int 	                      tau_N		         ;
   std::vector<int>  	      tau_pdgId	                 ;

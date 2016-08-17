@@ -241,7 +241,7 @@ void MuonsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSet
     nBranches_->mu_neutralHadIsoBoost    .push_back(mu.userIsolation(pat::PfNeutralHadronIso));
     nBranches_->mu_chargedHadIsoBoost    .push_back(mu.userIsolation(pat::PfChargedHadronIso));
     nBranches_->mu_SemileptonicPFIso	  .push_back(MuonPFIso(mu,true));  
-    nBranches_->mu_relIso	  .push_back(MuonPFIso(mu,true)/mu.pt());   // YT added : 17 Aug 2016
+
     if (doBoostedTaus_)  nBranches_->mu_SemileptonicCorrPFIso .push_back(MuonCorrPFIso(mu,true, taus_));
 
     /*=======================*/
