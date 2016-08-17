@@ -149,12 +149,15 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch( "mu_chargedHadIsoBoost"    , &mu_chargedHadIsoBoost     );  
     tree_->Branch( "mu_normChi2"  	      , &mu_normChi2	    	   );
     tree_->Branch( "mu_isGlobalMuon"	      , &mu_isGlobalMuon    	   );
+    tree_->Branch( "mu_isTrackerMuon"	      , &mu_isTrackerMuon    	   );
+    tree_->Branch( "mu_isMediumMuon"	      , &mu_isMediumMuon    	   );
     tree_->Branch( "mu_trackerHits"	      , &mu_trackerHits     	   );
     tree_->Branch( "mu_matchedStations"	      , &mu_matchedStations 	   );
     tree_->Branch( "mu_pixelHits" 	      , &mu_pixelHits	    	   );
     tree_->Branch( "mu_globalHits"	      , &mu_globalHits        	   );
     tree_->Branch( "mu_SemileptonicPFIso"     , &mu_SemileptonicPFIso	   );
     tree_->Branch( "mu_SemileptonicCorrPFIso" , &mu_SemileptonicCorrPFIso  );
+    tree_->Branch( "mu_relIso"                , &mu_relIso                 );
   } //doMuons
   
   if ( runFlags["doTaus"] ){
@@ -176,6 +179,7 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch( "tau_chargedHadIso"	     	 , &tau_chargedHadIso	       );
     tree_->Branch( "tau_trackIso"	     	 , &tau_trackIso	       );
     tree_->Branch( "tau_d0"                  	 , &tau_d0		       );
+    tree_->Branch( "tau_dz"                  	 , &tau_dz		       );
     tree_->Branch( "tau_pfRhoCorrRelIso03Boost"  , &tau_pfRhoCorrRelIso03Boost );
     tree_->Branch( "tau_pfRhoCorrRelIso04Boost"  , &tau_pfRhoCorrRelIso04Boost );
     tree_->Branch( "tau_pfDeltaCorrRelIsoBoost"  , &tau_pfDeltaCorrRelIsoBoost );
@@ -184,6 +188,7 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch( "tau_neutralHadIsoBoost"      , &tau_neutralHadIsoBoost     );
     tree_->Branch( "tau_chargedHadIsoBoost"      , &tau_chargedHadIsoBoost     );  
     tree_->Branch( "tau_TauType"		 , &tau_TauType		       );
+    tree_->Branch( "tau_decayMode"		 , &tau_decayMode	       ); // YT added
   
     if ( runFlags["doBoostedTaus"] ){
       /** tau discriminants */
@@ -740,12 +745,15 @@ void NtupleBranches::reset( void ){
   mu_chargedHadIsoBoost.clear();
   mu_normChi2.clear();
   mu_isGlobalMuon.clear();
+  mu_isTrackerMuon.clear();
+  mu_isMediumMuon.clear();
   mu_trackerHits.clear();
   mu_matchedStations.clear();
   mu_pixelHits.clear();
   mu_globalHits.clear();
   mu_SemileptonicPFIso.clear();
   mu_SemileptonicCorrPFIso.clear();
+  mu_relIso.clear();
 
   /** taus */
   tau_N       = 0;
@@ -765,6 +773,7 @@ void NtupleBranches::reset( void ){
   tau_chargedHadIso.clear();
   tau_trackIso.clear();
   tau_d0.clear();
+  tau_dz.clear();
   tau_pfRhoCorrRelIso03Boost.clear();
   tau_pfRhoCorrRelIso04Boost.clear();
   tau_pfDeltaCorrRelIsoBoost.clear();

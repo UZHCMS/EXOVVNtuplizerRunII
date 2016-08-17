@@ -173,12 +173,19 @@ public:
   std::vector<float>  	      mu_chargedHadIsoBoost      ;  
   std::vector<float>  	      mu_normChi2  	         ;
   std::vector<int  >  	      mu_isGlobalMuon	         ;
+  std::vector<int  >  	      mu_isTrackerMuon	         ; // YT added
+  std::vector<int  >  	      mu_isMediumMuon	         ; // YT added
   std::vector<int  >  	      mu_trackerHits	         ;
   std::vector<int  >  	      mu_matchedStations         ;
   std::vector<int  >  	      mu_pixelHits 	         ;
   std::vector<int  >  	      mu_globalHits	         ;
   std::vector<float>  	      mu_SemileptonicPFIso 	 ;//  Isolations for semileptonic tau channel  
   std::vector<float>  	      mu_SemileptonicCorrPFIso   ;// the simple PF one and the corrected one for the tau presence
+
+  // YT added : 17 Aug 2016
+  // This is the relative muon isolation, used by several analyses, and equivalent to mu_SemileptonicPFIso variable (already defined) divided by muon pT
+  // One can reconstruct relIso by using already defined varaibles (i.e. it is redundant), but I made this new variable, as the name, mu_SemileptonicPFIso, is a little bit confusing (it is not only for semileptonic analysis ...)
+  std::vector<float>  	      mu_relIso                  ; 
 
   /** taus */
   int 	                      tau_N		         ;
@@ -198,6 +205,7 @@ public:
   std::vector<float>  	      tau_chargedHadIso	     	 ;
   std::vector<float>  	      tau_trackIso	         ;
   std::vector<float>          tau_d0			 ;  
+  std::vector<float>          tau_dz			 ;  // YT added
   std::vector<float>  	      tau_pfRhoCorrRelIso03Boost ;
   std::vector<float>  	      tau_pfRhoCorrRelIso04Boost ;
   std::vector<float>  	      tau_pfDeltaCorrRelIsoBoost ;
@@ -206,6 +214,7 @@ public:
   std::vector<float>  	      tau_neutralHadIsoBoost     ;
   std::vector<float>  	      tau_chargedHadIsoBoost     ;  
   std::vector<int  >  	      tau_TauType	         ;  
+  std::vector<int  >  	      tau_decayMode	         ;  // YT added
   
   /** tau discriminants */
   std::vector<float>  	      tau_decayModeFindingNewDMs	              ;
