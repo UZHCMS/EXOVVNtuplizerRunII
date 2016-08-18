@@ -82,7 +82,6 @@ public:
   std::vector<float>  	      el_e 		         ;
   std::vector<float>  	      el_eta		         ;
   std::vector<float>  	      el_phi		         ;
-  std::vector<float>  	      el_nonTrigMVAID	         ;
   std::vector<float>  	      el_mass		         ;
   std::vector<float>  	      el_pt		         ;
   std::vector<float>  	      el_et		         ;
@@ -126,6 +125,7 @@ public:
   std::vector<int>	      el_isVetoElectron	          ;
   std::vector<int>	      el_isMediumElectron	  ;
   std::vector<int>	      el_isTightElectron	  ;    
+  std::vector<float>  	      el_nonTrigMVAID	          ;
   std::vector<int  >  	      el_isHeepElectron	          ;
   std::vector<int  >  	      el_isHeep51Electron         ;
   std::vector<int  >  	      el_isLooseElectron	  ; 

@@ -56,7 +56,6 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch( "el_e" 		     	, &el_e 	               );
     tree_->Branch( "el_eta"		     	, &el_eta	               );
     tree_->Branch( "el_phi"		     	, &el_phi	               );
-    tree_->Branch( "el_nonTrigMVAID"	     	, &el_nonTrigMVAID             );
     tree_->Branch( "el_mass"		     	, &el_mass	               );
     tree_->Branch( "el_pt"		     	, &el_pt	               );
     tree_->Branch( "el_et"		     	, &el_et	               );
@@ -93,6 +92,7 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch( "el_isVetoElectron"	        , &el_isVetoElectron           );
     tree_->Branch( "el_isMediumElectron"	, &el_isMediumElectron         );
     tree_->Branch( "el_isTightElectron"         , &el_isTightElectron          );  
+    tree_->Branch( "el_nonTrigMVAID"	     	, &el_nonTrigMVAID             );
     tree_->Branch( "el_isHeepElectron"	        , &el_isHeepElectron           );
     tree_->Branch( "el_isHeep51Electron"	, &el_isHeep51Electron         );
     tree_->Branch( "el_isLooseElectron"	        , &el_isLooseElectron          );  
@@ -647,7 +647,6 @@ void NtupleBranches::reset( void ){
   el_e.clear();
   el_eta.clear();
   el_phi.clear();
-  el_nonTrigMVAID.clear();
   el_mass.clear();
   el_pt.clear();
   el_et.clear();
@@ -691,6 +690,7 @@ void NtupleBranches::reset( void ){
   el_isVetoElectron.clear();
   el_isMediumElectron.clear();
   el_isTightElectron.clear();
+  el_nonTrigMVAID.clear();
   el_isHeepElectron.clear();
   el_isHeep51Electron.clear();
   el_isLooseElectron.clear();

@@ -187,7 +187,6 @@ void ElectronsNtuplizer::fillBranches( edm::Event const & event, const edm::Even
     nBranches_->el_mass	   	   .push_back(ele.mass());
     nBranches_->el_pt  	   	   .push_back(ele.pt());  
     nBranches_->el_phi 	   	   .push_back(ele.phi()); 
-    nBranches_->el_nonTrigMVAID	   .push_back(isNonTrigElectronID(ele)); 
     
     /*======= ISO ==========*/
     double rho = *(rho_.product()); 
@@ -287,6 +286,7 @@ void ElectronsNtuplizer::fillBranches( edm::Event const & event, const edm::Even
     nBranches_->el_isLooseElectron .push_back(isLooseElectron);
     nBranches_->el_isMediumElectron.push_back(isMediumElectron);
     nBranches_->el_isTightElectron .push_back(isTightElectron);
+    nBranches_->el_nonTrigMVAID	   .push_back(isNonTrigElectronID(ele)); 
     nBranches_->el_isHeepElectron  .push_back(isHeepElectron);  
     nBranches_->el_isHeep51Electron.push_back(isHeep51Electron);  
 
