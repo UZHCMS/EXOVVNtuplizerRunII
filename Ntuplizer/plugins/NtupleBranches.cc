@@ -92,6 +92,7 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch( "el_isVetoElectron"	        , &el_isVetoElectron           );
     tree_->Branch( "el_isMediumElectron"	, &el_isMediumElectron         );
     tree_->Branch( "el_isTightElectron"         , &el_isTightElectron          );  
+    tree_->Branch( "el_nonTrigMVAID"	     	, &el_nonTrigMVAID             );
     tree_->Branch( "el_isHeepElectron"	        , &el_isHeepElectron           );
     tree_->Branch( "el_isHeep51Electron"	, &el_isHeep51Electron         );
     tree_->Branch( "el_isLooseElectron"	        , &el_isLooseElectron          );  
@@ -689,6 +690,7 @@ void NtupleBranches::reset( void ){
   el_isVetoElectron.clear();
   el_isMediumElectron.clear();
   el_isTightElectron.clear();
+  el_nonTrigMVAID.clear();
   el_isHeepElectron.clear();
   el_isHeep51Electron.clear();
   el_isLooseElectron.clear();

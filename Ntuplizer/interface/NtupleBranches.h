@@ -125,6 +125,7 @@ public:
   std::vector<int>	      el_isVetoElectron	          ;
   std::vector<int>	      el_isMediumElectron	  ;
   std::vector<int>	      el_isTightElectron	  ;    
+  std::vector<float>  	      el_nonTrigMVAID	          ;
   std::vector<int  >  	      el_isHeepElectron	          ;
   std::vector<int  >  	      el_isHeep51Electron         ;
   std::vector<int  >  	      el_isLooseElectron	  ; 
