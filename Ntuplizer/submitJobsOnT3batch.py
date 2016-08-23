@@ -269,6 +269,9 @@ if opts.copyfiles:
    checkdir = "ls -l " + newdir + "/config"
    status,cmd_out = commands.getstatusoutput(checkdir)
    if status: 
+     cmd = "srmmkdir srm://t3se01.psi.ch/%s"%(newdir) #No gFAL!
+     print cmd
+     os.system(cmd)
      # cmd = "gfal-mkdir srm://t3se01.psi.ch:8443/srm/managerv2?SFN=%s"%(newdir+"/config")
      cmd = "srmmkdir srm://t3se01.psi.ch/%s"%(newdir+"/config") #No gFAL!
      # cmd = "env -i X509_USER_PROXY=~/.x509up_u`id -u` gfal-mkdir -p gsiftp://t3se01.psi.ch%s" %(newdir)
