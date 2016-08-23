@@ -39,6 +39,20 @@ float MuonPFIso(pat::Muon muon, bool highpt){
 
 
 
+// YT added : 17 Aug 2016. This is for ICHEP medium ID
+bool isMediumMuon(pat::Muon muon)
+{
+  bool goodGlob = muon.isGlobalMuon() && 
+    muon.globalTrack()->normalizedChi2() < 3 && 
+    muon.combinedQuality().chi2LocalPosition < 12 && 
+    muon.combinedQuality().trkKink < 20; 
+  bool isMedium = muon.isLooseMuon() && 
+    muon.innerTrack()->validFraction() > 0.49 && 
+    muon::segmentCompatibility(muon) > (goodGlob ? 0.303 : 0.451); 
+  return isMedium; 
+}
+
+
 //===================================================================================================================
 float MuonCorrPFIso(pat::Muon muon, bool highpt, edm::Handle<pat::TauCollection>  taus_){
   double TauSumChargedHadronPt = 0.;
@@ -176,6 +190,8 @@ void MuonsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSet
     double energy = TMath::Pi()*deltaR*deltaR*rho;
   
     nBranches_->mu_isGlobalMuon.push_back(mu.isGlobalMuon());  
+    nBranches_->mu_isTrackerMuon.push_back(mu.isTrackerMuon());  
+    nBranches_->mu_isMediumMuon.push_back(isMediumMuon(mu));
    
       
     double normChi2	   = -99;
@@ -225,6 +241,7 @@ void MuonsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSet
     nBranches_->mu_neutralHadIsoBoost    .push_back(mu.userIsolation(pat::PfNeutralHadronIso));
     nBranches_->mu_chargedHadIsoBoost    .push_back(mu.userIsolation(pat::PfChargedHadronIso));
     nBranches_->mu_SemileptonicPFIso	  .push_back(MuonPFIso(mu,true));  
+
     if (doBoostedTaus_)  nBranches_->mu_SemileptonicCorrPFIso .push_back(MuonCorrPFIso(mu,true, taus_));
 
     /*=======================*/

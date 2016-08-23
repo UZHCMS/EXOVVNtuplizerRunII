@@ -62,6 +62,40 @@ float ElectronsNtuplizer::dEtaInSeed( const pat::Electron &ele ){
 
 //===================================================================================================================
 
+// YT added : 17 Aug 2016. This is for Non-Triggering MVA, used for tautau analysis, in general
+bool isNonTrigElectronID(pat::Electron ele)
+{
+  Float_t eta = abs(ele.superCluster()->eta());
+  Float_t pt = ele.pt();
+
+  Float_t mva = 0;
+  if(ele.hasUserFloat("ElectronMVAEstimatorRun2Spring15NonTrig25nsV1Values")){
+    mva = ele.userFloat("ElectronMVAEstimatorRun2Spring15NonTrig25nsV1Values");
+  }else{
+    std::cout << "Not available nonTrig" << std::endl;
+    return 0;
+  }
+
+  if(pt > 10.){
+    if(eta < 0.8) return mva > 0.967083;
+    else if(eta < 1.479) return mva > 0.929117;
+    else{
+      return mva > 0.726311;
+    }
+  }else if(pt <= 10){
+    if(eta < 0.8) return mva > 0.287435;
+    else if(eta < 1.479) return mva > 0.221846;
+    else{
+      return mva > -0.303263;
+    }
+  }else{
+    std::cout << "Not happens" << std::endl;
+    return 0;
+  }
+  
+}
+
+
 float ElectronCorrPFIso(pat::Electron ele, double Aeff03, float rho, edm::Handle<pat::TauCollection> 	     taus_  ){
   double TauSumChargedHadronPt = 0.;
   double TauSumNeutralHadronEt = 0.;
@@ -252,6 +286,7 @@ void ElectronsNtuplizer::fillBranches( edm::Event const & event, const edm::Even
     nBranches_->el_isLooseElectron .push_back(isLooseElectron);
     nBranches_->el_isMediumElectron.push_back(isMediumElectron);
     nBranches_->el_isTightElectron .push_back(isTightElectron);
+    nBranches_->el_nonTrigMVAID	   .push_back(isNonTrigElectronID(ele)); 
     nBranches_->el_isHeepElectron  .push_back(isHeepElectron);  
     nBranches_->el_isHeep51Electron.push_back(isHeep51Electron);  
 

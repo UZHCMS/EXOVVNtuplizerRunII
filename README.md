@@ -56,6 +56,11 @@ cmsRun config_MC.py (for MC)
 
 the flags for running on data can be changed in python/ntuplizerOptions_data_cfi.py
 the flags for running on MC can be changed in python/ntuplizerOptions_MC_cfi.py
+Note that, if you run on reHLT samples, remember to modify,
+
+```
+HLT = cms.InputTag("TriggerResults","","HLT2"),
+```
 
 to recluster jets and MET, or to add the Higgs-tagger the following flags can be changed:
 ```
