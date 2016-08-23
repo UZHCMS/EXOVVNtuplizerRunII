@@ -187,8 +187,10 @@ def checkJobsOutputFromXML(xmlfile):
 #-----------------------------------------------------------------------------------------
 def getFileListDAS(dataset,instance="prod/global",run=-1):
 
-   cmd = './das_client.py --query="file dataset=%s instance=%s" --limit=10000' %(dataset,instance)
-   if run != -1: cmd = './das_client.py --query="file run=%i dataset=%s instance=%s" --limit=10000' %(run,dataset,instance)
+   # cmd = './das_client.py --query="file dataset=%s instance=%s" --limit=10000' %(dataset,instance)
+#    if run != -1: cmd = './das_client.py --query="file run=%i dataset=%s instance=%s" --limit=10000' %(run,dataset,instance)
+   cmd = 'das_client.py --query="file dataset=%s instance=%s" --limit=10000' %(dataset,instance)
+   if run != -1: cmd = 'das_client.py --query="file run=%i dataset=%s instance=%s" --limit=10000' %(run,dataset,instance)
    print cmd
    cmd_out = commands.getoutput( cmd )
    tmpList = cmd_out.split(os.linesep)
@@ -269,6 +271,9 @@ if opts.copyfiles:
    checkdir = "ls -l " + newdir + "/config"
    status,cmd_out = commands.getstatusoutput(checkdir)
    if status: 
+     cmd = "srmmkdir srm://t3se01.psi.ch/%s"%(newdir) #No gFAL!
+     print cmd
+     os.system(cmd)
      # cmd = "gfal-mkdir srm://t3se01.psi.ch:8443/srm/managerv2?SFN=%s"%(newdir+"/config")
      cmd = "srmmkdir srm://t3se01.psi.ch/%s"%(newdir+"/config") #No gFAL!
      # cmd = "env -i X509_USER_PROXY=~/.x509up_u`id -u` gfal-mkdir -p gsiftp://t3se01.psi.ch%s" %(newdir)
