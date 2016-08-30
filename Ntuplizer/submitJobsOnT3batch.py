@@ -187,8 +187,8 @@ def checkJobsOutputFromXML(xmlfile):
 #-----------------------------------------------------------------------------------------
 def getFileListDAS(dataset,instance="prod/global",run=-1):
 
-   cmd = 'das_client.py --query="file dataset=%s instance=%s" --limit=10000' %(dataset,instance)
-   if run != -1: cmd = 'das_client.py --query="file run=%i dataset=%s instance=%s" --limit=10000' %(run,dataset,instance)
+   cmd = 'source das_client && ./das_client.py --query="file dataset=%s instance=%s" --limit=10000' %(dataset,instance)
+   if run != -1: cmd = 'source das_client && ./das_client.py --query="file run=%i dataset=%s instance=%s" --limit=10000' %(run,dataset,instance)
    print cmd
    cmd_out = commands.getoutput( cmd )
    tmpList = cmd_out.split(os.linesep)
@@ -197,7 +197,7 @@ def getFileListDAS(dataset,instance="prod/global",run=-1):
       if l.find(".root") != -1:
          files.append(l)
             
-   return files 
+   return files
    
 #-----------------------------------------------------------------------------------------   
 argv = sys.argv
