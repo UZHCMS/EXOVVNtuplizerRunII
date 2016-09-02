@@ -128,9 +128,13 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch( "mu_pt"		      , &mu_pt  	  	   );
     tree_->Branch( "mu_isHighPtMuon"	      , &mu_isHighPtMuon      	   );
     tree_->Branch( "mu_isTightMuon"	      , &mu_isTightMuon       	   );
+    tree_->Branch( "mu_isMediumMuon"	      , &mu_isMediumMuon    	   );
     tree_->Branch( "mu_isLooseMuon"	      , &mu_isLooseMuon       	   );
     tree_->Branch( "mu_isPFMuon"	      , &mu_isPFMuon	      	   );
     tree_->Branch( "mu_isSoftMuon"	      , &mu_isSoftMuon             );
+    tree_->Branch( "mu_isGlobalMuon"	      , &mu_isGlobalMuon    	   );
+    tree_->Branch( "mu_isTrackerMuon"	      , &mu_isTrackerMuon    	   );
+    tree_->Branch( "mu_isTrackerHighPtMuon"	      , &mu_isTrackerHighPtMuon    	   );
     tree_->Branch( "mu_pfRhoCorrRelIso03"     , &mu_pfRhoCorrRelIso03 	   );
     tree_->Branch( "mu_pfRhoCorrRelIso04"     , &mu_pfRhoCorrRelIso04 	   );
     tree_->Branch( "mu_pfDeltaCorrRelIso"     , &mu_pfDeltaCorrRelIso 	   );
@@ -156,9 +160,6 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch( "mu_neutralHadIsoBoost"    , &mu_neutralHadIsoBoost     );
     tree_->Branch( "mu_chargedHadIsoBoost"    , &mu_chargedHadIsoBoost     );  
     tree_->Branch( "mu_normChi2"  	      , &mu_normChi2	    	   );
-    tree_->Branch( "mu_isGlobalMuon"	      , &mu_isGlobalMuon    	   );
-    tree_->Branch( "mu_isTrackerMuon"	      , &mu_isTrackerMuon    	   );
-    tree_->Branch( "mu_isMediumMuon"	      , &mu_isMediumMuon    	   );
     tree_->Branch( "mu_trackerHits"	      , &mu_trackerHits     	   );
     tree_->Branch( "mu_matchedStations"	      , &mu_matchedStations 	   );
     tree_->Branch( "mu_pixelHits" 	      , &mu_pixelHits	    	   );
@@ -731,9 +732,13 @@ void NtupleBranches::reset( void ){
   mu_pt.clear();
   mu_isHighPtMuon.clear();
   mu_isTightMuon.clear();
+  mu_isMediumMuon.clear();
   mu_isLooseMuon.clear();
   mu_isPFMuon.clear();
   mu_isSoftMuon.clear();
+  mu_isGlobalMuon.clear();
+  mu_isTrackerMuon.clear();
+  mu_isTrackerHighPtMuon.clear();
   mu_pfRhoCorrRelIso03.clear();
   mu_pfRhoCorrRelIso04.clear();
   mu_pfDeltaCorrRelIso.clear();
@@ -757,9 +762,6 @@ void NtupleBranches::reset( void ){
   mu_neutralHadIsoBoost.clear();
   mu_chargedHadIsoBoost.clear();
   mu_normChi2.clear();
-  mu_isGlobalMuon.clear();
-  mu_isTrackerMuon.clear();
-  mu_isMediumMuon.clear();
   mu_trackerHits.clear();
   mu_matchedStations.clear();
   mu_pixelHits.clear();

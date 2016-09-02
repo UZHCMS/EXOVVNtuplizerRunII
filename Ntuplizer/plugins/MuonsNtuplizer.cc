@@ -52,6 +52,19 @@ bool isMediumMuon(pat::Muon muon)
   return isMedium; 
 }
 
+// Tracker High Pt Id
+bool isTrackerHighPtMuon(pat::Muon mu, const reco::Vertex* vertex) {
+  if (! (mu.isMuon()) ) return false;
+  if (! (mu.isTrackerMuon()) ) return false;
+  if (! (mu.tunePMuonBestTrack().isNonnull()) ) return false;
+  if (! (mu.numberOfMatchedStations() > 1) ) return false;
+  if (! (mu.innerTrack()->hitPattern().trackerLayersWithMeasurement() > 5) ) return false;
+  if (! (mu.innerTrack()->hitPattern().numberOfValidPixelHits() > 0) ) return false;
+  if (! (mu.tunePMuonBestTrack()->ptError()/mu.tunePMuonBestTrack()->pt() < 0.3) ) return false;
+  if (! (fabs(mu.tunePMuonBestTrack()->dxy(vertex->position()) ) < 0.2) ) return false;
+  if (! (fabs(mu.tunePMuonBestTrack()->dz(vertex->position()) ) < 0.5) ) return false;
+  return true;
+}
 
 //===================================================================================================================
 float MuonCorrPFIso(pat::Muon muon, bool highpt, edm::Handle<pat::TauCollection>  taus_){
@@ -198,6 +211,7 @@ void MuonsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSet
     nBranches_->mu_isGlobalMuon.push_back(mu.isGlobalMuon());  
     nBranches_->mu_isTrackerMuon.push_back(mu.isTrackerMuon());  
     nBranches_->mu_isMediumMuon.push_back(isMediumMuon(mu));
+    nBranches_->mu_isTrackerHighPtMuon.push_back(isTrackerHighPtMuon(mu, &*firstGoodVertex));
    
       
     double normChi2	   = -99;

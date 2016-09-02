@@ -152,9 +152,13 @@ public:
   std::vector<float>  	      mu_pt		         ;    
   std::vector<int  >          mu_isHighPtMuon		 ;
   std::vector<int  >          mu_isTightMuon		 ;
+  std::vector<int  >  	      mu_isMediumMuon	         ; // YT added
   std::vector<int  >          mu_isLooseMuon		 ;
   std::vector<int  >          mu_isPFMuon		 ;
   std::vector<int  >          mu_isSoftMuon		 ;   
+  std::vector<int  >  	      mu_isGlobalMuon	         ;
+  std::vector<int  >  	      mu_isTrackerMuon	         ; // YT added
+  std::vector<int  >  	      mu_isTrackerHighPtMuon	         ;
   std::vector<float>  	      mu_pfRhoCorrRelIso03  	 ;
   std::vector<float>  	      mu_pfRhoCorrRelIso04  	 ;
   std::vector<float>  	      mu_pfDeltaCorrRelIso  	 ;
@@ -180,9 +184,6 @@ public:
   std::vector<float>  	      mu_neutralHadIsoBoost      ;
   std::vector<float>  	      mu_chargedHadIsoBoost      ;  
   std::vector<float>  	      mu_normChi2  	         ;
-  std::vector<int  >  	      mu_isGlobalMuon	         ;
-  std::vector<int  >  	      mu_isTrackerMuon	         ; // YT added
-  std::vector<int  >  	      mu_isMediumMuon	         ; // YT added
   std::vector<int  >  	      mu_trackerHits	         ;
   std::vector<int  >  	      mu_matchedStations         ;
   std::vector<int  >  	      mu_pixelHits 	         ;
