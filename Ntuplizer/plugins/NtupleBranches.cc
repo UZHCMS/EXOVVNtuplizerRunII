@@ -148,10 +148,11 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch( "mu_dz"                    , &mu_dz  	      	   );
     tree_->Branch( "mu_d0_allvertices"        , &mu_d0_allvertices  	   );
     tree_->Branch( "mu_dz_allvertices"        , &mu_dz_allvertices    	   );
-    tree_->Branch( "mu_bestTrack_pt"	      , &mu_bestTrack_pt      	   );
+    tree_->Branch( "mu_innerTrack_pt"	        , &mu_innerTrack_pt      	   );
+    tree_->Branch( "mu_bestTrack_pt"	        , &mu_bestTrack_pt      	   );
     tree_->Branch( "mu_bestTrack_ptErr"	      , &mu_bestTrack_ptErr        );
-    tree_->Branch( "mu_tunePTrack_pt"	      , &mu_tunePTrack_pt      	   );
-    tree_->Branch( "mu_tunePTrack_ptErr"	      , &mu_tunePTrack_ptErr        );
+    tree_->Branch( "mu_tunePTrack_pt"	        , &mu_tunePTrack_pt      	   );
+    tree_->Branch( "mu_tunePTrack_ptErr"	    , &mu_tunePTrack_ptErr        );
     tree_->Branch( "mu_pfRhoCorrRelIso03Boost", &mu_pfRhoCorrRelIso03Boost );
     tree_->Branch( "mu_pfRhoCorrRelIso04Boost", &mu_pfRhoCorrRelIso04Boost );
     tree_->Branch( "mu_pfDeltaCorrRelIsoBoost", &mu_pfDeltaCorrRelIsoBoost );
@@ -752,8 +753,11 @@ void NtupleBranches::reset( void ){
   mu_dz.clear();
   mu_d0_allvertices.clear();
   mu_dz_allvertices.clear();
+  mu_innerTrack_pt.clear();
   mu_bestTrack_pt.clear();
   mu_bestTrack_ptErr.clear();
+  mu_tunePTrack_pt.clear();
+  mu_tunePTrack_ptErr.clear();
   mu_pfRhoCorrRelIso03Boost.clear();
   mu_pfRhoCorrRelIso04Boost.clear();
   mu_pfDeltaCorrRelIsoBoost.clear();

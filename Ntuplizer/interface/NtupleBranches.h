@@ -172,6 +172,7 @@ public:
   std::vector<float>          mu_dz			 ;
   std::vector<float>          mu_d0_allvertices		 ;
   std::vector<float>          mu_dz_allvertices		 ;
+  std::vector<float>  	      mu_innerTrack_pt 	         ;
   std::vector<float>  	      mu_bestTrack_pt  	         ;
   std::vector<float>  	      mu_bestTrack_ptErr  	 ;    
   std::vector<float>  	      mu_tunePTrack_pt  	       ;
