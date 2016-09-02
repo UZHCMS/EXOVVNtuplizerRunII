@@ -148,7 +148,9 @@ void MuonsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSet
 
   // Find the first vertex in the collection that passes good quality criteria
   // reco::VertexCollection::const_iterator firstGoodVertex = vertices_->end();
-   reco::VertexCollection::const_iterator firstGoodVertex = vertices_->begin();
+  reco::VertexCollection::const_iterator firstVertex = vertices_->begin();
+  reco::VertexCollection::const_iterator firstGoodVertex = vertices_->begin();
+
   int firstGoodVertexIdx = 0;
   for( reco::VertexCollection::const_iterator vtx = vertices_->begin(); vtx != vertices_->end(); ++vtx, ++firstGoodVertexIdx){
     bool isFake = (vtx->chi2()==0 && vtx->ndof()==0);
@@ -178,6 +180,10 @@ void MuonsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSet
     float dxy = fabs(mu.muonBestTrack()->dxy( (*firstGoodVertex).position() ));
     nBranches_->mu_d0          .push_back(dxy);
     nBranches_->mu_dz          .push_back(mu.muonBestTrack()->dz( (*firstGoodVertex).position() ));
+
+    float dxy_allvertices = fabs(mu.muonBestTrack()->dxy( (*firstVertex).position() ));
+    nBranches_->mu_d0_allvertices          .push_back(dxy_allvertices);
+    nBranches_->mu_dz_allvertices          .push_back(mu.muonBestTrack()->dz( (*firstVertex).position() ));
     nBranches_->mu_bestTrack_pt.push_back(mu.muonBestTrack()->pt());  
     nBranches_->mu_bestTrack_ptErr.push_back(mu.muonBestTrack()->ptError());
     

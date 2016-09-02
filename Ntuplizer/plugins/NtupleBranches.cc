@@ -78,6 +78,8 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch( "el_expectedMissingInnerHits", &el_expectedMissingInnerHits );  
     tree_->Branch( "el_d0"                      , &el_d0                       );
     tree_->Branch( "el_dz"		        , &el_dz                       );  
+    tree_->Branch( "el_d0_allvertices"          , &el_d0_allvertices           );
+    tree_->Branch( "el_dz_allvertices"          , &el_dz_allvertices           );  
     tree_->Branch( "el_dr03EcalRecHitSumEt"     , &el_dr03EcalRecHitSumEt      );
     tree_->Branch( "el_dr03HcalDepth1TowerSumEt", &el_dr03HcalDepth1TowerSumEt );
     tree_->Branch( "el_rho"                     , &el_rho                      );
@@ -93,6 +95,7 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch( "el_isMediumElectron"	, &el_isMediumElectron         );
     tree_->Branch( "el_isTightElectron"         , &el_isTightElectron          );  
     tree_->Branch( "el_nonTrigMVAID"	     	, &el_nonTrigMVAID             );
+    tree_->Branch( "el_nonTrigMVA"	     	, &el_nonTrigMVA               );
     tree_->Branch( "el_isHeepElectron"	        , &el_isHeepElectron           );
     tree_->Branch( "el_isHeep51Electron"	, &el_isHeep51Electron         );
     tree_->Branch( "el_isLooseElectron"	        , &el_isLooseElectron          );  
@@ -139,6 +142,8 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch( "mu_trackCorrIso"	      , &mu_trackCorrIso	   );
     tree_->Branch( "mu_d0"                    , &mu_d0  	      	   );
     tree_->Branch( "mu_dz"                    , &mu_dz  	      	   );
+    tree_->Branch( "mu_d0_allvertices"        , &mu_d0_allvertices  	   );
+    tree_->Branch( "mu_dz_allvertices"        , &mu_dz_allvertices    	   );
     tree_->Branch( "mu_bestTrack_pt"	      , &mu_bestTrack_pt      	   );
     tree_->Branch( "mu_bestTrack_ptErr"	      , &mu_bestTrack_ptErr        );
     tree_->Branch( "mu_pfRhoCorrRelIso03Boost", &mu_pfRhoCorrRelIso03Boost );
@@ -676,6 +681,8 @@ void NtupleBranches::reset( void ){
   el_expectedMissingInnerHits.clear();
   el_d0.clear();
   el_dz.clear();
+  el_d0_allvertices.clear();
+  el_dz_allvertices.clear();
   el_dr03EcalRecHitSumEt.clear();
   el_dr03HcalDepth1TowerSumEt.clear();
   el_rho.clear();
@@ -691,6 +698,7 @@ void NtupleBranches::reset( void ){
   el_isMediumElectron.clear();
   el_isTightElectron.clear();
   el_nonTrigMVAID.clear();
+  el_nonTrigMVA.clear();
   el_isHeepElectron.clear();
   el_isHeep51Electron.clear();
   el_isLooseElectron.clear();
@@ -735,6 +743,8 @@ void NtupleBranches::reset( void ){
   mu_trackCorrIso.clear();
   mu_d0.clear();
   mu_dz.clear();
+  mu_d0_allvertices.clear();
+  mu_dz_allvertices.clear();
   mu_bestTrack_pt.clear();
   mu_bestTrack_ptErr.clear();
   mu_pfRhoCorrRelIso03Boost.clear();
