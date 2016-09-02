@@ -204,6 +204,8 @@ void MuonsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSet
     int    trackerHits     = -99;
     int    pixelHits	   = -99;
     int    globalMuonHits  = -99;
+    double tunePTrack_pt = -1.;
+    double tunePTrack_ptErr = 0.;
   
     if( mu.isGlobalMuon() ) 
       normChi2=mu.normChi2();
@@ -216,12 +218,19 @@ void MuonsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSet
   
     if( !mu.globalTrack().isNull() )
       globalMuonHits = (mu.globalTrack())->hitPattern().numberOfValidMuonHits();
-  
+    
+    if( !mu.tunePMuonBestTrack().isNull() ) {
+      tunePTrack_pt = (mu.tunePMuonBestTrack())->pt();
+      tunePTrack_ptErr = (mu.tunePMuonBestTrack())->ptError();
+    }
+    
     nBranches_->mu_normChi2	   .push_back(normChi2);
     nBranches_->mu_trackerHits    .push_back(trackerHits);
     nBranches_->mu_matchedStations.push_back(mu.numberOfMatchedStations());
     nBranches_->mu_pixelHits	   .push_back(pixelHits);
     nBranches_->mu_globalHits     .push_back(globalMuonHits);
+    nBranches_->mu_tunePTrack_pt.push_back(tunePTrack_pt);  
+    nBranches_->mu_tunePTrack_ptErr.push_back(tunePTrack_ptErr);
         
     /*===== ISO ====*/
     deltaR = 0.3;

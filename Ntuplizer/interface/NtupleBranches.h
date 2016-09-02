@@ -170,6 +170,8 @@ public:
   std::vector<float>          mu_dz_allvertices		 ;
   std::vector<float>  	      mu_bestTrack_pt  	         ;
   std::vector<float>  	      mu_bestTrack_ptErr  	 ;    
+  std::vector<float>  	      mu_tunePTrack_pt  	       ;
+  std::vector<float>  	      mu_tunePTrack_ptErr  	 ;   
   std::vector<float>  	      mu_pfRhoCorrRelIso03Boost  ;
   std::vector<float>  	      mu_pfRhoCorrRelIso04Boost  ;
   std::vector<float>  	      mu_pfDeltaCorrRelIsoBoost  ;

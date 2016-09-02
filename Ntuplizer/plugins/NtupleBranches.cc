@@ -146,6 +146,8 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch( "mu_dz_allvertices"        , &mu_dz_allvertices    	   );
     tree_->Branch( "mu_bestTrack_pt"	      , &mu_bestTrack_pt      	   );
     tree_->Branch( "mu_bestTrack_ptErr"	      , &mu_bestTrack_ptErr        );
+    tree_->Branch( "mu_tunePTrack_pt"	      , &mu_tunePTrack_pt      	   );
+    tree_->Branch( "mu_tunePTrack_ptErr"	      , &mu_tunePTrack_ptErr        );
     tree_->Branch( "mu_pfRhoCorrRelIso03Boost", &mu_pfRhoCorrRelIso03Boost );
     tree_->Branch( "mu_pfRhoCorrRelIso04Boost", &mu_pfRhoCorrRelIso04Boost );
     tree_->Branch( "mu_pfDeltaCorrRelIsoBoost", &mu_pfDeltaCorrRelIsoBoost );
