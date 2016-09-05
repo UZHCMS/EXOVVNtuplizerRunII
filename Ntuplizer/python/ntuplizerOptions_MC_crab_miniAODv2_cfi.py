@@ -37,7 +37,7 @@ config["DOAK8PUPPI"] = True
 config["DOAK10TRIMMEDRECLUSTERING"] = False #ATLAS sequence
 config["DOHBBTAG"] = True #Higgs-tagger
 config["DOAK8PUPPIRECLUSTERING"] = False
-
+config["UpdateJetCollection"] = True #needed for Higgs-tagger in 80X
 #--------- MET reclustering ----------#
 config["DOMETRECLUSTERING"] = False
 
