@@ -6,7 +6,7 @@ config = dict()
 config["SPRING16"] = True
 config["RUNONMC"] = True
 config["USEJSON"] = False
-config["JSONFILE"] = "JSON/Cert_271036-273450_13TeV_PromptReco_Collisions16_JSON_NoL1T.txt"
+config["JSONFILE"] = "JSON/Cert_271036-279588_13TeV_PromptReco_Collisions16_JSON_NoL1T.txt"
 config["BUNCHSPACING"] = 25
 config["USENOHF"] = False
 config["FILTEREVENTS"] = False
@@ -36,6 +36,7 @@ config["DOAK8PRUNEDRECLUSTERING"] = False #! To add pruned jet and pruned subjet
 config["DOAK8PUPPI"] = True
 config["DOAK10TRIMMEDRECLUSTERING"] = False #ATLAS sequence
 config["DOHBBTAG"] = True #Higgs-tagger
+config["UpdateJetCollection"] = True #needed for Higgs-tagger in 80X
 
 #--------- MET reclustering ----------#
 config["DOMETRECLUSTERING"] = False

@@ -291,9 +291,6 @@ if config["ADDAK8GENJETS"]:
 ################# Prepare recluster or update jet collection jets with b-tagging ######################
 
 
-from PhysicsTools.PatAlgos.tools.jetTools import updateJetCollection
-
-
 bTagDiscriminators = [
     # 'pfJetProbabilityBJetTags',
     # 'pfJetBProbabilityBJetTags',
