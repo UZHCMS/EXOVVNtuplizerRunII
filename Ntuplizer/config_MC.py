@@ -313,9 +313,6 @@ if config["UpdateJetCollection"]:
     btagDiscriminators = bTagDiscriminators
   )
 
-
-
-
 def cap(s): return s[0].upper() + s[1:]
 
 from PhysicsTools.PatAlgos.tools.jetTools import *
