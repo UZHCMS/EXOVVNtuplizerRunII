@@ -218,7 +218,6 @@ void MuonsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSet
     int    trackerHits     = -99;
     int    pixelHits	   = -99;
     int    globalMuonHits  = -99;
-    double innerTrack_pt = -99;
     double tunePTrack_pt = -1.;
     double tunePTrack_ptErr = 0.;
   
