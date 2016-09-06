@@ -581,6 +581,8 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch("MET_corrPy"		        , &MET_corrPy	     );   
     tree_->Branch("MET_et"	                , &MET_et  	     ); 
     tree_->Branch("MET_phi"	                , &MET_phi           );
+    tree_->Branch("METpuppi_et"	                , &METpuppi_et       ); 
+    tree_->Branch("METpuppi_phi"                , &METpuppi_phi      );
     tree_->Branch("MET_sumEt"	                , &MET_sumEt 	     ); 
   } //doMissingEt
 
@@ -1159,6 +1161,8 @@ void NtupleBranches::reset( void ){
   MET_corrPy.clear();
   MET_et.clear();
   MET_phi.clear();
+  METpuppi_et.clear();
+  METpuppi_phi.clear();
   MET_sumEt.clear();
   MET_T1Uncertainty.clear();
 

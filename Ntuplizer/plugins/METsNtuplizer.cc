@@ -6,6 +6,7 @@
 
 //===================================================================================================================        
 METsNtuplizer::METsNtuplizer( 	edm::EDGetTokenT<pat::METCollection>     mettoken    , 
+				edm::EDGetTokenT<pat::METCollection>     metpuppitoken    , 
  	 			edm::EDGetTokenT<pat::JetCollection>	 jettoken    ,
 				edm::EDGetTokenT<pat::MuonCollection> 	 muontoken   ,
 				edm::EDGetTokenT<double> 		 rhotoken    ,
@@ -20,6 +21,7 @@ METsNtuplizer::METsNtuplizer( 	edm::EDGetTokenT<pat::METCollection>     mettoken
 									
 : CandidateNtuplizer ( nBranches    )
 , metInputToken_     ( mettoken     )
+, metpuppiInputToken_( metpuppitoken)
 , jetInputToken_     ( jettoken     )
 , muonInputToken_    ( muontoken    )	    
 , rhoToken_	     ( rhotoken     )	    
@@ -184,7 +186,6 @@ void METsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
   if( doCorrOnTheFly_ ) addTypeICorr(event);
 
   for (const pat::MET &met : *METs_) {
-  	  
     //const float rawPt	= met.shiftedPt(pat::MET::NoShift, pat::MET::Raw);
     //const float rawPhi  = met.shiftedPhi(pat::MET::NoShift, pat::MET::Raw);
     //const float rawSumEt= met.shiftedSumEt(pat::MET::NoShift, pat::MET::Raw);
@@ -224,6 +225,16 @@ void METsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
  
    
   } 
+
+
+  // Y.T added 6 Sep. For puppi MET
+  event.getByToken(metpuppiInputToken_, METspuppi_ );
+
+  for (const pat::MET &met : *METspuppi_) {
+    nBranches_->METpuppi_et.push_back(met.et());
+    nBranches_->METpuppi_phi.push_back(met.phi());
+  }
+
 
   if (doMETSVFIT_) {
  
