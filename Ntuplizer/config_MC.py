@@ -26,7 +26,7 @@ options.maxEvents = 100
 
 
 #options.inputFiles = '/store/mc/RunIISpring16MiniAODv1/RadionTohhTohtatahbb_narrow_M-2000_13TeV-madgraph/MINIAODSIM/PUSpring16RAWAODSIM_80X_mcRun2_asymptotic_2016_v3-v1/70000/B0C98A71-791E-E611-9952-00259073E4E8.root'
-options.inputFiles = '/store/mc/RunIISpring16MiniAODv2/ZprimeToWW_narrow_M-800_13TeV-madgraph/MINIAODSIM/PUSpring16RAWAODSIM_80X_mcRun2_asymptotic_2016_miniAODv2_v0-v1/60000/2C6DE685-3226-E611-B6B5-842B2B766849.root'
+options.inputFiles = '/store/user/thaarres/QStar/QstarToQW_M_1000_TuneCUETP8M1_13TeV_pythia8_GEN-SIM_DIGI80X_RECO80X_MiniAODv2_80X/160824_080014/0000/HIG-RunIISpring16MiniAODv2-01205_98.root'
 #options.inputFiles = '/store/mc/RunIISpring16MiniAODv2/WJetsToQQ_HT-600ToInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/PUSpring16_80X_mcRun2_asymptotic_2016_miniAODv2_v0-v1/30000/0EA1D6CA-931A-E611-BFCD-BCEE7B2FE01D.root'
 #options.inputFiles = 'dcap://t3se01.psi.ch:22125//pnfs/psi.ch/cms/trivcat/store/mc/RunIIFall15MiniAODv2/WprimeToWhToWhadhbb_narrow_M-1000_13TeV-madgraph/MINIAODSIM/PU25nsData2015v1_76X_mcRun2_asymptotic_v12-v1/00000/8EE77064-42B8-E511-8BA1-003048895D40.root'
 #options.inputFiles = 'xroot://t3dcachedb.psi.ch:1094//pnfs/psi.ch/cms/trivcat/store/user/cgalloni/RunII/RadionTohhTohtatahbb_narrow_M-1000_13TeV-madgraph/MiniAOD_TauBoosted_v0667_maxDepth100_jetPt100/miniAOD_4.root'
