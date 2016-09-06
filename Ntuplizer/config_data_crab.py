@@ -661,59 +661,59 @@ jecAK4chsUncFile = "%s_DATA_Uncertainty_AK4PFchs.txt"%(JECprefix)
 if config["CORRJETSONTHEFLY"]:
    if config["RUNONMC"]:
      jecLevelsAK8chs = [
-     	 'JEC/%s_MC_L1FastJet_AK8PFchs.txt'%(JECprefix),
-     	 'JEC/%s_MC_L2Relative_AK8PFchs.txt'%(JECprefix),
-     	 'JEC/%s_MC_L3Absolute_AK8PFchs.txt'%(JECprefix)
+     	 '%s_MC_L1FastJet_AK8PFchs.txt'%(JECprefix),
+     	 '%s_MC_L2Relative_AK8PFchs.txt'%(JECprefix),
+     	 '%s_MC_L3Absolute_AK8PFchs.txt'%(JECprefix)
        ]
      jecLevelsAK8Groomedchs = [
-     	 'JEC/%s_MC_L2Relative_AK8PFchs.txt'%(JECprefix),
-     	 'JEC/%s_MC_L3Absolute_AK8PFchs.txt'%(JECprefix)
+     	 '%s_MC_L2Relative_AK8PFchs.txt'%(JECprefix),
+     	 '%s_MC_L3Absolute_AK8PFchs.txt'%(JECprefix)
        ]
      jecLevelsAK8Puppi = [
-     	 'JEC/%s_MC_L2Relative_AK8PFPuppi.txt'%(JECprefix),
-     	 'JEC/%s_MC_L3Absolute_AK8PFPuppi.txt'%(JECprefix)
+     	 '%s_MC_L2Relative_AK8PFPuppi.txt'%(JECprefix),
+     	 '%s_MC_L3Absolute_AK8PFPuppi.txt'%(JECprefix)
        ]
      jecLevelsAK4chs = [
-     	 'JEC/%s_MC_L1FastJet_AK4PFchs.txt'%(JECprefix),
-     	 'JEC/%s_MC_L2Relative_AK4PFchs.txt'%(JECprefix),
-     	 'JEC/%s_MC_L3Absolute_AK4PFchs.txt'%(JECprefix)
+     	 '%s_MC_L1FastJet_AK4PFchs.txt'%(JECprefix),
+     	 '%s_MC_L2Relative_AK4PFchs.txt'%(JECprefix),
+     	 '%s_MC_L3Absolute_AK4PFchs.txt'%(JECprefix)
        ]
    else:
      jecLevelsAK8chs = [
-     	 'JEC/%s_DATA_L1FastJet_AK8PFchs.txt'%(JECprefix),
-     	 'JEC/%s_DATA_L2Relative_AK8PFchs.txt'%(JECprefix),
-     	 'JEC/%s_DATA_L3Absolute_AK8PFchs.txt'%(JECprefix),
-	     'JEC/%s_DATA_L2L3Residual_AK8PFchs.txt'%(JECprefix)
+     	 '%s_DATA_L1FastJet_AK8PFchs.txt'%(JECprefix),
+     	 '%s_DATA_L2Relative_AK8PFchs.txt'%(JECprefix),
+     	 '%s_DATA_L3Absolute_AK8PFchs.txt'%(JECprefix),
+	     '%s_DATA_L2L3Residual_AK8PFchs.txt'%(JECprefix)
        ]
      jecLevelsAK8Groomedchs = [
-     	 'JEC/%s_DATA_L2Relative_AK8PFchs.txt'%(JECprefix),
-     	 'JEC/%s_DATA_L3Absolute_AK8PFchs.txt'%(JECprefix),
-	     'JEC/%s_DATA_L2L3Residual_AK8PFchs.txt'%(JECprefix)
+     	 '%s_DATA_L2Relative_AK8PFchs.txt'%(JECprefix),
+     	 '%s_DATA_L3Absolute_AK8PFchs.txt'%(JECprefix),
+	     '%s_DATA_L2L3Residual_AK8PFchs.txt'%(JECprefix)
        ]
      jecLevelsAK8Puppi = [
-     	 'JEC/%s_DATA_L2Relative_AK8PFPuppi.txt'%(JECprefix),
-     	 'JEC/%s_DATA_L3Absolute_AK8PFPuppi.txt'%(JECprefix),
-	     'JEC/%s_DATA_L2L3Residual_AK8PFPuppi.txt'%(JECprefix)
+     	 '%s_DATA_L2Relative_AK8PFPuppi.txt'%(JECprefix),
+     	 '%s_DATA_L3Absolute_AK8PFPuppi.txt'%(JECprefix),
+	     '%s_DATA_L2L3Residual_AK8PFPuppi.txt'%(JECprefix)
        ]
      jecLevelsAK4chs = [
-     	 'JEC/%s_DATA_L1FastJet_AK4PFchs.txt'%(JECprefix),
-     	 'JEC/%s_DATA_L2Relative_AK4PFchs.txt'%(JECprefix),
-     	 'JEC/%s_DATA_L3Absolute_AK4PFchs.txt'%(JECprefix),
-	     'JEC/%s_DATA_L2L3Residual_AK4PFchs.txt'%(JECprefix)
+     	 '%s_DATA_L1FastJet_AK4PFchs.txt'%(JECprefix),
+     	 '%s_DATA_L2Relative_AK4PFchs.txt'%(JECprefix),
+     	 '%s_DATA_L3Absolute_AK4PFchs.txt'%(JECprefix),
+	     '%s_DATA_L2L3Residual_AK4PFchs.txt'%(JECprefix)
        ]   
 if config["CORRMETONTHEFLY"]:  
    if config["RUNONMC"]:
      jecLevelsForMET = [				       
-     	 'JEC/%s_MC_L1FastJet_AK4PFchs.txt'%(JECprefix),
-     	 'JEC/%s_MC_L2Relative_AK4PFchs.txt'%(JECprefix),
-     	 'JEC/%s_MC_L3Absolute_AK4PFchs.txt'%(JECprefix)
+     	 '%s_MC_L1FastJet_AK4PFchs.txt'%(JECprefix),
+     	 '%s_MC_L2Relative_AK4PFchs.txt'%(JECprefix),
+     	 '%s_MC_L3Absolute_AK4PFchs.txt'%(JECprefix)
        ]
    else:       					       
      jecLevelsForMET = [
-     	 'JEC/%s_DATA_L1FastJet_AK4PFchs.txt'%(JECprefix),
-     	 'JEC/%s_DATA_L2Relative_AK4PFchs.txt'%(JECprefix),
-     	 'JEC/%s_DATA_L3Absolute_AK4PFchs.txt'%(JECprefix),
-       'JEC/%s_DATA_L2L3Residual_AK4PFchs.txt'%(JECprefix)
+     	 '%s_DATA_L1FastJet_AK4PFchs.txt'%(JECprefix),
+     	 '%s_DATA_L2Relative_AK4PFchs.txt'%(JECprefix),
+     	 '%s_DATA_L3Absolute_AK4PFchs.txt'%(JECprefix),
+       '%s_DATA_L2L3Residual_AK4PFchs.txt'%(JECprefix)
        ]	
       			    
 #from PhysicsTools.SelectorUtils.pfJetIDSelector_cfi import pfJetIDSelector
