@@ -67,7 +67,6 @@ bool TriggersNtuplizer::findTrigger( std::string trigName ){
        trigName.find("AK8PFHT700_TrimR0p1PT0p03Mass50") != std::string::npos ||
        trigName.find("AK8PFHT650_TrimR0p1PT0p03Mass50") != std::string::npos ||
        trigName.find("AK8PFHT660_TrimR0p1PT0p03Mass50_BTagCSV_p20") != std::string::npos ||
-       trigName.find("AK8DiPFJet280_200_TrimMass30_BTagCSV") != std::string::npos ||
        trigName.find("AK8DiPFJet280_200_TrimMass30_BTagCSV_p20") != std::string::npos ||
        trigName.find("AK8DiPFJet250_200_TrimMass30_BTagCSV_p20") != std::string::npos ||
        trigName.find("PFHT650_WideJetMJJ950DEtaJJ1p5") != std::string::npos ||
