@@ -74,7 +74,7 @@ def main():
                                  './JER/Spring16_25nsV6_MC_SF_AK4PFPuppi.txt',
                                  './JSON/Cert_246908-260627_13TeV_PromptReco_Collisions15_25ns_JSON_Silver_v2.txt',
                                  './JSON/JSON_Run2015D_PromptReco-v4.txt',
-                                 './JSON/Cert_271036-273450_13TeV_PromptReco_Collisions16_JSON_NoL1T.txt'
+                                 './JSON/Cert_271036-279588_13TeV_PromptReco_Collisions16_JSON_NoL1T.txt'
                                ]
 
     config.section_("Data")

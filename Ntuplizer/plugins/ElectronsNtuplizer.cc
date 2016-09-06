@@ -65,7 +65,7 @@ float ElectronsNtuplizer::dEtaInSeed( const pat::Electron &ele ){
 // YT added : 17 Aug 2016. This is for Non-Triggering MVA, used for tautau analysis, in general
 bool isNonTrigElectronID(pat::Electron ele)
 {
-  Float_t eta = abs(ele.superCluster()->eta());
+  Float_t eta = fabs(ele.superCluster()->eta());
   Float_t pt = ele.pt();
 
   Float_t mva = 0;
@@ -75,6 +75,8 @@ bool isNonTrigElectronID(pat::Electron ele)
     std::cout << "Not available nonTrig" << std::endl;
     return 0;
   }
+
+  //  std::cout << "pT, eta, mva = " << pt << " " << eta << " " << mva << std::endl;
 
   if(pt > 10.){
     if(eta < 0.8) return mva > 0.967083;
@@ -94,6 +96,24 @@ bool isNonTrigElectronID(pat::Electron ele)
   }
   
 }
+
+
+float isNonTrigElectron(pat::Electron ele)
+{
+  
+  float mva = 0;
+  if(ele.hasUserFloat("ElectronMVAEstimatorRun2Spring15NonTrig25nsV1Values")){
+    mva = ele.userFloat("ElectronMVAEstimatorRun2Spring15NonTrig25nsV1Values");
+    return mva;
+  }else{
+    std::cout << "Not available nonTrig" << std::endl;
+    return -99;
+  }
+
+  return -99;
+  
+}
+
 
 
 float ElectronCorrPFIso(pat::Electron ele, double Aeff03, float rho, edm::Handle<pat::TauCollection> 	     taus_  ){
@@ -163,7 +183,9 @@ void ElectronsNtuplizer::fillBranches( edm::Event const & event, const edm::Even
   
    // Find the first vertex in the collection that passes good quality criteria
    // reco::VertexCollection::const_iterator firstGoodVertex = vertices_->end();
+   reco::VertexCollection::const_iterator firstVertex = vertices_->begin();
    reco::VertexCollection::const_iterator firstGoodVertex = vertices_->begin();
+
    int firstGoodVertexIdx = 0;
    for( reco::VertexCollection::const_iterator vtx = vertices_->begin(); vtx != vertices_->end(); ++vtx, ++firstGoodVertexIdx){
      bool isFake = (vtx->chi2()==0 && vtx->ndof()==0);
@@ -246,6 +268,8 @@ void ElectronsNtuplizer::fillBranches( edm::Event const & event, const edm::Even
     nBranches_->el_hOverE		   .push_back(ele.hcalOverEcal());
     nBranches_->el_dz  		           .push_back(ele.gsfTrack()->dz((*firstGoodVertex).position()));
     nBranches_->el_d0  	                   .push_back((-1)*ele.gsfTrack()->dxy((*firstGoodVertex).position()));
+    nBranches_->el_dz_allvertices          .push_back(ele.gsfTrack()->dz((*firstVertex).position()));
+    nBranches_->el_d0_allvertices          .push_back((-1)*ele.gsfTrack()->dxy((*firstVertex).position()));
     nBranches_->el_expectedMissingInnerHits.push_back(ele.gsfTrack()->hitPattern().numberOfHits(reco::HitPattern::MISSING_INNER_HITS));
     
     nBranches_->el_dr03EcalRecHitSumEt.push_back(ele.dr03EcalRecHitSumEt());
@@ -287,6 +311,7 @@ void ElectronsNtuplizer::fillBranches( edm::Event const & event, const edm::Even
     nBranches_->el_isMediumElectron.push_back(isMediumElectron);
     nBranches_->el_isTightElectron .push_back(isTightElectron);
     nBranches_->el_nonTrigMVAID	   .push_back(isNonTrigElectronID(ele)); 
+    nBranches_->el_nonTrigMVA	   .push_back(isNonTrigElectron(ele)); 
     nBranches_->el_isHeepElectron  .push_back(isHeepElectron);  
     nBranches_->el_isHeep51Electron.push_back(isHeep51Electron);  
 

@@ -20,7 +20,7 @@ import FWCore.ParameterSet.VarParsing as VarParsing
 
 options = VarParsing.VarParsing ('analysis')
 
-options.maxEvents = 100
+options.maxEvents = 500
 
 #data file
 
@@ -288,7 +288,9 @@ if config["ADDAK8GENJETS"]:
   process.genJetsAK8.jetCorrFactorsSource = cms.VInputTag( cms.InputTag("") )
   process.selectedGenJetsAK8 = selectedPatJetsAK8.clone( src = 'genJetsAK8', cut = cms.string('pt > 20') )
 
-################# Prepare recluster jets with b-tagging ######################
+################# Prepare recluster or update jet collection jets with b-tagging ######################
+
+
 bTagDiscriminators = [
     # 'pfJetProbabilityBJetTags',
     # 'pfJetBProbabilityBJetTags',
@@ -299,6 +301,17 @@ bTagDiscriminators = [
     # 'pfTrackCountingHighEffBJetTags',
     'pfBoostedDoubleSecondaryVertexAK8BJetTags'    
 ]
+
+#Needed in 80X to get the latest Hbb training
+if config["UpdateJetCollection"]:
+  from PhysicsTools.PatAlgos.tools.jetTools import updateJetCollection
+## Update the slimmedJets in miniAOD: corrections from the chosen Global Tag are applied and the b-tag discriminators are re-evaluated
+  updateJetCollection(
+    process,
+    jetSource = cms.InputTag('slimmedJetsAK8'),
+    jetCorrections = ('AK8PFchs', cms.vstring(['L1FastJet', 'L2Relative', 'L3Absolute']), 'None'),
+    btagDiscriminators = bTagDiscriminators
+  )
 
 def cap(s): return s[0].upper() + s[1:]
 
@@ -594,6 +607,8 @@ if config["ADDAK8GENJETS"]:
     
 if config["DOAK8RECLUSTERING"]:
   jetsAK8 = "patJetsAk8CHSJets"
+if config["UpdateJetCollection"]:
+  jetsAK8 = "updatedPatJetsTransientCorrected"
 if doAK8softdropReclustering:  
   jetsAK8softdrop = "patJetsAk8CHSJetsSoftDropPacked"  
 if config["DOAK8PRUNEDRECLUSTERING"]:  
