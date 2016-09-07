@@ -607,6 +607,8 @@ public:
   std::vector<float>  	            MET_corrPy  	      ;
   std::vector<float>  	      	    MET_et		      ;
   std::vector<float>  	      	    MET_phi		      ;
+  std::vector<float>  	      	    METpuppi_et		      ;
+  std::vector<float>  	      	    METpuppi_phi	      ;
   std::vector<float>  	      	    MET_sumEt		      ;
   std::vector<float>  	      	    MET_T1Uncertainty	      ;
 
