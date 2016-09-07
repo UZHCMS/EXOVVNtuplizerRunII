@@ -7,6 +7,7 @@
 //===================================================================================================================        
 METsNtuplizer::METsNtuplizer( 	edm::EDGetTokenT<pat::METCollection>     mettoken    , 
 				edm::EDGetTokenT<pat::METCollection>     metpuppitoken    , 
+				edm::EDGetTokenT<pat::METCollection>     metmvatoken    , 
  	 			edm::EDGetTokenT<pat::JetCollection>	 jettoken    ,
 				edm::EDGetTokenT<pat::MuonCollection> 	 muontoken   ,
 				edm::EDGetTokenT<double> 		 rhotoken    ,
@@ -22,6 +23,7 @@ METsNtuplizer::METsNtuplizer( 	edm::EDGetTokenT<pat::METCollection>     mettoken
 : CandidateNtuplizer ( nBranches    )
 , metInputToken_     ( mettoken     )
 , metpuppiInputToken_( metpuppitoken)
+, metmvaInputToken_  ( metmvatoken  )
 , jetInputToken_     ( jettoken     )
 , muonInputToken_    ( muontoken    )	    
 , rhoToken_	     ( rhotoken     )	    
@@ -229,11 +231,31 @@ void METsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
 
   // Y.T added 6 Sep. For puppi MET
   event.getByToken(metpuppiInputToken_, METspuppi_ );
+  Int_t im = 0;
 
   for (const pat::MET &met : *METspuppi_) {
     nBranches_->METpuppi_et.push_back(met.et());
     nBranches_->METpuppi_phi.push_back(met.phi());
+    im ++;
   }
+
+  std::cout << "n puppi MET = " << im << std::endl;
+
+
+  // Y.T added 6 Sep. For MVA MET
+  event.getByToken(metmvaInputToken_, METsmva_ );
+
+  im = 0;
+
+  for (const pat::MET &met : *METsmva_) {
+    nBranches_->METmva_et.push_back(met.et());
+    nBranches_->METmva_phi.push_back(met.phi());
+
+    std::cout << "MVA met et, phi = "  << met.et() << " " << met.phi() << std::endl;
+    im++;
+  }
+
+  std::cout << "nMVAMET = " << im << std::endl;
 
 
   if (doMETSVFIT_) {
