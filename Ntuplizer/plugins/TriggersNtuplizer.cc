@@ -98,27 +98,46 @@ bool TriggersNtuplizer::findTrigger( std::string trigName ){
        trigName.find("HLT_IsoMu16_eta2p1_MET30_LooseIsoPFTau50_Trk30_eta2p1_v1") != std::string::npos ||
        //H->tautau triggers
        trigName.find("HLT_LooseIsoPFTau50") != std::string::npos||
-       trigName.find("HLT_IsoMu17_eta2p1_LooseIsoPFTau20") != std::string::npos||
+       trigName.find("HLT_IsoMu17_eta2p1_LooseIsoPFTau20_SingleL1_v") != std::string::npos||
+       trigName.find("HLT_IsoMu17_eta2p1_LooseIsoPFTau20_v") != std::string::npos||
+       trigName.find("HLT_IsoMu19_eta2p1_LooseIsoPFTau20_SingleL1_v") != std::string::npos||
+       trigName.find("HLT_IsoMu19_eta2p1_LooseIsoPFTau20_v") != std::string::npos||
+       trigName.find("HLT_IsoMu21_eta2p1_LooseIsoPFTau20_SingleL1_v") != std::string::npos||
        trigName.find("HLT_IsoMu24_eta2p1") != std::string::npos||
        trigName.find("HLT_IsoMu17_eta2p1") != std::string::npos||
        trigName.find("HLT_IsoMu18_v") != std::string::npos||
        trigName.find("HLT_IsoMu22_v") != std::string::npos||
        trigName.find("HLT_IsoMu27_v") != std::string::npos||
        trigName.find("HLT_IsoMu20_v") != std::string::npos||
+       trigName.find("HLT_IsoMu22_v") != std::string::npos||
+       trigName.find("HLT_IsoMu22_eta2p1_v") != std::string::npos||       
        trigName.find("HLT_IsoMu24_v") != std::string::npos||
        trigName.find("HLT_IsoTkMu18_v") != std::string::npos||
        trigName.find("HLT_IsoTkMu20_v") != std::string::npos||
        trigName.find("HLT_IsoTkMu22_v") != std::string::npos||
+       trigName.find("HLT_IsoTkMu22_eta2p1_v") != std::string::npos||
        trigName.find("HLT_IsoTkMu24_v") != std::string::npos||
        trigName.find("HLT_IsoTkMu27_v") != std::string::npos||
+       trigName.find("HLT_Ele22_eta2p1_WPLoose_Gsf_LooseIsoPFTau20_SingleL1_v") != std::string::npos||
+       trigName.find("HLT_Ele24_eta2p1_WPLoose_Gsf_LooseIsoPFTau20_SingleL1_v") != std::string::npos||
+       trigName.find("HLT_Ele24_eta2p1_WPLoose_Gsf_LooseIsoPFTau20_v") != std::string::npos||
+       trigName.find("HLT_Ele27_eta2p1_WPLoose_Gsf_LooseIsoPFTau20_SingleL1_v") != std::string::npos||
+       trigName.find("HLT_Ele32_eta2p1_WPLoose_Gsf_LooseIsoPFTau20_SingleL1_v") != std::string::npos||
        trigName.find("HLT_Ele22_eta2p1_WP75_Gsf_LooseIsoPFTau20") != std::string::npos||
        trigName.find("HLT_Ele25_eta2p1") != std::string::npos||
        trigName.find("HLT_Ele22_eta2p1_WP75_Gsf_v") != std::string::npos||
        trigName.find("HLT_Ele32_eta2p1_WP75_Gsf") != std::string::npos||
        trigName.find("HLT_Ele23_WPLoose_Gsf") != std::string::npos||
        trigName.find("HLT_Ele23_WPTight_Gsf") != std::string::npos||
+       trigName.find("HLT_Ele24_eta2p1_WPLoose_Gsf_v") != std::string::npos||
+       trigName.find("HLT_Ele25_WPTight_Gsf_v") != std::string::npos||
+       trigName.find("HLT_Ele25_eta2p1_WPLoose_Gsf_v") != std::string::npos||
+       trigName.find("HLT_Ele25_eta2p1_WPTight_Gsf_v") != std::string::npos||
        trigName.find("HLT_Ele27_WPLoose_Gsf") != std::string::npos||
        trigName.find("HLT_Ele27_WPTight_Gsf") != std::string::npos||
+       trigName.find("HLT_Ele27_eta2p1_WPLoose_Gsf_v") != std::string::npos||
+       trigName.find("HLT_Ele27_eta2p1_WPTight_Gsf_v") != std::string::npos||
+       trigName.find("HLT_Ele32_eta2p1_WPTight_Gsf_v") != std::string::npos||
        trigName.find("HLT_DoubleMediumIsoPFTau40_Trk1_eta2p1_Reg") != std::string::npos||
        trigName.find("HLT_DoubleMediumIsoPFTau35_Trk1_eta2p1_Reg") != std::string::npos||
        // Double leptons
@@ -191,6 +210,7 @@ void TriggersNtuplizer::fillBranches( edm::Event const & event, const edm::Event
   			   nBranches_->triggerObject_eta .push_back(obj.eta());
   			   nBranches_->triggerObject_phi .push_back(obj.phi());
   			   nBranches_->triggerObject_mass.push_back(obj.mass());
+  			   nBranches_->triggerObject_lastname.push_back(pathNamesLast[h]);
 			
   			   for (unsigned h = 0; h < obj.filterIds().size(); ++h) vfilterIDs.push_back( obj.filterIds()[h]); // as defined in http://cmslxr.fnal.gov/lxr/source/DataFormats/HLTReco/interface/TriggerTypeDefs.h
 				

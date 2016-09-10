@@ -29,8 +29,8 @@ METsNtuplizer::METsNtuplizer( 	edm::EDGetTokenT<pat::METCollection>     mettoken
 , rhoToken_	     ( rhotoken     )	    
 , verticeToken_	     ( vtxtoken     )	
 , metSigToken_       ( metSigtoken  )
-, metCovToken_  	(metCovtoken)										    
-, jetCorrLabel_	     ( jecAK4labels )								    
+, metCovToken_       ( metCovtoken  )
+, jetCorrLabel_	     ( jecAK4labels )
 , corrFormulas_	     ( corrformulas )	
 , doMETSVFIT_        ( runFlags["doMETSVFIT"]  )					    
 
@@ -182,6 +182,10 @@ void METsNtuplizer::addTypeICorr( edm::Event const & event ){
 
 //===================================================================================================================
 void METsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetup& iSetup ){
+
+
+
+  // PFMET
 	
   event.getByToken(metInputToken_, METs_ );
 
@@ -231,31 +235,60 @@ void METsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
 
   // Y.T added 6 Sep. For puppi MET
   event.getByToken(metpuppiInputToken_, METspuppi_ );
-  Int_t im = 0;
 
   for (const pat::MET &met : *METspuppi_) {
-    nBranches_->METpuppi_et.push_back(met.et());
+    nBranches_->METpuppi_et.push_back(met.pt());
     nBranches_->METpuppi_phi.push_back(met.phi());
-    im ++;
+
   }
 
-  std::cout << "n puppi MET = " << im << std::endl;
 
+  // Y.T added 10 Sep. For MVA MET
 
-  // Y.T added 6 Sep. For MVA MET
   event.getByToken(metmvaInputToken_, METsmva_ );
 
-  im = 0;
-
   for (const pat::MET &met : *METsmva_) {
-    nBranches_->METmva_et.push_back(met.et());
+    nBranches_->METmva_et.push_back(met.pt());
     nBranches_->METmva_phi.push_back(met.phi());
+    nBranches_->METmva_cov00.push_back(met.getSignificanceMatrix()(0,0));
+    nBranches_->METmva_cov01.push_back(met.getSignificanceMatrix()(0,1));
+    nBranches_->METmva_cov10.push_back(met.getSignificanceMatrix()(1,0));
+    nBranches_->METmva_cov11.push_back(met.getSignificanceMatrix()(1,1));
 
-    std::cout << "MVA met et, phi = "  << met.et() << " " << met.phi() << std::endl;
-    im++;
+    std::vector<float> recoil_pt;
+    std::vector<float> recoil_eta;
+    std::vector<float> recoil_phi;
+    std::vector<float> recoil_M;
+    std::vector<int> recoil_charge;
+
+    recoil_pt.clear();
+    recoil_eta.clear();
+    recoil_phi.clear();
+    recoil_M.clear();
+    recoil_charge.clear();
+
+    //    std::cout << "met = " << met.pt() << std::endl;
+
+    for(auto name: met.userCandNames()){
+      reco::CandidatePtr aRecoCand = met.userCand(name);
+
+      //      std::cout << "\t" << name << " " << aRecoCand->p4().Pt() << " " << aRecoCand->p4().Eta() << " " << aRecoCand->p4().Phi() << " " << aRecoCand->p4().M() << " " << aRecoCand->charge() << std::endl;
+
+      recoil_pt.push_back(aRecoCand->p4().Pt());
+      recoil_eta.push_back(aRecoCand->p4().Eta());
+      recoil_phi.push_back(aRecoCand->p4().Phi());
+      recoil_M.push_back(aRecoCand->p4().M());
+      recoil_charge.push_back(aRecoCand->charge());
+    }
+
+    nBranches_->METmva_recoil_pt.push_back(recoil_pt);
+    nBranches_->METmva_recoil_eta.push_back(recoil_eta);
+    nBranches_->METmva_recoil_phi.push_back(recoil_phi);
+    nBranches_->METmva_recoil_M.push_back(recoil_M);
+    nBranches_->METmva_recoil_charge.push_back(recoil_charge);
+
   }
 
-  std::cout << "nMVAMET = " << im << std::endl;
 
 
   if (doMETSVFIT_) {
@@ -266,10 +299,10 @@ void METsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
   //event.getByLabel ("METSignificance", "METSignificance", significanceHandle);
   //event.getByLabel ("METSignificance", "METCovariance", covHandle);
  
-  nBranches_->MET_significance.push_back( (*significanceHandle));
-  nBranches_->MET_cov00.push_back(    (*covHandle)(0,0));
-  nBranches_->MET_cov10.push_back(    (*covHandle)(1,0));
-  nBranches_->MET_cov11.push_back(    (*covHandle)(1,1));
+    nBranches_->MET_significance.push_back( (*significanceHandle));
+    nBranches_->MET_cov00.push_back(    (*covHandle)(0,0));
+    nBranches_->MET_cov10.push_back(    (*covHandle)(1,0));
+    nBranches_->MET_cov11.push_back(    (*covHandle)(1,1));
   //FROM LOW MASS ANALYSIS
   // covMET[0][0] = (*covHandle)(0,0);
   // covMET[1][0] = (*covHandle)(1,0);

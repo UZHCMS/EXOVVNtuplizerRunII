@@ -39,6 +39,10 @@ GenParticlesNtuplizer::~GenParticlesNtuplizer( void )
       nBranches_->genParticle_e     .push_back((*genParticles_)[p].energy() );
       nBranches_->genParticle_status.push_back((*genParticles_)[p].status() );
       nBranches_->genParticle_pdgId .push_back((*genParticles_)[p].pdgId()  );
+      nBranches_->genParticle_isPrompt.push_back((*genParticles_)[p].statusFlags().isPrompt());
+      nBranches_->genParticle_isDirectPromptTauDecayProduct.push_back((*genParticles_)[p].statusFlags().isDirectPromptTauDecayProduct());
+
+
       for( unsigned int d=0; d<(*genParticles_)[p].numberOfDaughters(); ++d ){
         vDau.push_back( (*genParticles_)[p].daughter(d)->pdgId() );
 	    nDau++;

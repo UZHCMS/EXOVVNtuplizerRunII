@@ -59,6 +59,8 @@ public:
   std::vector<float>              genParticle_phi      ;
   std::vector<float>              genParticle_mass     ;
   std::vector<int  >              genParticle_pdgId    ;
+  std::vector<int  >              genParticle_isPrompt ;
+  std::vector<int  >              genParticle_isDirectPromptTauDecayProduct;
   std::vector<int  >              genParticle_status   ;
   std::vector<int  >              genParticle_nDau     ;
   std::vector<int  >              genParticle_nMoth    ;
@@ -68,7 +70,9 @@ public:
   /** generator info */
   float                           lheV_pt              ;
   float                           lheHT                ;
-  float                           lheNj                ;
+  int                             lheNj                ;
+  float                           lheBosonMass         ;
+  float                           lheBosonPt           ;
   float                           genWeight            ;
   float                           qScale               ;
   std::vector<int  >              PDF_id               ;
@@ -220,6 +224,8 @@ public:
   std::vector<float>  	      tau_chargedHadIsoBoost     ;  
   std::vector<int  >  	      tau_TauType	         ;  
   std::vector<int  >  	      tau_decayMode	         ;  // YT added
+  std::vector<float>  	      tau_chargedPionPt	         ;  // YT added
+  std::vector<float>  	      tau_neutralPionPt	         ;  // YT added
   
   /** tau discriminants */
   std::vector<float>  	      tau_decayModeFindingNewDMs	              ;
@@ -571,6 +577,7 @@ public:
   std::vector<float>  		    triggerObject_eta	      ;
   std::vector<float>  		    triggerObject_phi	      ;
   std::vector<float>  		    triggerObject_mass	      ;
+  std::vector<std::string>  		    triggerObject_lastname    ;
   std::vector< std::vector<float> > triggerObject_filterIDs   ; // as defined in http://cmslxr.fnal.gov/lxr/source/DataFormats/HLTReco/interface/TriggerTypeDefs.h
   std::vector< std::vector<int> >   triggerObject_firedTrigger; // as defined in plugins/TriggersNtuplizer.cc
 
@@ -609,6 +616,8 @@ public:
   std::vector<float>  	      	    MET_phi		      ;
   std::vector<float>  	      	    METpuppi_et		      ;
   std::vector<float>  	      	    METpuppi_phi	      ;
+  std::vector<float>  	      	    METmva_et		      ;
+  std::vector<float>  	      	    METmva_phi	              ;
   std::vector<float>  	      	    MET_sumEt		      ;
   std::vector<float>  	      	    MET_T1Uncertainty	      ;
 
@@ -617,7 +626,15 @@ public:
   std::vector<float>                MET_cov00	      ;	 
   std::vector<float>                MET_cov10	      ;	 
   std::vector<float>                MET_cov11	      ;	 
-  
+  std::vector<float>                METmva_cov00	      ;	 
+  std::vector<float>                METmva_cov01	      ;	 
+  std::vector<float>                METmva_cov10	      ;	 
+  std::vector<float>                METmva_cov11	      ;	 
+  std::vector< std::vector<float> > METmva_recoil_pt;
+  std::vector< std::vector<float> > METmva_recoil_eta;
+  std::vector< std::vector<float> > METmva_recoil_phi;
+  std::vector< std::vector<float> > METmva_recoil_M;
+  std::vector< std::vector<int> >   METmva_recoil_charge;
 
   /*------------------------EVENT infos-------------------------*/    
   int                               EVENT_event            ;

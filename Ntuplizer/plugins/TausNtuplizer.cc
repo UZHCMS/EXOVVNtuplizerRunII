@@ -57,6 +57,41 @@ void TausNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
       // YT added : 17 Aug 2016
       pat::PackedCandidate const* packedLeadTauCand = dynamic_cast<pat::PackedCandidate const*>(tau.leadChargedHadrCand().get());
       nBranches_->tau_dz	      	      .push_back(fabs(packedLeadTauCand->dz()));
+
+      // For the tau polarization measurement
+      if(tau.decayMode() >= 1 && tau.decayMode() <= 4){
+	Float_t pt_neutral = 0;
+	Float_t pt_charged = 0;
+	
+	// This crashes ... don't know why ... 
+	//	for(auto it = tau.signalCands().begin(), end = tau.signalCands().end(); it!=end; ++it){
+	//	  std::cout << (*it)->pdgId() << std::endl;
+	//	}
+
+	for(int ii = 0; ii < (int)tau.signalCands().size(); ii++){
+	  Int_t pdg = abs(tau.signalCands()[ii]->pdgId());
+	  Float_t candpt = tau.signalCands()[ii]->pt();
+	  
+	  if(pdg == 11 || pdg == 22 || pdg == 130) pt_neutral += candpt;
+	  if(pdg == 211){
+	    if(candpt > pt_charged){
+	      pt_charged = candpt;
+	    }
+	  }
+	}
+	
+	if(pt_charged > 0){
+	  nBranches_->tau_chargedPionPt.push_back(pt_charged);
+	  nBranches_->tau_neutralPionPt.push_back(pt_neutral);
+	}else{
+	  nBranches_->tau_chargedPionPt.push_back(-1);
+	  nBranches_->tau_neutralPionPt.push_back(-1);
+	}
+      }else{
+	nBranches_->tau_chargedPionPt.push_back(-99);
+	nBranches_->tau_neutralPionPt.push_back(-99);
+      }
+
          
       /*====================== ISO ========================*/	         
       double rho = *(rho_.product());
@@ -196,6 +231,36 @@ void TausNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
       // YT added : 17 Aug 2016
       pat::PackedCandidate const* packedLeadTauCand = dynamic_cast<pat::PackedCandidate const*>(boostedTau.leadChargedHadrCand().get());
       nBranches_->tau_dz	      	      .push_back(fabs(packedLeadTauCand->dz()));
+
+      if(boostedTau.decayMode() >= 1 && boostedTau.decayMode() <= 4){
+	Float_t pt_neutral = 0;
+	Float_t pt_charged = 0;
+
+	for(int ii = 0; ii < (int)boostedTau.signalCands().size(); ii++){
+	  Int_t pdg = abs(boostedTau.signalCands()[ii]->pdgId());
+	  Float_t candpt = boostedTau.signalCands()[ii]->pt();
+	  
+	  if(pdg == 11 || pdg == 22 || pdg == 130) pt_neutral += candpt;
+	  if(pdg == 211){
+	    if(candpt > pt_charged){
+	      pt_charged = candpt;
+	    }
+	  }
+	}
+	
+	if(pt_charged > 0){
+	  nBranches_->tau_chargedPionPt.push_back(pt_charged);
+	  nBranches_->tau_neutralPionPt.push_back(pt_neutral);
+	}else{
+	  nBranches_->tau_chargedPionPt.push_back(-1);
+	  nBranches_->tau_neutralPionPt.push_back(-1);
+	}
+      }else{
+	nBranches_->tau_chargedPionPt.push_back(-99);
+	nBranches_->tau_neutralPionPt.push_back(-99);
+      }
+
+
 
       /*====================== ISO ========================*/	          
       double rho = *(rho_.product());
