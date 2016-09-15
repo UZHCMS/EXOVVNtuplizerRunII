@@ -84,17 +84,18 @@ void GenEventNtuplizer::fillBranches( edm::Event const & event, const edm::Event
   if(tlv.size()==2){
     Float_t genboson_mass = (tlv[0] + tlv[1]).M();
     Float_t genboson_pt = (tlv[0] + tlv[1]).Pt();
-    nBranches_->lheBosonMass = genboson_mass;
-    nBranches_->lheBosonPt = genboson_pt;
+
+    nBranches_->lheV_mass = genboson_mass;
+    nBranches_->lheV_pt = genboson_pt;
   }else{
-    nBranches_->lheBosonMass = -1;
-    nBranches_->lheBosonPt = -1;
+    nBranches_->lheV_mass = -1;
+    nBranches_->lheV_pt = -1;
   }
 
-  nBranches_->lheV_pt = 0.;
+  //  nBranches_->lheV_pt = 0.;
   //  nBranches_->lheNj = 0; // Does anybody use this ?
   nBranches_->lheNj = nParton;
-  nBranches_->lheHT = lheHt_;
+  nBranches_->lheHt = lheHt_;
 
 
  

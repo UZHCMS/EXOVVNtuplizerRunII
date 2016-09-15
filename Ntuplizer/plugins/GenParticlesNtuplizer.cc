@@ -39,8 +39,17 @@ GenParticlesNtuplizer::~GenParticlesNtuplizer( void )
       nBranches_->genParticle_e     .push_back((*genParticles_)[p].energy() );
       nBranches_->genParticle_status.push_back((*genParticles_)[p].status() );
       nBranches_->genParticle_pdgId .push_back((*genParticles_)[p].pdgId()  );
+
+
+      // needed for the gen matching
       nBranches_->genParticle_isPrompt.push_back((*genParticles_)[p].statusFlags().isPrompt());
       nBranches_->genParticle_isDirectPromptTauDecayProduct.push_back((*genParticles_)[p].statusFlags().isDirectPromptTauDecayProduct());
+
+      // needed for the MVA recoil correction
+      //      nBranches_->genParticle_fromHardProcessFinalState.push_back((*genParticles_)[p].statusFlags().fromHardProcessFinalState());
+      //      nBranches_->genParticle_isDirectHardProcessTauDecayProductFinalState.push_back((*genParticles_)[p].statusFlags().isDirectHardProcessTauDecayProductFinalState());
+      nBranches_->genParticle_fromHardProcessFinalState.push_back((*genParticles_)[p].fromHardProcessFinalState());
+      nBranches_->genParticle_isDirectHardProcessTauDecayProductFinalState.push_back((*genParticles_)[p].isDirectHardProcessTauDecayProductFinalState());
 
 
       for( unsigned int d=0; d<(*genParticles_)[p].numberOfDaughters(); ++d ){

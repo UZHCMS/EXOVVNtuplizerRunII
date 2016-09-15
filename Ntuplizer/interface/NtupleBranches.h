@@ -61,6 +61,8 @@ public:
   std::vector<int  >              genParticle_pdgId    ;
   std::vector<int  >              genParticle_isPrompt ;
   std::vector<int  >              genParticle_isDirectPromptTauDecayProduct;
+  std::vector<int  >              genParticle_fromHardProcessFinalState;
+  std::vector<int  >              genParticle_isDirectHardProcessTauDecayProductFinalState;
   std::vector<int  >              genParticle_status   ;
   std::vector<int  >              genParticle_nDau     ;
   std::vector<int  >              genParticle_nMoth    ;
@@ -69,10 +71,9 @@ public:
 
   /** generator info */
   float                           lheV_pt              ;
-  float                           lheHT                ;
+  float                           lheHt                ;
   int                             lheNj                ;
-  float                           lheBosonMass         ;
-  float                           lheBosonPt           ;
+  float                           lheV_mass            ;
   float                           genWeight            ;
   float                           qScale               ;
   std::vector<int  >              PDF_id               ;
@@ -614,10 +615,10 @@ public:
   std::vector<float>  	            MET_corrPy  	      ;
   std::vector<float>  	      	    MET_et		      ;
   std::vector<float>  	      	    MET_phi		      ;
-  std::vector<float>  	      	    METpuppi_et		      ;
-  std::vector<float>  	      	    METpuppi_phi	      ;
-  std::vector<float>  	      	    METmva_et		      ;
-  std::vector<float>  	      	    METmva_phi	              ;
+  std::vector<float>  	      	    MET_puppi_et		      ;
+  std::vector<float>  	      	    MET_puppi_phi	      ;
+  std::vector<float>  	      	    MET_mva_et		      ;
+  std::vector<float>  	      	    MET_mva_phi	              ;
   std::vector<float>  	      	    MET_sumEt		      ;
   std::vector<float>  	      	    MET_T1Uncertainty	      ;
 
@@ -626,15 +627,15 @@ public:
   std::vector<float>                MET_cov00	      ;	 
   std::vector<float>                MET_cov10	      ;	 
   std::vector<float>                MET_cov11	      ;	 
-  std::vector<float>                METmva_cov00	      ;	 
-  std::vector<float>                METmva_cov01	      ;	 
-  std::vector<float>                METmva_cov10	      ;	 
-  std::vector<float>                METmva_cov11	      ;	 
-  std::vector< std::vector<float> > METmva_recoil_pt;
-  std::vector< std::vector<float> > METmva_recoil_eta;
-  std::vector< std::vector<float> > METmva_recoil_phi;
-  std::vector< std::vector<float> > METmva_recoil_M;
-  std::vector< std::vector<int> >   METmva_recoil_charge;
+  std::vector<float>                MET_mva_cov00	      ;	 
+  std::vector<float>                MET_mva_cov01	      ;	 
+  std::vector<float>                MET_mva_cov10	      ;	 
+  std::vector<float>                MET_mva_cov11	      ;	 
+  std::vector< std::vector<float> > MET_mva_recoil_pt;
+  std::vector< std::vector<float> > MET_mva_recoil_eta;
+  std::vector< std::vector<float> > MET_mva_recoil_phi;
+  std::vector< std::vector<int> >   MET_mva_recoil_pdgId;
+  std::vector<int>  	            MET_Nmva;
 
   /*------------------------EVENT infos-------------------------*/    
   int                               EVENT_event            ;

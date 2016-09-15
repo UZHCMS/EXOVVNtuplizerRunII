@@ -31,6 +31,8 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
       tree_->Branch( "genParticle_status"    , &genParticle_status     );
       tree_->Branch( "genParticle_isPrompt"  , &genParticle_isPrompt   );
       tree_->Branch( "genParticle_isDirectPromptTauDecayProduct"  , &genParticle_isDirectPromptTauDecayProduct);
+      tree_->Branch( "genParticle_isDirectHardProcessTauDecayProductFinalState"  , &genParticle_isDirectHardProcessTauDecayProductFinalState);
+      tree_->Branch( "genParticle_fromHardProcessFinalState"  , &genParticle_fromHardProcessFinalState   );
       tree_->Branch( "genParticle_mother"    , &genParticle_mother     );
       tree_->Branch( "genParticle_nMoth"     , &genParticle_nMoth      );
       tree_->Branch( "genParticle_nDau"	     , &genParticle_nDau       ); 
@@ -40,10 +42,9 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     if ( runFlags["doGenEvent"] ){
       /** generator info */
       tree_->Branch( "lheV_pt"	             , &lheV_pt                ); 
-      tree_->Branch( "lheHT"	             , &lheHT                  ); 
+      tree_->Branch( "lheHt"	             , &lheHt                  ); 
       tree_->Branch( "lheNj"	             , &lheNj                  ); 
-      tree_->Branch( "lheBosonMass"          , &lheBosonMass           ); 
-      tree_->Branch( "lheBosonPt"            , &lheBosonPt             ); 
+      tree_->Branch( "lheV_mass"             , &lheV_mass              ); 
       tree_->Branch( "genWeight"	     , &genWeight              ); 
       tree_->Branch( "qScale"	             , &qScale                 );
       tree_->Branch( "PDF_x"	             , &PDF_x                  );
@@ -588,11 +589,12 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch("MET_corrPy"		        , &MET_corrPy	     );   
     tree_->Branch("MET_et"	                , &MET_et  	     ); 
     tree_->Branch("MET_phi"	                , &MET_phi           );
-    tree_->Branch("METpuppi_et"	                , &METpuppi_et       ); 
-    tree_->Branch("METpuppi_phi"                , &METpuppi_phi      );
-    tree_->Branch("METmva_et"	                , &METmva_et       ); 
-    tree_->Branch("METmva_phi"                , &METmva_phi      );
+    tree_->Branch("MET_puppi_et"	        , &MET_puppi_et      ); 
+    tree_->Branch("MET_puppi_phi"               , &MET_puppi_phi     );
+    tree_->Branch("MET_mva_et"	                , &MET_mva_et        ); 
+    tree_->Branch("MET_mva_phi"                 , &MET_mva_phi       );
     tree_->Branch("MET_sumEt"	                , &MET_sumEt 	     ); 
+    tree_->Branch("MET_Nmva"	                , &MET_Nmva 	     ); 
   } //doMissingEt
 
   if ( runFlags["doMETSVFIT"] ){
@@ -601,15 +603,14 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch( "MET_cov00"                                        , &MET_cov00 );
     tree_->Branch( "MET_cov10"                                        , &MET_cov10 );
     tree_->Branch( "MET_cov11"                                        , &MET_cov11 );
-    tree_->Branch( "METmva_cov00"                                        , &METmva_cov00 );
-    tree_->Branch( "METmva_cov01"                                        , &METmva_cov01 );
-    tree_->Branch( "METmva_cov10"                                        , &METmva_cov10 );
-    tree_->Branch( "METmva_cov11"                                        , &METmva_cov11 );
-    tree_->Branch( "METmva_recoil_pt"                                        , &METmva_recoil_pt );
-    tree_->Branch( "METmva_recoil_eta"                                        , &METmva_recoil_eta );
-    tree_->Branch( "METmva_recoil_phi"                                        , &METmva_recoil_phi );
-    tree_->Branch( "METmva_recoil_M"                                        , &METmva_recoil_M );
-    tree_->Branch( "METmva_recoil_charge"                                        , &METmva_recoil_charge );
+    tree_->Branch( "MET_mva_cov00"                                        , &MET_mva_cov00 );
+    tree_->Branch( "MET_mva_cov01"                                        , &MET_mva_cov01 );
+    tree_->Branch( "MET_mva_cov10"                                        , &MET_mva_cov10 );
+    tree_->Branch( "MET_mva_cov11"                                        , &MET_mva_cov11 );
+    tree_->Branch( "MET_mva_recoil_pt"                                        , &MET_mva_recoil_pt );
+    tree_->Branch( "MET_mva_recoil_eta"                                        , &MET_mva_recoil_eta );
+    tree_->Branch( "MET_mva_recoil_phi"                                        , &MET_mva_recoil_phi );
+    tree_->Branch( "MET_mva_recoil_pdgId"                                        , &MET_mva_recoil_pdgId );
 
   }
   
@@ -655,6 +656,8 @@ void NtupleBranches::reset( void ){
   genParticle_pdgId.clear();
   genParticle_isPrompt.clear();
   genParticle_isDirectPromptTauDecayProduct.clear();
+  genParticle_fromHardProcessFinalState.clear();
+  genParticle_isDirectHardProcessTauDecayProductFinalState.clear();
   genParticle_status.clear();
   genParticle_mother.clear();
   genParticle_nMoth.clear();
@@ -662,16 +665,15 @@ void NtupleBranches::reset( void ){
   genParticle_dau.clear();
   
   /** generator info */
-  lheV_pt     = 0;
-  lheHT       = 0;
-  lheNj       = 0;
-  lheBosonMass= 0;
-  lheBosonPt  = 0;
   genWeight   = 0;
   qScale      = 0;
   PDF_id.clear();  
   PDF_x.clear();	
   PDF_xPDF.clear();
+  lheV_pt = 0;
+  lheHt = 0;
+  lheNj = 0;
+  lheV_mass = 0;
     
   /** electrons */
   el_N        = 0;
@@ -1186,10 +1188,11 @@ void NtupleBranches::reset( void ){
   MET_corrPy.clear();
   MET_et.clear();
   MET_phi.clear();
-  METpuppi_et.clear();
-  METpuppi_phi.clear();
-  METmva_et.clear();
-  METmva_phi.clear();
+  MET_puppi_et.clear();
+  MET_puppi_phi.clear();
+
+  MET_mva_et.clear();
+  MET_mva_phi.clear();
   MET_sumEt.clear();
   MET_T1Uncertainty.clear();
 
@@ -1198,15 +1201,15 @@ void NtupleBranches::reset( void ){
   MET_cov00.clear();
   MET_cov10.clear();
   MET_cov11.clear();
-  METmva_cov00.clear();
-  METmva_cov01.clear();
-  METmva_cov10.clear();
-  METmva_cov11.clear();
-  METmva_recoil_pt.clear();
-  METmva_recoil_eta.clear();
-  METmva_recoil_phi.clear();
-  METmva_recoil_M.clear();
-  METmva_recoil_charge.clear();
+  MET_mva_cov00.clear();
+  MET_mva_cov01.clear();
+  MET_mva_cov10.clear();
+  MET_mva_cov11.clear();
+  MET_mva_recoil_pt.clear();
+  MET_mva_recoil_eta.clear();
+  MET_mva_recoil_phi.clear();
+  MET_mva_recoil_pdgId.clear();
+  MET_Nmva.clear();
 
   /*------------------------EVENT infos-------------------------*/    
   EVENT_event = 0;
@@ -1225,6 +1228,7 @@ void NtupleBranches::reset( void ){
   nPuVtxTrue.clear();
   nPuVtx.clear();
   bX.clear();
+
 
 
 

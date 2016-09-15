@@ -237,59 +237,58 @@ void METsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
   event.getByToken(metpuppiInputToken_, METspuppi_ );
 
   for (const pat::MET &met : *METspuppi_) {
-    nBranches_->METpuppi_et.push_back(met.pt());
-    nBranches_->METpuppi_phi.push_back(met.phi());
+    nBranches_->MET_puppi_et.push_back(met.pt());
+    nBranches_->MET_puppi_phi.push_back(met.phi());
 
   }
 
+  
 
   // Y.T added 10 Sep. For MVA MET
 
   event.getByToken(metmvaInputToken_, METsmva_ );
 
-  for (const pat::MET &met : *METsmva_) {
-    nBranches_->METmva_et.push_back(met.pt());
-    nBranches_->METmva_phi.push_back(met.phi());
-    nBranches_->METmva_cov00.push_back(met.getSignificanceMatrix()(0,0));
-    nBranches_->METmva_cov01.push_back(met.getSignificanceMatrix()(0,1));
-    nBranches_->METmva_cov10.push_back(met.getSignificanceMatrix()(1,0));
-    nBranches_->METmva_cov11.push_back(met.getSignificanceMatrix()(1,1));
+  int nmva = 0;
 
+  for (const pat::MET &met : *METsmva_) {
+    nBranches_->MET_mva_et.push_back(met.pt());
+    nBranches_->MET_mva_phi.push_back(met.phi());
+    nBranches_->MET_mva_cov00.push_back(met.getSignificanceMatrix()(0,0));
+    nBranches_->MET_mva_cov01.push_back(met.getSignificanceMatrix()(0,1));
+    nBranches_->MET_mva_cov10.push_back(met.getSignificanceMatrix()(1,0));
+    nBranches_->MET_mva_cov11.push_back(met.getSignificanceMatrix()(1,1));
+
+    nmva++;
+    
     std::vector<float> recoil_pt;
     std::vector<float> recoil_eta;
     std::vector<float> recoil_phi;
-    std::vector<float> recoil_M;
-    std::vector<int> recoil_charge;
+    std::vector<int> recoil_pdgId;
 
     recoil_pt.clear();
     recoil_eta.clear();
     recoil_phi.clear();
-    recoil_M.clear();
-    recoil_charge.clear();
+    recoil_pdgId.clear();
 
     //    std::cout << "met = " << met.pt() << std::endl;
 
     for(auto name: met.userCandNames()){
       reco::CandidatePtr aRecoCand = met.userCand(name);
 
-      //      std::cout << "\t" << name << " " << aRecoCand->p4().Pt() << " " << aRecoCand->p4().Eta() << " " << aRecoCand->p4().Phi() << " " << aRecoCand->p4().M() << " " << aRecoCand->charge() << std::endl;
-
       recoil_pt.push_back(aRecoCand->p4().Pt());
       recoil_eta.push_back(aRecoCand->p4().Eta());
       recoil_phi.push_back(aRecoCand->p4().Phi());
-      recoil_M.push_back(aRecoCand->p4().M());
-      recoil_charge.push_back(aRecoCand->charge());
+      recoil_pdgId.push_back(aRecoCand->pdgId());
     }
 
-    nBranches_->METmva_recoil_pt.push_back(recoil_pt);
-    nBranches_->METmva_recoil_eta.push_back(recoil_eta);
-    nBranches_->METmva_recoil_phi.push_back(recoil_phi);
-    nBranches_->METmva_recoil_M.push_back(recoil_M);
-    nBranches_->METmva_recoil_charge.push_back(recoil_charge);
+    nBranches_->MET_mva_recoil_pt.push_back(recoil_pt);
+    nBranches_->MET_mva_recoil_eta.push_back(recoil_eta);
+    nBranches_->MET_mva_recoil_phi.push_back(recoil_phi);
+    nBranches_->MET_mva_recoil_pdgId.push_back(recoil_pdgId);
 
   }
 
-
+  nBranches_->MET_Nmva.push_back(nmva);
 
   if (doMETSVFIT_) {
  
