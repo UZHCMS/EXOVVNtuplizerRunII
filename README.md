@@ -9,23 +9,13 @@ For Spring16(80):
 
 ```
 
-cmsrel CMSSW_8_0_11
-cd CMSSW_8_0_11/src
+cmsrel CMSSW_8_0_20
+cd CMSSW_8_0_20/src
 cmsenv
 git cms-init
 git cms-merge-topic -u cms-met:CMSSW_8_0_X-METFilterUpdate
 
 ```
-to get the latest training of the doubleBtagger (Hbbtag):
-
-```
-
-git remote add btv-cmssw https://github.com/cms-btv-pog/cmssw.git
-git fetch --tags btv-cmssw
-git cms-merge-topic -u cms-btv-pog:BoostedDoubleSVTaggerV3-WithWeightFiles-v1_from-CMSSW_8_0_8_patch1
-
-```
-
 
 The flags for running on Spring15(74) or Fall15(76) or Spring16(80) samples have to be changed with config["FALL15"]=False/True and config["SPRING16"]=False/True in python/ntuplizerOptions_*_cfi.py
 
