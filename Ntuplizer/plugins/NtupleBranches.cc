@@ -37,11 +37,13 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
       tree_->Branch( "genParticle_nMoth"     , &genParticle_nMoth      );
       tree_->Branch( "genParticle_nDau"	     , &genParticle_nDau       ); 
       tree_->Branch( "genParticle_dau"	     , &genParticle_dau        );
-      tree_->Branch( "genParticle_taudau_pdgId"	     , &genParticle_taudau_pdgId        );
-      tree_->Branch( "genParticle_taudau_pt"	     , &genParticle_taudau_pt        );
-      tree_->Branch( "genParticle_taudau_eta"	     , &genParticle_taudau_eta        );
-      tree_->Branch( "genParticle_taudau_phi"	     , &genParticle_taudau_phi        );
-      tree_->Branch( "genParticle_taudau_mass"	     , &genParticle_taudau_mass        );
+      tree_->Branch( "genParticle_tauvispt"	     , &genParticle_tauvispt        );
+      tree_->Branch( "genParticle_tauviseta"	     , &genParticle_tauviseta        );
+      tree_->Branch( "genParticle_tauvisphi"	     , &genParticle_tauvisphi       );
+      tree_->Branch( "genParticle_tauvismass"	     , &genParticle_tauvismass        );
+      tree_->Branch( "genParticle_taudecay"	     , &genParticle_taudecay        );
+
+
     } //doGenParticles
     
     if ( runFlags["doGenEvent"] ){
@@ -667,11 +669,11 @@ void NtupleBranches::reset( void ){
   genParticle_nMoth.clear();
   genParticle_nDau.clear();
   genParticle_dau.clear();
-  genParticle_taudau_pt.clear();
-  genParticle_taudau_eta.clear();
-  genParticle_taudau_phi.clear();
-  genParticle_taudau_mass.clear();
-  genParticle_taudau_pdgId.clear();
+  genParticle_tauvispt.clear();
+  genParticle_tauviseta.clear();
+  genParticle_tauvisphi.clear();
+  genParticle_tauvismass.clear();
+  genParticle_taudecay.clear();
   
   /** generator info */
   genWeight   = 0;

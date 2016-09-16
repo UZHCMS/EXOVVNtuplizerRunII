@@ -21,11 +21,6 @@ GenParticlesNtuplizer::~GenParticlesNtuplizer( void )
    /* here we want to save  gen particles info*/
    
     std::vector<int> vDau ;
-    std::vector<float> vTauDau_pt ;
-    std::vector<float> vTauDau_eta ;
-    std::vector<float> vTauDau_phi ;
-    std::vector<float> vTauDau_mass ;
-    std::vector<int> vTauDau_pdgId ;
     std::vector<int> vMoth;
     int nMoth = 0;
     int nDau  = 0;  
@@ -33,11 +28,6 @@ GenParticlesNtuplizer::~GenParticlesNtuplizer( void )
     for( unsigned p=0; p<genParticles_->size(); ++p ){
       //if( (*genParticles_)[p].status() != 3 ) continue;
       vDau.clear(); vMoth.clear();
-      vTauDau_pt.clear();
-      vTauDau_eta.clear();
-      vTauDau_phi.clear();
-      vTauDau_mass.clear();
-      vTauDau_pdgId.clear();
 
       nDau = 0; nMoth = 0;
       nBranches_->genParticle_pt    .push_back((*genParticles_)[p].pt()     );
@@ -68,31 +58,58 @@ GenParticlesNtuplizer::~GenParticlesNtuplizer( void )
 
 
       if(abs((*genParticles_)[p].pdgId())==15 && (*genParticles_)[p].statusFlags().isPrompt()){
-	for( unsigned int d=0; d<(*genParticles_)[p].numberOfDaughters(); ++d ){
-	  vTauDau_pt.push_back( (*genParticles_)[p].daughter(d)->pt() );
-	  vTauDau_eta.push_back( (*genParticles_)[p].daughter(d)->eta() );
-	  vTauDau_phi.push_back( (*genParticles_)[p].daughter(d)->phi() );
-	  vTauDau_mass.push_back( (*genParticles_)[p].daughter(d)->mass() );
-	  vTauDau_pdgId.push_back( (*genParticles_)[p].daughter(d)->pdgId() );
+
+	if(nDau>2){
+
+
+	  TLorentzVector tau;
+	  tau.SetPtEtaPhiM(0,0,0,0);
+	  Int_t decaymode = -1;
+	  
+	  for( unsigned int d=0; d<(*genParticles_)[p].numberOfDaughters(); ++d ){
+	    Float_t taupt = (*genParticles_)[p].daughter(d)->pt();
+	    Float_t taueta = (*genParticles_)[p].daughter(d)->eta();
+	    Float_t tauphi = (*genParticles_)[p].daughter(d)->phi();
+	    Float_t taumass = (*genParticles_)[p].daughter(d)->mass();
+	    Int_t taupdgId = (*genParticles_)[p].daughter(d)->pdgId();
+	    
+	    if(!(taupdgId >= 11 && taupdgId<=16)){
+	      TLorentzVector taudau;
+	      taudau.SetPtEtaPhiM(taupt, taueta, tauphi, taumass);
+	      tau += taudau;
+	      decaymode = 4;
+	    }
+	    if(taupdgId==11) decaymode = 2; // electron decay
+	    if(taupdgId==13) decaymode = 3; // muon decay
+	  
+	  }
+
+	  nBranches_->genParticle_tauvispt  .push_back( (float)tau.Pt()  );
+	  nBranches_->genParticle_tauviseta  .push_back( (float)tau.Eta()  );
+	  nBranches_->genParticle_tauvisphi  .push_back( (float)tau.Phi()  );
+	  nBranches_->genParticle_tauvismass  .push_back( (float)tau.M()  );
+	  nBranches_->genParticle_taudecay  .push_back( decaymode  );
+	}else{
+	  nBranches_->genParticle_tauvispt  .push_back( -1.  );
+	  nBranches_->genParticle_tauviseta  .push_back( -1.  );
+	  nBranches_->genParticle_tauvisphi  .push_back( -1.  );
+	  nBranches_->genParticle_tauvismass  .push_back( -1.  );
+	  if(nDau==1) nBranches_->genParticle_taudecay  .push_back( 0  );
+	  if(nDau==2) nBranches_->genParticle_taudecay  .push_back( 1  );
 	}
       }
-
+      
 
       for( unsigned int m=0; m<(*genParticles_)[p].numberOfMothers(); ++m ){
         vMoth.push_back( (*genParticles_)[p].mother(m)->pdgId() );
     	nMoth++;
       }
+
       nBranches_->genParticle_nDau  .push_back( nDau  );
       nBranches_->genParticle_nMoth .push_back( nMoth );      
       nBranches_->genParticle_mother.push_back( vMoth );
       nBranches_->genParticle_dau   .push_back( vDau  );      
 
-      // only for taus
-      nBranches_->genParticle_taudau_pt   .push_back( vTauDau_pt  );      
-      nBranches_->genParticle_taudau_eta   .push_back( vTauDau_eta  );      
-      nBranches_->genParticle_taudau_phi   .push_back( vTauDau_phi  );      
-      nBranches_->genParticle_taudau_mass   .push_back( vTauDau_mass  );      
-      nBranches_->genParticle_taudau_pdgId   .push_back( vTauDau_pdgId  );      
     }
 
     

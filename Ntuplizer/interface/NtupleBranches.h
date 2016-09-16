@@ -68,11 +68,11 @@ public:
   std::vector<int  >              genParticle_nMoth    ;
   std::vector<std::vector<int> >  genParticle_mother   ; 
   std::vector<std::vector<int> >  genParticle_dau      ;
-  std::vector<std::vector<int> >  genParticle_taudau_pdgId      ;
-  std::vector<std::vector<float> >  genParticle_taudau_pt      ;
-  std::vector<std::vector<float> >  genParticle_taudau_eta      ;
-  std::vector<std::vector<float> >  genParticle_taudau_phi      ;
-  std::vector<std::vector<float> >  genParticle_taudau_mass      ;
+  std::vector<float >  genParticle_tauvispt      ;
+  std::vector<float >  genParticle_tauviseta      ;
+  std::vector<float >  genParticle_tauvisphi      ;
+  std::vector<float >  genParticle_tauvismass      ;
+  std::vector<int >  genParticle_taudecay      ;
 
   /** generator info */
   float                           lheV_pt              ;
