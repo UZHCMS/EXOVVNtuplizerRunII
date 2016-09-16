@@ -71,7 +71,7 @@ GenParticlesNtuplizer::~GenParticlesNtuplizer( void )
 	    Float_t taueta = (*genParticles_)[p].daughter(d)->eta();
 	    Float_t tauphi = (*genParticles_)[p].daughter(d)->phi();
 	    Float_t taumass = (*genParticles_)[p].daughter(d)->mass();
-	    Int_t taupdgId = (*genParticles_)[p].daughter(d)->pdgId();
+	    Int_t taupdgId = abs((*genParticles_)[p].daughter(d)->pdgId());
 	    
 	    if(!(taupdgId >= 11 && taupdgId<=16)){
 	      TLorentzVector taudau;
@@ -90,12 +90,32 @@ GenParticlesNtuplizer::~GenParticlesNtuplizer( void )
 	  nBranches_->genParticle_tauvismass  .push_back( (float)tau.M()  );
 	  nBranches_->genParticle_taudecay  .push_back( decaymode  );
 	}else{
-	  nBranches_->genParticle_tauvispt  .push_back( -1.  );
-	  nBranches_->genParticle_tauviseta  .push_back( -1.  );
-	  nBranches_->genParticle_tauvisphi  .push_back( -1.  );
-	  nBranches_->genParticle_tauvismass  .push_back( -1.  );
-	  if(nDau==1) nBranches_->genParticle_taudecay  .push_back( 0  );
-	  if(nDau==2) nBranches_->genParticle_taudecay  .push_back( 1  );
+	  nBranches_->genParticle_tauvispt  .push_back( -99.  );
+	  nBranches_->genParticle_tauviseta  .push_back( -99.  );
+	  nBranches_->genParticle_tauvisphi  .push_back( -99.  );
+	  nBranches_->genParticle_tauvismass  .push_back( -99.  );
+
+	  
+	  if(nDau==1) nBranches_->genParticle_taudecay  .push_back( 0  ); // self decay (tau -> tau)
+	  
+	  if(nDau==2){
+
+	    bool flag_radioactive_gamma = false;
+	    bool flag_radioactive_tau = false;
+	    
+	    for( unsigned int d=0; d<(*genParticles_)[p].numberOfDaughters(); ++d ){
+	      Int_t taupdgId = abs((*genParticles_)[p].daughter(d)->pdgId());
+	      
+	      if(taupdgId==22) flag_radioactive_gamma = true;   
+	      if(taupdgId==15) flag_radioactive_tau = true; 
+	      
+	    }
+
+	    if(flag_radioactive_gamma && flag_radioactive_tau) nBranches_->genParticle_taudecay  .push_back( 1  ); // radiative decay (tau -> tau + gamma)
+	    else nBranches_->genParticle_taudecay  .push_back( -99  ); // ??
+	  }
+
+
 	}
       }
       
