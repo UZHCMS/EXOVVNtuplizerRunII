@@ -929,7 +929,54 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
         nBranches_->jetAK8_puppi_e      	    .push_back(-99);
 	}
 
+        vPuppiSoftDropSubjetpt.clear();
+        vPuppiSoftDropSubjeteta.clear();
+        vPuppiSoftDropSubjetmass.clear();
+        vPuppiSoftDropSubjetphi.clear();
+        vPuppiSoftDropSubjete.clear();
+        vPuppiSoftDropSubjetcharge.clear();
+        vPuppiSoftDropSubjetPartonFlavour.clear();
+        vPuppiSoftDropSubjetHadronFlavour.clear();
+        vPuppiSoftDropSubjetcsv.clear();
+      
+        nsubjets = 0;
+      
+        const std::vector<edm::Ptr<pat::Jet> > &wSubjets = puppijet.subjets();
+    
+      	for ( const pat::Jet & puppi_softdropsubjet : wSubjets ) {
+	
+           if( puppi_softdropsubjet.pt() < 0.01 ) continue;
+         
+           nsubjets++;
 
+           vPuppiSoftDropSubjetpt.push_back(puppi_softdropsubjet.pt());
+           vPuppiSoftDropSubjeteta.push_back(puppi_softdropsubjet.eta());
+           vPuppiSoftDropSubjetmass.push_back(puppi_softdropsubjet.mass());
+           vPuppiSoftDropSubjetphi.push_back(puppi_softdropsubjet.phi());
+           vPuppiSoftDropSubjete.push_back(puppi_softdropsubjet.energy());
+           vPuppiSoftDropSubjetPartonFlavour.push_back(abs(puppi_softdropsubjet.partonFlavour()));
+           vPuppiSoftDropSubjetHadronFlavour.push_back(abs(puppi_softdropsubjet.hadronFlavour()));
+           vPuppiSoftDropSubjetcharge.push_back(puppi_softdropsubjet.charge());
+           vPuppiSoftDropSubjetcsv.push_back(puppi_softdropsubjet.bDiscriminator("pfCombinedInclusiveSecondaryVertexV2BJetTags") );
+         
+         } 
+
+        nBranches_->jetAK8_subjet_puppi_softdrop_N.push_back(nsubjets);
+        nBranches_->jetAK8_subjet_puppi_softdrop_pt.push_back(vPuppiSoftDropSubjetpt);
+        nBranches_->jetAK8_subjet_puppi_softdrop_eta.push_back(vPuppiSoftDropSubjeteta);
+        nBranches_->jetAK8_subjet_puppi_softdrop_mass.push_back(vPuppiSoftDropSubjetmass);
+        nBranches_->jetAK8_subjet_puppi_softdrop_phi.push_back(vPuppiSoftDropSubjetphi);
+        nBranches_->jetAK8_subjet_puppi_softdrop_e.push_back(vPuppiSoftDropSubjete);
+        nBranches_->jetAK8_subjet_puppi_softdrop_charge.push_back(vPuppiSoftDropSubjetcharge);
+        nBranches_->jetAK8_subjet_puppi_softdrop_csv.push_back(vPuppiSoftDropSubjetcsv);
+
+        if(isMC){
+	
+          nBranches_->jetAK8_subjet_puppi_softdrop_partonFlavour.push_back(vPuppiSoftDropSubjetPartonFlavour);
+          nBranches_->jetAK8_subjet_puppi_softdrop_hadronFlavour.push_back(vPuppiSoftDropSubjetHadronFlavour);
+	 
+
+        }
 
 
       } //doPuppi

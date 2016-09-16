@@ -54,12 +54,9 @@ process.source = cms.Source("PoolSource",
 hltFiltersProcessName = 'RECO'
 if config["RUNONMC"] or config["JSONFILE"].find('reMiniAOD') != -1:
   hltFiltersProcessName = 'PAT'
-reclusterPuppi=(not 'MiniAODv2' in options.inputFiles[0])
-if config["DOAK8PUPPIRECLUSTERING"]: reclusterPuppi=True
+reclusterPuppi=config["DOAK8PUPPIRECLUSTERING"]
 if reclusterPuppi:
-  print "RECLUSTERING PUPPI (since not running of Spring16MiniAODv2)"
-else:
-  print "NOT RECLUSTERING PUPPI (since running of Spring16MiniAODv2)"
+  print "RECLUSTERING PUPPI with latest tune from CMSSW_8_0_20"
   
 #! To recluster and add AK8 Higgs tagging and softdrop subjet b-tagging (both need to be simoultaneously true or false, if not you will have issues with your softdrop subjets!)
 #If you use the softdrop subjets from the slimmedJetsAK8 collection, only CSV seems to be available?
@@ -149,7 +146,7 @@ if config["DOAK10TRIMMEDRECLUSTERING"]:
 
 if reclusterPuppi:
   process.load('CommonTools/PileupAlgos/Puppi_cff')
-  process.puppi.useExistingWeights = True
+  process.puppi.useExistingWeights = False
   process.puppi.candName = cms.InputTag('packedPFCandidates')
   process.puppi.vertexName = cms.InputTag('offlineSlimmedPrimaryVertices')  
   process.ak8PuppiJets = ak8PFJetsCHS.clone( src = 'puppi', jetPtMin = fatjet_ptmin )
@@ -477,8 +474,8 @@ if config["DOAK10TRIMMEDRECLUSTERING"]:
     
 ################# Recluster puppi jets ######################
 if reclusterPuppi:
-    recluster_addBtagging(process, 'ak8PuppiJets', 'ak8PuppiJetsSoftDrop', jetcorr_label = 'AK8PFPuppi', genjets_name = lambda s: s.replace('Puppi', 'Gen'), verbose = False, btagging = False, subjets = False)
-    recluster_addBtagging(process, 'ak8PuppiJets', 'ak8PuppiJetsPruned', jetcorr_label = 'AK8PFPuppi', genjets_name = lambda s: s.replace('Puppi', 'Gen'), verbose = False, btagging = False, subjets = False)
+    recluster_addBtagging(process, 'ak8PuppiJets', 'ak8PuppiJetsSoftDrop', jetcorr_label = 'AK8PFPuppi', genjets_name = lambda s: s.replace('Puppi', 'Gen'))
+    recluster_addBtagging(process, 'ak8PuppiJets', 'ak8PuppiJetsPruned', jetcorr_label = 'AK8PFPuppi', genjets_name = lambda s: s.replace('Puppi', 'Gen'))
   
     process.ak8PFJetsPuppiPrunedMass = cms.EDProducer("RecoJetDeltaRValueMapProducer",
     					  src = cms.InputTag("ak8PuppiJets"),
@@ -495,14 +492,14 @@ if reclusterPuppi:
     					  )	    
     process.ak8PFJetsPuppiPrunedMassCorrected = cms.EDProducer("RecoJetDeltaRValueMapProducer",
     					  src = cms.InputTag("ak8PuppiJets"),
-    					  matched = cms.InputTag("patJetsAk8PuppiJetsPruned"),
+    					  matched = cms.InputTag("patJetsAk8PuppiJetsPrunedPacked"),
     					  distMax = cms.double(0.8),
     					  value = cms.string('mass')
     					  )
 
     process.ak8PFJetsPuppiSoftDropMassCorrected = cms.EDProducer("RecoJetDeltaRValueMapProducer",
     					  src = cms.InputTag("ak8PuppiJets"),
-    					  matched = cms.InputTag("patJetsAk8PuppiJetsSoftDrop"),					 
+    					  matched = cms.InputTag("patJetsAk8PuppiJetsSoftDropPacked"),					 
     					  distMax = cms.double(0.8),
     					  value = cms.string('mass') 
     					  )	    
@@ -512,6 +509,18 @@ if reclusterPuppi:
     process.patJetsAk8PuppiJets.userData.userFloats.src += ['NjettinessAK8Puppi:tau1','NjettinessAK8Puppi:tau2','NjettinessAK8Puppi:tau3']
     process.patJetsAk8PuppiJets.addTagInfos = True
 
+    process.packedJetsAk8PuppiJets = cms.EDProducer("JetSubstructurePacker",
+            jetSrc = cms.InputTag("patJetsAk8PuppiJets"),
+            distMax = cms.double(0.8),
+            algoTags = cms.VInputTag(
+                cms.InputTag("patJetsAk8PuppiJetsSoftDropPacked")
+            ),
+            algoLabels = cms.vstring(
+                'SoftDropPuppi'
+                ),
+            fixDaughters = cms.bool(False),
+            packedPFCandidates = cms.InputTag("packedPFCandidates"),
+    )
 
 # ###### Recluster MET ##########
 if config["DOMETRECLUSTERING"]:
@@ -633,7 +642,7 @@ if config["DOAK8PRUNEDRECLUSTERING"]:
 if config["DOAK10TRIMMEDRECLUSTERING"]:  
   jetsAK10trimmed = "patJetsAk10CHSJetsTrimmed"
 if reclusterPuppi:  
-  jetsAK8Puppi = "patJetsAk8PuppiJets"  
+  jetsAK8Puppi = "packedJetsAk8PuppiJets"  
 
 if config["DOTAUSBOOSTED"]:
   TAUS = "slimmedTaus"
