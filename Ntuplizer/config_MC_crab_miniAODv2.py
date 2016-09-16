@@ -595,8 +595,11 @@ if config["DOMETSVFIT"]:
   process.load("RecoMET.METProducers.METSignificanceParams_cfi")
   process.METSequence = cms.Sequence (process.METSignificance)
 
+  from RecoMET.METPUSubtraction.jet_recorrections import recorrectJets
+  recorrectJets(process, isData=False)
+
   from RecoMET.METPUSubtraction.MVAMETConfiguration_cff import runMVAMET
-  runMVAMET( process)
+  runMVAMET( process, jetCollectionPF="patJetsReapplyJEC")
   process.MVAMET.srcLeptons  = cms.VInputTag("slimmedMuons", "slimmedElectrons", "slimmedTaus")
   process.MVAMET.requireOS = cms.bool(False)
 

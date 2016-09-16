@@ -254,7 +254,6 @@ void METsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
     nBranches_->MET_mva_et.push_back(met.pt());
     nBranches_->MET_mva_phi.push_back(met.phi());
     nBranches_->MET_mva_cov00.push_back(met.getSignificanceMatrix()(0,0));
-    nBranches_->MET_mva_cov01.push_back(met.getSignificanceMatrix()(0,1));
     nBranches_->MET_mva_cov10.push_back(met.getSignificanceMatrix()(1,0));
     nBranches_->MET_mva_cov11.push_back(met.getSignificanceMatrix()(1,1));
 

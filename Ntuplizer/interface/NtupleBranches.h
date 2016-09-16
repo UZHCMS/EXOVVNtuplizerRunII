@@ -76,7 +76,7 @@ public:
 
   /** generator info */
   float                           lheV_pt              ;
-  float                           lheHt                ;
+  float                           lheHT                ;
   int                             lheNj                ;
   float                           lheV_mass            ;
   float                           genWeight            ;
@@ -633,7 +633,6 @@ public:
   std::vector<float>                MET_cov10	      ;	 
   std::vector<float>                MET_cov11	      ;	 
   std::vector<float>                MET_mva_cov00	      ;	 
-  std::vector<float>                MET_mva_cov01	      ;	 
   std::vector<float>                MET_mva_cov10	      ;	 
   std::vector<float>                MET_mva_cov11	      ;	 
   std::vector< std::vector<float> > MET_mva_recoil_pt;

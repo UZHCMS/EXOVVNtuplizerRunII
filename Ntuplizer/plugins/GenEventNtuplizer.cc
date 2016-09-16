@@ -95,7 +95,7 @@ void GenEventNtuplizer::fillBranches( edm::Event const & event, const edm::Event
   //  nBranches_->lheV_pt = 0.;
   //  nBranches_->lheNj = 0; // Does anybody use this ?
   nBranches_->lheNj = nParton;
-  nBranches_->lheHt = lheHt_;
+  nBranches_->lheHT = lheHt_;
 
 
  

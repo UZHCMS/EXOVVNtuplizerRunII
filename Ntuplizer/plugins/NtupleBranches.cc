@@ -47,7 +47,7 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     if ( runFlags["doGenEvent"] ){
       /** generator info */
       tree_->Branch( "lheV_pt"	             , &lheV_pt                ); 
-      tree_->Branch( "lheHt"	             , &lheHt                  ); 
+      tree_->Branch( "lheHT"	             , &lheHT                  ); 
       tree_->Branch( "lheNj"	             , &lheNj                  ); 
       tree_->Branch( "lheV_mass"             , &lheV_mass              ); 
       tree_->Branch( "genWeight"	     , &genWeight              ); 
@@ -609,7 +609,6 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch( "MET_cov10"                                        , &MET_cov10 );
     tree_->Branch( "MET_cov11"                                        , &MET_cov11 );
     tree_->Branch( "MET_mva_cov00"                                        , &MET_mva_cov00 );
-    tree_->Branch( "MET_mva_cov01"                                        , &MET_mva_cov01 );
     tree_->Branch( "MET_mva_cov10"                                        , &MET_mva_cov10 );
     tree_->Branch( "MET_mva_cov11"                                        , &MET_mva_cov11 );
     tree_->Branch( "MET_mva_recoil_pt"                                        , &MET_mva_recoil_pt );
@@ -681,7 +680,7 @@ void NtupleBranches::reset( void ){
   PDF_x.clear();	
   PDF_xPDF.clear();
   lheV_pt = 0;
-  lheHt = 0;
+  lheHT = 0;
   lheNj = 0;
   lheV_mass = 0;
     
@@ -1212,7 +1211,6 @@ void NtupleBranches::reset( void ){
   MET_cov10.clear();
   MET_cov11.clear();
   MET_mva_cov00.clear();
-  MET_mva_cov01.clear();
   MET_mva_cov10.clear();
   MET_mva_cov11.clear();
   MET_mva_recoil_pt.clear();
