@@ -310,7 +310,24 @@ if config["UpdateJetCollection"]:
     jetCorrections = ('AK8PFchs', cms.vstring(['L1FastJet', 'L2Relative', 'L3Absolute']), 'None'),
     btagDiscriminators = bTagDiscriminators
   )
-
+## Update to latest PU jet ID training
+  process.load("RecoJets.JetProducers.PileupJetID_cfi")
+  process.pileupJetIdUpdated = process.pileupJetId.clone(
+    jets=cms.InputTag("slimmedJets"),
+    inputIsCorrected=True,
+    applyJec=True,
+    vertexes=cms.InputTag("offlineSlimmedPrimaryVertices")
+  )
+  from PhysicsTools.PatAlgos.producersLayer1.jetUpdater_cff import updatedPatJetCorrFactors, updatedPatJets
+  process.patJetCorrFactorsReapplyJEC = updatedPatJetCorrFactors.clone(
+    src = cms.InputTag("slimmedJets"),
+    levels = ['L1FastJet', 'L2Relative', 'L3Absolute'] )
+  process.updatedJets = updatedPatJets.clone(
+    jetSource = cms.InputTag("slimmedJets"),
+    jetCorrFactorsSource = cms.VInputTag(cms.InputTag("patJetCorrFactorsReapplyJEC"))
+  )
+  process.updatedJets.userData.userFloats.src += ['pileupJetIdUpdated:fullDiscriminant']
+  process.updatedJets.userData.userInts.src += ['pileupJetIdUpdated:fullId']
 
 def cap(s): return s[0].upper() + s[1:]
 
@@ -599,6 +616,7 @@ if config["ADDAK8GENJETS"]:
 if config["DOAK8RECLUSTERING"]:
   jetsAK8 = "patJetsAk8CHSJets"
 if config["UpdateJetCollection"]:
+  jetsAK4 = "updatedJets"
   jetsAK8 = "updatedPatJetsTransientCorrected"
 if doAK8softdropReclustering:  
   jetsAK8softdrop = "patJetsAk8CHSJetsSoftDropPacked"  

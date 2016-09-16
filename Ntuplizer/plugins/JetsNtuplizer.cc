@@ -235,8 +235,8 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
      nBranches_->jetAK4_jecDown	  .push_back(corrDown);
      nBranches_->jetAK4_IDLoose   .push_back(IDLoose);
      nBranches_->jetAK4_IDTight   .push_back(IDTight);
-     nBranches_->jetAK4_PUIDdiscriminat.push_back(j.userFloat("pileupJetId:fullDiscriminant")); 
-     int fullId=j.userInt("pileupJetId:fullId");
+     nBranches_->jetAK4_PUIDdiscriminat.push_back(j.userFloat("pileupJetIdUpdated:fullDiscriminant")); 
+     int fullId=j.userInt("pileupJetIdUpdated:fullId");
      nBranches_->jetAK4_PUIDloose .push_back(fullId & (1 << 2)); 
      nBranches_->jetAK4_PUIDmedium.push_back(fullId & (1 << 1)); 
      nBranches_->jetAK4_PUIDtight .push_back(fullId & (1 << 0)); 
