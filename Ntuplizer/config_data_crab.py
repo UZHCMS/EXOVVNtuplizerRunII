@@ -610,6 +610,7 @@ if config["DOMETSVFIT"]:
   process.load("RecoMET.METProducers.METSignificanceParams_cfi")
   process.METSequence = cms.Sequence (process.METSignificance)
 
+if config["DOMVAMET"]:
   from RecoMET.METPUSubtraction.jet_recorrections import recorrectJets
   recorrectJets(process, isData=True)
   

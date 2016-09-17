@@ -598,10 +598,7 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch("MET_phi"	                , &MET_phi           );
     tree_->Branch("MET_puppi_et"	        , &MET_puppi_et      ); 
     tree_->Branch("MET_puppi_phi"               , &MET_puppi_phi     );
-    tree_->Branch("MET_mva_et"	                , &MET_mva_et        ); 
-    tree_->Branch("MET_mva_phi"                 , &MET_mva_phi       );
     tree_->Branch("MET_sumEt"	                , &MET_sumEt 	     ); 
-    tree_->Branch("MET_Nmva"	                , &MET_Nmva 	     ); 
   } //doMissingEt
 
   if ( runFlags["doMETSVFIT"] ){
@@ -610,6 +607,13 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch( "MET_cov00"                                        , &MET_cov00 );
     tree_->Branch( "MET_cov10"                                        , &MET_cov10 );
     tree_->Branch( "MET_cov11"                                        , &MET_cov11 );
+  }
+
+  if ( runFlags["doMVAMET"] ){
+    /** MET SVift*/
+    tree_->Branch("MET_Nmva"	                , &MET_Nmva 	     ); 
+    tree_->Branch(" MET_mva_et"	                , &MET_mva_et        ); 
+    tree_->Branch(" MET_mva_phi"                 , &MET_mva_phi       );
     tree_->Branch( "MET_mva_cov00"                                        , &MET_mva_cov00 );
     tree_->Branch( "MET_mva_cov10"                                        , &MET_mva_cov10 );
     tree_->Branch( "MET_mva_cov11"                                        , &MET_mva_cov11 );
@@ -619,6 +623,7 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch( "MET_mva_recoil_pdgId"                                        , &MET_mva_recoil_pdgId );
 
   }
+
   
   /*------------- ------EVENT infos-----------------------------*/
   tree_->Branch("EVENT_event"	 , &EVENT_event     );

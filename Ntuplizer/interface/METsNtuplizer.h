@@ -66,6 +66,7 @@ public:
 
     bool doCorrOnTheFly_;
     bool doMETSVFIT_;
+    bool doMVAMET_;
 
 };
 
