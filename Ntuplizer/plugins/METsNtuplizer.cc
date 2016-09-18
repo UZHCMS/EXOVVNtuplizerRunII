@@ -246,7 +246,6 @@ void METsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
   
   // Y.T added 10 Sep. For MVA MET -> add options here 
 
-  std::cout << "doMVAMET_ = " << doMVAMET_ << std::endl;
 
   if (doMVAMET_) {
 
