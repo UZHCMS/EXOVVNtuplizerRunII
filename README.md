@@ -20,6 +20,7 @@ git cms-merge-topic -u cms-met:CMSSW_8_0_X-METFilterUpdate
 The flags for running on Spring15(74) or Fall15(76) or Spring16(80) samples have to be changed with config["FALL15"]=False/True and config["SPRING16"]=False/True in python/ntuplizerOptions_*_cfi.py
 
 
+
 ### getting the code for Spring16
 
 ```
@@ -34,6 +35,16 @@ cd $CMSSW_BASE/src
 scram b distclean
 scram b -j8
 cd EXOVVNtuplizerRunII/Ntuplizer
+```
+
+### getting latest MVA MET 
+
+```
+cd $CMSSW_BASE/src
+kinit YOUR_USERNAME@CERN.CH && aklog cern.ch
+cp -r /afs/cern.ch/user/y/ytakahas/public/forUZH/RecoMET/METPUSubtraction RecoMET/
+cp -r /afs/cern.ch/user/y/ytakahas/public/forUZH/DataFormats .
+scram b -j8
 ```
 
 
