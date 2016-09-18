@@ -28,7 +28,7 @@ config["DOHLTFILTERS"] = True
 config["DOMISSINGET"] = True
 config["DOTAUSBOOSTED"] = True
 config["DOMETSVFIT"] = True
-config["DOMVAMET"] = False
+config["DOMVAMET"] = True
 
 #--------- AK8 jets reclustering ----------#
 config["ADDAK8GENJETS"] = False #! Add AK8 gen jet collection with pruned and softdrop mass
