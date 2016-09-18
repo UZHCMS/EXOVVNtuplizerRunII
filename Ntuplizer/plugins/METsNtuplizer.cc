@@ -246,6 +246,8 @@ void METsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
   
   // Y.T added 10 Sep. For MVA MET -> add options here 
 
+  std::cout << "doMVAMET_ = " << doMVAMET_ << std::endl;
+
   if (doMVAMET_) {
 
     event.getByToken(metmvaInputToken_, METsmva_ );
@@ -253,11 +255,6 @@ void METsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
     int nmva = 0;
     
     for (const pat::MET &met : *METsmva_) {
-      nBranches_->MET_mva_et.push_back(met.pt());
-      nBranches_->MET_mva_phi.push_back(met.phi());
-      nBranches_->MET_mva_cov00.push_back(met.getSignificanceMatrix()(0,0));
-      nBranches_->MET_mva_cov10.push_back(met.getSignificanceMatrix()(1,0));
-      nBranches_->MET_mva_cov11.push_back(met.getSignificanceMatrix()(1,1));
       
       nmva++;
       
@@ -281,6 +278,12 @@ void METsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
 	recoil_phi.push_back(aRecoCand->p4().Phi());
 	recoil_pdgId.push_back(aRecoCand->pdgId());
       }
+
+      nBranches_->MET_mva_et.push_back(met.pt());
+      nBranches_->MET_mva_phi.push_back(met.phi());
+      nBranches_->MET_mva_cov00.push_back(met.getSignificanceMatrix()(0,0));
+      nBranches_->MET_mva_cov10.push_back(met.getSignificanceMatrix()(1,0));
+      nBranches_->MET_mva_cov11.push_back(met.getSignificanceMatrix()(1,1));
       
       nBranches_->MET_mva_recoil_pt.push_back(recoil_pt);
       nBranches_->MET_mva_recoil_eta.push_back(recoil_eta);

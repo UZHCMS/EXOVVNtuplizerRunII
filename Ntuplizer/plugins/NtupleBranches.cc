@@ -612,8 +612,8 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
   if ( runFlags["doMVAMET"] ){
     /** MET SVift*/
     tree_->Branch("MET_Nmva"	                , &MET_Nmva 	     ); 
-    tree_->Branch(" MET_mva_et"	                , &MET_mva_et        ); 
-    tree_->Branch(" MET_mva_phi"                 , &MET_mva_phi       );
+    tree_->Branch("MET_mva_et"	                , &MET_mva_et        ); 
+    tree_->Branch("MET_mva_phi"                 , &MET_mva_phi       );
     tree_->Branch( "MET_mva_cov00"                                        , &MET_mva_cov00 );
     tree_->Branch( "MET_mva_cov10"                                        , &MET_mva_cov10 );
     tree_->Branch( "MET_mva_cov11"                                        , &MET_mva_cov11 );
@@ -1207,8 +1207,6 @@ void NtupleBranches::reset( void ){
   MET_puppi_et.clear();
   MET_puppi_phi.clear();
 
-  MET_mva_et.clear();
-  MET_mva_phi.clear();
   MET_sumEt.clear();
   MET_T1Uncertainty.clear();
 
@@ -1217,6 +1215,8 @@ void NtupleBranches::reset( void ){
   MET_cov00.clear();
   MET_cov10.clear();
   MET_cov11.clear();
+  MET_mva_et.clear();
+  MET_mva_phi.clear();
   MET_mva_cov00.clear();
   MET_mva_cov10.clear();
   MET_mva_cov11.clear();
