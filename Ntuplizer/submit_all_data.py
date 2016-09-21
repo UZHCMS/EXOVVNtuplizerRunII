@@ -53,7 +53,7 @@ def main():
     config.JobType.allowUndistributedCMSSW = True
    # config.JobType.pyCfgParams = ['DataProcessing=MC25ns_MiniAODv2','lheLabel=externalLHEProducer']
     config.JobType.inputFiles = [
-        './JSON/Cert_271036-279588_13TeV_PromptReco_Collisions16_JSON_NoL1T.txt',
+        './JSON/Cert_271036-279931_13TeV_PromptReco_Collisions16_JSON_NoL1T.txt',
         './JEC/Spring16_25nsV6_DATA_Uncertainty_AK8PFchs.txt',
         './JEC/Spring16_25nsV6_DATA_Uncertainty_AK4PFchs.txt',
         './JEC/Spring16_25nsV6_DATA_L1FastJet_AK8PFchs.txt', 
@@ -67,8 +67,15 @@ def main():
         './JEC/Spring16_25nsV6_DATA_L2Relative_AK4PFchs.txt',
         './JEC/Spring16_25nsV6_DATA_L3Absolute_AK4PFchs.txt',
         './JEC/Spring16_25nsV6_DATA_L2L3Residual_AK4PFchs.txt',
+        './JER/Spring16_25nsV6_MC_PtResolution_AK8PFchs.txt',
+        './JER/Spring16_25nsV6_MC_PtResolution_AK4PFchs.txt',
+        './JER/Spring16_25nsV6_MC_PtResolution_AK8PFPuppi.txt',
+        './JER/Spring16_25nsV6_MC_PtResolution_AK4PFPuppi.txt',
+        './JER/Spring16_25nsV6_MC_SF_AK8PFchs.txt',
+        './JER/Spring16_25nsV6_MC_SF_AK4PFchs.txt',
+        './JER/Spring16_25nsV6_MC_SF_AK8PFPuppi.txt',
+        './JER/Spring16_25nsV6_MC_SF_AK4PFPuppi.txt',
         
-
 ]
 
 
@@ -80,13 +87,13 @@ def main():
     #config.Data.runRange= "275125-275783"
     config.Data.ignoreLocality = True
     config.Data.publication = False    
-    config.Data.outLFNDirBase = '/store/user/cgalloni/Ntuple_80_270716'
-    config.Data.lumiMask      = '/mnt/t3nfs01/data01/shome/cgalloni/RunII/CMSSW_8_0_11/src/EXOVVNtuplizerRunII/Ntuplizer/JSON/Cert_271036-279588_13TeV_PromptReco_Collisions16_JSON_NoL1T.txt'
+    config.Data.lumiMask      = '/mnt/t3nfs01/data01/shome/cgalloni/RunII/CMSSW_8_0_20/src/EXOVVNtuplizerRunII/Ntuplizer/Cert_271036-279931_13TeV_PromptReco_Collisions16_JSON_NoL1T.txt'
     config.section_("Site")
     config.Site.storageSite = 'T2_CH_CSCS'
     config.Site.blacklist=['T2_US_Nebraska','T2_US_Wisconsin','T2_FR_IPHC','T2_EE_Estonia','T2_DE_RWTH']
     #config.Site.whitelist=['T2_US_Nebraska','T2_US_Wisconsin','T2_FR_IPHC','T2_EE_Estonia',
-
+    config.Data.outLFNDirBase = '/store/user/cgalloni/Ntuple_80_190916'
+  
 
     print 'Using config ' + options.config
     print 'Writing to directory ' + options.dir
@@ -117,9 +124,9 @@ def main():
         ptbin = job.split('/')[1]
         cond = job.split('/')[2]
         
-        config.General.requestName = ptbin +'_'+ cond +'_15p9fb'
+        config.General.requestName = ptbin +'_'+ cond +'_24p47fb_v2'
         config.Data.inputDataset = job
-        config.Data.outputDatasetTag =  ptbin +'_'+ cond +'_15p9fb'
+        config.Data.outputDatasetTag =  ptbin +'_'+ cond +'_24p47fb_v2'
         print "ptbin :%s and cond: %s " %(ptbin, cond)
         print 'Submitting ' + config.General.requestName + ', dataset = ' + job
         print 'Configuration :'
