@@ -102,7 +102,19 @@ class DASOptionParser:
                                default="", dest="ckey", help=msg)
         msg  = 'specify private certificate file name'
         self.parser.add_option("--cert", action="store", type="string",
-                               default="", dest="cert", help=msg)
+                               default=x509(), dest="cert", help=msg)
+        default_ca = os.environ.get("X509_CERT_DIR")
+        if not default_ca or not os.path.exists(default_ca):
+            default_ca = "/etc/grid-security/certificates"
+            if not os.path.exists(default_ca):
+                default_ca = ""
+        if default_ca:
+            msg = 'specify CA path, default currently is %s' % default_ca
+        else:
+            msg = 'specify CA path; defaults to system CAs.'
+        self.parser.add_option("--capath", action="store", type="string",
+                               default=default_ca,
+                               dest="capath", help=msg)
         msg  = 'specify number of retries upon busy DAS server message'
         self.parser.add_option("--retry", action="store", type="string",
                                default=0, dest="retry", help=msg)
@@ -241,6 +253,8 @@ def get_data(host, query, idx, limit, debug, threshold=300, ckey=None,
     pat = re.compile(r'^[a-z0-9]{32}')
     if  data and isinstance(data, str) and pat.match(data) and len(data) == 32:
         pid = data
+    elif data.find('"pid"') != -1 and data.find('"status"') != -1:
+        pid = json.loads(data)['pid']
     else:
         pid = None
     iwtime  = 2  # initial waiting time in seconds

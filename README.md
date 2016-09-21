@@ -4,40 +4,24 @@ Ntuplizer for searches for heavy resonances decaying to dibosons
 
 ## installation instructions
 
-For Spring15(74):
+
+For Spring16(80):
 
 ```
-export SCRAM_ARCH=slc6_amd64_gcc491
-cmsrel CMSSW_7_4_12_patch2
-cd CMSSW_7_4_12_patch2/src
+
+cmsrel CMSSW_8_0_20
+cd CMSSW_8_0_20/src
 cmsenv
 git cms-init
-```
-
-For Fall15(76):
+git cms-merge-topic -u cms-met:CMSSW_8_0_X-METFilterUpdate
 
 ```
-export SCRAM_ARCH=slc6_amd64_gcc493
-cmsrel CMSSW_7_6_3_patch2
-cd CMSSW_7_6_3_patch2/src
-cmsenv
-git cms-init
-git cms-merge-topic nhanvtran:Puppi76X-backportFrom80X
-```
 
-The flags for running on Spring15(74) or Fall15(76) samples have to be changed with config["FALL15"]=False/True in python/ntuplizerOptions_*_cfi.py
-
-### optional packages
-
-For the boosted Hbb tagger (will add a lot of packages that will take a long time to compile):
-```
-git remote add btv-cmssw https://github.com/cms-btv-pog/cmssw.git
-git fetch btv-cmssw
-git cms-merge-topic -u cms-btv-pog:BoostedDoubleSVTagger-WithWeightFiles-v2_from-CMSSW_7_4_1
-```
+The flags for running on Spring15(74) or Fall15(76) or Spring16(80) samples have to be changed with config["FALL15"]=False/True and config["SPRING16"]=False/True in python/ntuplizerOptions_*_cfi.py
 
 
-### getting the code
+
+### getting the code for Spring16
 
 ```
 export GITUSER=`git config user.github`
@@ -46,12 +30,23 @@ git clone git@github.com:${GITUSER}/EXOVVNtuplizerRunII.git
 cd EXOVVNtuplizerRunII
 git remote add UZHCMS git@github.com:UZHCMS/EXOVVNtuplizerRunII.git
 git fetch UZHCMS
-git checkout -b DevelopmentBranch UZHCMS/master
+git checkout -b DevelopmentBranch UZHCMS/80X_ntuplizer
 cd $CMSSW_BASE/src
 scram b distclean
 scram b -j8
 cd EXOVVNtuplizerRunII/Ntuplizer
 ```
+
+### getting latest MVA MET 
+
+```
+cd $CMSSW_BASE/src
+kinit YOUR_USERNAME@CERN.CH && aklog cern.ch
+cp -r /afs/cern.ch/user/y/ytakahas/public/forUZH/RecoMET/METPUSubtraction RecoMET/
+cp -r /afs/cern.ch/user/y/ytakahas/public/forUZH/DataFormats .
+scram b -j8
+```
+
 
 ### running
 
@@ -62,6 +57,11 @@ cmsRun config_MC.py (for MC)
 
 the flags for running on data can be changed in python/ntuplizerOptions_data_cfi.py
 the flags for running on MC can be changed in python/ntuplizerOptions_MC_cfi.py
+Note that, if you run on reHLT samples, remember to modify,
+
+```
+HLT = cms.InputTag("TriggerResults","","HLT2"),
+```
 
 to recluster jets and MET, or to add the Higgs-tagger the following flags can be changed:
 ```

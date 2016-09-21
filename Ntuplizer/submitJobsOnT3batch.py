@@ -187,8 +187,8 @@ def checkJobsOutputFromXML(xmlfile):
 #-----------------------------------------------------------------------------------------
 def getFileListDAS(dataset,instance="prod/global",run=-1):
 
-   cmd = './das_client.py --query="file dataset=%s instance=%s" --limit=10000' %(dataset,instance)
-   if run != -1: cmd = './das_client.py --query="file run=%i dataset=%s instance=%s" --limit=10000' %(run,dataset,instance)
+   cmd = 'das_client.py --query="file dataset=%s instance=%s" --limit=10000' %(dataset,instance)
+   if run != -1: cmd = 'das_client.py --query="file run=%i dataset=%s instance=%s" --limit=10000' %(run,dataset,instance)
    print cmd
    cmd_out = commands.getoutput( cmd )
    tmpList = cmd_out.split(os.linesep)
@@ -269,9 +269,15 @@ if opts.copyfiles:
    checkdir = "ls -l " + newdir + "/config"
    status,cmd_out = commands.getstatusoutput(checkdir)
    if status: 
-     cmd = "gfal-mkdir srm://t3se01.psi.ch:8443/srm/managerv2?SFN=%s"%(newdir+"/config")
-     #print cmd
+     cmd = "srmmkdir srm://t3se01.psi.ch/%s"%(newdir) #No gFAL!
+     print cmd
      os.system(cmd)
+     # cmd = "gfal-mkdir srm://t3se01.psi.ch:8443/srm/managerv2?SFN=%s"%(newdir+"/config")
+     cmd = "srmmkdir srm://t3se01.psi.ch/%s"%(newdir+"/config") #No gFAL!
+     # cmd = "env -i X509_USER_PROXY=~/.x509up_u`id -u` gfal-mkdir -p gsiftp://t3se01.psi.ch%s" %(newdir)
+     print cmd
+     os.system(cmd)
+     
    else:
      cmd = "uberftp t3se01.psi.ch 'ls %s'" %(newdir+"/config")
      ls_la = commands.getoutput(cmd)
@@ -280,18 +286,20 @@ if opts.copyfiles:
      list_.extend(ls_la.split(os.linesep))   
      dirs = []
      for a in list_:
-     	b = a.split(" ")
-     	status = os.path.exists(newdir + "/config/" + b[-1:][0].strip('\r'))
-     	if status:
-	   cmd = "gfal-rm srm://t3se01.psi.ch:8443/srm/managerv2?SFN=%s"%(newdir + "/config/" + b[-1:][0].strip('\r'))
-	   #print cmd
-	   os.system(cmd)
-
-   cmd = "lcg-cp -b -D srmv2 " + xmlfile + " srm://t3se01.psi.ch:8443/srm/managerv2?SFN=%s"%(newdir+"/config/"+os.path.basename(xmlfile))
-   print cmd  
-   os.system(cmd)    
-   cmd = "lcg-cp -b -D srmv2 " + cmsswdir + "/src/" + cfg + " srm://t3se01.psi.ch:8443/srm/managerv2?SFN=%s"%(newdir+"/config/"+os.path.basename(cfg))
-   print cmd  
+       b = a.split(" ")
+       status = os.path.exists(newdir + "/config/" + b[-1:][0].strip('\r'))
+       if status:
+         # cmd = "gfal-rm srm://t3se01.psi.ch:8443/srm/managerv2?SFN=%s"%(newdir + "/config/" + b[-1:][0].strip('\r'))
+         cmd = "srm-rm srm://t3se01.psi.ch%s"%(newdir + "/config/" + b[-1:][0].strip('\r')) #No gFAL!
+         os.system(cmd)
+   
+   # cmd = "lcg-cp -b -D srmv2 " + xmlfile + " srm://t3se01.psi.ch:8443/srm/managerv2?SFN=%s"%(newdir+"/config/"+os.path.basename(xmlfile))
+   cmd = "xrdcp -d 1 " + xmlfile + " root://t3dcachedb.psi.ch:1094///%s"%(newdir+"/config/"+os.path.basename(xmlfile)) #No gFAL!
+   print cmd
+   os.system(cmd)
+   # cmd = "lcg-cp -b -D srmv2 " + cmsswdir + "/src/" + cfg + " srm://t3se01.psi.ch:8443/srm/managerv2?SFN=%s -f"%(newdir+"/config/"+os.path.basename(cfg))
+   cmd = "xrdcp -d 1 " + cmsswdir + "/src/" + cfg + " root://t3dcachedb.psi.ch:1094///%s -f"%(newdir+"/config/"+os.path.basename(cfg)) #No gFAL!
+   print cmd
    os.system(cmd)
    f = open(cmsswdir + "/src/" + cfg, 'r')
    ismc = False
@@ -299,12 +307,15 @@ if opts.copyfiles:
       if l.find("ntuplizerOptions_MC_cfi") != -1: ismc = True
    f.close()
    if ismc:
-      cmd = "lcg-cp -b -D srmv2 python/ntuplizerOptions_MC_cfi.py srm://t3se01.psi.ch:8443/srm/managerv2?SFN=%s"%(newdir+"/config/ntuplizerOptions_MC_cfi.py")
+      # cmd = "lcg-cp -b -D srmv2 python/ntuplizerOptions_MC_cfi.py srm://t3se01.psi.ch:8443/srm/managerv2?SFN=%s"%(newdir+"/config/ntuplizerOptions_MC_cfi.py")
+      cmd = "xrdcp -d 1 python/ntuplizerOptions_MC_cfi.py root://t3dcachedb.psi.ch:1094///%s"%(newdir+"/config/ntuplizerOptions_MC_cfi.py")
    else:
-      cmd = "lcg-cp -b -D srmv2 python/ntuplizerOptions_data_cfi.py srm://t3se01.psi.ch:8443/srm/managerv2?SFN=%s"%(newdir+"/config/ntuplizerOptions_data_cfi.py")   
-   print cmd   
+      # cmd = "lcg-cp -b -D srmv2 python/ntuplizerOptions_data_cfi.py srm://t3se01.psi.ch:8443/srm/managerv2?SFN=%s"%(newdir+"/config/ntuplizerOptions_data_cfi.py")
+      cmd = "xrdcp -d 1 python/ntuplizerOptions_data_cfi.py root://t3dcachedb.psi.ch:1094///%s"%(newdir+"/config/ntuplizerOptions_data_cfi.py")
+   print cmd
    os.system(cmd)
-   cmd = "lcg-cp -b -D srmv2 " + opts.config[0] + " srm://t3se01.psi.ch:8443/srm/managerv2?SFN=%s"%(newdir+"/config/"+os.path.basename(opts.config[0]))
+   # cmd = "lcg-cp -b -D srmv2 " + opts.config[0] + " srm://t3se01.psi.ch:8443/srm/managerv2?SFN=%s"%(newdir+"/config/"+os.path.basename(opts.config[0]))
+   cmd = "xrdcp -d 1 " + opts.config[0] + " root://t3dcachedb.psi.ch:1094///%s"%(newdir+"/config/"+os.path.basename(opts.config[0]))
    print cmd
    os.system(cmd)
 
@@ -314,15 +325,19 @@ if opts.copyfiles:
     
    for j in jobsdir:
       jobid = j.rsplit("-",1)[1]
-      inputpath = "srm://t3se01.psi.ch:8443/srm/managerv2?SFN="+j+"/"+outfile
-      outputpath = "srm://t3se01.psi.ch:8443/srm/managerv2?SFN=%s"%(newdir+"/"+prefix+"_"+jobid+".root")
+      # inputpath = "srm://t3se01.psi.ch:8443/srm/managerv2?SFN="+j+"/"+outfile
+      # outputpath = "srm://t3se01.psi.ch:8443/srm/managerv2?SFN=%s"%(newdir+"/"+prefix+"_"+jobid+".root")
+      inputpath = "root://t3dcachedb.psi.ch:1094//"+j+"/"+outfile #USE XROOTD!!
+      outputpath = "root://t3dcachedb.psi.ch:1094//%s"%(newdir+"/"+prefix+"_"+jobid+".root") #USE XROOTD!!
       checkfile = "ls -l %s"%(newdir+"/"+prefix+"_"+jobid+".root") 
       status,cmd_out = commands.getstatusoutput(checkfile)
       if not(status): 
-         cmd = "gfal-rm %s"%(outputpath)
-	 print cmd
-	 os.system(cmd)
-      cmd = "gfal-copy %s %s" %(inputpath,outputpath)
+         # cmd = "gfal-rm %s"%(outputpath)
+         cmd = "srmrm %s"%(outputpath)
+         print cmd
+         os.system(cmd)
+      # cmd = "gfal-copy %s %s" %(inputpath,outputpath)
+      cmd = "xrdcp -d 1 %s %s -f" %(inputpath,outputpath)#TEST
       print cmd
       os.system(cmd)
           	 

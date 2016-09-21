@@ -3,22 +3,22 @@ import FWCore.ParameterSet.Config as cms
 config = dict()
 
 #--------- general ----------#
-config["FALL15"] = True
+config["SPRING16"] = True
 config["RUNONMC"] = True
 config["USEJSON"] = False
-config["JSONFILE"] = "JSON/JSON_Run2015D_PromptReco-v4.txt"
+config["JSONFILE"] = "JSON/Cert_271036-279588_13TeV_PromptReco_Collisions16_JSON_NoL1T.txt"
 config["BUNCHSPACING"] = 25
 config["USENOHF"] = False
 config["FILTEREVENTS"] = False
 
 #--------- basic sequences ----------#
 config["DOGENPARTICLES"] = True
-config["DOGENJETS"] = False
+config["DOGENJETS"] = True
 config["DOGENEVENT"] = True
 config["DOPILEUP"] = True
 config["DOELECTRONS"] = True
 config["DOMUONS"] = True
-config["DOTAUS"] = False
+config["DOTAUS"] = True
 config["DOAK8JETS"] = True
 config["DOAK4JETS"] = True
 config["DOVERTICES"] = True
@@ -26,16 +26,18 @@ config["DOTRIGGERDECISIONS"] = True
 config["DOTRIGGEROBJECTS"] = True
 config["DOHLTFILTERS"] = True
 config["DOMISSINGET"] = True
-config["DOTAUSBOOSTED"] = False
-config["DOMETSVFIT"] = False
+config["DOTAUSBOOSTED"] = True
+config["DOMETSVFIT"] = True
+config["DOMVAMET"] = True
 
 #--------- AK8 jets reclustering ----------#
-config["ADDAK8GENJETS"] = False #! Add AK8 gen jet collection with pruned and softdrop mass
+config["ADDAK8GENJETS"] = True #! Add AK8 gen jet collection with pruned and softdrop mass
 config["DOAK8RECLUSTERING"] = False
 config["DOAK8PRUNEDRECLUSTERING"] = False #! To add pruned jet and pruned subjet collection (not in MINIAOD)
-config["DOAK8PUPPIRECLUSTERING"] = True
-config["DOAK10TRIMMEDRECLUSTERING"] = True #ATLAS sequence
-config["DOHBBTAG"] = False #Higgs-tagger
+config["DOAK8PUPPI"] = True
+config["DOAK10TRIMMEDRECLUSTERING"] = False #ATLAS sequence
+config["DOHBBTAG"] = True #Higgs-tagger
+config["UpdateJetCollection"] = True #needed for Higgs-tagger in 80X
 
 #--------- MET reclustering ----------#
 config["DOMETRECLUSTERING"] = False

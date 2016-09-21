@@ -29,10 +29,21 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
       tree_->Branch( "genParticle_mass"	     , &genParticle_mass       ); 
       tree_->Branch( "genParticle_pdgId"     , &genParticle_pdgId      );
       tree_->Branch( "genParticle_status"    , &genParticle_status     );
+      tree_->Branch( "genParticle_isPrompt"  , &genParticle_isPrompt   );
+      tree_->Branch( "genParticle_isDirectPromptTauDecayProduct"  , &genParticle_isDirectPromptTauDecayProduct);
+      tree_->Branch( "genParticle_isDirectHardProcessTauDecayProductFinalState"  , &genParticle_isDirectHardProcessTauDecayProductFinalState);
+      tree_->Branch( "genParticle_fromHardProcessFinalState"  , &genParticle_fromHardProcessFinalState   );
       tree_->Branch( "genParticle_mother"    , &genParticle_mother     );
       tree_->Branch( "genParticle_nMoth"     , &genParticle_nMoth      );
       tree_->Branch( "genParticle_nDau"	     , &genParticle_nDau       ); 
       tree_->Branch( "genParticle_dau"	     , &genParticle_dau        );
+      tree_->Branch( "genParticle_tauvispt"	     , &genParticle_tauvispt        );
+      tree_->Branch( "genParticle_tauviseta"	     , &genParticle_tauviseta        );
+      tree_->Branch( "genParticle_tauvisphi"	     , &genParticle_tauvisphi       );
+      tree_->Branch( "genParticle_tauvismass"	     , &genParticle_tauvismass        );
+      tree_->Branch( "genParticle_taudecay"	     , &genParticle_taudecay        );
+
+
     } //doGenParticles
     
     if ( runFlags["doGenEvent"] ){
@@ -40,6 +51,7 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
       tree_->Branch( "lheV_pt"	             , &lheV_pt                ); 
       tree_->Branch( "lheHT"	             , &lheHT                  ); 
       tree_->Branch( "lheNj"	             , &lheNj                  ); 
+      tree_->Branch( "lheV_mass"             , &lheV_mass              ); 
       tree_->Branch( "genWeight"	     , &genWeight              ); 
       tree_->Branch( "qScale"	             , &qScale                 );
       tree_->Branch( "PDF_x"	             , &PDF_x                  );
@@ -78,6 +90,8 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch( "el_expectedMissingInnerHits", &el_expectedMissingInnerHits );  
     tree_->Branch( "el_d0"                      , &el_d0                       );
     tree_->Branch( "el_dz"		        , &el_dz                       );  
+    tree_->Branch( "el_d0_allvertices"          , &el_d0_allvertices           );
+    tree_->Branch( "el_dz_allvertices"          , &el_dz_allvertices           );  
     tree_->Branch( "el_dr03EcalRecHitSumEt"     , &el_dr03EcalRecHitSumEt      );
     tree_->Branch( "el_dr03HcalDepth1TowerSumEt", &el_dr03HcalDepth1TowerSumEt );
     tree_->Branch( "el_rho"                     , &el_rho                      );
@@ -92,6 +106,8 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch( "el_isVetoElectron"	        , &el_isVetoElectron           );
     tree_->Branch( "el_isMediumElectron"	, &el_isMediumElectron         );
     tree_->Branch( "el_isTightElectron"         , &el_isTightElectron          );  
+    tree_->Branch( "el_nonTrigMVAID"	     	, &el_nonTrigMVAID             );
+    tree_->Branch( "el_nonTrigMVA"	     	, &el_nonTrigMVA               );
     tree_->Branch( "el_isHeepElectron"	        , &el_isHeepElectron           );
     tree_->Branch( "el_isHeep51Electron"	, &el_isHeep51Electron         );
     tree_->Branch( "el_isLooseElectron"	        , &el_isLooseElectron          );  
@@ -124,9 +140,13 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch( "mu_pt"		      , &mu_pt  	  	   );
     tree_->Branch( "mu_isHighPtMuon"	      , &mu_isHighPtMuon      	   );
     tree_->Branch( "mu_isTightMuon"	      , &mu_isTightMuon       	   );
+    tree_->Branch( "mu_isMediumMuon"	      , &mu_isMediumMuon    	   );
     tree_->Branch( "mu_isLooseMuon"	      , &mu_isLooseMuon       	   );
     tree_->Branch( "mu_isPFMuon"	      , &mu_isPFMuon	      	   );
     tree_->Branch( "mu_isSoftMuon"	      , &mu_isSoftMuon             );
+    tree_->Branch( "mu_isGlobalMuon"	      , &mu_isGlobalMuon    	   );
+    tree_->Branch( "mu_isTrackerMuon"	      , &mu_isTrackerMuon    	   );
+    tree_->Branch( "mu_isTrackerHighPtMuon"	      , &mu_isTrackerHighPtMuon    	   );
     tree_->Branch( "mu_pfRhoCorrRelIso03"     , &mu_pfRhoCorrRelIso03 	   );
     tree_->Branch( "mu_pfRhoCorrRelIso04"     , &mu_pfRhoCorrRelIso04 	   );
     tree_->Branch( "mu_pfDeltaCorrRelIso"     , &mu_pfDeltaCorrRelIso 	   );
@@ -135,10 +155,16 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch( "mu_neutralHadIso"	      , &mu_neutralHadIso     	   );
     tree_->Branch( "mu_chargedHadIso"	      , &mu_chargedHadIso     	   );
     tree_->Branch( "mu_trackIso"	      , &mu_trackIso	      	   );
+    tree_->Branch( "mu_trackCorrIso"	      , &mu_trackCorrIso	   );
     tree_->Branch( "mu_d0"                    , &mu_d0  	      	   );
     tree_->Branch( "mu_dz"                    , &mu_dz  	      	   );
-    tree_->Branch( "mu_bestTrack_pt"	      , &mu_bestTrack_pt      	   );
+    tree_->Branch( "mu_d0_allvertices"        , &mu_d0_allvertices  	   );
+    tree_->Branch( "mu_dz_allvertices"        , &mu_dz_allvertices    	   );
+    tree_->Branch( "mu_innerTrack_pt"	        , &mu_innerTrack_pt      	   );
+    tree_->Branch( "mu_bestTrack_pt"	        , &mu_bestTrack_pt      	   );
     tree_->Branch( "mu_bestTrack_ptErr"	      , &mu_bestTrack_ptErr        );
+    tree_->Branch( "mu_tunePTrack_pt"	        , &mu_tunePTrack_pt      	   );
+    tree_->Branch( "mu_tunePTrack_ptErr"	    , &mu_tunePTrack_ptErr        );
     tree_->Branch( "mu_pfRhoCorrRelIso03Boost", &mu_pfRhoCorrRelIso03Boost );
     tree_->Branch( "mu_pfRhoCorrRelIso04Boost", &mu_pfRhoCorrRelIso04Boost );
     tree_->Branch( "mu_pfDeltaCorrRelIsoBoost", &mu_pfDeltaCorrRelIsoBoost );
@@ -147,7 +173,6 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch( "mu_neutralHadIsoBoost"    , &mu_neutralHadIsoBoost     );
     tree_->Branch( "mu_chargedHadIsoBoost"    , &mu_chargedHadIsoBoost     );  
     tree_->Branch( "mu_normChi2"  	      , &mu_normChi2	    	   );
-    tree_->Branch( "mu_isGlobalMuon"	      , &mu_isGlobalMuon    	   );
     tree_->Branch( "mu_trackerHits"	      , &mu_trackerHits     	   );
     tree_->Branch( "mu_matchedStations"	      , &mu_matchedStations 	   );
     tree_->Branch( "mu_pixelHits" 	      , &mu_pixelHits	    	   );
@@ -175,6 +200,7 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch( "tau_chargedHadIso"	     	 , &tau_chargedHadIso	       );
     tree_->Branch( "tau_trackIso"	     	 , &tau_trackIso	       );
     tree_->Branch( "tau_d0"                  	 , &tau_d0		       );
+    tree_->Branch( "tau_dz"                  	 , &tau_dz		       );
     tree_->Branch( "tau_pfRhoCorrRelIso03Boost"  , &tau_pfRhoCorrRelIso03Boost );
     tree_->Branch( "tau_pfRhoCorrRelIso04Boost"  , &tau_pfRhoCorrRelIso04Boost );
     tree_->Branch( "tau_pfDeltaCorrRelIsoBoost"  , &tau_pfDeltaCorrRelIsoBoost );
@@ -183,6 +209,9 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch( "tau_neutralHadIsoBoost"      , &tau_neutralHadIsoBoost     );
     tree_->Branch( "tau_chargedHadIsoBoost"      , &tau_chargedHadIsoBoost     );  
     tree_->Branch( "tau_TauType"		 , &tau_TauType		       );
+    tree_->Branch( "tau_decayMode"		 , &tau_decayMode	       ); // YT added
+    tree_->Branch( "tau_chargedPionPt"		 , &tau_chargedPionPt	       ); // YT added
+    tree_->Branch( "tau_neutralPionPt"		 , &tau_neutralPionPt	       ); // YT added
   
     if ( runFlags["doBoostedTaus"] ){
       /** tau discriminants */
@@ -195,62 +224,81 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
       tree_->Branch( "tau_chargedIsoPtSum"			      , &tau_chargedIsoPtSum			         );
       tree_->Branch( "tau_neutralIsoPtSum"			      , &tau_neutralIsoPtSum			         );
       tree_->Branch( "tau_puCorrPtSum"				      , &tau_puCorrPtSum 				 );
-      tree_->Branch( "tau_byIsolationMVA3oldDMwoLTraw"		      , &tau_byIsolationMVA3oldDMwoLTraw 		 );
-      tree_->Branch( "tau_byVLooseIsolationMVA3oldDMwoLT"	      , &tau_byVLooseIsolationMVA3oldDMwoLT	         );
-      tree_->Branch( "tau_byLooseIsolationMVA3oldDMwoLT"	      , &tau_byLooseIsolationMVA3oldDMwoLT	         );
-      tree_->Branch( "tau_byMediumIsolationMVA3oldDMwoLT"	      , &tau_byMediumIsolationMVA3oldDMwoLT	         );
-      tree_->Branch( "tau_byTightIsolationMVA3oldDMwoLT"	      , &tau_byTightIsolationMVA3oldDMwoLT	         );
-      tree_->Branch( "tau_byVTightIsolationMVA3oldDMwoLT"	      , &tau_byVTightIsolationMVA3oldDMwoLT	         );
-      tree_->Branch( "tau_byVVTightIsolationMVA3oldDMwoLT"	      , &tau_byVVTightIsolationMVA3oldDMwoLT	         );
-      tree_->Branch( "tau_byIsolationMVA3oldDMwLTraw"		      , &tau_byIsolationMVA3oldDMwLTraw  		 );
-      tree_->Branch( "tau_byVLooseIsolationMVA3oldDMwLT"	      , &tau_byVLooseIsolationMVA3oldDMwLT		 );
-      tree_->Branch( "tau_byLooseIsolationMVA3oldDMwLT"		      , &tau_byLooseIsolationMVA3oldDMwLT		 );
-      tree_->Branch( "tau_byMediumIsolationMVA3oldDMwLT"	      , &tau_byMediumIsolationMVA3oldDMwLT		 );
-      tree_->Branch( "tau_byTightIsolationMVA3oldDMwLT"		      , &tau_byTightIsolationMVA3oldDMwLT		 );
-      tree_->Branch( "tau_byVTightIsolationMVA3oldDMwLT"	      , &tau_byVTightIsolationMVA3oldDMwLT	         );
-      tree_->Branch( "tau_byVVTightIsolationMVA3oldDMwLT"	      , &tau_byVVTightIsolationMVA3oldDMwLT	         );
-      tree_->Branch( "tau_byIsolationMVA3newDMwoLTraw"		      , &tau_byIsolationMVA3newDMwoLTraw 		 );
-      tree_->Branch( "tau_byVLooseIsolationMVA3newDMwoLT"	      , &tau_byVLooseIsolationMVA3newDMwoLT	         );
-      tree_->Branch( "tau_byLooseIsolationMVA3newDMwoLT"	      , &tau_byLooseIsolationMVA3newDMwoLT	         );
-      tree_->Branch( "tau_byMediumIsolationMVA3newDMwoLT"	      , &tau_byMediumIsolationMVA3newDMwoLT	         );
-      tree_->Branch( "tau_byTightIsolationMVA3newDMwoLT"	      , &tau_byTightIsolationMVA3newDMwoLT	         );
-      tree_->Branch( "tau_byVTightIsolationMVA3newDMwoLT"	      , &tau_byVTightIsolationMVA3newDMwoLT	         );
-      tree_->Branch( "tau_byVVTightIsolationMVA3newDMwoLT"	      , &tau_byVVTightIsolationMVA3newDMwoLT	         );
-      tree_->Branch( "tau_byIsolationMVA3newDMwLTraw"		      , &tau_byIsolationMVA3newDMwLTraw  		 );
-      tree_->Branch( "tau_byVLooseIsolationMVA3newDMwLT"	      , &tau_byVLooseIsolationMVA3newDMwLT		 );
-      tree_->Branch( "tau_byLooseIsolationMVA3newDMwLT"		      , &tau_byLooseIsolationMVA3newDMwLT		 );
-      tree_->Branch( "tau_byMediumIsolationMVA3newDMwLT"	      , &tau_byMediumIsolationMVA3newDMwLT		 );
-      tree_->Branch( "tau_byTightIsolationMVA3newDMwLT"		      , &tau_byTightIsolationMVA3newDMwLT		 );
-      tree_->Branch( "tau_byVTightIsolationMVA3newDMwLT"	      , &tau_byVTightIsolationMVA3newDMwLT	         );
-      tree_->Branch( "tau_byVVTightIsolationMVA3newDMwLT"	      , &tau_byVVTightIsolationMVA3newDMwLT	         );
-      tree_->Branch( "tau_againstElectronLoose"			      , &tau_againstElectronLoose			 );
-      tree_->Branch( "tau_againstElectronMedium"		      , &tau_againstElectronMedium			 );
-      tree_->Branch( "tau_againstElectronTight"			      , &tau_againstElectronTight			 );
-      tree_->Branch( "tau_againstElectronMVA5raw"		      , &tau_againstElectronMVA5raw			 );
-      tree_->Branch( "tau_againstElectronMVA5category"		      , &tau_againstElectronMVA5category 		 );
-      tree_->Branch( "tau_againstElectronVLooseMVA5" 		      , &tau_againstElectronVLooseMVA5			 );
-      tree_->Branch( "tau_againstElectronLooseMVA5"  		      , &tau_againstElectronLooseMVA5			 );
-      tree_->Branch( "tau_againstElectronMediumMVA5" 		      , &tau_againstElectronMediumMVA5			 );
-      tree_->Branch( "tau_againstElectronTightMVA5"  		      , &tau_againstElectronTightMVA5			 );
-      tree_->Branch( "tau_againstElectronVTightMVA5" 		      , &tau_againstElectronVTightMVA5			 );
-      tree_->Branch( "tau_againstMuonLoose"  			      , &tau_againstMuonLoose				 );
-      tree_->Branch( "tau_againstMuonMedium" 			      , &tau_againstMuonTight				 );
-      tree_->Branch( "tau_againstMuonTight"  			      , &tau_againstMuonTight				 );
-      tree_->Branch( "tau_againstMuonLoose2" 			      , &tau_againstMuonLoose2				 );
-      tree_->Branch( "tau_againstMuonMedium2"			      , &tau_againstMuonMedium2  			 );
-      tree_->Branch( "tau_againstMuonTight2" 			      , &tau_againstMuonLoose3				 );
-      tree_->Branch( "tau_againstMuonLoose3" 			      , &tau_againstMuonLoose3				 );
-      tree_->Branch( "tau_againstMuonTight3" 			      , &tau_againstMuonTight3				 );
-      tree_->Branch( "tau_againstMuonMVAraw" 			      , &tau_againstMuonMVAraw				 );
-      tree_->Branch( "tau_againstMuonLooseMVA"			      , &tau_againstMuonLooseMVA 			 );
-      tree_->Branch( "tau_againstMuonMediumMVA"			      , &tau_againstMuonMediumMVA			 );
-      tree_->Branch( "tau_againstMuonTightMVA"			      , &tau_againstMuonTightMVA 			 );
-      tree_->Branch( "tau_byPileupWeightedIsolationRaw3Hits"	      , &tau_byPileupWeightedIsolationRaw3Hits		 );
-      tree_->Branch( "tau_byLoosePileupWeightedIsolation3Hits"	      , &tau_byLoosePileupWeightedIsolation3Hits	 );
-      tree_->Branch( "tau_byMediumPileupWeightedIsolation3Hits"	      , &tau_byMediumPileupWeightedIsolation3Hits	 );
-      tree_->Branch( "tau_byTightPileupWeightedIsolation3Hits"	      , &tau_byTightPileupWeightedIsolation3Hits	 ); 
-      tree_->Branch( "tau_byPhotonPtSumOutsideSignalCone"	      , &tau_byPhotonPtSumOutsideSignalCone	 );
-      tree_->Branch( "tau_footprintCorrection"	                      , &tau_footprintCorrection	 );
+     
+
+      tree_->Branch( "tau_chargedIsoPtSumdR03"                       , &tau_chargedIsoPtSumdR03);
+      tree_->Branch( "tau_footprintCorrectiondR03"                    , &tau_footprintCorrectiondR03);
+      tree_->Branch( "tau_neutralIsoPtSumdR03"                        , &tau_neutralIsoPtSumdR03);
+      tree_->Branch( "tau_neutralIsoPtSumWeight"                      , &tau_neutralIsoPtSumWeight);
+      tree_->Branch( "tau_neutralIsoPtSumWeightdR03"                  , &tau_neutralIsoPtSumWeightdR03);
+      tree_->Branch( "tau_photonPtSumOutsideSignalConedR03"           , &tau_photonPtSumOutsideSignalConedR03);
+
+      tree_->Branch( "tau_byIsolationMVArun2v1DBdR03oldDMwLTraw"      , &tau_byIsolationMVArun2v1DBdR03oldDMwLTraw);
+      tree_->Branch( "tau_byIsolationMVArun2v1DBnewDMwLTraw"          , &tau_byIsolationMVArun2v1DBnewDMwLTraw);
+      tree_->Branch( "tau_byIsolationMVArun2v1DBoldDMwLTraw"          , &tau_byIsolationMVArun2v1DBoldDMwLTraw);
+      tree_->Branch( "tau_byIsolationMVArun2v1PWdR03oldDMwLTraw"      , &tau_byIsolationMVArun2v1PWdR03oldDMwLTraw);
+      tree_->Branch( "tau_byIsolationMVArun2v1PWnewDMwLTraw"          , &tau_byIsolationMVArun2v1PWnewDMwLTraw);
+      tree_->Branch( "tau_byIsolationMVArun2v1PWoldDMwLTraw"          , &tau_byIsolationMVArun2v1PWoldDMwLTraw);
+      tree_->Branch( "tau_byLooseIsolationMVArun2v1DBdR03oldDMwLT"    , &tau_byLooseIsolationMVArun2v1DBdR03oldDMwLT);
+      tree_->Branch( "tau_byLooseIsolationMVArun2v1DBnewDMwLT"        , &tau_byLooseIsolationMVArun2v1DBnewDMwLT);
+      tree_->Branch( "tau_byLooseIsolationMVArun2v1DBoldDMwLT"        , &tau_byLooseIsolationMVArun2v1DBoldDMwLT);
+      tree_->Branch( "tau_byLooseIsolationMVArun2v1PWdR03oldDMwLT"   , &tau_byLooseIsolationMVArun2v1PWdR03oldDMwLT);
+      tree_->Branch( "tau_byLooseIsolationMVArun2v1PWnewDMwLT"        , &tau_byLooseIsolationMVArun2v1PWnewDMwLT);
+      tree_->Branch( "tau_byLooseIsolationMVArun2v1PWoldDMwLT"        , &tau_byLooseIsolationMVArun2v1PWoldDMwLT);
+      tree_->Branch( "tau_byMediumIsolationMVArun2v1DBdR03oldDMwLT"    , &tau_byMediumIsolationMVArun2v1DBdR03oldDMwLT);
+      tree_->Branch( "tau_byMediumIsolationMVArun2v1DBnewDMwLT"        , &tau_byMediumIsolationMVArun2v1DBnewDMwLT);
+      tree_->Branch( "tau_byMediumIsolationMVArun2v1DBoldDMwLT"        , &tau_byMediumIsolationMVArun2v1DBoldDMwLT);
+      tree_->Branch( "tau_byMediumIsolationMVArun2v1PWdR03oldDMwLT"    , &tau_byMediumIsolationMVArun2v1PWdR03oldDMwLT);
+      tree_->Branch( "tau_byMediumIsolationMVArun2v1PWnewDMwLT"        , &tau_byMediumIsolationMVArun2v1PWnewDMwLT);
+      tree_->Branch( "tau_byMediumIsolationMVArun2v1PWoldDMwLT"        , &tau_byMediumIsolationMVArun2v1PWoldDMwLT);
+
+
+      tree_->Branch( "tau_byTightIsolationMVArun2v1DBdR03oldDMwLT"     , &tau_byTightIsolationMVArun2v1DBdR03oldDMwLT);
+      tree_->Branch( "tau_byTightIsolationMVArun2v1DBnewDMwLT"         , &tau_byTightIsolationMVArun2v1DBnewDMwLT);
+      tree_->Branch( "tau_byTightIsolationMVArun2v1DBoldDMwLT"         , &tau_byTightIsolationMVArun2v1DBoldDMwLT);
+      tree_->Branch( "tau_byTightIsolationMVArun2v1PWdR03oldDMwLT"     , &tau_byTightIsolationMVArun2v1PWdR03oldDMwLT);
+      tree_->Branch( "tau_byTightIsolationMVArun2v1PWnewDMwLT"         , &tau_byTightIsolationMVArun2v1PWnewDMwLT);
+      tree_->Branch( "tau_byTightIsolationMVArun2v1PWoldDMwLT"         , &tau_byTightIsolationMVArun2v1PWoldDMwLT);
+      tree_->Branch( "tau_byVLooseIsolationMVArun2v1DBdR03oldDMwLT"    , &tau_byVLooseIsolationMVArun2v1DBdR03oldDMwLT);
+
+      tree_->Branch( "tau_byVLooseIsolationMVArun2v1DBnewDMwLT"        , &tau_byVLooseIsolationMVArun2v1DBnewDMwLT);
+      tree_->Branch( "tau_byVLooseIsolationMVArun2v1DBoldDMwLT"        , &tau_byVLooseIsolationMVArun2v1DBoldDMwLT);
+      tree_->Branch( "tau_byVLooseIsolationMVArun2v1PWdR03oldDMwLT"    , &tau_byVLooseIsolationMVArun2v1PWdR03oldDMwLT);
+      tree_->Branch( "tau_byVLooseIsolationMVArun2v1PWnewDMwLT"        , &tau_byVLooseIsolationMVArun2v1PWnewDMwLT);
+      tree_->Branch( "tau_byVLooseIsolationMVArun2v1PWoldDMwLT"        , &tau_byVLooseIsolationMVArun2v1PWoldDMwLT);
+      tree_->Branch( "tau_byVTightIsolationMVArun2v1DBdR03oldDMwLT"    , &tau_byVTightIsolationMVArun2v1DBdR03oldDMwLT);
+      tree_->Branch( "tau_byVTightIsolationMVArun2v1DBnewDMwLT"        , &tau_byVTightIsolationMVArun2v1DBnewDMwLT);
+      tree_->Branch( "tau_byVTightIsolationMVArun2v1DBoldDMwLT"        , &tau_byVTightIsolationMVArun2v1DBoldDMwLT);
+
+      tree_->Branch( "tau_byVTightIsolationMVArun2v1PWdR03oldDMwLT"     , &tau_byVTightIsolationMVArun2v1PWdR03oldDMwLT);
+      tree_->Branch( "tau_byVTightIsolationMVArun2v1PWnewDMwLT"         , &tau_byVTightIsolationMVArun2v1PWnewDMwLT);
+      tree_->Branch( "tau_byVTightIsolationMVArun2v1PWoldDMwLT"         , &tau_byVTightIsolationMVArun2v1PWoldDMwLT);
+      tree_->Branch( "tau_byVVTightIsolationMVArun2v1DBdR03oldDMwLT"    , &tau_byVVTightIsolationMVArun2v1DBdR03oldDMwLT);
+      tree_->Branch( "tau_byVVTightIsolationMVArun2v1DBnewDMwLT"        , &tau_byVVTightIsolationMVArun2v1DBnewDMwLT);
+      tree_->Branch( "tau_byVVTightIsolationMVArun2v1DBoldDMwLT"        , &tau_byVVTightIsolationMVArun2v1DBoldDMwLT);
+      tree_->Branch( "tau_byVVTightIsolationMVArun2v1PWdR03oldDMwLT"    , &tau_byVVTightIsolationMVArun2v1PWdR03oldDMwLT);
+      tree_->Branch( "tau_byVVTightIsolationMVArun2v1PWnewDMwLT"        , &tau_byVVTightIsolationMVArun2v1PWnewDMwLT);
+
+      tree_->Branch( "tau_byVVTightIsolationMVArun2v1PWoldDMwLT"        , &tau_byVVTightIsolationMVArun2v1PWoldDMwLT);
+
+
+
+
+      tree_->Branch( "tau_againstElectronMVA6raw"                     , &tau_againstElectronMVA6raw);
+      tree_->Branch( "tau_againstElectronMVA6category"                , &tau_againstElectronMVA6category);
+      tree_->Branch( "tau_againstElectronVLooseMVA6"                  , &tau_againstElectronVLooseMVA6);
+      tree_->Branch( "tau_againstElectronLooseMVA6"                   , &tau_againstElectronLooseMVA6);
+      tree_->Branch( "tau_againstElectronMediumMVA6"                  , &tau_againstElectronMediumMVA6);
+      tree_->Branch( "tau_againstElectronTightMVA6"                   , &tau_againstElectronTightMVA6);
+      tree_->Branch( "tau_againstElectronVTightMVA6"                  , &tau_againstElectronVTightMVA6);
+      
+
+      tree_->Branch( "tau_againstMuonLoose3"                          , &tau_againstMuonLoose3);
+      tree_->Branch( "tau_againstMuonTight3"                          , &tau_againstMuonTight3); 
+      
+      tree_->Branch( "tau_byPhotonPtSumOutsideSignalCone"             , &tau_byPhotonPtSumOutsideSignalCone);
+      tree_->Branch( "tau_footprintCorrection"                        , &tau_footprintCorrection);
+
 
     } //doTausBoosted
   } //doTaus
@@ -277,6 +325,10 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch( "jetAK4_jecDown"	    , &jetAK4_jecDown 	 );
     tree_->Branch( "jetAK4_IDLoose"	    , &jetAK4_IDLoose	 );
     tree_->Branch( "jetAK4_IDTight"	    , &jetAK4_IDTight	 );
+    tree_->Branch( "jetAK4_PUIDdiscriminat" , &jetAK4_PUIDdiscriminat);
+    tree_->Branch( "jetAK4_PUIDloose"	    , &jetAK4_PUIDloose	 );
+    tree_->Branch( "jetAK4_PUIDmedium"	    , &jetAK4_PUIDmedium );
+    tree_->Branch( "jetAK4_PUIDtight"	    , &jetAK4_PUIDtight	 );
     tree_->Branch( "jetAK4_muf" 	    , &jetAK4_muf	 );
     tree_->Branch( "jetAK4_phf" 	    , &jetAK4_phf	 );
     tree_->Branch( "jetAK4_emf" 	    , &jetAK4_emf	 );
@@ -307,6 +359,10 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
       tree_->Branch( "jetAK4_genParton_pdgID" , &jetAK4_genParton_pdgID);
       tree_->Branch( "jetAK4_nbHadrons"       , &jetAK4_nbHadrons);
       tree_->Branch( "jetAK4_ncHadrons"       , &jetAK4_ncHadrons);
+      tree_->Branch( "jetAK4_jer_sf"          , &jetAK4_jer_sf);
+      tree_->Branch( "jetAK4_jer_sf_up"          , &jetAK4_jer_sf_up);
+      tree_->Branch( "jetAK4_jer_sf_down"          , &jetAK4_jer_sf_down);
+      tree_->Branch( "jetAK4_jer_sigma_pt"          , &jetAK4_jer_sigma_pt);
     }
 
   } //doAK4Jets
@@ -350,8 +406,19 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
       tree_->Branch( "jetAK8_genParton_pdgID" , &jetAK8_genParton_pdgID);
       tree_->Branch( "jetAK8_nbHadrons"       , &jetAK8_nbHadrons);
       tree_->Branch( "jetAK8_ncHadrons"       , &jetAK8_ncHadrons);
+
+      tree_->Branch( "jetAK8_jer_sf"          , &jetAK8_jer_sf);
+      tree_->Branch( "jetAK8_jer_sf_up"          , &jetAK8_jer_sf_up);
+      tree_->Branch( "jetAK8_jer_sf_down"          , &jetAK8_jer_sf_down);
+      tree_->Branch( "jetAK8_jer_sigma_pt"          , &jetAK8_jer_sigma_pt);
+     
+      tree_->Branch( "jetAK8Puppi_jer_sf"          , &jetAK8Puppi_jer_sf);
+      tree_->Branch( "jetAK8Puppi_jer_sf_up"          , &jetAK8Puppi_jer_sf_up);
+      tree_->Branch( "jetAK8Puppi_jer_sf_down"          , &jetAK8Puppi_jer_sf_down);
+      tree_->Branch( "jetAK8Puppi_jer_sigma_pt"          , &jetAK8Puppi_jer_sigma_pt);
+
+      
     }
-    
     if (runFlags["doHbbTag"]) {
       tree_->Branch( "jetAK8_Hbbtag"	     , &jetAK8_Hbbtag		 );
     }
@@ -380,23 +447,6 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
      tree_->Branch( "jetAK10_ecf3"	     , &jetAK10_ecf3	    	 );
     }
 
-    if (runFlags["doPuppi"]) {
-      /*----------------------PUPPI ---------------------------*/   
-     tree_->Branch( "jetAK8_puppi_pt"        , &jetAK8_puppi_pt    	);
-     tree_->Branch( "jetAK8_puppi_eta"       , &jetAK8_puppi_eta	);
-     tree_->Branch( "jetAK8_puppi_mass"      , &jetAK8_puppi_mass	 );
-     tree_->Branch( "jetAK8_puppi_phi"       , &jetAK8_puppi_phi	);
-     tree_->Branch( "jetAK8_puppi_e"	     , &jetAK8_puppi_e	);
-     tree_->Branch( "jetAK8_puppi_pruned_mass"      , &jetAK8_puppi_pruned_mass       );
-     tree_->Branch( "jetAK8_puppi_pruned_massCorr"  , &jetAK8_puppi_pruned_massCorr   );
-     tree_->Branch( "jetAK8_puppi_pruned_jec"	    , &jetAK8_puppi_pruned_jec        );
-     tree_->Branch( "jetAK8_puppi_softdrop_mass"    , &jetAK8_puppi_softdrop_mass     ); 
-     tree_->Branch( "jetAK8_puppi_softdrop_massCorr", &jetAK8_puppi_softdrop_massCorr );
-     tree_->Branch( "jetAK8_puppi_softdrop_jec"     , &jetAK8_puppi_softdrop_jec      );
-     tree_->Branch( "jetAK8_puppi_tau1"	            , &jetAK8_puppi_tau1	      );
-     tree_->Branch( "jetAK8_puppi_tau2"	            , &jetAK8_puppi_tau2      	      );
-     tree_->Branch( "jetAK8_puppi_tau3"	            , &jetAK8_puppi_tau3	      );
-    }
       // /*----------------------Softdrop AK8 subjets---------------------------*/
       tree_->Branch( "jetAK8_subjet_softdrop_N"            , &jetAK8_subjet_softdrop_N  	   );
       tree_->Branch( "jetAK8_subjet_softdrop_pt"           , &jetAK8_subjet_softdrop_pt      	   );
@@ -413,6 +463,41 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
         tree_->Branch( "jetAK8_subjet_softdrop_hadronFlavour", &jetAK8_subjet_softdrop_hadronFlavour );
       }
       tree_->Branch( "jetAK8_subjet_softdrop_csv"          , &jetAK8_subjet_softdrop_csv           );
+      
+    if (runFlags["doPuppi"]) {
+      /*----------------------PUPPI ---------------------------*/   
+     tree_->Branch( "jetAK8_puppi_pt"        , &jetAK8_puppi_pt    	);
+     tree_->Branch( "jetAK8_puppi_eta"       , &jetAK8_puppi_eta	);
+     tree_->Branch( "jetAK8_puppi_mass"      , &jetAK8_puppi_mass	 );
+     tree_->Branch( "jetAK8_puppi_phi"       , &jetAK8_puppi_phi	);
+     tree_->Branch( "jetAK8_puppi_e"	     , &jetAK8_puppi_e	);
+     tree_->Branch( "jetAK8_puppi_pruned_mass"      , &jetAK8_puppi_pruned_mass       );
+     tree_->Branch( "jetAK8_puppi_pruned_massCorr"  , &jetAK8_puppi_pruned_massCorr   );
+     tree_->Branch( "jetAK8_puppi_pruned_jec"	    , &jetAK8_puppi_pruned_jec        );
+     tree_->Branch( "jetAK8_puppi_softdrop_mass"    , &jetAK8_puppi_softdrop_mass     ); 
+     tree_->Branch( "jetAK8_puppi_softdrop_massCorr", &jetAK8_puppi_softdrop_massCorr );
+     tree_->Branch( "jetAK8_puppi_softdrop_jec"     , &jetAK8_puppi_softdrop_jec      );
+     tree_->Branch( "jetAK8_puppi_tau1"	            , &jetAK8_puppi_tau1	      );
+     tree_->Branch( "jetAK8_puppi_tau2"	            , &jetAK8_puppi_tau2      	      );
+     tree_->Branch( "jetAK8_puppi_tau3"	            , &jetAK8_puppi_tau3	      );
+
+      // /*----------------------puppi_softdrop AK8 subjets---------------------------*/
+      tree_->Branch( "jetAK8_subjet_puppi_softdrop_N"            , &jetAK8_subjet_puppi_softdrop_N  	   );
+      tree_->Branch( "jetAK8_subjet_puppi_softdrop_pt"           , &jetAK8_subjet_puppi_softdrop_pt      	   );
+      tree_->Branch( "jetAK8_subjet_puppi_softdrop_eta"          , &jetAK8_subjet_puppi_softdrop_eta     	   );
+      tree_->Branch( "jetAK8_subjet_puppi_softdrop_mass"         , &jetAK8_subjet_puppi_softdrop_mass    	   );
+      tree_->Branch( "jetAK8_subjet_puppi_softdrop_phi"          , &jetAK8_subjet_puppi_softdrop_phi     	   );
+      tree_->Branch( "jetAK8_subjet_puppi_softdrop_e"            , &jetAK8_subjet_puppi_softdrop_e       	   );
+      tree_->Branch( "jetAK8_subjet_puppi_softdrop_charge"       , &jetAK8_subjet_puppi_softdrop_charge        );
+      if ( runFlags["runOnMC"] ){
+        tree_->Branch( "jetAK8_subjet_puppi_softdrop_genParton_pdgID", &jetAK8_subjet_puppi_softdrop_genParton_pdgID );
+        tree_->Branch( "jetAK8_subjet_puppi_softdrop_nbHadrons", &jetAK8_subjet_puppi_softdrop_nbHadrons );
+        tree_->Branch( "jetAK8_subjet_puppi_softdrop_ncHadrons", &jetAK8_subjet_puppi_softdrop_ncHadrons );
+        tree_->Branch( "jetAK8_subjet_puppi_softdrop_partonFlavour", &jetAK8_subjet_puppi_softdrop_partonFlavour );
+        tree_->Branch( "jetAK8_subjet_puppi_softdrop_hadronFlavour", &jetAK8_subjet_puppi_softdrop_hadronFlavour );
+      }
+      tree_->Branch( "jetAK8_subjet_puppi_softdrop_csv"          , &jetAK8_subjet_puppi_softdrop_csv           );
+    }
     	  
     if (runFlags["doPrunedSubjets"]) {
     
@@ -472,6 +557,7 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch("triggerObject_eta"		, &triggerObject_eta		);
     tree_->Branch("triggerObject_phi"		, &triggerObject_phi	        );
     tree_->Branch("triggerObject_mass"		, &triggerObject_mass		);
+    tree_->Branch("triggerObject_lastname"	, &triggerObject_lastname	);
     tree_->Branch("triggerObject_filterIDs"	, &triggerObject_filterIDs	);
     tree_->Branch("triggerObject_firedTrigger"	, &triggerObject_firedTrigger	);
   } //doTriggerObjects
@@ -495,6 +581,14 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch("passFilter_TrkPOG_toomanystrip"  ,&passFilter_TrkPOG_toomanystrip_ ,"passFilter_TrkPOG_toomanystrip_/O");
     tree_->Branch("passFilter_TrkPOG_logError"      ,&passFilter_TrkPOG_logError_     ,"passFilter_TrkPOG_logError_/O");
     tree_->Branch("passFilter_METFilters"           ,&passFilter_METFilters_          ,"passFilter_METFilters_/O");
+    
+     //NEW FOR ICHEP
+    tree_->Branch("passFilter_CSCTightHaloTrkMuUnvetoFilter", &passFilter_CSCTightHaloTrkMuUnvetoFilter_   ,"passFilter_CSCTightHaloTrkMuUnvetoFilter_/O");
+    tree_->Branch("passFilter_globalTightHalo2016"          , &passFilter_globalTightHalo2016_             ,"passFilter_globalTightHalo2016_/O");
+    tree_->Branch("passFilter_HcalStripHalo"                , &passFilter_HcalStripHalo_                   ,"passFilter_HcalStripHalo_/O");
+    tree_->Branch("passFilter_chargedHadronTrackResolution" , &passFilter_chargedHadronTrackResolution_    ,"passFilter_chargedHadronTrackResolution_/O");
+    tree_->Branch("passFilter_muonBadTrack"                 , &passFilter_muonBadTrack_                    ,"passFilter_muonBadTrack_/O");
+    
   } //do HltFilters
 
   if (runFlags["doMissingEt"]) {
@@ -506,6 +600,8 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch("MET_corrPy"		        , &MET_corrPy	     );   
     tree_->Branch("MET_et"	                , &MET_et  	     ); 
     tree_->Branch("MET_phi"	                , &MET_phi           );
+    tree_->Branch("MET_puppi_et"	        , &MET_puppi_et      ); 
+    tree_->Branch("MET_puppi_phi"               , &MET_puppi_phi     );
     tree_->Branch("MET_sumEt"	                , &MET_sumEt 	     ); 
   } //doMissingEt
 
@@ -515,8 +611,23 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch( "MET_cov00"                                        , &MET_cov00 );
     tree_->Branch( "MET_cov10"                                        , &MET_cov10 );
     tree_->Branch( "MET_cov11"                                        , &MET_cov11 );
+  }
+
+  if ( runFlags["doMVAMET"] ){
+    /** MET SVift*/
+    tree_->Branch("MET_Nmva"	                , &MET_Nmva 	     ); 
+    tree_->Branch("MET_mva_et"	                , &MET_mva_et        ); 
+    tree_->Branch("MET_mva_phi"                 , &MET_mva_phi       );
+    tree_->Branch( "MET_mva_cov00"                                        , &MET_mva_cov00 );
+    tree_->Branch( "MET_mva_cov10"                                        , &MET_mva_cov10 );
+    tree_->Branch( "MET_mva_cov11"                                        , &MET_mva_cov11 );
+    tree_->Branch( "MET_mva_recoil_pt"                                        , &MET_mva_recoil_pt );
+    tree_->Branch( "MET_mva_recoil_eta"                                        , &MET_mva_recoil_eta );
+    tree_->Branch( "MET_mva_recoil_phi"                                        , &MET_mva_recoil_phi );
+    tree_->Branch( "MET_mva_recoil_pdgId"                                        , &MET_mva_recoil_pdgId );
 
   }
+
   
   /*------------- ------EVENT infos-----------------------------*/
   tree_->Branch("EVENT_event"	 , &EVENT_event     );
@@ -558,21 +669,31 @@ void NtupleBranches::reset( void ){
   genParticle_phi.clear();
   genParticle_mass.clear();
   genParticle_pdgId.clear();
+  genParticle_isPrompt.clear();
+  genParticle_isDirectPromptTauDecayProduct.clear();
+  genParticle_fromHardProcessFinalState.clear();
+  genParticle_isDirectHardProcessTauDecayProductFinalState.clear();
   genParticle_status.clear();
   genParticle_mother.clear();
   genParticle_nMoth.clear();
   genParticle_nDau.clear();
   genParticle_dau.clear();
+  genParticle_tauvispt.clear();
+  genParticle_tauviseta.clear();
+  genParticle_tauvisphi.clear();
+  genParticle_tauvismass.clear();
+  genParticle_taudecay.clear();
   
   /** generator info */
-  lheV_pt     = 0;
-  lheHT       = 0;
-  lheNj       = 0;
   genWeight   = 0;
   qScale      = 0;
   PDF_id.clear();  
   PDF_x.clear();	
   PDF_xPDF.clear();
+  lheV_pt = 0;
+  lheHT = 0;
+  lheNj = 0;
+  lheV_mass = 0;
     
   /** electrons */
   el_N        = 0;
@@ -610,6 +731,8 @@ void NtupleBranches::reset( void ){
   el_expectedMissingInnerHits.clear();
   el_d0.clear();
   el_dz.clear();
+  el_d0_allvertices.clear();
+  el_dz_allvertices.clear();
   el_dr03EcalRecHitSumEt.clear();
   el_dr03HcalDepth1TowerSumEt.clear();
   el_rho.clear();
@@ -624,6 +747,8 @@ void NtupleBranches::reset( void ){
   el_isVetoElectron.clear();
   el_isMediumElectron.clear();
   el_isTightElectron.clear();
+  el_nonTrigMVAID.clear();
+  el_nonTrigMVA.clear();
   el_isHeepElectron.clear();
   el_isHeep51Electron.clear();
   el_isLooseElectron.clear();
@@ -654,9 +779,13 @@ void NtupleBranches::reset( void ){
   mu_pt.clear();
   mu_isHighPtMuon.clear();
   mu_isTightMuon.clear();
+  mu_isMediumMuon.clear();
   mu_isLooseMuon.clear();
   mu_isPFMuon.clear();
   mu_isSoftMuon.clear();
+  mu_isGlobalMuon.clear();
+  mu_isTrackerMuon.clear();
+  mu_isTrackerHighPtMuon.clear();
   mu_pfRhoCorrRelIso03.clear();
   mu_pfRhoCorrRelIso04.clear();
   mu_pfDeltaCorrRelIso.clear();
@@ -665,10 +794,16 @@ void NtupleBranches::reset( void ){
   mu_neutralHadIso.clear();
   mu_chargedHadIso.clear();
   mu_trackIso.clear();
+  mu_trackCorrIso.clear();
   mu_d0.clear();
   mu_dz.clear();
+  mu_d0_allvertices.clear();
+  mu_dz_allvertices.clear();
+  mu_innerTrack_pt.clear();
   mu_bestTrack_pt.clear();
   mu_bestTrack_ptErr.clear();
+  mu_tunePTrack_pt.clear();
+  mu_tunePTrack_ptErr.clear();
   mu_pfRhoCorrRelIso03Boost.clear();
   mu_pfRhoCorrRelIso04Boost.clear();
   mu_pfDeltaCorrRelIsoBoost.clear();
@@ -677,7 +812,6 @@ void NtupleBranches::reset( void ){
   mu_neutralHadIsoBoost.clear();
   mu_chargedHadIsoBoost.clear();
   mu_normChi2.clear();
-  mu_isGlobalMuon.clear();
   mu_trackerHits.clear();
   mu_matchedStations.clear();
   mu_pixelHits.clear();
@@ -703,6 +837,7 @@ void NtupleBranches::reset( void ){
   tau_chargedHadIso.clear();
   tau_trackIso.clear();
   tau_d0.clear();
+  tau_dz.clear();
   tau_pfRhoCorrRelIso03Boost.clear();
   tau_pfRhoCorrRelIso04Boost.clear();
   tau_pfDeltaCorrRelIsoBoost.clear();
@@ -711,6 +846,9 @@ void NtupleBranches::reset( void ){
   tau_neutralHadIsoBoost.clear();
   tau_chargedHadIsoBoost.clear();
   tau_TauType.clear();
+  tau_decayMode.clear();
+  tau_chargedPionPt.clear();
+  tau_neutralPionPt.clear();
 
   /** tau discriminants */
   tau_decayModeFindingNewDMs.clear();
@@ -722,63 +860,82 @@ void NtupleBranches::reset( void ){
   tau_chargedIsoPtSum.clear();
   tau_neutralIsoPtSum.clear();
   tau_puCorrPtSum.clear();
-  tau_byIsolationMVA3oldDMwoLTraw.clear();
-  tau_byVLooseIsolationMVA3oldDMwoLT.clear();
-  tau_byLooseIsolationMVA3oldDMwoLT.clear();
-  tau_byMediumIsolationMVA3oldDMwoLT.clear();
-  tau_byTightIsolationMVA3oldDMwoLT.clear();
-  tau_byVTightIsolationMVA3oldDMwoLT.clear();
-  tau_byVVTightIsolationMVA3oldDMwoLT.clear();
-  tau_byIsolationMVA3oldDMwLTraw.clear();
-  tau_byVLooseIsolationMVA3oldDMwLT.clear();
-  tau_byLooseIsolationMVA3oldDMwLT.clear();
-  tau_byMediumIsolationMVA3oldDMwLT.clear();
-  tau_byTightIsolationMVA3oldDMwLT.clear();
-  tau_byVTightIsolationMVA3oldDMwLT.clear();
-  tau_byVVTightIsolationMVA3oldDMwLT.clear();
-  tau_byIsolationMVA3newDMwoLTraw.clear();
-  tau_byVLooseIsolationMVA3newDMwoLT.clear();
-  tau_byLooseIsolationMVA3newDMwoLT.clear();
-  tau_byMediumIsolationMVA3newDMwoLT.clear();
-  tau_byTightIsolationMVA3newDMwoLT.clear();
-  tau_byVTightIsolationMVA3newDMwoLT.clear();
-  tau_byVVTightIsolationMVA3newDMwoLT.clear();
-  tau_byIsolationMVA3newDMwLTraw.clear();
-  tau_byVLooseIsolationMVA3newDMwLT.clear();
-  tau_byLooseIsolationMVA3newDMwLT.clear();
-  tau_byMediumIsolationMVA3newDMwLT.clear();
-  tau_byTightIsolationMVA3newDMwLT.clear();
-  tau_byVTightIsolationMVA3newDMwLT.clear();
-  tau_byVVTightIsolationMVA3newDMwLT.clear();
-  tau_againstElectronLoose.clear();
-  tau_againstElectronMedium.clear();
-  tau_againstElectronTight.clear();
-  tau_againstElectronMVA5raw.clear();
-  tau_againstElectronMVA5category.clear();
-  tau_againstElectronVLooseMVA5.clear();
-  tau_againstElectronLooseMVA5.clear();
-  tau_againstElectronMediumMVA5.clear();
-  tau_againstElectronTightMVA5.clear();
-  tau_againstElectronVTightMVA5.clear();
-  tau_againstMuonLoose.clear();
-  tau_againstMuonMedium.clear();
-  tau_againstMuonTight.clear();
-  tau_againstMuonLoose2.clear();
-  tau_againstMuonMedium2.clear();
-  tau_againstMuonTight2.clear();
-  tau_againstMuonLoose3.clear();
-  tau_againstMuonTight3.clear();
-  tau_againstMuonMVAraw.clear();
-  tau_againstMuonLooseMVA.clear();
-  tau_againstMuonMediumMVA.clear();
-  tau_againstMuonTightMVA.clear();
-  tau_byPileupWeightedIsolationRaw3Hits          .clear();
-  tau_byLoosePileupWeightedIsolation3Hits        .clear();
-  tau_byMediumPileupWeightedIsolation3Hits       .clear();
-  tau_byTightPileupWeightedIsolation3Hits        .clear();
-  tau_byPhotonPtSumOutsideSignalCone             .clear();
-  tau_footprintCorrection                        .clear();
+
   
+  tau_chargedIsoPtSumdR03.clear();
+  tau_footprintCorrectiondR03.clear();
+  tau_neutralIsoPtSumdR03.clear();
+  tau_neutralIsoPtSumWeight.clear();
+  tau_neutralIsoPtSumWeightdR03.clear();
+  tau_photonPtSumOutsideSignalConedR03.clear();
+
+  tau_byIsolationMVArun2v1DBdR03oldDMwLTraw.clear();
+  tau_byIsolationMVArun2v1DBnewDMwLTraw.clear();
+  tau_byIsolationMVArun2v1DBoldDMwLTraw.clear();
+  tau_byIsolationMVArun2v1PWdR03oldDMwLTraw.clear();
+  tau_byIsolationMVArun2v1PWnewDMwLTraw.clear();
+  tau_byIsolationMVArun2v1PWoldDMwLTraw.clear();
+  tau_byLooseIsolationMVArun2v1DBdR03oldDMwLT.clear();
+  tau_byLooseIsolationMVArun2v1DBnewDMwLT.clear();
+  tau_byLooseIsolationMVArun2v1DBoldDMwLT.clear();
+  tau_byLooseIsolationMVArun2v1PWdR03oldDMwLT.clear();
+  tau_byLooseIsolationMVArun2v1PWnewDMwLT.clear();
+  tau_byLooseIsolationMVArun2v1PWoldDMwLT.clear();
+  
+  tau_byMediumIsolationMVArun2v1DBdR03oldDMwLT.clear();
+  tau_byMediumIsolationMVArun2v1DBnewDMwLT.clear();
+  tau_byMediumIsolationMVArun2v1DBoldDMwLT.clear();
+  tau_byMediumIsolationMVArun2v1PWdR03oldDMwLT.clear();
+  tau_byMediumIsolationMVArun2v1PWnewDMwLT.clear();
+  tau_byMediumIsolationMVArun2v1PWoldDMwLT.clear();
+
+  tau_byTightIsolationMVArun2v1DBdR03oldDMwLT.clear();
+  tau_byTightIsolationMVArun2v1DBnewDMwLT.clear();
+  tau_byTightIsolationMVArun2v1DBoldDMwLT.clear();
+  tau_byTightIsolationMVArun2v1PWdR03oldDMwLT.clear();
+  tau_byTightIsolationMVArun2v1PWnewDMwLT.clear();
+  tau_byTightIsolationMVArun2v1PWoldDMwLT.clear();
+  tau_byVLooseIsolationMVArun2v1DBdR03oldDMwLT.clear();
+
+  tau_byVLooseIsolationMVArun2v1DBnewDMwLT.clear();
+  tau_byVLooseIsolationMVArun2v1DBoldDMwLT.clear();
+  tau_byVLooseIsolationMVArun2v1PWdR03oldDMwLT.clear();
+  tau_byVLooseIsolationMVArun2v1PWnewDMwLT.clear();
+  tau_byVLooseIsolationMVArun2v1PWoldDMwLT.clear();
+  tau_byVTightIsolationMVArun2v1DBdR03oldDMwLT.clear();
+  tau_byVTightIsolationMVArun2v1DBnewDMwLT.clear();
+  tau_byVTightIsolationMVArun2v1DBoldDMwLT.clear();
+
+  tau_byVTightIsolationMVArun2v1PWdR03oldDMwLT.clear();
+  tau_byVTightIsolationMVArun2v1PWnewDMwLT.clear();
+  tau_byVTightIsolationMVArun2v1PWoldDMwLT.clear();
+  tau_byVVTightIsolationMVArun2v1DBdR03oldDMwLT.clear();
+  tau_byVVTightIsolationMVArun2v1DBnewDMwLT.clear();
+  tau_byVVTightIsolationMVArun2v1DBoldDMwLT.clear();
+  tau_byVVTightIsolationMVArun2v1PWdR03oldDMwLT.clear();
+  tau_byVVTightIsolationMVArun2v1PWnewDMwLT.clear();
+
+  tau_byVVTightIsolationMVArun2v1PWoldDMwLT.clear();
+
+
+
+
+  tau_againstElectronMVA6raw.clear();
+  tau_againstElectronMVA6category.clear();
+  tau_againstElectronVLooseMVA6.clear();
+  tau_againstElectronLooseMVA6.clear();
+  tau_againstElectronMediumMVA6.clear();
+  tau_againstElectronTightMVA6.clear();
+  tau_againstElectronVTightMVA6.clear();
+      
+
+  tau_againstMuonLoose3.clear();
+  tau_againstMuonTight3.clear(); 
+      
+  tau_byPhotonPtSumOutsideSignalCone.clear();
+  tau_footprintCorrection.clear();
+
+
 
   
   /** energy density */
@@ -796,6 +953,10 @@ void NtupleBranches::reset( void ){
   jetAK4_jecDown.clear(); 
   jetAK4_IDTight.clear();
   jetAK4_IDLoose.clear();
+  jetAK4_PUIDdiscriminat.clear();
+  jetAK4_PUIDloose.clear();
+  jetAK4_PUIDmedium.clear();
+  jetAK4_PUIDtight.clear();
   jetAK4_muf.clear();
   jetAK4_phf.clear();
   jetAK4_emf.clear();
@@ -825,6 +986,12 @@ void NtupleBranches::reset( void ){
   jetAK4_vtxNtracks.clear();
   jetAK4_vtx3DVal.clear();
   jetAK4_vtx3DSig.clear();
+  
+  jetAK4_jer_sf.clear(); 
+  jetAK4_jer_sf_up.clear(); 
+  jetAK4_jer_sf_down.clear(); 
+  jetAK4_jer_sigma_pt.clear(); 
+
 
   /** AK8 jets */  
   jetAK8_N = 0;
@@ -867,6 +1034,16 @@ void NtupleBranches::reset( void ){
   jetAK8_tau1.clear();
   jetAK8_tau2.clear();
   jetAK8_tau3.clear();    
+
+  jetAK8Puppi_jer_sf.clear(); 
+  jetAK8Puppi_jer_sf_up.clear(); 
+  jetAK8Puppi_jer_sf_down.clear(); 
+  jetAK8Puppi_jer_sigma_pt.clear(); 
+  jetAK8_jer_sf.clear(); 
+  jetAK8_jer_sf_up.clear(); 
+  jetAK8_jer_sf_down.clear(); 
+  jetAK8_jer_sigma_pt.clear(); 
+
 
   /** AK8 jets pruned */  
   jetAK8_pruned_mass.clear();
@@ -927,6 +1104,21 @@ void NtupleBranches::reset( void ){
   jetAK8_subjet_softdrop_hadronFlavour.clear();
   jetAK8_subjet_softdrop_csv.clear();
 
+  /** puppi_softdrop AK8 subjets */
+  jetAK8_subjet_puppi_softdrop_N.clear();
+  jetAK8_subjet_puppi_softdrop_pt.clear();
+  jetAK8_subjet_puppi_softdrop_eta.clear();
+  jetAK8_subjet_puppi_softdrop_mass.clear();
+  jetAK8_subjet_puppi_softdrop_phi.clear();
+  jetAK8_subjet_puppi_softdrop_e.clear();
+  jetAK8_subjet_puppi_softdrop_charge.clear();
+  jetAK8_subjet_puppi_softdrop_genParton_pdgID.clear();
+  jetAK8_subjet_puppi_softdrop_nbHadrons	 .clear();
+  jetAK8_subjet_puppi_softdrop_ncHadrons	.clear();
+  jetAK8_subjet_puppi_softdrop_partonFlavour.clear();
+  jetAK8_subjet_puppi_softdrop_hadronFlavour.clear();
+  jetAK8_subjet_puppi_softdrop_csv.clear();
+
   /** puppi and ATLAS */      
   jetAK8_puppi_pt.clear();
   jetAK8_puppi_eta.clear();
@@ -983,6 +1175,7 @@ void NtupleBranches::reset( void ){
   triggerObject_eta.clear();
   triggerObject_phi.clear();
   triggerObject_mass.clear();
+  triggerObject_lastname.clear();
   triggerObject_filterIDs.clear();
   triggerObject_firedTrigger.clear();
 
@@ -1004,6 +1197,12 @@ void NtupleBranches::reset( void ){
   passFilter_TrkPOG_toomanystrip_   = false;
   passFilter_TrkPOG_logError_       = false;
   passFilter_METFilters_            = false;
+   //NEW FOR ICHEP
+  passFilter_CSCTightHaloTrkMuUnvetoFilter_   = false;
+  passFilter_globalTightHalo2016_             = false;
+  passFilter_HcalStripHalo_                   = false;
+  passFilter_chargedHadronTrackResolution_    = false;
+  passFilter_muonBadTrack_                    = false;
 
   /** MET */
   METraw_et.clear();	 
@@ -1013,6 +1212,9 @@ void NtupleBranches::reset( void ){
   MET_corrPy.clear();
   MET_et.clear();
   MET_phi.clear();
+  MET_puppi_et.clear();
+  MET_puppi_phi.clear();
+
   MET_sumEt.clear();
   MET_T1Uncertainty.clear();
 
@@ -1021,6 +1223,17 @@ void NtupleBranches::reset( void ){
   MET_cov00.clear();
   MET_cov10.clear();
   MET_cov11.clear();
+  MET_mva_et.clear();
+  MET_mva_phi.clear();
+  MET_mva_cov00.clear();
+  MET_mva_cov10.clear();
+  MET_mva_cov11.clear();
+  MET_mva_recoil_pt.clear();
+  MET_mva_recoil_eta.clear();
+  MET_mva_recoil_phi.clear();
+  MET_mva_recoil_pdgId.clear();
+  MET_Nmva.clear();
+
   /*------------------------EVENT infos-------------------------*/    
   EVENT_event = 0;
   EVENT_run = 0;
@@ -1038,6 +1251,7 @@ void NtupleBranches::reset( void ){
   nPuVtxTrue.clear();
   nPuVtx.clear();
   bX.clear();
+
 
 
 

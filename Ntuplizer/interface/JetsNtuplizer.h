@@ -11,12 +11,14 @@
 #include "DataFormats/PatCandidates/interface/PackedCandidate.h"
 #include "DataFormats/Candidate/interface/Candidate.h"
 
+#include "JetMETCorrections/Modules/interface/JetResolution.h"
+#include <CondFormats/JetMETObjects/interface/JetResolutionObject.h>
 class JetsNtuplizer : public CandidateNtuplizer {
 
 public:
 //   JetsNtuplizer( std::vector<edm::InputTag> labels, std::vector<std::string> jecCA8Labels, std::vector<std::string> jecAK5Labels, NtupleBranches* nBranches );
 
- JetsNtuplizer( std::vector<edm::EDGetTokenT<pat::JetCollection>> token, std::vector<std::string> jecAK4Labels, std::vector<std::string> jecAK8Labels, std::vector<std::string> jecAK8GroomedLabels, std::vector<std::string> jecAK8PuppiLabels, edm::EDGetTokenT<reco::JetFlavourMatchingCollection> flavourToken, edm::EDGetTokenT<double> rhoToken, edm::EDGetTokenT<reco::VertexCollection> verticeToken, NtupleBranches* nBranches, std::map< std::string, bool >& runFlags );
+  JetsNtuplizer( std::vector<edm::EDGetTokenT<pat::JetCollection>> token, std::vector<std::string> jecAK4Labels, std::vector<std::string> jecAK8Labels, std::vector<std::string> jecAK8GroomedLabels, std::vector<std::string> jecAK8PuppiLabels, edm::EDGetTokenT<reco::JetFlavourMatchingCollection> flavourToken, edm::EDGetTokenT<double> rhoToken, edm::EDGetTokenT<reco::VertexCollection> verticeToken, NtupleBranches* nBranches, std::map< std::string, bool >& runFlags,   std::vector<std::string>   jerAK8chsFileLabel, std::vector<std::string>   jerAK4chsFileLabel, std::vector<std::string>   jerAK8PuppiFileLabel,  std::vector<std::string>   jerAK4PuppiFileLabel					    );
    ~JetsNtuplizer( void );
 
   bool looseJetID( const pat::Jet& j );
@@ -41,6 +43,16 @@ public:
   boost::shared_ptr<JetCorrectionUncertainty> jecAK4Unc_	  	;
   std::string                      	      jecAK4UncName_	    	;
   
+  std::string                      	      jerAK4chsName_res_	    	;
+  std::string                      	      jerAK8chsName_res_	    	;
+  std::string                      	      jerAK4PuppiName_res_	    	;
+  std::string                      	      jerAK8PuppiName_res_	    	;
+  std::string                      	      jerAK4chsName_sf_	    	;
+  std::string                      	      jerAK8chsName_sf_	    	;
+  std::string                      	      jerAK4PuppiName_sf_	    	;
+  std::string                      	      jerAK8PuppiName_sf_	    	;
+
+
   edm::EDGetTokenT<pat::JetCollection> 		       jetInputToken_	       ;
   edm::EDGetTokenT<pat::JetCollection> 		       fatjetInputToken_       ;
   edm::EDGetTokenT<pat::JetCollection> 		       prunedjetInputToken_    ;
@@ -65,7 +77,7 @@ public:
   bool doCorrOnTheFly_;
   bool doAK4Jets_;
   bool doAK8Jets_;
-  bool doPruning_;
+  bool doPuppiRecluster_;
   bool runOnMC_;
 
 };
