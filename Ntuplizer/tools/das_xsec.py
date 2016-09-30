@@ -32,7 +32,7 @@ def main():
   
   print "Looking for datasets of pattern: %s" %dataset
 
-  command = 'python das_client.py --query=\"dataset=%s\" --format=json --limit=0' %(dataset)
+  command = 'das_client.py --query=\"dataset=%s\" --format=json --limit=0' %(dataset)
   # print command
   jsonOutput = queryDAS(command)
   
@@ -60,7 +60,7 @@ def main():
     # print thisDataset
     if (thisDataset.find("MINIAOD") >= 0):
       print "Investigating %s" %thisDataset
-      eventsCommand = 'python das_client.py --query=\"dataset=%s\" --format=json --limit=0' %(thisDataset)
+      eventsCommand = 'das_client.py --query=\"dataset=%s\" --format=json --limit=0' %(thisDataset)
       eventsOutput = queryDAS(eventsCommand)
       # print eventsOutput["data"][0]["dataset"]
       print "Number of events: %i" %eventsOutput["data"][0]["dataset"][0]["nevents"]
@@ -69,7 +69,7 @@ def main():
       maxSteps = 5
       currentStep = 0
       while ((parentDataset.find("/GEN") < 0) and (currentStep < maxSteps)):
-        parentCommand = 'python das_client.py --query=\"parent dataset=%s\" --format=json --limit=0' %(parentDataset)
+        parentCommand = 'das_client.py --query=\"parent dataset=%s\" --format=json --limit=0' %(parentDataset)
         parentOutput = queryDAS(parentCommand)
         print parentOutput["data"][0]["parent"][0]["name"]
         parentDataset = parentOutput["data"][0]["parent"][0]["name"]
@@ -77,7 +77,7 @@ def main():
       if (currentStep == maxSteps):
         print "ERROR: Couldn't find parent of type GEN for %s" %thisDataset
         continue
-      xsecCommand = 'python das_client.py --query=\"mcm dataset=%s | grep mcm.generator_parameters\" --format=json --limit=0' %(parentDataset)
+      xsecCommand = 'das_client.py --query=\"mcm dataset=%s | grep mcm.generator_parameters\" --format=json --limit=0' %(parentDataset)
       xsecOutput = queryDAS(xsecCommand)
       # print xsecOutput["data"][0]["mcm"][0]["generator_parameters"]
       print "Cross-section [pb]: %f" %xsecOutput["data"][0]["mcm"][0]["generator_parameters"][0]["cross_section"]
