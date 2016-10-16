@@ -218,6 +218,7 @@ public:
   std::vector<float>  	      tau_photonIso 	     	 ;
   std::vector<float>  	      tau_neutralHadIso	     	 ;
   std::vector<float>  	      tau_chargedHadIso	     	 ;
+  std::vector<float>  	      tau_photonPtSumOutsideSignalCone;
   std::vector<float>  	      tau_trackIso	         ;
   std::vector<float>          tau_d0			 ;  
   std::vector<float>          tau_dz			 ;  // YT added

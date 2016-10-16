@@ -198,6 +198,7 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch( "tau_photonIso" 	     	 , &tau_photonIso	       );
     tree_->Branch( "tau_neutralHadIso"	     	 , &tau_neutralHadIso	       );
     tree_->Branch( "tau_chargedHadIso"	     	 , &tau_chargedHadIso	       );
+    tree_->Branch( "tau_photonPtSumOutsideSignalCone"      , &tau_photonPtSumOutsideSignalCone     );  
     tree_->Branch( "tau_trackIso"	     	 , &tau_trackIso	       );
     tree_->Branch( "tau_d0"                  	 , &tau_d0		       );
     tree_->Branch( "tau_dz"                  	 , &tau_dz		       );
@@ -758,13 +759,13 @@ void NtupleBranches::reset( void ){
   el_isHeepElectronBoosted.clear();
   el_isHeep51ElectronBoosted.clear();
   el_isLooseElectronBoosted.clear();
-  el_pfRhoCorrRelIso03Boost.clear();
-  el_pfRhoCorrRelIso04Boost.clear();
-  el_pfDeltaCorrRelIsoBoost.clear();
-  el_pfRelIsoBoost.clear();
-  el_photonIsoBoost.clear();
-  el_neutralHadIsoBoost.clear();
-  el_chargedHadIsoBoost.clear();
+  //  el_pfRhoCorrRelIso03Boost.clear();
+  //  el_pfRhoCorrRelIso04Boost.clear();
+  //  el_pfDeltaCorrRelIsoBoost.clear();
+  //  el_pfRelIsoBoost.clear();
+  //  el_photonIsoBoost.clear();
+  //  el_neutralHadIsoBoost.clear();
+  //  el_chargedHadIsoBoost.clear();
   el_SemileptonicPFIso.clear();
   el_SemileptonicCorrPFIso.clear();
   
@@ -835,6 +836,7 @@ void NtupleBranches::reset( void ){
   tau_photonIso.clear();
   tau_neutralHadIso.clear();
   tau_chargedHadIso.clear();
+  tau_photonPtSumOutsideSignalCone.clear();
   tau_trackIso.clear();
   tau_d0.clear();
   tau_dz.clear();
