@@ -72,7 +72,7 @@ def main():
                                  './JER/Spring16_25nsV6_MC_SF_AK4PFchs.txt',
                                  './JER/Spring16_25nsV6_MC_SF_AK8PFPuppi.txt',
                                  './JER/Spring16_25nsV6_MC_SF_AK4PFPuppi.txt',
-                                 './JSON/Cert_271036-279588_13TeV_PromptReco_Collisions16_JSON_NoL1T.txt'
+                                 './JSON/Cert_271036-279931_13TeV_PromptReco_Collisions16_JSON_NoL1T.txt'
                                ]
 
     config.section_("Data")
@@ -84,7 +84,7 @@ def main():
     config.Data.unitsPerJob = 1
     config.Data.ignoreLocality = True
     config.Data.publication = False    
-    config.Data.outLFNDirBase = '/store/user/cgalloni/Ntuple_80_270716'
+    config.Data.outLFNDirBase = '/store/user/cgalloni/Ntuple_80_190916'
 
     config.section_("Site")
     config.Site.storageSite = 'T2_CH_CSCS'
@@ -118,9 +118,9 @@ def main():
 
         ptbin = job.split('/')[1]
         cond = job.split('/')[2]
-        config.General.requestName =  ptbin + '_v15p9'
+        config.General.requestName =  ptbin 
         config.Data.inputDataset = job
-        config.Data.outputDatasetTag = ptbin + '_v15p9'
+        config.Data.outputDatasetTag = ptbin 
         print "ptbin :%s and cond: %s " %(ptbin, cond)
         print 'Submitting ' + config.General.requestName + ', dataset = ' + job
         print 'Configuration :'

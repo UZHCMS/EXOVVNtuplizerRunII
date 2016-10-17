@@ -10,6 +10,7 @@ class METsNtuplizer : public CandidateNtuplizer {
 public:
    METsNtuplizer( edm::EDGetTokenT<pat::METCollection>     mettoken    , 
 		  edm::EDGetTokenT<pat::METCollection>     metpuppitoken    , 
+		  edm::EDGetTokenT<pat::METCollection>     metmvatoken    , 
  	 	  edm::EDGetTokenT<pat::JetCollection>	   jettoken    ,
 		  edm::EDGetTokenT<pat::MuonCollection>    muontoken   ,
 		  edm::EDGetTokenT<double>		   rhotoken    ,
@@ -31,6 +32,7 @@ public:
    private:
     edm::EDGetTokenT<pat::METCollection>	 metInputToken_  ;
     edm::EDGetTokenT<pat::METCollection>	 metpuppiInputToken_  ;
+    edm::EDGetTokenT<pat::METCollection>	 metmvaInputToken_  ;
     edm::EDGetTokenT<pat::JetCollection>	 jetInputToken_  ; 
     edm::EDGetTokenT<pat::MuonCollection>	 muonInputToken_ ;
     edm::EDGetTokenT<double>			 rhoToken_	 ;  
@@ -47,6 +49,7 @@ public:
     
     edm::Handle<pat::METCollection>		 METs_  	 ;
     edm::Handle<pat::METCollection>		 METspuppi_  	 ;
+    edm::Handle<pat::METCollection>		 METsmva_  	 ;
     edm::Handle<pat::MuonCollection>		 muons_ 	 ;
     edm::Handle<pat::JetCollection>		 jets_  	 ;
     edm::Handle< double >			 rho_		 ;
@@ -63,6 +66,7 @@ public:
 
     bool doCorrOnTheFly_;
     bool doMETSVFIT_;
+    bool doMVAMET_;
 
 };
 

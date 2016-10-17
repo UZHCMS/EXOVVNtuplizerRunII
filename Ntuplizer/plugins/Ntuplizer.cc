@@ -53,6 +53,7 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
 
 	metToken_	      	    (consumes<pat::METCollection>(iConfig.getParameter<edm::InputTag>("mets"))),
 	metpuppiToken_	      	    (consumes<pat::METCollection>(iConfig.getParameter<edm::InputTag>("mets_puppi"))),
+	metmvaToken_	      	    (consumes<pat::METCollection>(iConfig.getParameter<edm::InputTag>("mets_mva"))),
 	metSigToken_	      	    (consumes<double>(edm::InputTag("METSignificance","METSignificance"))),
 	metCovToken_	      	    (consumes<math::Error<2>::type>(edm::InputTag("METSignificance","METCovariance"))),
 
@@ -95,6 +96,7 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
   runFlags["doPuppi"] = iConfig.getParameter<bool>("doPuppi");
   runFlags["doHbbTag"] = iConfig.getParameter<bool>("doHbbTag");
   runFlags["doMETSVFIT"] = iConfig.getParameter<bool>("doMETSVFIT");
+  runFlags["doMVAMET"] = iConfig.getParameter<bool>("doMVAMET");
   runFlags["doPuppiRecluster"] = iConfig.getParameter<edm::InputTag>("puppijets").label()!="";
 
   std::string jecpath = iConfig.getParameter<std::string>("jecpath");
@@ -192,6 +194,7 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
     
     nTuplizers_["MET"] = new METsNtuplizer( metToken_          , 
 					    metpuppiToken_     , 
+					    metmvaToken_     , 
                                             jetForMetCorrToken_, 
 					    muonToken_         ,
 					    rhoToken_	       ,
