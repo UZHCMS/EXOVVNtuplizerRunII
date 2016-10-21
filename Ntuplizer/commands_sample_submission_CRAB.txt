@@ -1,0 +1,16 @@
+#python submit_all.py  -d Crab_v7 -c config_MC_crab_miniAODv2.py -f samples/Summer16/samples_crab_MC_bkg_v2_missing_reHLT_ext.txt -s "_reHLT_v7_ext"
+#python submit_all.py  -d Crab_v7 -c config_MC_crab_miniAODv2.py -f samples/Summer16/samples_crab_MC_bkg_v2_missing_reHLT.txt -s "_reHLT_v7"
+#python submit_all.py  -d Crab_v7 -c config_MC_crab_miniAODv2.py -f samples/samples_crab_MC_signal_reHLT_tata.txt  -s "_reHLT_v7" -l True
+python submit_all.py  -d Crab_v7 -c config_MC_crab_miniAODv2.py -f samples/Summer16/samples_crab_MC_bkg_v2_missing_ext.txt -s "_v7_ext"
+python submit_all.py  -d Crab_v7 -c config_MC_crab_miniAODv2.py -f samples/Summer16/samples_crab_MC_bkg_v2_missing.txt -s "_v7"
+
+
+
+Actual command 
+
+python submit_all.py  -d Crab_v1 -c config_MC_crab_miniAODv2.py -f samples/samples_crab_MC_signal_tata.txt  -s "_reHLT_v1" -l True
+python submit_all.py  -d Crab_v1 -c config_MC_crab_miniAODv2.py -f samples/Summer16/samples_crab_MC_bkg_v2_reHLT_ext.txt -s "_reHLT_v1_ext"
+python submit_all.py  -d Crab_v1 -c config_MC_crab_miniAODv2.py -f samples/Summer16/samples_crab_MC_bkg_v2_reHLT.txt -s "_reHLT_v1"
+python submit_all.py  -d Crab_v1 -c config_MC_crab_miniAODv2.py -f samples/Summer16/samples_crab_MC_bkg_v2_ext.txt -s "_v1_ext"
+python submit_all.py  -d Crab_v1 -c config_MC_crab_miniAODv2.py -f samples/Summer16/samples_crab_MC_bkg_v2.txt -s "_v1"
+python submit_all_data.py  -d Crab_v1_data -c config_data_crab.py -f samples/Summer16/samples_crab_data.txt -s "_24p47fb_27p22fb"

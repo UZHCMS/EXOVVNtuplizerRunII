@@ -22,3 +22,7 @@
 /MET/Run2016G-PromptReco-v1/MINIAOD
 /SingleElectron/Run2016G-PromptReco-v1/MINIAOD
 /SingleMuon/Run2016G-PromptReco-v1/MINIAOD
+/JetHT/Run2016H-PromptReco-v1/MINIAOD
+/MET/Run2016H-PromptReco-v1/MINIAOD
+/SingleElectron/Run2016H-PromptReco-v1/MINIAOD
+/SingleMuon/Run2016H-PromptReco-v1/MINIAOD
