@@ -106,6 +106,7 @@ GenParticlesNtuplizer::~GenParticlesNtuplizer( void )
 	    nBranches_->genParticle_tauviseta  .push_back( -99.  );
 	    nBranches_->genParticle_tauvisphi  .push_back( -99.  );
 	    nBranches_->genParticle_tauvismass  .push_back( -99.  );
+	    nBranches_->genParticle_taudecay  .push_back( 0  ); // self decay (tau -> tau)
 	  }
 	  
 	}else{
@@ -114,7 +115,7 @@ GenParticlesNtuplizer::~GenParticlesNtuplizer( void )
 	  nBranches_->genParticle_tauvisphi  .push_back( -99.  );
 	  nBranches_->genParticle_tauvismass  .push_back( -99.  );
 	  
-	  nBranches_->genParticle_taudecay  .push_back( 0  ); // self decay (tau -> tau)
+	  nBranches_->genParticle_taudecay  .push_back( -1  ); // self decay (tau -> tau)
 	  
 	}
       }
