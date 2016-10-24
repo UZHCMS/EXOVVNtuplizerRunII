@@ -79,10 +79,25 @@ bool JetsNtuplizer::looseJetID( const pat::Jet& j ) {
   //In sync with: https://twiki.cern.ch/twiki/bin/viewauth/CMS/JetID#Recommendations_for_8_TeV_data_a
   //and with dijet group https://github.com/CMSDIJET/DijetRootTreeMaker/blob/e650ba19e9e9bc676754a948298bb5cf850f4ecc/plugins/DijetTreeProducer.cc#L869
 
+//  double eta = j.eta();		
+//  double chf = j.chargedHadronEnergyFraction();
+//  double nhf = j.neutralHadronEnergyFraction(); // + j.HFHadronEnergyFraction();
+//  double muf = j.muonEnergy()/(j.jecFactor(0) * j.energy());  
+//  double nemf = j.neutralEmEnergyFraction();
+//  double cemf = j.chargedEmEnergyFraction();
+//  int chMult = j.chargedMultiplicity();
+//  int neMult = j.neutralMultiplicity();
+//  int npr    = chMult + neMult;
+//  int NumConst = npr;
+//
+//  return (nhf<0.99 && nemf<0.99 && NumConst>1 && muf < 0.8) && ((fabs(eta) <= 2.4 && chf>0 && chMult>0 && cemf<0.99) || fabs(eta)>2.4);      
+
+  // Change to 13 TeV definition
+  // https://twiki.cern.ch/twiki/bin/view/CMS/JetID#Recommendations_for_13_TeV_data
+
   double eta = j.eta();		
   double chf = j.chargedHadronEnergyFraction();
   double nhf = j.neutralHadronEnergyFraction(); // + j.HFHadronEnergyFraction();
-  double muf = j.muonEnergy()/(j.jecFactor(0) * j.energy());  
   double nemf = j.neutralEmEnergyFraction();
   double cemf = j.chargedEmEnergyFraction();
   int chMult = j.chargedMultiplicity();
@@ -90,7 +105,14 @@ bool JetsNtuplizer::looseJetID( const pat::Jet& j ) {
   int npr    = chMult + neMult;
   int NumConst = npr;
 
-  return (nhf<0.99 && nemf<0.99 && NumConst>1 && muf < 0.8) && ((fabs(eta) <= 2.4 && chf>0 && chMult>0 && cemf<0.99) || fabs(eta)>2.4);        
+  if(abs(eta) <= 2.7){
+    return (nhf<0.99 && nemf<0.99 && NumConst>1) && ((abs(eta)<=2.4 && chf>0 && chMult>0 && cemf<0.99) || abs(eta)>2.4);
+  }else if(abs(eta) <= 3.0){
+    return (nemf<0.90 && neMult>2);
+  }else{
+    return (nemf<0.90 && neMult>10);
+  }
+
       		
 }
 
@@ -109,8 +131,45 @@ bool JetsNtuplizer::tightJetID( const pat::Jet& j ) {
   int npr    = chMult + neMult;
   int NumConst = npr;
      
-  return (nhf<0.90 && nemf<0.90 && NumConst>1 && muf<0.8) && ((fabs(eta)<=2.4 && chf>0 && chMult>0 && cemf<0.90) || fabs(eta)>2.4);  		
+  if(abs(eta) <= 2.7){
+    return (nhf<0.90 && nemf<0.90 && NumConst>1 && muf<0.8) && ((fabs(eta)<=2.4 && chf>0 && chMult>0 && cemf<0.90) || fabs(eta)>2.4);  		
+  }else if(abs(eta) <= 3.0){
+    return (nemf<0.90 && neMult>2);
+  }else{
+    return (nemf<0.90 && neMult>10);
+  }
+
 }
+
+
+
+bool JetsNtuplizer::tightJetIDWithoutLepVeto( const pat::Jet& j ) {
+
+  // Change to 13 TeV definition
+  // https://twiki.cern.ch/twiki/bin/view/CMS/JetID#Recommendations_for_13_TeV_data
+
+  double eta = j.eta();		
+  double chf = j.chargedHadronEnergyFraction();
+  double nhf = j.neutralHadronEnergyFraction(); // + j.HFHadronEnergyFraction();
+  double nemf = j.neutralEmEnergyFraction();
+  double cemf = j.chargedEmEnergyFraction();
+  int chMult = j.chargedMultiplicity();
+  int neMult = j.neutralMultiplicity();
+  int npr    = chMult + neMult;
+  int NumConst = npr;
+
+  if(abs(eta) <= 2.7){
+    return (nhf<0.90 && nemf<0.90 && NumConst>1) && ((abs(eta)<=2.4 && chf>0 && chMult>0 && cemf<0.99) || abs(eta)>2.4);
+  }else if(abs(eta) <= 3.0){
+    return (nemf<0.90 && neMult>2);
+  }else{
+    return (nemf<0.90 && neMult>10);
+  }
+
+
+}
+
+
 
 //===================================================================================================================
 void JetsNtuplizer::initJetCorrFactors( void ){
@@ -193,6 +252,7 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
 	        
      bool IDLoose = looseJetID(j);
      bool IDTight = tightJetID(j);
+     bool IDTightWithoutLepVeto = tightJetIDWithoutLepVeto(j);
 
      reco::Candidate::LorentzVector uncorrJet;
      double corr = 1;
@@ -235,6 +295,7 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
      nBranches_->jetAK4_jecDown	  .push_back(corrDown);
      nBranches_->jetAK4_IDLoose   .push_back(IDLoose);
      nBranches_->jetAK4_IDTight   .push_back(IDTight);
+     nBranches_->jetAK4_IDTightWithoutLepVeto   .push_back(IDTightWithoutLepVeto);
      nBranches_->jetAK4_PUIDdiscriminat.push_back(j.userFloat("pileupJetIdUpdated:fullDiscriminant")); 
      int fullId=j.userInt("pileupJetIdUpdated:fullId");
      nBranches_->jetAK4_PUIDloose .push_back(fullId & (1 << 2)); 

@@ -352,6 +352,7 @@ public:
   std::vector<float>	          jetAK4_jecDown       ; 
   std::vector<bool>               jetAK4_IDLoose       ;
   std::vector<bool>               jetAK4_IDTight       ;
+  std::vector<bool>               jetAK4_IDTightWithoutLepVeto;
   std::vector<float>  	          jetAK4_PUIDdiscriminat;
   std::vector<bool >  	          jetAK4_PUIDloose     ;
   std::vector<bool >  	          jetAK4_PUIDmedium    ;

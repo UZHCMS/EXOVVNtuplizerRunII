@@ -326,6 +326,7 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch( "jetAK4_jecDown"	    , &jetAK4_jecDown 	 );
     tree_->Branch( "jetAK4_IDLoose"	    , &jetAK4_IDLoose	 );
     tree_->Branch( "jetAK4_IDTight"	    , &jetAK4_IDTight	 );
+    tree_->Branch( "jetAK4_IDTightWithoutLepVeto"	    , &jetAK4_IDTightWithoutLepVeto	 );
     tree_->Branch( "jetAK4_PUIDdiscriminat" , &jetAK4_PUIDdiscriminat);
     tree_->Branch( "jetAK4_PUIDloose"	    , &jetAK4_PUIDloose	 );
     tree_->Branch( "jetAK4_PUIDmedium"	    , &jetAK4_PUIDmedium );
@@ -954,6 +955,7 @@ void NtupleBranches::reset( void ){
   jetAK4_jecUp.clear();
   jetAK4_jecDown.clear(); 
   jetAK4_IDTight.clear();
+  jetAK4_IDTightWithoutLepVeto.clear();
   jetAK4_IDLoose.clear();
   jetAK4_PUIDdiscriminat.clear();
   jetAK4_PUIDloose.clear();
