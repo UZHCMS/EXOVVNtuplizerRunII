@@ -131,7 +131,13 @@ bool JetsNtuplizer::tightJetID( const pat::Jet& j ) {
   int npr    = chMult + neMult;
   int NumConst = npr;
      
-  return (nhf<0.90 && nemf<0.90 && NumConst>1 && muf<0.8) && ((fabs(eta)<=2.4 && chf>0 && chMult>0 && cemf<0.90) || fabs(eta)>2.4);  		
+  if(abs(eta) <= 2.7){
+    return (nhf<0.90 && nemf<0.90 && NumConst>1 && muf<0.8) && ((fabs(eta)<=2.4 && chf>0 && chMult>0 && cemf<0.90) || fabs(eta)>2.4);  		
+  }else if(abs(eta) <= 3.0){
+    return (nemf<0.90 && neMult>2);
+  }else{
+    return (nemf<0.90 && neMult>10);
+  }
 
 }
 
