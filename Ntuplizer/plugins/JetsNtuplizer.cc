@@ -120,18 +120,25 @@ bool JetsNtuplizer::looseJetID( const pat::Jet& j ) {
 bool JetsNtuplizer::tightJetID( const pat::Jet& j ) {
 
   //In sync with: https://twiki.cern.ch/twiki/bin/viewauth/CMS/JetID#Recommendations_for_8_TeV_data_a
-//  double eta = j.eta();		
-//  double chf = j.chargedHadronEnergyFraction();
-//  double nhf = j.neutralHadronEnergyFraction(); // + j.HFHadronEnergyFraction();
-//  double muf = j.muonEnergy()/(j.jecFactor(0) * j.energy());  
-//  double nemf = j.neutralEmEnergyFraction();
-//  double cemf = j.chargedEmEnergyFraction();
-//  int chMult = j.chargedMultiplicity();
-//  int neMult = j.neutralMultiplicity();
-//  int npr    = chMult + neMult;
-//  int NumConst = npr;
-//     
-//  return (nhf<0.90 && nemf<0.90 && NumConst>1 && muf<0.8) && ((fabs(eta)<=2.4 && chf>0 && chMult>0 && cemf<0.90) || fabs(eta)>2.4);  		
+  double eta = j.eta();		
+  double chf = j.chargedHadronEnergyFraction();
+  double nhf = j.neutralHadronEnergyFraction(); // + j.HFHadronEnergyFraction();
+  double muf = j.muonEnergy()/(j.jecFactor(0) * j.energy());  
+  double nemf = j.neutralEmEnergyFraction();
+  double cemf = j.chargedEmEnergyFraction();
+  int chMult = j.chargedMultiplicity();
+  int neMult = j.neutralMultiplicity();
+  int npr    = chMult + neMult;
+  int NumConst = npr;
+     
+  return (nhf<0.90 && nemf<0.90 && NumConst>1 && muf<0.8) && ((fabs(eta)<=2.4 && chf>0 && chMult>0 && cemf<0.90) || fabs(eta)>2.4);  		
+
+}
+
+
+
+bool JetsNtuplizer::tightJetIDWithoutLepVeto( const pat::Jet& j ) {
+
   // Change to 13 TeV definition
   // https://twiki.cern.ch/twiki/bin/view/CMS/JetID#Recommendations_for_13_TeV_data
 
@@ -155,6 +162,8 @@ bool JetsNtuplizer::tightJetID( const pat::Jet& j ) {
 
 
 }
+
+
 
 //===================================================================================================================
 void JetsNtuplizer::initJetCorrFactors( void ){
@@ -237,6 +246,7 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
 	        
      bool IDLoose = looseJetID(j);
      bool IDTight = tightJetID(j);
+     bool IDTightWithoutLepVeto = tightJetIDWithoutLepVeto(j);
 
      reco::Candidate::LorentzVector uncorrJet;
      double corr = 1;
@@ -279,6 +289,7 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
      nBranches_->jetAK4_jecDown	  .push_back(corrDown);
      nBranches_->jetAK4_IDLoose   .push_back(IDLoose);
      nBranches_->jetAK4_IDTight   .push_back(IDTight);
+     nBranches_->jetAK4_IDTightWithoutLepVeto   .push_back(IDTightWithoutLepVeto);
      nBranches_->jetAK4_PUIDdiscriminat.push_back(j.userFloat("pileupJetIdUpdated:fullDiscriminant")); 
      int fullId=j.userInt("pileupJetIdUpdated:fullId");
      nBranches_->jetAK4_PUIDloose .push_back(fullId & (1 << 2)); 
