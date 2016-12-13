@@ -659,10 +659,7 @@ jecLevelsAK4 = []
 jecLevelsAK8Puppi = []
 jecLevelsForMET = []
 
-if config["BUNCHSPACING"] == 25 and config["RUNONMC"] and config["SPRING16"]:
-  JECprefix = "Spring16_25nsV6"
-elif config["BUNCHSPACING"] == 25 and not(config["RUNONMC"]) and config["SPRING16"]:
-  JECprefix = "Spring16_25nsV6"
+JECprefix = "Summer16_23Sep2016V0"
 
 jecAK8chsUncFile = "%s_MC_Uncertainty_AK8PFchs.txt"%(JECprefix)
 jecAK4chsUncFile = "%s_MC_Uncertainty_AK4PFchs.txt"%(JECprefix)

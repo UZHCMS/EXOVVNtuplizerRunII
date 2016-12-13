@@ -78,7 +78,9 @@ bool TriggersNtuplizer::findTrigger( std::string trigName ){
        trigName.find("PFHT800_v") != std::string::npos ||
        trigName.find("PFHT900_v") != std::string::npos ||
        trigName.find("PFJet320_v") != std::string::npos ||
+       trigName.find("PFJet400_v") != std::string::npos ||
        trigName.find("PFJet450_v") != std::string::npos ||         
+       trigName.find("PFJet500_v") != std::string::npos ||
        trigName.find("IsoMu20_eta2p1") != std::string::npos ||
        trigName.find("IsoMu24_eta2p1") != std::string::npos ||
        trigName.find("Mu45_eta2p1") != std::string::npos ||
