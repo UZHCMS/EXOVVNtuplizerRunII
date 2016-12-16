@@ -28,7 +28,7 @@ config["DOHLTFILTERS"] = True
 config["DOMISSINGET"] = True
 config["DOTAUSBOOSTED"] = True
 config["DOMETSVFIT"] = True
-config["DOMVAMET"] = True
+config["DOMVAMET"] = False
 
 
 #--------- AK8 jets reclustering ----------#

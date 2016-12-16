@@ -22,11 +22,14 @@
 #include "TTree.h"
 #include "Math/VectorUtil.h"
 
+
 //===================================================================================================================
 ElectronsNtuplizer::ElectronsNtuplizer( edm::EDGetTokenT<edm::View<pat::Electron>  >          electronToken, 
                                         edm::EDGetTokenT<reco::VertexCollection>              verticeToken , 
 					edm::EDGetTokenT<double>                              rhoToken     ,
                                         std::vector< edm::EDGetTokenT<edm::ValueMap<bool> > > eleIDtokens  ,
+					edm::EDGetTokenT<edm::ValueMap<float> >               mvaValuesMapToken,
+					edm::EDGetTokenT<edm::ValueMap<int> >                 mvaCategoriesMapToken,
 					edm::EDGetTokenT<pat::TauCollection>                  boostedtauToken  ,
 					NtupleBranches*                                       nBranches  ,
 					std::map< std::string, bool >&                        runFlags 
@@ -39,8 +42,12 @@ ElectronsNtuplizer::ElectronsNtuplizer( edm::EDGetTokenT<edm::View<pat::Electron
 	, electronLooseIdMapToken_ ( eleIDtokens[1] )
 	, electronMediumIdMapToken_( eleIDtokens[2] )
 	, electronTightIdMapToken_ ( eleIDtokens[3] )
-	, electronHEEPIdMapToken_  ( eleIDtokens[4] )
-        , electronHEEPId51MapToken_( eleIDtokens[5] )
+        , electronHLTIdMapToken_   ( eleIDtokens[4] )
+	, electronHEEPIdMapToken_  ( eleIDtokens[5] )
+	, electronMVAMediumIdMapToken_( eleIDtokens[6] )
+	, electronMVATightIdMapToken_ ( eleIDtokens[7] )
+        , mvaValuesMapToken_( mvaValuesMapToken )
+        , mvaCategoriesMapToken_( mvaCategoriesMapToken )
 	, boostedtauToken_		   ( boostedtauToken    )
 	, doBoostedTaus_   	   ( runFlags["doBoostedTaus"]  )
 {
@@ -60,61 +67,15 @@ float ElectronsNtuplizer::dEtaInSeed( const pat::Electron &ele ){
 }
 
 
+float ElectronsNtuplizer::EleEInverseMinusPInverse( const pat::Electron &ele ){
+
+  const float ecal_energy_inverse = 1.0/ele.ecalEnergy();
+  const float eSCoverP = ele.eSuperClusterOverP();
+
+  return std::abs(1.0 - eSCoverP)*ecal_energy_inverse;
+}
+
 //===================================================================================================================
-
-// YT added : 17 Aug 2016. This is for Non-Triggering MVA, used for tautau analysis, in general
-bool isNonTrigElectronID(pat::Electron ele)
-{
-  Float_t eta = fabs(ele.superCluster()->eta());
-  Float_t pt = ele.pt();
-
-  Float_t mva = 0;
-  if(ele.hasUserFloat("ElectronMVAEstimatorRun2Spring15NonTrig25nsV1Values")){
-    mva = ele.userFloat("ElectronMVAEstimatorRun2Spring15NonTrig25nsV1Values");
-  }else{
-    std::cout << "Not available nonTrig" << std::endl;
-    return 0;
-  }
-
-  //  std::cout << "pT, eta, mva = " << pt << " " << eta << " " << mva << std::endl;
-
-  if(pt > 10.){
-    if(eta < 0.8) return mva > 0.967083;
-    else if(eta < 1.479) return mva > 0.929117;
-    else{
-      return mva > 0.726311;
-    }
-  }else if(pt <= 10){
-    if(eta < 0.8) return mva > 0.287435;
-    else if(eta < 1.479) return mva > 0.221846;
-    else{
-      return mva > -0.303263;
-    }
-  }else{
-    std::cout << "Not happens" << std::endl;
-    return 0;
-  }
-  
-}
-
-
-float isNonTrigElectron(pat::Electron ele)
-{
-  
-  float mva = 0;
-  if(ele.hasUserFloat("ElectronMVAEstimatorRun2Spring15NonTrig25nsV1Values")){
-    mva = ele.userFloat("ElectronMVAEstimatorRun2Spring15NonTrig25nsV1Values");
-    return mva;
-  }else{
-    std::cout << "Not available nonTrig" << std::endl;
-    return -99;
-  }
-
-  return -99;
-  
-}
-
-
 
 float ElectronCorrPFIso(pat::Electron ele, double Aeff03, float rho, edm::Handle<pat::TauCollection> 	     taus_  ){
   double TauSumChargedHadronPt = 0.;
@@ -173,13 +134,17 @@ void ElectronsNtuplizer::fillBranches( edm::Event const & event, const edm::Even
    event.getByToken(verticeToken_  , vertices_  );
    event.getByToken(rhoToken_	   , rho_       );
    event.getByToken(boostedtauToken_   , taus_      );
- 
-   event.getByToken(electronHEEPIdMapToken_  , heep_id_decisions   );
-   event.getByToken(electronHEEPId51MapToken_, heep_id51_decisions );
+
    event.getByToken(electronVetoIdMapToken_  , veto_id_decisions   );
    event.getByToken(electronLooseIdMapToken_ , loose_id_decisions  );
    event.getByToken(electronMediumIdMapToken_, medium_id_decisions );
    event.getByToken(electronTightIdMapToken_ , tight_id_decisions  );
+   event.getByToken(electronHLTIdMapToken_, hlt_id_decisions );
+   event.getByToken(electronHEEPIdMapToken_  , heep_id_decisions   );
+   event.getByToken(electronMVAMediumIdMapToken_, mva_medium_id_decisions );
+   event.getByToken(electronMVATightIdMapToken_ , mva_tight_id_decisions  );
+   event.getByToken(mvaValuesMapToken_ , mva_value);
+   event.getByToken(mvaCategoriesMapToken_ , mva_categories);
   
    // Find the first vertex in the collection that passes good quality criteria
    // reco::VertexCollection::const_iterator firstGoodVertex = vertices_->end();
@@ -304,33 +269,34 @@ void ElectronsNtuplizer::fillBranches( edm::Event const & event, const edm::Even
     bool isMediumElectron = (*medium_id_decisions)[el];
     bool isTightElectron  = (*tight_id_decisions)[el] ;
     bool isHeepElectron   = (*heep_id_decisions)[el]  ;
-    bool isHeep51Electron = (*heep_id51_decisions)[el];
+    bool isHltElectron = (*hlt_id_decisions)[el];
+    bool isMVAMediumElectron = (*mva_medium_id_decisions)[el];
+    bool isMVATightElectron  = (*mva_tight_id_decisions)[el] ;
   
-    nBranches_->el_isVetoElectron  .push_back(isVetoElectron);
-    nBranches_->el_isLooseElectron .push_back(isLooseElectron);
-    nBranches_->el_isMediumElectron.push_back(isMediumElectron);
-    nBranches_->el_isTightElectron .push_back(isTightElectron);
-    nBranches_->el_nonTrigMVAID	   .push_back(isNonTrigElectronID(ele)); 
-    nBranches_->el_nonTrigMVA	   .push_back(isNonTrigElectron(ele)); 
-    nBranches_->el_isHeepElectron  .push_back(isHeepElectron);  
-    nBranches_->el_isHeep51Electron.push_back(isHeep51Electron);  
-
+    nBranches_->el_isVetoElectron     .push_back(isVetoElectron);
+    nBranches_->el_isLooseElectron    .push_back(isLooseElectron);
+    nBranches_->el_isMediumElectron   .push_back(isMediumElectron);
+    nBranches_->el_isTightElectron    .push_back(isTightElectron);
+    nBranches_->el_isHeepElectron     .push_back(isHeepElectron);  
+    nBranches_->el_isHltElectron      .push_back(isHltElectron);  
+    nBranches_->el_isMVAMediumElectron.push_back(isMVAMediumElectron);
+    nBranches_->el_isMVATightElectron .push_back(isMVATightElectron);
+    nBranches_->el_MVAscore           .push_back((*mva_value)[el]);
+    nBranches_->el_MVAcategory        .push_back((*mva_categories)[el]);
+    
     if ( doBoostedTaus_ ) {
-      bool isVetoElectronBoosted   = eleIDpassedBoosted("Veto"  ,ele) ;
-      bool isLooseElectronBoosted  = eleIDpassedBoosted("Loose" ,ele) ;
-      bool isMediumElectronBoosted = eleIDpassedBoosted("Medium",ele) ;
-      bool isTightElectronBoosted  = eleIDpassedBoosted("Tight" ,ele) ;
-      bool isHeepElectronBoosted   = eleIDpassedBoosted("Heep"  ,ele) ;
-      bool isHeep51ElectronBoosted = eleIDpassedBoosted("Heep51",ele) ;
       
-      
-      
+      bool isVetoElectronBoosted   = eleIDpassedWithoutIPandIsolation("Veto"  ,ele) ;
+      bool isLooseElectronBoosted  = eleIDpassedWithoutIPandIsolation("Loose" ,ele) ;
+      bool isMediumElectronBoosted = eleIDpassedWithoutIPandIsolation("Medium",ele) ;
+      bool isTightElectronBoosted  = eleIDpassedWithoutIPandIsolation("Tight" ,ele) ;
+      bool isHeepElectronBoosted   = eleIDpassedWithoutIPandIsolation("Heep"  ,ele) ;
+    
       nBranches_->el_isVetoElectronBoosted  .push_back(isVetoElectronBoosted);
       nBranches_->el_isLooseElectronBoosted .push_back(isLooseElectronBoosted);
       nBranches_->el_isMediumElectronBoosted.push_back(isMediumElectronBoosted);
       nBranches_->el_isTightElectronBoosted .push_back(isTightElectronBoosted);
       nBranches_->el_isHeepElectronBoosted  .push_back(isHeepElectronBoosted);  
-      nBranches_->el_isHeep51ElectronBoosted.push_back(isHeep51ElectronBoosted);  
     }
     
 
@@ -347,9 +313,366 @@ void ElectronsNtuplizer::fillBranches( edm::Event const & event, const edm::Even
 }
 
 
-bool ElectronsNtuplizer::eleIDpassedBoosted(std::string id, const pat::Electron &ele ){
-  ///NOT REQUIRING ISOLATION FOR TAU ANALYSIS
- 
+//bool ElectronsNtuplizer::eleIDpassedBoosted(std::string id, const pat::Electron &ele ){
+//  ///NOT REQUIRING ISOLATION FOR TAU ANALYSIS
+// 
+//  // Find the first vertex in the collection that passes good quality criteria
+//  // reco::VertexCollection::const_iterator firstGoodVertex = vertices_->end();
+//  reco::VertexCollection::const_iterator firstGoodVertex = vertices_->begin();
+//  int firstGoodVertexIdx = 0;
+//  for( reco::VertexCollection::const_iterator vtx = vertices_->begin(); vtx != vertices_->end(); ++vtx, ++firstGoodVertexIdx){
+//    bool isFake = (vtx->chi2()==0 && vtx->ndof()==0);
+//    // Check the goodness
+//    if( !isFake && vtx->ndof()>=4. && vtx->position().Rho()<=2.0 && fabs(vtx->position().Z())<=24.0) {
+//      firstGoodVertex = vtx;
+//      break;
+//    }
+//    
+//  }
+//   
+//  // Ele veto, medium and tight ID starts here!!! 
+//  // All ID variables
+//  Float_t dEtaIn_;
+//  Float_t dPhiIn_;
+//  Float_t hOverE_;
+//  Float_t full5x5_sigmaIetaIeta_;
+//  // Float_t relIsoWithDBeta_;
+//  Float_t ooEmooP_;
+//  //  Float_t d0_;
+//  Float_t dz_;
+//  Float_t eta;
+//  Int_t   expectedMissingInnerHits_;
+//  Int_t   passConversionVeto_;
+//  bool    isVetoElectron   = false;  
+//  bool    isLooseElectron   = false;
+//  bool    isMediumElectron = false;
+//  bool    isTightElectron  = false;
+//
+//  eta = ele.superCluster()->eta();  
+//  dEtaIn_ = ele.deltaEtaSuperClusterTrackAtVtx();
+//  dPhiIn_ = ele.deltaPhiSuperClusterTrackAtVtx();
+//  hOverE_ = ele.hcalOverEcal();
+//  full5x5_sigmaIetaIeta_ = ele.full5x5_sigmaIetaIeta();
+//  // |1/E-1/p| = |1/E - EoverPinner/E| is computed below
+//  // The if protects against ecalEnergy == inf or zero (always
+//  // the case for electrons below 5 GeV in miniAOD)
+//  if( ele.ecalEnergy() == 0 ){
+//	  ooEmooP_ = 1e30;
+//  }
+//  else if( !std::isfinite(ele.ecalEnergy())){
+//	  ooEmooP_ = 1e30;
+//  }
+//  else{
+//	  ooEmooP_ = fabs(1.0/ele.ecalEnergy() - ele.eSuperClusterOverP()/ele.ecalEnergy() );
+//  }
+//  // Isolation
+//  //reco::GsfElectron::PflowIsolationVariables pfIso = ele.pfIsolationVariables();
+//  // Compute isolation with delta beta correction for PU
+//  // float absiso = pfIso.sumChargedHadronPt + std::max(0.0 , pfIso.sumNeutralHadronEt + pfIso.sumPhotonEt - 0.5 * pfIso.sumPUPt );
+//  //  relIsoWithDBeta_ = absiso/ele.pt();
+//  // Impact parameter
+//  d0_ = (-1) * ele.gsfTrack()->dxy((*firstGoodVertex).position() );
+//  dz_ = ele.gsfTrack()->dz( (*firstGoodVertex).position() );
+//
+//  // Conversion rejection
+//  expectedMissingInnerHits_ = ele.gsfTrack()->hitPattern().numberOfHits(reco::HitPattern::MISSING_INNER_HITS);
+//  passConversionVeto_ = ele.passConversionVeto(); 
+// 
+//  //Barrel cuts 
+//  if(fabs(eta) <= 1.479){
+//  
+//	  if( passConversionVeto_	           &&
+//	      full5x5_sigmaIetaIeta_    < 0.0114 &&
+//	      fabs(dEtaIn_)	        < 0.0152 &&
+//	      fabs(dPhiIn_)	        < 0.216 &&
+//	      hOverE_		        < 0.181 &&
+//	      // relIsoWithDBeta_          < 0.126 &&
+//	      ooEmooP_  	        < 0.207 &&
+//	      fabs(d0_) 	        < 0.0564 &&
+//	      fabs(dz_) 	        < 0.472 &&			      
+//	      expectedMissingInnerHits_ <= 2.000000 &&
+//	      passConversionVeto_ 
+//	      ) isVetoElectron = true;
+//
+//	   if( passConversionVeto_	           &&
+//	      full5x5_sigmaIetaIeta_    < 0.0103   &&
+//	      fabs(dEtaIn_)	        < 0.0105 &&
+//	      fabs(dPhiIn_)	        < 0.115 &&
+//	      hOverE_		        < 0.104 &&
+//	      // relIsoWithDBeta_          < 0.0893 &&
+//	      ooEmooP_  	        < 0.102 &&
+//	      fabs(d0_) 	        < 0.0261 &&
+//	      fabs(dz_) 	        < 0.41 &&			      
+//	      expectedMissingInnerHits_ <= 2.000000 &&
+//	      passConversionVeto_ 
+//	      ) isLooseElectron = true;
+//	  
+//	  if( passConversionVeto_		   &&
+//	      full5x5_sigmaIetaIeta_    < 0.0101 &&
+//	      fabs(dEtaIn_)		< 0.0103 &&
+//	      fabs(dPhiIn_)		< 0.0336 &&
+//	      hOverE_			< 0.0876 &&
+//	      //relIsoWithDBeta_  	< 0.0766 &&
+//	      ooEmooP_  		< 0.0174 &&
+//	      fabs(d0_) 		< 0.011811 &&
+//	      fabs(dz_) 		< 0.0373 &&				   
+//	      expectedMissingInnerHits_ <= 2.000000 &&
+//	      passConversionVeto_ 
+//	      ) isMediumElectron = true;
+//	  
+//	  if( passConversionVeto_		   &&
+//	      full5x5_sigmaIetaIeta_    < 0.0101 &&
+//	      fabs(dEtaIn_)		< 0.00926 &&
+//	      fabs(dPhiIn_)		< 0.0336 &&
+//	      hOverE_			< 0.0597 &&
+//	      // relIsoWithDBeta_  	< 0.0354 &&
+//	      ooEmooP_  		< 0.012 &&
+//	      fabs(d0_) 		< 0.0111 &&
+//	      fabs(dz_) 		< 0.0466 &&				   
+//	      expectedMissingInnerHits_ <= 2.000000 &&
+//	      passConversionVeto_ 
+//	      ) isTightElectron = true;	  
+//	      
+//  } 
+//  //Endcap cut
+//  else if(fabs(eta) > 1.479 && fabs(eta) < 2.5){
+//		  
+//	  if( passConversionVeto_		   &&
+//	      full5x5_sigmaIetaIeta_	< 0.0352 &&
+//	      fabs(dEtaIn_)		< 0.0113 &&
+//	      fabs(dPhiIn_)		< 0.237 &&
+//	      hOverE_			< 0.1116 &&
+//	      //relIsoWithDBeta_  	< 0.144 &&
+//	      ooEmooP_  		< 0.174 &&
+//	      fabs(d0_) 		< 0.222 &&
+//	      fabs(dz_) 		< 0.921 &&				   
+//	      expectedMissingInnerHits_ <= 3.000000 
+//	      ) isVetoElectron = true;
+//	
+//	  if( passConversionVeto_		   &&
+//	      full5x5_sigmaIetaIeta_    < 0.0301   &&
+//	      fabs(dEtaIn_)		< 0.00814   &&
+//	      fabs(dPhiIn_)		< 0.182   &&
+//	      hOverE_			< 0.0897    &&
+//	      //relIsoWithDBeta_  	< 0.121    &&
+//	      ooEmooP_  		< 0.126   &&
+//	      fabs(d0_) 		< 0.118   &&
+//	      fabs(dz_) 		< 0.822   &&
+//	      expectedMissingInnerHits_ < 1.00000 
+//	      ) isLooseElectron = true;  
+//	
+//	  if( passConversionVeto_		   &&
+//	      full5x5_sigmaIetaIeta_	< 0.0283 &&
+//	      fabs(dEtaIn_)		< 0.00733 &&
+//	      fabs(dPhiIn_)		< 0.114 &&
+//	      hOverE_			< 0.0678 &&
+//	      //relIsoWithDBeta_  	< 0.0678 &&
+//	      ooEmooP_  		< 0.0898 &&
+//	      fabs(d0_) 		< 0.0739 &&
+//	      fabs(dz_) 		< 0.602 &&				   
+//	      expectedMissingInnerHits_ <= 1.000000
+//	      ) isMediumElectron = true;  
+//
+//	  if( passConversionVeto_		   &&
+//	      full5x5_sigmaIetaIeta_	< 0.0279 &&
+//	      fabs(dEtaIn_)		< 0.00724 &&
+//	      fabs(dPhiIn_)		< 0.0918 &&
+//	      hOverE_			< 0.0615 &&
+//	      //relIsoWithDBeta_  	< 0.0646 &&
+//	      ooEmooP_  		< 0.00999 &&
+//	      fabs(d0_) 		< 0.0351 &&
+//	      fabs(dz_) 		< 0.417 &&				   
+//	      expectedMissingInnerHits_ <= 1.000000
+//	      ) isTightElectron = true;  
+//	      
+//  }
+//
+//  bool isHeepElectron = false;
+//  bool isHeep51Electron = false;
+//
+//  float et = ele.energy()!=0. ? ele.et()/ele.energy()*ele.caloEnergy() : 0.;
+//  // double iso;
+//  // double isoCut;
+//  // double rho = *(rho_.product()); 
+//  double dxy = ( vertices_->size() ? ele.gsfTrack()->dxy((*firstGoodVertex).position()) :  ele.gsfTrack()->dxy() );
+//  
+//  if (ele.gsfTrack().isNonnull()){
+//  
+//    if( et > 35. ) {
+//    
+//       //barrel electrons
+//       if( fabs(eta) < 1.4442 ){
+//       
+//    	  // iso = ele.dr03EcalRecHitSumEt() + ele.dr03HcalDepth1TowerSumEt();
+//    	  // isoCut = 2 + 0.03*et + 0.28*rho;	    
+//    	  if(  ele.ecalDriven() == 1 && dEtaInSeed( ele ) < 0.004 && 
+//	       ele.deltaPhiSuperClusterTrackAtVtx() < 0.06 && 
+//    	      (ele.full5x5_e2x5Max()/ele.full5x5_e5x5() > 0.94 || ele.full5x5_e1x5()/ele.full5x5_e5x5() > 0.83) &&
+//    	       ele.dr03TkSumPt() < 5. && 
+//	       ele.gsfTrack()->hitPattern().numberOfHits(reco::HitPattern::MISSING_INNER_HITS) <= 1 &&
+//    	       // iso < isoCut &&
+//	       fabs(dxy) < 0.02 )
+//    	  {
+//    	     if (ele.hadronicOverEm() < (2./ele.superCluster()->energy()+0.05)) isHeep51Electron = true;
+//    	     if (ele.hadronicOverEm() < (1./ele.superCluster()->energy()+0.05)) isHeepElectron = true;
+//    	  }
+//	  
+//       }
+//       //endcap electrons
+//       if( fabs(eta) > 1.566 && fabs(eta) < 2.5 ){
+//       
+//    	  // iso = ele.dr03EcalRecHitSumEt() + ele.dr03HcalDepth1TowerSumEt();
+//    	  // if( et <= 50 ) isoCut = 2.5 + 0.28*rho;
+//    	  // else isoCut = 2.5+0.03*(et-50.) + 0.28*rho;	 
+//    	  if( ele.ecalDriven() == 1 && 
+//	      dEtaInSeed( ele ) < 0.006 && 
+//	      ele.deltaPhiSuperClusterTrackAtVtx() < 0.06 && 
+//    	      ele.full5x5_sigmaIetaIeta() < 0.03 && 
+//    	      ele.dr03TkSumPt() < 5. && 
+//	      ele.gsfTrack()->hitPattern().numberOfHits(reco::HitPattern::MISSING_INNER_HITS) <= 1 &&
+//    	      // iso < isoCut &&
+//	      fabs(dxy) < 0.05 )
+//    	  {
+//    	     if (ele.hadronicOverEm() < (12.5/ele.superCluster()->energy()+0.05)) isHeep51Electron = true;
+//    	     if (ele.hadronicOverEm() < (5./ele.superCluster()->energy()+0.05)) isHeepElectron = true;
+//    	  }
+//	  
+//       }
+//       	 
+//    }
+//    	   
+//  }
+//	     
+//  if( id == "Veto" ) return isVetoElectron;
+//  else if( id == "Loose" ) return isLooseElectron;
+//  else if( id == "Medium" ) return isMediumElectron;
+//  else if( id == "Tight" ) return isTightElectron;
+//  else if( id == "Heep51" ) return isHeep51Electron;
+//  else if( id == "Heep" ) return isHeepElectron;
+//  else return false;
+//   
+//}
+
+
+
+
+
+
+
+bool ElectronsNtuplizer::eleIDpassedWithoutIPandIsolation(std::string id, const pat::Electron &ele ){
+
+  // No requirements on isolation AND d0/dz cuts for tau analysis
+  // https://twiki.cern.ch/twiki/bin/viewauth/CMS/CutBasedElectronIdentificationRun2#Working_points_for_2016_data_for
+
+  bool    isVetoElectron   = false;  
+  bool    isLooseElectron   = false;
+  bool    isMediumElectron = false;
+  bool    isTightElectron  = false;
+
+  Float_t full5x5_sigmaIetaIeta_ = ele.full5x5_sigmaIetaIeta(); 
+  Float_t eta = ele.superCluster()->eta();  
+  Float_t dEtaInSeed_ = dEtaInSeed( ele );
+  Float_t dPhiIn_ = std::abs(ele.deltaPhiSuperClusterTrackAtVtx());
+  Float_t hOverE_ = ele.hadronicOverEm();
+  Float_t ooEmooP_ = EleEInverseMinusPInverse(ele);
+  Int_t expectedMissingInnerHits_ = ele.gsfTrack()->hitPattern().numberOfHits(reco::HitPattern::MISSING_INNER_HITS);
+  Int_t passConversionVeto_ = ele.passConversionVeto(); 
+
+
+  //Barrel cuts 
+  if(fabs(eta) <= 1.479){
+  
+    if(
+       passConversionVeto_ && 
+       full5x5_sigmaIetaIeta_    < 0.0115 &&
+       fabs(dEtaInSeed_)        < 0.00749 &&
+       fabs(dPhiIn_)	        < 0.228 &&
+       hOverE_		        < 0.356 &&
+       ooEmooP_  	        < 0.299 &&
+       expectedMissingInnerHits_ <= 2.
+       ) isVetoElectron = true;
+
+    if(
+       passConversionVeto_ && 
+       full5x5_sigmaIetaIeta_    < 0.011 &&
+       fabs(dEtaInSeed_)        < 0.00477 &&
+       fabs(dPhiIn_)	        < 0.222 &&
+       hOverE_		        < 0.298 &&
+       ooEmooP_  	        < 0.241 &&
+       expectedMissingInnerHits_ <= 1.
+       ) isLooseElectron = true;
+
+    if(
+       passConversionVeto_ && 
+       full5x5_sigmaIetaIeta_    < 0.00998 &&
+       fabs(dEtaInSeed_)        < 0.00311 &&
+       fabs(dPhiIn_)	        < 0.103 &&
+       hOverE_		        < 0.253 &&
+       ooEmooP_  	        < 0.134 &&
+       expectedMissingInnerHits_ <= 1.
+       ) isMediumElectron = true;
+
+    if(
+       passConversionVeto_ && 
+       full5x5_sigmaIetaIeta_    < 0.00998 &&
+       fabs(dEtaInSeed_)        < 0.00308 &&
+       fabs(dPhiIn_)	        < 0.0816 &&
+       hOverE_		        < 0.0414 &&
+       ooEmooP_  	        < 0.0129 &&
+       expectedMissingInnerHits_ <= 1.
+       ) isTightElectron = true;
+    	      
+  } 
+  //Endcap cut
+  else if(fabs(eta) > 1.479 && fabs(eta) < 2.5){
+
+
+    if(
+       passConversionVeto_ && 
+       full5x5_sigmaIetaIeta_    < 0.037 &&
+       fabs(dEtaInSeed_)        < 0.00895 &&
+       fabs(dPhiIn_)	        < 0.213 &&
+       hOverE_		        < 0.211 &&
+       ooEmooP_  	        < 0.15 &&
+       expectedMissingInnerHits_ <= 3.
+       ) isVetoElectron = true;
+
+    if(
+       passConversionVeto_ && 
+       full5x5_sigmaIetaIeta_    < 0.0314 &&
+       fabs(dEtaInSeed_)        < 0.00868 &&
+       fabs(dPhiIn_)	        < 0.213 &&
+       hOverE_		        < 0.101 &&
+       ooEmooP_  	        < 0.14 &&
+       expectedMissingInnerHits_ <= 1.
+       ) isLooseElectron = true;
+
+    if(
+       passConversionVeto_ && 
+       full5x5_sigmaIetaIeta_    < 0.0298 &&
+       fabs(dEtaInSeed_)        < 0.00609 &&
+       fabs(dPhiIn_)	        < 0.045 &&
+       hOverE_		        < 0.0878 &&
+       ooEmooP_  	        < 0.13 &&
+       expectedMissingInnerHits_ <= 1.
+       ) isMediumElectron = true;
+
+    if(
+       passConversionVeto_ && 
+       full5x5_sigmaIetaIeta_    < 0.0292 &&
+       fabs(dEtaInSeed_)        < 0.00605 &&
+       fabs(dPhiIn_)	        < 0.0394 &&
+       hOverE_		        < 0.0641 &&
+       ooEmooP_  	        < 0.0129 &&
+       expectedMissingInnerHits_ <= 1.
+       ) isTightElectron = true;
+  }
+
+
+  // HEEP electron IDs
+  // https://twiki.cern.ch/twiki/bin/view/CMS/HEEPElectronIdentificationRun2
+  bool isHeepElectron = false;
+
   // Find the first vertex in the collection that passes good quality criteria
   // reco::VertexCollection::const_iterator firstGoodVertex = vertices_->end();
   reco::VertexCollection::const_iterator firstGoodVertex = vertices_->begin();
@@ -363,166 +686,7 @@ bool ElectronsNtuplizer::eleIDpassedBoosted(std::string id, const pat::Electron 
     }
     
   }
-   
-  // Ele veto, medium and tight ID starts here!!! 
-  // All ID variables
-  Float_t dEtaIn_;
-  Float_t dPhiIn_;
-  Float_t hOverE_;
-  Float_t full5x5_sigmaIetaIeta_;
-  // Float_t relIsoWithDBeta_;
-  Float_t ooEmooP_;
-  Float_t d0_;
-  Float_t dz_;
-  Float_t eta;
-  Int_t   expectedMissingInnerHits_;
-  Int_t   passConversionVeto_;
-  bool    isVetoElectron   = false;  
-  bool    isLooseElectron   = false;
-  bool    isMediumElectron = false;
-  bool    isTightElectron  = false;
 
-  eta = ele.superCluster()->eta();  
-  dEtaIn_ = ele.deltaEtaSuperClusterTrackAtVtx();
-  dPhiIn_ = ele.deltaPhiSuperClusterTrackAtVtx();
-  hOverE_ = ele.hcalOverEcal();
-  full5x5_sigmaIetaIeta_ = ele.full5x5_sigmaIetaIeta();
-  // |1/E-1/p| = |1/E - EoverPinner/E| is computed below
-  // The if protects against ecalEnergy == inf or zero (always
-  // the case for electrons below 5 GeV in miniAOD)
-  if( ele.ecalEnergy() == 0 ){
-	  ooEmooP_ = 1e30;
-  }
-  else if( !std::isfinite(ele.ecalEnergy())){
-	  ooEmooP_ = 1e30;
-  }
-  else{
-	  ooEmooP_ = fabs(1.0/ele.ecalEnergy() - ele.eSuperClusterOverP()/ele.ecalEnergy() );
-  }
-  // Isolation
-  //reco::GsfElectron::PflowIsolationVariables pfIso = ele.pfIsolationVariables();
-  // Compute isolation with delta beta correction for PU
-  // float absiso = pfIso.sumChargedHadronPt + std::max(0.0 , pfIso.sumNeutralHadronEt + pfIso.sumPhotonEt - 0.5 * pfIso.sumPUPt );
-  //  relIsoWithDBeta_ = absiso/ele.pt();
-  // Impact parameter
-  d0_ = (-1) * ele.gsfTrack()->dxy((*firstGoodVertex).position() );
-  dz_ = ele.gsfTrack()->dz( (*firstGoodVertex).position() );
-
-  // Conversion rejection
-  expectedMissingInnerHits_ = ele.gsfTrack()->hitPattern().numberOfHits(reco::HitPattern::MISSING_INNER_HITS);
-  passConversionVeto_ = ele.passConversionVeto(); 
- 
-  //Barrel cuts 
-  if(fabs(eta) <= 1.479){
-  
-	  if( passConversionVeto_	           &&
-	      full5x5_sigmaIetaIeta_    < 0.0114 &&
-	      fabs(dEtaIn_)	        < 0.0152 &&
-	      fabs(dPhiIn_)	        < 0.216 &&
-	      hOverE_		        < 0.181 &&
-	      // relIsoWithDBeta_          < 0.126 &&
-	      ooEmooP_  	        < 0.207 &&
-	      fabs(d0_) 	        < 0.0564 &&
-	      fabs(dz_) 	        < 0.472 &&			      
-	      expectedMissingInnerHits_ <= 2.000000 &&
-	      passConversionVeto_ 
-	      ) isVetoElectron = true;
-
-	   if( passConversionVeto_	           &&
-	      full5x5_sigmaIetaIeta_    < 0.0103   &&
-	      fabs(dEtaIn_)	        < 0.0105 &&
-	      fabs(dPhiIn_)	        < 0.115 &&
-	      hOverE_		        < 0.104 &&
-	      // relIsoWithDBeta_          < 0.0893 &&
-	      ooEmooP_  	        < 0.102 &&
-	      fabs(d0_) 	        < 0.0261 &&
-	      fabs(dz_) 	        < 0.41 &&			      
-	      expectedMissingInnerHits_ <= 2.000000 &&
-	      passConversionVeto_ 
-	      ) isLooseElectron = true;
-	  
-	  if( passConversionVeto_		   &&
-	      full5x5_sigmaIetaIeta_    < 0.0101 &&
-	      fabs(dEtaIn_)		< 0.0103 &&
-	      fabs(dPhiIn_)		< 0.0336 &&
-	      hOverE_			< 0.0876 &&
-	      //relIsoWithDBeta_  	< 0.0766 &&
-	      ooEmooP_  		< 0.0174 &&
-	      fabs(d0_) 		< 0.011811 &&
-	      fabs(dz_) 		< 0.0373 &&				   
-	      expectedMissingInnerHits_ <= 2.000000 &&
-	      passConversionVeto_ 
-	      ) isMediumElectron = true;
-	  
-	  if( passConversionVeto_		   &&
-	      full5x5_sigmaIetaIeta_    < 0.0101 &&
-	      fabs(dEtaIn_)		< 0.00926 &&
-	      fabs(dPhiIn_)		< 0.0336 &&
-	      hOverE_			< 0.0597 &&
-	      // relIsoWithDBeta_  	< 0.0354 &&
-	      ooEmooP_  		< 0.012 &&
-	      fabs(d0_) 		< 0.0111 &&
-	      fabs(dz_) 		< 0.0466 &&				   
-	      expectedMissingInnerHits_ <= 2.000000 &&
-	      passConversionVeto_ 
-	      ) isTightElectron = true;	  
-	      
-  } 
-  //Endcap cut
-  else if(fabs(eta) > 1.479 && fabs(eta) < 2.5){
-		  
-	  if( passConversionVeto_		   &&
-	      full5x5_sigmaIetaIeta_	< 0.0352 &&
-	      fabs(dEtaIn_)		< 0.0113 &&
-	      fabs(dPhiIn_)		< 0.237 &&
-	      hOverE_			< 0.1116 &&
-	      //relIsoWithDBeta_  	< 0.144 &&
-	      ooEmooP_  		< 0.174 &&
-	      fabs(d0_) 		< 0.222 &&
-	      fabs(dz_) 		< 0.921 &&				   
-	      expectedMissingInnerHits_ <= 3.000000 
-	      ) isVetoElectron = true;
-	
-	  if( passConversionVeto_		   &&
-	      full5x5_sigmaIetaIeta_    < 0.0301   &&
-	      fabs(dEtaIn_)		< 0.00814   &&
-	      fabs(dPhiIn_)		< 0.182   &&
-	      hOverE_			< 0.0897    &&
-	      //relIsoWithDBeta_  	< 0.121    &&
-	      ooEmooP_  		< 0.126   &&
-	      fabs(d0_) 		< 0.118   &&
-	      fabs(dz_) 		< 0.822   &&
-	      expectedMissingInnerHits_ < 1.00000 
-	      ) isLooseElectron = true;  
-	
-	  if( passConversionVeto_		   &&
-	      full5x5_sigmaIetaIeta_	< 0.0283 &&
-	      fabs(dEtaIn_)		< 0.00733 &&
-	      fabs(dPhiIn_)		< 0.114 &&
-	      hOverE_			< 0.0678 &&
-	      //relIsoWithDBeta_  	< 0.0678 &&
-	      ooEmooP_  		< 0.0898 &&
-	      fabs(d0_) 		< 0.0739 &&
-	      fabs(dz_) 		< 0.602 &&				   
-	      expectedMissingInnerHits_ <= 1.000000
-	      ) isMediumElectron = true;  
-
-	  if( passConversionVeto_		   &&
-	      full5x5_sigmaIetaIeta_	< 0.0279 &&
-	      fabs(dEtaIn_)		< 0.00724 &&
-	      fabs(dPhiIn_)		< 0.0918 &&
-	      hOverE_			< 0.0615 &&
-	      //relIsoWithDBeta_  	< 0.0646 &&
-	      ooEmooP_  		< 0.00999 &&
-	      fabs(d0_) 		< 0.0351 &&
-	      fabs(dz_) 		< 0.417 &&				   
-	      expectedMissingInnerHits_ <= 1.000000
-	      ) isTightElectron = true;  
-	      
-  }
-
-  bool isHeepElectron = false;
-  bool isHeep51Electron = false;
 
   float et = ele.energy()!=0. ? ele.et()/ele.energy()*ele.caloEnergy() : 0.;
   // double iso;
@@ -547,7 +711,6 @@ bool ElectronsNtuplizer::eleIDpassedBoosted(std::string id, const pat::Electron 
     	       // iso < isoCut &&
 	       fabs(dxy) < 0.02 )
     	  {
-    	     if (ele.hadronicOverEm() < (2./ele.superCluster()->energy()+0.05)) isHeep51Electron = true;
     	     if (ele.hadronicOverEm() < (1./ele.superCluster()->energy()+0.05)) isHeepElectron = true;
     	  }
 	  
@@ -567,7 +730,6 @@ bool ElectronsNtuplizer::eleIDpassedBoosted(std::string id, const pat::Electron 
     	      // iso < isoCut &&
 	      fabs(dxy) < 0.05 )
     	  {
-    	     if (ele.hadronicOverEm() < (12.5/ele.superCluster()->energy()+0.05)) isHeep51Electron = true;
     	     if (ele.hadronicOverEm() < (5./ele.superCluster()->energy()+0.05)) isHeepElectron = true;
     	  }
 	  
@@ -581,9 +743,7 @@ bool ElectronsNtuplizer::eleIDpassedBoosted(std::string id, const pat::Electron 
   else if( id == "Loose" ) return isLooseElectron;
   else if( id == "Medium" ) return isMediumElectron;
   else if( id == "Tight" ) return isTightElectron;
-  else if( id == "Heep51" ) return isHeep51Electron;
   else if( id == "Heep" ) return isHeepElectron;
   else return false;
    
 }
-
