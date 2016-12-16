@@ -23,7 +23,7 @@ public:
   float dEtaInSeed( const pat::Electron &ele );
   float EleEInverseMinusPInverse( const pat::Electron &ele );
   bool  eleIDpassed( std::string id, const pat::Electron &ele );
-  //  bool  eleIDpassedBoosted( std::string id, const pat::Electron &ele );
+  bool  eleIDpassedBoosted( std::string id, const pat::Electron &ele );
   bool  eleIDpassedWithoutIPandIsolation( std::string id, const pat::Electron &ele );
   
 private:

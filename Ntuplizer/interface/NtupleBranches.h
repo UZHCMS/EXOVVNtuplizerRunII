@@ -144,6 +144,11 @@ public:
   std::vector<int>	      el_isMVATightElectron	  ;    
   std::vector<float>	      el_MVAscore	  ;    
   std::vector<int>	      el_MVAcategory	  ;    
+  std::vector<int>	      el_isVetoElectronWithoutIPandIsolation	  ;
+  std::vector<int>	      el_isMediumElectronWithoutIPandIsolation  ;
+  std::vector<int>	      el_isTightElectronWithoutIPandIsolation	  ;    
+  std::vector<int  >  	      el_isHeepElectronWithoutIPandIsolation	  ;
+  std::vector<int  >  	      el_isLooseElectronWithoutIPandIsolation	  ;  
   std::vector<int>	      el_isVetoElectronBoosted	  ;
   std::vector<int>	      el_isMediumElectronBoosted  ;
   std::vector<int>	      el_isTightElectronBoosted	  ;    
