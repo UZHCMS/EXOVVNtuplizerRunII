@@ -40,6 +40,7 @@ void GenEventNtuplizer::fillBranches( edm::Event const & event, const edm::Event
 
   event.getByToken(lheEventProductToken_, lheEventProduct_);
   float lheHt_ = 0.;
+  int nLeptons = 0;
   int nParton = 0;
 
   std::vector<TLorentzVector> tlv;
@@ -66,15 +67,14 @@ void GenEventNtuplizer::fillBranches( edm::Event const & event, const edm::Event
       }
 
       if(status == 1 && (absPdgId == 11 || absPdgId == 13 || absPdgId == 15)){ // leptons (needed for DY, W stitching)
-	TLorentzVector tl;
-	tl.SetPxPyPzE(lheParticles[idxParticle][0],
+	        nLeptons++;
+	        TLorentzVector tl;
+	        tl.SetPxPyPzE(lheParticles[idxParticle][0],
 		      lheParticles[idxParticle][1],
 		      lheParticles[idxParticle][2],
 		      lheParticles[idxParticle][3]);						
-
-	tlv.push_back(tl);
+        	tlv.push_back(tl);
       }
-
 
     }
   }
@@ -92,8 +92,7 @@ void GenEventNtuplizer::fillBranches( edm::Event const & event, const edm::Event
     nBranches_->lheV_pt = -1;
   }
 
-  //  nBranches_->lheV_pt = 0.;
-  //  nBranches_->lheNj = 0; // Does anybody use this ?
+  nBranches_->lheNl = nLeptons; // Does anybody use this ?
   nBranches_->lheNj = nParton;
   nBranches_->lheHT = lheHt_;
 

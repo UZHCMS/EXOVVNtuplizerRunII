@@ -50,7 +50,8 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
       /** generator info */
       tree_->Branch( "lheV_pt"	             , &lheV_pt                ); 
       tree_->Branch( "lheHT"	             , &lheHT                  ); 
-      tree_->Branch( "lheNj"	             , &lheNj                  ); 
+      tree_->Branch( "lheNj"	             , &lheNj                  );
+      tree_->Branch( "lheNl"	             , &lheNl                  );
       tree_->Branch( "lheV_mass"             , &lheV_mass              ); 
       tree_->Branch( "genWeight"	     , &genWeight              ); 
       tree_->Branch( "qScale"	             , &qScale                 );
