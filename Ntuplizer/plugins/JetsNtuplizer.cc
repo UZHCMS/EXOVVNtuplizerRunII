@@ -108,7 +108,7 @@ bool JetsNtuplizer::looseJetID( const pat::Jet& j ) {
   if(abs(eta) <= 2.7){
     return (nhf<0.99 && nemf<0.99 && NumConst>1) && ((abs(eta)<=2.4 && chf>0 && chMult>0 && cemf<0.99) || abs(eta)>2.4);
   }else if(abs(eta) <= 3.0){
-    return (nemf<0.90 && neMult>2);
+    return (nhf<0.98 && nemf>0.01 && neMult>2);
   }else{
     return (nemf<0.90 && neMult>10);
   }
@@ -134,7 +134,7 @@ bool JetsNtuplizer::tightJetID( const pat::Jet& j ) {
   if(abs(eta) <= 2.7){
     return (nhf<0.90 && nemf<0.90 && NumConst>1 && muf<0.8) && ((fabs(eta)<=2.4 && chf>0 && chMult>0 && cemf<0.90) || fabs(eta)>2.4);  		
   }else if(abs(eta) <= 3.0){
-    return (nemf<0.90 && neMult>2);
+    return (nhf<0.98 && nemf>0.01 && neMult>2);
   }else{
     return (nemf<0.90 && neMult>10);
   }
@@ -161,7 +161,7 @@ bool JetsNtuplizer::tightJetIDWithoutLepVeto( const pat::Jet& j ) {
   if(abs(eta) <= 2.7){
     return (nhf<0.90 && nemf<0.90 && NumConst>1) && ((abs(eta)<=2.4 && chf>0 && chMult>0 && cemf<0.99) || abs(eta)>2.4);
   }else if(abs(eta) <= 3.0){
-    return (nemf<0.90 && neMult>2);
+    return (nhf<0.98 && nemf>0.01 && neMult>2);
   }else{
     return (nemf<0.90 && neMult>10);
   }

@@ -23,7 +23,7 @@ options = VarParsing.VarParsing ('analysis')
 options.maxEvents = -1
 
 #data file
-options.inputFiles = "file:/mnt/t3nfs01/data01/shome/cgalloni/RunII/CMSSW_8_0_20/src/EXOVVNtuplizerRunII/Ntuplizer/patMiniAOD_standard_numEvent5000.root"
+#options.inputFiles = "file:/mnt/t3nfs01/data01/shome/cgalloni/RunII/CMSSW_8_0_20/src/EXOVVNtuplizerRunII/Ntuplizer/patMiniAOD_standard_numEvent5000.root"
 #options.inputFiles = '/store/mc/RunIISpring16MiniAODv1/RadionTohhTohtatahbb_narrow_M-2000_13TeV-madgraph/MINIAODSIM/PUSpring16RAWAODSIM_80X_mcRun2_asymptotic_2016_v3-v1/70000/B0C98A71-791E-E611-9952-00259073E4E8.root'
 #options.inputFiles = '/store/mc/RunIISpring16MiniAODv2/ZprimeToWW_narrow_M-800_13TeV-madgraph/MINIAODSIM/PUSpring16RAWAODSIM_80X_mcRun2_asymptotic_2016_miniAODv2_v0-v1/60000/2C6DE685-3226-E611-B6B5-842B2B766849.root'
 #options.inputFiles = '/store/mc/RunIISpring16MiniAODv2/SUSYGluGluToHToTauTau_M-160_TuneCUETP8M1_13TeV-pythia8/MINIAODSIM/PUSpring16RAWAODSIM_reHLT_80X_mcRun2_asymptotic_v14-v1/90000/66445A95-3151-E611-AA07-0090FAA579F0.root'
@@ -32,6 +32,7 @@ options.inputFiles = "file:/mnt/t3nfs01/data01/shome/cgalloni/RunII/CMSSW_8_0_20
 #options.inputFiles = 'xroot://t3dcachedb.psi.ch:1094//pnfs/psi.ch/cms/trivcat/store/user/cgalloni/RunII/RadionTohhTohtatahbb_narrow_M-1000_13TeV-madgraph/MiniAOD_TauBoosted_v0667_maxDepth100_jetPt100/miniAOD_4.root'
 #options.inputFiles = 'dcap://t3se01.psi.ch:22125//pnfs/psi.ch/cms/trivcat/store/user/cgalloni/RunII/RadionTohhTohtatahbb_narrow_M-1000_13TeV-madgraph/MiniAOD_TauBoosted_v0667_maxDepth100_jetPt100/miniAOD_4.root'
 #options.inputFiles = '/store/user/cgalloni/MiniAOD_191115/RadionTohhTohtatahbb_narrow_M-1000_13TeV-madgraph/BoostedTaus_RadionTohhTohtatahbb_narrow_M-1000_13TeV-madgraph_v0/151119_130555/0000/miniAOD_1.root'
+options.inputFiles = '/store/mc/RunIISummer16MiniAODv2/QCD_Pt_300to470_TuneCUETP8M1_13TeV_pythia8/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext1-v1/120000/0679F830-EAB6-E611-B84A-0CC47A5FBE25.root'
 options.parseArguments()
 
 process.options  = cms.untracked.PSet( 
@@ -672,10 +673,7 @@ jecLevelsAK4 = []
 jecLevelsAK8Puppi = []
 jecLevelsForMET = []
 
-if config["BUNCHSPACING"] == 25 and config["RUNONMC"] and config["SPRING16"]:
-   JECprefix = "Spring16_25nsV6"
-elif config["BUNCHSPACING"] == 25 and not(config["RUNONMC"]) and config["SPRING16"]:
-   JECprefix = "Spring16_25nsV6"
+JECprefix = "Summer16_23Sep2016V0"
 
 jecAK8chsUncFile = "JEC/%s_MC_Uncertainty_AK8PFchs.txt"%(JECprefix)
 jecAK4chsUncFile = "JEC/%s_MC_Uncertainty_AK4PFchs.txt"%(JECprefix)

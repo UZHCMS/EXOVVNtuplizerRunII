@@ -353,11 +353,11 @@ if opts.clean:
          a = j.split("-")
          jobid = a[1]
          inputpath = "srm://t3se01.psi.ch:8443/srm/managerv2?SFN="+j+"/"+outfile
-	 cmd = "gfal-rm "+inputpath
+	 cmd = "srmrm "+inputpath
 	 print cmd
 	 os.system(cmd)
-      jdir = "srm://t3se01.psi.ch:8443/srm/managerv2?SFN="+j
-      cmd = "lcg-del -d %s" %jdir
+      #jdir = "srm://t3se01.psi.ch:8443/srm/managerv2?SFN="+j
+      cmd = "uberftp t3se01.psi.ch 'rm -r %s'" %j
       print cmd
       os.system(cmd)
     
@@ -367,7 +367,7 @@ if opts.clean:
    os.system(cmd)
    user = commands.getoutput("whoami")
    dir = '/pnfs/psi.ch/cms/trivcat/store/user/'+user+"/"+outdir
-   cmd = "lcg-del -d srm://t3se01.psi.ch:8443/srm/managerv2?SFN=" + dir
+   cmd = "uberftp t3se01.psi.ch 'rm -r " + dir + "'"
    print cmd
    os.system(cmd)
       
