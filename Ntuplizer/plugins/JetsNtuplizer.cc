@@ -383,7 +383,7 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
      nBranches_->jetAK4_qg_axis2  .push_back(-std::log(axis2));
      nBranches_->jetAK4_qg_charged  .push_back(charged_multiplicity);
      nBranches_->jetAK4_qg_ptD  .push_back(ptD);     
-     nBranches_->jetAK4_qg_pt_dr  .push_back(pt_dr_log/corr*uncorrJet.pt());
+     nBranches_->jetAK4_qg_pt_dr  .push_back(pt_dr_log);
 
      
      ////////////////////////////////////////////
