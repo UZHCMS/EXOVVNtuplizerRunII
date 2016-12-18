@@ -50,7 +50,7 @@ float MuonCorrPFIso(pat::Muon muon, bool highpt, edm::Handle<pat::TauCollection>
   for(size_t tauIndex = 0; tauIndex < numTaus; ++tauIndex){
 	pat::TauRef tau(taus_, tauIndex);
 	double dR = reco::deltaR(muon.eta(), muon.phi(), tau->eta(), tau->phi());
-	if ( dR < dRmin &&
+	if ( dR < dRmin && dR>0.02 &&
 		tau->pt()>20 && 
 		fabs(tau->eta())<2.4 && 
 	     tau->tauID("decayModeFindingNewDMs")>0.5 // && 
