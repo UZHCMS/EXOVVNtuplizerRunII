@@ -326,6 +326,71 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
      nBranches_->jetAK4_vtx3DVal  .push_back(j.userFloat("vtx3DVal")); 
      nBranches_->jetAK4_vtx3DSig  .push_back(j.userFloat("vtx3DSig"));
      
+     //////////////////////////////////////////
+     // for QG likelihood
+     //////////////////////////////////////////
+
+     float sum_weight = 0., sum_deta = 0., sum_dphi = 0., sum_deta2 = 0., sum_dphi2 = 0., sum_detadphi = 0., sum_pt = 0.;
+     int charged_multiplicity = 0; 
+     float pt_dr_log = 0;
+
+     //Loop over the jet constituents
+     for(auto daughter : j.getJetConstituentsQuick()){
+       
+       auto part = static_cast<const pat::PackedCandidate*>(daughter);
+       
+       if(part->charge()){
+	 if(!(part->fromPV() > 1 && part->trackHighPurity())) continue;
+	 ++charged_multiplicity; 
+       }
+      
+       float dr = reco::deltaR(j, *part);      
+       pt_dr_log += std::log(part->pt()/dr);
+       
+       float deta   = daughter->eta() - j.eta();
+       float dphi   = reco::deltaPhi(daughter->phi(), j.phi());
+       float partPt = daughter->pt();
+       float weight = partPt*partPt;
+       
+       sum_weight   += weight;
+       sum_pt       += partPt;
+       sum_deta     += deta*weight;
+       sum_dphi     += dphi*weight;
+       sum_deta2    += deta*deta*weight;
+       sum_detadphi += deta*dphi*weight;
+       sum_dphi2    += dphi*dphi*weight;
+     }
+  
+     //Calculate axis2 and ptD
+     float a = 0., b = 0., c = 0.;
+     float ave_deta = 0., ave_dphi = 0., ave_deta2 = 0., ave_dphi2 = 0.;
+     if(sum_weight > 0){
+       ave_deta  = sum_deta/sum_weight;
+       ave_dphi  = sum_dphi/sum_weight;
+       ave_deta2 = sum_deta2/sum_weight;
+       ave_dphi2 = sum_dphi2/sum_weight;
+       a         = ave_deta2 - ave_deta*ave_deta;                          
+       b         = ave_dphi2 - ave_dphi*ave_dphi;                          
+       c         = -(sum_detadphi/sum_weight - ave_deta*ave_dphi);                
+     }
+     float delta = sqrt(fabs((a-b)*(a-b)+4*c*c));
+     float axis1 = (a+b+delta > 0 ?  sqrt(0.5*(a+b+delta)) : 0);
+     float axis2 = (a+b-delta > 0 ?  sqrt(0.5*(a+b-delta)) : 0);
+     float ptD   = (sum_weight > 0 ? sqrt(sum_weight)/sum_pt : 0);
+     
+     
+     nBranches_->jetAK4_qg_axis1  .push_back(-std::log(axis1));
+     nBranches_->jetAK4_qg_axis2  .push_back(-std::log(axis2));
+     nBranches_->jetAK4_qg_charged  .push_back(charged_multiplicity);
+     nBranches_->jetAK4_qg_ptD  .push_back(ptD);     
+     nBranches_->jetAK4_qg_pt_dr  .push_back(pt_dr_log/corr*uncorrJet.pt());
+
+     
+     ////////////////////////////////////////////
+     // for QG likelihood : end
+     ////////////////////////////////////////////
+     
+
      if(isMC){
      
        int genP_pdgId = j.genParton() ? j.genParton()->pdgId() : -99; // default to -99 when no genParton is found!!!

@@ -362,6 +362,14 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch( "jetAK4_vtxNtracks"      , &jetAK4_vtxNtracks );
     tree_->Branch( "jetAK4_vtx3DVal"	    , &jetAK4_vtx3DVal   );
     tree_->Branch( "jetAK4_vtx3DSig"	    , &jetAK4_vtx3DSig   );
+    
+    tree_->Branch( "jetAK4_qg_axis1"	    , &jetAK4_qg_axis1   );
+    tree_->Branch( "jetAK4_qg_axis2"	    , &jetAK4_qg_axis2   );
+    tree_->Branch( "jetAK4_qg_charged"      , &jetAK4_qg_charged );
+    tree_->Branch( "jetAK4_qg_ptD"          , &jetAK4_qg_ptD     );
+    tree_->Branch( "jetAK4_qg_pt_dr"        , &jetAK4_qg_pt_dr   );
+
+
     if ( runFlags["runOnMC"] ){
       tree_->Branch( "jetAK4_partonFlavour" , &jetAK4_partonFlavour);
       tree_->Branch( "jetAK4_hadronFlavour" , &jetAK4_hadronFlavour);
@@ -1004,6 +1012,12 @@ void NtupleBranches::reset( void ){
   jetAK4_vtx3DVal.clear();
   jetAK4_vtx3DSig.clear();
   
+  jetAK4_qg_axis1.clear();
+  jetAK4_qg_axis2.clear();
+  jetAK4_qg_charged.clear();
+  jetAK4_qg_ptD.clear();
+  jetAK4_qg_pt_dr.clear();
+
   jetAK4_jer_sf.clear(); 
   jetAK4_jer_sf_up.clear(); 
   jetAK4_jer_sf_down.clear(); 
