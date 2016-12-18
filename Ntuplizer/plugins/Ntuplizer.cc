@@ -42,12 +42,20 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
 
 	muonToken_	      	    (consumes<pat::MuonCollection>(iConfig.getParameter<edm::InputTag>("muons"))),
 	electronToken_	      	    (consumes<edm::View<pat::Electron> >(iConfig.getParameter<edm::InputTag>("electrons"))),
-	eleHEEPIdMapToken_    	    (consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("eleHEEPIdMap"))),
-        eleHEEPId51MapToken_  	    (consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("eleHEEPId51Map"))),
+
 	eleVetoIdMapToken_    	    (consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("eleVetoIdMap"))),
 	eleLooseIdMapToken_   	    (consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("eleLooseIdMap"))),
 	eleMediumIdMapToken_  	    (consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("eleMediumIdMap"))),
 	eleTightIdMapToken_   	    (consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("eleTightIdMap"))),
+
+	eleHLTIdMapToken_  	    (consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("eleHLTIdMap"))),
+	eleHEEPIdMapToken_    	    (consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("eleHEEPIdMap"))),
+
+	eleMVAMediumIdMapToken_     (consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("eleMVAMediumIdMap"))),
+	eleMVATightIdMapToken_      (consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("eleMVATightIdMap"))),
+	mvaValuesMapToken_          (consumes<edm::ValueMap<float> >(iConfig.getParameter<edm::InputTag>("mvaValuesMap"))),
+	mvaCategoriesMapToken_      (consumes<edm::ValueMap<int> >(iConfig.getParameter<edm::InputTag>("mvaCategoriesMap"))),
+
 	tauToken_	      	    (consumes<pat::TauCollection>(iConfig.getParameter<edm::InputTag>("taus"))),
 	tauBoostedTauToken_	    (consumes<pat::TauCollection>(iConfig.getParameter<edm::InputTag>("tausBoostedTau"))),
 
@@ -231,13 +239,17 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
     eleIdTokens.push_back(eleLooseIdMapToken_ );
     eleIdTokens.push_back(eleMediumIdMapToken_);
     eleIdTokens.push_back(eleTightIdMapToken_ );
+    eleIdTokens.push_back(eleHLTIdMapToken_  );
     eleIdTokens.push_back(eleHEEPIdMapToken_  );
-    eleIdTokens.push_back(eleHEEPId51MapToken_  );
+    eleIdTokens.push_back(eleMVAMediumIdMapToken_  );
+    eleIdTokens.push_back(eleMVATightIdMapToken_  );
     
     nTuplizers_["electrons"] = new ElectronsNtuplizer( electronToken_, 
                                                        vtxToken_     , 
 						       rhoToken_     , 
 						       eleIdTokens   , 
+						       mvaValuesMapToken_,
+						       mvaCategoriesMapToken_,
 						       tauBoostedTauToken_ ,
 						       nBranches_  ,
 						       runFlags     );

@@ -80,7 +80,10 @@ bool TriggersNtuplizer::findTrigger( std::string trigName ){
        trigName.find("PFHT800_v") != std::string::npos ||
        trigName.find("PFHT900_v") != std::string::npos ||
        trigName.find("PFJet320_v") != std::string::npos ||
-       trigName.find("PFJet450_v") != std::string::npos ||         
+       trigName.find("PFJet400_v") != std::string::npos ||
+       trigName.find("PFJet450_v") != std::string::npos ||   
+       trigName.find("PFJet500_v") != std::string::npos ||
+
        trigName.find("HLT_IsoMu20_eta2p1") != std::string::npos ||
        trigName.find("HLT_IsoMu24_eta2p1") != std::string::npos ||
        trigName.find("HLT_IsoTkMu24_eta2p1") != std::string::npos ||
@@ -90,6 +93,7 @@ bool TriggersNtuplizer::findTrigger( std::string trigName ){
        trigName.find("HLT_IsoTkMu27_v") != std::string::npos ||
        trigName.find("HLT_Mu45_eta2p1") != std::string::npos ||
        //trigName.find("HLT_Mu50_eta2p1") != std::string::npos ||
+
        trigName.find("HLT_Mu50_v") != std::string::npos ||
        trigName.find("HLT_TkMu50_v") != std::string::npos ||
        trigName.find("HLT_Ele27_WPTight_Gsf") != std::string::npos ||

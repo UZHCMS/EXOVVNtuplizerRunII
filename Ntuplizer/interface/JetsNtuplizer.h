@@ -23,6 +23,7 @@ public:
 
   bool looseJetID( const pat::Jet& j );
   bool tightJetID( const pat::Jet& j );
+  bool tightJetIDWithoutLepVeto( const pat::Jet& j );
 
   void fillBranches( edm::Event const & event, const edm::EventSetup& iSetup );
   void initJetCorrFactors( void );

@@ -50,9 +50,9 @@ process.source = cms.Source("PoolSource",
 hltFiltersProcessName = 'RECO'
 if config["RUNONMC"] or config["JSONFILE"].find('reMiniAOD') != -1:
   hltFiltersProcessName = 'PAT'
-reclusterPuppi=False
+reclusterPuppi=config["DOAK8PUPPIRECLUSTERING"]
 if reclusterPuppi:
-  print "RECLUSTERING PUPPI (since not running of Spring16MiniAODv2)"
+  print "RECLUSTERING PUPPI with latest tune from CMSSW_8_0_20"
 
 #! To recluster and add AK8 Higgs tagging and softdrop subjet b-tagging (both need to be simoultaneously true or false, if not you will have issues with your softdrop subjets!)
 #If you use the softdrop subjets from the slimmedJetsAK8 collection, only CSV seems to be available?
@@ -162,7 +162,7 @@ if config["DOAK10TRIMMEDRECLUSTERING"]:
 
 if reclusterPuppi:
   process.load('CommonTools/PileupAlgos/Puppi_cff')
-  process.puppi.useExistingWeights = True
+  process.puppi.useExistingWeights = False
   process.puppi.candName = cms.InputTag('packedPFCandidates')
   process.puppi.vertexName = cms.InputTag('offlineSlimmedPrimaryVertices')  
   process.ak8PuppiJets = ak8PFJetsCHS.clone( src = 'puppi', jetPtMin = fatjet_ptmin )
@@ -490,8 +490,8 @@ if config["DOAK10TRIMMEDRECLUSTERING"]:
     
 ################# Recluster puppi jets ######################
 if reclusterPuppi:
-    recluster_addBtagging(process, 'ak8PuppiJets', 'ak8PuppiJetsSoftDrop', jetcorr_label = 'AK8PFPuppi', genjets_name = lambda s: s.replace('Puppi', 'Gen'), verbose = False, btagging = False, subjets = False)
-    recluster_addBtagging(process, 'ak8PuppiJets', 'ak8PuppiJetsPruned', jetcorr_label = 'AK8PFPuppi', genjets_name = lambda s: s.replace('Puppi', 'Gen'), verbose = False, btagging = False, subjets = False)
+    recluster_addBtagging(process, 'ak8PuppiJets', 'ak8PuppiJetsSoftDrop', jetcorr_label = 'AK8PFPuppi', genjets_name = lambda s: s.replace('Puppi', 'Gen'))
+    recluster_addBtagging(process, 'ak8PuppiJets', 'ak8PuppiJetsPruned', jetcorr_label = 'AK8PFPuppi', genjets_name = lambda s: s.replace('Puppi', 'Gen'))
   
     process.ak8PFJetsPuppiPrunedMass = cms.EDProducer("RecoJetDeltaRValueMapProducer",
     					  src = cms.InputTag("ak8PuppiJets"),
@@ -508,14 +508,14 @@ if reclusterPuppi:
     					  )	    
     process.ak8PFJetsPuppiPrunedMassCorrected = cms.EDProducer("RecoJetDeltaRValueMapProducer",
     					  src = cms.InputTag("ak8PuppiJets"),
-    					  matched = cms.InputTag("patJetsAk8PuppiJetsPruned"),
+    					  matched = cms.InputTag("patJetsAk8PuppiJetsPrunedPacked"),
     					  distMax = cms.double(0.8),
     					  value = cms.string('mass')
     					  )
 
     process.ak8PFJetsPuppiSoftDropMassCorrected = cms.EDProducer("RecoJetDeltaRValueMapProducer",
     					  src = cms.InputTag("ak8PuppiJets"),
-    					  matched = cms.InputTag("patJetsAk8PuppiJetsSoftDrop"),					 
+    					  matched = cms.InputTag("patJetsAk8PuppiJetsSoftDropPacked"),					 
     					  distMax = cms.double(0.8),
     					  value = cms.string('mass') 
     					  )	    
@@ -525,6 +525,18 @@ if reclusterPuppi:
     process.patJetsAk8PuppiJets.userData.userFloats.src += ['NjettinessAK8Puppi:tau1','NjettinessAK8Puppi:tau2','NjettinessAK8Puppi:tau3']
     process.patJetsAk8PuppiJets.addTagInfos = True
 
+    process.packedJetsAk8PuppiJets = cms.EDProducer("JetSubstructurePacker",
+            jetSrc = cms.InputTag("patJetsAk8PuppiJets"),
+            distMax = cms.double(0.8),
+            algoTags = cms.VInputTag(
+                cms.InputTag("patJetsAk8PuppiJetsSoftDropPacked")
+            ),
+            algoLabels = cms.vstring(
+                'SoftDropPuppi'
+                ),
+            fixDaughters = cms.bool(False),
+            packedPFCandidates = cms.InputTag("packedPFCandidates"),
+    )
 
 # ###### Recluster MET ##########
 if config["DOMETRECLUSTERING"]:
@@ -581,10 +593,17 @@ process.egmGsfElectronIDSequence = cms.Sequence(process.egmGsfElectronIDs)
 # define which IDs we want to produce
 #my_id_modules = ['RecoEgamma.ElectronIdentification.Identification.cutBasedElectronID_PHYS14_PU20bx25_V2_cff',
 #		 'RecoEgamma.ElectronIdentification.Identification.heepElectronID_HEEPV51_cff']
-my_id_modules = ['RecoEgamma.ElectronIdentification.Identification.heepElectronID_HEEPV51_cff',
-                 'RecoEgamma.ElectronIdentification.Identification.heepElectronID_HEEPV60_cff',
-                 'RecoEgamma.ElectronIdentification.Identification.cutBasedElectronID_Spring15_25ns_V1_cff']
-                 
+#my_id_modules = ['RecoEgamma.ElectronIdentification.Identification.heepElectronID_HEEPV51_cff',
+#                 'RecoEgamma.ElectronIdentification.Identification.heepElectronID_HEEPV60_cff',
+#                 'RecoEgamma.ElectronIdentification.Identification.cutBasedElectronID_Spring15_25ns_V1_cff']
+      
+my_id_modules = [
+                 'RecoEgamma.ElectronIdentification.Identification.cutBasedElectronID_Summer16_80X_V1_cff',
+                 'RecoEgamma.ElectronIdentification.Identification.cutBasedElectronHLTPreselecition_Summer16_V1_cff',
+                 'RecoEgamma.ElectronIdentification.Identification.heepElectronID_HEEPV70_cff',
+                 'RecoEgamma.ElectronIdentification.Identification.mvaElectronID_Spring16_GeneralPurpose_V1_cff',
+                 ]
+           
 
 #add them to the VID producer
 for idmod in my_id_modules:
@@ -658,7 +677,7 @@ if config["DOAK8PRUNEDRECLUSTERING"]:
 if config["DOAK10TRIMMEDRECLUSTERING"]:  
   jetsAK10trimmed = "patJetsAk10CHSJetsTrimmed"
 if reclusterPuppi:  
-  jetsAK8Puppi = "patJetsAk8PuppiJets"  
+  jetsAK8Puppi = "packedJetsAk8PuppiJets"  
 
 if config["DOTAUSBOOSTED"]:
   TAUS = "slimmedTaus"
@@ -790,12 +809,27 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     vertices = cms.InputTag("offlineSlimmedPrimaryVertices"),
     muons = cms.InputTag("slimmedMuons"),
     electrons = cms.InputTag("slimmedElectrons"),
-    eleHEEPId51Map = cms.InputTag("egmGsfElectronIDs:heepElectronID-HEEPV51"),
-    eleHEEPIdMap = cms.InputTag("egmGsfElectronIDs:heepElectronID-HEEPV60"),
-    eleVetoIdMap = cms.InputTag("egmGsfElectronIDs:cutBasedElectronID-Spring15-25ns-V1-standalone-veto"),
-    eleLooseIdMap = cms.InputTag("egmGsfElectronIDs:cutBasedElectronID-Spring15-25ns-V1-standalone-loose"),
-    eleMediumIdMap = cms.InputTag("egmGsfElectronIDs:cutBasedElectronID-Spring15-25ns-V1-standalone-medium"),
-    eleTightIdMap = cms.InputTag("egmGsfElectronIDs:cutBasedElectronID-Spring15-25ns-V1-standalone-tight"),
+
+#    eleHEEPId51Map = cms.InputTag("egmGsfElectronIDs:heepElectronID-HEEPV51"),
+#    eleHEEPIdMap = cms.InputTag("egmGsfElectronIDs:heepElectronID-HEEPV60"),
+#    eleVetoIdMap = cms.InputTag("egmGsfElectronIDs:cutBasedElectronID-Spring15-25ns-V1-standalone-veto"),
+#    eleLooseIdMap = cms.InputTag("egmGsfElectronIDs:cutBasedElectronID-Spring15-25ns-V1-standalone-loose"),
+#    eleMediumIdMap = cms.InputTag("egmGsfElectronIDs:cutBasedElectronID-Spring15-25ns-V1-standalone-medium"),
+#    eleTightIdMap = cms.InputTag("egmGsfElectronIDs:cutBasedElectronID-Spring15-25ns-V1-standalone-tight"),
+
+    eleVetoIdMap = cms.InputTag("egmGsfElectronIDs:cutBasedElectronID-Summer16-80X-V1-veto"),
+    eleLooseIdMap = cms.InputTag("egmGsfElectronIDs:cutBasedElectronID-Summer16-80X-V1-loose"),
+    eleMediumIdMap = cms.InputTag("egmGsfElectronIDs:cutBasedElectronID-Summer16-80X-V1-medium"),
+    eleTightIdMap = cms.InputTag("egmGsfElectronIDs:cutBasedElectronID-Summer16-80X-V1-tight"),
+
+    eleHLTIdMap = cms.InputTag("egmGsfElectronIDs:cutBasedElectronHLTPreselection-Summer16-V1"), 
+    eleHEEPIdMap = cms.InputTag("egmGsfElectronIDs:heepElectronID-HEEPV70"),
+                                   
+    eleMVAMediumIdMap = cms.InputTag("egmGsfElectronIDs:mvaEleID-Spring16-GeneralPurpose-V1-wp90"),
+    eleMVATightIdMap  = cms.InputTag("egmGsfElectronIDs:mvaEleID-Spring16-GeneralPurpose-V1-wp80"),
+    mvaValuesMap     = cms.InputTag("electronMVAValueMapProducer:ElectronMVAEstimatorRun2Spring16GeneralPurposeV1Values"),
+    mvaCategoriesMap = cms.InputTag("electronMVAValueMapProducer:ElectronMVAEstimatorRun2Spring16GeneralPurposeV1Categories"),
+
     taus = cms.InputTag(TAUS),
     tausBoostedTau = cms.InputTag(BOOSTEDTAUS),
     jets = cms.InputTag(jetsAK4),

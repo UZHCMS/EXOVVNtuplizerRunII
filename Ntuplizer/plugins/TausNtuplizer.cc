@@ -110,12 +110,14 @@ void TausNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
       nBranches_->tau_photonIso             .push_back(tau.photonIso());
       nBranches_->tau_neutralHadIso         .push_back(tau.neutralHadronIso());
       nBranches_->tau_chargedHadIso         .push_back(tau.chargedHadronIso());
+      nBranches_->tau_photonPtSumOutsideSignalCone               .push_back(tau.tauID("photonPtSumOutsideSignalCone"));
       nBranches_->tau_trackIso              .push_back(tau.trackIso());      
       nBranches_->tau_pfDeltaCorrRelIsoBoost.push_back((tau.userIsolation(pat::PfChargedHadronIso) + std::max(0., tau.userIsolation(pat::PfNeutralHadronIso) + tau.userIsolation(pat::PfGammaIso) - 0.5*tau.userIsolation(pat::PfPUChargedHadronIso)))/tau.pt());
       nBranches_->tau_pfRelIsoBoost         .push_back((tau.userIsolation(pat::PfChargedHadronIso) + tau.userIsolation(pat::PfNeutralHadronIso)+ tau.userIsolation(pat::PfGammaIso))/tau.pt()) ; 
       nBranches_->tau_photonIsoBoost        .push_back(tau.userIsolation(pat::PfGammaIso));
       nBranches_->tau_neutralHadIsoBoost    .push_back(tau.userIsolation(pat::PfNeutralHadronIso));
       nBranches_->tau_chargedHadIsoBoost    .push_back(tau.userIsolation(pat::PfChargedHadronIso));
+
 
       /*====================== IDs ========================*/	                         
       nBranches_->tau_decayModeFindingNewDMs                     .push_back(tau.tauID("decayModeFindingNewDMs"  		    ));
@@ -206,8 +208,6 @@ void TausNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
       nBranches_->tau_byPhotonPtSumOutsideSignalCone             .push_back(tau.tauID("byPhotonPtSumOutsideSignalCone"              ));
       nBranches_->tau_footprintCorrection                        .push_back(tau.tauID("footprintCorrection"                         ));
 
-
-
       /*======================================================*/            
 
   }
@@ -279,6 +279,7 @@ void TausNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
       nBranches_->tau_photonIso             .push_back(boostedTau.photonIso());
       nBranches_->tau_neutralHadIso         .push_back(boostedTau.neutralHadronIso());
       nBranches_->tau_chargedHadIso         .push_back(boostedTau.chargedHadronIso());
+      nBranches_->tau_photonPtSumOutsideSignalCone               .push_back(boostedTau.tauID("photonPtSumOutsideSignalCone"));
       nBranches_->tau_trackIso              .push_back(boostedTau.trackIso());            
       nBranches_->tau_pfDeltaCorrRelIsoBoost.push_back((boostedTau.userIsolation(pat::PfChargedHadronIso) + std::max(0., boostedTau.userIsolation(pat::PfNeutralHadronIso) + boostedTau.userIsolation(pat::PfGammaIso) - 0.5*boostedTau.userIsolation(pat::PfPUChargedHadronIso)))/boostedTau.pt());
       nBranches_->tau_pfRelIsoBoost         .push_back((boostedTau.userIsolation(pat::PfChargedHadronIso) + boostedTau.userIsolation(pat::PfNeutralHadronIso)+ boostedTau.userIsolation(pat::PfGammaIso))/boostedTau.pt()) ; 
@@ -297,7 +298,7 @@ void TausNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
       nBranches_->tau_chargedIsoPtSum                            .push_back(boostedTau.tauID("chargedIsoPtSum" 			    ));
       nBranches_->tau_neutralIsoPtSum                            .push_back(boostedTau.tauID("neutralIsoPtSum" 			    ));
       nBranches_->tau_puCorrPtSum                                .push_back(boostedTau.tauID("puCorrPtSum"				    ));
-       nBranches_->tau_chargedIsoPtSumdR03                       .push_back(boostedTau.tauID("chargedIsoPtSumdR03" 			    ));
+      nBranches_->tau_chargedIsoPtSumdR03                       .push_back(boostedTau.tauID("chargedIsoPtSumdR03" 			    ));
       nBranches_->tau_footprintCorrectiondR03                    .push_back(boostedTau.tauID("footprintCorrectiondR03"                         ));
       nBranches_->tau_neutralIsoPtSumdR03                        .push_back(boostedTau.tauID("neutralIsoPtSumdR03" 			    ));
       nBranches_->tau_neutralIsoPtSumWeight                      .push_back(boostedTau.tauID("neutralIsoPtSumWeight" 			    ));

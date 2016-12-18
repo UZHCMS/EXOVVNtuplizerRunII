@@ -6,7 +6,7 @@ config = dict()
 config["SPRING16"] = True
 config["RUNONMC"] = False
 config["USEJSON"] = True
-config["JSONFILE"] = "Cert_271036-279931_13TeV_PromptReco_Collisions16_JSON_NoL1T.txt"
+config["JSONFILE"] = "Cert_271036-280385_13TeV_PromptReco_Collisions16_JSON_NoL1T_v2.txt"
 config["FILTEREVENTS"] = False
 config["BUNCHSPACING"] = 25
 config["USENOHF"] = False
@@ -28,8 +28,7 @@ config["DOHLTFILTERS"] = True
 config["DOMISSINGET"] = True
 config["DOTAUSBOOSTED"] = True
 config["DOMETSVFIT"] = True
-config["DOMVAMET"] = True
-
+config["DOMVAMET"] = False
 
 #--------- AK8 jets reclustering ----------#
 config["ADDAK8GENJETS"] = False #! Add AK8 gen jet collection with pruned and softdrop mass
@@ -38,6 +37,7 @@ config["DOAK8PRUNEDRECLUSTERING"] = False #! To add pruned jet and pruned subjet
 config["DOAK8PUPPI"] = True
 config["DOAK10TRIMMEDRECLUSTERING"] = False #ATLAS sequence
 config["DOHBBTAG"] = True #Higgs-tagger
+config["DOAK8PUPPIRECLUSTERING"] = False
 config["UpdateJetCollection"] = True #needed for Higgs-tagger in 80X
 
 #--------- MET reclustering ----------#

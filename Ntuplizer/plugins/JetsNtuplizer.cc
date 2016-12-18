@@ -79,10 +79,25 @@ bool JetsNtuplizer::looseJetID( const pat::Jet& j ) {
   //In sync with: https://twiki.cern.ch/twiki/bin/viewauth/CMS/JetID#Recommendations_for_8_TeV_data_a
   //and with dijet group https://github.com/CMSDIJET/DijetRootTreeMaker/blob/e650ba19e9e9bc676754a948298bb5cf850f4ecc/plugins/DijetTreeProducer.cc#L869
 
+//  double eta = j.eta();		
+//  double chf = j.chargedHadronEnergyFraction();
+//  double nhf = j.neutralHadronEnergyFraction(); // + j.HFHadronEnergyFraction();
+//  double muf = j.muonEnergy()/(j.jecFactor(0) * j.energy());  
+//  double nemf = j.neutralEmEnergyFraction();
+//  double cemf = j.chargedEmEnergyFraction();
+//  int chMult = j.chargedMultiplicity();
+//  int neMult = j.neutralMultiplicity();
+//  int npr    = chMult + neMult;
+//  int NumConst = npr;
+//
+//  return (nhf<0.99 && nemf<0.99 && NumConst>1 && muf < 0.8) && ((fabs(eta) <= 2.4 && chf>0 && chMult>0 && cemf<0.99) || fabs(eta)>2.4);      
+
+  // Change to 13 TeV definition
+  // https://twiki.cern.ch/twiki/bin/view/CMS/JetID#Recommendations_for_13_TeV_data
+
   double eta = j.eta();		
   double chf = j.chargedHadronEnergyFraction();
   double nhf = j.neutralHadronEnergyFraction(); // + j.HFHadronEnergyFraction();
-  double muf = j.muonEnergy()/(j.jecFactor(0) * j.energy());  
   double nemf = j.neutralEmEnergyFraction();
   double cemf = j.chargedEmEnergyFraction();
   int chMult = j.chargedMultiplicity();
@@ -90,7 +105,14 @@ bool JetsNtuplizer::looseJetID( const pat::Jet& j ) {
   int npr    = chMult + neMult;
   int NumConst = npr;
 
-  return (nhf<0.99 && nemf<0.99 && NumConst>1 && muf < 0.8) && ((fabs(eta) <= 2.4 && chf>0 && chMult>0 && cemf<0.99) || fabs(eta)>2.4);        
+  if(abs(eta) <= 2.7){
+    return (nhf<0.99 && nemf<0.99 && NumConst>1) && ((abs(eta)<=2.4 && chf>0 && chMult>0 && cemf<0.99) || abs(eta)>2.4);
+  }else if(abs(eta) <= 3.0){
+    return (nhf<0.98 && nemf>0.01 && neMult>2);
+  }else{
+    return (nemf<0.90 && neMult>10);
+  }
+
       		
 }
 
@@ -109,8 +131,45 @@ bool JetsNtuplizer::tightJetID( const pat::Jet& j ) {
   int npr    = chMult + neMult;
   int NumConst = npr;
      
-  return (nhf<0.90 && nemf<0.90 && NumConst>1 && muf<0.8) && ((fabs(eta)<=2.4 && chf>0 && chMult>0 && cemf<0.90) || fabs(eta)>2.4);  		
+  if(abs(eta) <= 2.7){
+    return (nhf<0.90 && nemf<0.90 && NumConst>1 && muf<0.8) && ((fabs(eta)<=2.4 && chf>0 && chMult>0 && cemf<0.90) || fabs(eta)>2.4);  		
+  }else if(abs(eta) <= 3.0){
+    return (nhf<0.98 && nemf>0.01 && neMult>2);
+  }else{
+    return (nemf<0.90 && neMult>10);
+  }
+
 }
+
+
+
+bool JetsNtuplizer::tightJetIDWithoutLepVeto( const pat::Jet& j ) {
+
+  // Change to 13 TeV definition
+  // https://twiki.cern.ch/twiki/bin/view/CMS/JetID#Recommendations_for_13_TeV_data
+
+  double eta = j.eta();		
+  double chf = j.chargedHadronEnergyFraction();
+  double nhf = j.neutralHadronEnergyFraction(); // + j.HFHadronEnergyFraction();
+  double nemf = j.neutralEmEnergyFraction();
+  double cemf = j.chargedEmEnergyFraction();
+  int chMult = j.chargedMultiplicity();
+  int neMult = j.neutralMultiplicity();
+  int npr    = chMult + neMult;
+  int NumConst = npr;
+
+  if(abs(eta) <= 2.7){
+    return (nhf<0.90 && nemf<0.90 && NumConst>1) && ((abs(eta)<=2.4 && chf>0 && chMult>0 && cemf<0.99) || abs(eta)>2.4);
+  }else if(abs(eta) <= 3.0){
+    return (nhf<0.98 && nemf>0.01 && neMult>2);
+  }else{
+    return (nemf<0.90 && neMult>10);
+  }
+
+
+}
+
+
 
 //===================================================================================================================
 void JetsNtuplizer::initJetCorrFactors( void ){
@@ -193,6 +252,7 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
 	        
      bool IDLoose = looseJetID(j);
      bool IDTight = tightJetID(j);
+     bool IDTightWithoutLepVeto = tightJetIDWithoutLepVeto(j);
 
      reco::Candidate::LorentzVector uncorrJet;
      double corr = 1;
@@ -235,6 +295,7 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
      nBranches_->jetAK4_jecDown	  .push_back(corrDown);
      nBranches_->jetAK4_IDLoose   .push_back(IDLoose);
      nBranches_->jetAK4_IDTight   .push_back(IDTight);
+     nBranches_->jetAK4_IDTightWithoutLepVeto   .push_back(IDTightWithoutLepVeto);
      nBranches_->jetAK4_PUIDdiscriminat.push_back(j.userFloat("pileupJetIdUpdated:fullDiscriminant")); 
      int fullId=j.userInt("pileupJetIdUpdated:fullId");
      nBranches_->jetAK4_PUIDloose .push_back(fullId & (1 << 2)); 
@@ -929,7 +990,54 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
         nBranches_->jetAK8_puppi_e      	    .push_back(-99);
 	}
 
+        vPuppiSoftDropSubjetpt.clear();
+        vPuppiSoftDropSubjeteta.clear();
+        vPuppiSoftDropSubjetmass.clear();
+        vPuppiSoftDropSubjetphi.clear();
+        vPuppiSoftDropSubjete.clear();
+        vPuppiSoftDropSubjetcharge.clear();
+        vPuppiSoftDropSubjetPartonFlavour.clear();
+        vPuppiSoftDropSubjetHadronFlavour.clear();
+        vPuppiSoftDropSubjetcsv.clear();
+      
+        nsubjets = 0;
+      
+        const std::vector<edm::Ptr<pat::Jet> > &wSubjets = puppijet.subjets();
+    
+      	for ( const pat::Jet & puppi_softdropsubjet : wSubjets ) {
+	
+           if( puppi_softdropsubjet.pt() < 0.01 ) continue;
+         
+           nsubjets++;
 
+           vPuppiSoftDropSubjetpt.push_back(puppi_softdropsubjet.pt());
+           vPuppiSoftDropSubjeteta.push_back(puppi_softdropsubjet.eta());
+           vPuppiSoftDropSubjetmass.push_back(puppi_softdropsubjet.mass());
+           vPuppiSoftDropSubjetphi.push_back(puppi_softdropsubjet.phi());
+           vPuppiSoftDropSubjete.push_back(puppi_softdropsubjet.energy());
+           vPuppiSoftDropSubjetPartonFlavour.push_back(abs(puppi_softdropsubjet.partonFlavour()));
+           vPuppiSoftDropSubjetHadronFlavour.push_back(abs(puppi_softdropsubjet.hadronFlavour()));
+           vPuppiSoftDropSubjetcharge.push_back(puppi_softdropsubjet.charge());
+           vPuppiSoftDropSubjetcsv.push_back(puppi_softdropsubjet.bDiscriminator("pfCombinedInclusiveSecondaryVertexV2BJetTags") );
+         
+         } 
+
+        nBranches_->jetAK8_subjet_puppi_softdrop_N.push_back(nsubjets);
+        nBranches_->jetAK8_subjet_puppi_softdrop_pt.push_back(vPuppiSoftDropSubjetpt);
+        nBranches_->jetAK8_subjet_puppi_softdrop_eta.push_back(vPuppiSoftDropSubjeteta);
+        nBranches_->jetAK8_subjet_puppi_softdrop_mass.push_back(vPuppiSoftDropSubjetmass);
+        nBranches_->jetAK8_subjet_puppi_softdrop_phi.push_back(vPuppiSoftDropSubjetphi);
+        nBranches_->jetAK8_subjet_puppi_softdrop_e.push_back(vPuppiSoftDropSubjete);
+        nBranches_->jetAK8_subjet_puppi_softdrop_charge.push_back(vPuppiSoftDropSubjetcharge);
+        nBranches_->jetAK8_subjet_puppi_softdrop_csv.push_back(vPuppiSoftDropSubjetcsv);
+
+        if(isMC){
+	
+          nBranches_->jetAK8_subjet_puppi_softdrop_partonFlavour.push_back(vPuppiSoftDropSubjetPartonFlavour);
+          nBranches_->jetAK8_subjet_puppi_softdrop_hadronFlavour.push_back(vPuppiSoftDropSubjetHadronFlavour);
+	 
+
+        }
 
 
       } //doPuppi

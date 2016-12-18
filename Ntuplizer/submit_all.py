@@ -22,12 +22,21 @@ def getOptions() :
     parser.add_option("-f", "--datasets", dest="datasets",
         help=("File listing datasets to run over"),
         metavar="FILE")
+    parser.add_option("-l", "--luminosity", dest="luminosity",
+        help=("Splitting job by lumi sections or by files"),
+        metavar="LUMI")
+    parser.add_option("-s", "--string", dest="string_to_add",
+        help=("Splitting job by lumi sections or by files"),
+        metavar="STRING")
     (options, args) = parser.parse_args()
 
 
     if options.config == None or options.dir == None:
         parser.error(usage)
-    
+    if options.luminosity == None:
+        options.luminosity = False
+    else: 
+        options.luminosity = True
     return options
     
 
@@ -78,10 +87,12 @@ def main():
     config.section_("Data")
     config.Data.inputDataset = None
     # config.Data.inputDBS = 'phys03' #to be commented in case of global#
-    #config.Data.splitting = 'LumiBased'#
-    #config.Data.unitsPerJob = 10
-    config.Data.splitting = 'FileBased'
-    config.Data.unitsPerJob = 1
+    if options.luminosity == True :
+        config.Data.splitting = 'LumiBased'
+        config.Data.unitsPerJob = 10
+    else:
+        config.Data.splitting = 'FileBased'
+        config.Data.unitsPerJob = 1
     config.Data.ignoreLocality = True
     config.Data.publication = False    
     config.Data.outLFNDirBase = '/store/user/cgalloni/Ntuple_80_190916'
@@ -118,9 +129,9 @@ def main():
 
         ptbin = job.split('/')[1]
         cond = job.split('/')[2]
-        config.General.requestName =  ptbin 
+        config.General.requestName =  ptbin + options.string_to_add
         config.Data.inputDataset = job
-        config.Data.outputDatasetTag = ptbin 
+        config.Data.outputDatasetTag = ptbin  +  options.string_to_add
         print "ptbin :%s and cond: %s " %(ptbin, cond)
         print 'Submitting ' + config.General.requestName + ', dataset = ' + job
         print 'Configuration :'
@@ -131,7 +142,7 @@ def main():
             p = Process(target=submit, args=(config,))
             p.start()
             p.join()
-           # submit(config)
+            # submit(config)
         except :
             print 'Not submitted.'
         

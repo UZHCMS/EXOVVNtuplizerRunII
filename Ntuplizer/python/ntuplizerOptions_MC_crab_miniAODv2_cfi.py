@@ -28,7 +28,7 @@ config["DOHLTFILTERS"] = True
 config["DOMISSINGET"] = True
 config["DOTAUSBOOSTED"] = True
 config["DOMETSVFIT"] = True
-config["DOMVAMET"] = True
+config["DOMVAMET"] = False
 
 #--------- AK8 jets reclustering ----------#
 config["ADDAK8GENJETS"] = True #! Add AK8 gen jet collection with pruned and softdrop mass
@@ -39,6 +39,7 @@ config["DOAK10TRIMMEDRECLUSTERING"] = False #ATLAS sequence
 config["DOHBBTAG"] = True #Higgs-tagger
 config["DOAK8PUPPIRECLUSTERING"] = False
 config["UpdateJetCollection"] = True #needed for Higgs-tagger in 80X
+
 #--------- MET reclustering ----------#
 config["DOMETRECLUSTERING"] = False
 

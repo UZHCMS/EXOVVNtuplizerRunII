@@ -136,18 +136,24 @@ public:
   std::vector<float>          el_superCluster_e           ;
   std::vector<float>          el_hadronicOverEm           ;
   std::vector<int>	      el_isVetoElectron	          ;
+  std::vector<int>  	      el_isLooseElectron	  ; 
   std::vector<int>	      el_isMediumElectron	  ;
   std::vector<int>	      el_isTightElectron	  ;    
-  std::vector<int>  	      el_nonTrigMVAID	          ;
-  std::vector<float>  	      el_nonTrigMVA	          ;
+  std::vector<int  >  	      el_isHltElectron            ;
   std::vector<int  >  	      el_isHeepElectron	          ;
-  std::vector<int  >  	      el_isHeep51Electron         ;
-  std::vector<int  >  	      el_isLooseElectron	  ; 
+  std::vector<int>	      el_isMVAMediumElectron	  ;
+  std::vector<int>	      el_isMVATightElectron	  ;    
+  std::vector<float>	      el_MVAscore	  ;    
+  std::vector<int>	      el_MVAcategory	  ;    
+  std::vector<int>	      el_isVetoElectronWithoutIPandIsolation	  ;
+  std::vector<int>	      el_isMediumElectronWithoutIPandIsolation  ;
+  std::vector<int>	      el_isTightElectronWithoutIPandIsolation	  ;    
+  std::vector<int  >  	      el_isHeepElectronWithoutIPandIsolation	  ;
+  std::vector<int  >  	      el_isLooseElectronWithoutIPandIsolation	  ;  
   std::vector<int>	      el_isVetoElectronBoosted	  ;
   std::vector<int>	      el_isMediumElectronBoosted  ;
   std::vector<int>	      el_isTightElectronBoosted	  ;    
   std::vector<int  >  	      el_isHeepElectronBoosted	  ;
-  std::vector<int  >  	      el_isHeep51ElectronBoosted  ;
   std::vector<int  >  	      el_isLooseElectronBoosted	  ;  
   std::vector<float>  	      el_SemileptonicPFIso 	 ;//  Isolations for semileptonic tau channel  
   std::vector<float>  	      el_SemileptonicCorrPFIso   ;// the simple PF one and the corrected one for the tau presence
@@ -219,6 +225,7 @@ public:
   std::vector<float>  	      tau_photonIso 	     	 ;
   std::vector<float>  	      tau_neutralHadIso	     	 ;
   std::vector<float>  	      tau_chargedHadIso	     	 ;
+  std::vector<float>  	      tau_photonPtSumOutsideSignalCone;
   std::vector<float>  	      tau_trackIso	         ;
   std::vector<float>          tau_d0			 ;  
   std::vector<float>          tau_dz			 ;  // YT added
@@ -352,6 +359,7 @@ public:
   std::vector<float>	          jetAK4_jecDown       ; 
   std::vector<bool>               jetAK4_IDLoose       ;
   std::vector<bool>               jetAK4_IDTight       ;
+  std::vector<bool>               jetAK4_IDTightWithoutLepVeto;
   std::vector<float>  	          jetAK4_PUIDdiscriminat;
   std::vector<bool >  	          jetAK4_PUIDloose     ;
   std::vector<bool >  	          jetAK4_PUIDmedium    ;
