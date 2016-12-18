@@ -88,7 +88,7 @@ float ElectronCorrPFIso(pat::Electron ele, double Aeff03, float rho, edm::Handle
   for(size_t tauIndex = 0; tauIndex < numTaus; ++tauIndex){
     pat::TauRef tau(taus_, tauIndex);
     double dR = reco::deltaR(ele.eta(), ele.phi(), tau->eta(), tau->phi());
-				if ( dR < dRmin &&
+				if ( dR < dRmin && dR>0.02 &&
 				     tau->pt()>20 && 
 				     fabs(tau->eta())<2.4 && 
 				     tau->tauID("decayModeFindingNewDMs")>0.5  && 
