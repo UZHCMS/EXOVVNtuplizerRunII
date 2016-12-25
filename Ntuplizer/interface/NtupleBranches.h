@@ -393,6 +393,13 @@ public:
   std::vector<float>              jetAK4_vtxNtracks    ;
   std::vector<float>              jetAK4_vtx3DVal      ;
   std::vector<float>              jetAK4_vtx3DSig      ; 
+
+  std::vector<float>              jetAK4_qg_axis1      ;
+  std::vector<float>              jetAK4_qg_axis2      ;
+  std::vector<int>                jetAK4_qg_charged    ;
+  std::vector<float>              jetAK4_qg_ptD        ;
+  std::vector<float>              jetAK4_qg_pt_dr      ;
+
   std::vector<float>              jetAK4_jer_sf        ; 
   std::vector<float>              jetAK4_jer_sf_up     ; 
   std::vector<float>              jetAK4_jer_sf_down   ; 
