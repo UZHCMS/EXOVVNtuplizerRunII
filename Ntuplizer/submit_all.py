@@ -63,26 +63,60 @@ def main():
     config.JobType.allowUndistributedCMSSW = True
     # config.JobType.pyCfgParams = ['DataProcessing=MC25ns_MiniAODv2','lheLabel=externalLHEProducer']
     config.JobType.inputFiles = [
-                                 './JEC/Spring16_25nsV6_MC_L1FastJet_AK8PFchs.txt',
-                                 './JEC/Spring16_25nsV6_MC_L2Relative_AK8PFchs.txt',
-                                 './JEC/Spring16_25nsV6_MC_L3Absolute_AK8PFchs.txt',
-                                 './JEC/Spring16_25nsV6_MC_L2Relative_AK8PFPuppi.txt',
-                                 './JEC/Spring16_25nsV6_MC_L3Absolute_AK8PFPuppi.txt',
-                                 './JEC/Spring16_25nsV6_MC_L1FastJet_AK4PFchs.txt', 
-                                 './JEC/Spring16_25nsV6_MC_L2Relative_AK4PFchs.txt', 
-                                 './JEC/Spring16_25nsV6_MC_L3Absolute_AK4PFchs.txt',
-                                 './JEC/Spring16_25nsV6_MC_Uncertainty_AK4PFchs.txt',
-                                 './JEC/Spring16_25nsV6_MC_Uncertainty_AK8PFchs.txt',
-                                 './JER/Spring16_25nsV6_MC_PtResolution_AK8PFchs.txt',
-                                 './JER/Spring16_25nsV6_MC_PtResolution_AK4PFchs.txt',
-                                 './JER/Spring16_25nsV6_MC_PtResolution_AK8PFPuppi.txt',
-                                 './JER/Spring16_25nsV6_MC_PtResolution_AK4PFPuppi.txt',
-                                 './JER/Spring16_25nsV6_MC_SF_AK8PFchs.txt',
-                                 './JER/Spring16_25nsV6_MC_SF_AK4PFchs.txt',
-                                 './JER/Spring16_25nsV6_MC_SF_AK8PFPuppi.txt',
-                                 './JER/Spring16_25nsV6_MC_SF_AK4PFPuppi.txt',
-                                 './JSON/Cert_271036-279931_13TeV_PromptReco_Collisions16_JSON_NoL1T.txt'
-                               ]
+        './JEC/Summer16_23Sep2016V0_MC_L1FastJet_AK4Calo.txt', 
+        './JEC/Summer16_23Sep2016V0_MC_L1FastJet_AK4JPT.txt', 
+        './JEC/Summer16_23Sep2016V0_MC_L1FastJet_AK4PFchs.txt', 
+        './JEC/Summer16_23Sep2016V0_MC_L1FastJet_AK4PFPuppi.txt', 
+        './JEC/Summer16_23Sep2016V0_MC_L1FastJet_AK4PF.txt', 
+        './JEC/Summer16_23Sep2016V0_MC_L1FastJet_AK8PFchs.txt', 
+        './JEC/Summer16_23Sep2016V0_MC_L1FastJet_AK8PFPuppi.txt', 
+        './JEC/Summer16_23Sep2016V0_MC_L1FastJet_AK8PF.txt', 
+        './JEC/Summer16_23Sep2016V0_MC_L1RC_AK4PFchs.txt', 
+        './JEC/Summer16_23Sep2016V0_MC_L1RC_AK4PF.txt', 
+        './JEC/Summer16_23Sep2016V0_MC_L1RC_AK8PFchs.txt', 
+        './JEC/Summer16_23Sep2016V0_MC_L1RC_AK8PF.txt', 
+        './JEC/Summer16_23Sep2016V0_MC_L2L3Residual_AK4Calo.txt', 
+        './JEC/Summer16_23Sep2016V0_MC_L2L3Residual_AK4JPT.txt', 
+        './JEC/Summer16_23Sep2016V0_MC_L2L3Residual_AK4PFchs.txt', 
+        './JEC/Summer16_23Sep2016V0_MC_L2L3Residual_AK4PFPuppi.txt', 
+        './JEC/Summer16_23Sep2016V0_MC_L2L3Residual_AK4PF.txt', 
+        './JEC/Summer16_23Sep2016V0_MC_L2L3Residual_AK8PFchs.txt', 
+        './JEC/Summer16_23Sep2016V0_MC_L2L3Residual_AK8PFPuppi.txt', 
+        './JEC/Summer16_23Sep2016V0_MC_L2L3Residual_AK8PF.txt', 
+        './JEC/Summer16_23Sep2016V0_MC_L2Relative_AK4Calo.txt', 
+        './JEC/Summer16_23Sep2016V0_MC_L2Relative_AK4JPT.txt', 
+        './JEC/Summer16_23Sep2016V0_MC_L2Relative_AK4PFchs.txt', 
+        './JEC/Summer16_23Sep2016V0_MC_L2Relative_AK4PFPuppi.txt', 
+        './JEC/Summer16_23Sep2016V0_MC_L2Relative_AK4PF.txt', 
+        './JEC/Summer16_23Sep2016V0_MC_L2Relative_AK8PFchs.txt', 
+        './JEC/Summer16_23Sep2016V0_MC_L2Relative_AK8PFPuppi.txt', 
+        './JEC/Summer16_23Sep2016V0_MC_L2Relative_AK8PF.txt', 
+        './JEC/Summer16_23Sep2016V0_MC_L3Absolute_AK4Calo.txt', 
+        './JEC/Summer16_23Sep2016V0_MC_L3Absolute_AK4JPT.txt', 
+        './JEC/Summer16_23Sep2016V0_MC_L3Absolute_AK4PFchs.txt',
+        './JEC/Summer16_23Sep2016V0_MC_L3Absolute_AK4PFPuppi.txt',
+        './JEC/Summer16_23Sep2016V0_MC_L3Absolute_AK4PF.txt',
+        './JEC/Summer16_23Sep2016V0_MC_L3Absolute_AK8PFchs.txt',
+        './JEC/Summer16_23Sep2016V0_MC_L3Absolute_AK8PFPuppi.txt',
+        './JEC/Summer16_23Sep2016V0_MC_L3Absolute_AK8PF.txt',
+        './JEC/Summer16_23Sep2016V0_MC_Uncertainty_AK4Calo.txt', 
+        './JEC/Summer16_23Sep2016V0_MC_Uncertainty_AK4JPT.txt', 
+        './JEC/Summer16_23Sep2016V0_MC_Uncertainty_AK4PFchs.txt', 
+        './JEC/Summer16_23Sep2016V0_MC_Uncertainty_AK4PFPuppi.txt', 
+        './JEC/Summer16_23Sep2016V0_MC_Uncertainty_AK4PF.txt', 
+        './JEC/Summer16_23Sep2016V0_MC_Uncertainty_AK8PFchs.txt', 
+        './JEC/Summer16_23Sep2016V0_MC_Uncertainty_AK8PFPuppi.txt', 
+        './JEC/Summer16_23Sep2016V0_MC_Uncertainty_AK8PF.txt', 
+        './JER/Spring16_25nsV6_MC_PtResolution_AK8PFchs.txt',
+        './JER/Spring16_25nsV6_MC_PtResolution_AK4PFchs.txt',
+        './JER/Spring16_25nsV6_MC_PtResolution_AK8PFPuppi.txt',
+        './JER/Spring16_25nsV6_MC_PtResolution_AK4PFPuppi.txt',
+        './JER/Spring16_25nsV6_MC_SF_AK8PFchs.txt',
+        './JER/Spring16_25nsV6_MC_SF_AK4PFchs.txt',
+        './JER/Spring16_25nsV6_MC_SF_AK8PFPuppi.txt',
+        './JER/Spring16_25nsV6_MC_SF_AK4PFPuppi.txt',
+        './JSON/Cert_271036-284044_13TeV_23Sep2016ReReco_Collisions16_JSON.txt'
+        ]
 
     config.section_("Data")
     config.Data.inputDataset = None
@@ -95,7 +129,8 @@ def main():
         config.Data.unitsPerJob = 1
     config.Data.ignoreLocality = True
     config.Data.publication = False    
-    config.Data.outLFNDirBase = '/store/user/cgalloni/Ntuple_80_190916'
+#    config.Data.outLFNDirBase = '/store/user/cgalloni/Ntuple_80_190916'
+    config.Data.outLFNDirBase = '/store/user/ytakahas/Ntuple_80_251216'
 
     config.section_("Site")
     config.Site.storageSite = 'T2_CH_CSCS'
