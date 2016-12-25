@@ -8,42 +8,78 @@ Ntuplizer for searches for heavy resonances decaying to dibosons
 For Spring16(80):
 
 ```
-
-cmsrel CMSSW_8_0_20
-cd CMSSW_8_0_20/src
+cmsrel CMSSW_8_0_21
+cd CMSSW_8_0_21/src
 cmsenv
-git cms-init
-git cms-merge-topic -u cms-met:CMSSW_8_0_X-METFilterUpdate
+```
 
+### getting the latest b-tagger
+### (https://twiki.cern.ch/twiki/bin/viewauth/CMS/Hbbtagging#V4_training)
+
+```
+export CMSSW_GIT_REFERENCE="/cvmfs/cms.cern.ch/cmssw.git.daily"
+git cms-init
+git remote add btv-cmssw https://github.com/cms-btv-pog/cmssw.git
+git fetch --tags btv-cmssw
+git cms-merge-topic -u cms-btv-pog:BoostedDoubleSVTaggerV4-WithWeightFiles-v1_from-CMSSW_8_0_21
+```
+
+### update MET filter
+
+```
+git cms-merge-topic -u cms-met:CMSSW_8_0_X-METFilterUpdate
+```
+
+
+### getting the ntuplizer codes
+```
+cd $CMSSW_BASE/src
+export GITUSER=`git config user.github`
+git clone https://github.com/${GITUSER}/EXOVVNtuplizerRunII 
+cd EXOVVNtuplizerRunII
+git remote add UZHCMS https://github.com/UZHCMS/EXOVVNtuplizerRunII
+git fetch UZHCMS
+git checkout -b MoriondDevelopmentBranch UZHCMS/80X_ntuplizer
+cd $CMSSW_BASE/src
 ```
 
 The flags for running on Spring15(74) or Fall15(76) or Spring16(80) samples have to be changed with config["FALL15"]=False/True and config["SPRING16"]=False/True in python/ntuplizerOptions_*_cfi.py
 
 
-
-### getting the code for Spring16
+### updates of latest cut-based electron ID
+### (https://twiki.cern.ch/twiki/bin/viewauth/CMS/CutBasedElectronIdentificationRun2#Recipe_for_regular_users_for_8_0)
 
 ```
-export GITUSER=`git config user.github`
-echo "Your github username has been set to \"$GITUSER\""
-git clone git@github.com:${GITUSER}/EXOVVNtuplizerRunII.git
-cd EXOVVNtuplizerRunII
-git remote add UZHCMS git@github.com:UZHCMS/EXOVVNtuplizerRunII.git
-git fetch UZHCMS
-git checkout -b DevelopmentBranch UZHCMS/80X_ntuplizer
 cd $CMSSW_BASE/src
-scram b distclean
+git cms-merge-topic ikrav:egm_id_80X_v2
+```
+
+### updates of latest HEEP electron ID
+### (https://twiki.cern.ch/twiki/bin/viewauth/CMS/HEEPElectronIdentificationRun2#Recipe_for_regular_users)
+
+```
+git cms-merge-topic Sam-Harper:HEEPV70VID
+git cms-merge-topic ikrav:egm_id_80X_v3
+git cms-merge-topic Sam-Harper:PackedCandNoPuppi
+```
+
+### compile first, before adding MVA-based electron ID 
+### (I don't konw why, but otherwise, $CMSSW_BASE/external/slc6_amd64_gcc530/data area will be deleted)
+```
+cd $CMSSW_BASE/src
 scram b -j8
-cd EXOVVNtuplizerRunII/Ntuplizer
 ```
 
-### getting latest MVA MET 
+### updates of latest MVA-based electron ID
+### (https://twiki.cern.ch/twiki/bin/viewauth/CMS/MultivariateElectronIdentificationRun2#Recipes_and_implementation)
 
 ```
+mkdir -p $CMSSW_BASE/external/slc6_amd64_gcc530/data/RecoEgamma/ElectronIdentification/
+cd $CMSSW_BASE/external/slc6_amd64_gcc530/
+git clone https://github.com/ikrav/RecoEgamma-ElectronIdentification.git data/RecoEgamma/ElectronIdentification/data
+cd data/RecoEgamma/ElectronIdentification/data
+git checkout egm_id_80X_v1
 cd $CMSSW_BASE/src
-kinit YOUR_USERNAME@CERN.CH && aklog cern.ch
-cp -r /afs/cern.ch/user/y/ytakahas/public/forUZH/RecoMET/METPUSubtraction RecoMET/
-cp -r /afs/cern.ch/user/y/ytakahas/public/forUZH/DataFormats .
 scram b -j8
 ```
 
@@ -57,11 +93,6 @@ cmsRun config_MC.py (for MC)
 
 the flags for running on data can be changed in python/ntuplizerOptions_data_cfi.py
 the flags for running on MC can be changed in python/ntuplizerOptions_MC_cfi.py
-Note that, if you run on reHLT samples, remember to modify,
-
-```
-HLT = cms.InputTag("TriggerResults","","HLT2"),
-```
 
 to recluster jets and MET, or to add the Higgs-tagger the following flags can be changed:
 ```
