@@ -93,12 +93,12 @@ def main():
         './JEC/Summer16_23Sep2016V0_MC_L2Relative_AK8PF.txt', 
         './JEC/Summer16_23Sep2016V0_MC_L3Absolute_AK4Calo.txt', 
         './JEC/Summer16_23Sep2016V0_MC_L3Absolute_AK4JPT.txt', 
-        './JEC/Summer16_23Sep2016V0_MC_L3Absolute_AK4PFchs.txt', *
-        './JEC/Summer16_23Sep2016V0_MC_L3Absolute_AK4PFPuppi.txt', *
-        './JEC/Summer16_23Sep2016V0_MC_L3Absolute_AK4PF.txt', *
-        './JEC/Summer16_23Sep2016V0_MC_L3Absolute_AK8PFchs.txt', *
-        './JEC/Summer16_23Sep2016V0_MC_L3Absolute_AK8PFPuppi.txt', *
-        './JEC/Summer16_23Sep2016V0_MC_L3Absolute_AK8PF.txt', *
+        './JEC/Summer16_23Sep2016V0_MC_L3Absolute_AK4PFchs.txt',
+        './JEC/Summer16_23Sep2016V0_MC_L3Absolute_AK4PFPuppi.txt',
+        './JEC/Summer16_23Sep2016V0_MC_L3Absolute_AK4PF.txt',
+        './JEC/Summer16_23Sep2016V0_MC_L3Absolute_AK8PFchs.txt',
+        './JEC/Summer16_23Sep2016V0_MC_L3Absolute_AK8PFPuppi.txt',
+        './JEC/Summer16_23Sep2016V0_MC_L3Absolute_AK8PF.txt',
         './JEC/Summer16_23Sep2016V0_MC_Uncertainty_AK4Calo.txt', 
         './JEC/Summer16_23Sep2016V0_MC_Uncertainty_AK4JPT.txt', 
         './JEC/Summer16_23Sep2016V0_MC_Uncertainty_AK4PFchs.txt', 

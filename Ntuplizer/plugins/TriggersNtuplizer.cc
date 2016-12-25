@@ -154,6 +154,7 @@ bool TriggersNtuplizer::findTrigger( std::string trigName ){
        trigName.find("HLT_Ele27_eta2p1_WPLoose_Gsf_v") != std::string::npos||
        trigName.find("HLT_Ele27_eta2p1_WPTight_Gsf_v") != std::string::npos||
        trigName.find("HLT_Ele32_eta2p1_WPTight_Gsf_v") != std::string::npos||
+       trigName.find("HLT_Ele45_WPLoose_Gsf_L1JetTauSeeded") != std::string::npos||
        trigName.find("HLT_DoubleMediumIsoPFTau40_Trk1_eta2p1_Reg") != std::string::npos||
        trigName.find("HLT_DoubleMediumIsoPFTau35_Trk1_eta2p1_Reg") != std::string::npos||
        // Double leptons
