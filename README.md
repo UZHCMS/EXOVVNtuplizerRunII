@@ -135,3 +135,9 @@ And eventually copied to the SE (path given in the config file):
 ```
 python submitJobsOnT3batch.py -C myconfig.cfg --copy
 ```
+
+Finally, note that, when you run on crab, you have to enable 
+```
+config.JobType.sendExternalFolder = True
+```
+as described at https://twiki.cern.ch/twiki/bin/viewauth/CMS/MultivariateElectronIdentificationRun2#Recipes_and_implementation
