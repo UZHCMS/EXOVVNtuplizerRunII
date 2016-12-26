@@ -46,8 +46,8 @@ ElectronsNtuplizer::ElectronsNtuplizer( edm::EDGetTokenT<edm::View<pat::Electron
 	, electronHEEPIdMapToken_  ( eleIDtokens[5] )
 	, electronMVAMediumIdMapToken_( eleIDtokens[6] )
 	, electronMVATightIdMapToken_ ( eleIDtokens[7] )
-        , mvaValuesMapToken_( mvaValuesMapToken )
-        , mvaCategoriesMapToken_( mvaCategoriesMapToken )
+	, mvaValuesMapToken_( mvaValuesMapToken )
+	, mvaCategoriesMapToken_( mvaCategoriesMapToken )
 	, boostedtauToken_		   ( boostedtauToken    )
 	, doBoostedTaus_   	   ( runFlags["doBoostedTaus"]  )
 {
