@@ -53,9 +53,10 @@ def main():
     config.JobType.pluginName = 'Analysis'
     config.JobType.psetName = options.config
     config.JobType.allowUndistributedCMSSW = True
+    config.JobType.sendExternalFolder = True 
    # config.JobType.pyCfgParams = ['DataProcessing=MC25ns_MiniAODv2','lheLabel=externalLHEProducer']
     config.JobType.inputFiles = [
-        './JSON/Cert_271036-280385_13TeV_PromptReco_Collisions16_JSON_NoL1T_v2.txt',
+        './JSON/Cert_271036-284044_13TeV_23Sep2016ReReco_Collisions16_JSON.txt',
         './JEC/Spring16_25nsV6_DATA_Uncertainty_AK8PFchs.txt',
         './JEC/Spring16_25nsV6_DATA_Uncertainty_AK4PFchs.txt',
         './JEC/Spring16_25nsV6_DATA_L1FastJet_AK8PFchs.txt', 
@@ -89,12 +90,13 @@ def main():
     config.Data.runRange= "279932-280385"
     config.Data.ignoreLocality = True
     config.Data.publication = False    
-    config.Data.lumiMask      = '/mnt/t3nfs01/data01/shome/cgalloni/RunII/CMSSW_8_0_20/src/EXOVVNtuplizerRunII/Ntuplizer/Cert_271036-280385_13TeV_PromptReco_Collisions16_JSON_NoL1T_v2.txt'
+    config.Data.lumiMask      = '/mnt/t3nfs01/data01/shome/ytakahas/work/tmp/CMSSW_8_0_21/src/EXOVVNtuplizerRunII/Ntuplizer/Cert_271036-284044_13TeV_23Sep2016ReReco_Collisions16_JSON.txt'
     config.section_("Site")
     config.Site.storageSite = 'T2_CH_CSCS'
     config.Site.blacklist=['T2_US_Nebraska','T2_US_Wisconsin','T2_FR_IPHC','T2_EE_Estonia','T2_DE_RWTH']
     #config.Site.whitelist=['T2_US_Nebraska','T2_US_Wisconsin','T2_FR_IPHC','T2_EE_Estonia',
-    config.Data.outLFNDirBase = '/store/user/cgalloni/Ntuple_80_190916'
+#    config.Data.outLFNDirBase = '/store/user/cgalloni/Ntuple_80_190916'
+    config.Data.outLFNDirBase = '/store/user/ytakahas/Ntuple_80_251216'
   
 
     print 'Using config ' + options.config

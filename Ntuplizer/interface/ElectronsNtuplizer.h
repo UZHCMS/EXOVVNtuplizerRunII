@@ -10,8 +10,8 @@ public:
                       edm::EDGetTokenT<reco::VertexCollection>             verticeToken , 
 		      edm::EDGetTokenT<double>  		           rhoToken     ,
                       std::vector<edm::EDGetTokenT<edm::ValueMap<bool> > > eleIDtokens  ,
-                      edm::EDGetTokenT<edm::ValueMap<float> > mvaValuesMapToken  ,
-                      edm::EDGetTokenT<edm::ValueMap<int> > mvaCategoriesMapToken  ,		      
+	 	      edm::EDGetTokenT<edm::ValueMap<float> > mvaValuesMapToken  ,
+	 	      edm::EDGetTokenT<edm::ValueMap<int> > mvaCategoriesMapToken  ,		      
 		      edm::EDGetTokenT<pat::TauCollection>                 boostedtauToken  ,
 		      NtupleBranches*				           nBranches    ,
 		      std::map< std::string, bool >&                       runFlags 

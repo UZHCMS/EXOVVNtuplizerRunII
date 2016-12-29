@@ -4,6 +4,10 @@ Ntuplizer for searches for heavy resonances decaying to dibosons
 
 ## installation instructions
 
+```
+# You can see my setup script here
+/mnt/t3nfs01/data01/shome/ytakahas/setup_80X_moriond.sh
+```
 
 For Spring16(80):
 
@@ -14,7 +18,7 @@ cmsenv
 ```
 
 ### getting the latest b-tagger
-### (https://twiki.cern.ch/twiki/bin/viewauth/CMS/Hbbtagging#V4_training)
+(https://twiki.cern.ch/twiki/bin/viewauth/CMS/Hbbtagging#V4_training)
 
 ```
 export CMSSW_GIT_REFERENCE="/cvmfs/cms.cern.ch/cmssw.git.daily"
@@ -47,7 +51,7 @@ The flags for running on Spring15(74) or Fall15(76) or Spring16(80) samples have
 
 
 ### updates of latest cut-based electron ID
-### (https://twiki.cern.ch/twiki/bin/viewauth/CMS/CutBasedElectronIdentificationRun2#Recipe_for_regular_users_for_8_0)
+(https://twiki.cern.ch/twiki/bin/viewauth/CMS/CutBasedElectronIdentificationRun2#Recipe_for_regular_users_for_8_0)
 
 ```
 cd $CMSSW_BASE/src
@@ -55,7 +59,7 @@ git cms-merge-topic ikrav:egm_id_80X_v2
 ```
 
 ### updates of latest HEEP electron ID
-### (https://twiki.cern.ch/twiki/bin/viewauth/CMS/HEEPElectronIdentificationRun2#Recipe_for_regular_users)
+(https://twiki.cern.ch/twiki/bin/viewauth/CMS/HEEPElectronIdentificationRun2#Recipe_for_regular_users)
 
 ```
 git cms-merge-topic Sam-Harper:HEEPV70VID
@@ -64,14 +68,14 @@ git cms-merge-topic Sam-Harper:PackedCandNoPuppi
 ```
 
 ### compile first, before adding MVA-based electron ID 
-### (I don't konw why, but otherwise, $CMSSW_BASE/external/slc6_amd64_gcc530/data area will be deleted)
+(I don't konw why, but otherwise, $CMSSW_BASE/external/slc6_amd64_gcc530/data area will be deleted)
 ```
 cd $CMSSW_BASE/src
 scram b -j8
 ```
 
 ### updates of latest MVA-based electron ID
-### (https://twiki.cern.ch/twiki/bin/viewauth/CMS/MultivariateElectronIdentificationRun2#Recipes_and_implementation)
+(https://twiki.cern.ch/twiki/bin/viewauth/CMS/MultivariateElectronIdentificationRun2#Recipes_and_implementation)
 
 ```
 mkdir -p $CMSSW_BASE/external/slc6_amd64_gcc530/data/RecoEgamma/ElectronIdentification/
@@ -131,3 +135,9 @@ And eventually copied to the SE (path given in the config file):
 ```
 python submitJobsOnT3batch.py -C myconfig.cfg --copy
 ```
+
+Finally, note that, when you run on crab, you have to enable 
+```
+config.JobType.sendExternalFolder = True
+```
+as described at https://twiki.cern.ch/twiki/bin/viewauth/CMS/MultivariateElectronIdentificationRun2#Recipes_and_implementation
