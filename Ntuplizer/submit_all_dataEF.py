@@ -325,7 +325,7 @@ def main():
     # config.Data.inputDBS = 'phys03' #to be commented in case of global#
     config.Data.splitting = 'LumiBased'#'LumiBased'#
     config.Data.unitsPerJob = 20
-    config.Data.runRange= "273158-284044"
+    config.Data.runRange= "276831-278801"
     config.Data.ignoreLocality = True
     config.Data.publication = False
     config.Data.lumiMask      = '/mnt/t3nfs01/data01/shome/ytakahas/work/tmp/CMSSW_8_0_21/src/EXOVVNtuplizerRunII/Ntuplizer/Cert_271036-284044_13TeV_23Sep2016ReReco_Collisions16_JSON.txt'
