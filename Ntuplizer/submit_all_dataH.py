@@ -121,6 +121,14 @@ def main():
         './JEC/Spring16_23Sep2016HV2_DataMcSF_L1RC_AK4PFchs.txt',
         './JEC/Spring16_23Sep2016HV2_DataMcSF_L1RC_AK8PF.txt',
         './JEC/Spring16_23Sep2016HV2_DataMcSF_L1RC_AK8PFchs.txt',
+        './JER/Spring16_25nsV6_MC_PtResolution_AK8PFchs.txt',
+        './JER/Spring16_25nsV6_MC_PtResolution_AK4PFchs.txt',
+        './JER/Spring16_25nsV6_MC_PtResolution_AK8PFPuppi.txt',
+        './JER/Spring16_25nsV6_MC_PtResolution_AK4PFPuppi.txt',
+        './JER/Spring16_25nsV6_MC_SF_AK8PFchs.txt',
+        './JER/Spring16_25nsV6_MC_SF_AK4PFchs.txt',
+        './JER/Spring16_25nsV6_MC_SF_AK8PFPuppi.txt',
+        './JER/Spring16_25nsV6_MC_SF_AK4PFPuppi.txt',
         './JSON/Cert_271036-284044_13TeV_23Sep2016ReReco_Collisions16_JSON.txt',
 ]
 
