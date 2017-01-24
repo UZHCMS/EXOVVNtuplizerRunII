@@ -132,6 +132,7 @@ public:
   std::vector<float>          el_full5x5_e2x5Max          ;
   std::vector<float>          el_full5x5_e5x5             ;
   std::vector<float>          el_full5x5_e1x5             ;
+  std::vector<float>          el_full5x5_r9               ;
   std::vector<float>          el_dr03TkSumPt              ;
   std::vector<float>          el_superCluster_e           ;
   std::vector<float>          el_hadronicOverEm           ;

@@ -245,6 +245,7 @@ void ElectronsNtuplizer::fillBranches( edm::Event const & event, const edm::Even
     nBranches_->el_full5x5_e2x5Max.push_back(ele.full5x5_e2x5Max());
     nBranches_->el_full5x5_e5x5.push_back(ele.full5x5_e5x5());
     nBranches_->el_full5x5_e1x5.push_back(ele.full5x5_e1x5());
+    nBranches_->el_full5x5_r9.push_back(ele.full5x5_r9());
     nBranches_->el_dr03TkSumPt.push_back(ele.dr03TkSumPt());
     nBranches_->el_superCluster_e.push_back(ele.superCluster()->energy());
     nBranches_->el_hadronicOverEm.push_back(ele.hadronicOverEm());

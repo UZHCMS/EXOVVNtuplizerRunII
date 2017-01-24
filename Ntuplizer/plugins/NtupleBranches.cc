@@ -101,6 +101,7 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch( "el_full5x5_e2x5Max"         , &el_full5x5_e2x5Max          );
     tree_->Branch( "el_full5x5_e5x5"            , &el_full5x5_e5x5             );
     tree_->Branch( "el_full5x5_e1x5"            , &el_full5x5_e1x5             );
+    tree_->Branch( "el_full5x5_r9"              , &el_full5x5_r9               );
     tree_->Branch( "el_dr03TkSumPt"             , &el_dr03TkSumPt              );
     tree_->Branch( "el_superCluster_e"          , &el_superCluster_e           );
     tree_->Branch( "el_hadronicOverEm"          , &el_hadronicOverEm           );  
@@ -758,6 +759,7 @@ void NtupleBranches::reset( void ){
   el_full5x5_e2x5Max.clear();
   el_full5x5_e5x5.clear();
   el_full5x5_e1x5.clear();
+  el_full5x5_r9.clear();
   el_dr03TkSumPt.clear();
   el_superCluster_e.clear();
   el_hadronicOverEm.clear();
