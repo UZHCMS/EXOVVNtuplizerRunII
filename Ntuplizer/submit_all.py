@@ -12,7 +12,7 @@ def getOptions() :
     """
     usage = ('usage: python submit_all.py -c CONFIG -d DIR ')
 
-    parser = OptionParser(usage=usage)    
+    parser = OptionParser(usage=usage)
     parser.add_option("-c", "--config", dest="config",
         help=("The crab script you want to submit "),
         metavar="CONFIG")
@@ -35,10 +35,10 @@ def getOptions() :
         parser.error(usage)
     if options.luminosity == None:
         options.luminosity = False
-    else: 
+    else:
         options.luminosity = True
     return options
-    
+
 
 def main():
 
@@ -64,25 +64,271 @@ def main():
     config.JobType.sendExternalFolder = True
     # config.JobType.pyCfgParams = ['DataProcessing=MC25ns_MiniAODv2','lheLabel=externalLHEProducer']
     config.JobType.inputFiles = [
-        './JEC/Summer16_23Sep2016V0_MC_L1FastJet_AK4PFchs.txt', 
-        './JEC/Summer16_23Sep2016V0_MC_L1FastJet_AK8PFchs.txt', 
-        './JEC/Summer16_23Sep2016V0_MC_L2Relative_AK4PFchs.txt', 
-        './JEC/Summer16_23Sep2016V0_MC_L2Relative_AK8PFchs.txt', 
-        './JEC/Summer16_23Sep2016V0_MC_L2Relative_AK8PFPuppi.txt', 
-        './JEC/Summer16_23Sep2016V0_MC_L3Absolute_AK4PFchs.txt',
-        './JEC/Summer16_23Sep2016V0_MC_L3Absolute_AK8PFchs.txt',
-        './JEC/Summer16_23Sep2016V0_MC_L3Absolute_AK8PFPuppi.txt',
-        './JEC/Summer16_23Sep2016V0_MC_Uncertainty_AK4PFchs.txt', 
-        './JEC/Summer16_23Sep2016V0_MC_Uncertainty_AK8PFchs.txt', 
-        './JER/Spring16_25nsV6_MC_PtResolution_AK8PFchs.txt',
-        './JER/Spring16_25nsV6_MC_PtResolution_AK4PFchs.txt',
-        './JER/Spring16_25nsV6_MC_PtResolution_AK8PFPuppi.txt',
-        './JER/Spring16_25nsV6_MC_PtResolution_AK4PFPuppi.txt',
-        './JER/Spring16_25nsV6_MC_SF_AK8PFchs.txt',
-        './JER/Spring16_25nsV6_MC_SF_AK4PFchs.txt',
-        './JER/Spring16_25nsV6_MC_SF_AK8PFPuppi.txt',
-        './JER/Spring16_25nsV6_MC_SF_AK4PFPuppi.txt',
-        './JSON/Cert_271036-284044_13TeV_23Sep2016ReReco_Collisions16_JSON.txt',
+        "./JEC/Spring16_23Sep2016BCDV2_DATA_L1FastJet_AK4Calo.txt",
+        "./JEC/Spring16_23Sep2016BCDV2_DATA_L1FastJet_AK4JPT.txt",
+        "./JEC/Spring16_23Sep2016BCDV2_DATA_L1FastJet_AK4PF.txt",
+        "./JEC/Spring16_23Sep2016BCDV2_DATA_L1FastJet_AK4PFPuppi.txt",
+        "./JEC/Spring16_23Sep2016BCDV2_DATA_L1FastJet_AK4PFchs.txt",
+        "./JEC/Spring16_23Sep2016BCDV2_DATA_L1FastJet_AK8PF.txt",
+        "./JEC/Spring16_23Sep2016BCDV2_DATA_L1FastJet_AK8PFPuppi.txt",
+        "./JEC/Spring16_23Sep2016BCDV2_DATA_L1FastJet_AK8PFchs.txt",
+        "./JEC/Spring16_23Sep2016BCDV2_DATA_L1JPTOffset_AK4JPT.txt",
+        "./JEC/Spring16_23Sep2016BCDV2_DATA_L1RC_AK4PF.txt",
+        "./JEC/Spring16_23Sep2016BCDV2_DATA_L1RC_AK4PFchs.txt",
+        "./JEC/Spring16_23Sep2016BCDV2_DATA_L1RC_AK8PF.txt",
+        "./JEC/Spring16_23Sep2016BCDV2_DATA_L1RC_AK8PFchs.txt",
+        "./JEC/Spring16_23Sep2016BCDV2_DATA_L2L3Residual_AK4Calo.txt",
+        "./JEC/Spring16_23Sep2016BCDV2_DATA_L2L3Residual_AK4JPT.txt",
+        "./JEC/Spring16_23Sep2016BCDV2_DATA_L2L3Residual_AK4PF.txt",
+        "./JEC/Spring16_23Sep2016BCDV2_DATA_L2L3Residual_AK4PFPuppi.txt",
+        "./JEC/Spring16_23Sep2016BCDV2_DATA_L2L3Residual_AK4PFchs.txt",
+        "./JEC/Spring16_23Sep2016BCDV2_DATA_L2L3Residual_AK8PF.txt",
+        "./JEC/Spring16_23Sep2016BCDV2_DATA_L2L3Residual_AK8PFPuppi.txt",
+        "./JEC/Spring16_23Sep2016BCDV2_DATA_L2L3Residual_AK8PFchs.txt",
+        "./JEC/Spring16_23Sep2016BCDV2_DATA_L2Relative_AK4Calo.txt",
+        "./JEC/Spring16_23Sep2016BCDV2_DATA_L2Relative_AK4JPT.txt",
+        "./JEC/Spring16_23Sep2016BCDV2_DATA_L2Relative_AK4PF.txt",
+        "./JEC/Spring16_23Sep2016BCDV2_DATA_L2Relative_AK4PFPuppi.txt",
+        "./JEC/Spring16_23Sep2016BCDV2_DATA_L2Relative_AK4PFchs.txt",
+        "./JEC/Spring16_23Sep2016BCDV2_DATA_L2Relative_AK8PF.txt",
+        "./JEC/Spring16_23Sep2016BCDV2_DATA_L2Relative_AK8PFPuppi.txt",
+        "./JEC/Spring16_23Sep2016BCDV2_DATA_L2Relative_AK8PFchs.txt",
+        "./JEC/Spring16_23Sep2016BCDV2_DATA_L2Residual_AK4Calo.txt",
+        "./JEC/Spring16_23Sep2016BCDV2_DATA_L2Residual_AK4JPT.txt",
+        "./JEC/Spring16_23Sep2016BCDV2_DATA_L2Residual_AK4PF.txt",
+        "./JEC/Spring16_23Sep2016BCDV2_DATA_L2Residual_AK4PFPuppi.txt",
+        "./JEC/Spring16_23Sep2016BCDV2_DATA_L2Residual_AK4PFchs.txt",
+        "./JEC/Spring16_23Sep2016BCDV2_DATA_L2Residual_AK8PF.txt",
+        "./JEC/Spring16_23Sep2016BCDV2_DATA_L2Residual_AK8PFPuppi.txt",
+        "./JEC/Spring16_23Sep2016BCDV2_DATA_L2Residual_AK8PFchs.txt",
+        "./JEC/Spring16_23Sep2016BCDV2_DATA_L3Absolute_AK4Calo.txt",
+        "./JEC/Spring16_23Sep2016BCDV2_DATA_L3Absolute_AK4JPT.txt",
+        "./JEC/Spring16_23Sep2016BCDV2_DATA_L3Absolute_AK4PF.txt",
+        "./JEC/Spring16_23Sep2016BCDV2_DATA_L3Absolute_AK4PFPuppi.txt",
+        "./JEC/Spring16_23Sep2016BCDV2_DATA_L3Absolute_AK4PFchs.txt",
+        "./JEC/Spring16_23Sep2016BCDV2_DATA_L3Absolute_AK8PF.txt",
+        "./JEC/Spring16_23Sep2016BCDV2_DATA_L3Absolute_AK8PFPuppi.txt",
+        "./JEC/Spring16_23Sep2016BCDV2_DATA_L3Absolute_AK8PFchs.txt",
+        "./JEC/Spring16_23Sep2016BCDV2_DATA_UncertaintySources_AK4Calo.txt",
+        "./JEC/Spring16_23Sep2016BCDV2_DATA_UncertaintySources_AK4JPT.txt",
+        "./JEC/Spring16_23Sep2016BCDV2_DATA_UncertaintySources_AK4PF.txt",
+        "./JEC/Spring16_23Sep2016BCDV2_DATA_UncertaintySources_AK4PFPuppi.txt",
+        "./JEC/Spring16_23Sep2016BCDV2_DATA_UncertaintySources_AK4PFchs.txt",
+        "./JEC/Spring16_23Sep2016BCDV2_DATA_UncertaintySources_AK8PF.txt",
+        "./JEC/Spring16_23Sep2016BCDV2_DATA_UncertaintySources_AK8PFPuppi.txt",
+        "./JEC/Spring16_23Sep2016BCDV2_DATA_UncertaintySources_AK8PFchs.txt",
+        "./JEC/Spring16_23Sep2016BCDV2_DATA_Uncertainty_AK4Calo.txt",
+        "./JEC/Spring16_23Sep2016BCDV2_DATA_Uncertainty_AK4JPT.txt",
+        "./JEC/Spring16_23Sep2016BCDV2_DATA_Uncertainty_AK4PF.txt",
+        "./JEC/Spring16_23Sep2016BCDV2_DATA_Uncertainty_AK4PFPuppi.txt",
+        "./JEC/Spring16_23Sep2016BCDV2_DATA_Uncertainty_AK4PFchs.txt",
+        "./JEC/Spring16_23Sep2016BCDV2_DATA_Uncertainty_AK8PF.txt",
+        "./JEC/Spring16_23Sep2016BCDV2_DATA_Uncertainty_AK8PFPuppi.txt",
+        "./JEC/Spring16_23Sep2016BCDV2_DATA_Uncertainty_AK8PFchs.txt",
+        "./JEC/Spring16_23Sep2016BCDV2_DataMcSF_L1RC_AK4PF.txt",
+        "./JEC/Spring16_23Sep2016BCDV2_DataMcSF_L1RC_AK4PFchs.txt",
+        "./JEC/Spring16_23Sep2016BCDV2_DataMcSF_L1RC_AK8PF.txt",
+        "./JEC/Spring16_23Sep2016BCDV2_DataMcSF_L1RC_AK8PFchs.txt",
+        "./JEC/Spring16_23Sep2016EFV2_DATA_L1FastJet_AK4Calo.txt",
+        "./JEC/Spring16_23Sep2016EFV2_DATA_L1FastJet_AK4JPT.txt",
+        "./JEC/Spring16_23Sep2016EFV2_DATA_L1FastJet_AK4PF.txt",
+        "./JEC/Spring16_23Sep2016EFV2_DATA_L1FastJet_AK4PFPuppi.txt",
+        "./JEC/Spring16_23Sep2016EFV2_DATA_L1FastJet_AK4PFchs.txt",
+        "./JEC/Spring16_23Sep2016EFV2_DATA_L1FastJet_AK8PF.txt",
+        "./JEC/Spring16_23Sep2016EFV2_DATA_L1FastJet_AK8PFPuppi.txt",
+        "./JEC/Spring16_23Sep2016EFV2_DATA_L1FastJet_AK8PFchs.txt",
+        "./JEC/Spring16_23Sep2016EFV2_DATA_L1JPTOffset_AK4JPT.txt",
+        "./JEC/Spring16_23Sep2016EFV2_DATA_L1RC_AK4PF.txt",
+        "./JEC/Spring16_23Sep2016EFV2_DATA_L1RC_AK4PFchs.txt",
+        "./JEC/Spring16_23Sep2016EFV2_DATA_L1RC_AK8PF.txt",
+        "./JEC/Spring16_23Sep2016EFV2_DATA_L1RC_AK8PFchs.txt",
+        "./JEC/Spring16_23Sep2016EFV2_DATA_L2L3Residual_AK4Calo.txt",
+        "./JEC/Spring16_23Sep2016EFV2_DATA_L2L3Residual_AK4JPT.txt",
+        "./JEC/Spring16_23Sep2016EFV2_DATA_L2L3Residual_AK4PF.txt",
+        "./JEC/Spring16_23Sep2016EFV2_DATA_L2L3Residual_AK4PFPuppi.txt",
+        "./JEC/Spring16_23Sep2016EFV2_DATA_L2L3Residual_AK4PFchs.txt",
+        "./JEC/Spring16_23Sep2016EFV2_DATA_L2L3Residual_AK8PF.txt",
+        "./JEC/Spring16_23Sep2016EFV2_DATA_L2L3Residual_AK8PFPuppi.txt",
+        "./JEC/Spring16_23Sep2016EFV2_DATA_L2L3Residual_AK8PFchs.txt",
+        "./JEC/Spring16_23Sep2016EFV2_DATA_L2Relative_AK4Calo.txt",
+        "./JEC/Spring16_23Sep2016EFV2_DATA_L2Relative_AK4JPT.txt",
+        "./JEC/Spring16_23Sep2016EFV2_DATA_L2Relative_AK4PF.txt",
+        "./JEC/Spring16_23Sep2016EFV2_DATA_L2Relative_AK4PFPuppi.txt",
+        "./JEC/Spring16_23Sep2016EFV2_DATA_L2Relative_AK4PFchs.txt",
+        "./JEC/Spring16_23Sep2016EFV2_DATA_L2Relative_AK8PF.txt",
+        "./JEC/Spring16_23Sep2016EFV2_DATA_L2Relative_AK8PFPuppi.txt",
+        "./JEC/Spring16_23Sep2016EFV2_DATA_L2Relative_AK8PFchs.txt",
+        "./JEC/Spring16_23Sep2016EFV2_DATA_L2Residual_AK4Calo.txt",
+        "./JEC/Spring16_23Sep2016EFV2_DATA_L2Residual_AK4JPT.txt",
+        "./JEC/Spring16_23Sep2016EFV2_DATA_L2Residual_AK4PF.txt",
+        "./JEC/Spring16_23Sep2016EFV2_DATA_L2Residual_AK4PFPuppi.txt",
+        "./JEC/Spring16_23Sep2016EFV2_DATA_L2Residual_AK4PFchs.txt",
+        "./JEC/Spring16_23Sep2016EFV2_DATA_L2Residual_AK8PF.txt",
+        "./JEC/Spring16_23Sep2016EFV2_DATA_L2Residual_AK8PFPuppi.txt",
+        "./JEC/Spring16_23Sep2016EFV2_DATA_L2Residual_AK8PFchs.txt",
+        "./JEC/Spring16_23Sep2016EFV2_DATA_L3Absolute_AK4Calo.txt",
+        "./JEC/Spring16_23Sep2016EFV2_DATA_L3Absolute_AK4JPT.txt",
+        "./JEC/Spring16_23Sep2016EFV2_DATA_L3Absolute_AK4PF.txt",
+        "./JEC/Spring16_23Sep2016EFV2_DATA_L3Absolute_AK4PFPuppi.txt",
+        "./JEC/Spring16_23Sep2016EFV2_DATA_L3Absolute_AK4PFchs.txt",
+        "./JEC/Spring16_23Sep2016EFV2_DATA_L3Absolute_AK8PF.txt",
+        "./JEC/Spring16_23Sep2016EFV2_DATA_L3Absolute_AK8PFPuppi.txt",
+        "./JEC/Spring16_23Sep2016EFV2_DATA_L3Absolute_AK8PFchs.txt",
+        "./JEC/Spring16_23Sep2016EFV2_DATA_UncertaintySources_AK4Calo.txt",
+        "./JEC/Spring16_23Sep2016EFV2_DATA_UncertaintySources_AK4JPT.txt",
+        "./JEC/Spring16_23Sep2016EFV2_DATA_UncertaintySources_AK4PF.txt",
+        "./JEC/Spring16_23Sep2016EFV2_DATA_UncertaintySources_AK4PFPuppi.txt",
+        "./JEC/Spring16_23Sep2016EFV2_DATA_UncertaintySources_AK4PFchs.txt",
+        "./JEC/Spring16_23Sep2016EFV2_DATA_UncertaintySources_AK8PF.txt",
+        "./JEC/Spring16_23Sep2016EFV2_DATA_UncertaintySources_AK8PFPuppi.txt",
+        "./JEC/Spring16_23Sep2016EFV2_DATA_UncertaintySources_AK8PFchs.txt",
+        "./JEC/Spring16_23Sep2016EFV2_DATA_Uncertainty_AK4Calo.txt",
+        "./JEC/Spring16_23Sep2016EFV2_DATA_Uncertainty_AK4JPT.txt",
+        "./JEC/Spring16_23Sep2016EFV2_DATA_Uncertainty_AK4PF.txt",
+        "./JEC/Spring16_23Sep2016EFV2_DATA_Uncertainty_AK4PFPuppi.txt",
+        "./JEC/Spring16_23Sep2016EFV2_DATA_Uncertainty_AK4PFchs.txt",
+        "./JEC/Spring16_23Sep2016EFV2_DATA_Uncertainty_AK8PF.txt",
+        "./JEC/Spring16_23Sep2016EFV2_DATA_Uncertainty_AK8PFPuppi.txt",
+        "./JEC/Spring16_23Sep2016EFV2_DATA_Uncertainty_AK8PFchs.txt",
+        "./JEC/Spring16_23Sep2016EFV2_DataMcSF_L1RC_AK4PF.txt",
+        "./JEC/Spring16_23Sep2016EFV2_DataMcSF_L1RC_AK4PFchs.txt",
+        "./JEC/Spring16_23Sep2016EFV2_DataMcSF_L1RC_AK8PF.txt",
+        "./JEC/Spring16_23Sep2016EFV2_DataMcSF_L1RC_AK8PFchs.txt",
+        "./JEC/Spring16_23Sep2016GV2_DATA_L1FastJet_AK4Calo.txt",
+        "./JEC/Spring16_23Sep2016GV2_DATA_L1FastJet_AK4JPT.txt",
+        "./JEC/Spring16_23Sep2016GV2_DATA_L1FastJet_AK4PF.txt",
+        "./JEC/Spring16_23Sep2016GV2_DATA_L1FastJet_AK4PFPuppi.txt",
+        "./JEC/Spring16_23Sep2016GV2_DATA_L1FastJet_AK4PFchs.txt",
+        "./JEC/Spring16_23Sep2016GV2_DATA_L1FastJet_AK8PF.txt",
+        "./JEC/Spring16_23Sep2016GV2_DATA_L1FastJet_AK8PFPuppi.txt",
+        "./JEC/Spring16_23Sep2016GV2_DATA_L1FastJet_AK8PFchs.txt",
+        "./JEC/Spring16_23Sep2016GV2_DATA_L1JPTOffset_AK4JPT.txt",
+        "./JEC/Spring16_23Sep2016GV2_DATA_L1RC_AK4PF.txt",
+        "./JEC/Spring16_23Sep2016GV2_DATA_L1RC_AK4PFchs.txt",
+        "./JEC/Spring16_23Sep2016GV2_DATA_L1RC_AK8PF.txt",
+        "./JEC/Spring16_23Sep2016GV2_DATA_L1RC_AK8PFchs.txt",
+        "./JEC/Spring16_23Sep2016GV2_DATA_L2L3Residual_AK4Calo.txt",
+        "./JEC/Spring16_23Sep2016GV2_DATA_L2L3Residual_AK4JPT.txt",
+        "./JEC/Spring16_23Sep2016GV2_DATA_L2L3Residual_AK4PF.txt",
+        "./JEC/Spring16_23Sep2016GV2_DATA_L2L3Residual_AK4PFPuppi.txt",
+        "./JEC/Spring16_23Sep2016GV2_DATA_L2L3Residual_AK4PFchs.txt",
+        "./JEC/Spring16_23Sep2016GV2_DATA_L2L3Residual_AK8PF.txt",
+        "./JEC/Spring16_23Sep2016GV2_DATA_L2L3Residual_AK8PFPuppi.txt",
+        "./JEC/Spring16_23Sep2016GV2_DATA_L2L3Residual_AK8PFchs.txt",
+        "./JEC/Spring16_23Sep2016GV2_DATA_L2Relative_AK4Calo.txt",
+        "./JEC/Spring16_23Sep2016GV2_DATA_L2Relative_AK4JPT.txt",
+        "./JEC/Spring16_23Sep2016GV2_DATA_L2Relative_AK4PF.txt",
+        "./JEC/Spring16_23Sep2016GV2_DATA_L2Relative_AK4PFPuppi.txt",
+        "./JEC/Spring16_23Sep2016GV2_DATA_L2Relative_AK4PFchs.txt",
+        "./JEC/Spring16_23Sep2016GV2_DATA_L2Relative_AK8PF.txt",
+        "./JEC/Spring16_23Sep2016GV2_DATA_L2Relative_AK8PFPuppi.txt",
+        "./JEC/Spring16_23Sep2016GV2_DATA_L2Relative_AK8PFchs.txt",
+        "./JEC/Spring16_23Sep2016GV2_DATA_L2Residual_AK4Calo.txt",
+        "./JEC/Spring16_23Sep2016GV2_DATA_L2Residual_AK4JPT.txt",
+        "./JEC/Spring16_23Sep2016GV2_DATA_L2Residual_AK4PF.txt",
+        "./JEC/Spring16_23Sep2016GV2_DATA_L2Residual_AK4PFPuppi.txt",
+        "./JEC/Spring16_23Sep2016GV2_DATA_L2Residual_AK4PFchs.txt",
+        "./JEC/Spring16_23Sep2016GV2_DATA_L2Residual_AK8PF.txt",
+        "./JEC/Spring16_23Sep2016GV2_DATA_L2Residual_AK8PFPuppi.txt",
+        "./JEC/Spring16_23Sep2016GV2_DATA_L2Residual_AK8PFchs.txt",
+        "./JEC/Spring16_23Sep2016GV2_DATA_L3Absolute_AK4Calo.txt",
+        "./JEC/Spring16_23Sep2016GV2_DATA_L3Absolute_AK4JPT.txt",
+        "./JEC/Spring16_23Sep2016GV2_DATA_L3Absolute_AK4PF.txt",
+        "./JEC/Spring16_23Sep2016GV2_DATA_L3Absolute_AK4PFPuppi.txt",
+        "./JEC/Spring16_23Sep2016GV2_DATA_L3Absolute_AK4PFchs.txt",
+        "./JEC/Spring16_23Sep2016GV2_DATA_L3Absolute_AK8PF.txt",
+        "./JEC/Spring16_23Sep2016GV2_DATA_L3Absolute_AK8PFPuppi.txt",
+        "./JEC/Spring16_23Sep2016GV2_DATA_L3Absolute_AK8PFchs.txt",
+        "./JEC/Spring16_23Sep2016GV2_DATA_UncertaintySources_AK4Calo.txt",
+        "./JEC/Spring16_23Sep2016GV2_DATA_UncertaintySources_AK4JPT.txt",
+        "./JEC/Spring16_23Sep2016GV2_DATA_UncertaintySources_AK4PF.txt",
+        "./JEC/Spring16_23Sep2016GV2_DATA_UncertaintySources_AK4PFPuppi.txt",
+        "./JEC/Spring16_23Sep2016GV2_DATA_UncertaintySources_AK4PFchs.txt",
+        "./JEC/Spring16_23Sep2016GV2_DATA_UncertaintySources_AK8PF.txt",
+        "./JEC/Spring16_23Sep2016GV2_DATA_UncertaintySources_AK8PFPuppi.txt",
+        "./JEC/Spring16_23Sep2016GV2_DATA_UncertaintySources_AK8PFchs.txt",
+        "./JEC/Spring16_23Sep2016GV2_DATA_Uncertainty_AK4Calo.txt",
+        "./JEC/Spring16_23Sep2016GV2_DATA_Uncertainty_AK4JPT.txt",
+        "./JEC/Spring16_23Sep2016GV2_DATA_Uncertainty_AK4PF.txt",
+        "./JEC/Spring16_23Sep2016GV2_DATA_Uncertainty_AK4PFPuppi.txt",
+        "./JEC/Spring16_23Sep2016GV2_DATA_Uncertainty_AK4PFchs.txt",
+        "./JEC/Spring16_23Sep2016GV2_DATA_Uncertainty_AK8PF.txt",
+        "./JEC/Spring16_23Sep2016GV2_DATA_Uncertainty_AK8PFPuppi.txt",
+        "./JEC/Spring16_23Sep2016GV2_DATA_Uncertainty_AK8PFchs.txt",
+        "./JEC/Spring16_23Sep2016GV2_DataMcSF_L1RC_AK4PF.txt",
+        "./JEC/Spring16_23Sep2016GV2_DataMcSF_L1RC_AK4PFchs.txt",
+        "./JEC/Spring16_23Sep2016GV2_DataMcSF_L1RC_AK8PF.txt",
+        "./JEC/Spring16_23Sep2016GV2_DataMcSF_L1RC_AK8PFchs.txt",
+        "./JEC/Spring16_23Sep2016HV2_DATA_L1FastJet_AK4Calo.txt",
+        "./JEC/Spring16_23Sep2016HV2_DATA_L1FastJet_AK4JPT.txt",
+        "./JEC/Spring16_23Sep2016HV2_DATA_L1FastJet_AK4PF.txt",
+        "./JEC/Spring16_23Sep2016HV2_DATA_L1FastJet_AK4PFPuppi.txt",
+        "./JEC/Spring16_23Sep2016HV2_DATA_L1FastJet_AK4PFchs.txt",
+        "./JEC/Spring16_23Sep2016HV2_DATA_L1FastJet_AK8PF.txt",
+        "./JEC/Spring16_23Sep2016HV2_DATA_L1FastJet_AK8PFPuppi.txt",
+        "./JEC/Spring16_23Sep2016HV2_DATA_L1FastJet_AK8PFchs.txt",
+        "./JEC/Spring16_23Sep2016HV2_DATA_L1JPTOffset_AK4JPT.txt",
+        "./JEC/Spring16_23Sep2016HV2_DATA_L1RC_AK4PF.txt",
+        "./JEC/Spring16_23Sep2016HV2_DATA_L1RC_AK4PFchs.txt",
+        "./JEC/Spring16_23Sep2016HV2_DATA_L1RC_AK8PF.txt",
+        "./JEC/Spring16_23Sep2016HV2_DATA_L1RC_AK8PFchs.txt",
+        "./JEC/Spring16_23Sep2016HV2_DATA_L2L3Residual_AK4Calo.txt",
+        "./JEC/Spring16_23Sep2016HV2_DATA_L2L3Residual_AK4JPT.txt",
+        "./JEC/Spring16_23Sep2016HV2_DATA_L2L3Residual_AK4PF.txt",
+        "./JEC/Spring16_23Sep2016HV2_DATA_L2L3Residual_AK4PFPuppi.txt",
+        "./JEC/Spring16_23Sep2016HV2_DATA_L2L3Residual_AK4PFchs.txt",
+        "./JEC/Spring16_23Sep2016HV2_DATA_L2L3Residual_AK8PF.txt",
+        "./JEC/Spring16_23Sep2016HV2_DATA_L2L3Residual_AK8PFPuppi.txt",
+        "./JEC/Spring16_23Sep2016HV2_DATA_L2L3Residual_AK8PFchs.txt",
+        "./JEC/Spring16_23Sep2016HV2_DATA_L2Relative_AK4Calo.txt",
+        "./JEC/Spring16_23Sep2016HV2_DATA_L2Relative_AK4JPT.txt",
+        "./JEC/Spring16_23Sep2016HV2_DATA_L2Relative_AK4PF.txt",
+        "./JEC/Spring16_23Sep2016HV2_DATA_L2Relative_AK4PFPuppi.txt",
+        "./JEC/Spring16_23Sep2016HV2_DATA_L2Relative_AK4PFchs.txt",
+        "./JEC/Spring16_23Sep2016HV2_DATA_L2Relative_AK8PF.txt",
+        "./JEC/Spring16_23Sep2016HV2_DATA_L2Relative_AK8PFPuppi.txt",
+        "./JEC/Spring16_23Sep2016HV2_DATA_L2Relative_AK8PFchs.txt",
+        "./JEC/Spring16_23Sep2016HV2_DATA_L2Residual_AK4Calo.txt",
+        "./JEC/Spring16_23Sep2016HV2_DATA_L2Residual_AK4JPT.txt",
+        "./JEC/Spring16_23Sep2016HV2_DATA_L2Residual_AK4PF.txt",
+        "./JEC/Spring16_23Sep2016HV2_DATA_L2Residual_AK4PFPuppi.txt",
+        "./JEC/Spring16_23Sep2016HV2_DATA_L2Residual_AK4PFchs.txt",
+        "./JEC/Spring16_23Sep2016HV2_DATA_L2Residual_AK8PF.txt",
+        "./JEC/Spring16_23Sep2016HV2_DATA_L2Residual_AK8PFPuppi.txt",
+        "./JEC/Spring16_23Sep2016HV2_DATA_L2Residual_AK8PFchs.txt",
+        "./JEC/Spring16_23Sep2016HV2_DATA_L3Absolute_AK4Calo.txt",
+        "./JEC/Spring16_23Sep2016HV2_DATA_L3Absolute_AK4JPT.txt",
+        "./JEC/Spring16_23Sep2016HV2_DATA_L3Absolute_AK4PF.txt",
+        "./JEC/Spring16_23Sep2016HV2_DATA_L3Absolute_AK4PFPuppi.txt",
+        "./JEC/Spring16_23Sep2016HV2_DATA_L3Absolute_AK4PFchs.txt",
+        "./JEC/Spring16_23Sep2016HV2_DATA_L3Absolute_AK8PF.txt",
+        "./JEC/Spring16_23Sep2016HV2_DATA_L3Absolute_AK8PFPuppi.txt",
+        "./JEC/Spring16_23Sep2016HV2_DATA_L3Absolute_AK8PFchs.txt",
+        "./JEC/Spring16_23Sep2016HV2_DATA_UncertaintySources_AK4Calo.txt",
+        "./JEC/Spring16_23Sep2016HV2_DATA_UncertaintySources_AK4JPT.txt",
+        "./JEC/Spring16_23Sep2016HV2_DATA_UncertaintySources_AK4PF.txt",
+        "./JEC/Spring16_23Sep2016HV2_DATA_UncertaintySources_AK4PFPuppi.txt",
+        "./JEC/Spring16_23Sep2016HV2_DATA_UncertaintySources_AK4PFchs.txt",
+        "./JEC/Spring16_23Sep2016HV2_DATA_UncertaintySources_AK8PF.txt",
+        "./JEC/Spring16_23Sep2016HV2_DATA_UncertaintySources_AK8PFPuppi.txt",
+        "./JEC/Spring16_23Sep2016HV2_DATA_UncertaintySources_AK8PFchs.txt",
+        "./JEC/Spring16_23Sep2016HV2_DATA_Uncertainty_AK4Calo.txt",
+        "./JEC/Spring16_23Sep2016HV2_DATA_Uncertainty_AK4JPT.txt",
+        "./JEC/Spring16_23Sep2016HV2_DATA_Uncertainty_AK4PF.txt",
+        "./JEC/Spring16_23Sep2016HV2_DATA_Uncertainty_AK4PFPuppi.txt",
+        "./JEC/Spring16_23Sep2016HV2_DATA_Uncertainty_AK4PFchs.txt",
+        "./JEC/Spring16_23Sep2016HV2_DATA_Uncertainty_AK8PF.txt",
+        "./JEC/Spring16_23Sep2016HV2_DATA_Uncertainty_AK8PFPuppi.txt",
+        "./JEC/Spring16_23Sep2016HV2_DATA_Uncertainty_AK8PFchs.txt",
+        "./JEC/Spring16_23Sep2016HV2_DataMcSF_L1RC_AK4PF.txt",
+        "./JEC/Spring16_23Sep2016HV2_DataMcSF_L1RC_AK4PFchs.txt",
+        "./JEC/Spring16_23Sep2016HV2_DataMcSF_L1RC_AK8PF.txt",
+        "./JEC/Spring16_23Sep2016HV2_DataMcSF_L1RC_AK8PFchs.txt",
+        # './JSON/Cert_271036-284044_13TeV_23Sep2016ReReco_Collisions16_JSON.txt',
+        './JSON/Cert_271036-284044_13TeV_23Sep2016BCDReReco_Collisions16_JSON.txt',
+        './JSON/Cert_271036-284044_13TeV_23Sep2016EFReReco_Collisions16_JSON.txt',
+        './JSON/Cert_271036-284044_13TeV_23Sep2016GReReco_Collisions16_JSON.txt',
+        './JSON/Cert_271036-284044_13TeV_23Sep2016HReReco_Collisions16_JSON.txt',
         ]
 
     config.section_("Data")
@@ -95,18 +341,19 @@ def main():
         config.Data.splitting = 'FileBased'
         config.Data.unitsPerJob = 1
     config.Data.ignoreLocality = True
-    config.Data.publication = False    
+    config.Data.publication = False
 #    config.Data.outLFNDirBase = '/store/user/cgalloni/Ntuple_80_190916'
-    config.Data.outLFNDirBase = '/store/user/ytakahas/Ntuple_80_251216'
+    config.Data.outLFNDirBase = '/store/user/clange/Ntuple_8020_20160112'
 
     config.section_("Site")
-    config.Site.storageSite = 'T2_CH_CSCS'
+    # config.Site.storageSite = 'T2_CH_CSCS'
+    config.Site.storageSite = 'T3_CH_PSI'
     config.Site.blacklist=['T2_US_Nebraska','T2_US_Wisconsin','T2_FR_IPHC','T2_EE_Estonia','T2_DE_RWTH']
     #config.Site.whitelist=['T2_US_Nebraska','T2_US_Wisconsin','T2_FR_IPHC','T2_EE_Estonia',
     print 'Using config ' + options.config
     print 'Writing to directory ' + options.dir
 
-    
+
     def submit(config):
         try:
             crabCommand('submit', config = config)
@@ -126,7 +373,7 @@ def main():
         jobs.append( s )
         print '  --> added ' + s
 
-        
+
     for ijob, job in enumerate(jobs) :
 
         ptbin = job.split('/')[1]
@@ -138,7 +385,7 @@ def main():
         print 'Submitting ' + config.General.requestName + ', dataset = ' + job
         print 'Configuration :'
         print config
-    
+
         try :
             from multiprocessing import Process
             p = Process(target=submit, args=(config,))
@@ -147,11 +394,11 @@ def main():
             # submit(config)
         except :
             print 'Not submitted.'
-        
+
 
 
 
 
 
 if __name__ == '__main__':
-    main()            
+    main()
