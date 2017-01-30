@@ -26,7 +26,7 @@ options.maxEvents = -1
 
 # options.inputFiles = '/store/data/Run2015D/SingleMuon/MINIAOD/05Oct2015-v1/10000/021FD3F0-876F-E511-99D2-0025905A6060.root'
 #options.inputFiles = 'dcap://t3se01.psi.ch:22125//pnfs/psi.ch/cms/trivcat/store/data/Run2015D/JetHT/MINIAOD/16Dec2015-v1/00000/301A497D-70B0-E511-9630-002590D0AFA8.root'
-#options.inputFiles = '/store/data/Run2016B/JetHT/MINIAOD/PromptReco-v2/000/273/158/00000/1E4ABD0D-DA19-E611-9396-02163E014258.root'
+#options.inputFiles = '/store/data/Run2016F/JetHT/MINIAOD/23Sep2016-v1/100000/00AB3FCF-1D86-E611-930B-002590D60036.root'
 options.parseArguments()
 
 process.options  = cms.untracked.PSet(
@@ -700,7 +700,7 @@ if config["BUNCHSPACING"] == 25 and config["RUNONMC"] and config["SPRING16"]:
     print"these JEC do not exist yet"
     JECprefix = "Spring16_25nsV6"
 elif config["BUNCHSPACING"] == 25 and not(config["RUNONMC"]) and config["SPRING16"]:
-    JECprefix = "Spring16_23Sep2016GV2"
+    JECprefix = "Summer16_23Sep2016GV3"
 
 jecAK8chsUncFile = "%s_DATA_Uncertainty_AK8PFchs.txt"%(JECprefix)
 jecAK4chsUncFile = "%s_DATA_Uncertainty_AK4PFchs.txt"%(JECprefix)
