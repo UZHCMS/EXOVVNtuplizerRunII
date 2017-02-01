@@ -676,7 +676,7 @@ jecLevelsAK4 = []
 jecLevelsAK8Puppi = []
 jecLevelsForMET = []
 
-JECprefix = "Summer16_23Sep2016V0"
+JECprefix = "Summer16_23Sep2016V3"
 
 jecAK8chsUncFile = "JEC/%s_MC_Uncertainty_AK8PFchs.txt"%(JECprefix)
 jecAK4chsUncFile = "JEC/%s_MC_Uncertainty_AK4PFchs.txt"%(JECprefix)
@@ -723,7 +723,7 @@ if config["CORRJETSONTHEFLY"]:
      	 'JEC/%s_DATA_L1FastJet_AK4PFchs.txt'%(JECprefix),
      	 'JEC/%s_DATA_L2Relative_AK4PFchs.txt'%(JECprefix),
      	 'JEC/%s_DATA_L3Absolute_AK4PFchs.txt'%(JECprefix),
-	     'JEC/%s_DATA_L2L3Residual_AK4PFchs.txt'%(JECprefix)
+	 'JEC/%s_DATA_L2L3Residual_AK4PFchs.txt'%(JECprefix)
        ]   
 if config["CORRMETONTHEFLY"]:  
    if config["RUNONMC"]:

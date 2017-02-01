@@ -56,6 +56,7 @@ def main():
     config.JobType.sendExternalFolder = True
    # config.JobType.pyCfgParams = ['DataProcessing=MC25ns_MiniAODv2','lheLabel=externalLHEProducer']
     config.JobType.inputFiles = [
+  
         './JEC/Summer16_23Sep2016EFV3_DATA_L1FastJet_AK4Calo.txt',
         './JEC/Summer16_23Sep2016EFV3_DATA_L1FastJet_AK4JPT.txt',
         './JEC/Summer16_23Sep2016EFV3_DATA_L1FastJet_AK4PF.txt',
@@ -65,6 +66,10 @@ def main():
         './JEC/Summer16_23Sep2016EFV3_DATA_L1FastJet_AK8PFPuppi.txt',
         './JEC/Summer16_23Sep2016EFV3_DATA_L1FastJet_AK8PFchs.txt',
         './JEC/Summer16_23Sep2016EFV3_DATA_L1JPTOffset_AK4JPT.txt',
+        './JEC/Summer16_23Sep2016EFV3_DATA_L1RC_AK4PF.txt',
+        './JEC/Summer16_23Sep2016EFV3_DATA_L1RC_AK4PFchs.txt',
+        './JEC/Summer16_23Sep2016EFV3_DATA_L1RC_AK8PF.txt',
+        './JEC/Summer16_23Sep2016EFV3_DATA_L1RC_AK8PFchs.txt',
         './JEC/Summer16_23Sep2016EFV3_DATA_L2L3Residual_AK4Calo.txt',
         './JEC/Summer16_23Sep2016EFV3_DATA_L2L3Residual_AK4JPT.txt',
         './JEC/Summer16_23Sep2016EFV3_DATA_L2L3Residual_AK4PF.txt',
@@ -97,14 +102,6 @@ def main():
         './JEC/Summer16_23Sep2016EFV3_DATA_L3Absolute_AK8PF.txt',
         './JEC/Summer16_23Sep2016EFV3_DATA_L3Absolute_AK8PFPuppi.txt',
         './JEC/Summer16_23Sep2016EFV3_DATA_L3Absolute_AK8PFchs.txt',
-        './JEC/Summer16_23Sep2016EFV3_DATA_UncertaintySources_AK4Calo.txt',
-        './JEC/Summer16_23Sep2016EFV3_DATA_UncertaintySources_AK4JPT.txt',
-        './JEC/Summer16_23Sep2016EFV3_DATA_UncertaintySources_AK4PF.txt',
-        './JEC/Summer16_23Sep2016EFV3_DATA_UncertaintySources_AK4PFPuppi.txt',
-        './JEC/Summer16_23Sep2016EFV3_DATA_UncertaintySources_AK4PFchs.txt',
-        './JEC/Summer16_23Sep2016EFV3_DATA_UncertaintySources_AK8PF.txt',
-        './JEC/Summer16_23Sep2016EFV3_DATA_UncertaintySources_AK8PFPuppi.txt',
-        './JEC/Summer16_23Sep2016EFV3_DATA_UncertaintySources_AK8PFchs.txt',
         './JEC/Summer16_23Sep2016EFV3_DATA_Uncertainty_AK4Calo.txt',
         './JEC/Summer16_23Sep2016EFV3_DATA_Uncertainty_AK4JPT.txt',
         './JEC/Summer16_23Sep2016EFV3_DATA_Uncertainty_AK4PF.txt',
@@ -113,6 +110,9 @@ def main():
         './JEC/Summer16_23Sep2016EFV3_DATA_Uncertainty_AK8PF.txt',
         './JEC/Summer16_23Sep2016EFV3_DATA_Uncertainty_AK8PFPuppi.txt',
         './JEC/Summer16_23Sep2016EFV3_DATA_Uncertainty_AK8PFchs.txt',
+        
+
+
         './JER/Spring16_25nsV6_MC_PtResolution_AK8PFchs.txt',
         './JER/Spring16_25nsV6_MC_PtResolution_AK4PFchs.txt',
         './JER/Spring16_25nsV6_MC_PtResolution_AK8PFPuppi.txt',
@@ -133,13 +133,13 @@ def main():
     config.Data.runRange= "276831-278801"
     config.Data.ignoreLocality = True
     config.Data.publication = False
-    config.Data.lumiMask      = '/mnt/t3nfs01/data01/shome/ytakahas/work/tmp/CMSSW_8_0_21/src/EXOVVNtuplizerRunII/Ntuplizer/Cert_271036-284044_13TeV_23Sep2016ReReco_Collisions16_JSON.txt'
+    config.Data.lumiMask      = '/mnt/t3nfs01/data01/shome/cgalloni/RunII/CMSSW_8_0_21/src/EXOVVNtuplizerRunII/Ntuplizer//Cert_271036-284044_13TeV_23Sep2016ReReco_Collisions16_JSON.txt'
     config.section_("Site")
     config.Site.storageSite = 'T3_CH_PSI'
     config.Site.blacklist=['T2_US_Nebraska','T2_US_Wisconsin','T2_FR_IPHC','T2_EE_Estonia','T2_DE_RWTH']
     #config.Site.whitelist=['T2_US_Nebraska','T2_US_Wisconsin','T2_FR_IPHC','T2_EE_Estonia',
 #    config.Data.outLFNDirBase = '/store/user/cgalloni/Ntuple_80_190916'
-    config.Data.outLFNDirBase = '/store/user/clange/Ntuple_8020_20170112'
+    config.Data.outLFNDirBase = '/store/user/cgalloni/Ntuple_80_20170131'
 
 
     print 'Using config ' + options.config
