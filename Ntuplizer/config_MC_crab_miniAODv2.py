@@ -675,7 +675,7 @@ jecLevelsAK4 = []
 jecLevelsAK8Puppi = []
 jecLevelsForMET = []
 
-JECprefix = "Summer16_23Sep2016V0"
+JECprefix = "Summer16_23Sep2016V3"
 
 jecAK8chsUncFile = "%s_MC_Uncertainty_AK8PFchs.txt"%(JECprefix)
 jecAK4chsUncFile = "%s_MC_Uncertainty_AK4PFchs.txt"%(JECprefix)
