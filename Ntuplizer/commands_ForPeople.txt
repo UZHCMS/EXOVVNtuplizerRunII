@@ -1,3 +1,12 @@
+For everybody:
+
+change in submit_all.py in the output dir "cgalloni" with your username
+ 
+cmsenv 
+source /cvmfs/cms.cern.ch/crab3/crab.sh
+voms-proxy-init  --voms cms --valid 200:00:00
+
+Then:
 
 python submit_all.py -d crab_MC_V3 -c config_MC_crab_miniAODv2.py -f samples/Moriond17/samples_MC_Alberto.txt 
 python submit_all.py -d crab_MC_V3 -c config_MC_crab_miniAODv2.py -f samples/Moriond17/samples_MC_ext_Alberto.txt  -s "_ext" 
