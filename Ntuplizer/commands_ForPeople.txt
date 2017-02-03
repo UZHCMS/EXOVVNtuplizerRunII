@@ -1,0 +1,16 @@
+
+python submit_all.py -d crab_MC_V3 -c config_MC_crab_miniAODv2.py -f samples/Moriond17/samples_MC_Alberto.txt 
+python submit_all.py -d crab_MC_V3 -c config_MC_crab_miniAODv2.py -f samples/Moriond17/samples_MC_ext_Alberto.txt  -s "_ext" 
+
+
+python submit_all.py -d crab_MC_V3 -c config_MC_crab_miniAODv2.py -f samples/Moriond17/samples_MC_Camilla.txt  -l True
+python submit_all.py -d crab_MC_V3 -c config_MC_crab_miniAODv2.py -f samples/Moriond17/samples_MC_ext_Camilla.txt  -l True -s "_ext" 
+
+
+python submit_all.py -d crab_MC_V3 -c config_MC_crab_miniAODv2.py -f samples/Moriond17/samples_MC_Clemens.txt 
+python submit_all.py -d crab_MC_V3 -c config_MC_crab_miniAODv2.py -f samples/Moriond17/samples_MC_ext_Clemens.txt -s "_ext" 
+
+
+python submit_all.py -d crab_MC_V3 -c config_MC_crab_miniAODv2.py -f samples/Moriond17/samples_MC_Yuta.txt  
+python submit_all.py -d crab_MC_V3 -c config_MC_crab_miniAODv2.py -f samples/Moriond17/samples_MC_ext_Yuta.txt  -s "_ext" 
+python submit_all.py -d crab_MC_V3 -c config_MC_crab_miniAODv2.py -f samples/Moriond17/samples_MC_additional_Yuta.txt  -s "_additional" 
