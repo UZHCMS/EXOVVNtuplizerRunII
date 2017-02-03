@@ -52,11 +52,17 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
       tree_->Branch( "lheHT"	             , &lheHT                  ); 
       tree_->Branch( "lheNj"	             , &lheNj                  );
       tree_->Branch( "lheNl"	             , &lheNl                  );
-      tree_->Branch( "lheV_mass"             , &lheV_mass              ); 
-      tree_->Branch( "genWeight"	     , &genWeight              ); 
+      tree_->Branch( "lheV_mass"           , &lheV_mass              ); 
+      tree_->Branch( "genWeight"	         , &genWeight              );
+      tree_->Branch( "genFacWeightUp"	     , &genFacWeightUp         );
+      tree_->Branch( "genFacWeightDown"	   , &genFacWeightDown       );
+      tree_->Branch( "genRenWeightUp"	     , &genRenWeightUp         );
+      tree_->Branch( "genRenWeightDown"	   , &genRenWeightDown       );
+      tree_->Branch( "genFacRenWeightUp"	 , &genFacRenWeightUp      );
+      tree_->Branch( "genFacRenWeightDown" , &genFacRenWeightDown    );
       tree_->Branch( "qScale"	             , &qScale                 );
       tree_->Branch( "PDF_x"	             , &PDF_x                  );
-      tree_->Branch( "PDF_xPDF"	             , &PDF_xPDF               );
+      tree_->Branch( "PDF_xPDF"	           , &PDF_xPDF               );
       tree_->Branch( "PDF_id"	             , &PDF_id                 );
     } //doGenEvent
   } //runOnMC
@@ -705,6 +711,12 @@ void NtupleBranches::reset( void ){
   /** generator info */
   genWeight   = 0;
   qScale      = 0;
+  genFacWeightUp       = 0;
+  genFacWeightDown     = 0;
+  genRenWeightUp       = 0;
+  genRenWeightDown     = 0;
+  genFacRenWeightUp    = 0;
+  genFacRenWeightDown  = 0;
   PDF_id.clear();  
   PDF_x.clear();	
   PDF_xPDF.clear();

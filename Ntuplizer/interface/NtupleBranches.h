@@ -81,6 +81,12 @@ public:
   int                             lheNl                ;
   float                           lheV_mass            ;
   float                           genWeight            ;
+  float                           genFacWeightUp       ;
+  float                           genFacWeightDown     ;
+  float                           genRenWeightUp       ;
+  float                           genRenWeightDown     ;
+  float                           genFacRenWeightUp    ;
+  float                           genFacRenWeightDown  ;
   float                           qScale               ;
   std::vector<int  >              PDF_id               ;
   std::vector<float>              PDF_x                ;
