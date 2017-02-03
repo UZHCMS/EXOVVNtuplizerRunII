@@ -69,22 +69,22 @@ def main():
         './JEC/Summer16_23Sep2016V3_MC_L3Absolute_AK8PFchs.txt',
         './JEC/Summer16_23Sep2016V3_MC_L2Relative_AK8PFPuppi.txt',
         './JEC/Summer16_23Sep2016V3_MC_L3Absolute_AK8PFPuppi.txt',
-        './JEC/Summer16_23Sep2016V3_MC_L1FastJet_AK4PFchs.txt', 
-        './JEC/Summer16_23Sep2016V3_MC_L2Relative_AK4PFchs.txt', 
+        './JEC/Summer16_23Sep2016V3_MC_L1FastJet_AK4PFchs.txt',
+        './JEC/Summer16_23Sep2016V3_MC_L2Relative_AK4PFchs.txt',
         './JEC/Summer16_23Sep2016V3_MC_L3Absolute_AK4PFchs.txt',
         './JEC/Summer16_23Sep2016V3_MC_Uncertainty_AK4PFchs.txt',
         './JEC/Summer16_23Sep2016V3_MC_Uncertainty_AK8PFchs.txt',
-        './JER/Summer16_23Sep2016V3_MC_PtResolution_AK8PFchs.txt',
-        './JER/Summer16_23Sep2016V3_MC_PtResolution_AK4PFchs.txt',
-        './JER/Summer16_23Sep2016V3_MC_PtResolution_AK8PFPuppi.txt',
-        './JER/Summer16_23Sep2016V3_MC_PtResolution_AK4PFPuppi.txt',
-        './JER/Summer16_23Sep2016V3_MC_SF_AK8PFchs.txt',
-        './JER/Summer16_23Sep2016V3_MC_SF_AK4PFchs.txt',
-        './JER/Summer16_23Sep2016V3_MC_SF_AK8PFPuppi.txt',
-        './JER/Summer16_23Sep2016V3_MC_SF_AK4PFPuppi.txt',
+        './JER/Spring16_25nsV10_MC_PtResolution_AK8PFchs.txt',
+        './JER/Spring16_25nsV10_MC_PtResolution_AK4PFchs.txt',
+        './JER/Spring16_25nsV10_MC_PtResolution_AK8PFPuppi.txt',
+        './JER/Spring16_25nsV10_MC_PtResolution_AK4PFPuppi.txt',
+        './JER/Spring16_25nsV10_MC_SF_AK8PFchs.txt',
+        './JER/Spring16_25nsV10_MC_SF_AK4PFchs.txt',
+        './JER/Spring16_25nsV10_MC_SF_AK8PFPuppi.txt',
+        './JER/Spring16_25nsV10_MC_SF_AK4PFPuppi.txt',
         './JSON/Cert_271036-279931_13TeV_PromptReco_Collisions16_JSON_NoL1T.txt'
         ]
-    
+
     config.section_("Data")
     config.Data.inputDataset = None
     # config.Data.inputDBS = 'phys03' #to be commented in case of global#
@@ -97,11 +97,11 @@ def main():
     config.Data.ignoreLocality = True
     config.Data.publication = False
 #    config.Data.outLFNDirBase = '/store/user/cgalloni/Ntuple_80_190916'
-    config.Data.outLFNDirBase = '/store/user/cgalloni//Ntuple_80_31012017'
+    config.Data.outLFNDirBase = '/store/user/clange/Ntuple_80_20170203_test'
 
     config.section_("Site")
-    # config.Site.storageSite = 'T2_CH_CSCS'
-    config.Site.storageSite = 'T3_CH_PSI'
+    config.Site.storageSite = 'T2_CH_CSCS'
+    # config.Site.storageSite = 'T3_CH_PSI'
     config.Site.blacklist=['T2_US_Nebraska','T2_US_Wisconsin','T2_FR_IPHC','T2_EE_Estonia','T2_DE_RWTH']
     #config.Site.whitelist=['T2_US_Nebraska','T2_US_Wisconsin','T2_FR_IPHC','T2_EE_Estonia',
     print 'Using config ' + options.config
