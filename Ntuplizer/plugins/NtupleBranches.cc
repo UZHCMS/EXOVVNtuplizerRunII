@@ -61,6 +61,7 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
       tree_->Branch( "genFacRenWeightUp"	 , &genFacRenWeightUp      );
       tree_->Branch( "genFacRenWeightDown" , &genFacRenWeightDown    );
       tree_->Branch( "qScale"	             , &qScale                 );
+      tree_->Branch( "PDF_rms"	           , &PDF_rms                );
       tree_->Branch( "PDF_x"	             , &PDF_x                  );
       tree_->Branch( "PDF_xPDF"	           , &PDF_xPDF               );
       tree_->Branch( "PDF_id"	             , &PDF_id                 );
@@ -717,6 +718,7 @@ void NtupleBranches::reset( void ){
   genRenWeightDown     = 0;
   genFacRenWeightUp    = 0;
   genFacRenWeightDown  = 0;
+  PDF_rms = 0;
   PDF_id.clear();  
   PDF_x.clear();	
   PDF_xPDF.clear();
