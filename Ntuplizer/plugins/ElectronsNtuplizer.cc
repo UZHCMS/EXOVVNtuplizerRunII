@@ -13,6 +13,12 @@
 
 #include "DataFormats/PatCandidates/interface/Electron.h"
 
+#include "DataFormats/EcalRecHit/interface/EcalRecHitCollections.h"
+#include "DataFormats/DetId/interface/DetId.h"
+#include "DataFormats/EcalDetId/interface/EBDetId.h"
+#include "DataFormats/EcalDetId/interface/EEDetId.h"
+
+
 #include "DataFormats/Common/interface/ValueMap.h"
 #include "DataFormats/Common/interface/View.h"
 
@@ -30,6 +36,7 @@ ElectronsNtuplizer::ElectronsNtuplizer( edm::EDGetTokenT<edm::View<pat::Electron
                                         std::vector< edm::EDGetTokenT<edm::ValueMap<bool> > > eleIDtokens  ,
 					edm::EDGetTokenT<edm::ValueMap<float> >               mvaValuesMapToken,
 					edm::EDGetTokenT<edm::ValueMap<int> >                 mvaCategoriesMapToken,
+					edm::EDGetTokenT<edm::SortedCollection<EcalRecHit,edm::StrictWeakOrdering<EcalRecHit>>> ebRecHitsToken, 	
 					edm::EDGetTokenT<pat::TauCollection>                  boostedtauToken  ,
 					NtupleBranches*                                       nBranches  ,
 					std::map< std::string, bool >&                        runFlags 
@@ -48,6 +55,7 @@ ElectronsNtuplizer::ElectronsNtuplizer( edm::EDGetTokenT<edm::View<pat::Electron
 	, electronMVATightIdMapToken_ ( eleIDtokens[7] )
 	, mvaValuesMapToken_( mvaValuesMapToken )
 	, mvaCategoriesMapToken_( mvaCategoriesMapToken )
+	, ebRecHitsToken_ ( ebRecHitsToken )
 	, boostedtauToken_		   ( boostedtauToken    )
 	, doBoostedTaus_   	   ( runFlags["doBoostedTaus"]  )
 {
@@ -145,6 +153,9 @@ void ElectronsNtuplizer::fillBranches( edm::Event const & event, const edm::Even
    event.getByToken(electronMVATightIdMapToken_ , mva_tight_id_decisions  );
    event.getByToken(mvaValuesMapToken_ , mva_value);
    event.getByToken(mvaCategoriesMapToken_ , mva_categories);
+   event.getByToken(ebRecHitsToken_, _ebRecHits);
+   
+   
   
    // Find the first vertex in the collection that passes good quality criteria
    // reco::VertexCollection::const_iterator firstGoodVertex = vertices_->end();
@@ -249,6 +260,20 @@ void ElectronsNtuplizer::fillBranches( edm::Event const & event, const edm::Even
     nBranches_->el_dr03TkSumPt.push_back(ele.dr03TkSumPt());
     nBranches_->el_superCluster_e.push_back(ele.superCluster()->energy());
     nBranches_->el_hadronicOverEm.push_back(ele.hadronicOverEm());
+    
+    // Seed energy for slew rate corrections
+    DetId detid = ele.superCluster()->seed()->seed();
+    const EcalRecHit * rh = NULL;
+    double seedE(0.);
+    if (detid.subdetId() == EcalBarrel) {
+        auto rh_i =  _ebRecHits->find(detid);
+        if( rh_i != _ebRecHits->end()) rh =  &(*rh_i);
+        else rh = NULL;
+    }
+    if(rh==NULL) seedE = -1.;
+    else {seedE = rh->energy();}
+    nBranches_->el_seedEnergy.push_back(seedE);
+    
 
     reco::GsfElectron::PflowIsolationVariables pfIso = ele.pfIsolationVariables();
     nBranches_->el_relIsoWithDBeta	    .push_back((pfIso.sumChargedHadronPt + std::max(0.0 , pfIso.sumNeutralHadronEt + pfIso.sumPhotonEt - 0.5 * pfIso.sumPUPt ))/ele.pt());

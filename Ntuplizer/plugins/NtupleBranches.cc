@@ -112,6 +112,7 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch( "el_dr03TkSumPt"             , &el_dr03TkSumPt              );
     tree_->Branch( "el_superCluster_e"          , &el_superCluster_e           );
     tree_->Branch( "el_hadronicOverEm"          , &el_hadronicOverEm           );  
+    tree_->Branch( "el_seedEnergy"              , &el_seedEnergy               );  
     tree_->Branch( "el_isVetoElectron"	        , &el_isVetoElectron           );
     tree_->Branch( "el_isLooseElectron"	        , &el_isLooseElectron          );  
     tree_->Branch( "el_isMediumElectron"	, &el_isMediumElectron         );
@@ -784,6 +785,7 @@ void NtupleBranches::reset( void ){
   el_dr03TkSumPt.clear();
   el_superCluster_e.clear();
   el_hadronicOverEm.clear();
+  el_seedEnergy.clear();
   el_isVetoElectron.clear();
   el_isLooseElectron.clear();
   el_isMediumElectron.clear();

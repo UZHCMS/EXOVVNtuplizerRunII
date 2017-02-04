@@ -143,6 +143,7 @@ public:
   std::vector<float>          el_dr03TkSumPt              ;
   std::vector<float>          el_superCluster_e           ;
   std::vector<float>          el_hadronicOverEm           ;
+  std::vector<float>          el_seedEnergy               ;
   std::vector<int>	      el_isVetoElectron	          ;
   std::vector<int>  	      el_isLooseElectron	  ; 
   std::vector<int>	      el_isMediumElectron	  ;
