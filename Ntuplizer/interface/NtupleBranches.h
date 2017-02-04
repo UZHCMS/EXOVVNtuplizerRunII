@@ -654,6 +654,14 @@ public:
   std::vector<float>  	      	    MET_mva_phi	              ;
   std::vector<float>  	      	    MET_sumEt		      ;
   std::vector<float>  	      	    MET_T1Uncertainty	      ;
+  
+  std::vector<float>  	      	    MET_JetEnUp	      ;
+  std::vector<float>  	      	    MET_JetEnDown	      ;
+  std::vector<float>  	      	    MET_JetResUp	      ;
+  std::vector<float>  	      	    MET_JetResDown	      ;
+  std::vector<float>  	      	    MET_UnclusteredEnUp	      ;
+  std::vector<float>  	      	    MET_UnclusteredEnDown	      ;
+  
 
   /** MET SVift*/
   std::vector<float>                MET_significance	      ;	 

@@ -628,6 +628,13 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch("MET_puppi_et"	        , &MET_puppi_et      ); 
     tree_->Branch("MET_puppi_phi"               , &MET_puppi_phi     );
     tree_->Branch("MET_sumEt"	                , &MET_sumEt 	     ); 
+    tree_->Branch("MET_JetEnUp"	                , &MET_JetEnUp 	     ); 
+    tree_->Branch("MET_JetEnDown"	                , &MET_JetEnDown 	     ); 
+    tree_->Branch("MET_JetResUp"	                , &MET_JetResUp 	     ); 
+    tree_->Branch("MET_JetResDown"	                , &MET_JetResDown 	     ); 
+    tree_->Branch("MET_UnclusteredEnUp"	                , &MET_UnclusteredEnUp 	     ); 
+    tree_->Branch("MET_UnclusteredEnDown"	                , &MET_UnclusteredEnDown 	     ); 
+    
   } //doMissingEt
 
   if ( runFlags["doMETSVFIT"] ){
@@ -1264,6 +1271,13 @@ void NtupleBranches::reset( void ){
 
   MET_sumEt.clear();
   MET_T1Uncertainty.clear();
+  
+  MET_JetEnUp.clear();
+  MET_JetEnDown.clear();
+  MET_JetResUp.clear();
+  MET_JetResDown.clear();
+  MET_UnclusteredEnUp.clear();
+  MET_UnclusteredEnDown.clear();
 
   /** MET SVift*/
   MET_significance.clear();

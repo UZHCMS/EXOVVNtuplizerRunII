@@ -229,8 +229,14 @@ void METsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
     nBranches_->MET_sumEt.push_back(sumEtcorr);
     nBranches_->MET_corrPx.push_back(TypeICorrMap_["corrEx"]);
     nBranches_->MET_corrPy.push_back(TypeICorrMap_["corrEy"]); 	 
- 
-   
+    
+    nBranches_->MET_JetEnUp.push_back( met.shiftedPt(pat::MET::METUncertainty::JetEnUp) / met.et() );
+    nBranches_->MET_JetEnDown.push_back( met.shiftedPt(pat::MET::METUncertainty::JetEnDown) / met.et() );
+    nBranches_->MET_JetResUp.push_back( met.shiftedPt(pat::MET::METUncertainty::JetResUp) / met.et() );
+    nBranches_->MET_JetResDown.push_back( met.shiftedPt(pat::MET::METUncertainty::JetResDown) / met.et() );
+    nBranches_->MET_UnclusteredEnUp.push_back( met.shiftedPt(pat::MET::METUncertainty::UnclusteredEnUp) / met.et() );
+    nBranches_->MET_UnclusteredEnDown.push_back( met.shiftedPt(pat::MET::METUncertainty::UnclusteredEnDown) / met.et() );
+    
   } 
 
 
