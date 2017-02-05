@@ -97,7 +97,7 @@ def main():
     config.Data.ignoreLocality = True
     config.Data.publication = False
 #    config.Data.outLFNDirBase = '/store/user/cgalloni/Ntuple_80_190916'
-    config.Data.outLFNDirBase = '/store/user/clange/Ntuple_80_20170203_test'
+    config.Data.outLFNDirBase = '/store/user/cgalloni/Ntuple_Moriond17_JECV3'
 
     config.section_("Site")
     config.Site.storageSite = 'T2_CH_CSCS'
