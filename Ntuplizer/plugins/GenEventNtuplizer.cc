@@ -89,9 +89,9 @@ void GenEventNtuplizer::fillBranches( edm::Event const & event, const edm::Event
       
     weightFacUp = Product->weights()[1].wgt / Product->originalXWGTUP();
     weightFacDown = Product->weights()[2].wgt / Product->originalXWGTUP();
-    weightRenUp = Product->weights()[4].wgt / Product->originalXWGTUP();
-    weightRenDown = Product->weights()[5].wgt / Product->originalXWGTUP();
-    weightFacRenUp = Product->weights()[7].wgt / Product->originalXWGTUP();
+    weightRenUp = Product->weights()[3].wgt / Product->originalXWGTUP();
+    weightRenDown = Product->weights()[6].wgt / Product->originalXWGTUP();
+    weightFacRenUp = Product->weights()[4].wgt / Product->originalXWGTUP();
     weightFacRenDown = Product->weights()[8].wgt / Product->originalXWGTUP();
     
     std::vector<double> pdfWeights;
