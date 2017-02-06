@@ -55,6 +55,7 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
 	eleMVATightIdMapToken_      (consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("eleMVATightIdMap"))),
 	mvaValuesMapToken_          (consumes<edm::ValueMap<float> >(iConfig.getParameter<edm::InputTag>("mvaValuesMap"))),
 	mvaCategoriesMapToken_      (consumes<edm::ValueMap<int> >(iConfig.getParameter<edm::InputTag>("mvaCategoriesMap"))),
+	ebRecHitsToken_             (consumes<edm::SortedCollection<EcalRecHit,edm::StrictWeakOrdering<EcalRecHit>>>(iConfig.getParameter<edm::InputTag>("ebRecHits"))),
 
 	tauToken_	      	    (consumes<pat::TauCollection>(iConfig.getParameter<edm::InputTag>("taus"))),
 	tauBoostedTauToken_	    (consumes<pat::TauCollection>(iConfig.getParameter<edm::InputTag>("tausBoostedTau"))),
@@ -250,6 +251,7 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
 						       eleIdTokens   , 
 						       mvaValuesMapToken_,
 						       mvaCategoriesMapToken_,
+						       ebRecHitsToken_ ,
 						       tauBoostedTauToken_ ,
 						       nBranches_  ,
 						       runFlags     );

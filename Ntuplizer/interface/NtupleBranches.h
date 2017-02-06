@@ -81,7 +81,14 @@ public:
   int                             lheNl                ;
   float                           lheV_mass            ;
   float                           genWeight            ;
+  float                           genFacWeightUp       ;
+  float                           genFacWeightDown     ;
+  float                           genRenWeightUp       ;
+  float                           genRenWeightDown     ;
+  float                           genFacRenWeightUp    ;
+  float                           genFacRenWeightDown  ;
   float                           qScale               ;
+  float                           PDF_rms              ;
   std::vector<int  >              PDF_id               ;
   std::vector<float>              PDF_x                ;
   std::vector<float>              PDF_xPDF             ;
@@ -136,6 +143,7 @@ public:
   std::vector<float>          el_dr03TkSumPt              ;
   std::vector<float>          el_superCluster_e           ;
   std::vector<float>          el_hadronicOverEm           ;
+  std::vector<float>          el_seedEnergy               ;
   std::vector<int>	      el_isVetoElectron	          ;
   std::vector<int>  	      el_isLooseElectron	  ; 
   std::vector<int>	      el_isMediumElectron	  ;
@@ -647,6 +655,14 @@ public:
   std::vector<float>  	      	    MET_mva_phi	              ;
   std::vector<float>  	      	    MET_sumEt		      ;
   std::vector<float>  	      	    MET_T1Uncertainty	      ;
+  
+  std::vector<float>  	      	    MET_JetEnUp	      ;
+  std::vector<float>  	      	    MET_JetEnDown	      ;
+  std::vector<float>  	      	    MET_JetResUp	      ;
+  std::vector<float>  	      	    MET_JetResDown	      ;
+  std::vector<float>  	      	    MET_UnclusteredEnUp	      ;
+  std::vector<float>  	      	    MET_UnclusteredEnDown	      ;
+  
 
   /** MET SVift*/
   std::vector<float>                MET_significance	      ;	 

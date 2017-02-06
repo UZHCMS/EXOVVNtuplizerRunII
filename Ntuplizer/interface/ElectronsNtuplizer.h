@@ -11,7 +11,8 @@ public:
 		      edm::EDGetTokenT<double>  		           rhoToken     ,
                       std::vector<edm::EDGetTokenT<edm::ValueMap<bool> > > eleIDtokens  ,
 	 	      edm::EDGetTokenT<edm::ValueMap<float> > mvaValuesMapToken  ,
-	 	      edm::EDGetTokenT<edm::ValueMap<int> > mvaCategoriesMapToken  ,		      
+	 	      edm::EDGetTokenT<edm::ValueMap<int> > mvaCategoriesMapToken  ,	
+	 	      edm::EDGetTokenT<edm::SortedCollection<EcalRecHit,edm::StrictWeakOrdering<EcalRecHit>>> ebRecHitsToken, 	      
 		      edm::EDGetTokenT<pat::TauCollection>                 boostedtauToken  ,
 		      NtupleBranches*				           nBranches    ,
 		      std::map< std::string, bool >&                       runFlags 
@@ -40,6 +41,7 @@ private:
    edm::EDGetTokenT<edm::ValueMap<bool> >    electronMVATightIdMapToken_;
    edm::EDGetTokenT<edm::ValueMap<float> >   mvaValuesMapToken_;
    edm::EDGetTokenT<edm::ValueMap<int> >     mvaCategoriesMapToken_;
+   edm::EDGetTokenT<edm::SortedCollection<EcalRecHit,edm::StrictWeakOrdering<EcalRecHit>>> ebRecHitsToken_; 
    edm::EDGetTokenT<pat::TauCollection>      boostedtauToken_  ;
    edm::Handle<edm::View<pat::Electron> >    electrons_    ;
    edm::Handle<reco::VertexCollection> 	     vertices_     ;
@@ -54,6 +56,7 @@ private:
    edm::Handle<edm::ValueMap<bool> >         mva_tight_id_decisions;
    edm::Handle<edm::ValueMap<float> >        mva_value;
    edm::Handle<edm::ValueMap<int> >          mva_categories;
+   edm::Handle<edm::SortedCollection<EcalRecHit,edm::StrictWeakOrdering<EcalRecHit>>> _ebRecHits;
    edm::Handle<pat::TauCollection> 	     taus_         ;  
    bool doBoostedTaus_;
 };

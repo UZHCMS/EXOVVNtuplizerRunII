@@ -52,11 +52,18 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
       tree_->Branch( "lheHT"	             , &lheHT                  ); 
       tree_->Branch( "lheNj"	             , &lheNj                  );
       tree_->Branch( "lheNl"	             , &lheNl                  );
-      tree_->Branch( "lheV_mass"             , &lheV_mass              ); 
-      tree_->Branch( "genWeight"	     , &genWeight              ); 
+      tree_->Branch( "lheV_mass"           , &lheV_mass              ); 
+      tree_->Branch( "genWeight"	         , &genWeight              );
+      tree_->Branch( "genFacWeightUp"	     , &genFacWeightUp         );
+      tree_->Branch( "genFacWeightDown"	   , &genFacWeightDown       );
+      tree_->Branch( "genRenWeightUp"	     , &genRenWeightUp         );
+      tree_->Branch( "genRenWeightDown"	   , &genRenWeightDown       );
+      tree_->Branch( "genFacRenWeightUp"	 , &genFacRenWeightUp      );
+      tree_->Branch( "genFacRenWeightDown" , &genFacRenWeightDown    );
       tree_->Branch( "qScale"	             , &qScale                 );
+      tree_->Branch( "PDF_rms"	           , &PDF_rms                );
       tree_->Branch( "PDF_x"	             , &PDF_x                  );
-      tree_->Branch( "PDF_xPDF"	             , &PDF_xPDF               );
+      tree_->Branch( "PDF_xPDF"	           , &PDF_xPDF               );
       tree_->Branch( "PDF_id"	             , &PDF_id                 );
     } //doGenEvent
   } //runOnMC
@@ -105,6 +112,7 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch( "el_dr03TkSumPt"             , &el_dr03TkSumPt              );
     tree_->Branch( "el_superCluster_e"          , &el_superCluster_e           );
     tree_->Branch( "el_hadronicOverEm"          , &el_hadronicOverEm           );  
+    tree_->Branch( "el_seedEnergy"              , &el_seedEnergy               );  
     tree_->Branch( "el_isVetoElectron"	        , &el_isVetoElectron           );
     tree_->Branch( "el_isLooseElectron"	        , &el_isLooseElectron          );  
     tree_->Branch( "el_isMediumElectron"	, &el_isMediumElectron         );
@@ -621,6 +629,13 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch("MET_puppi_et"	        , &MET_puppi_et      ); 
     tree_->Branch("MET_puppi_phi"               , &MET_puppi_phi     );
     tree_->Branch("MET_sumEt"	                , &MET_sumEt 	     ); 
+    tree_->Branch("MET_JetEnUp"	                , &MET_JetEnUp 	     ); 
+    tree_->Branch("MET_JetEnDown"	                , &MET_JetEnDown 	     ); 
+    tree_->Branch("MET_JetResUp"	                , &MET_JetResUp 	     ); 
+    tree_->Branch("MET_JetResDown"	                , &MET_JetResDown 	     ); 
+    tree_->Branch("MET_UnclusteredEnUp"	                , &MET_UnclusteredEnUp 	     ); 
+    tree_->Branch("MET_UnclusteredEnDown"	                , &MET_UnclusteredEnDown 	     ); 
+    
   } //doMissingEt
 
   if ( runFlags["doMETSVFIT"] ){
@@ -705,6 +720,13 @@ void NtupleBranches::reset( void ){
   /** generator info */
   genWeight   = 0;
   qScale      = 0;
+  genFacWeightUp       = 0;
+  genFacWeightDown     = 0;
+  genRenWeightUp       = 0;
+  genRenWeightDown     = 0;
+  genFacRenWeightUp    = 0;
+  genFacRenWeightDown  = 0;
+  PDF_rms = 0;
   PDF_id.clear();  
   PDF_x.clear();	
   PDF_xPDF.clear();
@@ -763,6 +785,7 @@ void NtupleBranches::reset( void ){
   el_dr03TkSumPt.clear();
   el_superCluster_e.clear();
   el_hadronicOverEm.clear();
+  el_seedEnergy.clear();
   el_isVetoElectron.clear();
   el_isLooseElectron.clear();
   el_isMediumElectron.clear();
@@ -1250,6 +1273,13 @@ void NtupleBranches::reset( void ){
 
   MET_sumEt.clear();
   MET_T1Uncertainty.clear();
+  
+  MET_JetEnUp.clear();
+  MET_JetEnDown.clear();
+  MET_JetResUp.clear();
+  MET_JetResDown.clear();
+  MET_UnclusteredEnUp.clear();
+  MET_UnclusteredEnDown.clear();
 
   /** MET SVift*/
   MET_significance.clear();
