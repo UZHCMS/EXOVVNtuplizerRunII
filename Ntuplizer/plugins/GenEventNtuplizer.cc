@@ -39,9 +39,13 @@ void GenEventNtuplizer::fillBranches( edm::Event const & event, const edm::Event
 
 
   event.getByToken(lheEventProductToken_, lheEventProduct_);
+  
   float lheHt_ = 0.;
   int nLeptons = 0;
   int nParton = 0;
+  
+  double weightFacUp(0.), weightFacDown(0.), weightRenUp(0.), weightRenDown(0.), weightFacRenUp(0.), weightFacRenDown(0.);
+  double pdfRMS(0.);
 
   std::vector<TLorentzVector> tlv;
 
@@ -77,6 +81,30 @@ void GenEventNtuplizer::fillBranches( edm::Event const & event, const edm::Event
       }
 
     }
+    
+    
+    // Gen weights for QCD scales and PDF
+    //  https://indico.cern.ch/event/459797/contributions/1961581/attachments/1181555/1800214/mcaod-Feb15-2016.pdf
+    const LHEEventProduct* Product = lheEventProduct_.product();
+      
+    weightFacUp = Product->weights()[1].wgt / Product->originalXWGTUP();
+    weightFacDown = Product->weights()[2].wgt / Product->originalXWGTUP();
+    weightRenUp = Product->weights()[4].wgt / Product->originalXWGTUP();
+    weightRenDown = Product->weights()[5].wgt / Product->originalXWGTUP();
+    weightFacRenUp = Product->weights()[7].wgt / Product->originalXWGTUP();
+    weightFacRenDown = Product->weights()[8].wgt / Product->originalXWGTUP();
+    
+    std::vector<double> pdfWeights;
+    for(unsigned int i = 10; i <= 110 && i < Product->weights().size(); i++) {
+        pdfWeights.push_back(Product->weights()[i].wgt / Product->originalXWGTUP());
+    }
+    
+    // Calculate RMS
+    double sum = std::accumulate(pdfWeights.begin(), pdfWeights.end(), 0.0);
+    double mean = sum / pdfWeights.size();
+
+    double sq_sum = std::inner_product(pdfWeights.begin(), pdfWeights.end(), pdfWeights.begin(), 0.0);
+    pdfRMS = std::sqrt(sq_sum / pdfWeights.size() - mean * mean);
   }
 
 
@@ -92,10 +120,17 @@ void GenEventNtuplizer::fillBranches( edm::Event const & event, const edm::Event
     nBranches_->lheV_pt = -1;
   }
 
-  nBranches_->lheNl = nLeptons; // Does anybody use this ?
+  nBranches_->lheNl = nLeptons;
   nBranches_->lheNj = nParton;
   nBranches_->lheHT = lheHt_;
 
 
- 
+  nBranches_->genFacWeightUp = weightFacUp;
+  nBranches_->genFacWeightDown = weightFacDown;
+  nBranches_->genRenWeightUp = weightRenUp;
+  nBranches_->genRenWeightDown = weightRenDown;
+  nBranches_->genFacRenWeightUp = weightFacRenUp;
+  nBranches_->genFacRenWeightDown = weightFacRenDown;
+  nBranches_->PDF_rms = 1. + pdfRMS;
+
 }
