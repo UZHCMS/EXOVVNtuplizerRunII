@@ -86,25 +86,28 @@ void GenEventNtuplizer::fillBranches( edm::Event const & event, const edm::Event
     // Gen weights for QCD scales and PDF
     //  https://indico.cern.ch/event/459797/contributions/1961581/attachments/1181555/1800214/mcaod-Feb15-2016.pdf
     const LHEEventProduct* Product = lheEventProduct_.product();
-      
-    weightFacUp = Product->weights()[1].wgt / Product->originalXWGTUP();
-    weightFacDown = Product->weights()[2].wgt / Product->originalXWGTUP();
-    weightRenUp = Product->weights()[3].wgt / Product->originalXWGTUP();
-    weightRenDown = Product->weights()[6].wgt / Product->originalXWGTUP();
-    weightFacRenUp = Product->weights()[4].wgt / Product->originalXWGTUP();
-    weightFacRenDown = Product->weights()[8].wgt / Product->originalXWGTUP();
     
-    std::vector<double> pdfWeights;
-    for(unsigned int i = 10; i <= 110 && i < Product->weights().size(); i++) {
-        pdfWeights.push_back(Product->weights()[i].wgt / Product->originalXWGTUP());
+    if(Product->weights().size() >= 9) {
+        weightFacUp = Product->weights()[1].wgt / Product->originalXWGTUP();
+        weightFacDown = Product->weights()[2].wgt / Product->originalXWGTUP();
+        weightRenUp = Product->weights()[3].wgt / Product->originalXWGTUP();
+        weightRenDown = Product->weights()[6].wgt / Product->originalXWGTUP();
+        weightFacRenUp = Product->weights()[4].wgt / Product->originalXWGTUP();
+        weightFacRenDown = Product->weights()[8].wgt / Product->originalXWGTUP();
+        
+        std::vector<double> pdfWeights;
+        for(unsigned int i = 10; i <= 110 && i < Product->weights().size(); i++) {
+            pdfWeights.push_back(Product->weights()[i].wgt / Product->originalXWGTUP());
+        }
     }
-    
     // Calculate RMS
-    double sum = std::accumulate(pdfWeights.begin(), pdfWeights.end(), 0.0);
-    double mean = sum / pdfWeights.size();
+    if(pdfWeights.size() > 0) {
+        double sum = std::accumulate(pdfWeights.begin(), pdfWeights.end(), 0.0);
+        double mean = sum / pdfWeights.size();
 
-    double sq_sum = std::inner_product(pdfWeights.begin(), pdfWeights.end(), pdfWeights.begin(), 0.0);
-    pdfRMS = std::sqrt(sq_sum / pdfWeights.size() - mean * mean);
+        double sq_sum = std::inner_product(pdfWeights.begin(), pdfWeights.end(), pdfWeights.begin(), 0.0);
+        pdfRMS = std::sqrt(sq_sum / pdfWeights.size() - mean * mean);
+    }
   }
 
 
