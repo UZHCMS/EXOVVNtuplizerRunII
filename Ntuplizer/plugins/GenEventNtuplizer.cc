@@ -94,12 +94,12 @@ void GenEventNtuplizer::fillBranches( edm::Event const & event, const edm::Event
         weightRenDown = Product->weights()[6].wgt / Product->originalXWGTUP();
         weightFacRenUp = Product->weights()[4].wgt / Product->originalXWGTUP();
         weightFacRenDown = Product->weights()[8].wgt / Product->originalXWGTUP();
-        
-        std::vector<double> pdfWeights;
-        for(unsigned int i = 10; i <= 110 && i < Product->weights().size(); i++) {
-            pdfWeights.push_back(Product->weights()[i].wgt / Product->originalXWGTUP());
-        }
+    }    
+    std::vector<double> pdfWeights;
+    for(unsigned int i = 10; i <= 110 && i < Product->weights().size(); i++) {
+        pdfWeights.push_back(Product->weights()[i].wgt / Product->originalXWGTUP());
     }
+    
     // Calculate RMS
     if(pdfWeights.size() > 0) {
         double sum = std::accumulate(pdfWeights.begin(), pdfWeights.end(), 0.0);
