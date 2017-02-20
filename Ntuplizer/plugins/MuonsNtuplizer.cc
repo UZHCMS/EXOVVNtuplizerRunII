@@ -52,6 +52,20 @@ bool isMediumMuon(pat::Muon muon)
   return isMedium; 
 }
 
+bool isMediumMuonGH(pat::Muon muon)
+{
+  bool goodGlob = muon.isGlobalMuon() && 
+    muon.globalTrack()->normalizedChi2() < 3 && 
+    muon.combinedQuality().chi2LocalPosition < 12 && 
+    muon.combinedQuality().trkKink < 20; 
+  bool isMedium = muon.isLooseMuon() && 
+    muon.innerTrack()->validFraction() > 0.8 && 
+    muon::segmentCompatibility(muon) > (goodGlob ? 0.303 : 0.451); 
+  return isMedium; 
+}
+
+
+
 // Tracker High Pt Id
 bool isTrackerHighPtMuon(pat::Muon mu, const reco::Vertex* vertex) {
   if (! (mu.isMuon()) ) return false;
@@ -211,6 +225,7 @@ void MuonsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSet
     nBranches_->mu_isGlobalMuon.push_back(mu.isGlobalMuon());  
     nBranches_->mu_isTrackerMuon.push_back(mu.isTrackerMuon());  
     nBranches_->mu_isMediumMuon.push_back(isMediumMuon(mu));
+    nBranches_->mu_isMediumMuonGH.push_back(isMediumMuonGH(mu));
     nBranches_->mu_isTrackerHighPtMuon.push_back(isTrackerHighPtMuon(mu, &*firstGoodVertex));
    
       

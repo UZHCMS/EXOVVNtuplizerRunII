@@ -157,6 +157,7 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch( "mu_isHighPtMuon"	      , &mu_isHighPtMuon      	   );
     tree_->Branch( "mu_isTightMuon"	      , &mu_isTightMuon       	   );
     tree_->Branch( "mu_isMediumMuon"	      , &mu_isMediumMuon    	   );
+    tree_->Branch( "mu_isMediumMuonGH"	      , &mu_isMediumMuonGH    	   );
     tree_->Branch( "mu_isLooseMuon"	      , &mu_isLooseMuon       	   );
     tree_->Branch( "mu_isPFMuon"	      , &mu_isPFMuon	      	   );
     tree_->Branch( "mu_isSoftMuon"	      , &mu_isSoftMuon             );
@@ -828,6 +829,7 @@ void NtupleBranches::reset( void ){
   mu_isHighPtMuon.clear();
   mu_isTightMuon.clear();
   mu_isMediumMuon.clear();
+  mu_isMediumMuonGH.clear();
   mu_isLooseMuon.clear();
   mu_isPFMuon.clear();
   mu_isSoftMuon.clear();

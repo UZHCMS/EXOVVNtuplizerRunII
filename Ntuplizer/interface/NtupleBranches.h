@@ -179,6 +179,7 @@ public:
   std::vector<int  >          mu_isHighPtMuon		 ;
   std::vector<int  >          mu_isTightMuon		 ;
   std::vector<int  >  	      mu_isMediumMuon	         ; // YT added
+  std::vector<int  >  	      mu_isMediumMuonGH	         ; // YT added
   std::vector<int  >          mu_isLooseMuon		 ;
   std::vector<int  >          mu_isPFMuon		 ;
   std::vector<int  >          mu_isSoftMuon		 ;   

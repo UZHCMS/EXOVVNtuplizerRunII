@@ -166,6 +166,11 @@ bool TriggersNtuplizer::findTrigger( std::string trigName ){
        trigName.find("HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ_v") != std::string::npos||
        trigName.find("HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_v") != std::string::npos||
        trigName.find("HLT_Mu30_TkMu11_v") != std::string::npos||
+       trigName.find("HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_v") != std::string::npos||
+       trigName.find("HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_v") != std::string::npos||
+       trigName.find("HLT_Mu8_TrkIsoVVL_Ele17_CaloIdL_TrackIdL_IsoVL_v") != std::string::npos||
+       trigName.find("HLT_Mu17_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_v") != std::string::npos||
+       trigName.find("HLT_Mu23_TrkIsoVVL_Ele8_CaloIdL_TrackIdL_IsoVL_v") != std::string::npos||
        // MET triggers
        trigName.find("HLT_PFMET110_PFMHT110_IDTight_v") != std::string::npos||
        trigName.find("HLT_PFMET120_PFMHT120_IDTight_v") != std::string::npos||
