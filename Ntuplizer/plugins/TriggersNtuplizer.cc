@@ -240,11 +240,7 @@ void TriggersNtuplizer::fillBranches( edm::Event const & event, const edm::Event
   			   nBranches_->triggerObject_mass.push_back(obj.mass());
   			   nBranches_->triggerObject_lastname.push_back(pathNamesLast[h]);
 
-			   std::cout << "debug : " << obj.filterIds().size() << " " << obj.filterLabels().size() << std::endl;
-
-  			   for (unsigned h = 0; h < obj.filterIds().size(); ++h){
-			     vfilterIDs.push_back( obj.filterIds()[h]); // as defined in http://cmslxr.fnal.gov/lxr/source/DataFormats/HLTReco/interface/TriggerTypeDefs.h
-			   }
+			   for (unsigned h = 0; h < obj.filterIds().size(); ++h) vfilterIDs.push_back( obj.filterIds()[h]); // as defined in http://cmslxr.fnal.gov/lxr/source/DataFormats/HLTReco/interface/TriggerTypeDefs.h
 
 			   std::vector<std::string> vfilterLabels; vfilterLabels.clear();
 
