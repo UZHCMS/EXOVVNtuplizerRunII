@@ -586,6 +586,7 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch("triggerObject_mass"		, &triggerObject_mass		);
     tree_->Branch("triggerObject_lastname"	, &triggerObject_lastname	);
     tree_->Branch("triggerObject_filterIDs"	, &triggerObject_filterIDs	);
+    tree_->Branch("triggerObject_filterLabels"	, &triggerObject_filterLabels	);
     tree_->Branch("triggerObject_firedTrigger"	, &triggerObject_firedTrigger	);
   } //doTriggerObjects
   
@@ -1235,6 +1236,7 @@ void NtupleBranches::reset( void ){
   triggerObject_mass.clear();
   triggerObject_lastname.clear();
   triggerObject_filterIDs.clear();
+  triggerObject_filterLabels.clear();
   triggerObject_firedTrigger.clear();
 
   /** HLT filter decisions */

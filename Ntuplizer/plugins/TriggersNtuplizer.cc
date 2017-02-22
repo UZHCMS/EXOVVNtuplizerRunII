@@ -5,6 +5,7 @@
 #include "DataFormats/PatCandidates/interface/TriggerObjectStandAlone.h"
 #include "DataFormats/PatCandidates/interface/PackedTriggerPrescales.h"
 
+
 //===================================================================================================================
 TriggersNtuplizer::TriggersNtuplizer( edm::EDGetTokenT<edm::TriggerResults> tokens,
                                       edm::EDGetTokenT<pat::TriggerObjectStandAloneCollection> object,
@@ -171,6 +172,8 @@ bool TriggersNtuplizer::findTrigger( std::string trigName ){
        trigName.find("HLT_Mu8_TrkIsoVVL_Ele17_CaloIdL_TrackIdL_IsoVL_v") != std::string::npos||
        trigName.find("HLT_Mu17_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_v") != std::string::npos||
        trigName.find("HLT_Mu23_TrkIsoVVL_Ele8_CaloIdL_TrackIdL_IsoVL_v") != std::string::npos||
+       trigName.find("HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ_v") != std::string::npos||
+       trigName.find("HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ_v") != std::string::npos||
        // MET triggers
        trigName.find("HLT_PFMET110_PFMHT110_IDTight_v") != std::string::npos||
        trigName.find("HLT_PFMET120_PFMHT120_IDTight_v") != std::string::npos||
@@ -214,8 +217,8 @@ void TriggersNtuplizer::fillBranches( edm::Event const & event, const edm::Event
   ////////////////// Trigger objects ///////////////////////////////////
   if (doTriggerObjects_) {
 
-     	std::vector<float> vfilterIDs; vfilterIDs.clear();
      	std::vector<int> vfiredTrigger; vfiredTrigger.clear();
+	std::vector<float> vfilterIDs; vfilterIDs.clear();
 
   	for (pat::TriggerObjectStandAlone obj : *triggerObjects) {
 
@@ -237,7 +240,20 @@ void TriggersNtuplizer::fillBranches( edm::Event const & event, const edm::Event
   			   nBranches_->triggerObject_mass.push_back(obj.mass());
   			   nBranches_->triggerObject_lastname.push_back(pathNamesLast[h]);
 
-  			   for (unsigned h = 0; h < obj.filterIds().size(); ++h) vfilterIDs.push_back( obj.filterIds()[h]); // as defined in http://cmslxr.fnal.gov/lxr/source/DataFormats/HLTReco/interface/TriggerTypeDefs.h
+			   std::cout << "debug : " << obj.filterIds().size() << " " << obj.filterLabels().size() << std::endl;
+
+  			   for (unsigned h = 0; h < obj.filterIds().size(); ++h){
+			     vfilterIDs.push_back( obj.filterIds()[h]); // as defined in http://cmslxr.fnal.gov/lxr/source/DataFormats/HLTReco/interface/TriggerTypeDefs.h
+			   }
+
+			   std::vector<std::string> vfilterLabels; vfilterLabels.clear();
+
+  			   for (unsigned h = 0; h < obj.filterLabels().size(); ++h){
+			     vfilterLabels.push_back( obj.filterLabels()[h]);
+			   }
+
+			   nBranches_->triggerObject_filterLabels[pathNamesLast[h]] = vfilterLabels;
+
 
   			   if( pathNamesLast[h] == "HLT_AK8PFJet360_TrimMass30_v1") vfiredTrigger.push_back( 0 );
   			   if( pathNamesLast[h] == "HLT_AK8PFHT700_TrimR0p1PT0p03Mass50_v1") vfiredTrigger.push_back( 1 );
@@ -261,9 +277,8 @@ void TriggersNtuplizer::fillBranches( edm::Event const & event, const edm::Event
 
   		}
 
-  		nBranches_->triggerObject_filterIDs.push_back(vfilterIDs);
   		nBranches_->triggerObject_firedTrigger.push_back(vfiredTrigger);
-
+		nBranches_->triggerObject_filterIDs.push_back(vfilterIDs);
   	}
   } //doTriggerObjects_
 
