@@ -643,6 +643,9 @@ public:
   bool passFilter_HcalStripHalo_                   ;
   bool passFilter_chargedHadronTrackResolution_    ;
   bool passFilter_muonBadTrack_                    ;
+  bool flag_badMuons_;
+  bool flag_duplicateMuons_;
+  bool flag_nobadMuons_;
   
   /** MET */
   std::vector<float>                METraw_et		      ;	 

@@ -52,6 +52,12 @@ TriggersNtuplizer::TriggersNtuplizer( edm::EDGetTokenT<edm::TriggerResults> toke
   HcalStripHaloFilter_Selector_                 =  iConfig.getParameter<std::string> ("noiseFilterSelection_HcalStripHaloFilter");
   chargedHadronTrackResolutionFilter_Selector_  =  iConfig.getParameter<std::string> ("noiseFilterSelection_chargedHadronTrackResolutionFilter");
   muonBadTrackFilter_Selector_                  =  iConfig.getParameter<std::string> ("noiseFilterSelection_muonBadTrackFilter");
+  
+  //NEW FOR MORIOND
+
+  badMuons_Selector_  =  iConfig.getParameter<std::string> ("noiseFilterSelection_badMuonsFilter");
+  duplicateMuons_Selector_  =  iConfig.getParameter<std::string> ("noiseFilterSelection_duplicateMuonsFilter");
+  nobadMuons_Selector_  =  iConfig.getParameter<std::string> ("noiseFilterSelection_nobadMuonsFilter");
 
 }
 
@@ -325,6 +331,16 @@ void TriggersNtuplizer::fillBranches( edm::Event const & event, const edm::Event
         nBranches_->passFilter_chargedHadronTrackResolution_ = noiseFilterBits_->accept(i); // TO BE USED FOR ICHEP 2016
       if (names.triggerName(i) == muonBadTrackFilter_Selector_                  )
         nBranches_->passFilter_muonBadTrack_ = noiseFilterBits_->accept(i); // TO BE USED FOR ICHEP 2016
+      //NEW FOR MORIOND
+      if (names.triggerName(i) == badMuons_Selector_                  )
+        nBranches_->flag_badMuons_ = noiseFilterBits_->accept(i); // TO BE USED FOR ICHEP 2016
+
+      if (names.triggerName(i) == duplicateMuons_Selector_                  )
+        nBranches_->flag_duplicateMuons_ = noiseFilterBits_->accept(i); // TO BE USED FOR ICHEP 2016
+
+      if (names.triggerName(i) == nobadMuons_Selector_                  )
+        nBranches_->flag_nobadMuons_ = noiseFilterBits_->accept(i); // TO BE USED FOR ICHEP 2016
+
     }
 
     //if( !runOnMC_ /*&& event.id().run() < 251585*/ ){
