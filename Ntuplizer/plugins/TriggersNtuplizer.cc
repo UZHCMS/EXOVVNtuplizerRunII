@@ -306,23 +306,29 @@ void TriggersNtuplizer::fillBranches( edm::Event const & event, const edm::Event
 
   			if( isBoth || isL3 ){
 
-  			   nBranches_->triggerObject_pt	 .push_back(obj.pt());
-  			   nBranches_->triggerObject_eta .push_back(obj.eta());
-  			   nBranches_->triggerObject_phi .push_back(obj.phi());
-  			   nBranches_->triggerObject_mass.push_back(obj.mass());
-  			   nBranches_->triggerObject_lastname.push_back(pathNamesLast[h]);
 
 			   for (unsigned h = 0; h < obj.filterIds().size(); ++h) vfilterIDs.push_back( obj.filterIds()[h]); // as defined in http://cmslxr.fnal.gov/lxr/source/DataFormats/HLTReco/interface/TriggerTypeDefs.h
 
 			   std::vector<std::string> vfilterLabels; vfilterLabels.clear();
 
+			   bool isFilterExist = false;
+
 			   for (unsigned hh = 0; hh < obj.filterLabels().size(); ++hh){
 			     if(findFilter(obj.filterLabels()[hh])){
 			       vfilterLabels.push_back( obj.filterLabels()[hh]);
+			       isFilterExist = true;
 			     }
 			   }
 
-			   nBranches_->triggerObject_filterLabels[pathNamesLast[h]] = vfilterLabels;
+			   
+			   if(isFilterExist){
+			     nBranches_->triggerObject_pt  .push_back(obj.pt());
+			     nBranches_->triggerObject_eta .push_back(obj.eta());
+			     nBranches_->triggerObject_phi .push_back(obj.phi());
+			     nBranches_->triggerObject_mass.push_back(obj.mass());
+			     nBranches_->triggerObject_lastname.push_back(pathNamesLast[h]);
+			     nBranches_->triggerObject_filterLabels[pathNamesLast[h]] = vfilterLabels;
+			   }
 
 
   			   if( pathNamesLast[h] == "HLT_AK8PFJet360_TrimMass30_v1") vfiredTrigger.push_back( 0 );
