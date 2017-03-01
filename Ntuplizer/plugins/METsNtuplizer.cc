@@ -6,6 +6,9 @@
 
 //===================================================================================================================        
 METsNtuplizer::METsNtuplizer( 	edm::EDGetTokenT<pat::METCollection>     mettoken    , 
+				edm::EDGetTokenT<pat::METCollection>     mettoken_egclean    , 
+				edm::EDGetTokenT<pat::METCollection>     mettoken_megclean    , 
+				edm::EDGetTokenT<pat::METCollection>     mettoken_uncorr    , 
 				edm::EDGetTokenT<pat::METCollection>     metpuppitoken    , 
 				edm::EDGetTokenT<pat::METCollection>     metmvatoken    , 
  	 			edm::EDGetTokenT<pat::JetCollection>	 jettoken    ,
@@ -22,6 +25,9 @@ METsNtuplizer::METsNtuplizer( 	edm::EDGetTokenT<pat::METCollection>     mettoken
 									
 : CandidateNtuplizer ( nBranches    )
 , metInputToken_     ( mettoken     )
+, metegcleanInputToken_  ( mettoken_egclean    )
+, metmegcleanInputToken_ ( mettoken_megclean   )
+, metuncorrInputToken_   ( mettoken_uncorr     )
 , metpuppiInputToken_( metpuppitoken)
 , metmvaInputToken_  ( metmvatoken  )
 , jetInputToken_     ( jettoken     )
@@ -187,10 +193,39 @@ void METsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
 
 
   // PFMET
-	
   event.getByToken(metInputToken_, METs_ );
+  event.getByToken(metegcleanInputToken_, METsEGclean_ );
+  event.getByToken(metmegcleanInputToken_, METsMEGclean_ );
+  event.getByToken(metuncorrInputToken_, METsUncorr_ );
 
   if( doCorrOnTheFly_ ) addTypeICorr(event);
+
+  for (const pat::MET &met : *METsEGclean_) {
+    nBranches_->MET_egclean_et .push_back(met.et());
+    nBranches_->MET_egclean_px .push_back(met.px());
+    nBranches_->MET_egclean_py .push_back(met.py());
+    nBranches_->MET_egclean_phi.push_back(met.phi());
+    nBranches_->MET_egclean_sumEt.push_back(met.sumEt());    
+  }
+
+  for (const pat::MET &met : *METsMEGclean_) {
+    nBranches_->MET_megclean_et .push_back(met.et());
+    nBranches_->MET_megclean_px .push_back(met.px());
+    nBranches_->MET_megclean_py .push_back(met.py());
+    nBranches_->MET_megclean_phi.push_back(met.phi());
+    nBranches_->MET_megclean_sumEt.push_back(met.sumEt());    
+  }
+
+
+  for (const pat::MET &met : *METsUncorr_) {
+    nBranches_->MET_uncorr_et .push_back(met.et());
+    nBranches_->MET_uncorr_px .push_back(met.px());
+    nBranches_->MET_uncorr_py .push_back(met.py());
+    nBranches_->MET_uncorr_phi.push_back(met.phi());
+    nBranches_->MET_uncorr_sumEt.push_back(met.sumEt());    
+  }
+
+
 
   for (const pat::MET &met : *METs_) {
     //const float rawPt	= met.shiftedPt(pat::MET::NoShift, pat::MET::Raw);
@@ -229,7 +264,7 @@ void METsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
     nBranches_->MET_sumEt.push_back(sumEtcorr);
     nBranches_->MET_corrPx.push_back(TypeICorrMap_["corrEx"]);
     nBranches_->MET_corrPy.push_back(TypeICorrMap_["corrEy"]); 	 
-    
+
     nBranches_->MET_JetEnUp.push_back( met.shiftedPt(pat::MET::METUncertainty::JetEnUp) / met.et() );
     nBranches_->MET_JetEnDown.push_back( met.shiftedPt(pat::MET::METUncertainty::JetEnDown) / met.et() );
     nBranches_->MET_JetResUp.push_back( met.shiftedPt(pat::MET::METUncertainty::JetResUp) / met.et() );

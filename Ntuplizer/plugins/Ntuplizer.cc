@@ -61,6 +61,9 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
 	tauBoostedTauToken_	    (consumes<pat::TauCollection>(iConfig.getParameter<edm::InputTag>("tausBoostedTau"))),
 
 	metToken_	      	    (consumes<pat::METCollection>(iConfig.getParameter<edm::InputTag>("mets"))),
+	metegcleanToken_	    (consumes<pat::METCollection>(iConfig.getParameter<edm::InputTag>("mets_EGclean"))),
+	metmegcleanToken_	    (consumes<pat::METCollection>(iConfig.getParameter<edm::InputTag>("mets_MEGclean"))),
+	metuncorrToken_	      	    (consumes<pat::METCollection>(iConfig.getParameter<edm::InputTag>("mets_uncorr"))),
 	metpuppiToken_	      	    (consumes<pat::METCollection>(iConfig.getParameter<edm::InputTag>("mets_puppi"))),
 	metmvaToken_	      	    (consumes<pat::METCollection>(iConfig.getParameter<edm::InputTag>("mets_mva"))),
 	metSigToken_	      	    (consumes<double>(edm::InputTag("METSignificance","METSignificance"))),
@@ -202,6 +205,9 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
     }
     
     nTuplizers_["MET"] = new METsNtuplizer( metToken_          , 
+					    metegcleanToken_   , 
+					    metmegcleanToken_  , 
+					    metuncorrToken_    ,
 					    metpuppiToken_     , 
 					    metmvaToken_     , 
                                             jetForMetCorrToken_, 

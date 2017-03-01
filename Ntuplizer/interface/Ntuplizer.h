@@ -88,6 +88,9 @@ private:
 
 
   edm::EDGetTokenT<pat::METCollection> 	    		    metToken_		;
+  edm::EDGetTokenT<pat::METCollection> 	    		    metegcleanToken_		;
+  edm::EDGetTokenT<pat::METCollection> 	    		    metmegcleanToken_		;
+  edm::EDGetTokenT<pat::METCollection> 	    		    metuncorrToken_		;
   edm::EDGetTokenT<pat::METCollection> 	    		    metpuppiToken_		;
   edm::EDGetTokenT<pat::METCollection> 	    		    metmvaToken_		;
   edm::EDGetTokenT<double> 	    		            metSigToken_		;

@@ -658,6 +658,24 @@ public:
   std::vector<float>  	      	    MET_mva_phi	              ;
   std::vector<float>  	      	    MET_sumEt		      ;
   std::vector<float>  	      	    MET_T1Uncertainty	      ;
+
+  std::vector<float>  	      	    MET_egclean_et		      ;
+  std::vector<float>  	      	    MET_egclean_px		      ;
+  std::vector<float>  	      	    MET_egclean_py		      ;
+  std::vector<float>  	      	    MET_egclean_phi		      ;
+  std::vector<float>  	      	    MET_egclean_sumEt		      ;
+
+  std::vector<float>  	      	    MET_megclean_et		      ;
+  std::vector<float>  	      	    MET_megclean_px		      ;
+  std::vector<float>  	      	    MET_megclean_py		      ;
+  std::vector<float>  	      	    MET_megclean_phi		      ;
+  std::vector<float>  	      	    MET_megclean_sumEt		      ;
+
+  std::vector<float>  	      	    MET_uncorr_et		      ;
+  std::vector<float>  	      	    MET_uncorr_px		      ;
+  std::vector<float>  	      	    MET_uncorr_py		      ;
+  std::vector<float>  	      	    MET_uncorr_phi		      ;
+  std::vector<float>  	      	    MET_uncorr_sumEt		      ;
   
   std::vector<float>  	      	    MET_JetEnUp	      ;
   std::vector<float>  	      	    MET_JetEnDown	      ;

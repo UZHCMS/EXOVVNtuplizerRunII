@@ -636,7 +636,25 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch("MET_JetResUp"	                , &MET_JetResUp 	     ); 
     tree_->Branch("MET_JetResDown"	                , &MET_JetResDown 	     ); 
     tree_->Branch("MET_UnclusteredEnUp"	                , &MET_UnclusteredEnUp 	     ); 
-    tree_->Branch("MET_UnclusteredEnDown"	                , &MET_UnclusteredEnDown 	     ); 
+    tree_->Branch("MET_UnclusteredEnDown"	        , &MET_UnclusteredEnDown     );
+
+    tree_->Branch("MET_egclean_et"	                , &MET_egclean_et  	     ); 
+    tree_->Branch("MET_egclean_px"	                , &MET_egclean_px  	     ); 
+    tree_->Branch("MET_egclean_py"	                , &MET_egclean_py  	     ); 
+    tree_->Branch("MET_egclean_phi"	                , &MET_egclean_phi  	     ); 
+    tree_->Branch("MET_egclean_sumEt"	                , &MET_egclean_sumEt         );
+
+    tree_->Branch("MET_megclean_et"	                , &MET_megclean_et  	     ); 
+    tree_->Branch("MET_megclean_px"	                , &MET_megclean_px  	     ); 
+    tree_->Branch("MET_megclean_py"	                , &MET_megclean_py  	     ); 
+    tree_->Branch("MET_megclean_phi"	                , &MET_megclean_phi  	     ); 
+    tree_->Branch("MET_megclean_sumEt"	                , &MET_megclean_sumEt        );
+
+    tree_->Branch("MET_uncorr_et"	                , &MET_uncorr_et  	     ); 
+    tree_->Branch("MET_uncorr_px"	                , &MET_uncorr_px  	     ); 
+    tree_->Branch("MET_uncorr_py"	                , &MET_uncorr_py  	     ); 
+    tree_->Branch("MET_uncorr_phi"	                , &MET_uncorr_phi  	     ); 
+    tree_->Branch("MET_uncorr_sumEt"	                , &MET_uncorr_sumEt          );
     
   } //doMissingEt
 
@@ -1274,6 +1292,24 @@ void NtupleBranches::reset( void ){
   MET_phi.clear();
   MET_puppi_et.clear();
   MET_puppi_phi.clear();
+
+  MET_egclean_et.clear();
+  MET_egclean_px.clear();
+  MET_egclean_py.clear();
+  MET_egclean_phi.clear();
+  MET_egclean_sumEt.clear();
+  
+  MET_megclean_et.clear();
+  MET_megclean_px.clear();
+  MET_megclean_py.clear();
+  MET_megclean_phi.clear();
+  MET_megclean_sumEt.clear();
+  
+  MET_uncorr_et.clear();
+  MET_uncorr_px.clear();
+  MET_uncorr_py.clear();
+  MET_uncorr_phi.clear();
+  MET_uncorr_sumEt.clear();
 
   MET_sumEt.clear();
   MET_T1Uncertainty.clear();
