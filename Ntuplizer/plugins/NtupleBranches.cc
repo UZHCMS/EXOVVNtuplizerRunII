@@ -616,6 +616,9 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch("passFilter_HcalStripHalo"                , &passFilter_HcalStripHalo_                   ,"passFilter_HcalStripHalo_/O");
     tree_->Branch("passFilter_chargedHadronTrackResolution" , &passFilter_chargedHadronTrackResolution_    ,"passFilter_chargedHadronTrackResolution_/O");
     tree_->Branch("passFilter_muonBadTrack"                 , &passFilter_muonBadTrack_                    ,"passFilter_muonBadTrack_/O");
+    tree_->Branch("flag_badMuons"                 , &flag_badMuons_                    ,"flag_badMuons_/O");
+    tree_->Branch("flag_duplicateMuons"                 , &flag_duplicateMuons_                    ,"flag_duplicateMuons_/O");
+    tree_->Branch("flag_nobadMuons"                 , &flag_nobadMuons_                    ,"flag_nobadMuons_/O");
     
   } //do HltFilters
 
@@ -1281,6 +1284,9 @@ void NtupleBranches::reset( void ){
   passFilter_HcalStripHalo_                   = false;
   passFilter_chargedHadronTrackResolution_    = false;
   passFilter_muonBadTrack_                    = false;
+  flag_badMuons_                    = false;
+  flag_duplicateMuons_              = false;
+  flag_nobadMuons_                  = false;
 
   /** MET */
   METraw_et.clear();	 
