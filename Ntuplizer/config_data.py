@@ -20,13 +20,14 @@ import FWCore.ParameterSet.VarParsing as VarParsing
 
 options = VarParsing.VarParsing ('analysis')
 
-options.maxEvents = 1000
+options.maxEvents = 100
 
 #data file
 
 # options.inputFiles = '/store/data/Run2015D/SingleMuon/MINIAOD/05Oct2015-v1/10000/021FD3F0-876F-E511-99D2-0025905A6060.root'
 #options.inputFiles = 'dcap://t3se01.psi.ch:22125//pnfs/psi.ch/cms/trivcat/store/data/Run2015D/JetHT/MINIAOD/16Dec2015-v1/00000/301A497D-70B0-E511-9630-002590D0AFA8.root'
-options.inputFiles = '/store/data/Run2016F/JetHT/MINIAOD/23Sep2016-v1/100000/00AB3FCF-1D86-E611-930B-002590D60036.root'
+#options.inputFiles = '/store/data/Run2016F/JetHT/MINIAOD/23Sep2016-v1/100000/00AB3FCF-1D86-E611-930B-002590D60036.root'
+options.inputFiles = '/store/data/Run2016C/SingleMuon/MINIAOD/03Feb2017-v1/50000/001CF316-1AEB-E611-BBBD-0CC47A4C8EE2.root'
 options.parseArguments()
 
 process.options  = cms.untracked.PSet( 
@@ -636,6 +637,10 @@ jetsAK10trimmed = ""
 jetsAK8Puppi = ""  
 
 METS = "slimmedMETs"
+METS_EGclean = "slimmedMETsEGClean"
+METS_MEGclean = "slimmedMETsMuEGClean"
+METS_uncorr = "slimmedMETsUncorrected"
+
 if config["DOMETRECLUSTERING"]: jetsAK4 = "selectedPatJets"
 if config["USENOHF"]: METS = "slimmedMETsNoHF"  
 
@@ -843,6 +848,9 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     genJetsAK8 = cms.InputTag(genAK8),
     subjetflavour = cms.InputTag("AK8byValAlgo"),
     mets = cms.InputTag(METS),
+    mets_EGclean = cms.InputTag(METS_EGclean),
+    mets_MEGclean = cms.InputTag(METS_MEGclean),
+    mets_uncorr = cms.InputTag(METS_uncorr),
     mets_puppi = cms.InputTag("slimmedMETsPuppi"),
     mets_mva = cms.InputTag("MVAMET","MVAMET"),
     corrMetPx = cms.string("+0.1166 + 0.0200*Nvtx"),
