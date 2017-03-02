@@ -37,6 +37,8 @@ ElectronsNtuplizer::ElectronsNtuplizer( edm::EDGetTokenT<edm::View<pat::Electron
 					edm::EDGetTokenT<edm::ValueMap<float> >               mvaValuesMapToken,
 					edm::EDGetTokenT<edm::ValueMap<int> >                 mvaCategoriesMapToken,
 					edm::EDGetTokenT<edm::SortedCollection<EcalRecHit,edm::StrictWeakOrdering<EcalRecHit>>> ebRecHitsToken, 	
+					edm::EDGetTokenT<bool>                                dupClusterToken,
+					edm::EDGetTokenT<edm::EDCollection<DetId> >           hitsNotReplacedToken,					
 					edm::EDGetTokenT<pat::TauCollection>                  boostedtauToken  ,
 					NtupleBranches*                                       nBranches  ,
 					std::map< std::string, bool >&                        runFlags 
@@ -56,7 +58,9 @@ ElectronsNtuplizer::ElectronsNtuplizer( edm::EDGetTokenT<edm::View<pat::Electron
 	, mvaValuesMapToken_( mvaValuesMapToken )
 	, mvaCategoriesMapToken_( mvaCategoriesMapToken )
 	, ebRecHitsToken_ ( ebRecHitsToken )
-	, boostedtauToken_		   ( boostedtauToken    )
+	, dupClusterToken_ ( dupClusterToken )
+	, hitsNotReplacedToken_ ( hitsNotReplacedToken )
+	, boostedtauToken_    	   ( boostedtauToken    )
 	, doBoostedTaus_   	   ( runFlags["doBoostedTaus"]  )
 {
 
@@ -155,7 +159,15 @@ void ElectronsNtuplizer::fillBranches( edm::Event const & event, const edm::Even
    event.getByToken(mvaCategoriesMapToken_ , mva_categories);
    event.getByToken(ebRecHitsToken_, _ebRecHits);
    
+   event.getByToken(dupClusterToken_, dupClusterHandle_);
+   event.getByToken(hitsNotReplacedToken_, hitsNotReplacedHandle_);
    
+   // Just for debugging purpose
+   //   std::cout << "dupClusterHandle = " << (*dupClusterHandle_) << std::endl;
+   //   std::cout << "isEmpty = " << (hitsNotReplacedHandle_->size() == 0) << ", size = " << hitsNotReplacedHandle_->size() << std::endl;
+  
+   nBranches_->el_dupECALClusters.push_back((*dupClusterHandle_));
+   nBranches_->el_ishitsNotReplacedEmpty.push_back((hitsNotReplacedHandle_->size() == 0));
   
    // Find the first vertex in the collection that passes good quality criteria
    // reco::VertexCollection::const_iterator firstGoodVertex = vertices_->end();

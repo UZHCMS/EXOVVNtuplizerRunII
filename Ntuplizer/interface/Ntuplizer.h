@@ -14,6 +14,8 @@
 #include "SimDataFormats/JetMatching/interface/JetFlavour.h"
 #include "DataFormats/PatCandidates/interface/TriggerObjectStandAlone.h"
 #include "DataFormats/PatCandidates/interface/PackedTriggerPrescales.h"
+#include "DataFormats/Common/interface/EDCollection.h"
+#include "DataFormats/DetId/interface/DetId.h"
 #include "../interface/NtupleBranches.h"
 
 #include "SimDataFormats/GeneratorProducts/interface/GenEventInfoProduct.h"
@@ -22,6 +24,7 @@
 #include "SimDataFormats/GeneratorProducts/interface/LHEEventProduct.h"
 #include "SimDataFormats/GeneratorProducts/interface/LHERunInfoProduct.h"
 #include "GeneratorInterface/LHEInterface/interface/LHEEvent.h"
+
 class NtupleBranches;
 class CandidateNtuplizer;
 
@@ -83,6 +86,8 @@ private:
   edm::EDGetTokenT<edm::ValueMap<float> >                   mvaValuesMapToken_;
   edm::EDGetTokenT<edm::ValueMap<int> >                     mvaCategoriesMapToken_;
   edm::EDGetTokenT<edm::SortedCollection<EcalRecHit,edm::StrictWeakOrdering<EcalRecHit>>> ebRecHitsToken_;
+  edm::EDGetTokenT<bool>                                    dupClusterToken_;
+  edm::EDGetTokenT<edm::EDCollection<DetId> >               hitsNotReplacedToken_;
   edm::EDGetTokenT<pat::TauCollection> 	    		    tauToken_		;
   edm::EDGetTokenT<pat::TauCollection> 	    		    tauBoostedTauToken_	;
 

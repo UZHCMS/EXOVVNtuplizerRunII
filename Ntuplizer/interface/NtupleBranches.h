@@ -32,6 +32,9 @@
 #include "TTree.h"
 #include "TLorentzVector.h"
 
+#include "DataFormats/Common/interface/EDCollection.h"
+#include "DataFormats/DetId/interface/DetId.h"
+
 /*here we declare the input and output variables*/
 
 class NtupleBranches {
@@ -166,6 +169,8 @@ public:
   std::vector<int  >  	      el_isLooseElectronBoosted	  ;  
   std::vector<float>  	      el_SemileptonicPFIso 	 ;//  Isolations for semileptonic tau channel  
   std::vector<float>  	      el_SemileptonicCorrPFIso   ;// the simple PF one and the corrected one for the tau presence
+  std::vector<int  >  	      el_dupECALClusters         ;
+  std::vector<int  >  	      el_ishitsNotReplacedEmpty  ;
 
   /** muons */
   int 	                      mu_N		         ;

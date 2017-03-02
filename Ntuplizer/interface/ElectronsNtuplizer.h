@@ -2,6 +2,8 @@
 #define ElectronsNtuplizer_H
 
 #include "../interface/CandidateNtuplizer.h"
+#include "DataFormats/Common/interface/EDCollection.h"
+#include "DataFormats/DetId/interface/DetId.h"
 
 class ElectronsNtuplizer : public CandidateNtuplizer {
 
@@ -13,7 +15,9 @@ public:
 	 	      edm::EDGetTokenT<edm::ValueMap<float> > mvaValuesMapToken  ,
 	 	      edm::EDGetTokenT<edm::ValueMap<int> > mvaCategoriesMapToken  ,	
 	 	      edm::EDGetTokenT<edm::SortedCollection<EcalRecHit,edm::StrictWeakOrdering<EcalRecHit>>> ebRecHitsToken, 	      
-		      edm::EDGetTokenT<pat::TauCollection>                 boostedtauToken  ,
+		      edm::EDGetTokenT<bool>                               dupClusterToken,
+		      edm::EDGetTokenT<edm::EDCollection<DetId>>           hitsNotReplacedToken,
+		      edm::EDGetTokenT<pat::TauCollection>                  boostedtauToken  ,
 		      NtupleBranches*				           nBranches    ,
 		      std::map< std::string, bool >&                       runFlags 
 		      );
@@ -42,7 +46,11 @@ private:
    edm::EDGetTokenT<edm::ValueMap<float> >   mvaValuesMapToken_;
    edm::EDGetTokenT<edm::ValueMap<int> >     mvaCategoriesMapToken_;
    edm::EDGetTokenT<edm::SortedCollection<EcalRecHit,edm::StrictWeakOrdering<EcalRecHit>>> ebRecHitsToken_; 
+   edm::EDGetTokenT<bool>                                    dupClusterToken_;
+   edm::EDGetTokenT<edm::EDCollection<DetId> >               hitsNotReplacedToken_;
    edm::EDGetTokenT<pat::TauCollection>      boostedtauToken_  ;
+   
+   
    edm::Handle<edm::View<pat::Electron> >    electrons_    ;
    edm::Handle<reco::VertexCollection> 	     vertices_     ;
    edm::Handle<double> 			     rho_	   ;
@@ -58,6 +66,12 @@ private:
    edm::Handle<edm::ValueMap<int> >          mva_categories;
    edm::Handle<edm::SortedCollection<EcalRecHit,edm::StrictWeakOrdering<EcalRecHit>>> _ebRecHits;
    edm::Handle<pat::TauCollection> 	     taus_         ;  
+
+   // New for Moriond
+   edm::Handle<bool> dupClusterHandle_;
+   edm::Handle<edm::EDCollection<DetId> > hitsNotReplacedHandle_;
+
+
    bool doBoostedTaus_;
 };
 

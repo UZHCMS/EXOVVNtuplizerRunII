@@ -142,6 +142,8 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch( "el_chargedHadIsoBoost"      , &el_chargedHadIsoBoost       );  
     tree_->Branch( "el_SemileptonicPFIso"       , &el_SemileptonicPFIso        );
     tree_->Branch( "el_SemileptonicCorrPFIso"   , &el_SemileptonicCorrPFIso    );
+    tree_->Branch( "el_dupECALClusters"         , &el_dupECALClusters          );
+    tree_->Branch( "el_ishitsNotReplacedEmpty"  , &el_ishitsNotReplacedEmpty   );
   } //doElectrons
   
   if ( runFlags["doMuons"] ){
@@ -838,7 +840,9 @@ void NtupleBranches::reset( void ){
   //  el_chargedHadIsoBoost.clear();
   el_SemileptonicPFIso.clear();
   el_SemileptonicCorrPFIso.clear();
-  
+  el_dupECALClusters.clear();
+  el_ishitsNotReplacedEmpty.clear();
+
   /** muons */
   mu_N        = 0;
   mu_pdgId.clear();
