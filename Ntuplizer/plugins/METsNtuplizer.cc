@@ -200,29 +200,109 @@ void METsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
 
   if( doCorrOnTheFly_ ) addTypeICorr(event);
 
+  //  std::cout << "check : " << doCorrOnTheFly_ << std::endl;
+
   for (const pat::MET &met : *METsEGclean_) {
-    nBranches_->MET_egclean_et .push_back(met.et());
-    nBranches_->MET_egclean_px .push_back(met.px());
-    nBranches_->MET_egclean_py .push_back(met.py());
-    nBranches_->MET_egclean_phi.push_back(met.phi());
-    nBranches_->MET_egclean_sumEt.push_back(met.sumEt());    
+
+    const float rawPt	 = met.uncorPt();//met.shiftedPt(pat::MET::METUncertainty::NoShift, pat::MET::METUncertaintyLevel::Raw);
+    const float rawPhi   = met.uncorPhi();//met.shiftedPhi(pat::MET::METUncertainty::NoShift, pat::MET::METUncertaintyLevel::Raw);
+    const float rawSumEt = met.uncorSumEt();//met.shiftedSumEt(pat::MET::METUncertainty::NoShift, pat::MET::METUncertaintyLevel::Raw);
+        
+    TVector2 rawMET_;
+    rawMET_.SetMagPhi (rawPt, rawPhi );
+
+    Double_t rawPx = rawMET_.Px();
+    Double_t rawPy = rawMET_.Py();
+
+    double pxcorr = met.px();
+    double pycorr = met.py();
+    double etcorr = met.et();
+    double sumEtcorr = met.sumEt();
+
+    if( doCorrOnTheFly_ ){
+       pxcorr = rawPx+TypeICorrMap_["corrEx"];
+       pycorr = rawPy+TypeICorrMap_["corrEy"];
+       etcorr = std::hypot(pxcorr,pycorr);
+       sumEtcorr = rawSumEt+TypeICorrMap_["corrSumEt"];
+    }
+
+    TLorentzVector corrmet; corrmet.SetPxPyPzE(pxcorr,pycorr,0.,etcorr);
+
+    nBranches_->MET_egclean_et .push_back(etcorr);
+    nBranches_->MET_egclean_px .push_back(pxcorr);
+    nBranches_->MET_egclean_py .push_back(pycorr);
+    nBranches_->MET_egclean_phi.push_back(corrmet.Phi());
+    nBranches_->MET_egclean_sumEt.push_back(sumEtcorr);
   }
 
+
   for (const pat::MET &met : *METsMEGclean_) {
-    nBranches_->MET_megclean_et .push_back(met.et());
-    nBranches_->MET_megclean_px .push_back(met.px());
-    nBranches_->MET_megclean_py .push_back(met.py());
-    nBranches_->MET_megclean_phi.push_back(met.phi());
-    nBranches_->MET_megclean_sumEt.push_back(met.sumEt());    
+
+    const float rawPt	 = met.uncorPt();//met.shiftedPt(pat::MET::METUncertainty::NoShift, pat::MET::METUncertaintyLevel::Raw);
+    const float rawPhi   = met.uncorPhi();//met.shiftedPhi(pat::MET::METUncertainty::NoShift, pat::MET::METUncertaintyLevel::Raw);
+    const float rawSumEt = met.uncorSumEt();//met.shiftedSumEt(pat::MET::METUncertainty::NoShift, pat::MET::METUncertaintyLevel::Raw);
+        
+    TVector2 rawMET_;
+    rawMET_.SetMagPhi (rawPt, rawPhi );
+
+    Double_t rawPx = rawMET_.Px();
+    Double_t rawPy = rawMET_.Py();
+
+    double pxcorr = met.px();
+    double pycorr = met.py();
+    double etcorr = met.et();
+    double sumEtcorr = met.sumEt();
+
+    if( doCorrOnTheFly_ ){
+       pxcorr = rawPx+TypeICorrMap_["corrEx"];
+       pycorr = rawPy+TypeICorrMap_["corrEy"];
+       etcorr = std::hypot(pxcorr,pycorr);
+       sumEtcorr = rawSumEt+TypeICorrMap_["corrSumEt"];
+    }
+
+    TLorentzVector corrmet; corrmet.SetPxPyPzE(pxcorr,pycorr,0.,etcorr);
+
+    nBranches_->MET_megclean_et .push_back(etcorr);
+    nBranches_->MET_megclean_px .push_back(pxcorr);
+    nBranches_->MET_megclean_py .push_back(pycorr);
+    nBranches_->MET_megclean_phi.push_back(corrmet.Phi());
+    nBranches_->MET_megclean_sumEt.push_back(sumEtcorr);
+
   }
 
 
   for (const pat::MET &met : *METsUncorr_) {
-    nBranches_->MET_uncorr_et .push_back(met.et());
-    nBranches_->MET_uncorr_px .push_back(met.px());
-    nBranches_->MET_uncorr_py .push_back(met.py());
-    nBranches_->MET_uncorr_phi.push_back(met.phi());
-    nBranches_->MET_uncorr_sumEt.push_back(met.sumEt());    
+
+    const float rawPt	 = met.uncorPt();//met.shiftedPt(pat::MET::METUncertainty::NoShift, pat::MET::METUncertaintyLevel::Raw);
+    const float rawPhi   = met.uncorPhi();//met.shiftedPhi(pat::MET::METUncertainty::NoShift, pat::MET::METUncertaintyLevel::Raw);
+    const float rawSumEt = met.uncorSumEt();//met.shiftedSumEt(pat::MET::METUncertainty::NoShift, pat::MET::METUncertaintyLevel::Raw);
+        
+    TVector2 rawMET_;
+    rawMET_.SetMagPhi (rawPt, rawPhi );
+
+    Double_t rawPx = rawMET_.Px();
+    Double_t rawPy = rawMET_.Py();
+
+    double pxcorr = met.px();
+    double pycorr = met.py();
+    double etcorr = met.et();
+    double sumEtcorr = met.sumEt();
+
+    if( doCorrOnTheFly_ ){
+       pxcorr = rawPx+TypeICorrMap_["corrEx"];
+       pycorr = rawPy+TypeICorrMap_["corrEy"];
+       etcorr = std::hypot(pxcorr,pycorr);
+       sumEtcorr = rawSumEt+TypeICorrMap_["corrSumEt"];
+    }
+
+    TLorentzVector corrmet; corrmet.SetPxPyPzE(pxcorr,pycorr,0.,etcorr);
+
+    nBranches_->MET_uncorr_et .push_back(etcorr);
+    nBranches_->MET_uncorr_px .push_back(pxcorr);
+    nBranches_->MET_uncorr_py .push_back(pycorr);
+    nBranches_->MET_uncorr_phi.push_back(corrmet.Phi());
+    nBranches_->MET_uncorr_sumEt.push_back(sumEtcorr);
+
   }
 
 
