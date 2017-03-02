@@ -9,6 +9,9 @@ class METsNtuplizer : public CandidateNtuplizer {
 
 public:
    METsNtuplizer( edm::EDGetTokenT<pat::METCollection>     mettoken    , 
+		  edm::EDGetTokenT<pat::METCollection>     mettoken_egclean    , 
+		  edm::EDGetTokenT<pat::METCollection>     mettoken_megclean    , 
+		  edm::EDGetTokenT<pat::METCollection>     mettoken_uncorr    , 
 		  edm::EDGetTokenT<pat::METCollection>     metpuppitoken    , 
 		  edm::EDGetTokenT<pat::METCollection>     metmvatoken    , 
  	 	  edm::EDGetTokenT<pat::JetCollection>	   jettoken    ,
@@ -31,6 +34,9 @@ public:
    
    private:
     edm::EDGetTokenT<pat::METCollection>	 metInputToken_  ;
+    edm::EDGetTokenT<pat::METCollection>	 metegcleanInputToken_  ;
+    edm::EDGetTokenT<pat::METCollection>	 metmegcleanInputToken_  ;
+    edm::EDGetTokenT<pat::METCollection>	 metuncorrInputToken_  ;
     edm::EDGetTokenT<pat::METCollection>	 metpuppiInputToken_  ;
     edm::EDGetTokenT<pat::METCollection>	 metmvaInputToken_  ;
     edm::EDGetTokenT<pat::JetCollection>	 jetInputToken_  ; 
@@ -48,6 +54,9 @@ public:
     boost::shared_ptr<FactorizedJetCorrector>	 jecOffset_	 ;
     
     edm::Handle<pat::METCollection>		 METs_  	 ;
+    edm::Handle<pat::METCollection>		 METsEGclean_  	 ;
+    edm::Handle<pat::METCollection>		 METsMEGclean_   ;
+    edm::Handle<pat::METCollection>		 METsUncorr_  	 ;
     edm::Handle<pat::METCollection>		 METspuppi_  	 ;
     edm::Handle<pat::METCollection>		 METsmva_  	 ;
     edm::Handle<pat::MuonCollection>		 muons_ 	 ;

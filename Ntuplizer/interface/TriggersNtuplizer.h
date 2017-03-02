@@ -22,6 +22,7 @@ public:
    
   void fillBranches( edm::Event const & event, const edm::EventSetup& iSetup );
   bool findTrigger( std::string trigName );
+  bool findFilter( std::string trigName );
 
 private:
    edm::EDGetTokenT<edm::TriggerResults> 		     HLTtriggersToken_;
@@ -52,12 +53,16 @@ private:
    std::string TrkPOG_toomanystrip_NoiseFilter_Selector_;
    std::string TrkPOG_logError_NoiseFilter_Selector_;
    std::string METFilters_Selector_;
-   //NEW FOR ICHEP
+   // NEW FOR ICHEP
    std::string CSCTightHaloTrkMuUnvetoFilter_Selector_  ;
    std::string globalTightHalo2016Filter_Selector_  ;
    std::string HcalStripHaloFilter_Selector_  ;
    std::string chargedHadronTrackResolutionFilter_Selector_ ;
    std::string muonBadTrackFilter_Selector_ ;
+   // NEW for Moriond 
+   std::string badMuons_Selector_;
+   std::string duplicateMuons_Selector_;
+   std::string nobadMuons_Selector_;
    
    bool doTriggerDecisions_;
    bool doTriggerObjects_;

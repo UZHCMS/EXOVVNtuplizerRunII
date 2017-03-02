@@ -32,6 +32,9 @@
 #include "TTree.h"
 #include "TLorentzVector.h"
 
+#include "DataFormats/Common/interface/EDCollection.h"
+#include "DataFormats/DetId/interface/DetId.h"
+
 /*here we declare the input and output variables*/
 
 class NtupleBranches {
@@ -166,6 +169,8 @@ public:
   std::vector<int  >  	      el_isLooseElectronBoosted	  ;  
   std::vector<float>  	      el_SemileptonicPFIso 	 ;//  Isolations for semileptonic tau channel  
   std::vector<float>  	      el_SemileptonicCorrPFIso   ;// the simple PF one and the corrected one for the tau presence
+  std::vector<int  >  	      el_dupECALClusters         ;
+  std::vector<int  >  	      el_ishitsNotReplacedEmpty  ;
 
   /** muons */
   int 	                      mu_N		         ;
@@ -643,6 +648,9 @@ public:
   bool passFilter_HcalStripHalo_                   ;
   bool passFilter_chargedHadronTrackResolution_    ;
   bool passFilter_muonBadTrack_                    ;
+  bool flag_badMuons_;
+  bool flag_duplicateMuons_;
+  bool flag_nobadMuons_;
   
   /** MET */
   std::vector<float>                METraw_et		      ;	 
@@ -658,6 +666,24 @@ public:
   std::vector<float>  	      	    MET_mva_phi	              ;
   std::vector<float>  	      	    MET_sumEt		      ;
   std::vector<float>  	      	    MET_T1Uncertainty	      ;
+
+  std::vector<float>  	      	    MET_egclean_et		      ;
+  std::vector<float>  	      	    MET_egclean_px		      ;
+  std::vector<float>  	      	    MET_egclean_py		      ;
+  std::vector<float>  	      	    MET_egclean_phi		      ;
+  std::vector<float>  	      	    MET_egclean_sumEt		      ;
+
+  std::vector<float>  	      	    MET_megclean_et		      ;
+  std::vector<float>  	      	    MET_megclean_px		      ;
+  std::vector<float>  	      	    MET_megclean_py		      ;
+  std::vector<float>  	      	    MET_megclean_phi		      ;
+  std::vector<float>  	      	    MET_megclean_sumEt		      ;
+
+  std::vector<float>  	      	    MET_uncorr_et		      ;
+  std::vector<float>  	      	    MET_uncorr_px		      ;
+  std::vector<float>  	      	    MET_uncorr_py		      ;
+  std::vector<float>  	      	    MET_uncorr_phi		      ;
+  std::vector<float>  	      	    MET_uncorr_sumEt		      ;
   
   std::vector<float>  	      	    MET_JetEnUp	      ;
   std::vector<float>  	      	    MET_JetEnDown	      ;

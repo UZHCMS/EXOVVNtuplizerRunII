@@ -872,6 +872,12 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     noiseFilterSelection_HcalStripHaloFilter = cms.string('Flag_HcalStripHaloFilter'),
     noiseFilterSelection_chargedHadronTrackResolutionFilter = cms.string('Flag_chargedHadronTrackResolutionFilter'),
     noiseFilterSelection_muonBadTrackFilter = cms.string('Flag_muonBadTrackFilter'),
+
+    #New for Moriond
+    noiseFilterSelection_badMuonsFilter = cms.string('Flag_badMuons'),
+    noiseFilterSelection_duplicateMuonsFilter = cms.string('Flag_duplicateMuons'),
+    noiseFilterSelection_nobadMuonsFilter = cms.string('Flag_nobadMuons'),
+
     # and the sub-filters
     noiseFilterSelection_trkPOG_manystripclus53X = cms.string('Flag_trkPOG_manystripclus53X'),
     noiseFilterSelection_trkPOG_toomanystripclus53X = cms.string('Flag_trkPOG_toomanystripclus53X'),

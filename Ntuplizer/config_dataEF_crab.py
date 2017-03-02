@@ -637,6 +637,10 @@ jetsAK10trimmed = ""
 jetsAK8Puppi = ""
 
 METS = "slimmedMETs"
+METS_EGclean = "slimmedMETsEGClean"
+METS_MEGclean = "slimmedMETsMuEGClean"
+METS_uncorr = "slimmedMETsUncorrected"
+
 if config["DOMETRECLUSTERING"]: jetsAK4 = "selectedPatJets"
 if config["USENOHF"]: METS = "slimmedMETsNoHF"
 
@@ -832,7 +836,8 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     eleMVATightIdMap  = cms.InputTag("egmGsfElectronIDs:mvaEleID-Spring16-GeneralPurpose-V1-wp80"),
     mvaValuesMap     = cms.InputTag("electronMVAValueMapProducer:ElectronMVAEstimatorRun2Spring16GeneralPurposeV1Values"),
     mvaCategoriesMap = cms.InputTag("electronMVAValueMapProducer:ElectronMVAEstimatorRun2Spring16GeneralPurposeV1Categories"),
-
+    dupCluster          = cms.InputTag("particleFlowEGammaGSFixed:dupECALClusters"),
+    hitsNotReplaced     = cms.InputTag("ecalMultiAndGSGlobalRecHitEB:hitsNotReplaced"),
     taus = cms.InputTag(TAUS),
     tausBoostedTau = cms.InputTag(BOOSTEDTAUS),
     jets = cms.InputTag(jetsAK4),
@@ -845,6 +850,9 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     genJetsAK8 = cms.InputTag(genAK8),
     subjetflavour = cms.InputTag("AK8byValAlgo"),
     mets = cms.InputTag(METS),
+    mets_EGclean = cms.InputTag(METS_EGclean),
+    mets_MEGclean = cms.InputTag(METS_MEGclean),
+    mets_uncorr = cms.InputTag(METS_uncorr),
     mets_puppi = cms.InputTag("slimmedMETsPuppi"),
     mets_mva = cms.InputTag("MVAMET","MVAMET"),
     corrMetPx = cms.string("+0.1166 + 0.0200*Nvtx"),
@@ -900,6 +908,11 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     noiseFilterSelection_HcalStripHaloFilter = cms.string('Flag_HcalStripHaloFilter'),
     noiseFilterSelection_chargedHadronTrackResolutionFilter = cms.string('Flag_chargedHadronTrackResolutionFilter'),
     noiseFilterSelection_muonBadTrackFilter = cms.string('Flag_muonBadTrackFilter'),
+
+    #New for Moriond
+    noiseFilterSelection_badMuonsFilter = cms.string('Flag_badMuons'),
+    noiseFilterSelection_duplicateMuonsFilter = cms.string('Flag_duplicateMuons'),
+    noiseFilterSelection_nobadMuonsFilter = cms.string('Flag_nobadMuons'),
 
    # and the sub-filters
     noiseFilterSelection_trkPOG_manystripclus53X = cms.string('Flag_trkPOG_manystripclus53X'),

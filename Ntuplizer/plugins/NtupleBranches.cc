@@ -142,6 +142,8 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch( "el_chargedHadIsoBoost"      , &el_chargedHadIsoBoost       );  
     tree_->Branch( "el_SemileptonicPFIso"       , &el_SemileptonicPFIso        );
     tree_->Branch( "el_SemileptonicCorrPFIso"   , &el_SemileptonicCorrPFIso    );
+    tree_->Branch( "el_dupECALClusters"         , &el_dupECALClusters          );
+    tree_->Branch( "el_ishitsNotReplacedEmpty"  , &el_ishitsNotReplacedEmpty   );
   } //doElectrons
   
   if ( runFlags["doMuons"] ){
@@ -616,6 +618,9 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch("passFilter_HcalStripHalo"                , &passFilter_HcalStripHalo_                   ,"passFilter_HcalStripHalo_/O");
     tree_->Branch("passFilter_chargedHadronTrackResolution" , &passFilter_chargedHadronTrackResolution_    ,"passFilter_chargedHadronTrackResolution_/O");
     tree_->Branch("passFilter_muonBadTrack"                 , &passFilter_muonBadTrack_                    ,"passFilter_muonBadTrack_/O");
+    tree_->Branch("flag_badMuons"                 , &flag_badMuons_                    ,"flag_badMuons_/O");
+    tree_->Branch("flag_duplicateMuons"                 , &flag_duplicateMuons_                    ,"flag_duplicateMuons_/O");
+    tree_->Branch("flag_nobadMuons"                 , &flag_nobadMuons_                    ,"flag_nobadMuons_/O");
     
   } //do HltFilters
 
@@ -636,7 +641,25 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch("MET_JetResUp"	                , &MET_JetResUp 	     ); 
     tree_->Branch("MET_JetResDown"	                , &MET_JetResDown 	     ); 
     tree_->Branch("MET_UnclusteredEnUp"	                , &MET_UnclusteredEnUp 	     ); 
-    tree_->Branch("MET_UnclusteredEnDown"	                , &MET_UnclusteredEnDown 	     ); 
+    tree_->Branch("MET_UnclusteredEnDown"	        , &MET_UnclusteredEnDown     );
+
+    tree_->Branch("MET_egclean_et"	                , &MET_egclean_et  	     ); 
+    tree_->Branch("MET_egclean_px"	                , &MET_egclean_px  	     ); 
+    tree_->Branch("MET_egclean_py"	                , &MET_egclean_py  	     ); 
+    tree_->Branch("MET_egclean_phi"	                , &MET_egclean_phi  	     ); 
+    tree_->Branch("MET_egclean_sumEt"	                , &MET_egclean_sumEt         );
+
+    tree_->Branch("MET_megclean_et"	                , &MET_megclean_et  	     ); 
+    tree_->Branch("MET_megclean_px"	                , &MET_megclean_px  	     ); 
+    tree_->Branch("MET_megclean_py"	                , &MET_megclean_py  	     ); 
+    tree_->Branch("MET_megclean_phi"	                , &MET_megclean_phi  	     ); 
+    tree_->Branch("MET_megclean_sumEt"	                , &MET_megclean_sumEt        );
+
+    tree_->Branch("MET_uncorr_et"	                , &MET_uncorr_et  	     ); 
+    tree_->Branch("MET_uncorr_px"	                , &MET_uncorr_px  	     ); 
+    tree_->Branch("MET_uncorr_py"	                , &MET_uncorr_py  	     ); 
+    tree_->Branch("MET_uncorr_phi"	                , &MET_uncorr_phi  	     ); 
+    tree_->Branch("MET_uncorr_sumEt"	                , &MET_uncorr_sumEt          );
     
   } //doMissingEt
 
@@ -817,7 +840,9 @@ void NtupleBranches::reset( void ){
   //  el_chargedHadIsoBoost.clear();
   el_SemileptonicPFIso.clear();
   el_SemileptonicCorrPFIso.clear();
-  
+  el_dupECALClusters.clear();
+  el_ishitsNotReplacedEmpty.clear();
+
   /** muons */
   mu_N        = 0;
   mu_pdgId.clear();
@@ -1263,6 +1288,9 @@ void NtupleBranches::reset( void ){
   passFilter_HcalStripHalo_                   = false;
   passFilter_chargedHadronTrackResolution_    = false;
   passFilter_muonBadTrack_                    = false;
+  flag_badMuons_                    = false;
+  flag_duplicateMuons_              = false;
+  flag_nobadMuons_                  = false;
 
   /** MET */
   METraw_et.clear();	 
@@ -1274,6 +1302,24 @@ void NtupleBranches::reset( void ){
   MET_phi.clear();
   MET_puppi_et.clear();
   MET_puppi_phi.clear();
+
+  MET_egclean_et.clear();
+  MET_egclean_px.clear();
+  MET_egclean_py.clear();
+  MET_egclean_phi.clear();
+  MET_egclean_sumEt.clear();
+  
+  MET_megclean_et.clear();
+  MET_megclean_px.clear();
+  MET_megclean_py.clear();
+  MET_megclean_phi.clear();
+  MET_megclean_sumEt.clear();
+  
+  MET_uncorr_et.clear();
+  MET_uncorr_px.clear();
+  MET_uncorr_py.clear();
+  MET_uncorr_phi.clear();
+  MET_uncorr_sumEt.clear();
 
   MET_sumEt.clear();
   MET_T1Uncertainty.clear();

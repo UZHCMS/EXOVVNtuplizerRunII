@@ -52,6 +52,12 @@ TriggersNtuplizer::TriggersNtuplizer( edm::EDGetTokenT<edm::TriggerResults> toke
   HcalStripHaloFilter_Selector_                 =  iConfig.getParameter<std::string> ("noiseFilterSelection_HcalStripHaloFilter");
   chargedHadronTrackResolutionFilter_Selector_  =  iConfig.getParameter<std::string> ("noiseFilterSelection_chargedHadronTrackResolutionFilter");
   muonBadTrackFilter_Selector_                  =  iConfig.getParameter<std::string> ("noiseFilterSelection_muonBadTrackFilter");
+  
+  //NEW FOR MORIOND
+
+  badMuons_Selector_  =  iConfig.getParameter<std::string> ("noiseFilterSelection_badMuonsFilter");
+  duplicateMuons_Selector_  =  iConfig.getParameter<std::string> ("noiseFilterSelection_duplicateMuonsFilter");
+  nobadMuons_Selector_  =  iConfig.getParameter<std::string> ("noiseFilterSelection_nobadMuonsFilter");
 
 }
 
@@ -192,8 +198,74 @@ bool TriggersNtuplizer::findTrigger( std::string trigName ){
    ) return true;
    else
      return false;
+}
+
+
+bool TriggersNtuplizer::findFilter( std::string filterName ){
+
+   if( filterName.find("hltL3crIsoL1sMu16L1f0L2f10QL3f18QL3trkIsoFiltered0p09") != std::string::npos ||
+       filterName.find("hltL3crIsoL1sMu18L1f0L2f10QL3f20QL3trkIsoFiltered0p09") != std::string::npos ||
+       filterName.find("hltL3crIsoL1sMu20L1f0L2f10QL3f22QL3trkIsoFiltered0p09") != std::string::npos ||
+       filterName.find("hltL3crIsoL1sSingleMu20erL1f0L2f10QL3f22QL3trkIsoFiltered0p09") != std::string::npos ||
+       filterName.find("hltL3crIsoL1sMu22L1f0L2f10QL3f24QL3trkIsoFiltered0p09") != std::string::npos ||
+       filterName.find("hltL3crIsoL1sMu22Or25L1f0L2f10QL3f27QL3trkIsoFiltered0p09") != std::string::npos ||
+       filterName.find("hltL3fL1sMu16L1f0Tkf18QL3trkIsoFiltered0p09") != std::string::npos ||
+       filterName.find("hltL3fL1sMu18L1f0Tkf20QL3trkIsoFiltered0p09") != std::string::npos ||
+       filterName.find("hltL3fL1sMu20erL1f0Tkf22QL3trkIsoFiltered0p09") != std::string::npos ||
+       filterName.find("hltL3fL1sMu20L1f0Tkf22QL3trkIsoFiltered0p09") != std::string::npos ||
+       filterName.find("hltL3fL1sMu22L1f0Tkf24QL3trkIsoFiltered0p09") != std::string::npos ||
+       filterName.find("hltL3fL1sMu22Or25L1f0Tkf27QL3trkIsoFiltered0p09") != std::string::npos ||
+       filterName.find("hltL3crIsoL1sSingleMu16erL1f0L2f10QL3f17QL3trkIsoFiltered0p09") != std::string::npos ||
+       filterName.find("hltOverlapFilterSingleIsoMu17LooseIsoPFTau20") != std::string::npos ||
+       filterName.find("hltL3crIsoL1sMu16erTauJet20erL1f0L2f10QL3f17QL3trkIsoFiltered0p09") != std::string::npos ||
+       filterName.find("hltOverlapFilterIsoMu17LooseIsoPFTau20") != std::string::npos ||
+       filterName.find("hltL3crIsoL1sSingleMu18erIorSingleMu20erL1f0L2f10QL3f19QL3trkIsoFiltered0p09") != std::string::npos ||
+       filterName.find("hltOverlapFilterSingleIsoMu19LooseIsoPFTau20") != std::string::npos ||
+       filterName.find("hltL3crIsoL1sMu18erTauJet20erL1f0L2f10QL3f19QL3trkIsoFiltered0p09") != std::string::npos ||
+       filterName.find("hltOverlapFilterIsoMu19LooseIsoPFTau20") != std::string::npos ||
+       filterName.find("hltL3crIsoL1sSingleMu20erIorSingleMu22erL1f0L2f10QL3f21QL3trkIsoFiltered0p09") != std::string::npos ||
+       filterName.find("hltOverlapFilterSingleIsoMu21LooseIsoPFTau20") != std::string::npos ||
+       filterName.find("hltPFTau20TrackLooseIsoAgainstMuon") != std::string::npos ||
+       filterName.find("hltEle23WPLooseGsfTrackIsoFilter") != std::string::npos ||
+       filterName.find("hltSingleEle24WPLooseGsfTrackIsoFilter") != std::string::npos ||
+       filterName.find("hltEle25WPTightGsfTrackIsoFilter") != std::string::npos ||
+       filterName.find("hltEle25erWPLooseGsfTrackIsoFilter") != std::string::npos ||
+       filterName.find("hltEle25erWPTightGsfTrackIsoFilter") != std::string::npos ||
+       filterName.find("hltEle27noerWPLooseGsfTrackIsoFilter") != std::string::npos ||
+       filterName.find("hltEle27WPTightGsfTrackIsoFilter") != std::string::npos ||
+       filterName.find("hltEle27erWPLooseGsfTrackIsoFilter") != std::string::npos ||
+       filterName.find("hltEle27erWPTightGsfTrackIsoFilter") != std::string::npos ||
+       filterName.find("hltEle32WPTightGsfTrackIsoFilter") != std::string::npos ||
+       filterName.find("hltEle22WPLooseL1SingleIsoEG20erGsfTrackIsoFilter") != std::string::npos ||
+       filterName.find("hltOverlapFilterSingleIsoEle22WPLooseGsfLooseIsoPFTau20") != std::string::npos ||
+       filterName.find("hltEle24WPLooseL1SingleIsoEG22erGsfTrackIsoFilter") != std::string::npos ||
+       filterName.find("hltOverlapFilterSingleIsoEle24WPLooseGsfLooseIsoPFTau20") != std::string::npos ||
+       filterName.find("hltEle24WPLooseL1IsoEG22erTau20erGsfTrackIsoFilter") != std::string::npos ||
+       filterName.find("hltOverlapFilterIsoEle24WPLooseGsfLooseIsoPFTau20") != std::string::npos ||
+       filterName.find("hltOverlapFilterIsoEle27WPLooseGsfLooseIsoPFTau20") != std::string::npos ||
+       filterName.find("hltEle32WPLooseGsfTrackIsoFilter") != std::string::npos ||
+       filterName.find("hltOverlapFilterIsoEle32WPLooseGsfLooseIsoPFTau20") != std::string::npos ||
+       filterName.find("hltPFTau20TrackLooseIso") != std::string::npos ||
+       filterName.find("hltMu8TrkIsoVVLEle17CaloIdLTrackIdLIsoVLElectronlegTrackIsoFilter") != std::string::npos ||
+       filterName.find("hltMu8TrkIsoVVLEle23CaloIdLTrackIdLIsoVLElectronlegTrackIsoFilter") != std::string::npos ||
+       filterName.find("hltMu17TrkIsoVVLEle12CaloIdLTrackIdLIsoVLElectronlegTrackIsoFilter") != std::string::npos ||
+       filterName.find("hltMu23TrkIsoVVLEle12CaloIdLTrackIdLIsoVLElectronlegTrackIsoFilter") != std::string::npos ||
+       filterName.find("hltMu23TrkIsoVVLEle8CaloIdLTrackIdLIsoVLElectronlegTrackIsoFilter") != std::string::npos ||
+       filterName.find("hltEle27erWPLooseGsfTrackIsoFilter") != std::string::npos ||
+       filterName.find("hltMu8TrkIsoVVLEle17CaloIdLTrackIdLIsoVLMuonlegL3IsoFiltered8") != std::string::npos ||
+       filterName.find("hltMu8TrkIsoVVLEle23CaloIdLTrackIdLIsoVLMuonlegL3IsoFiltered8") != std::string::npos ||
+       filterName.find("hltMu17TrkIsoVVLEle12CaloIdLTrackIdLIsoVLMuonlegL3IsoFiltered17") != std::string::npos ||
+       filterName.find("hltMu23TrkIsoVVLEle12CaloIdLTrackIdLIsoVLMuonlegL3IsoFiltered23") != std::string::npos ||
+       filterName.find("hltMu23TrkIsoVVLEle8CaloIdLTrackIdLIsoVLMuonlegL3IsoFiltered23") != std::string::npos ||
+       filterName.find("hltMu8TrkIsoVVLEle23CaloIdLTrackIdLIsoVLDZFilter") != std::string::npos ||
+       filterName.find("hltMu23TrkIsoVVLEle12CaloIdLTrackIdLIsoVLDZFilter") != std::string::npos
+       ) return true;
+   else
+     return false;
 
 }
+
+
 
 //===================================================================================================================
 void TriggersNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetup& iSetup ){
@@ -234,21 +306,29 @@ void TriggersNtuplizer::fillBranches( edm::Event const & event, const edm::Event
 
   			if( isBoth || isL3 ){
 
-  			   nBranches_->triggerObject_pt	 .push_back(obj.pt());
-  			   nBranches_->triggerObject_eta .push_back(obj.eta());
-  			   nBranches_->triggerObject_phi .push_back(obj.phi());
-  			   nBranches_->triggerObject_mass.push_back(obj.mass());
-  			   nBranches_->triggerObject_lastname.push_back(pathNamesLast[h]);
 
 			   for (unsigned h = 0; h < obj.filterIds().size(); ++h) vfilterIDs.push_back( obj.filterIds()[h]); // as defined in http://cmslxr.fnal.gov/lxr/source/DataFormats/HLTReco/interface/TriggerTypeDefs.h
 
 			   std::vector<std::string> vfilterLabels; vfilterLabels.clear();
 
-  			   for (unsigned h = 0; h < obj.filterLabels().size(); ++h){
-			     vfilterLabels.push_back( obj.filterLabels()[h]);
+			   bool isFilterExist = false;
+
+			   for (unsigned hh = 0; hh < obj.filterLabels().size(); ++hh){
+			     if(findFilter(obj.filterLabels()[hh])){
+			       vfilterLabels.push_back( obj.filterLabels()[hh]);
+			       isFilterExist = true;
+			     }
 			   }
 
-			   nBranches_->triggerObject_filterLabels[pathNamesLast[h]] = vfilterLabels;
+			   
+			   if(isFilterExist){
+			     nBranches_->triggerObject_pt  .push_back(obj.pt());
+			     nBranches_->triggerObject_eta .push_back(obj.eta());
+			     nBranches_->triggerObject_phi .push_back(obj.phi());
+			     nBranches_->triggerObject_mass.push_back(obj.mass());
+			     nBranches_->triggerObject_lastname.push_back(pathNamesLast[h]);
+			     nBranches_->triggerObject_filterLabels[pathNamesLast[h]] = vfilterLabels;
+			   }
 
 
   			   if( pathNamesLast[h] == "HLT_AK8PFJet360_TrimMass30_v1") vfiredTrigger.push_back( 0 );
@@ -325,6 +405,16 @@ void TriggersNtuplizer::fillBranches( edm::Event const & event, const edm::Event
         nBranches_->passFilter_chargedHadronTrackResolution_ = noiseFilterBits_->accept(i); // TO BE USED FOR ICHEP 2016
       if (names.triggerName(i) == muonBadTrackFilter_Selector_                  )
         nBranches_->passFilter_muonBadTrack_ = noiseFilterBits_->accept(i); // TO BE USED FOR ICHEP 2016
+      //NEW FOR MORIOND
+      if (names.triggerName(i) == badMuons_Selector_                  )
+        nBranches_->flag_badMuons_ = noiseFilterBits_->accept(i); // TO BE USED FOR ICHEP 2016
+
+      if (names.triggerName(i) == duplicateMuons_Selector_                  )
+        nBranches_->flag_duplicateMuons_ = noiseFilterBits_->accept(i); // TO BE USED FOR ICHEP 2016
+
+      if (names.triggerName(i) == nobadMuons_Selector_                  )
+        nBranches_->flag_nobadMuons_ = noiseFilterBits_->accept(i); // TO BE USED FOR ICHEP 2016
+
     }
 
     //if( !runOnMC_ /*&& event.id().run() < 251585*/ ){
