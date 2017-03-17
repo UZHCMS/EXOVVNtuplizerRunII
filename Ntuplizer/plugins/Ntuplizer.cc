@@ -270,7 +270,7 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
     nTuplizers_["vertices"] = new VerticesNtuplizer( vtxTokens   , 
                                                      nBranches_ );
   }
-  
+
   if (runFlags["doTriggerDecisions"] || runFlags["doTriggerObjects"] || runFlags["doTriggerDecisions"]) {
     nTuplizers_["triggers"] = new TriggersNtuplizer( triggerToken_, 
                                                      triggerObjects_, 
@@ -344,8 +344,8 @@ void Ntuplizer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
            
   nBranches_->EVENT_event     = iEvent.id().event();
   nBranches_->EVENT_run       = iEvent.id().run();
-  nBranches_->EVENT_lumiBlock = iEvent.id().luminosityBlock();  
-         
+  nBranches_->EVENT_lumiBlock = iEvent.id().luminosityBlock();
+
   for( std::map<std::string,CandidateNtuplizer*>::iterator it = nTuplizers_.begin(); it != nTuplizers_.end(); ++it )
     (it->second)->fillBranches( iEvent, iSetup );
   

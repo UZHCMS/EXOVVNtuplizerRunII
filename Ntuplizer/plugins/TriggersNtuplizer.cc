@@ -261,8 +261,7 @@ bool TriggersNtuplizer::findFilter( std::string filterName ){
        filterName.find("hltMu23TrkIsoVVLEle12CaloIdLTrackIdLIsoVLDZFilter") != std::string::npos
        ) return true;
    else
-     return false;
-
+     return false;   
 }
 
 
@@ -276,11 +275,12 @@ void TriggersNtuplizer::fillBranches( edm::Event const & event, const edm::Event
 
   const edm::TriggerNames& trigNames = event.triggerNames(*HLTtriggers_);
 
+
   if (doTriggerDecisions_) {
   	 for (unsigned int i = 0, n = HLTtriggers_->size(); i < n; ++i) {
-	   // std::cout << "Trigger " << trigNames.triggerName(i) << ": " << (HLTtriggers_->accept(i) ? "PASS" : "fail (or not run)") << std::endl;
   	  if( findTrigger(trigNames.triggerName(i)) ){
    	     nBranches_->HLT_isFired[trigNames.triggerName(i)] = HLTtriggers_->accept(i);
+	     //	     std::cout << "Trigger " << trigNames.triggerName(i) << ": " << (HLTtriggers_->accept(i) ? "PASS" : "fail (or not run)") << std::endl;
    	  }
    	}
 
@@ -304,6 +304,8 @@ void TriggersNtuplizer::fillBranches( edm::Event const & event, const edm::Event
   			bool isBoth = obj.hasPathName( pathNamesLast[h], true , true );
                         bool isL3   = obj.hasPathName( pathNamesLast[h], false, true );
 
+			//			std::cout << "trigger object =" << pathNamesLast[h] << "(isBoth, isL3) = " << isBoth << " " << isL3 << std::endl;
+			
   			if( isBoth || isL3 ){
 
 
@@ -314,6 +316,8 @@ void TriggersNtuplizer::fillBranches( edm::Event const & event, const edm::Event
 			   bool isFilterExist = false;
 
 			   for (unsigned hh = 0; hh < obj.filterLabels().size(); ++hh){
+			     //	std::cout << "filter label = " << obj.filterLabels()[hh] << std::endl;
+
 			     if(findFilter(obj.filterLabels()[hh])){
 			       vfilterLabels.push_back( obj.filterLabels()[hh]);
 			       isFilterExist = true;
@@ -327,7 +331,31 @@ void TriggersNtuplizer::fillBranches( edm::Event const & event, const edm::Event
 			     nBranches_->triggerObject_phi .push_back(obj.phi());
 			     nBranches_->triggerObject_mass.push_back(obj.mass());
 			     nBranches_->triggerObject_lastname.push_back(pathNamesLast[h]);
-			     nBranches_->triggerObject_filterLabels[pathNamesLast[h]] = vfilterLabels;
+
+			     if(nBranches_->triggerObject_filterLabels.find(pathNamesLast[h]) == nBranches_->triggerObject_filterLabels.end()){
+			       //  std::cout << "index NOT found !!!" << std::endl;
+			       nBranches_->triggerObject_filterLabels[pathNamesLast[h]] = vfilterLabels;
+			     }else{
+			       // add to the original
+			       // std::cout << "index found !!!" << std::endl;
+			       
+			       std::vector<std::string> vec1 = nBranches_->triggerObject_filterLabels[pathNamesLast[h]];
+			       
+//			       std::cout << "before : size of vec1 = " << vec1.size() << std::endl;
+//			       for(int ii = 0; ii < (int)vec1.size(); ii++){
+//				 std::cout << "\t\t " << vec1.at(ii) << std::endl;
+//			       }
+
+			       vec1.insert(vec1.end(), vfilterLabels.begin(), vfilterLabels.end());
+
+//			       std::cout << "after : size of vec1 = " << vec1.size() << std::endl;
+//			       for(int ii = 0; ii < (int)vec1.size(); ii++){
+//				 std::cout << "\t\t " << vec1.at(ii) << std::endl;
+//			       }
+
+			       nBranches_->triggerObject_filterLabels[pathNamesLast[h]] = vec1;
+			     }
+
 			   }
 
 
