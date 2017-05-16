@@ -22,6 +22,7 @@ public:
    
   void fillBranches( edm::Event const & event, const edm::EventSetup& iSetup );
   bool findTrigger( std::string trigName );
+  bool findFilter( std::string trigName );
 
 private:
    edm::EDGetTokenT<edm::TriggerResults> 		     HLTtriggersToken_;
