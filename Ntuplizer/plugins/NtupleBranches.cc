@@ -65,6 +65,17 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
       tree_->Branch( "PDF_x"	             , &PDF_x                  );
       tree_->Branch( "PDF_xPDF"	           , &PDF_xPDF               );
       tree_->Branch( "PDF_id"	             , &PDF_id                 );
+
+      tree_->Branch( "TauSpinnerWTisValid"   , &TauSpinnerWTisValid         );
+      tree_->Branch( "TauSpinnerWT"   , &TauSpinnerWT         );
+      tree_->Branch( "TauSpinnerWThminus"   , &TauSpinnerWThminus         );
+      tree_->Branch( "TauSpinnerWThplus"   , &TauSpinnerWThplus        );
+      tree_->Branch( "TauSpinnerTauPolFromZ"   , &TauSpinnerTauPolFromZ       );
+      tree_->Branch( "TauSpinnerWRight"   , &TauSpinnerWRight       );
+      tree_->Branch( "TauSpinnerWLeft"   , &TauSpinnerWLeft       );
+      tree_->Branch( "TauSpinnerIsRightLeft"   , &TauSpinnerIsRightLeft       );
+
+
     } //doGenEvent
   } //runOnMC
   
@@ -208,6 +219,23 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch( "tau_phi"		     	 , &tau_phi		       );
     tree_->Branch( "tau_mass"		     	 , &tau_mass		       );
     tree_->Branch( "tau_pt"		     	 , &tau_pt		       );
+
+    // YT added
+    tree_->Branch( "tau_associated_pdgId"    	 , &tau_associated_pdgId       );
+    tree_->Branch( "tau_associated_pt"    	 , &tau_associated_pt       );
+    tree_->Branch( "tau_associated_eta"    	 , &tau_associated_eta       );
+    tree_->Branch( "tau_associated_phi"    	 , &tau_associated_phi       );
+    tree_->Branch( "tau_associated_dr"    	 , &tau_associated_dr       );
+
+    tree_->Branch( "tau_n_total"    	 , &tau_n_total       );
+    tree_->Branch( "tau_n_ch"    	 , &tau_n_ch       );
+    tree_->Branch( "tau_n_nh"    	 , &tau_n_nh       );
+    tree_->Branch( "tau_n_h_f"    	 , &tau_n_h_f       );
+    tree_->Branch( "tau_n_em_f"    	 , &tau_n_em_f       );
+    tree_->Branch( "tau_n_gamma"    	 , &tau_n_gamma       );
+    tree_->Branch( "tau_n_e"    	 , &tau_n_e       );
+    tree_->Branch( "tau_n_mu"    	 , &tau_n_mu       );
+
     tree_->Branch( "tau_pfRhoCorrRelIso03"   	 , &tau_pfRhoCorrRelIso03      );
     tree_->Branch( "tau_pfRhoCorrRelIso04"   	 , &tau_pfRhoCorrRelIso04      );
     tree_->Branch( "tau_pfDeltaCorrRelIso"   	 , &tau_pfDeltaCorrRelIso      );
@@ -230,6 +258,33 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch( "tau_decayMode"		 , &tau_decayMode	       ); // YT added
     tree_->Branch( "tau_chargedPionPt"		 , &tau_chargedPionPt	       ); // YT added
     tree_->Branch( "tau_neutralPionPt"		 , &tau_neutralPionPt	       ); // YT added
+
+    // YT added
+    tree_->Branch( "tau_nPhoton"                 , &tau_nPhoton                );
+    tree_->Branch( "tau_nPhoton_1"                 , &tau_nPhoton_1                );
+    tree_->Branch( "tau_nPhoton_1p5"                 , &tau_nPhoton_1p5               );
+    tree_->Branch( "tau_nPhoton_2"                 , &tau_nPhoton_2               );
+    tree_->Branch( "tau_nPhoton_2p5"                 , &tau_nPhoton_2p5               );
+    tree_->Branch( "tau_nPhoton_3"                 , &tau_nPhoton_3               );
+    tree_->Branch( "tau_nPhoton_4"                 , &tau_nPhoton_4               );
+    tree_->Branch( "tau_nPhoton_5"                 , &tau_nPhoton_5               );
+    tree_->Branch( "tau_ptWeightedDetaStrip"     , &tau_ptWeightedDetaStrip    );
+    tree_->Branch( "tau_ptWeightedDphiStrip"     , &tau_ptWeightedDphiStrip    );
+    tree_->Branch( "tau_ptWeightedDrSignal"      , &tau_ptWeightedDrSignal     );
+    tree_->Branch( "tau_ptWeightedDrIsolation"   , &tau_ptWeightedDrIsolation  );
+    tree_->Branch( "tau_leadingTrackChi2"        , &tau_leadingTrackChi2       );
+    tree_->Branch( "tau_leadingTrackPt"          , &tau_leadingTrackPt         );
+    tree_->Branch( "tau_eRatio"                  , &tau_eRatio                 );
+    tree_->Branch( "tau_dxy_Sig"                 , &tau_dxy_Sig                );
+    tree_->Branch( "tau_ip3d"                    , &tau_ip3d                   );
+    tree_->Branch( "tau_ip3d_Sig"                , &tau_ip3d_Sig               );
+    tree_->Branch( "tau_hasSecondaryVertex"      , &tau_hasSecondaryVertex     );
+    tree_->Branch( "tau_decayDistMag_x"          , &tau_decayDistMag_x         );
+    tree_->Branch( "tau_decayDistMag_y"          , &tau_decayDistMag_y         );
+    tree_->Branch( "tau_decayDistMag_z"          , &tau_decayDistMag_z         );
+    tree_->Branch( "tau_decayDistMag"            , &tau_decayDistMag           );
+    tree_->Branch( "tau_flightLenthSig"          , &tau_flightLenthSig         );
+    // YT added end
   
     if ( runFlags["doBoostedTaus"] ){
       /** tau discriminants */
@@ -241,6 +296,14 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
       tree_->Branch( "tau_byCombinedIsolationDeltaBetaCorrRaw3Hits"   , &tau_byCombinedIsolationDeltaBetaCorrRaw3Hits	 );
       tree_->Branch( "tau_chargedIsoPtSum"			      , &tau_chargedIsoPtSum			         );
       tree_->Branch( "tau_neutralIsoPtSum"			      , &tau_neutralIsoPtSum			         );
+      tree_->Branch( "tau_neutralIsoPtSum_0p5"			      , &tau_neutralIsoPtSum_0p5			         );
+      tree_->Branch( "tau_neutralIsoPtSum_1"			      , &tau_neutralIsoPtSum_1			         );
+      tree_->Branch( "tau_neutralIsoPtSum_1p5"			      , &tau_neutralIsoPtSum_1p5			         );
+      tree_->Branch( "tau_neutralIsoPtSum_2"			      , &tau_neutralIsoPtSum_2			         );
+      tree_->Branch( "tau_neutralIsoPtSum_2p5"			      , &tau_neutralIsoPtSum_2p5			         );
+      tree_->Branch( "tau_neutralIsoPtSum_3"			      , &tau_neutralIsoPtSum_3			         );
+      tree_->Branch( "tau_neutralIsoPtSum_4"			      , &tau_neutralIsoPtSum_4			         );
+      tree_->Branch( "tau_neutralIsoPtSum_5"			      , &tau_neutralIsoPtSum_5			         );
       tree_->Branch( "tau_puCorrPtSum"				      , &tau_puCorrPtSum 				 );
      
 
@@ -254,6 +317,7 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
       tree_->Branch( "tau_byIsolationMVArun2v1DBdR03oldDMwLTraw"      , &tau_byIsolationMVArun2v1DBdR03oldDMwLTraw);
       tree_->Branch( "tau_byIsolationMVArun2v1DBnewDMwLTraw"          , &tau_byIsolationMVArun2v1DBnewDMwLTraw);
       tree_->Branch( "tau_byIsolationMVArun2v1DBoldDMwLTraw"          , &tau_byIsolationMVArun2v1DBoldDMwLTraw);
+      //      tree_->Branch( "tau_byIsolationMVArun2v1DBoldDMwoLTraw"          , &tau_byIsolationMVArun2v1DBoldDMwoLTraw);
       tree_->Branch( "tau_byIsolationMVArun2v1PWdR03oldDMwLTraw"      , &tau_byIsolationMVArun2v1PWdR03oldDMwLTraw);
       tree_->Branch( "tau_byIsolationMVArun2v1PWnewDMwLTraw"          , &tau_byIsolationMVArun2v1PWnewDMwLTraw);
       tree_->Branch( "tau_byIsolationMVArun2v1PWoldDMwLTraw"          , &tau_byIsolationMVArun2v1PWoldDMwLTraw);
@@ -299,7 +363,15 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
 
       tree_->Branch( "tau_byVVTightIsolationMVArun2v1PWoldDMwLT"        , &tau_byVVTightIsolationMVArun2v1PWoldDMwLT);
 
-
+      // YT added
+      tree_->Branch("tau_byIsolationMVArun2v1DBoldDMwLTrawNew", &tau_byIsolationMVArun2v1DBoldDMwLTrawNew);
+      tree_->Branch("tau_byVLooseIsolationMVArun2v1DBoldDMwLTNew", &tau_byVLooseIsolationMVArun2v1DBoldDMwLTNew);
+      tree_->Branch("tau_byLooseIsolationMVArun2v1DBoldDMwLTNew", &tau_byLooseIsolationMVArun2v1DBoldDMwLTNew);
+      tree_->Branch("tau_byMediumIsolationMVArun2v1DBoldDMwLTNew", &tau_byMediumIsolationMVArun2v1DBoldDMwLTNew);
+      tree_->Branch("tau_byTightIsolationMVArun2v1DBoldDMwLTNew", &tau_byTightIsolationMVArun2v1DBoldDMwLTNew);
+      tree_->Branch("tau_byVTightIsolationMVArun2v1DBoldDMwLTNew", &tau_byVTightIsolationMVArun2v1DBoldDMwLTNew);
+      tree_->Branch("tau_byVVTightIsolationMVArun2v1DBoldDMwLTNew", &tau_byVVTightIsolationMVArun2v1DBoldDMwLTNew);
+      // YT added end
 
 
       tree_->Branch( "tau_againstElectronMVA6raw"                     , &tau_againstElectronMVA6raw);
@@ -740,6 +812,15 @@ void NtupleBranches::reset( void ){
   lheNj = 0;
   lheV_mass = 0;
     
+  TauSpinnerWTisValid.clear();	
+  TauSpinnerWT.clear();	
+  TauSpinnerWThminus.clear();	
+  TauSpinnerWThplus.clear();	
+  TauSpinnerTauPolFromZ.clear();	
+  TauSpinnerWRight.clear();	
+  TauSpinnerWLeft.clear();	
+  TauSpinnerIsRightLeft.clear();	
+    
   /** electrons */
   el_N        = 0;
   el_pdgId.clear();
@@ -882,6 +963,23 @@ void NtupleBranches::reset( void ){
   tau_phi.clear();
   tau_mass.clear();
   tau_pt.clear();
+  
+  // YT added
+  tau_associated_pdgId.clear();
+  tau_associated_pt.clear();
+  tau_associated_eta.clear();
+  tau_associated_phi.clear();
+  tau_associated_dr.clear();
+  tau_n_total.clear();
+  tau_n_ch.clear();
+  tau_n_nh.clear();
+  tau_n_h_f.clear();
+  tau_n_em_f.clear();
+  tau_n_gamma.clear();
+  tau_n_e.clear();
+  tau_n_mu.clear();
+  tau_n_total.clear();
+
   tau_pfRhoCorrRelIso03.clear();
   tau_pfRhoCorrRelIso04.clear();
   tau_pfDeltaCorrRelIso.clear();
@@ -905,6 +1003,33 @@ void NtupleBranches::reset( void ){
   tau_chargedPionPt.clear();
   tau_neutralPionPt.clear();
 
+  tau_nPhoton.clear();  
+  tau_nPhoton_1.clear();  
+  tau_nPhoton_1p5.clear();  
+  tau_nPhoton_2.clear();  
+  tau_nPhoton_2p5.clear();  
+  tau_nPhoton_3.clear();  
+  tau_nPhoton_4.clear();  
+  tau_nPhoton_5.clear();  
+
+  tau_ptWeightedDetaStrip.clear();
+  tau_ptWeightedDphiStrip.clear();
+  tau_ptWeightedDrSignal.clear();
+  tau_ptWeightedDrIsolation.clear();
+  tau_leadingTrackChi2.clear();
+  tau_leadingTrackPt.clear();
+  tau_eRatio.clear();
+  tau_dxy_Sig.clear();
+  tau_ip3d.clear();
+  tau_ip3d_Sig.clear();
+  tau_hasSecondaryVertex.clear();
+  tau_decayDistMag_x.clear();
+  tau_decayDistMag_y.clear();
+  tau_decayDistMag_z.clear();
+  tau_decayDistMag.clear();
+  tau_flightLenthSig.clear();
+
+
   /** tau discriminants */
   tau_decayModeFindingNewDMs.clear();
   tau_decayModeFinding.clear();
@@ -914,6 +1039,14 @@ void NtupleBranches::reset( void ){
   tau_byCombinedIsolationDeltaBetaCorrRaw3Hits.clear();
   tau_chargedIsoPtSum.clear();
   tau_neutralIsoPtSum.clear();
+  tau_neutralIsoPtSum_0p5.clear();
+  tau_neutralIsoPtSum_1.clear();
+  tau_neutralIsoPtSum_1p5.clear();
+  tau_neutralIsoPtSum_2.clear();
+  tau_neutralIsoPtSum_2p5.clear();
+  tau_neutralIsoPtSum_3.clear();
+  tau_neutralIsoPtSum_4.clear();
+  tau_neutralIsoPtSum_5.clear();
   tau_puCorrPtSum.clear();
 
   
@@ -927,6 +1060,7 @@ void NtupleBranches::reset( void ){
   tau_byIsolationMVArun2v1DBdR03oldDMwLTraw.clear();
   tau_byIsolationMVArun2v1DBnewDMwLTraw.clear();
   tau_byIsolationMVArun2v1DBoldDMwLTraw.clear();
+  //  tau_byIsolationMVArun2v1DBoldDMwoLTraw.clear();
   tau_byIsolationMVArun2v1PWdR03oldDMwLTraw.clear();
   tau_byIsolationMVArun2v1PWnewDMwLTraw.clear();
   tau_byIsolationMVArun2v1PWoldDMwLTraw.clear();
@@ -973,7 +1107,14 @@ void NtupleBranches::reset( void ){
   tau_byVVTightIsolationMVArun2v1PWoldDMwLT.clear();
 
 
-
+  tau_byIsolationMVArun2v1DBoldDMwLTrawNew.clear();
+  tau_byVLooseIsolationMVArun2v1DBoldDMwLTNew.clear();
+  tau_byLooseIsolationMVArun2v1DBoldDMwLTNew.clear();
+  tau_byMediumIsolationMVArun2v1DBoldDMwLTNew.clear();
+  tau_byTightIsolationMVArun2v1DBoldDMwLTNew.clear();
+  tau_byVTightIsolationMVArun2v1DBoldDMwLTNew.clear();
+  tau_byVVTightIsolationMVArun2v1DBoldDMwLTNew.clear();
+  
 
   tau_againstElectronMVA6raw.clear();
   tau_againstElectronMVA6category.clear();

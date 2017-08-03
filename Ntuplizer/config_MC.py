@@ -20,7 +20,7 @@ import FWCore.ParameterSet.VarParsing as VarParsing
 
 options = VarParsing.VarParsing ('analysis')
 
-options.maxEvents = 2000
+options.maxEvents = 10
 
 #data file
 #options.inputFiles = "file:/mnt/t3nfs01/data01/shome/cgalloni/RunII/CMSSW_8_0_20/src/EXOVVNtuplizerRunII/Ntuplizer/patMiniAOD_standard_numEvent5000.root"
@@ -34,7 +34,15 @@ options.maxEvents = 2000
 #options.inputFiles = '/store/user/cgalloni/MiniAOD_191115/RadionTohhTohtatahbb_narrow_M-1000_13TeV-madgraph/BoostedTaus_RadionTohhTohtatahbb_narrow_M-1000_13TeV-madgraph_v0/151119_130555/0000/miniAOD_1.root'
 #options.inputFiles = '/store/mc/RunIISummer16MiniAODv2/QCD_Pt_300to470_TuneCUETP8M1_13TeV_pythia8/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext1-v1/120000/0679F830-EAB6-E611-B84A-0CC47A5FBE25.root'
 #options.inputFiles = '/store/mc/RunIISummer16MiniAODv2/WprimeToWhToWhadhbb_narrow_M-1000_13TeV-madgraph/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/92BBE2C3-1BE9-E611-A58C-D067E5F91587.root'
-options.inputFiles = '/store/mc/RunIISummer16MiniAODv2/VBFHToTauTau_M125_13TeV_powheg_pythia8/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/120000/0A1C9276-92C4-E611-B966-00266CF2CD48.root'
+#options.inputFiles = '/store/mc/RunIISummer16MiniAODv2/VBFHToTauTau_M125_13TeV_powheg_pythia8/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/120000/0A1C9276-92C4-E611-B966-00266CF2CD48.root'
+#options.inputFiles = '/store/mc/RunIISummer16MiniAODv2/TT_TuneCUETP8M2T4_13TeV-powheg-pythia8/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/0693E0E7-97BE-E611-B32F-0CC47A78A3D8.root'
+#options.inputFiles = 'file:HIG-RunIISummer16MiniAODv2-03361.root'
+
+#options.inputFiles = 'dcap://t3se01.psi.ch:22125//pnfs/psi.ch/cms/trivcat/store/t3groups/uniz-higgs/Summer16_miniAOD/mc/RunIISpring16MiniAODv2_PUSpring16_80X_mcRun2_asymptotic_2016_miniAODv2_v0/SUSYVBFToHToAA_AToBB_AToTauTau_M-20_TuneCUETP8M1_13TeV_madgraph_pythia8/miniAOD/v1/HToAA_AToBB_AToTauTau_M-20_TuneCUETP8M1_13TeV_madgraph_pythia8_10.root'
+options.inputFiles = 'file:/scratch/ytakahas/miniAOD_SUSYVBFToHToAA_AToBB_AToTauTau_M-20_TuneCUETP8M1_13TeV_madgraph_pythia8_10.root'
+
+
+
 options.parseArguments()
 
 process.options  = cms.untracked.PSet( 
@@ -46,7 +54,8 @@ process.options  = cms.untracked.PSet(
 process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(options.maxEvents) )
 
 process.source = cms.Source("PoolSource",
-                            fileNames = cms.untracked.vstring(options.inputFiles)
+                            fileNames = cms.untracked.vstring(options.inputFiles),
+                            duplicateCheckMode = cms.untracked.string('noDuplicateCheck')
                             )                     
 
 ######## Sequence settings ##########
@@ -664,10 +673,12 @@ if reclusterPuppi:
   jetsAK8Puppi = "packedJetsAk8PuppiJets"  
 
 if config["DOTAUSBOOSTED"]:
-  TAUS = "slimmedTaus"
+#  TAUS = "slimmedTaus"
+  TAUS = "NewTauIDsEmbedded"
   BOOSTEDTAUS = "slimmedTausBoosted"     
 else:
-  TAUS = "slimmedTaus"
+#  TAUS = "slimmedTaus"
+  TAUS = "NewTauIDsEmbedded"
   BOOSTEDTAUS = "slimmedTaus"
  
 ######## JEC ########
@@ -830,7 +841,7 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     PUInfo = cms.InputTag("slimmedAddPileupInfo"),
     genEventInfo = cms.InputTag("generator"),
     externallheProducer = cms.InputTag("externalLHEProducer"),
-#    HLT = cms.InputTag("TriggerResults","","HLT2"),
+#    HLT = cms.InputTag("TriggerResults","",""),
     HLT = cms.InputTag("TriggerResults","","HLT"),
     triggerobjects = cms.InputTag("selectedPatTrigger"),
     triggerprescales = cms.InputTag("patTrigger"),
@@ -888,11 +899,120 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     # summary
     noiseFilterSelection_metFilters = cms.string('Flag_METFilters'),
 
+    TauSpinnerWTisValid = cms.InputTag('TauSpinnerReco', 'TauSpinnerWTisValid'),
+    TauSpinnerWT = cms.InputTag('TauSpinnerReco', 'TauSpinnerWT'),
+    TauSpinnerWThminus = cms.InputTag('TauSpinnerReco', 'TauSpinnerWThminus'),
+    TauSpinnerWThplus = cms.InputTag('TauSpinnerReco', 'TauSpinnerWThplus'),
+    TauSpinnerTauPolFromZ = cms.InputTag('TauSpinnerReco', 'TauSpinnerTauPolFromZ'),
+    TauSpinnerWRight = cms.InputTag('TauSpinnerReco', 'TauSpinnerWRight'),
+    TauSpinnerWLeft = cms.InputTag('TauSpinnerReco', 'TauSpinnerWLeft'),
+    TauSpinnerIsRightLeft = cms.InputTag('TauSpinnerReco', 'TauSpinnerIsRightLeft'),
+
+    packedpfcandidates = cms.InputTag('packedPFCandidates')
 )
+
+####### TauSpinner ##########
+#iseed = 2134567
+#
+#process.load("GeneratorInterface.TauolaInterface.TauSpinner_cfi") 
+#process.RandomNumberGeneratorService = cms.Service("RandomNumberGeneratorService",
+#                                                   TauSpinnerReco = cms.PSet(
+#    initialSeed = cms.untracked.uint32( iseed ),
+#    engineName = cms.untracked.string('HepJamesRandom')
+#    ))
+#process.randomEngineStateProducer = cms.EDProducer("RandomEngineStateProducer") 
+#
+#process.TauSpinnerReco.CMSEnergy = cms.double(13000.0)
+#process.TauSpinnerReco.gensrc = cms.InputTag('prunedGenParticles') 
+#
+#process.load("FWCore.MessageService.MessageLogger_cfi")
+
+
+
+####### Tau new MVA ##########
+
+from RecoTauTag.RecoTau.TauDiscriminatorTools import noPrediscriminants
+process.load('RecoTauTag.Configuration.loadRecoTauTagMVAsFromPrepDB_cfi')
+from RecoTauTag.RecoTau.PATTauDiscriminationByMVAIsolationRun2_cff import *
+
+process.rerunDiscriminationByIsolationMVArun2v1raw = patDiscriminationByIsolationMVArun2v1raw.clone(
+   PATTauProducer = cms.InputTag('slimmedTaus'),
+   Prediscriminants = noPrediscriminants,
+   loadMVAfromDB = cms.bool(True),
+   mvaName = cms.string("RecoTauTag_tauIdMVAIsoDBoldDMwLT2016v1"), # name of the training you want to use
+   mvaOpt = cms.string("DBoldDMwLT"), # option you want to use for your training (i.e., which variables are used to compute the BDT score)
+   requireDecayMode = cms.bool(True),
+   verbosity = cms.int32(0)
+)
+
+process.rerunDiscriminationByIsolationMVArun2v1VLoose = patDiscriminationByIsolationMVArun2v1VLoose.clone(
+   PATTauProducer = cms.InputTag('slimmedTaus'),    
+   Prediscriminants = noPrediscriminants,
+   toMultiplex = cms.InputTag('rerunDiscriminationByIsolationMVArun2v1raw'),
+   key = cms.InputTag('rerunDiscriminationByIsolationMVArun2v1raw:category'),
+   loadMVAfromDB = cms.bool(True),
+   mvaOutput_normalization = cms.string("RecoTauTag_tauIdMVAIsoDBoldDMwLT2016v1_mvaOutput_normalization"), # normalization fo the training you want to use
+   mapping = cms.VPSet(
+      cms.PSet(
+         category = cms.uint32(0),
+         cut = cms.string("RecoTauTag_tauIdMVAIsoDBoldDMwLT2016v1_WPEff90"), # this is the name of the working point you want to use
+         variable = cms.string("pt"),
+      )
+   )
+)
+
+# here we produce all the other working points for the training
+process.rerunDiscriminationByIsolationMVArun2v1Loose = process.rerunDiscriminationByIsolationMVArun2v1VLoose.clone()
+process.rerunDiscriminationByIsolationMVArun2v1Loose.mapping[0].cut = cms.string("RecoTauTag_tauIdMVAIsoDBoldDMwLT2016v1_WPEff80")
+process.rerunDiscriminationByIsolationMVArun2v1Medium = process.rerunDiscriminationByIsolationMVArun2v1VLoose.clone()
+process.rerunDiscriminationByIsolationMVArun2v1Medium.mapping[0].cut = cms.string("RecoTauTag_tauIdMVAIsoDBoldDMwLT2016v1_WPEff70")
+process.rerunDiscriminationByIsolationMVArun2v1Tight = process.rerunDiscriminationByIsolationMVArun2v1VLoose.clone()
+process.rerunDiscriminationByIsolationMVArun2v1Tight.mapping[0].cut = cms.string("RecoTauTag_tauIdMVAIsoDBoldDMwLT2016v1_WPEff60")
+process.rerunDiscriminationByIsolationMVArun2v1VTight = process.rerunDiscriminationByIsolationMVArun2v1VLoose.clone()
+process.rerunDiscriminationByIsolationMVArun2v1VTight.mapping[0].cut = cms.string("RecoTauTag_tauIdMVAIsoDBoldDMwLT2016v1_WPEff50")
+process.rerunDiscriminationByIsolationMVArun2v1VVTight = process.rerunDiscriminationByIsolationMVArun2v1VLoose.clone()
+process.rerunDiscriminationByIsolationMVArun2v1VVTight.mapping[0].cut = cms.string("RecoTauTag_tauIdMVAIsoDBoldDMwLT2016v1_WPEff40")
+
+# this sequence has to be included in your cms.Path() before your analyzer which accesses the new variables is called.
+process.rerunMvaIsolation2SeqRun2 = cms.Sequence(
+   process.rerunDiscriminationByIsolationMVArun2v1raw
+   *process.rerunDiscriminationByIsolationMVArun2v1VLoose
+   *process.rerunDiscriminationByIsolationMVArun2v1Loose
+   *process.rerunDiscriminationByIsolationMVArun2v1Medium
+   *process.rerunDiscriminationByIsolationMVArun2v1Tight
+   *process.rerunDiscriminationByIsolationMVArun2v1VTight
+   *process.rerunDiscriminationByIsolationMVArun2v1VVTight
+)
+
+
+
+# embed new id's into new tau collection
+embedID = cms.EDProducer("PATTauIDEmbedder",
+   src = cms.InputTag('slimmedTaus'),
+   tauIDSources = cms.PSet(
+      byIsolationMVArun2v1DBoldDMwLTrawNew = cms.InputTag('rerunDiscriminationByIsolationMVArun2v1raw'),
+      byVLooseIsolationMVArun2v1DBoldDMwLTNew = cms.InputTag('rerunDiscriminationByIsolationMVArun2v1VLoose'),
+      byLooseIsolationMVArun2v1DBoldDMwLTNew = cms.InputTag('rerunDiscriminationByIsolationMVArun2v1Loose'),
+      byMediumIsolationMVArun2v1DBoldDMwLTNew = cms.InputTag('rerunDiscriminationByIsolationMVArun2v1Medium'),
+      byTightIsolationMVArun2v1DBoldDMwLTNew = cms.InputTag('rerunDiscriminationByIsolationMVArun2v1Tight'),
+      byVTightIsolationMVArun2v1DBoldDMwLTNew = cms.InputTag('rerunDiscriminationByIsolationMVArun2v1VTight'),
+      byVVTightIsolationMVArun2v1DBoldDMwLTNew = cms.InputTag('rerunDiscriminationByIsolationMVArun2v1VVTight'),
+      ),
+   )
+
+setattr(process, "NewTauIDsEmbedded", embedID)
 
 ####### Final path ##########
 process.p = cms.Path()
 if config["DOHLTFILTERS"]:
  process.p += process.HBHENoiseFilterResultProducer
  process.p += process.BadChargedCandidateSequence
+
+
+# For new MVA ID !
+process.p += process.rerunMvaIsolation2SeqRun2 
+process.p += getattr(process, "NewTauIDsEmbedded")
+# For new MVA ID END!
+
+
 process.p += process.ntuplizer

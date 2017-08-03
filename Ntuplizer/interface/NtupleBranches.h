@@ -92,6 +92,16 @@ public:
   std::vector<int  >              PDF_id               ;
   std::vector<float>              PDF_x                ;
   std::vector<float>              PDF_xPDF             ;
+
+  std::vector<int  >              TauSpinnerWTisValid  ;
+  std::vector<float>              TauSpinnerWT         ;	
+  std::vector<float>              TauSpinnerWThminus   ;	
+  std::vector<float>              TauSpinnerWThplus    ;	
+  std::vector<float>              TauSpinnerTauPolFromZ;	
+  std::vector<float>              TauSpinnerWRight     ;	
+  std::vector<float>              TauSpinnerWLeft      ;	
+  std::vector<float>              TauSpinnerIsRightLeft;	
+
           
   /** electrons */
   int 	                      el_N		         ;
@@ -228,6 +238,23 @@ public:
   std::vector<float>  	      tau_phi		         ;
   std::vector<float>  	      tau_mass		         ;
   std::vector<float>  	      tau_pt		         ;  
+
+  // YT added
+  std::vector<std::vector<int>>	      tau_associated_pdgId       ;  
+  std::vector<std::vector<float>>	      tau_associated_pt       ;  
+  std::vector<std::vector<float>>	      tau_associated_eta       ;  
+  std::vector<std::vector<float>>	      tau_associated_phi       ;  
+  std::vector<std::vector<float>>	      tau_associated_dr       ;  
+
+  std::vector<int>  	      tau_n_total                 ;
+  std::vector<int>  	      tau_n_ch                 ;
+  std::vector<int>  	      tau_n_nh                 ;
+  std::vector<int>  	      tau_n_h_f                 ;
+  std::vector<int>  	      tau_n_em_f                 ;
+  std::vector<int>  	      tau_n_gamma                 ;
+  std::vector<int>  	      tau_n_e                 ;
+  std::vector<int>  	      tau_n_mu                 ;
+
   std::vector<float>  	      tau_pfRhoCorrRelIso03  	 ;
   std::vector<float>  	      tau_pfRhoCorrRelIso04  	 ;
   std::vector<float>  	      tau_pfDeltaCorrRelIso  	 ;
@@ -250,7 +277,34 @@ public:
   std::vector<int  >  	      tau_decayMode	         ;  // YT added
   std::vector<float>  	      tau_chargedPionPt	         ;  // YT added
   std::vector<float>  	      tau_neutralPionPt	         ;  // YT added
-  
+  // YT added : newly added for the MVA training
+  std::vector<float>  	      tau_nPhoton		 ;  
+  std::vector<float>  	      tau_nPhoton_1		 ;  
+  std::vector<float>  	      tau_nPhoton_1p5		 ;  
+  std::vector<float>  	      tau_nPhoton_2		 ;  
+  std::vector<float>  	      tau_nPhoton_2p5		 ;  
+  std::vector<float>  	      tau_nPhoton_3		 ;  
+  std::vector<float>  	      tau_nPhoton_4		 ;  
+  std::vector<float>  	      tau_nPhoton_5		 ;  
+  std::vector<float>          tau_ptWeightedDetaStrip    ;
+  std::vector<float>          tau_ptWeightedDphiStrip    ;
+  std::vector<float>          tau_ptWeightedDrSignal     ;
+  std::vector<float>          tau_ptWeightedDrIsolation  ;
+  std::vector<float>          tau_leadingTrackChi2       ;
+  std::vector<float>          tau_leadingTrackPt         ;
+  std::vector<float>          tau_eRatio                 ;
+  std::vector<float>          tau_dxy_Sig                ;
+  std::vector<float>          tau_ip3d                   ;
+  std::vector<float>          tau_ip3d_Sig               ;
+  std::vector<int>            tau_hasSecondaryVertex     ;
+  std::vector<float>          tau_decayDistMag_x         ;
+  std::vector<float>          tau_decayDistMag_y         ;
+  std::vector<float>          tau_decayDistMag_z         ;
+  std::vector<float>          tau_decayDistMag           ;
+  std::vector<float>          tau_flightLenthSig         ;
+  // YT added end : newly added for the MVA training
+
+
   /** tau discriminants */
   std::vector<float>  	      tau_decayModeFindingNewDMs	              ;
   std::vector<float>          tau_decayModeFinding  			      ;
@@ -260,6 +314,14 @@ public:
   std::vector<float>  	      tau_byCombinedIsolationDeltaBetaCorrRaw3Hits    ;
   std::vector<float>  	      tau_chargedIsoPtSum			      ;
   std::vector<float>  	      tau_neutralIsoPtSum			      ;
+  std::vector<float>  	      tau_neutralIsoPtSum_0p5			      ;
+  std::vector<float>  	      tau_neutralIsoPtSum_1			      ;
+  std::vector<float>  	      tau_neutralIsoPtSum_1p5			      ;
+  std::vector<float>  	      tau_neutralIsoPtSum_2			      ;
+  std::vector<float>  	      tau_neutralIsoPtSum_2p5			      ;
+  std::vector<float>  	      tau_neutralIsoPtSum_3			      ;
+  std::vector<float>  	      tau_neutralIsoPtSum_4			      ;
+  std::vector<float>  	      tau_neutralIsoPtSum_5			      ;
   std::vector<float>  	      tau_puCorrPtSum				      ;
   std::vector<float>  	      tau_chargedIsoPtSumdR03			      ;
   std::vector<float>  	      tau_footprintCorrectiondR03			      ;
@@ -271,6 +333,7 @@ public:
   std::vector<float>  	      tau_byIsolationMVArun2v1DBdR03oldDMwLTraw			      ;
   std::vector<float>  	      tau_byIsolationMVArun2v1DBnewDMwLTraw			      ;
   std::vector<float>  	      tau_byIsolationMVArun2v1DBoldDMwLTraw			      ;
+  //  std::vector<float>  	      tau_byIsolationMVArun2v1DBoldDMwoLTraw			      ;
   std::vector<float>  	      tau_byIsolationMVArun2v1PWdR03oldDMwLTraw			      ;
   std::vector<float>  	      tau_byIsolationMVArun2v1PWnewDMwLTraw			      ;
   std::vector<float>  	      tau_byIsolationMVArun2v1PWoldDMwLTraw			      ;
@@ -316,6 +379,15 @@ public:
 
   std::vector<float>  	      tau_byVVTightIsolationMVArun2v1PWoldDMwLT			      ;
 
+  // YT added : newly added for the MVA training
+  std::vector<float>  	      tau_byIsolationMVArun2v1DBoldDMwLTrawNew;
+  std::vector<float>  	      tau_byVLooseIsolationMVArun2v1DBoldDMwLTNew;
+  std::vector<float>  	      tau_byLooseIsolationMVArun2v1DBoldDMwLTNew;
+  std::vector<float>  	      tau_byMediumIsolationMVArun2v1DBoldDMwLTNew;
+  std::vector<float>  	      tau_byTightIsolationMVArun2v1DBoldDMwLTNew;
+  std::vector<float>  	      tau_byVTightIsolationMVArun2v1DBoldDMwLTNew;
+  std::vector<float>  	      tau_byVVTightIsolationMVArun2v1DBoldDMwLTNew;
+  // YT added : newly added for the MVA training
 
   std::vector<float>  	      tau_againstElectronMVA6raw			      ;
   std::vector<float>  	      tau_againstElectronMVA6category			      ;

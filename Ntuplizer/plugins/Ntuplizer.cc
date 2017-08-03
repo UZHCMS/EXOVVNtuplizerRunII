@@ -24,10 +24,20 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
 
 	vtxToken_             	    (consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("vertices"))),
 	rhoToken_             	    (consumes<double>(iConfig.getParameter<edm::InputTag>("rho"))),
+	packedpfcandidatesToken_    (consumes<std::vector<pat::PackedCandidate>>(iConfig.getParameter<edm::InputTag>("packedpfcandidates"))),
 	puinfoToken_          	    (consumes<std::vector<PileupSummaryInfo> >(iConfig.getParameter<edm::InputTag>("PUInfo"))),
 	geneventToken_        	    (consumes<GenEventInfoProduct>(iConfig.getParameter<edm::InputTag>("genEventInfo"))),     
 	lheEventProductToken_       (consumes<LHEEventProduct>(iConfig.getParameter<edm::InputTag>("externallheProducer"))),     
 	genparticleToken_     	    (consumes<reco::GenParticleCollection>(iConfig.getParameter<edm::InputTag>("genparticles"))),
+	tauspinnerWTisValidToken_   (consumes<bool>(iConfig.getParameter<edm::InputTag>("TauSpinnerWTisValid"))),
+	tauspinnerWTToken_     	    (consumes<double>(iConfig.getParameter<edm::InputTag>("TauSpinnerWT"))),
+	tauspinnerWThminusToken_    (consumes<double>(iConfig.getParameter<edm::InputTag>("TauSpinnerWThminus"))),
+	tauspinnerWThplusToken_     (consumes<double>(iConfig.getParameter<edm::InputTag>("TauSpinnerWThplus"))),
+	tauspinnerTauPolFromZToken_ (consumes<double>(iConfig.getParameter<edm::InputTag>("TauSpinnerTauPolFromZ"))),
+	tauspinnerWRightToken_      (consumes<double>(iConfig.getParameter<edm::InputTag>("TauSpinnerWRight"))),
+	tauspinnerWLeftToken_       (consumes<double>(iConfig.getParameter<edm::InputTag>("TauSpinnerWLeft"))),
+	tauspinnerIsRightLeftToken_ (consumes<double>(iConfig.getParameter<edm::InputTag>("TauSpinnerIsRightLeft"))),
+
 	
 	jetToken_             	    (consumes<pat::JetCollection>(iConfig.getParameter<edm::InputTag>("jets"))),
 	fatjetToken_          	    (consumes<pat::JetCollection>(iConfig.getParameter<edm::InputTag>("fatjets"))),
@@ -279,6 +289,7 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
      nTuplizers_["taus"] = new TausNtuplizer( tauToken_      ,  
                                               tauBoostedTauToken_,  
 					      rhoToken_      ,  
+					      packedpfcandidatesToken_,
 					      vtxToken_      ,  
 					      nBranches_     , 
                                               runFlags      ); 
@@ -292,7 +303,20 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
     if (runFlags["doGenParticles"]) {
       std::vector<edm::EDGetTokenT<reco::GenParticleCollection>> genpTokens;
       genpTokens.push_back( genparticleToken_ );
-      nTuplizers_["genParticles"] = new GenParticlesNtuplizer( genpTokens, nBranches_ );
+
+      std::vector<edm::EDGetTokenT<bool>> tauspinnerTokens_bool;
+      tauspinnerTokens_bool.push_back( tauspinnerWTisValidToken_ );
+
+      std::vector<edm::EDGetTokenT<double>> tauspinnerTokens_double;
+      tauspinnerTokens_double.push_back(tauspinnerWTToken_);     	    
+      tauspinnerTokens_double.push_back(tauspinnerWThminusToken_);    
+      tauspinnerTokens_double.push_back(tauspinnerWThplusToken_);     
+      tauspinnerTokens_double.push_back(tauspinnerTauPolFromZToken_); 
+      tauspinnerTokens_double.push_back(tauspinnerWRightToken_);      
+      tauspinnerTokens_double.push_back(tauspinnerWLeftToken_);       
+      tauspinnerTokens_double.push_back(tauspinnerIsRightLeftToken_);       
+
+      nTuplizers_["genParticles"] = new GenParticlesNtuplizer( genpTokens, tauspinnerTokens_bool, tauspinnerTokens_double, nBranches_ );
     }
 
     if (runFlags["doPileUp"]) {
