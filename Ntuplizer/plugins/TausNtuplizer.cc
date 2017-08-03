@@ -168,28 +168,7 @@ void TausNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
       float decayDistY = tau.flightLength().y();
       float decayDistZ = tau.flightLength().z();
       float decayDistMag = std::sqrt(decayDistX*decayDistX + decayDistY*decayDistY + decayDistZ*decayDistZ);
-
-
-      float neutralptsum_0p5 = (float)clusterVariables_.tau_isophotons_total(tau, 0.5);
-      float neutralptsum_1 = (float)clusterVariables_.tau_isophotons_total(tau, 1.0);
-      float neutralptsum_1p5 = (float)clusterVariables_.tau_isophotons_total(tau, 1.5);
-      float neutralptsum_2 = (float)clusterVariables_.tau_isophotons_total(tau, 2.0);
-      float neutralptsum_2p5 = (float)clusterVariables_.tau_isophotons_total(tau, 2.5);
-      float neutralptsum_3 = (float)clusterVariables_.tau_isophotons_total(tau, 3.0);
-      float neutralptsum_4 = (float)clusterVariables_.tau_isophotons_total(tau, 4.0);
-      float neutralptsum_5 = (float)clusterVariables_.tau_isophotons_total(tau, 5.0);
-
-      //      std::cout << "official = " << tau.tauID("neutralIsoPtSum") << ", Yuta = " << check_0p5 << std::endl;      
-
-      float nPhoton = (float)clusterVariables_.tau_n_photons_total(tau, 0.5);
-      float nPhoton_1 = (float)clusterVariables_.tau_n_photons_total(tau, 1.0);
-      float nPhoton_1p5 = (float)clusterVariables_.tau_n_photons_total(tau, 1.5);
-      float nPhoton_2 = (float)clusterVariables_.tau_n_photons_total(tau, 2.0);
-      float nPhoton_2p5 = (float)clusterVariables_.tau_n_photons_total(tau, 2.5);
-      float nPhoton_3 = (float)clusterVariables_.tau_n_photons_total(tau, 3.0);
-      float nPhoton_4 = (float)clusterVariables_.tau_n_photons_total(tau, 4.0);
-      float nPhoton_5 = (float)clusterVariables_.tau_n_photons_total(tau, 5.0);
-
+      float nPhoton = (float)clusterVariables_.tau_n_photons_total(tau);
       float ptWeightedDetaStrip = clusterVariables_.tau_pt_weighted_deta_strip(tau, tauDecayMode);
       float ptWeightedDphiStrip = clusterVariables_.tau_pt_weighted_dphi_strip(tau, tauDecayMode);
       float ptWeightedDrSignal = clusterVariables_.tau_pt_weighted_dr_signal(tau, tauDecayMode);
@@ -205,13 +184,6 @@ void TausNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
 
 
       nBranches_->tau_nPhoton		     .push_back(nPhoton);
-      nBranches_->tau_nPhoton_1		     .push_back(nPhoton_1);
-      nBranches_->tau_nPhoton_1p5	     .push_back(nPhoton_1p5);
-      nBranches_->tau_nPhoton_2		     .push_back(nPhoton_2);
-      nBranches_->tau_nPhoton_2p5	     .push_back(nPhoton_2p5);
-      nBranches_->tau_nPhoton_3		     .push_back(nPhoton_3);
-      nBranches_->tau_nPhoton_4		     .push_back(nPhoton_4);
-      nBranches_->tau_nPhoton_5		     .push_back(nPhoton_5);
       nBranches_->tau_ptWeightedDetaStrip    .push_back(ptWeightedDetaStrip);
       nBranches_->tau_ptWeightedDphiStrip    .push_back(ptWeightedDphiStrip);
       nBranches_->tau_ptWeightedDrSignal     .push_back(ptWeightedDrSignal);
@@ -306,15 +278,6 @@ void TausNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
       nBranches_->tau_neutralIsoPtSum                            .push_back(tau.tauID("neutralIsoPtSum" 			    ));
       nBranches_->tau_puCorrPtSum                                .push_back(tau.tauID("puCorrPtSum"				    ));
 
-      nBranches_->tau_neutralIsoPtSum_0p5                        .push_back(neutralptsum_0p5);
-      nBranches_->tau_neutralIsoPtSum_1                        .push_back(neutralptsum_1);
-      nBranches_->tau_neutralIsoPtSum_1p5                        .push_back(neutralptsum_1p5);
-      nBranches_->tau_neutralIsoPtSum_2                        .push_back(neutralptsum_2);
-      nBranches_->tau_neutralIsoPtSum_2p5                        .push_back(neutralptsum_2p5);
-      nBranches_->tau_neutralIsoPtSum_3                       .push_back(neutralptsum_3);
-      nBranches_->tau_neutralIsoPtSum_4                        .push_back(neutralptsum_4);
-      nBranches_->tau_neutralIsoPtSum_5                        .push_back(neutralptsum_5);
-      
       nBranches_->tau_chargedIsoPtSumdR03                        .push_back(tau.tauID("chargedIsoPtSumdR03" 			    ));
       nBranches_->tau_footprintCorrectiondR03                    .push_back(tau.tauID("footprintCorrectiondR03"                         ));
       nBranches_->tau_neutralIsoPtSumdR03                        .push_back(tau.tauID("neutralIsoPtSumdR03" 			    ));
@@ -513,23 +476,7 @@ void TausNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
       float decayDistZ = boostedTau.flightLength().z();
       float decayDistMag = std::sqrt(decayDistX*decayDistX + decayDistY*decayDistY + decayDistZ*decayDistZ);
 
-      float neutralptsum_0p5 = (float)clusterVariables_.tau_isophotons_total(boostedTau, 0.5);
-      float neutralptsum_1 = (float)clusterVariables_.tau_isophotons_total(boostedTau, 1.0);
-      float neutralptsum_1p5 = (float)clusterVariables_.tau_isophotons_total(boostedTau, 1.5);
-      float neutralptsum_2 = (float)clusterVariables_.tau_isophotons_total(boostedTau, 2.0);
-      float neutralptsum_2p5 = (float)clusterVariables_.tau_isophotons_total(boostedTau, 2.5);
-      float neutralptsum_3 = (float)clusterVariables_.tau_isophotons_total(boostedTau, 3.0);
-      float neutralptsum_4 = (float)clusterVariables_.tau_isophotons_total(boostedTau, 4.0);
-      float neutralptsum_5 = (float)clusterVariables_.tau_isophotons_total(boostedTau, 5.0);
-
-      float nPhoton = (float)clusterVariables_.tau_n_photons_total(boostedTau, 0.5);
-      float nPhoton_1 = (float)clusterVariables_.tau_n_photons_total(boostedTau, 1.0);
-      float nPhoton_1p5 = (float)clusterVariables_.tau_n_photons_total(boostedTau, 1.5);
-      float nPhoton_2 = (float)clusterVariables_.tau_n_photons_total(boostedTau, 2.0);
-      float nPhoton_2p5 = (float)clusterVariables_.tau_n_photons_total(boostedTau, 2.5);
-      float nPhoton_3 = (float)clusterVariables_.tau_n_photons_total(boostedTau, 3.0);
-      float nPhoton_4 = (float)clusterVariables_.tau_n_photons_total(boostedTau, 4.0);
-      float nPhoton_5 = (float)clusterVariables_.tau_n_photons_total(boostedTau, 5.0);
+      float nPhoton = (float)clusterVariables_.tau_n_photons_total(boostedTau);
       float ptWeightedDetaStrip = clusterVariables_.tau_pt_weighted_deta_strip(boostedTau, tauDecayMode);
       float ptWeightedDphiStrip = clusterVariables_.tau_pt_weighted_dphi_strip(boostedTau, tauDecayMode);
       float ptWeightedDrSignal = clusterVariables_.tau_pt_weighted_dr_signal(boostedTau, tauDecayMode);
@@ -545,13 +492,6 @@ void TausNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
 
 
       nBranches_->tau_nPhoton		     .push_back(nPhoton);
-      nBranches_->tau_nPhoton_1		     .push_back(nPhoton_1);
-      nBranches_->tau_nPhoton_1p5		     .push_back(nPhoton_1p5);
-      nBranches_->tau_nPhoton_2		     .push_back(nPhoton_2);
-      nBranches_->tau_nPhoton_2p5	     .push_back(nPhoton_2p5);
-      nBranches_->tau_nPhoton_3		     .push_back(nPhoton_3);
-      nBranches_->tau_nPhoton_4		     .push_back(nPhoton_4);
-      nBranches_->tau_nPhoton_5		     .push_back(nPhoton_5);
       nBranches_->tau_ptWeightedDetaStrip    .push_back(ptWeightedDetaStrip);
       nBranches_->tau_ptWeightedDphiStrip    .push_back(ptWeightedDphiStrip);
       nBranches_->tau_ptWeightedDrSignal     .push_back(ptWeightedDrSignal);
@@ -635,15 +575,6 @@ void TausNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
       nBranches_->tau_byCombinedIsolationDeltaBetaCorrRaw3Hits   .push_back(boostedTau.tauID("byCombinedIsolationDeltaBetaCorrRaw3Hits"    ));
       nBranches_->tau_chargedIsoPtSum                            .push_back(boostedTau.tauID("chargedIsoPtSum" 			    ));
       nBranches_->tau_neutralIsoPtSum                            .push_back(boostedTau.tauID("neutralIsoPtSum" 			    ));
-
-      nBranches_->tau_neutralIsoPtSum_0p5                        .push_back(neutralptsum_0p5);
-      nBranches_->tau_neutralIsoPtSum_1                        .push_back(neutralptsum_1);
-      nBranches_->tau_neutralIsoPtSum_1p5                        .push_back(neutralptsum_1p5);
-      nBranches_->tau_neutralIsoPtSum_2                        .push_back(neutralptsum_2);
-      nBranches_->tau_neutralIsoPtSum_2p5                        .push_back(neutralptsum_2p5);
-      nBranches_->tau_neutralIsoPtSum_3                       .push_back(neutralptsum_3);
-      nBranches_->tau_neutralIsoPtSum_4                        .push_back(neutralptsum_4);
-      nBranches_->tau_neutralIsoPtSum_5                        .push_back(neutralptsum_5);
 
       nBranches_->tau_puCorrPtSum                                .push_back(boostedTau.tauID("puCorrPtSum"				    ));
       nBranches_->tau_chargedIsoPtSumdR03                       .push_back(boostedTau.tauID("chargedIsoPtSumdR03" 			    ));

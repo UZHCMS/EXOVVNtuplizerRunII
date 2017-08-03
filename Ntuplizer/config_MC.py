@@ -899,14 +899,14 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     # summary
     noiseFilterSelection_metFilters = cms.string('Flag_METFilters'),
 
-    TauSpinnerWTisValid = cms.InputTag('TauSpinnerReco', 'TauSpinnerWTisValid'),
-    TauSpinnerWT = cms.InputTag('TauSpinnerReco', 'TauSpinnerWT'),
-    TauSpinnerWThminus = cms.InputTag('TauSpinnerReco', 'TauSpinnerWThminus'),
-    TauSpinnerWThplus = cms.InputTag('TauSpinnerReco', 'TauSpinnerWThplus'),
-    TauSpinnerTauPolFromZ = cms.InputTag('TauSpinnerReco', 'TauSpinnerTauPolFromZ'),
-    TauSpinnerWRight = cms.InputTag('TauSpinnerReco', 'TauSpinnerWRight'),
-    TauSpinnerWLeft = cms.InputTag('TauSpinnerReco', 'TauSpinnerWLeft'),
-    TauSpinnerIsRightLeft = cms.InputTag('TauSpinnerReco', 'TauSpinnerIsRightLeft'),
+#    TauSpinnerWTisValid = cms.InputTag('TauSpinnerReco', 'TauSpinnerWTisValid'),
+#    TauSpinnerWT = cms.InputTag('TauSpinnerReco', 'TauSpinnerWT'),
+#    TauSpinnerWThminus = cms.InputTag('TauSpinnerReco', 'TauSpinnerWThminus'),
+#    TauSpinnerWThplus = cms.InputTag('TauSpinnerReco', 'TauSpinnerWThplus'),
+#    TauSpinnerTauPolFromZ = cms.InputTag('TauSpinnerReco', 'TauSpinnerTauPolFromZ'),
+#    TauSpinnerWRight = cms.InputTag('TauSpinnerReco', 'TauSpinnerWRight'),
+#    TauSpinnerWLeft = cms.InputTag('TauSpinnerReco', 'TauSpinnerWLeft'),
+#    TauSpinnerIsRightLeft = cms.InputTag('TauSpinnerReco', 'TauSpinnerIsRightLeft'),
 
     packedpfcandidates = cms.InputTag('packedPFCandidates')
 )
