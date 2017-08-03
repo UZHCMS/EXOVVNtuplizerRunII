@@ -66,16 +66,6 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
       tree_->Branch( "PDF_xPDF"	           , &PDF_xPDF               );
       tree_->Branch( "PDF_id"	             , &PDF_id                 );
 
-      tree_->Branch( "TauSpinnerWTisValid"   , &TauSpinnerWTisValid         );
-      tree_->Branch( "TauSpinnerWT"   , &TauSpinnerWT         );
-      tree_->Branch( "TauSpinnerWThminus"   , &TauSpinnerWThminus         );
-      tree_->Branch( "TauSpinnerWThplus"   , &TauSpinnerWThplus        );
-      tree_->Branch( "TauSpinnerTauPolFromZ"   , &TauSpinnerTauPolFromZ       );
-      tree_->Branch( "TauSpinnerWRight"   , &TauSpinnerWRight       );
-      tree_->Branch( "TauSpinnerWLeft"   , &TauSpinnerWLeft       );
-      tree_->Branch( "TauSpinnerIsRightLeft"   , &TauSpinnerIsRightLeft       );
-
-
     } //doGenEvent
   } //runOnMC
   
@@ -261,13 +251,6 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
 
     // YT added
     tree_->Branch( "tau_nPhoton"                 , &tau_nPhoton                );
-    tree_->Branch( "tau_nPhoton_1"                 , &tau_nPhoton_1                );
-    tree_->Branch( "tau_nPhoton_1p5"                 , &tau_nPhoton_1p5               );
-    tree_->Branch( "tau_nPhoton_2"                 , &tau_nPhoton_2               );
-    tree_->Branch( "tau_nPhoton_2p5"                 , &tau_nPhoton_2p5               );
-    tree_->Branch( "tau_nPhoton_3"                 , &tau_nPhoton_3               );
-    tree_->Branch( "tau_nPhoton_4"                 , &tau_nPhoton_4               );
-    tree_->Branch( "tau_nPhoton_5"                 , &tau_nPhoton_5               );
     tree_->Branch( "tau_ptWeightedDetaStrip"     , &tau_ptWeightedDetaStrip    );
     tree_->Branch( "tau_ptWeightedDphiStrip"     , &tau_ptWeightedDphiStrip    );
     tree_->Branch( "tau_ptWeightedDrSignal"      , &tau_ptWeightedDrSignal     );
@@ -296,14 +279,6 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
       tree_->Branch( "tau_byCombinedIsolationDeltaBetaCorrRaw3Hits"   , &tau_byCombinedIsolationDeltaBetaCorrRaw3Hits	 );
       tree_->Branch( "tau_chargedIsoPtSum"			      , &tau_chargedIsoPtSum			         );
       tree_->Branch( "tau_neutralIsoPtSum"			      , &tau_neutralIsoPtSum			         );
-      tree_->Branch( "tau_neutralIsoPtSum_0p5"			      , &tau_neutralIsoPtSum_0p5			         );
-      tree_->Branch( "tau_neutralIsoPtSum_1"			      , &tau_neutralIsoPtSum_1			         );
-      tree_->Branch( "tau_neutralIsoPtSum_1p5"			      , &tau_neutralIsoPtSum_1p5			         );
-      tree_->Branch( "tau_neutralIsoPtSum_2"			      , &tau_neutralIsoPtSum_2			         );
-      tree_->Branch( "tau_neutralIsoPtSum_2p5"			      , &tau_neutralIsoPtSum_2p5			         );
-      tree_->Branch( "tau_neutralIsoPtSum_3"			      , &tau_neutralIsoPtSum_3			         );
-      tree_->Branch( "tau_neutralIsoPtSum_4"			      , &tau_neutralIsoPtSum_4			         );
-      tree_->Branch( "tau_neutralIsoPtSum_5"			      , &tau_neutralIsoPtSum_5			         );
       tree_->Branch( "tau_puCorrPtSum"				      , &tau_puCorrPtSum 				 );
      
 
@@ -812,15 +787,6 @@ void NtupleBranches::reset( void ){
   lheNj = 0;
   lheV_mass = 0;
     
-  TauSpinnerWTisValid.clear();	
-  TauSpinnerWT.clear();	
-  TauSpinnerWThminus.clear();	
-  TauSpinnerWThplus.clear();	
-  TauSpinnerTauPolFromZ.clear();	
-  TauSpinnerWRight.clear();	
-  TauSpinnerWLeft.clear();	
-  TauSpinnerIsRightLeft.clear();	
-    
   /** electrons */
   el_N        = 0;
   el_pdgId.clear();
@@ -1004,14 +970,6 @@ void NtupleBranches::reset( void ){
   tau_neutralPionPt.clear();
 
   tau_nPhoton.clear();  
-  tau_nPhoton_1.clear();  
-  tau_nPhoton_1p5.clear();  
-  tau_nPhoton_2.clear();  
-  tau_nPhoton_2p5.clear();  
-  tau_nPhoton_3.clear();  
-  tau_nPhoton_4.clear();  
-  tau_nPhoton_5.clear();  
-
   tau_ptWeightedDetaStrip.clear();
   tau_ptWeightedDphiStrip.clear();
   tau_ptWeightedDrSignal.clear();
@@ -1039,14 +997,6 @@ void NtupleBranches::reset( void ){
   tau_byCombinedIsolationDeltaBetaCorrRaw3Hits.clear();
   tau_chargedIsoPtSum.clear();
   tau_neutralIsoPtSum.clear();
-  tau_neutralIsoPtSum_0p5.clear();
-  tau_neutralIsoPtSum_1.clear();
-  tau_neutralIsoPtSum_1p5.clear();
-  tau_neutralIsoPtSum_2.clear();
-  tau_neutralIsoPtSum_2p5.clear();
-  tau_neutralIsoPtSum_3.clear();
-  tau_neutralIsoPtSum_4.clear();
-  tau_neutralIsoPtSum_5.clear();
   tau_puCorrPtSum.clear();
 
   

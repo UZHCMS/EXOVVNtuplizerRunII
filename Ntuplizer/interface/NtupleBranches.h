@@ -93,15 +93,6 @@ public:
   std::vector<float>              PDF_x                ;
   std::vector<float>              PDF_xPDF             ;
 
-  std::vector<int  >              TauSpinnerWTisValid  ;
-  std::vector<float>              TauSpinnerWT         ;	
-  std::vector<float>              TauSpinnerWThminus   ;	
-  std::vector<float>              TauSpinnerWThplus    ;	
-  std::vector<float>              TauSpinnerTauPolFromZ;	
-  std::vector<float>              TauSpinnerWRight     ;	
-  std::vector<float>              TauSpinnerWLeft      ;	
-  std::vector<float>              TauSpinnerIsRightLeft;	
-
           
   /** electrons */
   int 	                      el_N		         ;
