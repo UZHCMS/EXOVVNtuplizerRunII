@@ -50,11 +50,22 @@ private:
   
   edm::EDGetTokenT<reco::VertexCollection>                  vtxToken_           ;
   edm::EDGetTokenT<double>                                  rhoToken_           ;
+  edm::EDGetTokenT<pat::PackedCandidateCollection>          packedpfcandidatesToken_;
+
   edm::EDGetTokenT< std::vector<PileupSummaryInfo> >        puinfoToken_        ;
   edm::EDGetTokenT< GenEventInfoProduct >                   geneventToken_      ;
   edm::EDGetTokenT<LHEEventProduct>	                    lheEventProductToken_;
   
   edm::EDGetTokenT<reco::GenParticleCollection>             genparticleToken_   ;
+  edm::EDGetTokenT<bool>                                    tauspinnerWTisValidToken_;
+  edm::EDGetTokenT<double>                                  tauspinnerWTToken_;
+  edm::EDGetTokenT<double>                                  tauspinnerWThminusToken_;
+  edm::EDGetTokenT<double>                                  tauspinnerWThplusToken_;
+  edm::EDGetTokenT<double>                                  tauspinnerTauPolFromZToken_;
+  edm::EDGetTokenT<double>                                  tauspinnerWRightToken_;
+  edm::EDGetTokenT<double>                                  tauspinnerWLeftToken_;
+  edm::EDGetTokenT<double>                                  tauspinnerIsRightLeftToken_;
+
   
   edm::EDGetTokenT<pat::JetCollection>                      jetToken_           ;
   edm::EDGetTokenT<pat::JetCollection>                      fatjetToken_        ;
