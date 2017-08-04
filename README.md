@@ -12,7 +12,7 @@ Ntuplizer for searches for heavy resonances decaying to dibosons
 
 ```
 
-For Spring16(80):
+Setting up CMSSW (might be sub-optimal ...):
 
 ```
 cmsrel CMSSW_8_0_26_patch1
