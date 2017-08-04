@@ -46,7 +46,7 @@ git clone https://github.com/${GITUSER}/EXOVVNtuplizerRunII
 cd EXOVVNtuplizerRunII
 git remote add UZHCMS https://github.com/UZHCMS/EXOVVNtuplizerRunII
 git fetch UZHCMS
-git checkout -b MoriondDevelopmentBranch UZHCMS/80X_ntuplizer_Moriond
+git checkout -b DevelopmentBranch_Legacy UZHCMS/80X_legacy
 cd $CMSSW_BASE/src
 ```
 
