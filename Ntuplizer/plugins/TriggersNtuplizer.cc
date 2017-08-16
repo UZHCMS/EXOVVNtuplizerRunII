@@ -293,8 +293,8 @@ void TriggersNtuplizer::fillBranches( edm::Event const & event, const edm::Event
   ////////////////// Trigger objects ///////////////////////////////////
   if (doTriggerObjects_) {
 
-     	std::vector<int> vfiredTrigger; vfiredTrigger.clear();
-	std::vector<float> vfilterIDs; vfilterIDs.clear();
+    //     	std::vector<int> vfiredTrigger; vfiredTrigger.clear();
+    //	std::vector<float> vfilterIDs; vfilterIDs.clear();
 
   	for (pat::TriggerObjectStandAlone obj : *triggerObjects) {
 
@@ -320,7 +320,7 @@ void TriggersNtuplizer::fillBranches( edm::Event const & event, const edm::Event
 		//			if( isBoth || isL3 ){
 
 
-		  for (unsigned hh = 0; hh < obj.filterIds().size(); ++hh) vfilterIDs.push_back( obj.filterIds()[hh]); // as defined in http://cmslxr.fnal.gov/lxr/source/DataFormats/HLTReco/interface/TriggerTypeDefs.h
+		  ///		  for (unsigned hh = 0; hh < obj.filterIds().size(); ++hh) vfilterIDs.push_back( obj.filterIds()[hh]); // as defined in http://cmslxr.fnal.gov/lxr/source/DataFormats/HLTReco/interface/TriggerTypeDefs.h
 
 			   std::vector<std::string> vfilterLabels; vfilterLabels.clear();
 
@@ -335,10 +335,10 @@ void TriggersNtuplizer::fillBranches( edm::Event const & event, const edm::Event
 
 			   
 			   if(isFilterExist){
-			     nBranches_->triggerObject_pt  .push_back(obj.pt());
+			     //			     nBranches_->triggerObject_pt  .push_back(obj.pt());
 			     nBranches_->triggerObject_eta .push_back(obj.eta());
 			     nBranches_->triggerObject_phi .push_back(obj.phi());
-			     nBranches_->triggerObject_mass.push_back(obj.mass());
+			     //			     nBranches_->triggerObject_mass.push_back(obj.mass());
 			     nBranches_->triggerObject_lastname.push_back(pathNamesAll[h]);
 			     //			     nBranches_->triggerObject_lastname.push_back("test");
 
@@ -372,21 +372,21 @@ void TriggersNtuplizer::fillBranches( edm::Event const & event, const edm::Event
 			   }
 
 
-  			   if( pathNamesAll[h] == "HLT_AK8PFJet360_TrimMass30_v1") vfiredTrigger.push_back( 0 );
-  			   if( pathNamesAll[h] == "HLT_AK8PFHT700_TrimR0p1PT0p03Mass50_v1") vfiredTrigger.push_back( 1 );
-  			   if( pathNamesAll[h] == "HLT_AK8DiPFJet280_200_TrimMass30_BTagCSV0p41_v1") vfiredTrigger.push_back( 2 );
-  			   if( pathNamesAll[h] == "HLT_PFHT650_WideJetMJJ950DEtaJJ1p5_v1") vfiredTrigger.push_back( 3 );
-  			   if( pathNamesAll[h] == "HLT_PFHT650_WideJetMJJ900DEtaJJ1p5_v1") vfiredTrigger.push_back( 4 );
-  			   if( pathNamesAll[h] == "HLT_PFHT900_v1") vfiredTrigger.push_back( 5 );
-  			   if( pathNamesAll[h] == "HLT_IsoMu24_eta2p1_v1") vfiredTrigger.push_back( 6 );
-  			   if( pathNamesAll[h] == "HLT_IsoMu24_eta2p1_v2") vfiredTrigger.push_back( 7 );
-  			   if( pathNamesAll[h] == "HLT_Mu45_eta2p1_v1") vfiredTrigger.push_back( 8 );
-  			   if( pathNamesAll[h] == "HLT_Mu50_eta2p1_v1") vfiredTrigger.push_back( 9 );
-  			   if( pathNamesAll[h] == "HLT_Ele23_CaloIdL_TrackIdL_IsoVL_v1") vfiredTrigger.push_back( 10 );
-  			   if( pathNamesAll[h] == "HLT_Ele32_eta2p1_WP75_Gsf_v1") vfiredTrigger.push_back( 11 );
-  			   if( pathNamesAll[h] == "HLT_Ele105_CaloIdVT_GsfTrkIdT_v1") vfiredTrigger.push_back( 12 );
-  			   if( pathNamesAll[h] == "HLT_Ele105_CaloIdVT_GsfTrkIdT_v2") vfiredTrigger.push_back( 13 );
-  			   if( pathNamesAll[h] == "HLT_Ele115_CaloIdVT_GsfTrkIdT_v1") vfiredTrigger.push_back( 14 );
+//  			   if( pathNamesAll[h] == "HLT_AK8PFJet360_TrimMass30_v1") vfiredTrigger.push_back( 0 );
+//  			   if( pathNamesAll[h] == "HLT_AK8PFHT700_TrimR0p1PT0p03Mass50_v1") vfiredTrigger.push_back( 1 );
+//  			   if( pathNamesAll[h] == "HLT_AK8DiPFJet280_200_TrimMass30_BTagCSV0p41_v1") vfiredTrigger.push_back( 2 );
+//  			   if( pathNamesAll[h] == "HLT_PFHT650_WideJetMJJ950DEtaJJ1p5_v1") vfiredTrigger.push_back( 3 );
+//  			   if( pathNamesAll[h] == "HLT_PFHT650_WideJetMJJ900DEtaJJ1p5_v1") vfiredTrigger.push_back( 4 );
+//  			   if( pathNamesAll[h] == "HLT_PFHT900_v1") vfiredTrigger.push_back( 5 );
+//  			   if( pathNamesAll[h] == "HLT_IsoMu24_eta2p1_v1") vfiredTrigger.push_back( 6 );
+//  			   if( pathNamesAll[h] == "HLT_IsoMu24_eta2p1_v2") vfiredTrigger.push_back( 7 );
+//  			   if( pathNamesAll[h] == "HLT_Mu45_eta2p1_v1") vfiredTrigger.push_back( 8 );
+//  			   if( pathNamesAll[h] == "HLT_Mu50_eta2p1_v1") vfiredTrigger.push_back( 9 );
+//  			   if( pathNamesAll[h] == "HLT_Ele23_CaloIdL_TrackIdL_IsoVL_v1") vfiredTrigger.push_back( 10 );
+//  			   if( pathNamesAll[h] == "HLT_Ele32_eta2p1_WP75_Gsf_v1") vfiredTrigger.push_back( 11 );
+//  			   if( pathNamesAll[h] == "HLT_Ele105_CaloIdVT_GsfTrkIdT_v1") vfiredTrigger.push_back( 12 );
+//  			   if( pathNamesAll[h] == "HLT_Ele105_CaloIdVT_GsfTrkIdT_v2") vfiredTrigger.push_back( 13 );
+//  			   if( pathNamesAll[h] == "HLT_Ele115_CaloIdVT_GsfTrkIdT_v1") vfiredTrigger.push_back( 14 );
 
 
   			   // else vfiredTrigger.push_back( -99 );
@@ -394,8 +394,8 @@ void TriggersNtuplizer::fillBranches( edm::Event const & event, const edm::Event
 			
 		}
 
-  		nBranches_->triggerObject_firedTrigger.push_back(vfiredTrigger);
-		nBranches_->triggerObject_filterIDs.push_back(vfilterIDs);
+		//  		nBranches_->triggerObject_firedTrigger.push_back(vfiredTrigger);
+		//		nBranches_->triggerObject_filterIDs.push_back(vfilterIDs);
   	}
   } //doTriggerObjects_
 
