@@ -218,8 +218,7 @@ void ElectronsNtuplizer::fillBranches( edm::Event const & event, const edm::Even
     nBranches_->el_photonIso		    .push_back(ele.photonIso());
     nBranches_->el_neutralHadIso	    .push_back(ele.neutralHadronIso());
     nBranches_->el_chargedHadIso	    .push_back(ele.chargedHadronIso());
-    nBranches_->el_trackIso		    .push_back(ele.trackIso());
-    
+    //nBranches_->el_trackIso		    .push_back(ele.trackIso());
     // float  DeltaCorrectedIsoBoost = (ele.userIsolation(pat::PfChargedHadronIso) + std::max(0., ele.userIsolation(pat::PfNeutralHadronIso) + ele.userIsolation(pat::PfGammaIso) - 0.5*ele.userIsolation(pat::PfPUChargedHadronIso)))/ele.pt();
     // float  RhoCorrectedIso04Boost = ele.userIsolation(pat::PfChargedHadronIso) + std::max(ele.userIsolation(pat::PfNeutralHadronIso) + ele.userIsolation(pat::PfGammaIso) - rho*Aeff04, 0.);
     // float  RhoCorrectedIso03Boost = ele.userIsolation(pat::PfChargedHadronIso) + std::max(ele.userIsolation(pat::PfNeutralHadronIso) + ele.userIsolation(pat::PfGammaIso) - rho*Aeff03, 0.);   
