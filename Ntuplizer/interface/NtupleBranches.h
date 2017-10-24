@@ -112,14 +112,14 @@ public:
   std::vector<float>  	      el_photonIso 	     	 ;
   std::vector<float>  	      el_neutralHadIso	     	 ;
   std::vector<float>  	      el_chargedHadIso	     	 ;
-  std::vector<float>  	      el_trackIso	         ;            
+  /* std::vector<float>  	      el_trackIso	         ; */      
   /* std::vector<float>  	      el_pfRhoCorrRelIso03Boost  ; */
   /* std::vector<float>  	      el_pfRhoCorrRelIso04Boost  ; */
   /* std::vector<float>  	      el_pfDeltaCorrRelIsoBoost  ; */
-  /* std::vector<float>  	      el_pfRelIsoBoost  	 ;     */
+  /* std::vector<float>  	      el_pfRelIsoBoost  	 ; */
   /* std::vector<float>  	      el_photonIsoBoost 	 ; */
   /* std::vector<float>  	      el_neutralHadIsoBoost      ; */
-  /* std::vector<float>  	      el_chargedHadIsoBoost      ;   */
+  /* std::vector<float>  	      el_chargedHadIsoBoost      ; */
   std::vector<int>	      el_passConversionVeto	 ;
   std::vector<float>          el_full5x5_sigmaIetaIeta	 ;
   std::vector<float>          el_dEtaIn		         ;
