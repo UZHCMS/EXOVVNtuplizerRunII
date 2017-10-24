@@ -218,9 +218,9 @@ void MuonsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSet
     nBranches_->mu_isLooseMuon .push_back(mu.isLooseMuon());
     nBranches_->mu_isPFMuon    .push_back(mu.isPFMuon());   
         
-    double rho = *(rho_.product());     
-    float deltaR = 0.3;
-    double energy = TMath::Pi()*deltaR*deltaR*rho;
+    // double rho = *(rho_.product());     
+    // float deltaR = 0.3;
+    // double energy = TMath::Pi()*deltaR*deltaR*rho;
   
     nBranches_->mu_isGlobalMuon.push_back(mu.isGlobalMuon());  
     nBranches_->mu_isTrackerMuon.push_back(mu.isTrackerMuon());  
