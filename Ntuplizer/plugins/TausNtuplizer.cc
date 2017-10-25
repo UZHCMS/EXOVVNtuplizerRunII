@@ -242,31 +242,32 @@ void TausNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
 
          
       /*====================== ISO ========================*/	         
-      double rho = *(rho_.product());
-      float  deltaR = 0.3;
-      double energy = TMath::Pi()*deltaR*deltaR*rho;      
-      nBranches_->tau_pfRhoCorrRelIso03.push_back((tau.chargedHadronIso() + std::max(0.,tau.neutralHadronIso() + tau.photonIso() - energy))/tau.pt());      
-      nBranches_->tau_pfRhoCorrRelIso03Boost.push_back((tau.userIsolation(pat::PfChargedHadronIso) + std::max(0.,tau.userIsolation(pat::PfNeutralHadronIso) + tau.userIsolation(pat::PfGammaIso) - energy))/tau.pt()); 
+      //double rho = *(rho_.product());
+      // float  deltaR = 0.3;
+      // double energy = TMath::Pi()*deltaR*deltaR*rho;      
+      // nBranches_->tau_pfRhoCorrRelIso03.push_back((tau.chargedHadronIso() + std::max(0.,tau.neutralHadronIso() + tau.photonIso() - energy))/tau.pt());      
+      // nBranches_->tau_pfRhoCorrRelIso03Boost.push_back((tau.userIsolation(pat::PfChargedHadronIso) + std::max(0.,tau.userIsolation(pat::PfNeutralHadronIso) + tau.userIsolation(pat::PfGammaIso) - energy))/tau.pt()); 
 
-      deltaR = 0.4;
-      energy = TMath::Pi()*deltaR*deltaR*rho;      
-      nBranches_->tau_pfRhoCorrRelIso04.push_back((tau.chargedHadronIso() + std::max(0.,tau.neutralHadronIso() + tau.photonIso() - energy))/tau.pt());
-      nBranches_->tau_pfRhoCorrRelIso04Boost.push_back((tau.userIsolation(pat::PfChargedHadronIso) + std::max(0.,tau.userIsolation(pat::PfNeutralHadronIso) + tau.userIsolation(pat::PfGammaIso) - energy))/tau.pt()); 
+      // deltaR = 0.4;
+      // energy = TMath::Pi()*deltaR*deltaR*rho;      
+      // nBranches_->tau_pfRhoCorrRelIso04.push_back((tau.chargedHadronIso() + std::max(0.,tau.neutralHadronIso() + tau.photonIso() - energy))/tau.pt());
+      // nBranches_->tau_pfRhoCorrRelIso04Boost.push_back((tau.userIsolation(pat::PfChargedHadronIso) + std::max(0.,tau.userIsolation(pat::PfNeutralHadronIso) + tau.userIsolation(pat::PfGammaIso) - energy))/tau.pt()); 
             
-      nBranches_->tau_pfDeltaCorrRelIso     .push_back((tau.chargedHadronIso() + std::max(0., tau.neutralHadronIso() + tau.photonIso() - 0.5*tau.puChargedHadronIso()))/tau.pt());
-      nBranches_->tau_pfRelIso              .push_back((tau.chargedHadronIso() + tau.neutralHadronIso()+ tau.photonIso())/tau.pt()) ; 
-      nBranches_->tau_photonIso             .push_back(tau.photonIso());
-      nBranches_->tau_neutralHadIso         .push_back(tau.neutralHadronIso());
-      nBranches_->tau_chargedHadIso         .push_back(tau.chargedHadronIso());
+      // nBranches_->tau_pfDeltaCorrRelIso     .push_back((tau.chargedHadronIso() + std::max(0., tau.neutralHadronIso() + tau.photonIso() - 0.5*tau.puChargedHadronIso()))/tau.pt());
+      // nBranches_->tau_pfRelIso              .push_back((tau.chargedHadronIso() + tau.neutralHadronIso()+ tau.photonIso())/tau.pt()) ; 
+      // nBranches_->tau_photonIso             .push_back(tau.photonIso());
+      // nBranches_->tau_neutralHadIso         .push_back(tau.neutralHadronIso());
+      // nBranches_->tau_chargedHadIso         .push_back(tau.chargedHadronIso());
+
       nBranches_->tau_photonPtSumOutsideSignalCone               .push_back(tau.tauID("photonPtSumOutsideSignalCone"));
-      nBranches_->tau_trackIso              .push_back(tau.trackIso());      
-      nBranches_->tau_pfDeltaCorrRelIsoBoost.push_back((tau.userIsolation(pat::PfChargedHadronIso) + std::max(0., tau.userIsolation(pat::PfNeutralHadronIso) + tau.userIsolation(pat::PfGammaIso) - 0.5*tau.userIsolation(pat::PfPUChargedHadronIso)))/tau.pt());
-      nBranches_->tau_pfRelIsoBoost         .push_back((tau.userIsolation(pat::PfChargedHadronIso) + tau.userIsolation(pat::PfNeutralHadronIso)+ tau.userIsolation(pat::PfGammaIso))/tau.pt()) ; 
-      nBranches_->tau_photonIsoBoost        .push_back(tau.userIsolation(pat::PfGammaIso));
-      nBranches_->tau_neutralHadIsoBoost    .push_back(tau.userIsolation(pat::PfNeutralHadronIso));
-      nBranches_->tau_chargedHadIsoBoost    .push_back(tau.userIsolation(pat::PfChargedHadronIso));
-
-
+      // nBranches_->tau_trackIso              .push_back(tau.trackIso());      
+      // nBranches_->tau_pfDeltaCorrRelIsoBoost.push_back((tau.userIsolation(pat::PfChargedHadronIso) + std::max(0., tau.userIsolation(pat::PfNeutralHadronIso) + tau.userIsolation(pat::PfGammaIso) - 0.5*tau.userIsolation(pat::PfPUChargedHadronIso)))/tau.pt());
+      // nBranches_->tau_pfRelIsoBoost         .push_back((tau.userIsolation(pat::PfChargedHadronIso) + tau.userIsolation(pat::PfNeutralHadronIso)+ tau.userIsolation(pat::PfGammaIso))/tau.pt()) ; 
+      // nBranches_->tau_photonIsoBoost        .push_back(tau.userIsolation(pat::PfGammaIso));
+      // nBranches_->tau_neutralHadIsoBoost    .push_back(tau.userIsolation(pat::PfNeutralHadronIso));
+      // nBranches_->tau_chargedHadIsoBoost    .push_back(tau.userIsolation(pat::PfChargedHadronIso));
+      // std::cout << " tau.userIsolation(pat::PfChargedHadronIso) "<< tau.userIsolation(pat::PfChargedHadronIso) <<" tau.userIsolation(pat::PfNeutralHadronIso) " << tau.userIsolation(pat::PfNeutralHadronIso) << " tau.userIsolation(pat::PfGammaIso) "<< std::endl;
+ 
       /*====================== IDs ========================*/	                         
       nBranches_->tau_decayModeFindingNewDMs                     .push_back(tau.tauID("decayModeFindingNewDMs"  		    ));
       nBranches_->tau_decayModeFinding	                         .push_back(tau.tauID("decayModeFinding"			    ));
@@ -541,29 +542,29 @@ void TausNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
 
 
       /*====================== ISO ========================*/	          
-      double rho = *(rho_.product());
-      float  deltaR = 0.3;
-      double energy = TMath::Pi()*deltaR*deltaR*rho;      
-      nBranches_->tau_pfRhoCorrRelIso03.push_back((boostedTau.chargedHadronIso() + std::max(0.,boostedTau.neutralHadronIso() + boostedTau.photonIso() - energy))/boostedTau.pt());      
-      nBranches_->tau_pfRhoCorrRelIso03Boost.push_back((boostedTau.userIsolation(pat::PfChargedHadronIso) + std::max(0.,boostedTau.userIsolation(pat::PfNeutralHadronIso) + boostedTau.userIsolation(pat::PfGammaIso) - energy))/boostedTau.pt()); 
+      // double rho = *(rho_.product());
+      // float  deltaR = 0.3;
+      // double energy = TMath::Pi()*deltaR*deltaR*rho;      
+      // nBranches_->tau_pfRhoCorrRelIso03.push_back((boostedTau.chargedHadronIso() + std::max(0.,boostedTau.neutralHadronIso() + boostedTau.photonIso() - energy))/boostedTau.pt());      
+      // nBranches_->tau_pfRhoCorrRelIso03Boost.push_back((boostedTau.userIsolation(pat::PfChargedHadronIso) + std::max(0.,boostedTau.userIsolation(pat::PfNeutralHadronIso) + boostedTau.userIsolation(pat::PfGammaIso) - energy))/boostedTau.pt()); 
 
-      deltaR = 0.4;
-      energy = TMath::Pi()*deltaR*deltaR*rho;      
-      nBranches_->tau_pfRhoCorrRelIso04.push_back((boostedTau.chargedHadronIso() + std::max(0.,boostedTau.neutralHadronIso() + boostedTau.photonIso() - energy))/boostedTau.pt());
-      nBranches_->tau_pfRhoCorrRelIso04Boost.push_back((boostedTau.userIsolation(pat::PfChargedHadronIso) + std::max(0.,boostedTau.userIsolation(pat::PfNeutralHadronIso) + boostedTau.userIsolation(pat::PfGammaIso) - energy))/boostedTau.pt()); 
+      // deltaR = 0.4;
+      // energy = TMath::Pi()*deltaR*deltaR*rho;      
+      // nBranches_->tau_pfRhoCorrRelIso04.push_back((boostedTau.chargedHadronIso() + std::max(0.,boostedTau.neutralHadronIso() + boostedTau.photonIso() - energy))/boostedTau.pt());
+      // nBranches_->tau_pfRhoCorrRelIso04Boost.push_back((boostedTau.userIsolation(pat::PfChargedHadronIso) + std::max(0.,boostedTau.userIsolation(pat::PfNeutralHadronIso) + boostedTau.userIsolation(pat::PfGammaIso) - energy))/boostedTau.pt()); 
             
-      nBranches_->tau_pfDeltaCorrRelIso     .push_back((boostedTau.chargedHadronIso() + std::max(0., boostedTau.neutralHadronIso() + boostedTau.photonIso() - 0.5*boostedTau.puChargedHadronIso()))/boostedTau.pt());
-      nBranches_->tau_pfRelIso              .push_back((boostedTau.chargedHadronIso() + boostedTau.neutralHadronIso()+ boostedTau.photonIso())/boostedTau.pt()) ; 
-      nBranches_->tau_photonIso             .push_back(boostedTau.photonIso());
-      nBranches_->tau_neutralHadIso         .push_back(boostedTau.neutralHadronIso());
-      nBranches_->tau_chargedHadIso         .push_back(boostedTau.chargedHadronIso());
+      // nBranches_->tau_pfDeltaCorrRelIso     .push_back((boostedTau.chargedHadronIso() + std::max(0., boostedTau.neutralHadronIso() + boostedTau.photonIso() - 0.5*boostedTau.puChargedHadronIso()))/boostedTau.pt());
+      // nBranches_->tau_pfRelIso              .push_back((boostedTau.chargedHadronIso() + boostedTau.neutralHadronIso()+ boostedTau.photonIso())/boostedTau.pt()) ; 
+      // nBranches_->tau_photonIso             .push_back(boostedTau.photonIso());
+      // nBranches_->tau_neutralHadIso         .push_back(boostedTau.neutralHadronIso());
+      // nBranches_->tau_chargedHadIso         .push_back(boostedTau.chargedHadronIso());
       nBranches_->tau_photonPtSumOutsideSignalCone               .push_back(boostedTau.tauID("photonPtSumOutsideSignalCone"));
-      nBranches_->tau_trackIso              .push_back(boostedTau.trackIso());            
-      nBranches_->tau_pfDeltaCorrRelIsoBoost.push_back((boostedTau.userIsolation(pat::PfChargedHadronIso) + std::max(0., boostedTau.userIsolation(pat::PfNeutralHadronIso) + boostedTau.userIsolation(pat::PfGammaIso) - 0.5*boostedTau.userIsolation(pat::PfPUChargedHadronIso)))/boostedTau.pt());
-      nBranches_->tau_pfRelIsoBoost         .push_back((boostedTau.userIsolation(pat::PfChargedHadronIso) + boostedTau.userIsolation(pat::PfNeutralHadronIso)+ boostedTau.userIsolation(pat::PfGammaIso))/boostedTau.pt()) ; 
-      nBranches_->tau_photonIsoBoost        .push_back(boostedTau.userIsolation(pat::PfGammaIso));
-      nBranches_->tau_neutralHadIsoBoost    .push_back(boostedTau.userIsolation(pat::PfNeutralHadronIso));
-      nBranches_->tau_chargedHadIsoBoost    .push_back(boostedTau.userIsolation(pat::PfChargedHadronIso));
+      // nBranches_->tau_trackIso              .push_back(boostedTau.trackIso());            
+      // nBranches_->tau_pfDeltaCorrRelIsoBoost.push_back((boostedTau.userIsolation(pat::PfChargedHadronIso) + std::max(0., boostedTau.userIsolation(pat::PfNeutralHadronIso) + boostedTau.userIsolation(pat::PfGammaIso) - 0.5*boostedTau.userIsolation(pat::PfPUChargedHadronIso)))/boostedTau.pt());
+      // nBranches_->tau_pfRelIsoBoost         .push_back((boostedTau.userIsolation(pat::PfChargedHadronIso) + boostedTau.userIsolation(pat::PfNeutralHadronIso)+ boostedTau.userIsolation(pat::PfGammaIso))/boostedTau.pt()) ; 
+      // nBranches_->tau_photonIsoBoost        .push_back(boostedTau.userIsolation(pat::PfGammaIso));
+      // nBranches_->tau_neutralHadIsoBoost    .push_back(boostedTau.userIsolation(pat::PfNeutralHadronIso));
+      // nBranches_->tau_chargedHadIsoBoost    .push_back(boostedTau.userIsolation(pat::PfChargedHadronIso));
 
       /*====================== IDs ========================*/	                                     
       
@@ -641,6 +642,13 @@ void TausNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
       nBranches_->tau_byVTightIsolationMVArun2v1DBoldDMwLTNew.push_back(-1);
       nBranches_->tau_byVVTightIsolationMVArun2v1DBoldDMwLTNew.push_back(-1);
 
+      // nBranches_->tau_byIsolationMVArun2v1DBoldDMwLTrawNew.push_back(boostedTau.tauID("byIsolationMVArun2v1DBoldDMwLTrawNew"));
+      // nBranches_->tau_byVLooseIsolationMVArun2v1DBoldDMwLTNew.push_back(boostedTau.tauID("byVLooseIsolationMVArun2v1DBoldDMwLTNew"));
+      // nBranches_->tau_byLooseIsolationMVArun2v1DBoldDMwLTNew.push_back(boostedTau.tauID("byLooseIsolationMVArun2v1DBoldDMwLTNew"));
+      // nBranches_->tau_byMediumIsolationMVArun2v1DBoldDMwLTNew.push_back(boostedTau.tauID("byMediumIsolationMVArun2v1DBoldDMwLTNew"));
+      // nBranches_->tau_byTightIsolationMVArun2v1DBoldDMwLTNew.push_back(boostedTau.tauID("byTightIsolationMVArun2v1DBoldDMwLTNew"));
+      // nBranches_->tau_byVTightIsolationMVArun2v1DBoldDMwLTNew.push_back(boostedTau.tauID("byVTightIsolationMVArun2v1DBoldDMwLTNew"));
+      // nBranches_->tau_byVVTightIsolationMVArun2v1DBoldDMwLTNew.push_back(boostedTau.tauID("byVVTightIsolationMVArun2v1DBoldDMwLTNew"));
 
       nBranches_->tau_againstElectronMVA6raw                     .push_back(boostedTau.tauID("againstElectronMVA6Raw"  		    ));
       nBranches_->tau_againstElectronMVA6category                .push_back(boostedTau.tauID("againstElectronMVA6category"		    ));
