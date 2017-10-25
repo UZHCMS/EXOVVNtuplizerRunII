@@ -293,110 +293,69 @@ void TriggersNtuplizer::fillBranches( edm::Event const & event, const edm::Event
   ////////////////// Trigger objects ///////////////////////////////////
   if (doTriggerObjects_) {
 
-    //     	std::vector<int> vfiredTrigger; vfiredTrigger.clear();
-    //	std::vector<float> vfilterIDs; vfilterIDs.clear();
+    for (pat::TriggerObjectStandAlone obj : *triggerObjects) {
+      
+      obj.unpackPathNames(trigNames);
+      
+      std::vector<std::string> pathNamesAll  = obj.pathNames(false);
 
-  	for (pat::TriggerObjectStandAlone obj : *triggerObjects) {
+      for (unsigned h = 0, n = pathNamesAll.size(); h < n; ++h) {
 
-  		obj.unpackPathNames(trigNames);
+	//		  bool isBoth = obj.hasPathName( pathNamesAll[h], true , true );
+	//		  bool isL3   = obj.hasPathName( pathNamesAll[h], false, true );
+	//		  bool isBoth = obj.hasPathName( pathNamesLast[h], true , true );
+	//		  bool isL3   = obj.hasPathName( pathNamesLast[h], false, true );
+	
+	
+	//			if( isBoth || isL3 ){
+	
 
-  		std::vector<std::string> pathNamesAll  = obj.pathNames(false);
-		//  		std::vector<std::string> pathNamesLast = obj.pathNames(true);
+	
+	std::vector<std::string> vfilterLabels; vfilterLabels.clear();
+	
+	bool isFilterExist = false;
+	
+	for (unsigned hh = 0; hh < obj.filterLabels().size(); ++hh){
+	  if(findFilter(obj.filterLabels()[hh])){
+	    vfilterLabels.push_back( obj.filterLabels()[hh]);
+	    isFilterExist = true;
+	  }
+	}
+	
+	
+	if(isFilterExist){
+	  //			     nBranches_->triggerObject_pt  .push_back(obj.pt());
+	  nBranches_->triggerObject_eta .push_back(obj.eta());
+	  nBranches_->triggerObject_phi .push_back(obj.phi());
+	  //			     nBranches_->triggerObject_mass.push_back(obj.mass());
+	  nBranches_->triggerObject_lastname.push_back(pathNamesAll[h]);
+	  
+	  if(nBranches_->triggerObject_filterLabels.find(pathNamesAll[h]) == nBranches_->triggerObject_filterLabels.end()){
 
-		//		std::cout << "Size of pathNames All = " << pathNamesAll.size() << ", Last = " << pathNamesLast.size()  << std::endl;
-		//		for (unsigned h = 0, n = pathNamesLast.size(); h < n; ++h) {
-		//		  std::cout << "\t Lastname = " << pathNamesLast[h] << std::endl;
-		//		}
-		for (unsigned h = 0, n = pathNamesAll.size(); h < n; ++h) {
+	    nBranches_->triggerObject_filterLabels[pathNamesAll[h]] = vfilterLabels;
 
-		  //		  bool isBoth = obj.hasPathName( pathNamesAll[h], true , true );
-		  //		  bool isL3   = obj.hasPathName( pathNamesAll[h], false, true );
-		  //		  bool isBoth = obj.hasPathName( pathNamesLast[h], true , true );
-		  //		  bool isL3   = obj.hasPathName( pathNamesLast[h], false, true );
-
-		  //		  std::cout << "trigger object =" << pathNamesLast[h] << "(isBoth, isL3) = " << isBoth << " " << isL3 << std::endl;
-		  //		  std::cout << "\t Finalname = " << pathNamesAll[h] << "(isBoth, isL3) = " << isBoth << " " << isL3 << std::endl;
-			
-		//			if( isBoth || isL3 ){
-
-
-		  ///		  for (unsigned hh = 0; hh < obj.filterIds().size(); ++hh) vfilterIDs.push_back( obj.filterIds()[hh]); // as defined in http://cmslxr.fnal.gov/lxr/source/DataFormats/HLTReco/interface/TriggerTypeDefs.h
-
-			   std::vector<std::string> vfilterLabels; vfilterLabels.clear();
-
-			   bool isFilterExist = false;
-
-			   for (unsigned hh = 0; hh < obj.filterLabels().size(); ++hh){
-			     if(findFilter(obj.filterLabels()[hh])){
-			       vfilterLabels.push_back( obj.filterLabels()[hh]);
-			       isFilterExist = true;
-			     }
-			   }
-
-			   
-			   if(isFilterExist){
-			     //			     nBranches_->triggerObject_pt  .push_back(obj.pt());
-			     nBranches_->triggerObject_eta .push_back(obj.eta());
-			     nBranches_->triggerObject_phi .push_back(obj.phi());
-			     //			     nBranches_->triggerObject_mass.push_back(obj.mass());
-			     nBranches_->triggerObject_lastname.push_back(pathNamesAll[h]);
-			     //			     nBranches_->triggerObject_lastname.push_back("test");
-
-			     //			     if(nBranches_->triggerObject_filterLabels.find(pathNamesLast[h]) == nBranches_->triggerObject_filterLabels.end()){
-			     if(nBranches_->triggerObject_filterLabels.find(pathNamesAll[h]) == nBranches_->triggerObject_filterLabels.end()){
-			       //  std::cout << "index NOT found !!!" << std::endl;
-			       nBranches_->triggerObject_filterLabels[pathNamesAll[h]] = vfilterLabels;
-			       //			       nBranches_->triggerObject_filterLabels["test"] = vfilterLabels;
-			     }else{
-			       // add to the original
-			       // std::cout << "index found !!!" << std::endl;
-			       
-			       //			       std::vector<std::string> vec1 = nBranches_->triggerObject_filterLabels["test"];
-			       std::vector<std::string> vec1 = nBranches_->triggerObject_filterLabels[pathNamesAll[h]];
-			       
-//			       std::cout << "before : size of vec1 = " << vec1.size() << std::endl;
-//			       for(int ii = 0; ii < (int)vec1.size(); ii++){
-//				 std::cout << "\t\t " << vec1.at(ii) << std::endl;
-//			       }
-
-			       vec1.insert(vec1.end(), vfilterLabels.begin(), vfilterLabels.end());
-
-//			       std::cout << "after : size of vec1 = " << vec1.size() << std::endl;
-//			       for(int ii = 0; ii < (int)vec1.size(); ii++){
-//				 std::cout << "\t\t " << vec1.at(ii) << std::endl;
-//			       }
-
-			       nBranches_->triggerObject_filterLabels[pathNamesAll[h]] = vec1;
-			     }
-
-			   }
-
-
-//  			   if( pathNamesAll[h] == "HLT_AK8PFJet360_TrimMass30_v1") vfiredTrigger.push_back( 0 );
-//  			   if( pathNamesAll[h] == "HLT_AK8PFHT700_TrimR0p1PT0p03Mass50_v1") vfiredTrigger.push_back( 1 );
-//  			   if( pathNamesAll[h] == "HLT_AK8DiPFJet280_200_TrimMass30_BTagCSV0p41_v1") vfiredTrigger.push_back( 2 );
-//  			   if( pathNamesAll[h] == "HLT_PFHT650_WideJetMJJ950DEtaJJ1p5_v1") vfiredTrigger.push_back( 3 );
-//  			   if( pathNamesAll[h] == "HLT_PFHT650_WideJetMJJ900DEtaJJ1p5_v1") vfiredTrigger.push_back( 4 );
-//  			   if( pathNamesAll[h] == "HLT_PFHT900_v1") vfiredTrigger.push_back( 5 );
-//  			   if( pathNamesAll[h] == "HLT_IsoMu24_eta2p1_v1") vfiredTrigger.push_back( 6 );
-//  			   if( pathNamesAll[h] == "HLT_IsoMu24_eta2p1_v2") vfiredTrigger.push_back( 7 );
-//  			   if( pathNamesAll[h] == "HLT_Mu45_eta2p1_v1") vfiredTrigger.push_back( 8 );
-//  			   if( pathNamesAll[h] == "HLT_Mu50_eta2p1_v1") vfiredTrigger.push_back( 9 );
-//  			   if( pathNamesAll[h] == "HLT_Ele23_CaloIdL_TrackIdL_IsoVL_v1") vfiredTrigger.push_back( 10 );
-//  			   if( pathNamesAll[h] == "HLT_Ele32_eta2p1_WP75_Gsf_v1") vfiredTrigger.push_back( 11 );
-//  			   if( pathNamesAll[h] == "HLT_Ele105_CaloIdVT_GsfTrkIdT_v1") vfiredTrigger.push_back( 12 );
-//  			   if( pathNamesAll[h] == "HLT_Ele105_CaloIdVT_GsfTrkIdT_v2") vfiredTrigger.push_back( 13 );
-//  			   if( pathNamesAll[h] == "HLT_Ele115_CaloIdVT_GsfTrkIdT_v1") vfiredTrigger.push_back( 14 );
-
-
-  			   // else vfiredTrigger.push_back( -99 );
-			   //  			}
-			
-		}
-
-		//  		nBranches_->triggerObject_firedTrigger.push_back(vfiredTrigger);
-		//		nBranches_->triggerObject_filterIDs.push_back(vfilterIDs);
-  	}
+	  }else{
+	    
+	    //			       std::vector<std::string> vec1 = nBranches_->triggerObject_filterLabels["test"];
+	    std::vector<std::string> vec1 = nBranches_->triggerObject_filterLabels[pathNamesAll[h]];
+	    
+	    //			       std::cout << "before : size of vec1 = " << vec1.size() << std::endl;
+	    //			       for(int ii = 0; ii < (int)vec1.size(); ii++){
+	    //				 std::cout << "\t\t " << vec1.at(ii) << std::endl;
+	    //			       }
+	    
+	    vec1.insert(vec1.end(), vfilterLabels.begin(), vfilterLabels.end());
+	    
+	    //			       std::cout << "after : size of vec1 = " << vec1.size() << std::endl;
+	    //			       for(int ii = 0; ii < (int)vec1.size(); ii++){
+	    //				 std::cout << "\t\t " << vec1.at(ii) << std::endl;
+	    //			       }
+	    
+	    nBranches_->triggerObject_filterLabels[pathNamesAll[h]] = vec1;
+	  }	  
+	}
+      }      
+    }
   } //doTriggerObjects_
 
 
