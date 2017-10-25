@@ -196,7 +196,14 @@ bool TriggersNtuplizer::findTrigger( std::string trigName ){
        trigName.find("HLT_PFMET170_HBHE_BeamHaloCleaned_v") != std::string::npos||
        //Alternative triggers
        trigName.find("HLT_MonoCentralPFJet80_PFMETNoMu120_JetIdCleaned_PFMHTNoMu120_IDTight")!= std::string::npos||
-       trigName.find("HLT_PFMETNoMu120_JetIdCleaned_PFMHTNoMu120_IDTight")!= std::string::npos
+       trigName.find("HLT_PFMETNoMu120_JetIdCleaned_PFMHTNoMu120_IDTight")!= std::string::npos || 
+       trigName.find("HLT_DoubleMediumIsoPFTau32_Trk1_eta2p1_Reg_v")!= std::string::npos || 
+       trigName.find("HLT_DoubleMediumIsoPFTau35_Trk1_eta2p1_Reg_v")!= std::string::npos || 
+       trigName.find("HLT_DoubleMediumIsoPFTau40_Trk1_eta2p1_Reg_v")!= std::string::npos || 
+       trigName.find("HLT_DoubleMediumCombinedIsoPFTau35_Trk1_eta2p1_Reg_v")!= std::string::npos || 
+       trigName.find("HLT_DoubleMediumCombinedIsoPFTau40_Trk1_eta2p1_Reg_v")!= std::string::npos || 
+       trigName.find("HLT_DoubleMediumCombinedIsoPFTau40_Trk1_eta2p1_v")!= std::string::npos
+
    ) return true;
    else
      return false;
@@ -253,7 +260,6 @@ bool TriggersNtuplizer::findFilter( std::string filterName ){
        filterName.find("hltMu17TrkIsoVVLEle12CaloIdLTrackIdLIsoVLElectronlegTrackIsoFilter") != std::string::npos ||
        filterName.find("hltMu23TrkIsoVVLEle12CaloIdLTrackIdLIsoVLElectronlegTrackIsoFilter") != std::string::npos ||
        filterName.find("hltMu23TrkIsoVVLEle8CaloIdLTrackIdLIsoVLElectronlegTrackIsoFilter") != std::string::npos ||
-       filterName.find("hltEle27erWPLooseGsfTrackIsoFilter") != std::string::npos ||
        filterName.find("hltMu8TrkIsoVVLEle17CaloIdLTrackIdLIsoVLMuonlegL3IsoFiltered8") != std::string::npos ||
        filterName.find("hltMu8TrkIsoVVLEle23CaloIdLTrackIdLIsoVLMuonlegL3IsoFiltered8") != std::string::npos ||
        filterName.find("hltMu17TrkIsoVVLEle12CaloIdLTrackIdLIsoVLMuonlegL3IsoFiltered17") != std::string::npos ||
@@ -261,8 +267,14 @@ bool TriggersNtuplizer::findFilter( std::string filterName ){
        filterName.find("hltMu23TrkIsoVVLEle8CaloIdLTrackIdLIsoVLMuonlegL3IsoFiltered23") != std::string::npos ||
        filterName.find("hltMu8TrkIsoVVLEle23CaloIdLTrackIdLIsoVLDZFilter") != std::string::npos ||
        filterName.find("hltMu23TrkIsoVVLEle12CaloIdLTrackIdLIsoVLDZFilter") != std::string::npos || 
-       filterName.find("hltDiMuonGlb17Glb8RelTrkIsoFiltered0p4") != std::string::npos || 
-       filterName.find("hltDiMuonGlb17Trk8RelTrkIsoFiltered0p4") != std::string::npos
+       filterName.find("hltMu23TrkIsoVVLEle12CaloIdLTrackIdLIsoVLElectronlegTrackIsoFilter") != std::string::npos || 
+       filterName.find("hltMu8TrkIsoVVLEle23CaloIdLTrackIdLIsoVLMuonlegL3IsoFiltered8") != std::string::npos || 
+       filterName.find("hltMu23TrkIsoVVLEle12CaloIdLTrackIdLIsoVLMuonlegL3IsoFiltered23") != std::string::npos || 
+	 //       filterName.find("hltDiMuonGlb17Glb8RelTrkIsoFiltered0p4") != std::string::npos || 
+	 //       filterName.find("hltDiMuonGlb17Trk8RelTrkIsoFiltered0p4") != std::string::npos || 
+       filterName.find("hltDoublePFTau32TrackPt1MediumIsolationDz02Reg") != std::string::npos || 
+       filterName.find("hltDoublePFTau35TrackPt1MediumIsolationDz02Reg") != std::string::npos || 
+       filterName.find("hltDoublePFTau40TrackPt1MediumIsolationDz02Reg") != std::string::npos
        ) return true;
    else
      return false;   
