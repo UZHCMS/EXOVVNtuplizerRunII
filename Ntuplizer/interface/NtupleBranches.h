@@ -233,11 +233,11 @@ public:
   std::vector<float>          tau_dz			 ;  // YT added
 
   // YT added
-  std::vector<std::vector<int>>	      tau_associated_pdgId       ;  
-  std::vector<std::vector<float>>	      tau_associated_pt       ;  
-  std::vector<std::vector<float>>	      tau_associated_eta       ;  
-  std::vector<std::vector<float>>	      tau_associated_phi       ;  
-  std::vector<std::vector<float>>	      tau_associated_dr       ;  
+//  std::vector<std::vector<int>>	      tau_associated_pdgId       ;  
+//  std::vector<std::vector<float>>	      tau_associated_pt       ;  
+//  std::vector<std::vector<float>>	      tau_associated_eta       ;  
+//  std::vector<std::vector<float>>	      tau_associated_phi       ;  
+//  std::vector<std::vector<float>>	      tau_associated_dr       ;  
 
   std::vector<int>  	      tau_n_total                 ;
   std::vector<int>  	      tau_n_ch                 ;

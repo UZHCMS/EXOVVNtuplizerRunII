@@ -86,17 +86,17 @@ void TausNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
       int n_e = 0;
       int n_mu = 0;
 
-      std::vector<int> associated_pdgId;
-      std::vector<float> associated_pt;
-      std::vector<float> associated_eta;
-      std::vector<float> associated_phi;
-      std::vector<float> associated_dr;
+//      std::vector<int> associated_pdgId;
+//      std::vector<float> associated_pt;
+//      std::vector<float> associated_eta;
+//      std::vector<float> associated_phi;
+//      std::vector<float> associated_dr;
 
-      associated_pdgId.clear();
-      associated_pt.clear();
-      associated_eta.clear();
-      associated_phi.clear();
-      associated_dr.clear();
+//      associated_pdgId.clear();
+//      associated_pt.clear();
+//      associated_eta.clear();
+//      associated_phi.clear();
+//      associated_dr.clear();
       
       for( size_t ii = 0; ii < packedpfcandidates_->size(); ++ii ){
 	pat::PackedCandidate pf = (*packedpfcandidates_)[ii];
@@ -132,22 +132,22 @@ void TausNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
 	if(pf_pdgId==1) n_h_f++;
 	if(pf_pdgId==2) n_em_f++;
 
-	associated_pdgId.push_back(pf_pdgId);
-	associated_pt.push_back(pf_pt);
-	associated_eta.push_back(pf_eta);
-	associated_phi.push_back(pf_phi);
-	associated_dr.push_back(deltaR);
+//	associated_pdgId.push_back(pf_pdgId);
+//	associated_pt.push_back(pf_pt);
+//	associated_eta.push_back(pf_eta);
+//	associated_phi.push_back(pf_phi);
+//	associated_dr.push_back(deltaR);
 	
 	//    std::cout << "YUTA: index=" << ii << ", pt=" << pf.pt() << ", pdg ID=" << pf.pdgId() << std::endl;
       }
       
       //      std::cout << "YUTA: " << n_ch << " " << n_nh << " " << n_gamma << " " << n_e << " " << n_mu << " " << n_h_f << " " << n_em_f << std::endl;
 
-      nBranches_->tau_associated_pdgId                .push_back(associated_pdgId);
-      nBranches_->tau_associated_pt                .push_back(associated_pt);
-      nBranches_->tau_associated_eta                .push_back(associated_eta);
-      nBranches_->tau_associated_phi                .push_back(associated_phi);
-      nBranches_->tau_associated_dr                .push_back(associated_dr);
+//      nBranches_->tau_associated_pdgId                .push_back(associated_pdgId);
+//      nBranches_->tau_associated_pt                .push_back(associated_pt);
+//      nBranches_->tau_associated_eta                .push_back(associated_eta);
+//      nBranches_->tau_associated_phi                .push_back(associated_phi);
+//      nBranches_->tau_associated_dr                .push_back(associated_dr);
 
       nBranches_->tau_n_ch.push_back(n_ch);
       nBranches_->tau_n_nh.push_back(n_nh);
@@ -396,17 +396,17 @@ void TausNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
       int n_e = 0;
       int n_mu = 0;
 
-      std::vector<int> associated_pdgId;
-      std::vector<float> associated_pt;
-      std::vector<float> associated_eta;
-      std::vector<float> associated_phi;
-      std::vector<float> associated_dr;
-
-      associated_pdgId.clear();
-      associated_pt.clear();
-      associated_eta.clear();
-      associated_phi.clear();
-      associated_dr.clear();
+//      std::vector<int> associated_pdgId;
+//      std::vector<float> associated_pt;
+//      std::vector<float> associated_eta;
+//      std::vector<float> associated_phi;
+//      std::vector<float> associated_dr;
+//
+//      associated_pdgId.clear();
+//      associated_pt.clear();
+//      associated_eta.clear();
+//      associated_phi.clear();
+//      associated_dr.clear();
       
       for( size_t ii = 0; ii < packedpfcandidates_->size(); ++ii ){
 	pat::PackedCandidate pf = (*packedpfcandidates_)[ii];
@@ -442,22 +442,22 @@ void TausNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
 	if(pf_pdgId==1) n_h_f++;
 	if(pf_pdgId==2) n_em_f++;
 
-	associated_pdgId.push_back(pf_pdgId);
-	associated_pt.push_back(pf_pt);
-	associated_eta.push_back(pf_eta);
-	associated_phi.push_back(pf_phi);
-	associated_dr.push_back(deltaR);
+//	associated_pdgId.push_back(pf_pdgId);
+//	associated_pt.push_back(pf_pt);
+//	associated_eta.push_back(pf_eta);
+//	associated_phi.push_back(pf_phi);
+//	associated_dr.push_back(deltaR);
 	
 	//    std::cout << "YUTA: index=" << ii << ", pt=" << pf.pt() << ", pdg ID=" << pf.pdgId() << std::endl;
       }
       
       //      std::cout << "YUTA: " << n_ch << " " << n_nh << " " << n_gamma << " " << n_e << " " << n_mu << " " << n_h_f << " " << n_em_f << std::endl;
 
-      nBranches_->tau_associated_pdgId                .push_back(associated_pdgId);
-      nBranches_->tau_associated_pt                .push_back(associated_pt);
-      nBranches_->tau_associated_eta                .push_back(associated_eta);
-      nBranches_->tau_associated_phi                .push_back(associated_phi);
-      nBranches_->tau_associated_dr                .push_back(associated_dr);
+//      nBranches_->tau_associated_pdgId                .push_back(associated_pdgId);
+//      nBranches_->tau_associated_pt                .push_back(associated_pt);
+//      nBranches_->tau_associated_eta                .push_back(associated_eta);
+//      nBranches_->tau_associated_phi                .push_back(associated_phi);
+//      nBranches_->tau_associated_dr                .push_back(associated_dr);
 
       nBranches_->tau_n_ch.push_back(n_ch);
       nBranches_->tau_n_nh.push_back(n_nh);
