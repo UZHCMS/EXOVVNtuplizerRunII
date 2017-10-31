@@ -20,10 +20,10 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
       /** genParticles */
       tree_->Branch( "genParticle_N"	     , &genParticle_N	       );
       tree_->Branch( "genParticle_pt"	     , &genParticle_pt	       ); 
-      tree_->Branch( "genParticle_px"	     , &genParticle_px	       ); 
-      tree_->Branch( "genParticle_py"	     , &genParticle_py	       ); 
-      tree_->Branch( "genParticle_pz"	     , &genParticle_pz	       ); 
-      tree_->Branch( "genParticle_e" 	     , &genParticle_e	       ); 
+//      tree_->Branch( "genParticle_px"	     , &genParticle_px	       ); 
+//      tree_->Branch( "genParticle_py"	     , &genParticle_py	       ); 
+//      tree_->Branch( "genParticle_pz"	     , &genParticle_pz	       ); 
+//      tree_->Branch( "genParticle_e" 	     , &genParticle_e	       ); 
       tree_->Branch( "genParticle_eta"	     , &genParticle_eta        ); 
       tree_->Branch( "genParticle_phi"	     , &genParticle_phi        ); 
       tree_->Branch( "genParticle_mass"	     , &genParticle_mass       ); 
@@ -51,6 +51,7 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
       tree_->Branch( "lheV_pt"	             , &lheV_pt                ); 
       tree_->Branch( "lheHT"	             , &lheHT                  ); 
       tree_->Branch( "lheNj"	             , &lheNj                  );
+      tree_->Branch( "lheNb"	             , &lheNb                  );
       tree_->Branch( "lheNl"	             , &lheNl                  );
       tree_->Branch( "lheV_mass"           , &lheV_mass              ); 
       tree_->Branch( "genWeight"	         , &genWeight              );
@@ -742,10 +743,10 @@ void NtupleBranches::reset( void ){
   /** genParticle */
   genParticle_N = 0;
   genParticle_pt.clear();
-  genParticle_px.clear();
-  genParticle_py.clear();
-  genParticle_pz.clear();
-  genParticle_e.clear();
+//  genParticle_px.clear();
+//  genParticle_py.clear();
+//  genParticle_pz.clear();
+//  genParticle_e.clear();
   genParticle_eta.clear();
   genParticle_phi.clear();
   genParticle_mass.clear();
@@ -781,6 +782,7 @@ void NtupleBranches::reset( void ){
   lheV_pt = 0;
   lheHT = 0;
   lheNj = 0;
+  lheNb = 0;
   lheV_mass = 0;
     
   /** electrons */

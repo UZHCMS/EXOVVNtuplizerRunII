@@ -51,10 +51,10 @@ public:
   /** genParticles */
   int                             genParticle_N;
   std::vector<float>              genParticle_pt       ;
-  std::vector<float>              genParticle_px       ;
-  std::vector<float>              genParticle_py       ;
-  std::vector<float>              genParticle_pz       ;
-  std::vector<float>              genParticle_e        ;
+//  std::vector<float>              genParticle_px       ;
+//  std::vector<float>              genParticle_py       ;
+//  std::vector<float>              genParticle_pz       ;
+//  std::vector<float>              genParticle_e        ;
   std::vector<float>              genParticle_eta      ;
   std::vector<float>              genParticle_phi      ;
   std::vector<float>              genParticle_mass     ;
@@ -78,6 +78,7 @@ public:
   float                           lheV_pt              ;
   float                           lheHT                ;
   int                             lheNj                ;
+  int                             lheNb                ;
   int                             lheNl                ;
   float                           lheV_mass            ;
   float                           genWeight            ;
