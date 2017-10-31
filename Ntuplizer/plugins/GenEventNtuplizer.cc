@@ -43,6 +43,7 @@ void GenEventNtuplizer::fillBranches( edm::Event const & event, const edm::Event
   float lheHt_ = 0.;
   int nLeptons = 0;
   int nParton = 0;
+  int nBParton = 0;
   
   double weightFacUp(0.), weightFacDown(0.), weightRenUp(0.), weightRenDown(0.), weightFacRenUp(0.), weightFacRenDown(0.);
   double pdfRMS(0.);
@@ -67,7 +68,8 @@ void GenEventNtuplizer::fillBranches( edm::Event const & event, const edm::Event
 
       // Yuta added 7 Sep : For gen weighting
       if(status == 1 && ((absPdgId >= 1 && absPdgId <= 5) || absPdgId == 21)){ // quarks and gluons, excluding top
-	nParton++;
+	      nParton++;
+	      if(absPdgId==5) nBParton++;
       }
 
       if(status == 1 && (absPdgId == 11 || absPdgId == 13 || absPdgId == 15)){ // leptons (needed for DY, W stitching)
@@ -125,6 +127,7 @@ void GenEventNtuplizer::fillBranches( edm::Event const & event, const edm::Event
 
   nBranches_->lheNl = nLeptons;
   nBranches_->lheNj = nParton;
+  nBranches_->lheNb = nBParton;
   nBranches_->lheHT = lheHt_;
 
 

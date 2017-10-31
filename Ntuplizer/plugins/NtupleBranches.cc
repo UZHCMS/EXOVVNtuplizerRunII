@@ -51,6 +51,7 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
       tree_->Branch( "lheV_pt"	             , &lheV_pt                ); 
       tree_->Branch( "lheHT"	             , &lheHT                  ); 
       tree_->Branch( "lheNj"	             , &lheNj                  );
+      tree_->Branch( "lheNb"	             , &lheNb                  );
       tree_->Branch( "lheNl"	             , &lheNl                  );
       tree_->Branch( "lheV_mass"           , &lheV_mass              ); 
       tree_->Branch( "genWeight"	         , &genWeight              );
@@ -781,6 +782,7 @@ void NtupleBranches::reset( void ){
   lheV_pt = 0;
   lheHT = 0;
   lheNj = 0;
+  lheNb = 0;
   lheV_mass = 0;
     
   /** electrons */

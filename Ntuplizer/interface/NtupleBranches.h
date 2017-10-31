@@ -78,6 +78,7 @@ public:
   float                           lheV_pt              ;
   float                           lheHT                ;
   int                             lheNj                ;
+  int                             lheNb                ;
   int                             lheNl                ;
   float                           lheV_mass            ;
   float                           genWeight            ;
