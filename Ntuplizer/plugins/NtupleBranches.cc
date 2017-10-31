@@ -213,11 +213,11 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch( "tau_dz"                  	 , &tau_dz		       );
     
     // YT added
-    tree_->Branch( "tau_associated_pdgId"    	 , &tau_associated_pdgId       );
-    tree_->Branch( "tau_associated_pt"    	 , &tau_associated_pt       );
-    tree_->Branch( "tau_associated_eta"    	 , &tau_associated_eta       );
-    tree_->Branch( "tau_associated_phi"    	 , &tau_associated_phi       );
-    tree_->Branch( "tau_associated_dr"    	 , &tau_associated_dr       );
+//    tree_->Branch( "tau_associated_pdgId"    	 , &tau_associated_pdgId       );
+//    tree_->Branch( "tau_associated_pt"    	 , &tau_associated_pt       );
+//    tree_->Branch( "tau_associated_eta"    	 , &tau_associated_eta       );
+//    tree_->Branch( "tau_associated_phi"    	 , &tau_associated_phi       );
+//    tree_->Branch( "tau_associated_dr"    	 , &tau_associated_dr       );
 
     tree_->Branch( "tau_n_total"    	 , &tau_n_total       );
     tree_->Branch( "tau_n_ch"    	 , &tau_n_ch       );
@@ -929,11 +929,11 @@ void NtupleBranches::reset( void ){
   tau_dz.clear();
  
   // YT added
-  tau_associated_pdgId.clear();
-  tau_associated_pt.clear();
-  tau_associated_eta.clear();
-  tau_associated_phi.clear();
-  tau_associated_dr.clear();
+//  tau_associated_pdgId.clear();
+//  tau_associated_pt.clear();
+//  tau_associated_eta.clear();
+//  tau_associated_phi.clear();
+//  tau_associated_dr.clear();
   tau_n_total.clear();
   tau_n_ch.clear();
   tau_n_nh.clear();

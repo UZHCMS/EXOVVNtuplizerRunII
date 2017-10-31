@@ -79,7 +79,7 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
 
 {
 
-	
+
   /*=======================================================================================*/
   edm::Service<TFileService> fs;
   TTree* tree = fs->make<TTree>( "tree", "tree" );
@@ -222,7 +222,7 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
   std::vector<edm::EDGetTokenT<reco::VertexCollection>> vtxTokens;
   vtxTokens.push_back( vtxToken_  );  
 
-  
+
   /*=======================================================================================*/  
 
   if (runFlags["doMuons"]) {
