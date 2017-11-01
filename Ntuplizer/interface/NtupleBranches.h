@@ -291,10 +291,10 @@ public:
   std::vector<float>          tau_dxy_Sig                ;
   std::vector<float>          tau_ip3d                   ;
   std::vector<float>          tau_ip3d_Sig               ;
-  std::vector<int>            tau_hasSecondaryVertex     ;
-  std::vector<float>          tau_decayDistMag_x         ;
-  std::vector<float>          tau_decayDistMag_y         ;
-  std::vector<float>          tau_decayDistMag_z         ;
+  std::vector<bool>            tau_hasSecondaryVertex     ;
+  //  std::vector<float>          tau_decayDistMag_x         ;
+  //  std::vector<float>          tau_decayDistMag_y         ;
+  //  std::vector<float>          tau_decayDistMag_z         ;
   std::vector<float>          tau_decayDistMag           ;
   std::vector<float>          tau_flightLenthSig         ;
   // YT added end : newly added for the MVA training
@@ -329,47 +329,47 @@ public:
   std::vector<float>  	      tau_byIsolationMVArun2v1DBnewDMwLTraw			      ;
   std::vector<float>  	      tau_byIsolationMVArun2v1DBoldDMwLTraw			      ;
   //  std::vector<float>  	      tau_byIsolationMVArun2v1DBoldDMwoLTraw			      ;
-  std::vector<float>  	      tau_byIsolationMVArun2v1PWdR03oldDMwLTraw			      ;
+  //  std::vector<float>  	      tau_byIsolationMVArun2v1PWdR03oldDMwLTraw			      ;
   std::vector<float>  	      tau_byIsolationMVArun2v1PWnewDMwLTraw			      ;
   std::vector<float>  	      tau_byIsolationMVArun2v1PWoldDMwLTraw			      ;
   std::vector<bool>  	      tau_byLooseIsolationMVArun2v1DBdR03oldDMwLT			      ;
   std::vector<bool>  	      tau_byLooseIsolationMVArun2v1DBnewDMwLT			      ;
   std::vector<bool>  	      tau_byLooseIsolationMVArun2v1DBoldDMwLT			      ;
-  std::vector<bool>  	      tau_byLooseIsolationMVArun2v1PWdR03oldDMwLT			      ;
+  //  std::vector<bool>  	      tau_byLooseIsolationMVArun2v1PWdR03oldDMwLT			      ;
   std::vector<bool>  	      tau_byLooseIsolationMVArun2v1PWnewDMwLT			      ;
   std::vector<bool>  	      tau_byLooseIsolationMVArun2v1PWoldDMwLT			      ;
 
   std::vector<bool>  	      tau_byMediumIsolationMVArun2v1DBdR03oldDMwLT			      ;
   std::vector<bool>  	      tau_byMediumIsolationMVArun2v1DBnewDMwLT			      ;
   std::vector<bool>  	      tau_byMediumIsolationMVArun2v1DBoldDMwLT			      ;
-  std::vector<bool>  	      tau_byMediumIsolationMVArun2v1PWdR03oldDMwLT			      ;
+  //  std::vector<bool>  	      tau_byMediumIsolationMVArun2v1PWdR03oldDMwLT			      ;
   std::vector<bool>  	      tau_byMediumIsolationMVArun2v1PWnewDMwLT			      ;
   std::vector<bool>  	      tau_byMediumIsolationMVArun2v1PWoldDMwLT;
  
   std::vector<bool>  	      tau_byTightIsolationMVArun2v1DBdR03oldDMwLT			      ;
   std::vector<bool>  	      tau_byTightIsolationMVArun2v1DBnewDMwLT			      ;
   std::vector<bool>  	      tau_byTightIsolationMVArun2v1DBoldDMwLT			      ;
-  std::vector<bool>  	      tau_byTightIsolationMVArun2v1PWdR03oldDMwLT			      ;
+  //  std::vector<bool>  	      tau_byTightIsolationMVArun2v1PWdR03oldDMwLT			      ;
   std::vector<bool>  	      tau_byTightIsolationMVArun2v1PWnewDMwLT			      ;
   std::vector<bool>  	      tau_byTightIsolationMVArun2v1PWoldDMwLT			      ;
   std::vector<bool>  	      tau_byVLooseIsolationMVArun2v1DBdR03oldDMwLT			      ;
 
   std::vector<bool>  	      tau_byVLooseIsolationMVArun2v1DBnewDMwLT			      ;
   std::vector<bool>  	      tau_byVLooseIsolationMVArun2v1DBoldDMwLT			      ;
-  std::vector<bool>  	      tau_byVLooseIsolationMVArun2v1PWdR03oldDMwLT			      ;
+  //  std::vector<bool>  	      tau_byVLooseIsolationMVArun2v1PWdR03oldDMwLT			      ;
   std::vector<bool>  	      tau_byVLooseIsolationMVArun2v1PWnewDMwLT			      ;
   std::vector<bool>  	      tau_byVLooseIsolationMVArun2v1PWoldDMwLT			      ;
   std::vector<bool>  	      tau_byVTightIsolationMVArun2v1DBdR03oldDMwLT			      ;
   std::vector<bool>  	      tau_byVTightIsolationMVArun2v1DBnewDMwLT			      ;
   std::vector<bool>  	      tau_byVTightIsolationMVArun2v1DBoldDMwLT			      ;
 
-  std::vector<bool>  	      tau_byVTightIsolationMVArun2v1PWdR03oldDMwLT			      ;
+  //  std::vector<bool>  	      tau_byVTightIsolationMVArun2v1PWdR03oldDMwLT			      ;
   std::vector<bool>  	      tau_byVTightIsolationMVArun2v1PWnewDMwLT			      ;
   std::vector<bool>  	      tau_byVTightIsolationMVArun2v1PWoldDMwLT			      ;
   std::vector<bool>  	      tau_byVVTightIsolationMVArun2v1DBdR03oldDMwLT			      ;
   std::vector<bool>  	      tau_byVVTightIsolationMVArun2v1DBnewDMwLT			      ;
   std::vector<bool>  	      tau_byVVTightIsolationMVArun2v1DBoldDMwLT			      ;
-  std::vector<bool>  	      tau_byVVTightIsolationMVArun2v1PWdR03oldDMwLT			      ;
+  //  std::vector<bool>  	      tau_byVVTightIsolationMVArun2v1PWdR03oldDMwLT			      ;
   std::vector<bool>  	      tau_byVVTightIsolationMVArun2v1PWnewDMwLT			      ;
 
   std::vector<bool>  	      tau_byVVTightIsolationMVArun2v1PWoldDMwLT			      ;
