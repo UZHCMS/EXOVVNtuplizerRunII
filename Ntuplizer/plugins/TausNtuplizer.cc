@@ -179,7 +179,7 @@ void TausNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
       float dxy_Sig = tau.dxy_Sig();
       float ip3d = tau.ip3d();
       float ip3d_Sig = tau.ip3d_Sig();
-      int hasSecondaryVertex = tau.hasSecondaryVertex();
+      bool hasSecondaryVertex = tau.hasSecondaryVertex();
       float flightLenthSig = tau.flightLengthSig();
 
 
@@ -290,51 +290,51 @@ void TausNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
       nBranches_->tau_byIsolationMVArun2v1DBnewDMwLTraw          .push_back(tau.tauID("byIsolationMVArun2v1DBnewDMwLTraw"));
       nBranches_->tau_byIsolationMVArun2v1DBoldDMwLTraw          .push_back(tau.tauID("byIsolationMVArun2v1DBoldDMwLTraw"				    ));
       //      nBranches_->tau_byIsolationMVArun2v1DBoldDMwoLTraw          .push_back(tau.tauID("byIsolationMVArun2v1DBoldDMwoLTraw"				    ));
-      nBranches_->tau_byIsolationMVArun2v1PWdR03oldDMwLTraw      .push_back(tau.tauID("byIsolationMVArun2v1PWdR03oldDMwLTraw"				    ));
+      //      nBranches_->tau_byIsolationMVArun2v1PWdR03oldDMwLTraw      .push_back(tau.tauID("byIsolationMVArun2v1PWdR03oldDMwLTraw"				    ));
       nBranches_->tau_byIsolationMVArun2v1PWnewDMwLTraw          .push_back(tau.tauID("byIsolationMVArun2v1PWnewDMwLTraw"				    ));
-      nBranches_->tau_byIsolationMVArun2v1PWoldDMwLTraw          .push_back(tau.tauID("byIsolationMVArun2v1PWoldDMwLTraw"				    ));
+      //      nBranches_->tau_byIsolationMVArun2v1PWoldDMwLTraw          .push_back(tau.tauID("byIsolationMVArun2v1PWoldDMwLTraw"				    ));
       nBranches_->tau_byLooseIsolationMVArun2v1DBdR03oldDMwLT    .push_back(tau.tauID("byLooseIsolationMVArun2v1DBdR03oldDMwLT"				    ));
       nBranches_->tau_byLooseIsolationMVArun2v1DBnewDMwLT        .push_back(tau.tauID("byLooseIsolationMVArun2v1DBnewDMwLT"				    ));
       nBranches_->tau_byLooseIsolationMVArun2v1DBoldDMwLT        .push_back(tau.tauID("byLooseIsolationMVArun2v1DBoldDMwLT"			    ));
-      nBranches_->tau_byLooseIsolationMVArun2v1PWdR03oldDMwLT    .push_back(tau.tauID("byLooseIsolationMVArun2v1PWdR03oldDMwLT"				    ));
+      //      nBranches_->tau_byLooseIsolationMVArun2v1PWdR03oldDMwLT    .push_back(tau.tauID("byLooseIsolationMVArun2v1PWdR03oldDMwLT"				    ));
       nBranches_->tau_byLooseIsolationMVArun2v1PWnewDMwLT        .push_back(	tau.tauID("byLooseIsolationMVArun2v1PWnewDMwLT"			    ));
-      nBranches_->tau_byLooseIsolationMVArun2v1PWoldDMwLT        .push_back(	tau.tauID("byLooseIsolationMVArun2v1PWoldDMwLT"			    ));
+      //      nBranches_->tau_byLooseIsolationMVArun2v1PWoldDMwLT        .push_back(	tau.tauID("byLooseIsolationMVArun2v1PWoldDMwLT"			    ));
       
       nBranches_->tau_byMediumIsolationMVArun2v1DBdR03oldDMwLT    .push_back(tau.tauID("byMediumIsolationMVArun2v1DBdR03oldDMwLT"				    ));
       nBranches_->tau_byMediumIsolationMVArun2v1DBnewDMwLT        .push_back(	tau.tauID("byMediumIsolationMVArun2v1DBnewDMwLT"			    ));
       nBranches_->tau_byMediumIsolationMVArun2v1DBoldDMwLT        .push_back(tau.tauID("byMediumIsolationMVArun2v1DBoldDMwLT"				    ));
-      nBranches_->tau_byMediumIsolationMVArun2v1PWdR03oldDMwLT    .push_back(tau.tauID("byMediumIsolationMVArun2v1PWdR03oldDMwLT"				    ));
+      //      nBranches_->tau_byMediumIsolationMVArun2v1PWdR03oldDMwLT    .push_back(tau.tauID("byMediumIsolationMVArun2v1PWdR03oldDMwLT"				    ));
       nBranches_->tau_byMediumIsolationMVArun2v1PWnewDMwLT        .push_back(tau.tauID("byMediumIsolationMVArun2v1PWnewDMwLT"				    ));
-      nBranches_->tau_byMediumIsolationMVArun2v1PWoldDMwLT        .push_back(tau.tauID("byMediumIsolationMVArun2v1PWoldDMwLT"				    ));
+      //      nBranches_->tau_byMediumIsolationMVArun2v1PWoldDMwLT        .push_back(tau.tauID("byMediumIsolationMVArun2v1PWoldDMwLT"				    ));
 
     
       nBranches_->tau_byTightIsolationMVArun2v1DBdR03oldDMwLT     .push_back(tau.tauID("byTightIsolationMVArun2v1DBdR03oldDMwLT"				    ));
       nBranches_->tau_byTightIsolationMVArun2v1DBnewDMwLT         .push_back(tau.tauID("byTightIsolationMVArun2v1DBnewDMwLT"			    ));
       nBranches_->tau_byTightIsolationMVArun2v1DBoldDMwLT         .push_back(tau.tauID("byTightIsolationMVArun2v1DBoldDMwLT"				    ));
-      nBranches_->tau_byTightIsolationMVArun2v1PWdR03oldDMwLT     .push_back(tau.tauID("byTightIsolationMVArun2v1PWdR03oldDMwLT"				    ));
+      //      nBranches_->tau_byTightIsolationMVArun2v1PWdR03oldDMwLT     .push_back(tau.tauID("byTightIsolationMVArun2v1PWdR03oldDMwLT"				    ));
       nBranches_->tau_byTightIsolationMVArun2v1PWnewDMwLT         .push_back(tau.tauID("byTightIsolationMVArun2v1PWnewDMwLT"			    ));
-      nBranches_->tau_byTightIsolationMVArun2v1PWoldDMwLT         .push_back(tau.tauID("byTightIsolationMVArun2v1PWoldDMwLT"			    ));
+      //      nBranches_->tau_byTightIsolationMVArun2v1PWoldDMwLT         .push_back(tau.tauID("byTightIsolationMVArun2v1PWoldDMwLT"			    ));
       nBranches_->tau_byVLooseIsolationMVArun2v1DBdR03oldDMwLT    .push_back(tau.tauID("byVLooseIsolationMVArun2v1DBdR03oldDMwLT"				    ));
 
       nBranches_->tau_byVLooseIsolationMVArun2v1DBnewDMwLT        .push_back(	tau.tauID("byVLooseIsolationMVArun2v1DBnewDMwLT"			    ));
       nBranches_->tau_byVLooseIsolationMVArun2v1DBoldDMwLT        .push_back(tau.tauID("byVLooseIsolationMVArun2v1DBoldDMwLT"			    ));
-      nBranches_->tau_byVLooseIsolationMVArun2v1PWdR03oldDMwLT    .push_back(tau.tauID("byVLooseIsolationMVArun2v1PWdR03oldDMwLT"			    ));
+      //      nBranches_->tau_byVLooseIsolationMVArun2v1PWdR03oldDMwLT    .push_back(tau.tauID("byVLooseIsolationMVArun2v1PWdR03oldDMwLT"			    ));
       nBranches_->tau_byVLooseIsolationMVArun2v1PWnewDMwLT        .push_back(tau.tauID("byVLooseIsolationMVArun2v1PWnewDMwLT"			    ));
-      nBranches_->tau_byVLooseIsolationMVArun2v1PWoldDMwLT        .push_back(tau.tauID("byVLooseIsolationMVArun2v1PWoldDMwLT"			    ));
+      //      nBranches_->tau_byVLooseIsolationMVArun2v1PWoldDMwLT        .push_back(tau.tauID("byVLooseIsolationMVArun2v1PWoldDMwLT"			    ));
       nBranches_->tau_byVTightIsolationMVArun2v1DBdR03oldDMwLT    .push_back(tau.tauID("byVTightIsolationMVArun2v1DBdR03oldDMwLT"			    ));
       nBranches_->tau_byVTightIsolationMVArun2v1DBnewDMwLT        .push_back(tau.tauID("byVTightIsolationMVArun2v1DBnewDMwLT"			    ));
       nBranches_->tau_byVTightIsolationMVArun2v1DBoldDMwLT        .push_back(tau.tauID("byVTightIsolationMVArun2v1DBoldDMwLT"			    ));
 
-      nBranches_->tau_byVTightIsolationMVArun2v1PWdR03oldDMwLT     .push_back(tau.tauID("byVTightIsolationMVArun2v1PWdR03oldDMwLT"			    ));
+      //      nBranches_->tau_byVTightIsolationMVArun2v1PWdR03oldDMwLT     .push_back(tau.tauID("byVTightIsolationMVArun2v1PWdR03oldDMwLT"			    ));
       nBranches_->tau_byVTightIsolationMVArun2v1PWnewDMwLT         .push_back(tau.tauID("byVTightIsolationMVArun2v1PWnewDMwLT"			    ));
-      nBranches_->tau_byVTightIsolationMVArun2v1PWoldDMwLT         .push_back(tau.tauID("byVTightIsolationMVArun2v1PWoldDMwLT"			    ));
+      //      nBranches_->tau_byVTightIsolationMVArun2v1PWoldDMwLT         .push_back(tau.tauID("byVTightIsolationMVArun2v1PWoldDMwLT"			    ));
       nBranches_->tau_byVVTightIsolationMVArun2v1DBdR03oldDMwLT    .push_back(tau.tauID("byVVTightIsolationMVArun2v1DBdR03oldDMwLT"			    ));
       nBranches_->tau_byVVTightIsolationMVArun2v1DBnewDMwLT        .push_back(tau.tauID("byVVTightIsolationMVArun2v1DBnewDMwLT"			    ));
       nBranches_->tau_byVVTightIsolationMVArun2v1DBoldDMwLT        .push_back(tau.tauID("byVVTightIsolationMVArun2v1DBoldDMwLT"			    ));
-      nBranches_->tau_byVVTightIsolationMVArun2v1PWdR03oldDMwLT    .push_back(tau.tauID("byVVTightIsolationMVArun2v1PWdR03oldDMwLT"			    ));
+      //      nBranches_->tau_byVVTightIsolationMVArun2v1PWdR03oldDMwLT    .push_back(tau.tauID("byVVTightIsolationMVArun2v1PWdR03oldDMwLT"			    ));
       nBranches_->tau_byVVTightIsolationMVArun2v1PWnewDMwLT        .push_back(tau.tauID("byVVTightIsolationMVArun2v1PWnewDMwLT"			    ));
 
-      nBranches_->tau_byVVTightIsolationMVArun2v1PWoldDMwLT        .push_back(tau.tauID("byVVTightIsolationMVArun2v1PWoldDMwLT"			    ));
+      //      nBranches_->tau_byVVTightIsolationMVArun2v1PWoldDMwLT        .push_back(tau.tauID("byVVTightIsolationMVArun2v1PWoldDMwLT"			    ));
 
 //      nBranches_->tau_byIsolationMVArun2v1DBoldDMwLTrawNew.push_back(tau.tauID("byIsolationMVArun2v1DBoldDMwLTrawNew"));
 //      nBranches_->tau_byVLooseIsolationMVArun2v1DBoldDMwLTNew.push_back(tau.tauID("byVLooseIsolationMVArun2v1DBoldDMwLTNew"));
@@ -488,7 +488,7 @@ void TausNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
       float dxy_Sig = boostedTau.dxy_Sig();
       float ip3d = boostedTau.ip3d();
       float ip3d_Sig = boostedTau.ip3d_Sig();
-      int hasSecondaryVertex = boostedTau.hasSecondaryVertex();
+      bool hasSecondaryVertex = boostedTau.hasSecondaryVertex();
       float flightLenthSig = boostedTau.flightLengthSig();
 
 
@@ -589,50 +589,50 @@ void TausNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
       nBranches_->tau_byIsolationMVArun2v1DBnewDMwLTraw          .push_back(boostedTau.tauID("byIsolationMVArun2v1DBnewDMwLTraw"));
       nBranches_->tau_byIsolationMVArun2v1DBoldDMwLTraw          .push_back(boostedTau.tauID("byIsolationMVArun2v1DBoldDMwLTraw"				    ));
       //      nBranches_->tau_byIsolationMVArun2v1DBoldDMwoLTraw          .push_back(boostedTau.tauID("byIsolationMVArun2v1DBoldDMwoLTraw"				    ));
-      nBranches_->tau_byIsolationMVArun2v1PWdR03oldDMwLTraw      .push_back(boostedTau.tauID("byIsolationMVArun2v1PWdR03oldDMwLTraw"				    ));
+      //      nBranches_->tau_byIsolationMVArun2v1PWdR03oldDMwLTraw      .push_back(boostedTau.tauID("byIsolationMVArun2v1PWdR03oldDMwLTraw"				    ));
       nBranches_->tau_byIsolationMVArun2v1PWnewDMwLTraw          .push_back(boostedTau.tauID("byIsolationMVArun2v1PWnewDMwLTraw"				    ));
-      nBranches_->tau_byIsolationMVArun2v1PWoldDMwLTraw          .push_back(boostedTau.tauID("byIsolationMVArun2v1PWoldDMwLTraw"				    ));
+      //      nBranches_->tau_byIsolationMVArun2v1PWoldDMwLTraw          .push_back(boostedTau.tauID("byIsolationMVArun2v1PWoldDMwLTraw"				    ));
       nBranches_->tau_byLooseIsolationMVArun2v1DBdR03oldDMwLT    .push_back(boostedTau.tauID("byLooseIsolationMVArun2v1DBdR03oldDMwLT"				    ));
       nBranches_->tau_byLooseIsolationMVArun2v1DBnewDMwLT        .push_back(boostedTau.tauID("byLooseIsolationMVArun2v1DBnewDMwLT"				    ));
       nBranches_->tau_byLooseIsolationMVArun2v1DBoldDMwLT        .push_back(boostedTau.tauID("byLooseIsolationMVArun2v1DBoldDMwLT"			    ));
-      nBranches_->tau_byLooseIsolationMVArun2v1PWdR03oldDMwLT    .push_back(boostedTau.tauID("byLooseIsolationMVArun2v1PWdR03oldDMwLT"				    ));
+      //      nBranches_->tau_byLooseIsolationMVArun2v1PWdR03oldDMwLT    .push_back(boostedTau.tauID("byLooseIsolationMVArun2v1PWdR03oldDMwLT"				    ));
       nBranches_->tau_byLooseIsolationMVArun2v1PWnewDMwLT        .push_back(	boostedTau.tauID("byLooseIsolationMVArun2v1PWnewDMwLT"			    ));
-      nBranches_->tau_byLooseIsolationMVArun2v1PWoldDMwLT        .push_back(	boostedTau.tauID("byLooseIsolationMVArun2v1PWoldDMwLT"			    ));
+      //      nBranches_->tau_byLooseIsolationMVArun2v1PWoldDMwLT        .push_back(	boostedTau.tauID("byLooseIsolationMVArun2v1PWoldDMwLT"			    ));
        nBranches_->tau_byMediumIsolationMVArun2v1DBdR03oldDMwLT    .push_back(boostedTau.tauID("byMediumIsolationMVArun2v1DBdR03oldDMwLT"				    ));
       nBranches_->tau_byMediumIsolationMVArun2v1DBnewDMwLT        .push_back(	boostedTau.tauID("byMediumIsolationMVArun2v1DBnewDMwLT"			    ));
       nBranches_->tau_byMediumIsolationMVArun2v1DBoldDMwLT        .push_back(boostedTau.tauID("byMediumIsolationMVArun2v1DBoldDMwLT"				    ));
-      nBranches_->tau_byMediumIsolationMVArun2v1PWdR03oldDMwLT    .push_back(boostedTau.tauID("byMediumIsolationMVArun2v1PWdR03oldDMwLT"				    ));
+      //      nBranches_->tau_byMediumIsolationMVArun2v1PWdR03oldDMwLT    .push_back(boostedTau.tauID("byMediumIsolationMVArun2v1PWdR03oldDMwLT"				    ));
       nBranches_->tau_byMediumIsolationMVArun2v1PWnewDMwLT        .push_back(boostedTau.tauID("byMediumIsolationMVArun2v1PWnewDMwLT"				    ));
-      nBranches_->tau_byMediumIsolationMVArun2v1PWoldDMwLT        .push_back(boostedTau.tauID("byMediumIsolationMVArun2v1PWoldDMwLT"				    ));
+      //      nBranches_->tau_byMediumIsolationMVArun2v1PWoldDMwLT        .push_back(boostedTau.tauID("byMediumIsolationMVArun2v1PWoldDMwLT"				    ));
 
      
       nBranches_->tau_byTightIsolationMVArun2v1DBdR03oldDMwLT     .push_back(boostedTau.tauID("byTightIsolationMVArun2v1DBdR03oldDMwLT"				    ));
       nBranches_->tau_byTightIsolationMVArun2v1DBnewDMwLT         .push_back(boostedTau.tauID("byTightIsolationMVArun2v1DBnewDMwLT"			    ));
       nBranches_->tau_byTightIsolationMVArun2v1DBoldDMwLT         .push_back(boostedTau.tauID("byTightIsolationMVArun2v1DBoldDMwLT"				    ));
-      nBranches_->tau_byTightIsolationMVArun2v1PWdR03oldDMwLT     .push_back(boostedTau.tauID("byTightIsolationMVArun2v1PWdR03oldDMwLT"				    ));
+      //      nBranches_->tau_byTightIsolationMVArun2v1PWdR03oldDMwLT     .push_back(boostedTau.tauID("byTightIsolationMVArun2v1PWdR03oldDMwLT"				    ));
       nBranches_->tau_byTightIsolationMVArun2v1PWnewDMwLT         .push_back(boostedTau.tauID("byTightIsolationMVArun2v1PWnewDMwLT"			    ));
-      nBranches_->tau_byTightIsolationMVArun2v1PWoldDMwLT         .push_back(boostedTau.tauID("byTightIsolationMVArun2v1PWoldDMwLT"			    ));
+      //      nBranches_->tau_byTightIsolationMVArun2v1PWoldDMwLT         .push_back(boostedTau.tauID("byTightIsolationMVArun2v1PWoldDMwLT"			    ));
       nBranches_->tau_byVLooseIsolationMVArun2v1DBdR03oldDMwLT    .push_back(boostedTau.tauID("byVLooseIsolationMVArun2v1DBdR03oldDMwLT"				    ));
 
       nBranches_->tau_byVLooseIsolationMVArun2v1DBnewDMwLT        .push_back(	boostedTau.tauID("byVLooseIsolationMVArun2v1DBnewDMwLT"			    ));
       nBranches_->tau_byVLooseIsolationMVArun2v1DBoldDMwLT        .push_back(boostedTau.tauID("byVLooseIsolationMVArun2v1DBoldDMwLT"			    ));
-      nBranches_->tau_byVLooseIsolationMVArun2v1PWdR03oldDMwLT    .push_back(boostedTau.tauID("byVLooseIsolationMVArun2v1PWdR03oldDMwLT"			    ));
+      //      nBranches_->tau_byVLooseIsolationMVArun2v1PWdR03oldDMwLT    .push_back(boostedTau.tauID("byVLooseIsolationMVArun2v1PWdR03oldDMwLT"			    ));
       nBranches_->tau_byVLooseIsolationMVArun2v1PWnewDMwLT        .push_back(boostedTau.tauID("byVLooseIsolationMVArun2v1PWnewDMwLT"			    ));
-      nBranches_->tau_byVLooseIsolationMVArun2v1PWoldDMwLT        .push_back(boostedTau.tauID("byVLooseIsolationMVArun2v1PWoldDMwLT"			    ));
+      //      nBranches_->tau_byVLooseIsolationMVArun2v1PWoldDMwLT        .push_back(boostedTau.tauID("byVLooseIsolationMVArun2v1PWoldDMwLT"			    ));
       nBranches_->tau_byVTightIsolationMVArun2v1DBdR03oldDMwLT    .push_back(boostedTau.tauID("byVTightIsolationMVArun2v1DBdR03oldDMwLT"			    ));
       nBranches_->tau_byVTightIsolationMVArun2v1DBnewDMwLT        .push_back(boostedTau.tauID("byVTightIsolationMVArun2v1DBnewDMwLT"			    ));
       nBranches_->tau_byVTightIsolationMVArun2v1DBoldDMwLT        .push_back(boostedTau.tauID("byVTightIsolationMVArun2v1DBoldDMwLT"			    ));
 
-      nBranches_->tau_byVTightIsolationMVArun2v1PWdR03oldDMwLT     .push_back(boostedTau.tauID("byVTightIsolationMVArun2v1PWdR03oldDMwLT"			    ));
+      //      nBranches_->tau_byVTightIsolationMVArun2v1PWdR03oldDMwLT     .push_back(boostedTau.tauID("byVTightIsolationMVArun2v1PWdR03oldDMwLT"			    ));
       nBranches_->tau_byVTightIsolationMVArun2v1PWnewDMwLT         .push_back(boostedTau.tauID("byVTightIsolationMVArun2v1PWnewDMwLT"			    ));
-      nBranches_->tau_byVTightIsolationMVArun2v1PWoldDMwLT         .push_back(boostedTau.tauID("byVTightIsolationMVArun2v1PWoldDMwLT"			    ));
+      //      nBranches_->tau_byVTightIsolationMVArun2v1PWoldDMwLT         .push_back(boostedTau.tauID("byVTightIsolationMVArun2v1PWoldDMwLT"			    ));
       nBranches_->tau_byVVTightIsolationMVArun2v1DBdR03oldDMwLT    .push_back(boostedTau.tauID("byVVTightIsolationMVArun2v1DBdR03oldDMwLT"			    ));
       nBranches_->tau_byVVTightIsolationMVArun2v1DBnewDMwLT        .push_back(boostedTau.tauID("byVVTightIsolationMVArun2v1DBnewDMwLT"			    ));
       nBranches_->tau_byVVTightIsolationMVArun2v1DBoldDMwLT        .push_back(boostedTau.tauID("byVVTightIsolationMVArun2v1DBoldDMwLT"			    ));
-      nBranches_->tau_byVVTightIsolationMVArun2v1PWdR03oldDMwLT    .push_back(boostedTau.tauID("byVVTightIsolationMVArun2v1PWdR03oldDMwLT"			    ));
+      //      nBranches_->tau_byVVTightIsolationMVArun2v1PWdR03oldDMwLT    .push_back(boostedTau.tauID("byVVTightIsolationMVArun2v1PWdR03oldDMwLT"			    ));
       nBranches_->tau_byVVTightIsolationMVArun2v1PWnewDMwLT        .push_back(boostedTau.tauID("byVVTightIsolationMVArun2v1PWnewDMwLT"			    ));
 
-      nBranches_->tau_byVVTightIsolationMVArun2v1PWoldDMwLT        .push_back(boostedTau.tauID("byVVTightIsolationMVArun2v1PWoldDMwLT"			    ));
+      //      nBranches_->tau_byVVTightIsolationMVArun2v1PWoldDMwLT        .push_back(boostedTau.tauID("byVVTightIsolationMVArun2v1PWoldDMwLT"			    ));
 
 //      nBranches_->tau_byIsolationMVArun2v1DBoldDMwLTrawNew.push_back(-1);
 //      nBranches_->tau_byVLooseIsolationMVArun2v1DBoldDMwLTNew.push_back(-1);

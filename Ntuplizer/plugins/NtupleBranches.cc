@@ -293,50 +293,50 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
       tree_->Branch( "tau_byIsolationMVArun2v1DBnewDMwLTraw"          , &tau_byIsolationMVArun2v1DBnewDMwLTraw);
       tree_->Branch( "tau_byIsolationMVArun2v1DBoldDMwLTraw"          , &tau_byIsolationMVArun2v1DBoldDMwLTraw);
       //      tree_->Branch( "tau_byIsolationMVArun2v1DBoldDMwoLTraw"          , &tau_byIsolationMVArun2v1DBoldDMwoLTraw);
-      tree_->Branch( "tau_byIsolationMVArun2v1PWdR03oldDMwLTraw"      , &tau_byIsolationMVArun2v1PWdR03oldDMwLTraw);
+      //      tree_->Branch( "tau_byIsolationMVArun2v1PWdR03oldDMwLTraw"      , &tau_byIsolationMVArun2v1PWdR03oldDMwLTraw);
       tree_->Branch( "tau_byIsolationMVArun2v1PWnewDMwLTraw"          , &tau_byIsolationMVArun2v1PWnewDMwLTraw);
-      tree_->Branch( "tau_byIsolationMVArun2v1PWoldDMwLTraw"          , &tau_byIsolationMVArun2v1PWoldDMwLTraw);
+      //      tree_->Branch( "tau_byIsolationMVArun2v1PWoldDMwLTraw"          , &tau_byIsolationMVArun2v1PWoldDMwLTraw);
       tree_->Branch( "tau_byLooseIsolationMVArun2v1DBdR03oldDMwLT"    , &tau_byLooseIsolationMVArun2v1DBdR03oldDMwLT);
       tree_->Branch( "tau_byLooseIsolationMVArun2v1DBnewDMwLT"        , &tau_byLooseIsolationMVArun2v1DBnewDMwLT);
       tree_->Branch( "tau_byLooseIsolationMVArun2v1DBoldDMwLT"        , &tau_byLooseIsolationMVArun2v1DBoldDMwLT);
-      tree_->Branch( "tau_byLooseIsolationMVArun2v1PWdR03oldDMwLT"   , &tau_byLooseIsolationMVArun2v1PWdR03oldDMwLT);
+      //      tree_->Branch( "tau_byLooseIsolationMVArun2v1PWdR03oldDMwLT"   , &tau_byLooseIsolationMVArun2v1PWdR03oldDMwLT);
       tree_->Branch( "tau_byLooseIsolationMVArun2v1PWnewDMwLT"        , &tau_byLooseIsolationMVArun2v1PWnewDMwLT);
-      tree_->Branch( "tau_byLooseIsolationMVArun2v1PWoldDMwLT"        , &tau_byLooseIsolationMVArun2v1PWoldDMwLT);
+      //      tree_->Branch( "tau_byLooseIsolationMVArun2v1PWoldDMwLT"        , &tau_byLooseIsolationMVArun2v1PWoldDMwLT);
       tree_->Branch( "tau_byMediumIsolationMVArun2v1DBdR03oldDMwLT"    , &tau_byMediumIsolationMVArun2v1DBdR03oldDMwLT);
       tree_->Branch( "tau_byMediumIsolationMVArun2v1DBnewDMwLT"        , &tau_byMediumIsolationMVArun2v1DBnewDMwLT);
       tree_->Branch( "tau_byMediumIsolationMVArun2v1DBoldDMwLT"        , &tau_byMediumIsolationMVArun2v1DBoldDMwLT);
-      tree_->Branch( "tau_byMediumIsolationMVArun2v1PWdR03oldDMwLT"    , &tau_byMediumIsolationMVArun2v1PWdR03oldDMwLT);
+      //      tree_->Branch( "tau_byMediumIsolationMVArun2v1PWdR03oldDMwLT"    , &tau_byMediumIsolationMVArun2v1PWdR03oldDMwLT);
       tree_->Branch( "tau_byMediumIsolationMVArun2v1PWnewDMwLT"        , &tau_byMediumIsolationMVArun2v1PWnewDMwLT);
-      tree_->Branch( "tau_byMediumIsolationMVArun2v1PWoldDMwLT"        , &tau_byMediumIsolationMVArun2v1PWoldDMwLT);
+      //      tree_->Branch( "tau_byMediumIsolationMVArun2v1PWoldDMwLT"        , &tau_byMediumIsolationMVArun2v1PWoldDMwLT);
 
 
       tree_->Branch( "tau_byTightIsolationMVArun2v1DBdR03oldDMwLT"     , &tau_byTightIsolationMVArun2v1DBdR03oldDMwLT);
       tree_->Branch( "tau_byTightIsolationMVArun2v1DBnewDMwLT"         , &tau_byTightIsolationMVArun2v1DBnewDMwLT);
       tree_->Branch( "tau_byTightIsolationMVArun2v1DBoldDMwLT"         , &tau_byTightIsolationMVArun2v1DBoldDMwLT);
-      tree_->Branch( "tau_byTightIsolationMVArun2v1PWdR03oldDMwLT"     , &tau_byTightIsolationMVArun2v1PWdR03oldDMwLT);
+      //      tree_->Branch( "tau_byTightIsolationMVArun2v1PWdR03oldDMwLT"     , &tau_byTightIsolationMVArun2v1PWdR03oldDMwLT);
       tree_->Branch( "tau_byTightIsolationMVArun2v1PWnewDMwLT"         , &tau_byTightIsolationMVArun2v1PWnewDMwLT);
-      tree_->Branch( "tau_byTightIsolationMVArun2v1PWoldDMwLT"         , &tau_byTightIsolationMVArun2v1PWoldDMwLT);
+      //      tree_->Branch( "tau_byTightIsolationMVArun2v1PWoldDMwLT"         , &tau_byTightIsolationMVArun2v1PWoldDMwLT);
       tree_->Branch( "tau_byVLooseIsolationMVArun2v1DBdR03oldDMwLT"    , &tau_byVLooseIsolationMVArun2v1DBdR03oldDMwLT);
 
       tree_->Branch( "tau_byVLooseIsolationMVArun2v1DBnewDMwLT"        , &tau_byVLooseIsolationMVArun2v1DBnewDMwLT);
       tree_->Branch( "tau_byVLooseIsolationMVArun2v1DBoldDMwLT"        , &tau_byVLooseIsolationMVArun2v1DBoldDMwLT);
-      tree_->Branch( "tau_byVLooseIsolationMVArun2v1PWdR03oldDMwLT"    , &tau_byVLooseIsolationMVArun2v1PWdR03oldDMwLT);
+      //      tree_->Branch( "tau_byVLooseIsolationMVArun2v1PWdR03oldDMwLT"    , &tau_byVLooseIsolationMVArun2v1PWdR03oldDMwLT);
       tree_->Branch( "tau_byVLooseIsolationMVArun2v1PWnewDMwLT"        , &tau_byVLooseIsolationMVArun2v1PWnewDMwLT);
-      tree_->Branch( "tau_byVLooseIsolationMVArun2v1PWoldDMwLT"        , &tau_byVLooseIsolationMVArun2v1PWoldDMwLT);
+      //      tree_->Branch( "tau_byVLooseIsolationMVArun2v1PWoldDMwLT"        , &tau_byVLooseIsolationMVArun2v1PWoldDMwLT);
       tree_->Branch( "tau_byVTightIsolationMVArun2v1DBdR03oldDMwLT"    , &tau_byVTightIsolationMVArun2v1DBdR03oldDMwLT);
       tree_->Branch( "tau_byVTightIsolationMVArun2v1DBnewDMwLT"        , &tau_byVTightIsolationMVArun2v1DBnewDMwLT);
       tree_->Branch( "tau_byVTightIsolationMVArun2v1DBoldDMwLT"        , &tau_byVTightIsolationMVArun2v1DBoldDMwLT);
 
-      tree_->Branch( "tau_byVTightIsolationMVArun2v1PWdR03oldDMwLT"     , &tau_byVTightIsolationMVArun2v1PWdR03oldDMwLT);
+      //      tree_->Branch( "tau_byVTightIsolationMVArun2v1PWdR03oldDMwLT"     , &tau_byVTightIsolationMVArun2v1PWdR03oldDMwLT);
       tree_->Branch( "tau_byVTightIsolationMVArun2v1PWnewDMwLT"         , &tau_byVTightIsolationMVArun2v1PWnewDMwLT);
-      tree_->Branch( "tau_byVTightIsolationMVArun2v1PWoldDMwLT"         , &tau_byVTightIsolationMVArun2v1PWoldDMwLT);
+      //      tree_->Branch( "tau_byVTightIsolationMVArun2v1PWoldDMwLT"         , &tau_byVTightIsolationMVArun2v1PWoldDMwLT);
       tree_->Branch( "tau_byVVTightIsolationMVArun2v1DBdR03oldDMwLT"    , &tau_byVVTightIsolationMVArun2v1DBdR03oldDMwLT);
       tree_->Branch( "tau_byVVTightIsolationMVArun2v1DBnewDMwLT"        , &tau_byVVTightIsolationMVArun2v1DBnewDMwLT);
       tree_->Branch( "tau_byVVTightIsolationMVArun2v1DBoldDMwLT"        , &tau_byVVTightIsolationMVArun2v1DBoldDMwLT);
-      tree_->Branch( "tau_byVVTightIsolationMVArun2v1PWdR03oldDMwLT"    , &tau_byVVTightIsolationMVArun2v1PWdR03oldDMwLT);
+      //      tree_->Branch( "tau_byVVTightIsolationMVArun2v1PWdR03oldDMwLT"    , &tau_byVVTightIsolationMVArun2v1PWdR03oldDMwLT);
       tree_->Branch( "tau_byVVTightIsolationMVArun2v1PWnewDMwLT"        , &tau_byVVTightIsolationMVArun2v1PWnewDMwLT);
 
-      tree_->Branch( "tau_byVVTightIsolationMVArun2v1PWoldDMwLT"        , &tau_byVVTightIsolationMVArun2v1PWoldDMwLT);
+      //      tree_->Branch( "tau_byVVTightIsolationMVArun2v1PWoldDMwLT"        , &tau_byVVTightIsolationMVArun2v1PWoldDMwLT);
 
       // YT added
 //      tree_->Branch("tau_byIsolationMVArun2v1DBoldDMwLTrawNew", &tau_byIsolationMVArun2v1DBoldDMwLTrawNew);
@@ -1007,50 +1007,50 @@ void NtupleBranches::reset( void ){
   tau_byIsolationMVArun2v1DBnewDMwLTraw.clear();
   tau_byIsolationMVArun2v1DBoldDMwLTraw.clear();
   //  tau_byIsolationMVArun2v1DBoldDMwoLTraw.clear();
-  tau_byIsolationMVArun2v1PWdR03oldDMwLTraw.clear();
+  //  tau_byIsolationMVArun2v1PWdR03oldDMwLTraw.clear();
   tau_byIsolationMVArun2v1PWnewDMwLTraw.clear();
-  tau_byIsolationMVArun2v1PWoldDMwLTraw.clear();
+  //  tau_byIsolationMVArun2v1PWoldDMwLTraw.clear();
   tau_byLooseIsolationMVArun2v1DBdR03oldDMwLT.clear();
   tau_byLooseIsolationMVArun2v1DBnewDMwLT.clear();
   tau_byLooseIsolationMVArun2v1DBoldDMwLT.clear();
-  tau_byLooseIsolationMVArun2v1PWdR03oldDMwLT.clear();
+  //  tau_byLooseIsolationMVArun2v1PWdR03oldDMwLT.clear();
   tau_byLooseIsolationMVArun2v1PWnewDMwLT.clear();
-  tau_byLooseIsolationMVArun2v1PWoldDMwLT.clear();
+  //  tau_byLooseIsolationMVArun2v1PWoldDMwLT.clear();
   
   tau_byMediumIsolationMVArun2v1DBdR03oldDMwLT.clear();
   tau_byMediumIsolationMVArun2v1DBnewDMwLT.clear();
   tau_byMediumIsolationMVArun2v1DBoldDMwLT.clear();
-  tau_byMediumIsolationMVArun2v1PWdR03oldDMwLT.clear();
+  //  tau_byMediumIsolationMVArun2v1PWdR03oldDMwLT.clear();
   tau_byMediumIsolationMVArun2v1PWnewDMwLT.clear();
-  tau_byMediumIsolationMVArun2v1PWoldDMwLT.clear();
+  //  tau_byMediumIsolationMVArun2v1PWoldDMwLT.clear();
 
   tau_byTightIsolationMVArun2v1DBdR03oldDMwLT.clear();
   tau_byTightIsolationMVArun2v1DBnewDMwLT.clear();
   tau_byTightIsolationMVArun2v1DBoldDMwLT.clear();
-  tau_byTightIsolationMVArun2v1PWdR03oldDMwLT.clear();
+  //  tau_byTightIsolationMVArun2v1PWdR03oldDMwLT.clear();
   tau_byTightIsolationMVArun2v1PWnewDMwLT.clear();
-  tau_byTightIsolationMVArun2v1PWoldDMwLT.clear();
+  //  tau_byTightIsolationMVArun2v1PWoldDMwLT.clear();
   tau_byVLooseIsolationMVArun2v1DBdR03oldDMwLT.clear();
 
   tau_byVLooseIsolationMVArun2v1DBnewDMwLT.clear();
   tau_byVLooseIsolationMVArun2v1DBoldDMwLT.clear();
-  tau_byVLooseIsolationMVArun2v1PWdR03oldDMwLT.clear();
+  //  tau_byVLooseIsolationMVArun2v1PWdR03oldDMwLT.clear();
   tau_byVLooseIsolationMVArun2v1PWnewDMwLT.clear();
-  tau_byVLooseIsolationMVArun2v1PWoldDMwLT.clear();
+  //  tau_byVLooseIsolationMVArun2v1PWoldDMwLT.clear();
   tau_byVTightIsolationMVArun2v1DBdR03oldDMwLT.clear();
   tau_byVTightIsolationMVArun2v1DBnewDMwLT.clear();
   tau_byVTightIsolationMVArun2v1DBoldDMwLT.clear();
 
-  tau_byVTightIsolationMVArun2v1PWdR03oldDMwLT.clear();
+  //  tau_byVTightIsolationMVArun2v1PWdR03oldDMwLT.clear();
   tau_byVTightIsolationMVArun2v1PWnewDMwLT.clear();
-  tau_byVTightIsolationMVArun2v1PWoldDMwLT.clear();
+  //  tau_byVTightIsolationMVArun2v1PWoldDMwLT.clear();
   tau_byVVTightIsolationMVArun2v1DBdR03oldDMwLT.clear();
   tau_byVVTightIsolationMVArun2v1DBnewDMwLT.clear();
   tau_byVVTightIsolationMVArun2v1DBoldDMwLT.clear();
-  tau_byVVTightIsolationMVArun2v1PWdR03oldDMwLT.clear();
+  //  tau_byVVTightIsolationMVArun2v1PWdR03oldDMwLT.clear();
   tau_byVVTightIsolationMVArun2v1PWnewDMwLT.clear();
 
-  tau_byVVTightIsolationMVArun2v1PWoldDMwLT.clear();
+  //  tau_byVVTightIsolationMVArun2v1PWoldDMwLT.clear();
 
 
 //  tau_byIsolationMVArun2v1DBoldDMwLTrawNew.clear();
