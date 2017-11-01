@@ -46,18 +46,18 @@ void TausNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
   event.getByToken(  tauInputToken_ , taus_ ); 
   event.getByToken( packedpfcandidatesToken_	 	   , packedpfcandidates_      );
 
-  int n_total = 0;
-  for( size_t ii = 0; ii < packedpfcandidates_->size(); ++ii ){
-    pat::PackedCandidate pf = (*packedpfcandidates_)[ii];
-    
-    float pf_pt = pf.pt();
-    if(pf_pt < 0.5) continue;
-
-    n_total ++;
-
-  }
-
-  nBranches_->tau_n_total.push_back(n_total);
+//  int n_total = 0;
+//  for( size_t ii = 0; ii < packedpfcandidates_->size(); ++ii ){
+//    pat::PackedCandidate pf = (*packedpfcandidates_)[ii];
+//    
+//    float pf_pt = pf.pt();
+//    if(pf_pt < 0.5) continue;
+//
+//    n_total ++;
+//
+//  }
+//
+//  nBranches_->tau_n_total.push_back(n_total);
 
     /********************************************************************/    
     for( size_t t = 0; t < taus_->size(); ++t ){
@@ -66,7 +66,7 @@ void TausNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
     
       nBranches_->tau_pdgId  	     	      .push_back(tau.pdgId());
       nBranches_->tau_charge 	     	      .push_back(tau.charge());
-      nBranches_->tau_e      	     	      .push_back(tau.energy());
+      //      nBranches_->tau_e      	     	      .push_back(tau.energy());
       nBranches_->tau_eta    	     	      .push_back(tau.eta());
       nBranches_->tau_mass   	     	      .push_back(tau.mass());
       nBranches_->tau_pt     	     	      .push_back(tau.pt());
@@ -80,11 +80,11 @@ void TausNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
 
       int n_ch = 0;
       int n_nh = 0;
-      int n_h_f = 0;
-      int n_em_f = 0;
+     //      int n_h_f = 0;
+      //      int n_em_f = 0;
       int n_gamma = 0;
-      int n_e = 0;
-      int n_mu = 0;
+      //      int n_e = 0;
+      //      int n_mu = 0;
 
 //      std::vector<int> associated_pdgId;
 //      std::vector<float> associated_pt;
@@ -127,10 +127,10 @@ void TausNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
 	if(pf_pdgId==211) n_ch++;
 	if(pf_pdgId==130) n_nh++;
 	if(pf_pdgId==22) n_gamma++;
-	if(pf_pdgId==11) n_e++;
-	if(pf_pdgId==13) n_mu++;
-	if(pf_pdgId==1) n_h_f++;
-	if(pf_pdgId==2) n_em_f++;
+	//	if(pf_pdgId==11) n_e++;
+	//	if(pf_pdgId==13) n_mu++;
+	//	if(pf_pdgId==1) n_h_f++;
+	//	if(pf_pdgId==2) n_em_f++;
 
 //	associated_pdgId.push_back(pf_pdgId);
 //	associated_pt.push_back(pf_pt);
@@ -151,11 +151,11 @@ void TausNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
 
       nBranches_->tau_n_ch.push_back(n_ch);
       nBranches_->tau_n_nh.push_back(n_nh);
-      nBranches_->tau_n_h_f.push_back(n_h_f);
-      nBranches_->tau_n_em_f.push_back(n_em_f);
+      //      nBranches_->tau_n_h_f.push_back(n_h_f);
+      //      nBranches_->tau_n_em_f.push_back(n_em_f);
       nBranches_->tau_n_gamma.push_back(n_gamma);
-      nBranches_->tau_n_e.push_back(n_e);
-      nBranches_->tau_n_mu.push_back(n_mu);
+      //      nBranches_->tau_n_e.push_back(n_e);
+      //      nBranches_->tau_n_mu.push_back(n_mu);
 
 
       // YT added : 17 Aug 2016
@@ -195,9 +195,9 @@ void TausNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
       nBranches_->tau_ip3d                   .push_back(ip3d);
       nBranches_->tau_ip3d_Sig               .push_back(ip3d_Sig);
       nBranches_->tau_hasSecondaryVertex     .push_back(hasSecondaryVertex);
-      nBranches_->tau_decayDistMag_x         .push_back(decayDistX);
-      nBranches_->tau_decayDistMag_y         .push_back(decayDistY);
-      nBranches_->tau_decayDistMag_z         .push_back(decayDistZ);
+      //      nBranches_->tau_decayDistMag_x         .push_back(decayDistX);
+      //      nBranches_->tau_decayDistMag_y         .push_back(decayDistY);
+      //      nBranches_->tau_decayDistMag_z         .push_back(decayDistZ);
       nBranches_->tau_decayDistMag           .push_back(decayDistMag);
       nBranches_->tau_flightLenthSig         .push_back(flightLenthSig);
       
@@ -280,10 +280,10 @@ void TausNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
       nBranches_->tau_puCorrPtSum                                .push_back(tau.tauID("puCorrPtSum"				    ));
 
       nBranches_->tau_chargedIsoPtSumdR03                        .push_back(tau.tauID("chargedIsoPtSumdR03" 			    ));
-      nBranches_->tau_footprintCorrectiondR03                    .push_back(tau.tauID("footprintCorrectiondR03"                         ));
+      //      nBranches_->tau_footprintCorrectiondR03                    .push_back(tau.tauID("footprintCorrectiondR03"                         ));
       nBranches_->tau_neutralIsoPtSumdR03                        .push_back(tau.tauID("neutralIsoPtSumdR03" 			    ));
-      nBranches_->tau_neutralIsoPtSumWeight                      .push_back(tau.tauID("neutralIsoPtSumWeight" 			    ));
-      nBranches_->tau_neutralIsoPtSumWeightdR03                  .push_back(tau.tauID("neutralIsoPtSumWeightdR03" 			    ));
+      //      nBranches_->tau_neutralIsoPtSumWeight                      .push_back(tau.tauID("neutralIsoPtSumWeight" 			    ));
+      //      nBranches_->tau_neutralIsoPtSumWeightdR03                  .push_back(tau.tauID("neutralIsoPtSumWeightdR03" 			    ));
       nBranches_->tau_photonPtSumOutsideSignalConedR03           .push_back(tau.tauID("photonPtSumOutsideSignalConedR03"               ));
 
       nBranches_->tau_byIsolationMVArun2v1DBdR03oldDMwLTraw      .push_back(tau.tauID("byIsolationMVArun2v1DBdR03oldDMwLTraw"));
@@ -336,13 +336,13 @@ void TausNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
 
       nBranches_->tau_byVVTightIsolationMVArun2v1PWoldDMwLT        .push_back(tau.tauID("byVVTightIsolationMVArun2v1PWoldDMwLT"			    ));
 
-      nBranches_->tau_byIsolationMVArun2v1DBoldDMwLTrawNew.push_back(tau.tauID("byIsolationMVArun2v1DBoldDMwLTrawNew"));
-      nBranches_->tau_byVLooseIsolationMVArun2v1DBoldDMwLTNew.push_back(tau.tauID("byVLooseIsolationMVArun2v1DBoldDMwLTNew"));
-      nBranches_->tau_byLooseIsolationMVArun2v1DBoldDMwLTNew.push_back(tau.tauID("byLooseIsolationMVArun2v1DBoldDMwLTNew"));
-      nBranches_->tau_byMediumIsolationMVArun2v1DBoldDMwLTNew.push_back(tau.tauID("byMediumIsolationMVArun2v1DBoldDMwLTNew"));
-      nBranches_->tau_byTightIsolationMVArun2v1DBoldDMwLTNew.push_back(tau.tauID("byTightIsolationMVArun2v1DBoldDMwLTNew"));
-      nBranches_->tau_byVTightIsolationMVArun2v1DBoldDMwLTNew.push_back(tau.tauID("byVTightIsolationMVArun2v1DBoldDMwLTNew"));
-      nBranches_->tau_byVVTightIsolationMVArun2v1DBoldDMwLTNew.push_back(tau.tauID("byVVTightIsolationMVArun2v1DBoldDMwLTNew"));
+//      nBranches_->tau_byIsolationMVArun2v1DBoldDMwLTrawNew.push_back(tau.tauID("byIsolationMVArun2v1DBoldDMwLTrawNew"));
+//      nBranches_->tau_byVLooseIsolationMVArun2v1DBoldDMwLTNew.push_back(tau.tauID("byVLooseIsolationMVArun2v1DBoldDMwLTNew"));
+//      nBranches_->tau_byLooseIsolationMVArun2v1DBoldDMwLTNew.push_back(tau.tauID("byLooseIsolationMVArun2v1DBoldDMwLTNew"));
+//      nBranches_->tau_byMediumIsolationMVArun2v1DBoldDMwLTNew.push_back(tau.tauID("byMediumIsolationMVArun2v1DBoldDMwLTNew"));
+//      nBranches_->tau_byTightIsolationMVArun2v1DBoldDMwLTNew.push_back(tau.tauID("byTightIsolationMVArun2v1DBoldDMwLTNew"));
+//      nBranches_->tau_byVTightIsolationMVArun2v1DBoldDMwLTNew.push_back(tau.tauID("byVTightIsolationMVArun2v1DBoldDMwLTNew"));
+//      nBranches_->tau_byVVTightIsolationMVArun2v1DBoldDMwLTNew.push_back(tau.tauID("byVVTightIsolationMVArun2v1DBoldDMwLTNew"));
 
 
 
@@ -363,7 +363,7 @@ void TausNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
       // nBranches_->tau_byMediumPileupWeightedIsolation3Hits       .push_back(tau.tauID("byMediumPileupWeightedIsolation3Hits"        ));
       // nBranches_->tau_byTightPileupWeightedIsolation3Hits        .push_back(tau.tauID("byTightPileupWeightedIsolation3Hits"         ));
       nBranches_->tau_byPhotonPtSumOutsideSignalCone             .push_back(tau.tauID("byPhotonPtSumOutsideSignalCone"              ));
-      nBranches_->tau_footprintCorrection                        .push_back(tau.tauID("footprintCorrection"                         ));
+      //      nBranches_->tau_footprintCorrection                        .push_back(tau.tauID("footprintCorrection"                         ));
 
       /*======================================================*/            
 
@@ -376,7 +376,7 @@ void TausNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
               
       nBranches_->tau_pdgId  		      .push_back(boostedTau.pdgId());
       nBranches_->tau_charge 		      .push_back(boostedTau.charge());
-      nBranches_->tau_e      		      .push_back(boostedTau.energy());
+      //      nBranches_->tau_e      		      .push_back(boostedTau.energy());
       nBranches_->tau_eta    		      .push_back(boostedTau.eta()); 
       nBranches_->tau_mass   		      .push_back(boostedTau.mass());
       nBranches_->tau_pt     		      .push_back(boostedTau.pt());
@@ -390,11 +390,11 @@ void TausNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
 
       int n_ch = 0;
       int n_nh = 0;
-      int n_h_f = 0;
-      int n_em_f = 0;
+      //      int n_h_f = 0;
+      //      int n_em_f = 0;
       int n_gamma = 0;
-      int n_e = 0;
-      int n_mu = 0;
+      //      int n_e = 0;
+      //      int n_mu = 0;
 
 //      std::vector<int> associated_pdgId;
 //      std::vector<float> associated_pt;
@@ -437,10 +437,10 @@ void TausNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
 	if(pf_pdgId==211) n_ch++;
 	if(pf_pdgId==130) n_nh++;
 	if(pf_pdgId==22) n_gamma++;
-	if(pf_pdgId==11) n_e++;
-	if(pf_pdgId==13) n_mu++;
-	if(pf_pdgId==1) n_h_f++;
-	if(pf_pdgId==2) n_em_f++;
+	//	if(pf_pdgId==11) n_e++;
+	//	if(pf_pdgId==13) n_mu++;
+	//	if(pf_pdgId==1) n_h_f++;
+	//	if(pf_pdgId==2) n_em_f++;
 
 //	associated_pdgId.push_back(pf_pdgId);
 //	associated_pt.push_back(pf_pt);
@@ -461,11 +461,11 @@ void TausNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
 
       nBranches_->tau_n_ch.push_back(n_ch);
       nBranches_->tau_n_nh.push_back(n_nh);
-      nBranches_->tau_n_h_f.push_back(n_h_f);
-      nBranches_->tau_n_em_f.push_back(n_em_f);
+      //      nBranches_->tau_n_h_f.push_back(n_h_f);
+      //      nBranches_->tau_n_em_f.push_back(n_em_f);
       nBranches_->tau_n_gamma.push_back(n_gamma);
-      nBranches_->tau_n_e.push_back(n_e);
-      nBranches_->tau_n_mu.push_back(n_mu);
+      //      nBranches_->tau_n_e.push_back(n_e);
+      //      nBranches_->tau_n_mu.push_back(n_mu);
 
       // YT added : 17 Aug 2016
       pat::PackedCandidate const* packedLeadTauCand = dynamic_cast<pat::PackedCandidate const*>(boostedTau.leadChargedHadrCand().get());
@@ -504,9 +504,9 @@ void TausNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
       nBranches_->tau_ip3d                   .push_back(ip3d);
       nBranches_->tau_ip3d_Sig               .push_back(ip3d_Sig);
       nBranches_->tau_hasSecondaryVertex     .push_back(hasSecondaryVertex);
-      nBranches_->tau_decayDistMag_x         .push_back(decayDistX);
-      nBranches_->tau_decayDistMag_y         .push_back(decayDistY);
-      nBranches_->tau_decayDistMag_z         .push_back(decayDistZ);
+      //      nBranches_->tau_decayDistMag_x         .push_back(decayDistX);
+      //      nBranches_->tau_decayDistMag_y         .push_back(decayDistY);
+      //      nBranches_->tau_decayDistMag_z         .push_back(decayDistZ);
       nBranches_->tau_decayDistMag           .push_back(decayDistMag);
       nBranches_->tau_flightLenthSig         .push_back(flightLenthSig);
 
@@ -579,10 +579,10 @@ void TausNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
 
       nBranches_->tau_puCorrPtSum                                .push_back(boostedTau.tauID("puCorrPtSum"				    ));
       nBranches_->tau_chargedIsoPtSumdR03                       .push_back(boostedTau.tauID("chargedIsoPtSumdR03" 			    ));
-      nBranches_->tau_footprintCorrectiondR03                    .push_back(boostedTau.tauID("footprintCorrectiondR03"                         ));
+      //      nBranches_->tau_footprintCorrectiondR03                    .push_back(boostedTau.tauID("footprintCorrectiondR03"                         ));
       nBranches_->tau_neutralIsoPtSumdR03                        .push_back(boostedTau.tauID("neutralIsoPtSumdR03" 			    ));
-      nBranches_->tau_neutralIsoPtSumWeight                      .push_back(boostedTau.tauID("neutralIsoPtSumWeight" 			    ));
-      nBranches_->tau_neutralIsoPtSumWeightdR03                  .push_back(boostedTau.tauID("neutralIsoPtSumWeightdR03" 			    ));
+      //      nBranches_->tau_neutralIsoPtSumWeight                      .push_back(boostedTau.tauID("neutralIsoPtSumWeight" 			    ));
+      //      nBranches_->tau_neutralIsoPtSumWeightdR03                  .push_back(boostedTau.tauID("neutralIsoPtSumWeightdR03" 			    ));
       nBranches_->tau_photonPtSumOutsideSignalConedR03           .push_back(boostedTau.tauID("photonPtSumOutsideSignalConedR03"               ));
 
       nBranches_->tau_byIsolationMVArun2v1DBdR03oldDMwLTraw      .push_back(boostedTau.tauID("byIsolationMVArun2v1DBdR03oldDMwLTraw"));
@@ -634,13 +634,13 @@ void TausNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
 
       nBranches_->tau_byVVTightIsolationMVArun2v1PWoldDMwLT        .push_back(boostedTau.tauID("byVVTightIsolationMVArun2v1PWoldDMwLT"			    ));
 
-      nBranches_->tau_byIsolationMVArun2v1DBoldDMwLTrawNew.push_back(-1);
-      nBranches_->tau_byVLooseIsolationMVArun2v1DBoldDMwLTNew.push_back(-1);
-      nBranches_->tau_byLooseIsolationMVArun2v1DBoldDMwLTNew.push_back(-1);
-      nBranches_->tau_byMediumIsolationMVArun2v1DBoldDMwLTNew.push_back(-1);
-      nBranches_->tau_byTightIsolationMVArun2v1DBoldDMwLTNew.push_back(-1);
-      nBranches_->tau_byVTightIsolationMVArun2v1DBoldDMwLTNew.push_back(-1);
-      nBranches_->tau_byVVTightIsolationMVArun2v1DBoldDMwLTNew.push_back(-1);
+//      nBranches_->tau_byIsolationMVArun2v1DBoldDMwLTrawNew.push_back(-1);
+//      nBranches_->tau_byVLooseIsolationMVArun2v1DBoldDMwLTNew.push_back(-1);
+//      nBranches_->tau_byLooseIsolationMVArun2v1DBoldDMwLTNew.push_back(-1);
+//      nBranches_->tau_byMediumIsolationMVArun2v1DBoldDMwLTNew.push_back(-1);
+//      nBranches_->tau_byTightIsolationMVArun2v1DBoldDMwLTNew.push_back(-1);
+//      nBranches_->tau_byVTightIsolationMVArun2v1DBoldDMwLTNew.push_back(-1);
+//      nBranches_->tau_byVVTightIsolationMVArun2v1DBoldDMwLTNew.push_back(-1);
 
       // nBranches_->tau_byIsolationMVArun2v1DBoldDMwLTrawNew.push_back(boostedTau.tauID("byIsolationMVArun2v1DBoldDMwLTrawNew"));
       // nBranches_->tau_byVLooseIsolationMVArun2v1DBoldDMwLTNew.push_back(boostedTau.tauID("byVLooseIsolationMVArun2v1DBoldDMwLTNew"));
@@ -667,7 +667,7 @@ void TausNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
       // nBranches_->tau_byMediumPileupWeightedIsolation3Hits       .push_back(boostedTau.tauID("byMediumPileupWeightedIsolation3Hits"        ));
       // nBranches_->tau_byTightPileupWeightedIsolation3Hits        .push_back(boostedTau.tauID("byTightPileupWeightedIsolation3Hits"         ));
       nBranches_->tau_byPhotonPtSumOutsideSignalCone             .push_back(boostedTau.tauID("byPhotonPtSumOutsideSignalCone"              ));
-      nBranches_->tau_footprintCorrection                        .push_back(boostedTau.tauID("footprintCorrection"                         ));
+      //      nBranches_->tau_footprintCorrection                        .push_back(boostedTau.tauID("footprintCorrection"                         ));
 
    /*======================================================*/   
         
