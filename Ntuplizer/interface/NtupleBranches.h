@@ -224,7 +224,7 @@ public:
   int 	                      tau_N		         ;
   std::vector<int>  	      tau_pdgId	                 ;
   std::vector<float>  	      tau_charge	         ;
-  std::vector<float>  	      tau_e 		         ;
+  //  std::vector<float>  	      tau_e 		         ;
   std::vector<float>  	      tau_eta		         ;
   std::vector<float>  	      tau_phi		         ;
   std::vector<float>  	      tau_mass		         ;
@@ -239,14 +239,14 @@ public:
 //  std::vector<std::vector<float>>	      tau_associated_phi       ;  
 //  std::vector<std::vector<float>>	      tau_associated_dr       ;  
 
-  std::vector<int>  	      tau_n_total                 ;
+//  std::vector<int>  	      tau_n_total                 ;
   std::vector<int>  	      tau_n_ch                 ;
   std::vector<int>  	      tau_n_nh                 ;
-  std::vector<int>  	      tau_n_h_f                 ;
-  std::vector<int>  	      tau_n_em_f                 ;
+  //  std::vector<int>  	      tau_n_h_f                 ;
+  //  std::vector<int>  	      tau_n_em_f                 ;
   std::vector<int>  	      tau_n_gamma                 ;
-  std::vector<int>  	      tau_n_e                 ;
-  std::vector<int>  	      tau_n_mu                 ;
+  //  std::vector<int>  	      tau_n_e                 ;
+  //  std::vector<int>  	      tau_n_mu                 ;
   /* // */
   /* std::vector<float>  	      tau_pfRhoCorrRelIso03  	 ; */
   /* std::vector<float>  	      tau_pfRhoCorrRelIso04  	 ; */
@@ -273,13 +273,13 @@ public:
   std::vector<float>  	      tau_neutralPionPt	         ;  // YT added
   // YT added : newly added for the MVA training
   std::vector<float>  	      tau_nPhoton		 ;  
-  std::vector<float>  	      tau_nPhoton_1		 ;  
-  std::vector<float>  	      tau_nPhoton_1p5		 ;  
-  std::vector<float>  	      tau_nPhoton_2		 ;  
-  std::vector<float>  	      tau_nPhoton_2p5		 ;  
-  std::vector<float>  	      tau_nPhoton_3		 ;  
-  std::vector<float>  	      tau_nPhoton_4		 ;  
-  std::vector<float>  	      tau_nPhoton_5		 ;  
+//  std::vector<float>  	      tau_nPhoton_1		 ;  
+//  std::vector<float>  	      tau_nPhoton_1p5		 ;  
+//  std::vector<float>  	      tau_nPhoton_2		 ;  
+//  std::vector<float>  	      tau_nPhoton_2p5		 ;  
+//  std::vector<float>  	      tau_nPhoton_3		 ;  
+//  std::vector<float>  	      tau_nPhoton_4		 ;  
+//  std::vector<float>  	      tau_nPhoton_5		 ;  
   std::vector<float>          tau_ptWeightedDetaStrip    ;
   std::vector<float>          tau_ptWeightedDphiStrip    ;
   std::vector<float>          tau_ptWeightedDrSignal     ;
@@ -308,20 +308,20 @@ public:
   std::vector<bool>  	      tau_byCombinedIsolationDeltaBetaCorrRaw3Hits    ;
   std::vector<float>  	      tau_chargedIsoPtSum			      ;
   std::vector<float>  	      tau_neutralIsoPtSum			      ;
-  std::vector<float>  	      tau_neutralIsoPtSum_0p5			      ;
-  std::vector<float>  	      tau_neutralIsoPtSum_1			      ;
-  std::vector<float>  	      tau_neutralIsoPtSum_1p5			      ;
-  std::vector<float>  	      tau_neutralIsoPtSum_2			      ;
-  std::vector<float>  	      tau_neutralIsoPtSum_2p5			      ;
-  std::vector<float>  	      tau_neutralIsoPtSum_3			      ;
-  std::vector<float>  	      tau_neutralIsoPtSum_4			      ;
-  std::vector<float>  	      tau_neutralIsoPtSum_5			      ;
+//  std::vector<float>  	      tau_neutralIsoPtSum_0p5			      ;
+//  std::vector<float>  	      tau_neutralIsoPtSum_1			      ;
+//  std::vector<float>  	      tau_neutralIsoPtSum_1p5			      ;
+//  std::vector<float>  	      tau_neutralIsoPtSum_2			      ;
+//  std::vector<float>  	      tau_neutralIsoPtSum_2p5			      ;
+//  std::vector<float>  	      tau_neutralIsoPtSum_3			      ;
+//  std::vector<float>  	      tau_neutralIsoPtSum_4			      ;
+//  std::vector<float>  	      tau_neutralIsoPtSum_5			      ;
   std::vector<float>  	      tau_puCorrPtSum				      ;
   std::vector<float>  	      tau_chargedIsoPtSumdR03			      ;
-  std::vector<float>  	      tau_footprintCorrectiondR03			      ;
+  //  std::vector<float>  	      tau_footprintCorrectiondR03			      ;
   std::vector<float>  	      tau_neutralIsoPtSumdR03			      ;
-  std::vector<float>  	      tau_neutralIsoPtSumWeight			      ;
-  std::vector<float>  	      tau_neutralIsoPtSumWeightdR03			      ;
+  //  std::vector<float>  	      tau_neutralIsoPtSumWeight			      ;
+  //  std::vector<float>  	      tau_neutralIsoPtSumWeightdR03			      ;
   std::vector<float>  	      tau_photonPtSumOutsideSignalConedR03			      ;
 
   std::vector<float>  	      tau_byIsolationMVArun2v1DBdR03oldDMwLTraw			      ;
@@ -374,13 +374,13 @@ public:
   std::vector<bool>  	      tau_byVVTightIsolationMVArun2v1PWoldDMwLT			      ;
 
   // YT added : newly added for the MVA training
-  std::vector<bool>  	      tau_byIsolationMVArun2v1DBoldDMwLTrawNew;
-  std::vector<bool>  	      tau_byVLooseIsolationMVArun2v1DBoldDMwLTNew;
-  std::vector<bool>  	      tau_byLooseIsolationMVArun2v1DBoldDMwLTNew;
-  std::vector<bool>  	      tau_byMediumIsolationMVArun2v1DBoldDMwLTNew;
-  std::vector<bool>  	      tau_byTightIsolationMVArun2v1DBoldDMwLTNew;
-  std::vector<bool>  	      tau_byVTightIsolationMVArun2v1DBoldDMwLTNew;
-  std::vector<bool>  	      tau_byVVTightIsolationMVArun2v1DBoldDMwLTNew;
+//  std::vector<bool>  	      tau_byIsolationMVArun2v1DBoldDMwLTrawNew;
+//  std::vector<bool>  	      tau_byVLooseIsolationMVArun2v1DBoldDMwLTNew;
+//  std::vector<bool>  	      tau_byLooseIsolationMVArun2v1DBoldDMwLTNew;
+//  std::vector<bool>  	      tau_byMediumIsolationMVArun2v1DBoldDMwLTNew;
+//  std::vector<bool>  	      tau_byTightIsolationMVArun2v1DBoldDMwLTNew;
+//  std::vector<bool>  	      tau_byVTightIsolationMVArun2v1DBoldDMwLTNew;
+//  std::vector<bool>  	      tau_byVVTightIsolationMVArun2v1DBoldDMwLTNew;
   // YT added : newly added for the MVA training
 
   std::vector<float>  	      tau_againstElectronMVA6raw			      ;
@@ -397,7 +397,7 @@ public:
       
  
   std::vector<float>  	      tau_byPhotonPtSumOutsideSignalCone			      ;
-  std::vector<float>  	      tau_footprintCorrection			      ;
+  //  std::vector<float>  	      tau_footprintCorrection			      ;
 
 
 
