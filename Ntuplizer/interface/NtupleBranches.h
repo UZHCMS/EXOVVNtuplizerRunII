@@ -190,7 +190,7 @@ public:
   std::vector<int  >  	      mu_isTrackerHighPtMuon	         ;
   /* std::vector<float>  	      mu_pfRhoCorrRelIso03  	 ; */
   /* std::vector<float>  	      mu_pfRhoCorrRelIso04  	 ; */
-  /* std::vector<float>  	      mu_pfDeltaCorrRelIso  	 ; */
+  std::vector<float>  	      mu_pfDeltaCorrRelIso  	 ;
   /* std::vector<float>  	      mu_pfRelIso  	     	 ; */
   std::vector<float>  	      mu_photonIso 	     	 ;
   std::vector<float>  	      mu_neutralHadIso	     	 ;

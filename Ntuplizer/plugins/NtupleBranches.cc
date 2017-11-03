@@ -168,7 +168,7 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch( "mu_isTrackerHighPtMuon"	      , &mu_isTrackerHighPtMuon    	   );
     // tree_->Branch( "mu_pfRhoCorrRelIso03"     , &mu_pfRhoCorrRelIso03 	   );
     // tree_->Branch( "mu_pfRhoCorrRelIso04"     , &mu_pfRhoCorrRelIso04 	   );
-    // tree_->Branch( "mu_pfDeltaCorrRelIso"     , &mu_pfDeltaCorrRelIso 	   );
+    tree_->Branch( "mu_pfDeltaCorrRelIso"     , &mu_pfDeltaCorrRelIso 	   );
     // tree_->Branch( "mu_pfRelIso"  	      , &mu_pfRelIso	      	   );
     tree_->Branch( "mu_photonIso" 	      , &mu_photonIso	      	   );
     tree_->Branch( "mu_neutralHadIso"	      , &mu_neutralHadIso     	   );
@@ -887,7 +887,7 @@ void NtupleBranches::reset( void ){
   mu_isTrackerHighPtMuon.clear();
   // mu_pfRhoCorrRelIso03.clear();
   // mu_pfRhoCorrRelIso04.clear();
-  // mu_pfDeltaCorrRelIso.clear();
+  mu_pfDeltaCorrRelIso.clear();
   // mu_pfRelIso.clear();
   mu_photonIso.clear();
   mu_neutralHadIso.clear();
