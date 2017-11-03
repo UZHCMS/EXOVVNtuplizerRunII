@@ -161,11 +161,11 @@ public:
   std::vector<int>	      el_isTightElectronWithoutIPandIsolation	  ;    
   std::vector<int  >  	      el_isHeepElectronWithoutIPandIsolation	  ;
   std::vector<int  >  	      el_isLooseElectronWithoutIPandIsolation	  ;  
-  std::vector<int>	      el_isVetoElectronBoosted	  ;
-  std::vector<int>	      el_isMediumElectronBoosted  ;
-  std::vector<int>	      el_isTightElectronBoosted	  ;    
-  std::vector<int  >  	      el_isHeepElectronBoosted	  ;
-  std::vector<int  >  	      el_isLooseElectronBoosted	  ;  
+//  std::vector<int>	      el_isVetoElectronBoosted	  ;
+//  std::vector<int>	      el_isMediumElectronBoosted  ;
+//  std::vector<int>	      el_isTightElectronBoosted	  ;    
+//  std::vector<int  >  	      el_isHeepElectronBoosted	  ;
+//  std::vector<int  >  	      el_isLooseElectronBoosted	  ;  
   std::vector<float>  	      el_SemileptonicPFIso 	 ;//  Isolations for semileptonic tau channel  
   std::vector<float>  	      el_SemileptonicCorrPFIso   ;// the simple PF one and the corrected one for the tau presence
 
