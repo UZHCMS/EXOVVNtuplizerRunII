@@ -1,4 +1,4 @@
-####### Process initialization ##########
+###### Process initialization ##########
 
 import FWCore.ParameterSet.Config as cms
 
@@ -20,7 +20,7 @@ import FWCore.ParameterSet.VarParsing as VarParsing
 
 options = VarParsing.VarParsing ('analysis')
 
-options.maxEvents = 3
+options.maxEvents = -1
 
 #data file
 
@@ -30,13 +30,13 @@ options.maxEvents = 3
 #options.inputFiles = '/store/data/Run2016H/MuonEG/MINIAOD/03Feb2017_ver2-v1/100000/044366C7-4AEE-E611-8CF7-0025905B856E.root'
 
 
-options.inputFiles = 'file:/scratch/ytakahas/output_periodF.root'
+options.inputFiles = 'file:006233DA-3599-E711-911B-0025905A6118.root'
 
                       
 options.parseArguments()
 
 process.options  = cms.untracked.PSet( 
-                     wantSummary = cms.untracked.bool(False),
+                     wantSummary = cms.untracked.bool(True),
                      SkipEvent = cms.untracked.vstring('ProductNotFound'),
                      allowUnscheduled = cms.untracked.bool(True)
                      )
@@ -85,7 +85,7 @@ from Configuration.AlCa.GlobalTag import GlobalTag
 
 GT = ''
 if config["RUNONMC"]: GT = '80X_mcRun2_asymptotic_2016_miniAODv2'
-elif not(config["RUNONMC"]): GT = '80X_dataRun2_Prompt_ICHEP16JEC_v0'
+elif not(config["RUNONMC"]): GT = '92X_dataRun2_2017Repro_v4'
 
 print "*************************************** GLOBAL TAG *************************************************" 
 print GT
@@ -129,6 +129,9 @@ fatjet_ptmin = 100.0
 from RecoJets.Configuration.RecoPFJets_cff import *
 from RecoJets.JetProducers.AnomalousCellParameters_cfi import *
 from RecoJets.JetProducers.PFJetParameters_cfi import *
+
+from PhysicsTools.PatAlgos.tools.helpers import *
+pattask = getPatAlgosToolsTask(process)
                                                                                                           
 process.chs = cms.EDFilter("CandPtrSelector",
   src = cms.InputTag('packedPFCandidates'),
@@ -333,22 +336,30 @@ if config["UpdateJetCollection"]:
   )
 ## Update to latest PU jet ID training
   process.load("RecoJets.JetProducers.PileupJetID_cfi")
-  process.pileupJetIdUpdated = process.pileupJetId.clone(
-    jets=cms.InputTag("slimmedJets"),
-    inputIsCorrected=True,
-    applyJec=True,
-    vertexes=cms.InputTag("offlineSlimmedPrimaryVertices")
-  )
+  # requires cnadidate track covaranice matrix, which isn't in miniaod anymore
+  #addToProcessAndTask('pileupJetIdUpdated',
+  #                    process.pileupJetId.clone(jets=cms.InputTag("slimmedJets"),
+  #                                              inputIsCorrected=True,
+  #                                              applyJec=True,
+  #                                              vertexes=cms.InputTag("offlineSlimmedPrimaryVertices")
+  #                                              ),
+  #                    process,pattask
+  #                    )
   from PhysicsTools.PatAlgos.producersLayer1.jetUpdater_cff import updatedPatJetCorrFactors, updatedPatJets
-  process.patJetCorrFactorsReapplyJEC = updatedPatJetCorrFactors.clone(
-    src = cms.InputTag("slimmedJets"),
-    levels = ['L1FastJet', 'L2Relative', 'L3Absolute', 'L2L3Residual'] )
-  process.updatedJets = updatedPatJets.clone(
-    jetSource = cms.InputTag("slimmedJets"),
-    jetCorrFactorsSource = cms.VInputTag(cms.InputTag("patJetCorrFactorsReapplyJEC"))
-  )
-  process.updatedJets.userData.userFloats.src += ['pileupJetIdUpdated:fullDiscriminant']
-  process.updatedJets.userData.userInts.src += ['pileupJetIdUpdated:fullId']
+  addToProcessAndTask('patJetCorrFactorsReapplyJEC',
+                      updatedPatJetCorrFactors.clone(src = cms.InputTag("slimmedJets"),
+                                                     levels = ['L1FastJet', 'L2Relative', 'L3Absolute', 'L2L3Residual'] 
+                                                     ),
+                      process,pattask
+                      )
+  addToProcessAndTask('updatedJets',
+                      updatedPatJets.clone(jetSource = cms.InputTag("slimmedJets"),
+                                           jetCorrFactorsSource = cms.VInputTag(cms.InputTag("patJetCorrFactorsReapplyJEC") )
+                                           ),
+                      process,pattask
+                      )                   
+  #process.updatedJets.userData.userFloats.src += ['pileupJetIdUpdated:fullDiscriminant']
+  #process.updatedJets.userData.userInts.src += ['pileupJetIdUpdated:fullId']
 
 def cap(s): return s[0].upper() + s[1:]
 
@@ -594,7 +605,7 @@ if config["DOMETRECLUSTERING"]:
 from PhysicsTools.SelectorUtils.tools.vid_id_tools import *
 
 dataFormat=DataFormat.MiniAOD
-switchOnVIDElectronIdProducer(process,dataFormat)
+switchOnVIDElectronIdProducer(process,dataFormat,task=pattask)
 
 process.egmGsfElectronIDSequence = cms.Sequence(process.egmGsfElectronIDs)
 
@@ -615,7 +626,7 @@ my_id_modules = [
 
 #add them to the VID producer
 for idmod in my_id_modules:
-    setupAllVIDIdsInModule(process,idmod,setupVIDElectronSelection)
+    setupAllVIDIdsInModule(process,idmod,setupVIDElectronSelection,task=pattask)
 
 ####### Event filters ###########
 
@@ -657,7 +668,7 @@ if config["DOMETSVFIT"]:
   print "Using event pfMET covariance for SVfit"
   process.load("RecoMET.METProducers.METSignificance_cfi")
   process.load("RecoMET.METProducers.METSignificanceParams_cfi")
-  process.METSequence = cms.Sequence (process.METSignificance)
+  pattask.add(process.METSignificance)
 
 if config["DOMVAMET"]:
   from RecoMET.METPUSubtraction.jet_recorrections import recorrectJets
@@ -873,7 +884,7 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     genEventInfo = cms.InputTag("generator"),
     externallheProducer = cms.InputTag("externalLHEProducer"),
     HLT = cms.InputTag("TriggerResults","","HLT"),
-    triggerobjects = cms.InputTag("selectedPatTrigger"),
+    triggerobjects = cms.InputTag("slimmedPatTrigger"),
     triggerprescales = cms.InputTag("patTrigger"),
     noiseFilter = cms.InputTag('TriggerResults','', hltFiltersProcessName),
     jecAK8chsPayloadNames = cms.vstring( jecLevelsAK8chs ),
@@ -1020,3 +1031,6 @@ process.p += getattr(process, "NewTauIDsEmbedded")
 # For new MVA ID END!
 
 process.p += process.ntuplizer
+process.p.associate(pattask)
+
+print pattask
