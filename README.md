@@ -4,35 +4,22 @@ Ntuplizer for searches for heavy resonances decaying to dibosons
 
 ## installation instructions
 
-```
-# You can see my setup script here
-
-/mnt/t3nfs01/data01/shome/ytakahas/public/setup_80X_legacy.sh
-/afs/cern.ch/user/y/ytakahas/public/forUZH/setup_80X_legacy.sh
+Setting up CMSSW (for september reprocessing):
 
 ```
-
-Setting up CMSSW (might be sub-optimal ...):
-
-```
-cmsrel CMSSW_8_0_26_patch1
-cd CMSSW_8_0_26_patch1/src
+cmsrel CMSSW_9_2_11
+cd CMSSW_9_2_11/src
 cmsenv
 ```
 
 ### getting the latest b-tagger
 (https://twiki.cern.ch/twiki/bin/viewauth/CMS/Hbbtagging#V4_training)
 
-```
-export CMSSW_GIT_REFERENCE="/cvmfs/cms.cern.ch/cmssw.git.daily"
-git cms-init
-git remote add btv-cmssw https://github.com/cms-btv-pog/cmssw.git
-git fetch --tags btv-cmssw
-git cms-merge-topic -u cms-btv-pog:BoostedDoubleSVTaggerV4-WithWeightFiles-v1_from-CMSSW_8_0_21
-```
+=> included by default in 92X
 
 ### update MET filter
 
+=> no obvious branch exists (seems to run fine 92X baseline, can be reomved?)
 ```
 git cms-merge-topic -u cms-met:CMSSW_8_0_X-METFilterUpdate
 ```
@@ -56,13 +43,12 @@ The flags for running on Spring15(74) or Fall15(76) or Spring16(80) samples have
 ### updates of latest cut-based electron ID
 (https://twiki.cern.ch/twiki/bin/viewauth/CMS/CutBasedElectronIdentificationRun2#Recipe_for_regular_users_for_8_0)
 
-```
-cd $CMSSW_BASE/src
-git cms-merge-topic ikrav:egm_id_80X_v2
-```
+=> cut based ele id included by default in 92X
 
 ### updates of latest HEEP electron ID
 (https://twiki.cern.ch/twiki/bin/viewauth/CMS/HEEPElectronIdentificationRun2#Recipe_for_regular_users)
+
+=> something not right with HEEP Id, need to investigate. Turned off for now
 
 ```
 git cms-merge-topic Sam-Harper:HEEPV70VID
@@ -74,7 +60,7 @@ git cms-merge-topic Sam-Harper:PackedCandNoPuppi
 (https://twiki.cern.ch/twiki/bin/view/CMSPublic/SWGuidePFTauID#Rerunning_of_the_tau_ID_on_MiniA)
 
 ```
-git cms-merge-topic -u cms-tau-pog:CMSSW_8_0_X_tau-pog_miniAOD-backport-tauID
+git cms-merge-topic -u cms-tau-pog:CMSSW_9_2_X_tau-pog
 ```
 
 ### compile first, before adding MVA-based electron ID 
@@ -87,6 +73,7 @@ scram b -j8
 ### updates of latest MVA-based electron ID
 (https://twiki.cern.ch/twiki/bin/viewauth/CMS/MultivariateElectronIdentificationRun2#Recipes_and_implementation)
 
+=> I didn't look into this one yet, but seems to be included in 92X
 ```
 mkdir -p $CMSSW_BASE/external/slc6_amd64_gcc530/data/RecoEgamma/ElectronIdentification/
 cd $CMSSW_BASE/external/slc6_amd64_gcc530/
