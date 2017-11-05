@@ -504,6 +504,8 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch( "jetAK8_tau1"	     , &jetAK8_tau1		 );
     tree_->Branch( "jetAK8_tau2"	     , &jetAK8_tau2      	 );
     tree_->Branch( "jetAK8_tau3"	     , &jetAK8_tau3	    	 );
+    tree_->Branch( "jetAK8_pull1"	     , &jetAK8_pull1    	 );
+    tree_->Branch( "jetAK8_pull2"	     , &jetAK8_pull2    	 );
     tree_->Branch( "jetAK8_pruned_mass"      , &jetAK8_pruned_mass       );
     tree_->Branch( "jetAK8_pruned_massCorr"  , &jetAK8_pruned_massCorr	 );
     tree_->Branch( "jetAK8_pruned_jec"	     , &jetAK8_pruned_jec        );
@@ -1187,7 +1189,9 @@ void NtupleBranches::reset( void ){
   jetAK8_nbHadrons.clear();
   jetAK8_ncHadrons.clear();
   jetAK8_Hbbtag.clear();
-  jetAK8_csv.clear();    
+  jetAK8_csv.clear();   
+  jetAK8_pull1.clear();   
+  jetAK8_pull2.clear();   
   jetAK8_tau1.clear();
   jetAK8_tau2.clear();
   jetAK8_tau3.clear();    

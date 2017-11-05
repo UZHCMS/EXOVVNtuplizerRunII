@@ -942,8 +942,8 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
         nsubjets = 0;
       
         const std::vector<edm::Ptr<pat::Jet> > &wSubjets = fj.subjets("SoftDrop");
-    
-      	for ( const pat::Jet & softdropsubjet : wSubjets ) {
+
+        	for ( const pat::Jet & softdropsubjet : wSubjets ) {
 	
            if( softdropsubjet.pt() < 0.01 ) continue;
          
@@ -959,8 +959,44 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
            vSoftDropSubjetcharge.push_back(softdropsubjet.charge());
            vSoftDropSubjetcsv.push_back(softdropsubjet.bDiscriminator("pfCombinedInclusiveSecondaryVertexV2BJetTags") );
          
-         } 
+        }
 
+        // Color connection between the two subjets
+        float s_pull1(0.), s_pull2(0.);
+        reco::Candidate::LorentzVector Axis1, Axis2;
+        TVector2 t1(0, 0), t2(0, 0);
+        if(wSubjets.size()>=2) {
+            for(auto daughter : wSubjets.at(0)->getJetConstituentsQuick()) {
+              if(daughter->charge()!=0) Axis1 += daughter->p4();
+            }
+            for(auto daughter : wSubjets.at(1)->getJetConstituentsQuick()) {
+              if(daughter->charge()!=0) Axis2 += daughter->p4();
+            }
+            for(auto daughter : wSubjets.at(0)->getJetConstituentsQuick()) {
+              if(daughter->charge() !=0) {
+                TVector2 r(daughter->rapidity()-Axis1.Rapidity(), deltaPhi(daughter->phi(), Axis1.Phi()));
+                t1 += ( daughter->pt() * r.Mod() / Axis1.pt() ) * r;
+              }
+            }
+            for(auto daughter : wSubjets.at(1)->getJetConstituentsQuick()) {
+              if(daughter->charge() !=0) {
+                TVector2 r(daughter->rapidity()-Axis2.Rapidity(), deltaPhi(daughter->phi(), Axis2.Phi()));
+                t2 += ( daughter->pt() * r.Mod() / Axis2.pt() ) * r;
+              }
+            }
+            // Axis12: Jet1->Jet2
+            TVector2 Axis12( Axis2.Rapidity()-Axis1.Rapidity(), deltaPhi(Axis2.Phi(), Axis1.Phi()) );
+            if(t1.Mod()>0.) s_pull1 = t1.DeltaPhi( Axis12 );
+            if(t2.Mod()>0.) s_pull2 = t2.DeltaPhi(-1*Axis12);
+            
+            // Background
+            // Beams
+            //TVector2 Beam1( Axis1.Rapidity()>Axis2.Rapidity() ? +1. : -1 , 0.);
+            //TVector2 Beam2( -1*Beam1 );
+            //if(t1.Mod()>0.) b_pull1 = t1.DeltaPhi( Beam1 );
+            //if(t2.Mod()>0.) b_pull2 = t2.DeltaPhi( Beam2 );
+        }
+        
         nBranches_->jetAK8_subjet_softdrop_N.push_back(nsubjets);
         nBranches_->jetAK8_subjet_softdrop_pt.push_back(vSoftDropSubjetpt);
         nBranches_->jetAK8_subjet_softdrop_eta.push_back(vSoftDropSubjeteta);
@@ -976,6 +1012,9 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
           nBranches_->jetAK8_subjet_softdrop_hadronFlavour.push_back(vSoftDropSubjetHadronFlavour);
 	  
         }
+
+        nBranches_->jetAK8_pull1     	    .push_back(s_pull1);
+        nBranches_->jetAK8_pull2     	    .push_back(s_pull2);
 			
       }
 

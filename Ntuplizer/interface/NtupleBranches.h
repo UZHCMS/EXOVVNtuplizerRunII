@@ -527,6 +527,8 @@ public:
   std::vector<float>  	      jetAK8_tau1              ;
   std::vector<float>  	      jetAK8_tau2              ;
   std::vector<float>  	      jetAK8_tau3              ; 
+  std::vector<float>  	      jetAK8_pull1             ; 
+  std::vector<float>  	      jetAK8_pull2             ; 
   std::vector<float>              jetAK8_jer_sf        ; 
   std::vector<float>              jetAK8_jer_sf_up     ; 
   std::vector<float>              jetAK8_jer_sf_down   ; 
