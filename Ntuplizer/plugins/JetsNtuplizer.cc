@@ -572,6 +572,7 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
       nBranches_->jetAK8_tau1               .push_back(fj.userFloat("NjettinessAK8:tau1"));	  
       nBranches_->jetAK8_tau2               .push_back(fj.userFloat("NjettinessAK8:tau2"));
       nBranches_->jetAK8_tau3               .push_back(fj.userFloat("NjettinessAK8:tau3")); 
+      //nBranches_->jetAK8_tau4               .push_back(fj.userFloat("NjettinessAK8:tau4")); 
       nBranches_->jetAK8_pruned_mass        .push_back(fj.userFloat("ak8PFJetsCHSPrunedMass"));
       nBranches_->jetAK8_softdrop_mass      .push_back(fj.userFloat("ak8PFJetsCHSSoftDropMass"));
       
@@ -1045,6 +1046,7 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
 	  nBranches_->jetAK8_puppi_tau1	 .push_back(puppijet.userFloat("NjettinessAK8Puppi:tau1"));	 
 	  nBranches_->jetAK8_puppi_tau2	 .push_back(puppijet.userFloat("NjettinessAK8Puppi:tau2"));
 	  nBranches_->jetAK8_puppi_tau3	 .push_back(puppijet.userFloat("NjettinessAK8Puppi:tau3")); 
+	  //nBranches_->jetAK8_puppi_tau4	 .push_back(puppijet.userFloat("NjettinessAK8Puppi:tau4")); 
 	  //nBranches_->jetAK8_puppi_pruned_mass.push_back(puppijet.userFloat("ak8PFJetsPuppiPrunedMass"));
 	  nBranches_->jetAK8_puppi_softdrop_mass.push_back(puppijet.userFloat("ak8PFJetsPuppiSoftDropMass"));
 
@@ -1100,6 +1102,7 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
         nBranches_->jetAK8_puppi_tau1	 .push_back(-99);	 
         nBranches_->jetAK8_puppi_tau2	 .push_back(-99);
         nBranches_->jetAK8_puppi_tau3	 .push_back(-99); 
+        nBranches_->jetAK8_puppi_tau4	 .push_back(-99); 
         //nBranches_->jetAK8_puppi_pruned_mass.push_back(-99);
         nBranches_->jetAK8_puppi_softdrop_mass.push_back(-99);
         //nBranches_->jetAK8_puppi_pruned_massCorr.push_back(-99);
@@ -1184,6 +1187,7 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
         nBranches_->jetAK8_puppi_tau1	 .push_back(fj.userFloat("ak8PFJetsPuppiValueMap:NjettinessAK8PuppiTau1"));	 
         nBranches_->jetAK8_puppi_tau2	 .push_back(fj.userFloat("ak8PFJetsPuppiValueMap:NjettinessAK8PuppiTau2"));
         nBranches_->jetAK8_puppi_tau3	 .push_back(fj.userFloat("ak8PFJetsPuppiValueMap:NjettinessAK8PuppiTau3")); 
+        //nBranches_->jetAK8_puppi_tau4	 .push_back(fj.userFloat("ak8PFJetsPuppiValueMap:NjettinessAK8PuppiTau4")); 
 
 	if(isMC){
 	  JME::JetParameters parameters_ak8Puppi;

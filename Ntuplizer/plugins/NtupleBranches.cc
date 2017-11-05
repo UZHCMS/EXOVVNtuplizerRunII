@@ -504,6 +504,7 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch( "jetAK8_tau1"	     , &jetAK8_tau1		 );
     tree_->Branch( "jetAK8_tau2"	     , &jetAK8_tau2      	 );
     tree_->Branch( "jetAK8_tau3"	     , &jetAK8_tau3	    	 );
+    tree_->Branch( "jetAK8_tau4"	     , &jetAK8_tau4	    	 );
     tree_->Branch( "jetAK8_pull1"	     , &jetAK8_pull1    	 );
     tree_->Branch( "jetAK8_pull2"	     , &jetAK8_pull2    	 );
     tree_->Branch( "jetAK8_pruned_mass"      , &jetAK8_pruned_mass       );
@@ -560,6 +561,7 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
      tree_->Branch( "jetAK8_puppi_tau1"	            , &jetAK8_puppi_tau1	      );
      tree_->Branch( "jetAK8_puppi_tau2"	            , &jetAK8_puppi_tau2      	      );
      tree_->Branch( "jetAK8_puppi_tau3"	            , &jetAK8_puppi_tau3	      );
+     tree_->Branch( "jetAK8_puppi_tau4"	            , &jetAK8_puppi_tau4	      );
 
       // /*----------------------puppi_softdrop AK8 subjets---------------------------*/
       tree_->Branch( "jetAK8_subjet_puppi_softdrop_N"            , &jetAK8_subjet_puppi_softdrop_N  	   );
@@ -1195,6 +1197,7 @@ void NtupleBranches::reset( void ){
   jetAK8_tau1.clear();
   jetAK8_tau2.clear();
   jetAK8_tau3.clear();    
+  jetAK8_tau4.clear();    
 
   jetAK8Puppi_jer_sf.clear(); 
   jetAK8Puppi_jer_sf_up.clear(); 
@@ -1290,6 +1293,7 @@ void NtupleBranches::reset( void ){
   jetAK8_puppi_tau1.clear();
   jetAK8_puppi_tau2.clear();
   jetAK8_puppi_tau3.clear();    
+  jetAK8_puppi_tau4.clear();    
   jetAK8_puppi_pruned_mass.clear();
   jetAK8_puppi_softdrop_mass.clear();
   jetAK8_puppi_pruned_massCorr.clear();
