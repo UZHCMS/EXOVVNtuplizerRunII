@@ -281,7 +281,7 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
      jecAK4Unc_->setJetPt( corr * j.correctedP4(0).pt() );
      corrDown = corr * ( 1 - fabs(jecAK4Unc_->getUncertainty(-1)) );
 
-     if (corr*uncorrJet.pt() < 20) continue;    
+     if (corr*uncorrJet.pt() < 17.) continue;    
 
      nBranches_->jetAK4_N++;
 
@@ -532,7 +532,7 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
       jecAK8Unc_->setJetPt( corr * fj.correctedP4(0).pt() );
       corrDown = corr * ( 1 - fabs(jecAK8Unc_->getUncertainty(-1)) );   
       
-      if( corr*uncorrJet.pt() < 100. ) continue;
+      if( corr*uncorrJet.pt() < 170. ) continue;
 
       bool IDLoose = looseJetID(fj);
       bool IDTight = tightJetID(fj);
