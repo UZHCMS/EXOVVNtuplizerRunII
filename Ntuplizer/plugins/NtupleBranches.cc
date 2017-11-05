@@ -420,6 +420,9 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch( "jetAK4_vtxNtracks"      , &jetAK4_vtxNtracks );
     tree_->Branch( "jetAK4_vtx3DVal"	    , &jetAK4_vtx3DVal   );
     tree_->Branch( "jetAK4_vtx3DSig"	    , &jetAK4_vtx3DSig   );
+    tree_->Branch( "jetAK4_etaAxis"	    , &jetAK4_etaAxis   );
+    tree_->Branch( "jetAK4_phiAxis"	    , &jetAK4_phiAxis   );
+    tree_->Branch( "jetAK4_phiT"	    , &jetAK4_phiT   );
     
     tree_->Branch( "jetAK4_qg_axis1"	    , &jetAK4_qg_axis1   );
     tree_->Branch( "jetAK4_qg_axis2"	    , &jetAK4_qg_axis2   );
@@ -1131,6 +1134,9 @@ void NtupleBranches::reset( void ){
   jetAK4_vtxNtracks.clear();
   jetAK4_vtx3DVal.clear();
   jetAK4_vtx3DSig.clear();
+  jetAK4_etaAxis.clear();
+  jetAK4_phiAxis.clear();
+  jetAK4_phiT.clear();
   
   jetAK4_qg_axis1.clear();
   jetAK4_qg_axis2.clear();

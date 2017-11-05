@@ -325,6 +325,25 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
      nBranches_->jetAK4_vtxNtracks.push_back(j.userFloat("vtxNtracks")); 
      nBranches_->jetAK4_vtx3DVal  .push_back(j.userFloat("vtx3DVal")); 
      nBranches_->jetAK4_vtx3DSig  .push_back(j.userFloat("vtx3DSig"));
+
+     //////////////////////////////////////////
+     // color variables
+     //////////////////////////////////////////
+     
+     reco::Candidate::LorentzVector Axis;
+     for(auto daughter : j.getJetConstituentsQuick()) {
+       if(daughter->charge() !=0) Axis += daughter->p4();
+     }
+     TVector2 t(0, 0);
+     for(auto daughter : j.getJetConstituentsQuick()) {
+       if(daughter->charge() !=0) {
+         TVector2 r(daughter->rapidity()-Axis.Rapidity(), deltaPhi(daughter->phi(), Axis.Phi()));
+         t += ( daughter->pt() * r.Mod() / Axis.pt() ) * r;
+       }
+     }
+     nBranches_->jetAK4_etaAxis.push_back(Axis.Rapidity()); 
+     nBranches_->jetAK4_phiAxis.push_back(Axis.Phi());
+     nBranches_->jetAK4_phiT.push_back(t.Mod() > 0. ? t.Phi() : 0);
      
      //////////////////////////////////////////
      // for QG likelihood
