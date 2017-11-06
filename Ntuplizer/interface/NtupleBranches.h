@@ -161,11 +161,11 @@ public:
   std::vector<int>	      el_isTightElectronWithoutIPandIsolation	  ;    
   std::vector<int  >  	      el_isHeepElectronWithoutIPandIsolation	  ;
   std::vector<int  >  	      el_isLooseElectronWithoutIPandIsolation	  ;  
-  std::vector<int>	      el_isVetoElectronBoosted	  ;
-  std::vector<int>	      el_isMediumElectronBoosted  ;
-  std::vector<int>	      el_isTightElectronBoosted	  ;    
-  std::vector<int  >  	      el_isHeepElectronBoosted	  ;
-  std::vector<int  >  	      el_isLooseElectronBoosted	  ;  
+//  std::vector<int>	      el_isVetoElectronBoosted	  ;
+//  std::vector<int>	      el_isMediumElectronBoosted  ;
+//  std::vector<int>	      el_isTightElectronBoosted	  ;    
+//  std::vector<int  >  	      el_isHeepElectronBoosted	  ;
+//  std::vector<int  >  	      el_isLooseElectronBoosted	  ;  
   std::vector<float>  	      el_SemileptonicPFIso 	 ;//  Isolations for semileptonic tau channel  
   std::vector<float>  	      el_SemileptonicCorrPFIso   ;// the simple PF one and the corrected one for the tau presence
 
@@ -190,7 +190,7 @@ public:
   std::vector<int  >  	      mu_isTrackerHighPtMuon	         ;
   /* std::vector<float>  	      mu_pfRhoCorrRelIso03  	 ; */
   /* std::vector<float>  	      mu_pfRhoCorrRelIso04  	 ; */
-  /* std::vector<float>  	      mu_pfDeltaCorrRelIso  	 ; */
+  std::vector<float>  	      mu_pfDeltaCorrRelIso  	 ;
   /* std::vector<float>  	      mu_pfRelIso  	     	 ; */
   std::vector<float>  	      mu_photonIso 	     	 ;
   std::vector<float>  	      mu_neutralHadIso	     	 ;
@@ -470,6 +470,9 @@ public:
   std::vector<float>              jetAK4_vtxNtracks    ;
   std::vector<float>              jetAK4_vtx3DVal      ;
   std::vector<float>              jetAK4_vtx3DSig      ; 
+  std::vector<float>              jetAK4_etaAxis       ; 
+  std::vector<float>              jetAK4_phiAxis       ; 
+  std::vector<float>              jetAK4_phiT          ; 
 
   std::vector<float>              jetAK4_qg_axis1      ;
   std::vector<float>              jetAK4_qg_axis2      ;
@@ -524,6 +527,9 @@ public:
   std::vector<float>  	      jetAK8_tau1              ;
   std::vector<float>  	      jetAK8_tau2              ;
   std::vector<float>  	      jetAK8_tau3              ; 
+  std::vector<float>  	      jetAK8_tau4              ; 
+  std::vector<float>  	      jetAK8_pull1             ; 
+  std::vector<float>  	      jetAK8_pull2             ; 
   std::vector<float>              jetAK8_jer_sf        ; 
   std::vector<float>              jetAK8_jer_sf_up     ; 
   std::vector<float>              jetAK8_jer_sf_down   ; 
@@ -637,6 +643,7 @@ public:
   std::vector<float>  	      jetAK8_puppi_tau1              ;
   std::vector<float>  	      jetAK8_puppi_tau2              ;
   std::vector<float>  	      jetAK8_puppi_tau3              ;    
+  std::vector<float>  	      jetAK8_puppi_tau4              ;    
   std::vector<float>  	      jetAK8_puppi_pruned_mass       ;
   std::vector<float>  	      jetAK8_puppi_softdrop_mass     ;
   std::vector<float>  	      jetAK8_puppi_pruned_massCorr   ;

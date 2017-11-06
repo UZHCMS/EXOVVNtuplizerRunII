@@ -321,20 +321,20 @@ void ElectronsNtuplizer::fillBranches( edm::Event const & event, const edm::Even
     nBranches_->el_isTightElectronWithoutIPandIsolation .push_back(isTightElectronWithoutIPandIsolation);
     nBranches_->el_isHeepElectronWithoutIPandIsolation  .push_back(isHeepElectronWithoutIPandIsolation);  
     
-    if ( doBoostedTaus_ ) {
-      
-      bool isVetoElectronBoosted   = eleIDpassedBoosted("Veto"  ,ele) ;
-      bool isLooseElectronBoosted  = eleIDpassedBoosted("Loose" ,ele) ;
-      bool isMediumElectronBoosted = eleIDpassedBoosted("Medium",ele) ;
-      bool isTightElectronBoosted  = eleIDpassedBoosted("Tight" ,ele) ;
-      bool isHeepElectronBoosted   = eleIDpassedBoosted("Heep"  ,ele) ;
-    
-      nBranches_->el_isVetoElectronBoosted  .push_back(isVetoElectronBoosted);
-      nBranches_->el_isLooseElectronBoosted .push_back(isLooseElectronBoosted);
-      nBranches_->el_isMediumElectronBoosted.push_back(isMediumElectronBoosted);
-      nBranches_->el_isTightElectronBoosted .push_back(isTightElectronBoosted);
-      nBranches_->el_isHeepElectronBoosted  .push_back(isHeepElectronBoosted);  
-    }
+//    if ( doBoostedTaus_ ) {
+//      
+//      bool isVetoElectronBoosted   = eleIDpassedBoosted("Veto"  ,ele) ;
+//      bool isLooseElectronBoosted  = eleIDpassedBoosted("Loose" ,ele) ;
+//      bool isMediumElectronBoosted = eleIDpassedBoosted("Medium",ele) ;
+//      bool isTightElectronBoosted  = eleIDpassedBoosted("Tight" ,ele) ;
+//      bool isHeepElectronBoosted   = eleIDpassedBoosted("Heep"  ,ele) ;
+//    
+//      nBranches_->el_isVetoElectronBoosted  .push_back(isVetoElectronBoosted);
+//      nBranches_->el_isLooseElectronBoosted .push_back(isLooseElectronBoosted);
+//      nBranches_->el_isMediumElectronBoosted.push_back(isMediumElectronBoosted);
+//      nBranches_->el_isTightElectronBoosted .push_back(isTightElectronBoosted);
+//      nBranches_->el_isHeepElectronBoosted  .push_back(isHeepElectronBoosted);  
+//    }
     
 
 
