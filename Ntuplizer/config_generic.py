@@ -11,7 +11,8 @@ process.TFileService = cms.Service("TFileService",
                                     fileName = cms.string('flatTuple.root')
                                    )
 
-from EXOVVNtuplizerRunII.Ntuplizer.ntuplizerOptions_data_cfi import config
+#from EXOVVNtuplizerRunII.Ntuplizer.ntuplizerOptions_data_cfi import config
+from EXOVVNtuplizerRunII.Ntuplizer.ntuplizerOptions_MC_cfi import config
 
 				   
 ####### Config parser ##########
@@ -30,7 +31,8 @@ options.maxEvents = -1
 #options.inputFiles = '/store/data/Run2016H/MuonEG/MINIAOD/03Feb2017_ver2-v1/100000/044366C7-4AEE-E611-8CF7-0025905B856E.root'
 
 
-options.inputFiles = 'file:006233DA-3599-E711-911B-0025905A6118.root'
+#options.inputFiles = 'file:006233DA-3599-E711-911B-0025905A6118.root'
+options.inputFiles = 'file:0031BC57-D8AD-E711-B912-008CFAF28DB2.root'
 
                       
 options.parseArguments()
@@ -84,13 +86,24 @@ process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_condD
 from Configuration.AlCa.GlobalTag import GlobalTag
 
 GT = ''
-if config["RUNONMC"]: GT = '80X_mcRun2_asymptotic_2016_miniAODv2'
+if config["RUNONMC"]: GT = '92X_upgrade2017_realistic_v7'
 elif not(config["RUNONMC"]): GT = '92X_dataRun2_2017Repro_v4'
 
 print "*************************************** GLOBAL TAG *************************************************" 
 print GT
 print "****************************************************************************************************" 
 process.GlobalTag = GlobalTag(process.GlobalTag, GT)
+
+
+jetcorr_levels=[]
+jetcorr_levels_groomed=[]
+if config["RUNONMC"]:
+  jetcorr_levels = cms.vstring(['L1FastJet', 'L2Relative', 'L3Absolute'])
+  jetcorr_levels_groomed = cms.vstring(['L2Relative', 'L3Absolute']) # NO L1 corretion for groomed jets
+else:
+  jetcorr_levels = cms.vstring(['L1FastJet', 'L2Relative', 'L3Absolute', 'L2L3Residual'])
+  jetcorr_levels_groomed = cms.vstring(['L2Relative', 'L3Absolute', 'L2L3Residual'])
+
    
 ######### read JSON file for data ##########					                                                             
 if not(config["RUNONMC"]) and config["USEJSON"]:
@@ -331,7 +344,7 @@ if config["UpdateJetCollection"]:
   updateJetCollection(
     process,
     jetSource = cms.InputTag('slimmedJetsAK8'),
-    jetCorrections = ('AK8PFchs', cms.vstring(['L1FastJet', 'L2Relative', 'L3Absolute', 'L2L3Residual' ]), 'None'),
+    jetCorrections = ('AK8PFchs', cms.vstring(jetcorr_levels), 'None'),
     btagDiscriminators = bTagDiscriminators
   )
 ## Update to latest PU jet ID training
@@ -348,7 +361,7 @@ if config["UpdateJetCollection"]:
   from PhysicsTools.PatAlgos.producersLayer1.jetUpdater_cff import updatedPatJetCorrFactors, updatedPatJets
   addToProcessAndTask('patJetCorrFactorsReapplyJEC',
                       updatedPatJetCorrFactors.clone(src = cms.InputTag("slimmedJets"),
-                                                     levels = ['L1FastJet', 'L2Relative', 'L3Absolute', 'L2L3Residual'] 
+                                                     levels = jetcorr_levels,
                                                      ),
                       process,pattask
                       )
@@ -409,10 +422,6 @@ def recluster_addBtagging(process, fatjets_name, groomed_jets_name, jetcorr_labe
       
 
     # patify ungroomed jets, if not already done:
-    if config["RUNONMC"]:
-      jetcorr_levels = cms.vstring(['L1FastJet', 'L2Relative', 'L3Absolute'])
-    else:
-      jetcorr_levels = cms.vstring(['L1FastJet', 'L2Relative', 'L3Absolute', 'L2L3Residual'])
     add_ungroomed = not hasattr(process, 'patJets' + cap(fatjets_name))
     addJetCollection(process, labelName = fatjets_name, jetSource = cms.InputTag(fatjets_name), algo = algo, rParam = rParam,
 	    jetCorrections = (jetcorr_label, jetcorr_levels, 'None'),
@@ -421,10 +430,6 @@ def recluster_addBtagging(process, fatjets_name, groomed_jets_name, jetcorr_labe
 	)
 
     # patify groomed fat jets, with b-tagging:
-    if config["RUNONMC"]:
-      jetcorr_levels_groomed = cms.vstring(['L2Relative', 'L3Absolute']) # NO L1 corretion for groomed jets
-    else:
-      jetcorr_levels_groomed = cms.vstring(['L2Relative', 'L3Absolute', 'L2L3Residual'])
     addJetCollection(process, labelName = groomed_jets_name, jetSource = cms.InputTag(groomed_jets_name), algo = algo, rParam = rParam,
        jetCorrections = (jetcorr_label, jetcorr_levels_groomed, 'None'),
        **bTagParameters)
@@ -562,20 +567,12 @@ if config["DOMETRECLUSTERING"]:
 
   from PhysicsTools.PatAlgos.tools.jetTools import switchJetCollection
 		  
-  if config["RUNONMC"]:
-     switchJetCollection(process,
-                         jetSource = cms.InputTag('ak4PFJetsCHS'),
-		         jetCorrections = ('AK4PFchs', ['L1FastJet', 'L2Relative', 'L3Absolute'], ''),
-		         genParticles = cms.InputTag('prunedGenParticles'),
-		         pvSource = cms.InputTag('offlineSlimmedPrimaryVertices')
-     )
-  else:
-     switchJetCollection(process,
-                         jetSource = cms.InputTag('ak4PFJetsCHS'),
-		         jetCorrections = ('AK4PFchs', ['L1FastJet', 'L2Relative', 'L3Absolute','L2L3Residual'], ''),
-		         genParticles = cms.InputTag('prunedGenParticles'),
-		         pvSource = cms.InputTag('offlineSlimmedPrimaryVertices')
-     )
+  switchJetCollection(process,
+                      jetSource = cms.InputTag('ak4PFJetsCHS'),
+                      jetCorrections = ('AK4PFchs', jet_corr_levels, ''),
+                      genParticles = cms.InputTag('prunedGenParticles'),
+                      pvSource = cms.InputTag('offlineSlimmedPrimaryVertices')
+                      )
 		  		
   process.patJets.addGenJetMatch = cms.bool(False) 
   process.patJets.addGenPartonMatch = cms.bool(False) 
@@ -880,7 +877,7 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     jetsForMetCorr = cms.InputTag(jetsAK4),
     rho = cms.InputTag("fixedGridRhoFastjetAll"),
     genparticles = cms.InputTag("prunedGenParticles"),
-    PUInfo = cms.InputTag("addPileupInfo"),
+    PUInfo = cms.InputTag("slimmedAddPileupInfo"),
     genEventInfo = cms.InputTag("generator"),
     externallheProducer = cms.InputTag("externalLHEProducer"),
     HLT = cms.InputTag("TriggerResults","","HLT"),

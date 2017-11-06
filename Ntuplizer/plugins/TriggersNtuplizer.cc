@@ -308,7 +308,8 @@ void TriggersNtuplizer::fillBranches( edm::Event const & event, const edm::Event
     for (pat::TriggerObjectStandAlone obj : *triggerObjects) {
       
       obj.unpackPathNames(trigNames);
-      
+      obj.unpackFilterLabels(event, *HLTtriggers_);
+
       std::vector<std::string> pathNamesAll  = obj.pathNames(false);
 
       for (unsigned h = 0, n = pathNamesAll.size(); h < n; ++h) {
