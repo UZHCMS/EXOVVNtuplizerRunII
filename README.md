@@ -1,4 +1,4 @@
-# EXOVVNtuplizerRunII
+	# EXOVVNtuplizerRunII
 
 Ntuplizer for searches for heavy resonances decaying to dibosons
 
@@ -7,9 +7,10 @@ Ntuplizer for searches for heavy resonances decaying to dibosons
 Setting up CMSSW (for september reprocessing):
 
 ```
-cmsrel CMSSW_9_2_11
-cd CMSSW_9_2_11/src
+cmsrel CMSSW_9_2_13
+cd CMSSW_9_2_13/src
 cmsenv
+git init
 ```
 
 ### getting the latest b-tagger
@@ -17,7 +18,7 @@ cmsenv
 
 => included by default in 92X
 
-### update MET filter
+### update MET filter. Skip this!
 
 => no obvious branch exists (seems to run fine 92X baseline, can be reomved?)
 ```
@@ -33,7 +34,7 @@ git clone https://github.com/${GITUSER}/EXOVVNtuplizerRunII
 cd EXOVVNtuplizerRunII
 git remote add UZHCMS https://github.com/UZHCMS/EXOVVNtuplizerRunII
 git fetch UZHCMS
-git checkout -b DevelopmentBranch_Legacy UZHCMS/80X_legacy
+git checkout -b DevelopmentBranch_9_2_13 UZHCMS/92X_legacy
 cd $CMSSW_BASE/src
 ```
 
@@ -48,20 +49,17 @@ The flags for running on Spring15(74) or Fall15(76) or Spring16(80) samples have
 ### updates of latest HEEP electron ID
 (https://twiki.cern.ch/twiki/bin/viewauth/CMS/HEEPElectronIdentificationRun2#Recipe_for_regular_users)
 
-=> something not right with HEEP Id, need to investigate. Turned off for now
+=> HEEP ID from here https://twiki.cern.ch/twiki/bin/viewauth/CMS/HEEPElectronIdentificationRun2
 
 ```
-git cms-merge-topic Sam-Harper:HEEPV70VID
-git cms-merge-topic ikrav:egm_id_80X_v3
-git cms-merge-topic Sam-Harper:PackedCandNoPuppi
+cmsenv
+git cms-addpkg RecoEgamma/EgammaIsolationAlgos 
+git cms-merge-topic rgoldouz:TrkIsoFix -u 
+scramv1 b -j 16
 ```
 
-### To include latest Tau ID MVA
-(https://twiki.cern.ch/twiki/bin/view/CMSPublic/SWGuidePFTauID#Rerunning_of_the_tau_ID_on_MiniA)
 
-```
-git cms-merge-topic -u cms-tau-pog:CMSSW_9_2_X_tau-pog
-```
+
 
 ### compile first, before adding MVA-based electron ID 
 (I don't konw why, but otherwise, $CMSSW_BASE/external/slc6_amd64_gcc530/data area will be deleted)
@@ -70,7 +68,7 @@ cd $CMSSW_BASE/src
 scram b -j8
 ```
 
-### updates of latest MVA-based electron ID
+### updates of latest MVA-based electron ID. Skip this!
 (https://twiki.cern.ch/twiki/bin/viewauth/CMS/MultivariateElectronIdentificationRun2#Recipes_and_implementation)
 
 => I didn't look into this one yet, but seems to be included in 92X
@@ -89,15 +87,13 @@ scram b -j8
 
 
 
-### running
+### running for data and MC! just set the proper flag in python/ntuplizerOptions_generic_cfi.py
 
 ```
-cmsRun config_data.py (for data)
-cmsRun config_MC.py (for MC)
+cmsRun config_generic.py 
+
 ```
 
-the flags for running on data can be changed in python/ntuplizerOptions_data_cfi.py
-the flags for running on MC can be changed in python/ntuplizerOptions_MC_cfi.py
 
 to recluster jets and MET, or to add the Higgs-tagger the following flags can be changed:
 ```

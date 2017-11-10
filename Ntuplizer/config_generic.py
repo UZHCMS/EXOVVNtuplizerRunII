@@ -12,7 +12,7 @@ process.TFileService = cms.Service("TFileService",
                                    )
 
 #from EXOVVNtuplizerRunII.Ntuplizer.ntuplizerOptions_data_cfi import config
-from EXOVVNtuplizerRunII.Ntuplizer.ntuplizerOptions_MC_cfi import config
+from EXOVVNtuplizerRunII.Ntuplizer.ntuplizerOptions_generic_cfi import config
 
 				   
 ####### Config parser ##########
@@ -25,16 +25,11 @@ options.maxEvents = -1
 
 #data file
 
-# options.inputFiles = '/store/data/Run2015D/SingleMuon/MINIAOD/05Oct2015-v1/10000/021FD3F0-876F-E511-99D2-0025905A6060.root'
-#options.inputFiles = 'dcap://t3se01.psi.ch:22125//pnfs/psi.ch/cms/trivcat/store/data/Run2015D/JetHT/MINIAOD/16Dec2015-v1/00000/301A497D-70B0-E511-9630-002590D0AFA8.root'
-#options.inputFiles = '/store/data/Run2016F/JetHT/MINIAOD/23Sep2016-v1/100000/00AB3FCF-1D86-E611-930B-002590D60036.root'
-#options.inputFiles = '/store/data/Run2016H/MuonEG/MINIAOD/03Feb2017_ver2-v1/100000/044366C7-4AEE-E611-8CF7-0025905B856E.root'
 
+options.inputFiles = '/store/mc/RunIISummer17MiniAOD/TT_TuneCUETP8M2T4_13TeV-powheg-pythia8/MINIAODSIM/92X_upgrade2017_realistic_v10_ext1-v2/70000/FE5284D7-009B-E711-9B8F-0CC47AC08816.root'
 
-#options.inputFiles = 'file:006233DA-3599-E711-911B-0025905A6118.root'
-options.inputFiles = 'file:0031BC57-D8AD-E711-B912-008CFAF28DB2.root'
-
-                      
+#options.inputFiles = '/store/data/Run2017C/SingleMuon/MINIAOD/12Sep2017-v1/50000/9E07D0AB-1CA6-E711-A982-7845C4FC35F3.root'
+                     
 options.parseArguments()
 
 process.options  = cms.untracked.PSet( 
@@ -86,8 +81,9 @@ process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_condD
 from Configuration.AlCa.GlobalTag import GlobalTag
 
 GT = ''
-if config["RUNONMC"]: GT = '92X_upgrade2017_realistic_v7'
-elif not(config["RUNONMC"]): GT = '92X_dataRun2_2017Repro_v4'
+if config["RUNONMC"]: GT = '92X_upgrade2017_realistic_v10'
+elif config["RUNONReReco"]: GT = '92X_dataRun2_2017Repro_v4'
+elif config["RUNONPromptReco"]: GT = '92X_dataRun2_2017Prompt_v11'
 
 print "*************************************** GLOBAL TAG *************************************************" 
 print GT
@@ -725,7 +721,7 @@ elif config["BUNCHSPACING"] == 25 and not(config["RUNONMC"]) and config["SPRING1
 jecAK8chsUncFile = "JEC/%s_DATA_Uncertainty_AK8PFchs.txt"%(JECprefix)
 jecAK4chsUncFile = "JEC/%s_DATA_Uncertainty_AK4PFchs.txt"%(JECprefix)
 
-
+print "jec unc file for ak8 ", jecAK8chsUncFile
 if config["CORRJETSONTHEFLY"]:
    if config["RUNONMC"]:
      jecLevelsAK8chs = [
