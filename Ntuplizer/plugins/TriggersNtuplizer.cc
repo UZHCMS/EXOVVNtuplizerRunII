@@ -99,6 +99,8 @@ bool TriggersNtuplizer::findTrigger( std::string trigName ){
        trigName.find("HLT_IsoTkMu24_v") != std::string::npos ||
        trigName.find("HLT_IsoMu27_v") != std::string::npos ||
        trigName.find("HLT_IsoTkMu27_v") != std::string::npos ||
+       trigName.find("HLT_IsoMu27_eta2p1") != std::string::npos ||
+       trigName.find("HLT_IsoTkMu27_eta2p1") != std::string::npos ||    
        trigName.find("HLT_Mu45_eta2p1") != std::string::npos ||
        //trigName.find("HLT_Mu50_eta2p1") != std::string::npos ||
 

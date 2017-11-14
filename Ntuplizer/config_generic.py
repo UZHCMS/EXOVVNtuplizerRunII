@@ -713,13 +713,17 @@ jecLevelsAK4 = []
 jecLevelsAK8Puppi = []
 jecLevelsForMET = []
 
-if config["BUNCHSPACING"] == 25 and config["RUNONMC"] and config["SPRING16"]:
-   JECprefix = "Spring16_25nsV6"
-elif config["BUNCHSPACING"] == 25 and not(config["RUNONMC"]) and config["SPRING16"]:
-   JECprefix = "Summer16_23Sep2016HV3"
+if config["BUNCHSPACING"] == 25 and config["RUNONMC"] :
+   JECprefix = "Summer16_23Sep2016V4"
+   jecAK8chsUncFile = "JEC/%s_MC_Uncertainty_AK8PFchs.txt"%(JECprefix)
+   jecAK4chsUncFile = "JEC/%s_MC_Uncertainty_AK4PFchs.txt"%(JECprefix)
 
-jecAK8chsUncFile = "JEC/%s_DATA_Uncertainty_AK8PFchs.txt"%(JECprefix)
-jecAK4chsUncFile = "JEC/%s_DATA_Uncertainty_AK4PFchs.txt"%(JECprefix)
+
+
+elif config["BUNCHSPACING"] == 25 and not(config["RUNONMC"]):
+   JECprefix = "Summer16_23Sep2016HV3"
+   jecAK8chsUncFile = "JEC/%s_DATA_Uncertainty_AK8PFchs.txt"%(JECprefix)
+   jecAK4chsUncFile = "JEC/%s_DATA_Uncertainty_AK4PFchs.txt"%(JECprefix)
 
 print "jec unc file for ak8 ", jecAK8chsUncFile
 if config["CORRJETSONTHEFLY"]:
