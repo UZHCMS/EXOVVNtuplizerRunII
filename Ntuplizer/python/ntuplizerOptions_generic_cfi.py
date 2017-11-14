@@ -3,8 +3,6 @@ import FWCore.ParameterSet.Config as cms
 config = dict()
 
 #--------- general ----------#
-config["SPRING16"] = True
-
 
 #--------- Set Just one to true ----------#
 config["RUNONMC"] = True
@@ -23,14 +21,14 @@ config["DOGENPARTICLES"] = (True and config["RUNONMC"])
 config["DOGENJETS"] = (True and config["RUNONMC"])
 config["DOGENEVENT"] = (True and config["RUNONMC"])
 config["DOPILEUP"] = (True and config["RUNONMC"])
-config["DOELECTRONS"] = True
+config["DOELECTRONS"] = False
 config["DOMUONS"] = True
 config["DOTAUS"] = True
 config["DOAK8JETS"] = True
 config["DOAK4JETS"] = True
 config["DOVERTICES"] = True
 config["DOTRIGGERDECISIONS"] = True
-config["DOTRIGGEROBJECTS"] = True
+config["DOTRIGGEROBJECTS"] = False
 config["DOHLTFILTERS"] = True
 config["DOMISSINGET"] = True
 config["DOTAUSBOOSTED"] = True
@@ -41,16 +39,16 @@ config["DOMVAMET"] = False
 config["ADDAK8GENJETS"] = True #! Add AK8 gen jet collection with pruned and softdrop mass
 config["DOAK8RECLUSTERING"] = False
 config["DOAK8PRUNEDRECLUSTERING"] = False #! To add pruned jet and pruned subjet collection (not in MINIAOD)
-config["DOAK8PUPPI"] = True
+config["DOAK8PUPPI"] = False
 config["DOAK10TRIMMEDRECLUSTERING"] = False #ATLAS sequence
-config["DOHBBTAG"] = True #Higgs-tagger
+config["DOHBBTAG"] = False #Higgs-tagger
 config["DOAK8PUPPIRECLUSTERING"] = False
-config["UpdateJetCollection"] = True #needed for Higgs-tagger in 80X
+config["UpdateJetCollection"] = False #needed for Higgs-tagger in 80X
 
 #--------- MET reclustering ----------#
 config["DOMETRECLUSTERING"] = False
 
 #--------- JEC ----------#
-config["CORRJETSONTHEFLY"] = True
-config["CORRMETONTHEFLY"] = True
+config["CORRJETSONTHEFLY"] = False
+config["CORRMETONTHEFLY"] = False
 config["GETJECFROMDBFILE"] = False # If not yet in global tag, but db file available
