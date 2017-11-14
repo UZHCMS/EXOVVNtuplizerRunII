@@ -5,9 +5,9 @@ config = dict()
 #--------- general ----------#
 
 #--------- Set Just one to true ----------#
-config["RUNONMC"] = True
+config["RUNONMC"] = False
 config["RUNONPromptReco"] = False
-config["RUNONReReco"] = False
+config["RUNONReReco"] = True
 #-----------------------------------------#
 
 config["USEJSON"] = False
@@ -21,7 +21,7 @@ config["DOGENPARTICLES"] = (True and config["RUNONMC"])
 config["DOGENJETS"] = (True and config["RUNONMC"])
 config["DOGENEVENT"] = (True and config["RUNONMC"])
 config["DOPILEUP"] = (True and config["RUNONMC"])
-config["DOELECTRONS"] = False
+config["DOELECTRONS"] = True
 config["DOMUONS"] = True
 config["DOTAUS"] = True
 config["DOAK8JETS"] = True
