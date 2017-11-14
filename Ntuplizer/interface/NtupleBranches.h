@@ -579,16 +579,6 @@ public:
   std::vector<float>          jetAK8_chs_tau2              ;
   std::vector<float>          jetAK8_chs_tau3              ;
   std::vector<float>          jetAK8_chs_softdrop_mass     ;
- //  std::vector<float>          jetAK8_puppi_pruned_massCorr   ;
- //  std::vector<float>          jetAK8_puppi_softdrop_massCorr ;
- //  std::vector<float>          jetAK8_puppi_pruned_jec        ;
- //  std::vector<float>          jetAK8_puppi_softdrop_jec      ;
- //
- //  std::vector<float>              jetAK8Puppi_jer_sf        ;
- //  std::vector<float>              jetAK8Puppi_jer_sf_up     ;
- //  std::vector<float>              jetAK8Puppi_jer_sf_down   ;
- //  std::vector<float>              jetAK8Puppi_jer_sigma_pt  ;
-	   
 
   /** AK4 genJets*/
   int			      genJetAK4_N               ;
