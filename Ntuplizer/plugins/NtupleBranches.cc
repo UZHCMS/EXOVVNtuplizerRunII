@@ -489,11 +489,6 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
       tree_->Branch( "jetAK8_jer_sf_up"          , &jetAK8_jer_sf_up);
       tree_->Branch( "jetAK8_jer_sf_down"          , &jetAK8_jer_sf_down);
       tree_->Branch( "jetAK8_jer_sigma_pt"          , &jetAK8_jer_sigma_pt);
-     
-      // tree_->Branch( "jetAK8Puppi_jer_sf"          , &jetAK8Puppi_jer_sf);
-      // tree_->Branch( "jetAK8Puppi_jer_sf_up"          , &jetAK8Puppi_jer_sf_up);
-      // tree_->Branch( "jetAK8Puppi_jer_sf_down"          , &jetAK8Puppi_jer_sf_down);
-      // tree_->Branch( "jetAK8Puppi_jer_sigma_pt"          , &jetAK8Puppi_jer_sigma_pt);
 
       
     }
@@ -532,10 +527,6 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
      tree_->Branch( "jetAK10_ecf3"	     , &jetAK10_ecf3	    	 );
     }
 
-     // tree_->Branch( "jetAK8_puppi_pruned_massCorr"  , &jetAK8_puppi_pruned_massCorr   );
-     // tree_->Branch( "jetAK8_puppi_pruned_jec"      , &jetAK8_puppi_pruned_jec        );
-     // tree_->Branch( "jetAK8_puppi_softdrop_massCorr", &jetAK8_puppi_softdrop_massCorr );
-     // tree_->Branch( "jetAK8_puppi_softdrop_jec"     , &jetAK8_puppi_softdrop_jec      );
 
 
       // /*----------------------puppi_softdrop AK8 subjets---------------------------*/
