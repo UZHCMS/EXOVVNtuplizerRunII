@@ -43,7 +43,7 @@ def getOptions() :
     else:
         options.luminosity = True
     if options.isData == None:
-        options.luminosity = False
+        options.isData = False
     else:
         options.isData = True
     return options
@@ -124,9 +124,11 @@ def main():
         ptbin = job.split('/')[1]
         cond = job.split('/')[2]
 
-        config.General.requestName =  ptbin + ("_"+cond)if options.isData else ""  + options.string_to_add
+        config.General.requestName =  ptbin + ("_"+cond)if options.isData else ""  
+        config.General.requestName +=  options.string_to_add
         config.Data.inputDataset = job
-        config.Data.outputDatasetTag = ptbin  + ("_"+cond)if options.isData else "" +  options.string_to_add
+        config.Data.outputDatasetTag = ptbin  + ("_"+cond)if options.isData else "" 
+        config.Data.outputDatasetTag +=  options.string_to_add
         print "ptbin :%s and cond: %s " %(ptbin, cond)
         print 'Submitting ' + config.General.requestName + ', dataset = ' + job
         print 'Configuration :'
