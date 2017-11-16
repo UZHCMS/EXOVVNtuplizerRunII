@@ -82,7 +82,7 @@ def main():
     # config.Data.inputDBS = 'phys03' #to be commented in case of global#
     if options.luminosity == True :
         config.Data.splitting = 'LumiBased'
-        config.Data.unitsPerJob = 10
+        config.Data.unitsPerJob = 100
     else:
         config.Data.splitting = 'FileBased'
         config.Data.unitsPerJob = 1
