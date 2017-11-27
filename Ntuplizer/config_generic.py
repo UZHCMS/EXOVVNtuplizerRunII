@@ -11,7 +11,8 @@ process.TFileService = cms.Service("TFileService",
                                     fileName = cms.string('flatTuple.root')
                                    )
 
-from EXOVVNtuplizerRunII.Ntuplizer.ntuplizerOptions_data_cfi import config
+#from EXOVVNtuplizerRunII.Ntuplizer.ntuplizerOptions_data_cfi import config
+from EXOVVNtuplizerRunII.Ntuplizer.ntuplizerOptions_generic_cfi import config
 
 				   
 ####### Config parser ##########
@@ -24,15 +25,11 @@ options.maxEvents = -1
 
 #data file
 
-# options.inputFiles = '/store/data/Run2015D/SingleMuon/MINIAOD/05Oct2015-v1/10000/021FD3F0-876F-E511-99D2-0025905A6060.root'
-#options.inputFiles = 'dcap://t3se01.psi.ch:22125//pnfs/psi.ch/cms/trivcat/store/data/Run2015D/JetHT/MINIAOD/16Dec2015-v1/00000/301A497D-70B0-E511-9630-002590D0AFA8.root'
-#options.inputFiles = '/store/data/Run2016F/JetHT/MINIAOD/23Sep2016-v1/100000/00AB3FCF-1D86-E611-930B-002590D60036.root'
-#options.inputFiles = '/store/data/Run2016H/MuonEG/MINIAOD/03Feb2017_ver2-v1/100000/044366C7-4AEE-E611-8CF7-0025905B856E.root'
 
+options.inputFiles = '/store/mc/RunIISummer17MiniAOD/TT_TuneCUETP8M2T4_13TeV-powheg-pythia8/MINIAODSIM/92X_upgrade2017_realistic_v10_ext1-v2/70000/FE5284D7-009B-E711-9B8F-0CC47AC08816.root'
 
-options.inputFiles = 'file:006233DA-3599-E711-911B-0025905A6118.root'
-
-                      
+#options.inputFiles = '/store/data/Run2017C/SingleMuon/MINIAOD/12Sep2017-v1/50000/9E07D0AB-1CA6-E711-A982-7845C4FC35F3.root'
+                     
 options.parseArguments()
 
 process.options  = cms.untracked.PSet( 
@@ -84,13 +81,25 @@ process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_condD
 from Configuration.AlCa.GlobalTag import GlobalTag
 
 GT = ''
-if config["RUNONMC"]: GT = '80X_mcRun2_asymptotic_2016_miniAODv2'
-elif not(config["RUNONMC"]): GT = '92X_dataRun2_2017Repro_v4'
+if config["RUNONMC"]: GT = '92X_upgrade2017_realistic_v10'
+elif config["RUNONReReco"]: GT = '92X_dataRun2_2017Repro_v4'
+elif config["RUNONPromptReco"]: GT = '92X_dataRun2_Prompt_v11'
 
 print "*************************************** GLOBAL TAG *************************************************" 
 print GT
 print "****************************************************************************************************" 
 process.GlobalTag = GlobalTag(process.GlobalTag, GT)
+
+
+jetcorr_levels=[]
+jetcorr_levels_groomed=[]
+if config["RUNONMC"]:
+  jetcorr_levels = cms.vstring(['L1FastJet', 'L2Relative', 'L3Absolute'])
+  jetcorr_levels_groomed = cms.vstring(['L2Relative', 'L3Absolute']) # NO L1 corretion for groomed jets
+else:
+  jetcorr_levels = cms.vstring(['L1FastJet', 'L2Relative', 'L3Absolute', 'L2L3Residual'])
+  jetcorr_levels_groomed = cms.vstring(['L2Relative', 'L3Absolute', 'L2L3Residual'])
+
    
 ######### read JSON file for data ##########					                                                             
 if not(config["RUNONMC"]) and config["USEJSON"]:
@@ -331,7 +340,7 @@ if config["UpdateJetCollection"]:
   updateJetCollection(
     process,
     jetSource = cms.InputTag('slimmedJetsAK8'),
-    jetCorrections = ('AK8PFchs', cms.vstring(['L1FastJet', 'L2Relative', 'L3Absolute', 'L2L3Residual' ]), 'None'),
+    jetCorrections = ('AK8PFchs', cms.vstring(jetcorr_levels), 'None'),
     btagDiscriminators = bTagDiscriminators
   )
 ## Update to latest PU jet ID training
@@ -348,7 +357,7 @@ if config["UpdateJetCollection"]:
   from PhysicsTools.PatAlgos.producersLayer1.jetUpdater_cff import updatedPatJetCorrFactors, updatedPatJets
   addToProcessAndTask('patJetCorrFactorsReapplyJEC',
                       updatedPatJetCorrFactors.clone(src = cms.InputTag("slimmedJets"),
-                                                     levels = ['L1FastJet', 'L2Relative', 'L3Absolute', 'L2L3Residual'] 
+                                                     levels = jetcorr_levels,
                                                      ),
                       process,pattask
                       )
@@ -409,10 +418,6 @@ def recluster_addBtagging(process, fatjets_name, groomed_jets_name, jetcorr_labe
       
 
     # patify ungroomed jets, if not already done:
-    if config["RUNONMC"]:
-      jetcorr_levels = cms.vstring(['L1FastJet', 'L2Relative', 'L3Absolute'])
-    else:
-      jetcorr_levels = cms.vstring(['L1FastJet', 'L2Relative', 'L3Absolute', 'L2L3Residual'])
     add_ungroomed = not hasattr(process, 'patJets' + cap(fatjets_name))
     addJetCollection(process, labelName = fatjets_name, jetSource = cms.InputTag(fatjets_name), algo = algo, rParam = rParam,
 	    jetCorrections = (jetcorr_label, jetcorr_levels, 'None'),
@@ -421,10 +426,6 @@ def recluster_addBtagging(process, fatjets_name, groomed_jets_name, jetcorr_labe
 	)
 
     # patify groomed fat jets, with b-tagging:
-    if config["RUNONMC"]:
-      jetcorr_levels_groomed = cms.vstring(['L2Relative', 'L3Absolute']) # NO L1 corretion for groomed jets
-    else:
-      jetcorr_levels_groomed = cms.vstring(['L2Relative', 'L3Absolute', 'L2L3Residual'])
     addJetCollection(process, labelName = groomed_jets_name, jetSource = cms.InputTag(groomed_jets_name), algo = algo, rParam = rParam,
        jetCorrections = (jetcorr_label, jetcorr_levels_groomed, 'None'),
        **bTagParameters)
@@ -562,20 +563,12 @@ if config["DOMETRECLUSTERING"]:
 
   from PhysicsTools.PatAlgos.tools.jetTools import switchJetCollection
 		  
-  if config["RUNONMC"]:
-     switchJetCollection(process,
-                         jetSource = cms.InputTag('ak4PFJetsCHS'),
-		         jetCorrections = ('AK4PFchs', ['L1FastJet', 'L2Relative', 'L3Absolute'], ''),
-		         genParticles = cms.InputTag('prunedGenParticles'),
-		         pvSource = cms.InputTag('offlineSlimmedPrimaryVertices')
-     )
-  else:
-     switchJetCollection(process,
-                         jetSource = cms.InputTag('ak4PFJetsCHS'),
-		         jetCorrections = ('AK4PFchs', ['L1FastJet', 'L2Relative', 'L3Absolute','L2L3Residual'], ''),
-		         genParticles = cms.InputTag('prunedGenParticles'),
-		         pvSource = cms.InputTag('offlineSlimmedPrimaryVertices')
-     )
+  switchJetCollection(process,
+                      jetSource = cms.InputTag('ak4PFJetsCHS'),
+                      jetCorrections = ('AK4PFchs', jet_corr_levels, ''),
+                      genParticles = cms.InputTag('prunedGenParticles'),
+                      pvSource = cms.InputTag('offlineSlimmedPrimaryVertices')
+                      )
 		  		
   process.patJets.addGenJetMatch = cms.bool(False) 
   process.patJets.addGenPartonMatch = cms.bool(False) 
@@ -720,15 +713,19 @@ jecLevelsAK4 = []
 jecLevelsAK8Puppi = []
 jecLevelsForMET = []
 
-if config["BUNCHSPACING"] == 25 and config["RUNONMC"] and config["SPRING16"]:
-   JECprefix = "Spring16_25nsV6"
-elif config["BUNCHSPACING"] == 25 and not(config["RUNONMC"]) and config["SPRING16"]:
+if config["BUNCHSPACING"] == 25 and config["RUNONMC"] :
+   JECprefix = "Summer16_23Sep2016V4"
+   jecAK8chsUncFile = "JEC/%s_MC_Uncertainty_AK8PFchs.txt"%(JECprefix)
+   jecAK4chsUncFile = "JEC/%s_MC_Uncertainty_AK4PFchs.txt"%(JECprefix)
+
+
+
+elif config["BUNCHSPACING"] == 25 and not(config["RUNONMC"]):
    JECprefix = "Summer16_23Sep2016HV3"
+   jecAK8chsUncFile = "JEC/%s_DATA_Uncertainty_AK8PFchs.txt"%(JECprefix)
+   jecAK4chsUncFile = "JEC/%s_DATA_Uncertainty_AK4PFchs.txt"%(JECprefix)
 
-jecAK8chsUncFile = "JEC/%s_DATA_Uncertainty_AK8PFchs.txt"%(JECprefix)
-jecAK4chsUncFile = "JEC/%s_DATA_Uncertainty_AK4PFchs.txt"%(JECprefix)
-
-
+print "jec unc file for ak8 ", jecAK8chsUncFile
 if config["CORRJETSONTHEFLY"]:
    if config["RUNONMC"]:
      jecLevelsAK8chs = [
@@ -880,7 +877,7 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     jetsForMetCorr = cms.InputTag(jetsAK4),
     rho = cms.InputTag("fixedGridRhoFastjetAll"),
     genparticles = cms.InputTag("prunedGenParticles"),
-    PUInfo = cms.InputTag("addPileupInfo"),
+    PUInfo = cms.InputTag("slimmedAddPileupInfo"),
     genEventInfo = cms.InputTag("generator"),
     externallheProducer = cms.InputTag("externalLHEProducer"),
     HLT = cms.InputTag("TriggerResults","","HLT"),

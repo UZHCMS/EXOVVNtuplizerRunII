@@ -15,6 +15,8 @@
 #include "DataFormats/PatCandidates/interface/TriggerObjectStandAlone.h"
 #include "DataFormats/PatCandidates/interface/PackedTriggerPrescales.h"
 
+#include "FWCore/ParameterSet/interface/FileInPath.h"
+
 // #include "DataFormats/METReco/interface/PFMET.h"
 
 
@@ -42,18 +44,6 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
 	flavourToken_	      	    (consumes<reco::JetFlavourMatchingCollection>(iConfig.getParameter<edm::InputTag>("subjetflavour"))),
 
 	muonToken_	      	    (consumes<pat::MuonCollection>(iConfig.getParameter<edm::InputTag>("muons"))),
-	electronToken_	      	    (consumes<edm::View<pat::Electron> >(iConfig.getParameter<edm::InputTag>("electrons"))),
-
-	eleVetoIdMapToken_    	    (consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("eleVetoIdMap"))),
-	eleLooseIdMapToken_   	    (consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("eleLooseIdMap"))),
-	eleMediumIdMapToken_  	    (consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("eleMediumIdMap"))),
-	eleTightIdMapToken_   	    (consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("eleTightIdMap"))),
-
-	eleHLTIdMapToken_  	    (consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("eleHLTIdMap"))),
-	eleHEEPIdMapToken_    	    (consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("eleHEEPIdMap"))),
-
-	eleMVAMediumIdMapToken_     (consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("eleMVAMediumIdMap"))),
-	eleMVATightIdMapToken_      (consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("eleMVATightIdMap"))),
 	mvaValuesMapToken_          (consumes<edm::ValueMap<float> >(iConfig.getParameter<edm::InputTag>("mvaValuesMap"))),
 	mvaCategoriesMapToken_      (consumes<edm::ValueMap<int> >(iConfig.getParameter<edm::InputTag>("mvaCategoriesMap"))),
 	ebRecHitsToken_             (consumes<edm::SortedCollection<EcalRecHit,edm::StrictWeakOrdering<EcalRecHit>>>(iConfig.getParameter<edm::InputTag>("ebRecHits"))),
@@ -109,8 +99,23 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
   runFlags["doMVAMET"] = iConfig.getParameter<bool>("doMVAMET");
   runFlags["doPuppiRecluster"] = iConfig.getParameter<edm::InputTag>("puppijets").label()!="";
 
+
+  if(runFlags["doElectrons"]){
+    electronToken_	      	    =consumes<edm::View<pat::Electron> >(iConfig.getParameter<edm::InputTag>("electrons"));
+    eleVetoIdMapToken_    	    =consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("eleVetoIdMap"));
+    eleLooseIdMapToken_   	    =consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("eleLooseIdMap"));
+    eleMediumIdMapToken_  	    =consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("eleMediumIdMap"));
+    eleTightIdMapToken_   	    =consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("eleTightIdMap"));
+    eleHLTIdMapToken_  	    =consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("eleHLTIdMap"));
+    eleHEEPIdMapToken_    	    =consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("eleHEEPIdMap"));
+    eleMVAMediumIdMapToken_     =consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("eleMVAMediumIdMap"));
+    eleMVATightIdMapToken_      =consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("eleMVATightIdMap"));
+  }
+
   std::string jecpath = iConfig.getParameter<std::string>("jecpath");
-  
+  jecpath = "EXOVVNtuplizerRunII/Ntuplizer/data/" + jecpath;
+  //jecpath = std::string("data/") + jecpath;
+ 
   nBranches_ = new NtupleBranches( runFlags, tree );
   
   /*=======================================================================================*/
@@ -130,45 +135,45 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
     std::vector<std::string> tmpVec = iConfig.getParameter<std::vector<std::string> >("jecAK8chsPayloadNames");
     for( unsigned int v = 0; v < tmpVec.size(); ++v ){
        tmpString = jecpath + tmpVec[v];
-       jecAK8Labels.push_back(tmpString);
+       jecAK8Labels.push_back(edm::FileInPath(tmpString).fullPath());
     }    
-    jecAK8Labels.push_back( iConfig.getParameter<std::string>("jecAK8chsUnc") );
+    jecAK8Labels.push_back( edm::FileInPath(jecpath + iConfig.getParameter<std::string>("jecAK8chsUnc")).fullPath() );
     std::vector<std::string> jecAK8GroomedLabels;
     tmpVec.clear(); tmpVec = iConfig.getParameter<std::vector<std::string> >("jecAK8GroomedchsPayloadNames");
     for( unsigned int v = 0; v < tmpVec.size(); ++v ){
        tmpString = jecpath + tmpVec[v];
-       jecAK8GroomedLabels.push_back(tmpString);
+       jecAK8GroomedLabels.push_back(edm::FileInPath(tmpString).fullPath());
     }    
     
     std::vector<std::string> jecAK8PuppiLabels;
     tmpVec.clear(); tmpVec = iConfig.getParameter<std::vector<std::string> >("jecAK8PuppiPayloadNames");
     for( unsigned int v = 0; v < tmpVec.size(); ++v ){
        tmpString = jecpath + tmpVec[v];
-       jecAK8PuppiLabels.push_back(tmpString);
+       jecAK8PuppiLabels.push_back(edm::FileInPath(tmpString).fullPath());
     }    
     
     std::vector<std::string> jecAK4chsLabels;
     tmpVec.clear(); tmpVec = iConfig.getParameter<std::vector<std::string> >("jecAK4chsPayloadNames");
     for( unsigned int v = 0; v < tmpVec.size(); ++v ){
        tmpString = jecpath + tmpVec[v];
-       jecAK4chsLabels.push_back(tmpString);
+       jecAK4chsLabels.push_back(edm::FileInPath(tmpString).fullPath());
     }
-    jecAK4chsLabels.push_back( iConfig.getParameter<std::string>("jecAK4chsUnc") );
+    jecAK4chsLabels.push_back( edm::FileInPath(jecpath + iConfig.getParameter<std::string>("jecAK4chsUnc")).fullPath() );
     
   
     std::vector<std::string> jerAK8chsFileLabels;
-    jerAK8chsFileLabels.push_back( iConfig.getParameter<std::string>("jerAK8chs_res_PayloadNames") );
-    jerAK8chsFileLabels.push_back( iConfig.getParameter<std::string>("jerAK8chs_sf_PayloadNames") );
+    jerAK8chsFileLabels.push_back(edm::FileInPath(jecpath + iConfig.getParameter<std::string>("jerAK8chs_res_PayloadNames")).fullPath() );
+    jerAK8chsFileLabels.push_back(edm::FileInPath(jecpath + iConfig.getParameter<std::string>("jerAK8chs_sf_PayloadNames")).fullPath() );
     std::vector<std::string> jerAK4chsFileLabels;
-    jerAK4chsFileLabels.push_back( iConfig.getParameter<std::string>("jerAK4chs_res_PayloadNames") );
-     jerAK4chsFileLabels.push_back( iConfig.getParameter<std::string>("jerAK4chs_sf_PayloadNames") );
+    jerAK4chsFileLabels.push_back(edm::FileInPath(jecpath + iConfig.getParameter<std::string>("jerAK4chs_res_PayloadNames")).fullPath() );
+     jerAK4chsFileLabels.push_back(edm::FileInPath(jecpath + iConfig.getParameter<std::string>("jerAK4chs_sf_PayloadNames")).fullPath() );
      std::vector<std::string> jerAK8PuppiFileLabels;
-    jerAK8PuppiFileLabels.push_back( iConfig.getParameter<std::string>("jerAK8Puppi_res_PayloadNames") );
-    jerAK8PuppiFileLabels.push_back( iConfig.getParameter<std::string>("jerAK8Puppi_sf_PayloadNames") );
+     jerAK8PuppiFileLabels.push_back(edm::FileInPath(jecpath + iConfig.getParameter<std::string>("jerAK8Puppi_res_PayloadNames")).fullPath() );
+    jerAK8PuppiFileLabels.push_back(edm::FileInPath(jecpath + iConfig.getParameter<std::string>("jerAK8Puppi_sf_PayloadNames")).fullPath() );
 
     std::vector<std::string> jerAK4PuppiFileLabels;
-    jerAK4PuppiFileLabels.push_back( iConfig.getParameter<std::string>("jerAK4Puppi_res_PayloadNames") );
-    jerAK4PuppiFileLabels.push_back( iConfig.getParameter<std::string>("jerAK4Puppi_sf_PayloadNames") );
+    jerAK4PuppiFileLabels.push_back(edm::FileInPath(jecpath + iConfig.getParameter<std::string>("jerAK4Puppi_res_PayloadNames")).fullPath() );
+    jerAK4PuppiFileLabels.push_back(edm::FileInPath(jecpath + iConfig.getParameter<std::string>("jerAK4Puppi_sf_PayloadNames")).fullPath() );
 
 
     nTuplizers_["jets"] = new JetsNtuplizer( jetTokens      , 
@@ -199,7 +204,7 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
     std::string tmpString = "";
     for( unsigned int v = 0; v < tmpVec.size(); ++v ){
        tmpString = jecpath + tmpVec[v];
-       jecAK4Labels.push_back(tmpString);
+       jecAK4Labels.push_back(edm::FileInPath(tmpString).fullPath());
     }
     
     nTuplizers_["MET"] = new METsNtuplizer( metToken_          , 

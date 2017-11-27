@@ -8,16 +8,10 @@ voms-proxy-init  --voms cms --valid 200:00:00
 
 Then:
 
-python submit_all.py -d crab_MC_V3 -c config_MC_crab_miniAODv2.py -f samples/Moriond17/samples_MC_Alberto.txt -s ""
-python submit_all.py -d crab_MC_V3 -c config_MC_crab_miniAODv2.py -f samples/Moriond17/samples_MC_ext_Alberto.txt  -s "_ext" 
+python submit_all.py -d CRAM_MC_V1 -c config_generic.py -f samples/MC_v1.txt -s ""
 
+python submit_all.py -d CRAM_MC_V1 -c config_generic.py -f samples/MC_v1_ext.txt -s "_ext"
 
-python submit_all.py -d crab_MC_V3 -c config_MC_crab_miniAODv2.py -f samples/Moriond17/samples_MC_Camilla.txt  -l True -s ""
-python submit_all.py -d crab_MC_V3 -c config_MC_crab_miniAODv2.py -f samples/Moriond17/samples_MC_ext_Camilla.txt  -l True -s "_ext" 
-
-
-python submit_all.py -d crab_MC_V3 -c config_MC_crab_miniAODv2.py -f samples/Moriond17/samples_MC_Clemens.txt  -s ""
-python submit_all.py -d crab_MC_V3 -c config_MC_crab_miniAODv2.py -f samples/Moriond17/samples_MC_ext_Clemens.txt -s "_ext" 
 
 
 python submit_all.py -d crab_MC_V3 -c config_MC_crab_miniAODv2.py -f samples/Moriond17/samples_MC_Yuta.txt   -s ""
