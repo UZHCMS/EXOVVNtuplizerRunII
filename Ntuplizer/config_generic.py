@@ -229,70 +229,93 @@ if config["GETJECFROMDBFILE"]:
 if config["ADDAK8GENJETS"]:
 
   from RecoJets.Configuration.RecoGenJets_cff import ak8GenJets
-  process.ak8GenJets = ak8GenJets.clone(src = 'packedGenParticles')
+  addToProcessAndTask('ak8GenJets',
+                      ak8GenJets.clone(src = 'packedGenParticles'),
+                      process,pattask
+                      )
+  
+  
+  addToProcessAndTask('NjettinessGenAK8',
+                      cms.EDProducer("NjettinessAdder",
+                                     src=cms.InputTag("ak8GenJets"),
+                                     Njets=cms.vuint32(1,2,3,4),          # compute 1-, 2-, 3-, 4- subjettiness
+                                     # variables for measure definition : 
+                                     measureDefinition = cms.uint32( 0 ), # CMS default is normalized measure
+                                     beta = cms.double(1.0),              # CMS default is 1
+                                     R0 = cms.double( 0.8 ),              # CMS default is jet cone size
+                                     Rcutoff = cms.double( 999.0),       # not used by default
+                                     # variables for axes definition :
+                                       axesDefinition = cms.uint32( 6 ),    # CMS default is 1-pass KT axes
+                                     nPass = cms.int32(999),             # not used by default
+                                     akAxesR0 = cms.double(-999.0)        # not used by default
+                                     ),
+                      process,pattask
+                      )
+                      
 
-  process.NjettinessGenAK8 = cms.EDProducer("NjettinessAdder",
-                              src=cms.InputTag("ak8GenJets"),
-                              Njets=cms.vuint32(1,2,3,4),          # compute 1-, 2-, 3-, 4- subjettiness
-                              # variables for measure definition : 
-                              measureDefinition = cms.uint32( 0 ), # CMS default is normalized measure
-                              beta = cms.double(1.0),              # CMS default is 1
-                              R0 = cms.double( 0.8 ),              # CMS default is jet cone size
-                              Rcutoff = cms.double( 999.0),       # not used by default
-                              # variables for axes definition :
-                              axesDefinition = cms.uint32( 6 ),    # CMS default is 1-pass KT axes
-                              nPass = cms.int32(999),             # not used by default
-                              akAxesR0 = cms.double(-999.0)        # not used by default
-                              )
-
-  process.genParticlesForJets = cms.EDProducer("InputGenJetsParticleSelector",
-                                               src = cms.InputTag("packedGenParticles"),
-                                               ignoreParticleIDs = cms.vuint32(
-                                                                  1000022,
-                                                                  1000012, 1000014, 1000016,
-                                                                  2000012, 2000014, 2000016,
-                                                                  1000039, 5100039,
-                                                                  4000012, 4000014, 4000016,
-                                                                  9900012, 9900014, 9900016,
-                                                                  39),
-                                              partonicFinalState = cms.bool(False),
-                                              excludeResonances = cms.bool(False),
-                                              excludeFromResonancePids = cms.vuint32(12, 13, 14, 16),
-                                              tausAsJets = cms.bool(False)
-                                              )
+  addToProcessAndTask('genParticlesForJets',
+                      cms.EDProducer("InputGenJetsParticleSelector",
+                                     src = cms.InputTag("packedGenParticles"),
+                                     ignoreParticleIDs = cms.vuint32(1000022,
+                                                                     1000012, 1000014, 1000016,
+                                                                     2000012, 2000014, 2000016,
+                                                                     1000039, 5100039,
+                                                                     4000012, 4000014, 4000016,
+                                                                     9900012, 9900014, 9900016,
+                                                                     39),
+                                     partonicFinalState = cms.bool(False),
+                                     excludeResonances = cms.bool(False),
+                                     excludeFromResonancePids = cms.vuint32(12, 13, 14, 16),
+                                     tausAsJets = cms.bool(False)
+                                     ),
+                      process,pattask
+                      )
+           
 
   from RecoJets.JetProducers.SubJetParameters_cfi import SubJetParameters
 
-  process.ak8GenJetsPruned = ak8GenJets.clone(
-              SubJetParameters,
-              usePruning = cms.bool(True),
-              writeCompound = cms.bool(True),
-              jetCollInstanceName=cms.string("SubJets")
-              )
-            
-  process.ak8GenJetsSoftDrop = ak8GenJets.clone(
-              SubJetParameters,
-              useSoftDrop = cms.bool(True),
-              R0 = cms.double(0.8),
-              beta = betapar,
-              writeCompound = cms.bool(True),
-              jetCollInstanceName=cms.string("SubJets")
-              )
+  addToProcessAndTask('ak8GenJetsPruned',
+                      ak8GenJets.clone(SubJetParameters,
+                                       usePruning = cms.bool(True),
+                                       writeCompound = cms.bool(True),
+                                       jetCollInstanceName=cms.string("SubJets")
+                                       ),
+                      process,pattask
+                      )
+  
+  addToProcessAndTask('ak8GenJetsSoftDrop',
+                      ak8GenJets.clone(SubJetParameters,
+                                       useSoftDrop = cms.bool(True),
+                                       R0 = cms.double(0.8),
+                                       beta = betapar,
+                                       writeCompound = cms.bool(True),
+                                       jetCollInstanceName=cms.string("SubJets")
+                                       ),
+                      process,pattask
+                      )
+  
 
-  process.ak8GenJetsPrunedMass = cms.EDProducer("RecoJetDeltaRValueMapProducer",
-                                            src = cms.InputTag("ak8GenJets"),
-                                            matched = cms.InputTag("ak8GenJetsPruned"),
-                                            distMax = cms.double(0.8),
-                                            value = cms.string('mass')
-                                            )
-
-  process.ak8GenJetsSoftDropMass = cms.EDProducer("RecoJetDeltaRValueMapProducer",
-                                            src = cms.InputTag("ak8GenJets"),
-                                            matched = cms.InputTag("ak8GenJetsSoftDrop"),                                         
-                                            distMax = cms.double(0.8),
-                                            value = cms.string('mass') 
-                                            )
-                                                      
+  addToProcessAndTask('ak8GenJetsPrunedMass',
+                      cms.EDProducer("RecoJetDeltaRValueMapProducer",
+                                     src = cms.InputTag("ak8GenJets"),
+                                     matched = cms.InputTag("ak8GenJetsPruned"),
+                                     distMax = cms.double(0.8),
+                                     value = cms.string('mass')
+                                      ),
+                      process,pattask
+                      )
+  
+  
+  addToProcessAndTask('ak8GenJetsSoftDropMass',
+                      cms.EDProducer("RecoJetDeltaRValueMapProducer",
+                                     src = cms.InputTag("ak8GenJets"),
+                                     matched = cms.InputTag("ak8GenJetsSoftDrop"), 
+                                     distMax = cms.double(0.8),
+                                     value = cms.string('mass') 
+                                     ),
+                      process,pattask
+                      )
+  
 
   # process.ak8GenJetsPrunedMass = ak8PFJetsCHSPrunedMass.clone(
   #             matched = cms.InputTag("ak8GenJetsPruned"),
@@ -315,11 +338,17 @@ if config["ADDAK8GENJETS"]:
 
   # Redo pat jets from gen AK8
 
-  process.genJetsAK8 = patJetsAK8.clone( jetSource = 'ak8GenJets' )
+  addToProcessAndTask('genJetsAK8',
+                     patJetsAK8.clone( jetSource = 'ak8GenJets' ),
+                     process,pattask)
+
   process.genJetsAK8.userData.userFloats.src = [ cms.InputTag("ak8GenJetsPrunedMass"), cms.InputTag("ak8GenJetsSoftDropMass"), cms.InputTag("NjettinessGenAK8:tau1"), cms.InputTag("NjettinessGenAK8:tau2"), cms.InputTag("NjettinessGenAK8:tau3")]
   process.genJetsAK8.addJetCorrFactors = cms.bool(False)
   process.genJetsAK8.jetCorrFactorsSource = cms.VInputTag( cms.InputTag("") )
-  process.selectedGenJetsAK8 = selectedPatJetsAK8.clone( src = 'genJetsAK8', cut = cms.string('pt > 20') )
+
+  addToProcessAndTask('selectedGenJetsAK8',
+                      selectedPatJetsAK8.clone( src = 'genJetsAK8', cut = cms.string('pt > 20') ),
+                      process,pattask)
 
 ################# Prepare recluster or update jets with b-tagging ######################
 bTagDiscriminators = [
