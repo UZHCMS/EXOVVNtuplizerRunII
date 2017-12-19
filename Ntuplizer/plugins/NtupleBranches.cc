@@ -1142,6 +1142,12 @@ void NtupleBranches::reset( void ){
   jetAK8_tau1.clear();
   jetAK8_tau2.clear();
   jetAK8_tau3.clear();    
+  jetAK8_softdrop_mass.clear();
+  jetAK8_softdrop_massCorr.clear();
+  jetAK8_softdrop_jecDown.clear();
+  jetAK8_softdrop_jecUp.clear();
+
+      
   // jetAK8_tau4.clear();
 
   jetAK8_jer_sf.clear(); 
