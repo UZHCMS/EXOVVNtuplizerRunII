@@ -66,7 +66,7 @@ void TausNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
     
       nBranches_->tau_pdgId  	     	      .push_back(tau.pdgId());
       nBranches_->tau_charge 	     	      .push_back(tau.charge());
-      //      nBranches_->tau_e      	     	      .push_back(tau.energy());
+      nBranches_->tau_e      	     	      .push_back(tau.energy());
       nBranches_->tau_eta    	     	      .push_back(tau.eta());
       nBranches_->tau_mass   	     	      .push_back(tau.mass());
       nBranches_->tau_pt     	     	      .push_back(tau.pt());
@@ -376,7 +376,7 @@ void TausNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
               
       nBranches_->tau_pdgId  		      .push_back(boostedTau.pdgId());
       nBranches_->tau_charge 		      .push_back(boostedTau.charge());
-      //      nBranches_->tau_e      		      .push_back(boostedTau.energy());
+      nBranches_->tau_e      		      .push_back(boostedTau.energy());
       nBranches_->tau_eta    		      .push_back(boostedTau.eta()); 
       nBranches_->tau_mass   		      .push_back(boostedTau.mass());
       nBranches_->tau_pt     		      .push_back(boostedTau.pt());

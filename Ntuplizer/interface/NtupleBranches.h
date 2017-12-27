@@ -225,7 +225,7 @@ public:
   int 	                      tau_N		         ;
   std::vector<int>  	      tau_pdgId	                 ;
   std::vector<float>  	      tau_charge	         ;
-  //  std::vector<float>  	      tau_e 		         ;
+  std::vector<float>  	      tau_e 		         ;
   std::vector<float>  	      tau_eta		         ;
   std::vector<float>  	      tau_phi		         ;
   std::vector<float>  	      tau_mass		         ;
