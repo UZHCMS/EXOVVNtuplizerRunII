@@ -245,7 +245,8 @@ void ElectronsNtuplizer::fillBranches( edm::Event const & event, const edm::Even
     nBranches_->el_d0  	                   .push_back((-1)*ele.gsfTrack()->dxy((*firstGoodVertex).position()));
     nBranches_->el_dz_allvertices          .push_back(ele.gsfTrack()->dz((*firstVertex).position()));
     nBranches_->el_d0_allvertices          .push_back((-1)*ele.gsfTrack()->dxy((*firstVertex).position()));
-    nBranches_->el_expectedMissingInnerHits.push_back(ele.gsfTrack()->hitPattern().numberOfHits(reco::HitPattern::MISSING_INNER_HITS));
+    nBranches_->el_expectedMissingInnerHits.push_back(ele.gsfTrack()->hitPattern().numberOfAllHits(reco::HitPattern::MISSING_INNER_HITS));
+    //numberOfHits gives compilation error in 94X->changed in numberOfAllHits
     
     nBranches_->el_dr03EcalRecHitSumEt.push_back(ele.dr03EcalRecHitSumEt());
     nBranches_->el_dr03HcalDepth1TowerSumEt.push_back(ele.dr03HcalDepth1TowerSumEt());
@@ -384,7 +385,7 @@ bool ElectronsNtuplizer::eleIDpassedBoosted(std::string id, const pat::Electron 
   Float_t dPhiIn_ = std::abs(ele.deltaPhiSuperClusterTrackAtVtx());
   Float_t hOverE_ = ele.hadronicOverEm();
   Float_t ooEmooP_ = EleEInverseMinusPInverse(ele);
-  Int_t expectedMissingInnerHits_ = ele.gsfTrack()->hitPattern().numberOfHits(reco::HitPattern::MISSING_INNER_HITS);
+  Int_t expectedMissingInnerHits_ = ele.gsfTrack()->hitPattern().numberOfAllHits(reco::HitPattern::MISSING_INNER_HITS);
   Int_t passConversionVeto_ = ele.passConversionVeto(); 
 
 
@@ -517,7 +518,7 @@ bool ElectronsNtuplizer::eleIDpassedBoosted(std::string id, const pat::Electron 
 	       ele.deltaPhiSuperClusterTrackAtVtx() < 0.06 && 
     	      (ele.full5x5_e2x5Max()/ele.full5x5_e5x5() > 0.94 || ele.full5x5_e1x5()/ele.full5x5_e5x5() > 0.83) &&
     	       ele.dr03TkSumPt() < 5. && 
-	       ele.gsfTrack()->hitPattern().numberOfHits(reco::HitPattern::MISSING_INNER_HITS) <= 1 &&
+	       ele.gsfTrack()->hitPattern().numberOfAllHits(reco::HitPattern::MISSING_INNER_HITS) <= 1 &&
     	       // iso < isoCut &&
 	       fabs(dxy) < 0.02 )
     	  {
@@ -536,7 +537,7 @@ bool ElectronsNtuplizer::eleIDpassedBoosted(std::string id, const pat::Electron 
 	      ele.deltaPhiSuperClusterTrackAtVtx() < 0.06 && 
     	      ele.full5x5_sigmaIetaIeta() < 0.03 && 
     	      ele.dr03TkSumPt() < 5. && 
-	      ele.gsfTrack()->hitPattern().numberOfHits(reco::HitPattern::MISSING_INNER_HITS) <= 1 &&
+	      ele.gsfTrack()->hitPattern().numberOfAllHits(reco::HitPattern::MISSING_INNER_HITS) <= 1 &&
     	      // iso < isoCut &&
 	      fabs(dxy) < 0.05 )
     	  {
@@ -824,7 +825,7 @@ bool ElectronsNtuplizer::eleIDpassedWithoutIPandIsolation(std::string id, const 
   Float_t dPhiIn_ = std::abs(ele.deltaPhiSuperClusterTrackAtVtx());
   Float_t hOverE_ = ele.hadronicOverEm();
   Float_t ooEmooP_ = EleEInverseMinusPInverse(ele);
-  Int_t expectedMissingInnerHits_ = ele.gsfTrack()->hitPattern().numberOfHits(reco::HitPattern::MISSING_INNER_HITS);
+  Int_t expectedMissingInnerHits_ = ele.gsfTrack()->hitPattern().numberOfAllHits(reco::HitPattern::MISSING_INNER_HITS);
   Int_t passConversionVeto_ = ele.passConversionVeto(); 
 
 
@@ -956,7 +957,7 @@ bool ElectronsNtuplizer::eleIDpassedWithoutIPandIsolation(std::string id, const 
 	       ele.deltaPhiSuperClusterTrackAtVtx() < 0.06 && 
     	      (ele.full5x5_e2x5Max()/ele.full5x5_e5x5() > 0.94 || ele.full5x5_e1x5()/ele.full5x5_e5x5() > 0.83) &&
     	       ele.dr03TkSumPt() < 5. && 
-	       ele.gsfTrack()->hitPattern().numberOfHits(reco::HitPattern::MISSING_INNER_HITS) <= 1 &&
+	       ele.gsfTrack()->hitPattern().numberOfAllHits(reco::HitPattern::MISSING_INNER_HITS) <= 1 &&
     	       // iso < isoCut &&
 	       fabs(dxy) < 0.02 )
     	  {
@@ -975,7 +976,7 @@ bool ElectronsNtuplizer::eleIDpassedWithoutIPandIsolation(std::string id, const 
 	      ele.deltaPhiSuperClusterTrackAtVtx() < 0.06 && 
     	      ele.full5x5_sigmaIetaIeta() < 0.03 && 
     	      ele.dr03TkSumPt() < 5. && 
-	      ele.gsfTrack()->hitPattern().numberOfHits(reco::HitPattern::MISSING_INNER_HITS) <= 1 &&
+	      ele.gsfTrack()->hitPattern().numberOfAllHits(reco::HitPattern::MISSING_INNER_HITS) <= 1 &&
     	      // iso < isoCut &&
 	      fabs(dxy) < 0.05 )
     	  {

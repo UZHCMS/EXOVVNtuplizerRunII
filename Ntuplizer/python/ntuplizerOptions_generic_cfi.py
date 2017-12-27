@@ -5,13 +5,13 @@ config = dict()
 #--------- general ----------#
 
 #--------- Set Just one to true ----------#
-config["RUNONMC"] = False
+config["RUNONMC"] = True
 config["RUNONPromptReco"] = False
-config["RUNONReReco"] = True
+config["RUNONReReco"] = False
 #-----------------------------------------#
 
-config["USEJSON"] = False
-config["JSONFILE"] = "JSON/Cert_294927-305636_13TeV_PromptReco_Collisions17_JSON.txt"
+config["USEJSON"] = not (config["RUNONMC"])
+config["JSONFILE"] = "JSON/Cert_294927-306462_13TeV_PromptReco_Collisions17_JSON.txt"
 config["BUNCHSPACING"] = 25
 config["USENOHF"] = False
 config["FILTEREVENTS"] = False
@@ -36,7 +36,7 @@ config["DOMETSVFIT"] = True
 config["DOMVAMET"] = False
 
 #--------- AK8 jets reclustering ----------#
-config["ADDAK8GENJETS"] = True #! Add AK8 gen jet collection with pruned and softdrop mass
+config["ADDAK8GENJETS"] = (True and config["RUNONMC"]) #! Add AK8 gen jet collection with pruned and softdrop mass
 config["DOAK8RECLUSTERING"] = False
 config["DOAK8PRUNEDRECLUSTERING"] = False #! To add pruned jet and pruned subjet collection (not in MINIAOD)
 config["DOAK8PUPPI"] = False

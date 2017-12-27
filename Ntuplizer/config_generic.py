@@ -26,9 +26,9 @@ options.maxEvents = -1
 #data file
 
 
-options.inputFiles = '/store/mc/RunIISummer17MiniAOD/TT_TuneCUETP8M2T4_13TeV-powheg-pythia8/MINIAODSIM/92X_upgrade2017_realistic_v10_ext1-v2/70000/FE5284D7-009B-E711-9B8F-0CC47AC08816.root'
+options.inputFiles = '/store/mc/RunIIFall17MiniAOD/ZZTo4L_13TeV_powheg_pythia8/MINIAODSIM/94X_mc2017_realistic_v10-v2/60000/EA783E89-8AD9-E711-AFFE-0CC47A7C3458.root'
 
-#options.inputFiles = '/store/data/Run2017C/SingleMuon/MINIAOD/12Sep2017-v1/50000/9E07D0AB-1CA6-E711-A982-7845C4FC35F3.root'
+#options.inputFiles = '/store/data/Run2017F/JetHT/MINIAOD/17Nov2017-v1/70000/F6F6E56A-8ADF-E711-BF89-02163E01A25E.root'
                      
 options.parseArguments()
 
@@ -81,8 +81,8 @@ process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_condD
 from Configuration.AlCa.GlobalTag import GlobalTag
 
 GT = ''
-if config["RUNONMC"]: GT = '92X_upgrade2017_realistic_v10'
-elif config["RUNONReReco"]: GT = '92X_dataRun2_2017Repro_v4'
+if config["RUNONMC"]: GT = '94X_mc2017_realistic_v10'
+elif config["RUNONReReco"]: GT = '94X_dataRun2_ReReco_EOY17_v2'
 elif config["RUNONPromptReco"]: GT = '92X_dataRun2_2017Prompt_v11'
 
 print "*************************************** GLOBAL TAG *************************************************" 
