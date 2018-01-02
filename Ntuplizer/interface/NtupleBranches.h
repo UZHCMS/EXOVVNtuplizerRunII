@@ -356,6 +356,8 @@ public:
 
   std::vector<bool>  	      tau_byVLooseIsolationMVArun2v1DBnewDMwLT			      ;
   std::vector<bool>  	      tau_byVLooseIsolationMVArun2v1DBoldDMwLT			      ;
+  std::vector<bool>           tau_byVVLooseIsolationMVArun2v1DBoldDMwLT                        ;
+   
   //  std::vector<bool>  	      tau_byVLooseIsolationMVArun2v1PWdR03oldDMwLT			      ;
   std::vector<bool>  	      tau_byVLooseIsolationMVArun2v1PWnewDMwLT			      ;
   std::vector<bool>  	      tau_byVLooseIsolationMVArun2v1PWoldDMwLT			      ;

@@ -321,6 +321,8 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
 
       tree_->Branch( "tau_byVLooseIsolationMVArun2v1DBnewDMwLT"        , &tau_byVLooseIsolationMVArun2v1DBnewDMwLT);
       tree_->Branch( "tau_byVLooseIsolationMVArun2v1DBoldDMwLT"        , &tau_byVLooseIsolationMVArun2v1DBoldDMwLT);
+      tree_->Branch( "tau_byVVLooseIsolationMVArun2v1DBoldDMwLT"       , &tau_byVVLooseIsolationMVArun2v1DBoldDMwLT);
+      
       //      tree_->Branch( "tau_byVLooseIsolationMVArun2v1PWdR03oldDMwLT"    , &tau_byVLooseIsolationMVArun2v1PWdR03oldDMwLT);
       tree_->Branch( "tau_byVLooseIsolationMVArun2v1PWnewDMwLT"        , &tau_byVLooseIsolationMVArun2v1PWnewDMwLT);
       //      tree_->Branch( "tau_byVLooseIsolationMVArun2v1PWoldDMwLT"        , &tau_byVLooseIsolationMVArun2v1PWoldDMwLT);
@@ -988,7 +990,9 @@ void NtupleBranches::reset( void ){
 
   tau_byVLooseIsolationMVArun2v1DBnewDMwLT.clear();
   tau_byVLooseIsolationMVArun2v1DBoldDMwLT.clear();
-  //  tau_byVLooseIsolationMVArun2v1PWdR03oldDMwLT.clear();
+  tau_byVVLooseIsolationMVArun2v1DBoldDMwLT.clear();
+   
+ //  tau_byVLooseIsolationMVArun2v1PWdR03oldDMwLT.clear();
   tau_byVLooseIsolationMVArun2v1PWnewDMwLT.clear();
   //  tau_byVLooseIsolationMVArun2v1PWoldDMwLT.clear();
   tau_byVTightIsolationMVArun2v1DBdR03oldDMwLT.clear();
