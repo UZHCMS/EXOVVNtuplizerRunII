@@ -695,7 +695,7 @@ public:
   std::vector<float>                PV_z             ;
     
   /*--------------------------PU infos--------------------------*/  			       
-  std::vector<int  >                nPuVtxTrue             ;// the *true* mean number of the poisson distribution for this event from which the number of interactions each bunch crossing has been sampled 
+  std::vector<float  >                nPuVtxTrue             ;// the *true* mean number of the poisson distribution for this event from which the number of interactions each bunch crossing has been sampled // In MC it can be float 
   std::vector<int  >                nPuVtx                 ;// the number of pileup interactions that have been added to the event in the current bunch crossing
   std::vector<int  >                bX                     ;// to which bunch crossing do these interaction belong?  
   

@@ -7,8 +7,8 @@ Ntuplizer for searches for heavy resonances decaying to dibosons
 Setting up CMSSW (for september reprocessing):
 
 ```
-cmsrel CMSSW_9_2_13
-cd CMSSW_9_2_13/src
+cmsrel CMSSW_9_4_0
+cd CMSSW_9_4_0/src
 cmsenv
 git init
 ```
@@ -34,19 +34,18 @@ git clone https://github.com/${GITUSER}/EXOVVNtuplizerRunII
 cd EXOVVNtuplizerRunII
 git remote add UZHCMS https://github.com/UZHCMS/EXOVVNtuplizerRunII
 git fetch UZHCMS
-git checkout -b DevelopmentBranch_9_2_13 UZHCMS/92X_legacy
+git checkout -b DevelopmentBranch_9_4_0 UZHCMS/94X_ntuplizer
 cd $CMSSW_BASE/src
 ```
 
 The flags for running on Spring15(74) or Fall15(76) or Spring16(80) samples have to be changed with config["FALL15"]=False/True and config["SPRING16"]=False/True in python/ntuplizerOptions_*_cfi.py
-
 
 ### updates of latest cut-based electron ID
 (https://twiki.cern.ch/twiki/bin/viewauth/CMS/CutBasedElectronIdentificationRun2#Recipe_for_regular_users_for_8_0)
 
 => cut based ele id included by default in 92X
 
-### updates of latest HEEP electron ID
+### updates of latest HEEP electron ID. No Recipe for 94X. Skip this!
 (https://twiki.cern.ch/twiki/bin/viewauth/CMS/HEEPElectronIdentificationRun2#Recipe_for_regular_users)
 
 => HEEP ID from here https://twiki.cern.ch/twiki/bin/viewauth/CMS/HEEPElectronIdentificationRun2
@@ -57,9 +56,6 @@ git cms-addpkg RecoEgamma/EgammaIsolationAlgos
 git cms-merge-topic rgoldouz:TrkIsoFix -u 
 scramv1 b -j 16
 ```
-
-
-
 
 ### compile first, before adding MVA-based electron ID 
 (I don't konw why, but otherwise, $CMSSW_BASE/external/slc6_amd64_gcc530/data area will be deleted)
@@ -81,9 +77,6 @@ git checkout egm_id_80X_v1
 cd $CMSSW_BASE/src
 scram b -j8
 ```
-
-
-
 
 
 
