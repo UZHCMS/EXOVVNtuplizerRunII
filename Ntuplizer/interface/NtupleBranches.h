@@ -225,7 +225,7 @@ public:
   int 	                      tau_N		         ;
   std::vector<int>  	      tau_pdgId	                 ;
   std::vector<float>  	      tau_charge	         ;
-  //  std::vector<float>  	      tau_e 		         ;
+  std::vector<float>  	      tau_e 		         ;
   std::vector<float>  	      tau_eta		         ;
   std::vector<float>  	      tau_phi		         ;
   std::vector<float>  	      tau_mass		         ;
@@ -356,6 +356,8 @@ public:
 
   std::vector<bool>  	      tau_byVLooseIsolationMVArun2v1DBnewDMwLT			      ;
   std::vector<bool>  	      tau_byVLooseIsolationMVArun2v1DBoldDMwLT			      ;
+  std::vector<bool>           tau_byVVLooseIsolationMVArun2v1DBoldDMwLT                        ;
+   
   //  std::vector<bool>  	      tau_byVLooseIsolationMVArun2v1PWdR03oldDMwLT			      ;
   std::vector<bool>  	      tau_byVLooseIsolationMVArun2v1PWnewDMwLT			      ;
   std::vector<bool>  	      tau_byVLooseIsolationMVArun2v1PWoldDMwLT			      ;

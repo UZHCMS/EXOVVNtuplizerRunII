@@ -205,7 +205,7 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch( "tau_N"  		     	 , &tau_N		       );
     tree_->Branch( "tau_pdgId"               	 , &tau_pdgId		       );
     tree_->Branch( "tau_charge"		     	 , &tau_charge  	       );
-    //    tree_->Branch( "tau_e" 		     	 , &tau_e		       );
+    tree_->Branch( "tau_e" 		     	 , &tau_e		       );
     tree_->Branch( "tau_eta"		     	 , &tau_eta		       );
     tree_->Branch( "tau_phi"		     	 , &tau_phi		       );
     tree_->Branch( "tau_mass"		     	 , &tau_mass		       );
@@ -321,6 +321,8 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
 
       tree_->Branch( "tau_byVLooseIsolationMVArun2v1DBnewDMwLT"        , &tau_byVLooseIsolationMVArun2v1DBnewDMwLT);
       tree_->Branch( "tau_byVLooseIsolationMVArun2v1DBoldDMwLT"        , &tau_byVLooseIsolationMVArun2v1DBoldDMwLT);
+      tree_->Branch( "tau_byVVLooseIsolationMVArun2v1DBoldDMwLT"       , &tau_byVVLooseIsolationMVArun2v1DBoldDMwLT);
+      
       //      tree_->Branch( "tau_byVLooseIsolationMVArun2v1PWdR03oldDMwLT"    , &tau_byVLooseIsolationMVArun2v1PWdR03oldDMwLT);
       tree_->Branch( "tau_byVLooseIsolationMVArun2v1PWnewDMwLT"        , &tau_byVLooseIsolationMVArun2v1PWnewDMwLT);
       //      tree_->Branch( "tau_byVLooseIsolationMVArun2v1PWoldDMwLT"        , &tau_byVLooseIsolationMVArun2v1PWoldDMwLT);
@@ -874,7 +876,7 @@ void NtupleBranches::reset( void ){
   tau_N       = 0;
   tau_pdgId.clear();
   tau_charge.clear();
-  //  tau_e.clear();
+  tau_e.clear();
   tau_eta.clear();
   tau_phi.clear();
   tau_mass.clear();
@@ -988,7 +990,9 @@ void NtupleBranches::reset( void ){
 
   tau_byVLooseIsolationMVArun2v1DBnewDMwLT.clear();
   tau_byVLooseIsolationMVArun2v1DBoldDMwLT.clear();
-  //  tau_byVLooseIsolationMVArun2v1PWdR03oldDMwLT.clear();
+  tau_byVVLooseIsolationMVArun2v1DBoldDMwLT.clear();
+   
+ //  tau_byVLooseIsolationMVArun2v1PWdR03oldDMwLT.clear();
   tau_byVLooseIsolationMVArun2v1PWnewDMwLT.clear();
   //  tau_byVLooseIsolationMVArun2v1PWoldDMwLT.clear();
   tau_byVTightIsolationMVArun2v1DBdR03oldDMwLT.clear();
