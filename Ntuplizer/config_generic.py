@@ -12,8 +12,8 @@ process.TFileService = cms.Service("TFileService",
                                    )
 
 #from EXOVVNtuplizerRunII.Ntuplizer.ntuplizerOptions_data_cfi import config
-from EXOVVNtuplizerRunII.Ntuplizer.ntuplizerOptions_generic_cfi import config
-
+from EXOVVNtuplizerRunII.Ntuplizer.ntuplizerOptions_MC_cfi import config
+#from EXOVVNtuplizerRunII.Ntuplizer.ntuplizerOptions_generic_cfi import config
 				   
 ####### Config parser ##########
 
@@ -21,13 +21,9 @@ import FWCore.ParameterSet.VarParsing as VarParsing
 
 options = VarParsing.VarParsing ('analysis')
 
-options.maxEvents = -1
-
-#data file
-
+options.maxEvents = 500
 
 options.inputFiles = '/store/mc/RunIISummer17MiniAOD/TT_TuneCUETP8M2T4_13TeV-powheg-pythia8/MINIAODSIM/92X_upgrade2017_realistic_v10_ext1-v2/70000/FE5284D7-009B-E711-9B8F-0CC47AC08816.root'
-
 #options.inputFiles = '/store/data/Run2017C/SingleMuon/MINIAOD/12Sep2017-v1/50000/9E07D0AB-1CA6-E711-A982-7845C4FC35F3.root'
                      
 options.parseArguments()
