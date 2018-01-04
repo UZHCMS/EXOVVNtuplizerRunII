@@ -14,9 +14,6 @@ process.TFileService = cms.Service("TFileService",
 #from EXOVVNtuplizerRunII.Ntuplizer.ntuplizerOptions_data_cfi import config
 from EXOVVNtuplizerRunII.Ntuplizer.ntuplizerOptions_MC_cfi import config
 #from EXOVVNtuplizerRunII.Ntuplizer.ntuplizerOptions_generic_cfi import config
-print config
-				   
-####### Config parser ##########
 
 import FWCore.ParameterSet.VarParsing as VarParsing
 
