@@ -27,9 +27,9 @@ options.maxEvents = 10000
 
 
 #options.inputFiles = '/store/mc/RunIIFall17MiniAOD/ZZTo4L_13TeV_powheg_pythia8/MINIAODSIM/94X_mc2017_realistic_v10-v2/60000/EA783E89-8AD9-E711-AFFE-0CC47A7C3458.root'
+#options.inputFiles = '/store/data/Run2017F/JetHT/MINIAOD/17Nov2017-v1/70000/F6F6E56A-8ADF-E711-BF89-02163E01A25E.root'
+options.inputFiles = '/store/mc/RunIIFall17MiniAOD/DY1JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/MINIAODSIM/94X_mc2017_realistic_v10-v1/20000/046772F6-54D9-E711-9C9D-008CFAF7485E.root'
 
-options.inputFiles = '/store/data/Run2017F/JetHT/MINIAOD/17Nov2017-v1/70000/F6F6E56A-8ADF-E711-BF89-02163E01A25E.root'
-                     
 options.parseArguments()
 
 process.options  = cms.untracked.PSet( 
