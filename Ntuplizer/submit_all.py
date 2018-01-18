@@ -25,9 +25,14 @@ def getOptions() :
     parser.add_option("-l", "--luminosity", dest="luminosity",
         help=("Splitting job by lumi sections or by files"),
         metavar="LUMI")
+    parser.add_option("-D", "--isData", dest="isData",
+        help=("If is data saving the run period in the name"),
+        metavar="isData")
     parser.add_option("-s", "--string", dest="string_to_add",
         help=("Splitting job by lumi sections or by files"),
         metavar="STRING")
+
+
     (options, args) = parser.parse_args()
 
 
@@ -37,6 +42,10 @@ def getOptions() :
         options.luminosity = False
     else:
         options.luminosity = True
+    if options.isData == None:
+        options.luminosity = False
+    else:
+        options.isData = True
     return options
 
 
@@ -64,25 +73,8 @@ def main():
     config.JobType.sendExternalFolder = True
     # config.JobType.pyCfgParams = ['DataProcessing=MC25ns_MiniAODv2','lheLabel=externalLHEProducer']
     config.JobType.inputFiles = [
-        './JEC/Summer16_23Sep2016V3_MC_L1FastJet_AK8PFchs.txt',
-        './JEC/Summer16_23Sep2016V3_MC_L2Relative_AK8PFchs.txt',
-        './JEC/Summer16_23Sep2016V3_MC_L3Absolute_AK8PFchs.txt',
-        './JEC/Summer16_23Sep2016V3_MC_L2Relative_AK8PFPuppi.txt',
-        './JEC/Summer16_23Sep2016V3_MC_L3Absolute_AK8PFPuppi.txt',
-        './JEC/Summer16_23Sep2016V3_MC_L1FastJet_AK4PFchs.txt',
-        './JEC/Summer16_23Sep2016V3_MC_L2Relative_AK4PFchs.txt',
-        './JEC/Summer16_23Sep2016V3_MC_L3Absolute_AK4PFchs.txt',
-        './JEC/Summer16_23Sep2016V3_MC_Uncertainty_AK4PFchs.txt',
-        './JEC/Summer16_23Sep2016V3_MC_Uncertainty_AK8PFchs.txt',
-        './JER/Spring16_25nsV10_MC_PtResolution_AK8PFchs.txt',
-        './JER/Spring16_25nsV10_MC_PtResolution_AK4PFchs.txt',
-        './JER/Spring16_25nsV10_MC_PtResolution_AK8PFPuppi.txt',
-        './JER/Spring16_25nsV10_MC_PtResolution_AK4PFPuppi.txt',
-        './JER/Spring16_25nsV10_MC_SF_AK8PFchs.txt',
-        './JER/Spring16_25nsV10_MC_SF_AK4PFchs.txt',
-        './JER/Spring16_25nsV10_MC_SF_AK8PFPuppi.txt',
-        './JER/Spring16_25nsV10_MC_SF_AK4PFPuppi.txt',
-        './JSON/Cert_271036-279931_13TeV_PromptReco_Collisions16_JSON_NoL1T.txt'
+ 
+        './JSON/Cert_294927-306462_13TeV_PromptReco_Collisions17_JSON.txt'
         ]
 
     config.section_("Data")
@@ -90,17 +82,17 @@ def main():
     # config.Data.inputDBS = 'phys03' #to be commented in case of global#
     if options.luminosity == True :
         config.Data.splitting = 'LumiBased'
-        config.Data.unitsPerJob = 10
+        config.Data.unitsPerJob = 100
     else:
         config.Data.splitting = 'FileBased'
         config.Data.unitsPerJob = 1
     config.Data.ignoreLocality = True
     config.Data.publication = False
-    config.Data.outLFNDirBase = '/store/user/zucchett/Ntuple_Moriond17'
+    config.Data.outLFNDirBase = '/store/user/cgalloni/Ntuple_2017_v2'
 
     config.section_("Site")
-    config.Site.storageSite = 'T2_CH_CSCS'
-    # config.Site.storageSite = 'T3_CH_PSI'
+    #config.Site.storageSite = 'T2_CH_CSCS'
+    config.Site.storageSite = 'T3_CH_PSI'
     config.Site.blacklist=['T1_US_FNAL','T2_US_Wisconsin','T2_FR_IPHC','T2_EE_Estonia','T2_DE_RWTH']
     #config.Site.whitelist=['T2_US_Nebraska','T2_US_Wisconsin','T2_FR_IPHC','T2_EE_Estonia',
     print 'Using config ' + options.config
@@ -131,9 +123,10 @@ def main():
 
         ptbin = job.split('/')[1]
         cond = job.split('/')[2]
-        config.General.requestName =  ptbin + options.string_to_add
+
+        config.General.requestName =  ptbin + ("_"+cond)if options.isData else ""  + options.string_to_add
         config.Data.inputDataset = job
-        config.Data.outputDatasetTag = ptbin  +  options.string_to_add
+        config.Data.outputDatasetTag = ptbin  + ("_"+cond)if options.isData else "" +  options.string_to_add
         print "ptbin :%s and cond: %s " %(ptbin, cond)
         print 'Submitting ' + config.General.requestName + ', dataset = ' + job
         print 'Configuration :'

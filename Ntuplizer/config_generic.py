@@ -11,7 +11,8 @@ process.TFileService = cms.Service("TFileService",
                                     fileName = cms.string('flatTuple.root')
                                    )
 
-from EXOVVNtuplizerRunII.Ntuplizer.ntuplizerOptions_data_cfi import config
+#from EXOVVNtuplizerRunII.Ntuplizer.ntuplizerOptions_data_cfi import config
+from EXOVVNtuplizerRunII.Ntuplizer.ntuplizerOptions_generic_cfi import config
 
 				   
 ####### Config parser ##########
@@ -20,19 +21,15 @@ import FWCore.ParameterSet.VarParsing as VarParsing
 
 options = VarParsing.VarParsing ('analysis')
 
-options.maxEvents = -1
+options.maxEvents = 10000
 
 #data file
 
-# options.inputFiles = '/store/data/Run2015D/SingleMuon/MINIAOD/05Oct2015-v1/10000/021FD3F0-876F-E511-99D2-0025905A6060.root'
-#options.inputFiles = 'dcap://t3se01.psi.ch:22125//pnfs/psi.ch/cms/trivcat/store/data/Run2015D/JetHT/MINIAOD/16Dec2015-v1/00000/301A497D-70B0-E511-9630-002590D0AFA8.root'
-#options.inputFiles = '/store/data/Run2016F/JetHT/MINIAOD/23Sep2016-v1/100000/00AB3FCF-1D86-E611-930B-002590D60036.root'
-#options.inputFiles = '/store/data/Run2016H/MuonEG/MINIAOD/03Feb2017_ver2-v1/100000/044366C7-4AEE-E611-8CF7-0025905B856E.root'
 
+#options.inputFiles = '/store/mc/RunIIFall17MiniAOD/ZZTo4L_13TeV_powheg_pythia8/MINIAODSIM/94X_mc2017_realistic_v10-v2/60000/EA783E89-8AD9-E711-AFFE-0CC47A7C3458.root'
 
-options.inputFiles = 'file:006233DA-3599-E711-911B-0025905A6118.root'
-
-                      
+options.inputFiles = '/store/data/Run2017F/JetHT/MINIAOD/17Nov2017-v1/70000/F6F6E56A-8ADF-E711-BF89-02163E01A25E.root'
+                     
 options.parseArguments()
 
 process.options  = cms.untracked.PSet( 
@@ -84,13 +81,25 @@ process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_condD
 from Configuration.AlCa.GlobalTag import GlobalTag
 
 GT = ''
-if config["RUNONMC"]: GT = '80X_mcRun2_asymptotic_2016_miniAODv2'
-elif not(config["RUNONMC"]): GT = '92X_dataRun2_2017Repro_v4'
+if config["RUNONMC"]: GT = '94X_mc2017_realistic_v10'
+elif config["RUNONReReco"]: GT = '94X_dataRun2_ReReco_EOY17_v2'
+elif config["RUNONPromptReco"]: GT = '92X_dataRun2_2017Prompt_v11'
 
 print "*************************************** GLOBAL TAG *************************************************" 
 print GT
 print "****************************************************************************************************" 
 process.GlobalTag = GlobalTag(process.GlobalTag, GT)
+
+
+jetcorr_levels=[]
+jetcorr_levels_groomed=[]
+if config["RUNONMC"]:
+  jetcorr_levels = cms.vstring(['L1FastJet', 'L2Relative', 'L3Absolute'])
+  jetcorr_levels_groomed = cms.vstring(['L2Relative', 'L3Absolute']) # NO L1 corretion for groomed jets
+else:
+  jetcorr_levels = cms.vstring(['L1FastJet', 'L2Relative', 'L3Absolute', 'L2L3Residual'])
+  jetcorr_levels_groomed = cms.vstring(['L2Relative', 'L3Absolute', 'L2L3Residual'])
+
    
 ######### read JSON file for data ##########					                                                             
 if not(config["RUNONMC"]) and config["USEJSON"]:
@@ -220,70 +229,93 @@ if config["GETJECFROMDBFILE"]:
 if config["ADDAK8GENJETS"]:
 
   from RecoJets.Configuration.RecoGenJets_cff import ak8GenJets
-  process.ak8GenJets = ak8GenJets.clone(src = 'packedGenParticles')
+  addToProcessAndTask('ak8GenJets',
+                      ak8GenJets.clone(src = 'packedGenParticles'),
+                      process,pattask
+                      )
+  
+  
+  addToProcessAndTask('NjettinessGenAK8',
+                      cms.EDProducer("NjettinessAdder",
+                                     src=cms.InputTag("ak8GenJets"),
+                                     Njets=cms.vuint32(1,2,3,4),          # compute 1-, 2-, 3-, 4- subjettiness
+                                     # variables for measure definition : 
+                                     measureDefinition = cms.uint32( 0 ), # CMS default is normalized measure
+                                     beta = cms.double(1.0),              # CMS default is 1
+                                     R0 = cms.double( 0.8 ),              # CMS default is jet cone size
+                                     Rcutoff = cms.double( 999.0),       # not used by default
+                                     # variables for axes definition :
+                                       axesDefinition = cms.uint32( 6 ),    # CMS default is 1-pass KT axes
+                                     nPass = cms.int32(999),             # not used by default
+                                     akAxesR0 = cms.double(-999.0)        # not used by default
+                                     ),
+                      process,pattask
+                      )
+                      
 
-  process.NjettinessGenAK8 = cms.EDProducer("NjettinessAdder",
-                              src=cms.InputTag("ak8GenJets"),
-                              Njets=cms.vuint32(1,2,3,4),          # compute 1-, 2-, 3-, 4- subjettiness
-                              # variables for measure definition : 
-                              measureDefinition = cms.uint32( 0 ), # CMS default is normalized measure
-                              beta = cms.double(1.0),              # CMS default is 1
-                              R0 = cms.double( 0.8 ),              # CMS default is jet cone size
-                              Rcutoff = cms.double( 999.0),       # not used by default
-                              # variables for axes definition :
-                              axesDefinition = cms.uint32( 6 ),    # CMS default is 1-pass KT axes
-                              nPass = cms.int32(999),             # not used by default
-                              akAxesR0 = cms.double(-999.0)        # not used by default
-                              )
-
-  process.genParticlesForJets = cms.EDProducer("InputGenJetsParticleSelector",
-                                               src = cms.InputTag("packedGenParticles"),
-                                               ignoreParticleIDs = cms.vuint32(
-                                                                  1000022,
-                                                                  1000012, 1000014, 1000016,
-                                                                  2000012, 2000014, 2000016,
-                                                                  1000039, 5100039,
-                                                                  4000012, 4000014, 4000016,
-                                                                  9900012, 9900014, 9900016,
-                                                                  39),
-                                              partonicFinalState = cms.bool(False),
-                                              excludeResonances = cms.bool(False),
-                                              excludeFromResonancePids = cms.vuint32(12, 13, 14, 16),
-                                              tausAsJets = cms.bool(False)
-                                              )
+  addToProcessAndTask('genParticlesForJets',
+                      cms.EDProducer("InputGenJetsParticleSelector",
+                                     src = cms.InputTag("packedGenParticles"),
+                                     ignoreParticleIDs = cms.vuint32(1000022,
+                                                                     1000012, 1000014, 1000016,
+                                                                     2000012, 2000014, 2000016,
+                                                                     1000039, 5100039,
+                                                                     4000012, 4000014, 4000016,
+                                                                     9900012, 9900014, 9900016,
+                                                                     39),
+                                     partonicFinalState = cms.bool(False),
+                                     excludeResonances = cms.bool(False),
+                                     excludeFromResonancePids = cms.vuint32(12, 13, 14, 16),
+                                     tausAsJets = cms.bool(False)
+                                     ),
+                      process,pattask
+                      )
+           
 
   from RecoJets.JetProducers.SubJetParameters_cfi import SubJetParameters
 
-  process.ak8GenJetsPruned = ak8GenJets.clone(
-              SubJetParameters,
-              usePruning = cms.bool(True),
-              writeCompound = cms.bool(True),
-              jetCollInstanceName=cms.string("SubJets")
-              )
-            
-  process.ak8GenJetsSoftDrop = ak8GenJets.clone(
-              SubJetParameters,
-              useSoftDrop = cms.bool(True),
-              R0 = cms.double(0.8),
-              beta = betapar,
-              writeCompound = cms.bool(True),
-              jetCollInstanceName=cms.string("SubJets")
-              )
+  addToProcessAndTask('ak8GenJetsPruned',
+                      ak8GenJets.clone(SubJetParameters,
+                                       usePruning = cms.bool(True),
+                                       writeCompound = cms.bool(True),
+                                       jetCollInstanceName=cms.string("SubJets")
+                                       ),
+                      process,pattask
+                      )
+  
+  addToProcessAndTask('ak8GenJetsSoftDrop',
+                      ak8GenJets.clone(SubJetParameters,
+                                       useSoftDrop = cms.bool(True),
+                                       R0 = cms.double(0.8),
+                                       beta = betapar,
+                                       writeCompound = cms.bool(True),
+                                       jetCollInstanceName=cms.string("SubJets")
+                                       ),
+                      process,pattask
+                      )
+  
 
-  process.ak8GenJetsPrunedMass = cms.EDProducer("RecoJetDeltaRValueMapProducer",
-                                            src = cms.InputTag("ak8GenJets"),
-                                            matched = cms.InputTag("ak8GenJetsPruned"),
-                                            distMax = cms.double(0.8),
-                                            value = cms.string('mass')
-                                            )
-
-  process.ak8GenJetsSoftDropMass = cms.EDProducer("RecoJetDeltaRValueMapProducer",
-                                            src = cms.InputTag("ak8GenJets"),
-                                            matched = cms.InputTag("ak8GenJetsSoftDrop"),                                         
-                                            distMax = cms.double(0.8),
-                                            value = cms.string('mass') 
-                                            )
-                                                      
+  addToProcessAndTask('ak8GenJetsPrunedMass',
+                      cms.EDProducer("RecoJetDeltaRValueMapProducer",
+                                     src = cms.InputTag("ak8GenJets"),
+                                     matched = cms.InputTag("ak8GenJetsPruned"),
+                                     distMax = cms.double(0.8),
+                                     value = cms.string('mass')
+                                      ),
+                      process,pattask
+                      )
+  
+  
+  addToProcessAndTask('ak8GenJetsSoftDropMass',
+                      cms.EDProducer("RecoJetDeltaRValueMapProducer",
+                                     src = cms.InputTag("ak8GenJets"),
+                                     matched = cms.InputTag("ak8GenJetsSoftDrop"), 
+                                     distMax = cms.double(0.8),
+                                     value = cms.string('mass') 
+                                     ),
+                      process,pattask
+                      )
+  
 
   # process.ak8GenJetsPrunedMass = ak8PFJetsCHSPrunedMass.clone(
   #             matched = cms.InputTag("ak8GenJetsPruned"),
@@ -306,11 +338,17 @@ if config["ADDAK8GENJETS"]:
 
   # Redo pat jets from gen AK8
 
-  process.genJetsAK8 = patJetsAK8.clone( jetSource = 'ak8GenJets' )
+  addToProcessAndTask('genJetsAK8',
+                     patJetsAK8.clone( jetSource = 'ak8GenJets' ),
+                     process,pattask)
+
   process.genJetsAK8.userData.userFloats.src = [ cms.InputTag("ak8GenJetsPrunedMass"), cms.InputTag("ak8GenJetsSoftDropMass"), cms.InputTag("NjettinessGenAK8:tau1"), cms.InputTag("NjettinessGenAK8:tau2"), cms.InputTag("NjettinessGenAK8:tau3")]
   process.genJetsAK8.addJetCorrFactors = cms.bool(False)
   process.genJetsAK8.jetCorrFactorsSource = cms.VInputTag( cms.InputTag("") )
-  process.selectedGenJetsAK8 = selectedPatJetsAK8.clone( src = 'genJetsAK8', cut = cms.string('pt > 20') )
+
+  addToProcessAndTask('selectedGenJetsAK8',
+                      selectedPatJetsAK8.clone( src = 'genJetsAK8', cut = cms.string('pt > 20') ),
+                      process,pattask)
 
 ################# Prepare recluster or update jets with b-tagging ######################
 bTagDiscriminators = [
@@ -331,7 +369,7 @@ if config["UpdateJetCollection"]:
   updateJetCollection(
     process,
     jetSource = cms.InputTag('slimmedJetsAK8'),
-    jetCorrections = ('AK8PFchs', cms.vstring(['L1FastJet', 'L2Relative', 'L3Absolute', 'L2L3Residual' ]), 'None'),
+    jetCorrections = ('AK8PFchs', cms.vstring(jetcorr_levels), 'None'),
     btagDiscriminators = bTagDiscriminators
   )
 ## Update to latest PU jet ID training
@@ -348,7 +386,7 @@ if config["UpdateJetCollection"]:
   from PhysicsTools.PatAlgos.producersLayer1.jetUpdater_cff import updatedPatJetCorrFactors, updatedPatJets
   addToProcessAndTask('patJetCorrFactorsReapplyJEC',
                       updatedPatJetCorrFactors.clone(src = cms.InputTag("slimmedJets"),
-                                                     levels = ['L1FastJet', 'L2Relative', 'L3Absolute', 'L2L3Residual'] 
+                                                     levels = jetcorr_levels,
                                                      ),
                       process,pattask
                       )
@@ -409,10 +447,6 @@ def recluster_addBtagging(process, fatjets_name, groomed_jets_name, jetcorr_labe
       
 
     # patify ungroomed jets, if not already done:
-    if config["RUNONMC"]:
-      jetcorr_levels = cms.vstring(['L1FastJet', 'L2Relative', 'L3Absolute'])
-    else:
-      jetcorr_levels = cms.vstring(['L1FastJet', 'L2Relative', 'L3Absolute', 'L2L3Residual'])
     add_ungroomed = not hasattr(process, 'patJets' + cap(fatjets_name))
     addJetCollection(process, labelName = fatjets_name, jetSource = cms.InputTag(fatjets_name), algo = algo, rParam = rParam,
 	    jetCorrections = (jetcorr_label, jetcorr_levels, 'None'),
@@ -421,10 +455,6 @@ def recluster_addBtagging(process, fatjets_name, groomed_jets_name, jetcorr_labe
 	)
 
     # patify groomed fat jets, with b-tagging:
-    if config["RUNONMC"]:
-      jetcorr_levels_groomed = cms.vstring(['L2Relative', 'L3Absolute']) # NO L1 corretion for groomed jets
-    else:
-      jetcorr_levels_groomed = cms.vstring(['L2Relative', 'L3Absolute', 'L2L3Residual'])
     addJetCollection(process, labelName = groomed_jets_name, jetSource = cms.InputTag(groomed_jets_name), algo = algo, rParam = rParam,
        jetCorrections = (jetcorr_label, jetcorr_levels_groomed, 'None'),
        **bTagParameters)
@@ -562,20 +592,12 @@ if config["DOMETRECLUSTERING"]:
 
   from PhysicsTools.PatAlgos.tools.jetTools import switchJetCollection
 		  
-  if config["RUNONMC"]:
-     switchJetCollection(process,
-                         jetSource = cms.InputTag('ak4PFJetsCHS'),
-		         jetCorrections = ('AK4PFchs', ['L1FastJet', 'L2Relative', 'L3Absolute'], ''),
-		         genParticles = cms.InputTag('prunedGenParticles'),
-		         pvSource = cms.InputTag('offlineSlimmedPrimaryVertices')
-     )
-  else:
-     switchJetCollection(process,
-                         jetSource = cms.InputTag('ak4PFJetsCHS'),
-		         jetCorrections = ('AK4PFchs', ['L1FastJet', 'L2Relative', 'L3Absolute','L2L3Residual'], ''),
-		         genParticles = cms.InputTag('prunedGenParticles'),
-		         pvSource = cms.InputTag('offlineSlimmedPrimaryVertices')
-     )
+  switchJetCollection(process,
+                      jetSource = cms.InputTag('ak4PFJetsCHS'),
+                      jetCorrections = ('AK4PFchs', jet_corr_levels, ''),
+                      genParticles = cms.InputTag('prunedGenParticles'),
+                      pvSource = cms.InputTag('offlineSlimmedPrimaryVertices')
+                      )
 		  		
   process.patJets.addGenJetMatch = cms.bool(False) 
   process.patJets.addGenPartonMatch = cms.bool(False) 
@@ -720,15 +742,19 @@ jecLevelsAK4 = []
 jecLevelsAK8Puppi = []
 jecLevelsForMET = []
 
-if config["BUNCHSPACING"] == 25 and config["RUNONMC"] and config["SPRING16"]:
-   JECprefix = "Spring16_25nsV6"
-elif config["BUNCHSPACING"] == 25 and not(config["RUNONMC"]) and config["SPRING16"]:
+if config["BUNCHSPACING"] == 25 and config["RUNONMC"] :
+   JECprefix = "Summer16_23Sep2016V4"
+   jecAK8chsUncFile = "JEC/%s_MC_Uncertainty_AK8PFchs.txt"%(JECprefix)
+   jecAK4chsUncFile = "JEC/%s_MC_Uncertainty_AK4PFchs.txt"%(JECprefix)
+
+
+
+elif config["BUNCHSPACING"] == 25 and not(config["RUNONMC"]):
    JECprefix = "Summer16_23Sep2016HV3"
+   jecAK8chsUncFile = "JEC/%s_DATA_Uncertainty_AK8PFchs.txt"%(JECprefix)
+   jecAK4chsUncFile = "JEC/%s_DATA_Uncertainty_AK4PFchs.txt"%(JECprefix)
 
-jecAK8chsUncFile = "JEC/%s_DATA_Uncertainty_AK8PFchs.txt"%(JECprefix)
-jecAK4chsUncFile = "JEC/%s_DATA_Uncertainty_AK4PFchs.txt"%(JECprefix)
-
-
+print "jec unc file for ak8 ", jecAK8chsUncFile
 if config["CORRJETSONTHEFLY"]:
    if config["RUNONMC"]:
      jecLevelsAK8chs = [
@@ -880,7 +906,7 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     jetsForMetCorr = cms.InputTag(jetsAK4),
     rho = cms.InputTag("fixedGridRhoFastjetAll"),
     genparticles = cms.InputTag("prunedGenParticles"),
-    PUInfo = cms.InputTag("addPileupInfo"),
+    PUInfo = cms.InputTag("slimmedAddPileupInfo"),
     genEventInfo = cms.InputTag("generator"),
     externallheProducer = cms.InputTag("externalLHEProducer"),
     HLT = cms.InputTag("TriggerResults","","HLT"),
@@ -944,21 +970,84 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
 )
 
 
+
+
+#### Needed to load the new tau ID payloads ####
+
+from RecoTauTag.RecoTau.TauDiscriminatorTools import noPrediscriminants
+from RecoTauTag.RecoTau.PATTauDiscriminationByMVAIsolationRun2_cff import patDiscriminationByIsolationMVArun2v1raw, patDiscriminationByIsolationMVArun2v1VLoose
+
+
+
+tauIdDiscrMVA_trainings_run2_2017 = {
+  'tauIdMVAIsoDBoldDMwLT2017' : "tauIdMVAIsoDBoldDMwLT2017",
+  }
+tauIdDiscrMVA_WPs_run2_2017 = {
+  'tauIdMVAIsoDBoldDMwLT2017' : {
+    'Eff95' : "DBoldDMwLTEff95",
+    'Eff90' : "DBoldDMwLTEff90",
+    'Eff80' : "DBoldDMwLTEff80",
+    'Eff70' : "DBoldDMwLTEff70",
+    'Eff60' : "DBoldDMwLTEff60",
+    'Eff50' : "DBoldDMwLTEff50",
+    'Eff40' : "DBoldDMwLTEff40"
+    }
+  }
+tauIdDiscrMVA_2017_version = "v1"
+
+
+def loadMVA_WPs_run2_2017(process):
+                print "LoadMVA_WPs_run2_2017: performed::::"
+                #global cms
+
+
+
+		for training, gbrForestName in tauIdDiscrMVA_trainings_run2_2017.items():
+
+			process.loadRecoTauTagMVAsFromPrepDB.toGet.append(
+				cms.PSet(
+					record = cms.string('GBRWrapperRcd'),
+					tag = cms.string("RecoTauTag_%s%s" % (gbrForestName, tauIdDiscrMVA_2017_version)),
+					label = cms.untracked.string("RecoTauTag_%s%s" % (gbrForestName, tauIdDiscrMVA_2017_version))
+				)
+			)
+
+			for WP in tauIdDiscrMVA_WPs_run2_2017[training].keys():
+				process.loadRecoTauTagMVAsFromPrepDB.toGet.append(
+					cms.PSet(
+						record = cms.string('PhysicsTGraphPayloadRcd'),
+						tag = cms.string("RecoTauTag_%s%s_WP%s" % (gbrForestName, tauIdDiscrMVA_2017_version, WP)),
+						label = cms.untracked.string("RecoTauTag_%s%s_WP%s" % (gbrForestName, tauIdDiscrMVA_2017_version, WP))
+					)
+				)
+
+			process.loadRecoTauTagMVAsFromPrepDB.toGet.append(
+				cms.PSet(
+					record = cms.string('PhysicsTFormulaPayloadRcd'),
+					tag = cms.string("RecoTauTag_%s%s_mvaOutput_normalization" % (gbrForestName, tauIdDiscrMVA_2017_version)),
+					label = cms.untracked.string("RecoTauTag_%s%s_mvaOutput_normalization" % (gbrForestName, tauIdDiscrMVA_2017_version))
+				)
+)
+
+
+
 ####### Tau new MVA ##########
 
 from RecoTauTag.RecoTau.TauDiscriminatorTools import noPrediscriminants
 process.load('RecoTauTag.Configuration.loadRecoTauTagMVAsFromPrepDB_cfi')
 from RecoTauTag.RecoTau.PATTauDiscriminationByMVAIsolationRun2_cff import *
+loadMVA_WPs_run2_2017(process)
 
 process.rerunDiscriminationByIsolationMVArun2v1raw = patDiscriminationByIsolationMVArun2v1raw.clone(
    PATTauProducer = cms.InputTag('slimmedTaus'),
    Prediscriminants = noPrediscriminants,
    loadMVAfromDB = cms.bool(True),
-   mvaName = cms.string("RecoTauTag_tauIdMVAIsoDBoldDMwLT2016v1"), # name of the training you want to use
-   mvaOpt = cms.string("DBoldDMwLT"), # option you want to use for your training (i.e., which variables are used to compute the BDT score)
+   mvaName = cms.string("RecoTauTag_tauIdMVAIsoDBoldDMwLT2017v1"),# training with 2017 MC_v1 for oldDM # name of the training you want to use
+   mvaOpt = cms.string("DBoldDMwLTwGJ"), # option you want to use for your training (i.e., which variables are used to compute the BDT score)
    requireDecayMode = cms.bool(True),
    verbosity = cms.int32(0)
 )
+
 
 process.rerunDiscriminationByIsolationMVArun2v1VLoose = patDiscriminationByIsolationMVArun2v1VLoose.clone(
    PATTauProducer = cms.InputTag('slimmedTaus'),    
@@ -966,32 +1055,35 @@ process.rerunDiscriminationByIsolationMVArun2v1VLoose = patDiscriminationByIsola
    toMultiplex = cms.InputTag('rerunDiscriminationByIsolationMVArun2v1raw'),
    key = cms.InputTag('rerunDiscriminationByIsolationMVArun2v1raw:category'),
    loadMVAfromDB = cms.bool(True),
-   mvaOutput_normalization = cms.string("RecoTauTag_tauIdMVAIsoDBoldDMwLT2016v1_mvaOutput_normalization"), # normalization fo the training you want to use
+   mvaOutput_normalization = cms.string("RecoTauTag_tauIdMVAIsoDBoldDMwLT2017v1_mvaOutput_normalization"), # normalization fo the training you want to use
    mapping = cms.VPSet(
       cms.PSet(
          category = cms.uint32(0),
-         cut = cms.string("RecoTauTag_tauIdMVAIsoDBoldDMwLT2016v1_WPEff90"), # this is the name of the working point you want to use
+         cut = cms.string("RecoTauTag_tauIdMVAIsoDBoldDMwLT2017v1_WPEff90"), # this is the name of the working point you want to use
          variable = cms.string("pt"),
       )
    )
 )
 
 # here we produce all the other working points for the training
+process.rerunDiscriminationByIsolationMVArun2v1VVLoose = process.rerunDiscriminationByIsolationMVArun2v1VLoose.clone()
+process.rerunDiscriminationByIsolationMVArun2v1VVLoose.mapping[0].cut = cms.string("RecoTauTag_tauIdMVAIsoDBoldDMwLT2017v1_WPEff95")
 process.rerunDiscriminationByIsolationMVArun2v1Loose = process.rerunDiscriminationByIsolationMVArun2v1VLoose.clone()
-process.rerunDiscriminationByIsolationMVArun2v1Loose.mapping[0].cut = cms.string("RecoTauTag_tauIdMVAIsoDBoldDMwLT2016v1_WPEff80")
+process.rerunDiscriminationByIsolationMVArun2v1Loose.mapping[0].cut = cms.string("RecoTauTag_tauIdMVAIsoDBoldDMwLT2017v1_WPEff80")
 process.rerunDiscriminationByIsolationMVArun2v1Medium = process.rerunDiscriminationByIsolationMVArun2v1VLoose.clone()
-process.rerunDiscriminationByIsolationMVArun2v1Medium.mapping[0].cut = cms.string("RecoTauTag_tauIdMVAIsoDBoldDMwLT2016v1_WPEff70")
+process.rerunDiscriminationByIsolationMVArun2v1Medium.mapping[0].cut = cms.string("RecoTauTag_tauIdMVAIsoDBoldDMwLT2017v1_WPEff70")
 process.rerunDiscriminationByIsolationMVArun2v1Tight = process.rerunDiscriminationByIsolationMVArun2v1VLoose.clone()
-process.rerunDiscriminationByIsolationMVArun2v1Tight.mapping[0].cut = cms.string("RecoTauTag_tauIdMVAIsoDBoldDMwLT2016v1_WPEff60")
+process.rerunDiscriminationByIsolationMVArun2v1Tight.mapping[0].cut = cms.string("RecoTauTag_tauIdMVAIsoDBoldDMwLT2017v1_WPEff60")
 process.rerunDiscriminationByIsolationMVArun2v1VTight = process.rerunDiscriminationByIsolationMVArun2v1VLoose.clone()
-process.rerunDiscriminationByIsolationMVArun2v1VTight.mapping[0].cut = cms.string("RecoTauTag_tauIdMVAIsoDBoldDMwLT2016v1_WPEff50")
+process.rerunDiscriminationByIsolationMVArun2v1VTight.mapping[0].cut = cms.string("RecoTauTag_tauIdMVAIsoDBoldDMwLT2017v1_WPEff50")
 process.rerunDiscriminationByIsolationMVArun2v1VVTight = process.rerunDiscriminationByIsolationMVArun2v1VLoose.clone()
-process.rerunDiscriminationByIsolationMVArun2v1VVTight.mapping[0].cut = cms.string("RecoTauTag_tauIdMVAIsoDBoldDMwLT2016v1_WPEff40")
+process.rerunDiscriminationByIsolationMVArun2v1VVTight.mapping[0].cut = cms.string("RecoTauTag_tauIdMVAIsoDBoldDMwLT2017v1_WPEff40")
 
 # this sequence has to be included in your cms.Path() before your analyzer which accesses the new variables is called.
 process.rerunMvaIsolation2SeqRun2 = cms.Sequence(
    process.rerunDiscriminationByIsolationMVArun2v1raw
    *process.rerunDiscriminationByIsolationMVArun2v1VLoose
+   *process.rerunDiscriminationByIsolationMVArun2v1VVLoose
    *process.rerunDiscriminationByIsolationMVArun2v1Loose
    *process.rerunDiscriminationByIsolationMVArun2v1Medium
    *process.rerunDiscriminationByIsolationMVArun2v1Tight
@@ -1007,6 +1099,7 @@ embedID = cms.EDProducer("PATTauIDEmbedder",
    tauIDSources = cms.PSet(
       byIsolationMVArun2v1DBoldDMwLTrawNew = cms.InputTag('rerunDiscriminationByIsolationMVArun2v1raw'),
       byVLooseIsolationMVArun2v1DBoldDMwLTNew = cms.InputTag('rerunDiscriminationByIsolationMVArun2v1VLoose'),
+      byVVLooseIsolationMVArun2v1DBoldDMwLTNew = cms.InputTag('rerunDiscriminationByIsolationMVArun2v1VVLoose'),
       byLooseIsolationMVArun2v1DBoldDMwLTNew = cms.InputTag('rerunDiscriminationByIsolationMVArun2v1Loose'),
       byMediumIsolationMVArun2v1DBoldDMwLTNew = cms.InputTag('rerunDiscriminationByIsolationMVArun2v1Medium'),
       byTightIsolationMVArun2v1DBoldDMwLTNew = cms.InputTag('rerunDiscriminationByIsolationMVArun2v1Tight'),

@@ -66,7 +66,7 @@ void TausNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
     
       nBranches_->tau_pdgId  	     	      .push_back(tau.pdgId());
       nBranches_->tau_charge 	     	      .push_back(tau.charge());
-      //      nBranches_->tau_e      	     	      .push_back(tau.energy());
+      nBranches_->tau_e      	     	      .push_back(tau.energy());
       nBranches_->tau_eta    	     	      .push_back(tau.eta());
       nBranches_->tau_mass   	     	      .push_back(tau.mass());
       nBranches_->tau_pt     	     	      .push_back(tau.pt());
@@ -288,21 +288,21 @@ void TausNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
 
       nBranches_->tau_byIsolationMVArun2v1DBdR03oldDMwLTraw      .push_back(tau.tauID("byIsolationMVArun2v1DBdR03oldDMwLTraw"));
       nBranches_->tau_byIsolationMVArun2v1DBnewDMwLTraw          .push_back(tau.tauID("byIsolationMVArun2v1DBnewDMwLTraw"));
-      nBranches_->tau_byIsolationMVArun2v1DBoldDMwLTraw          .push_back(tau.tauID("byIsolationMVArun2v1DBoldDMwLTraw"				    ));
+      nBranches_->tau_byIsolationMVArun2v1DBoldDMwLTraw          .push_back(tau.tauID("byIsolationMVArun2v1DBoldDMwLTrawNew"				    ));
       //      nBranches_->tau_byIsolationMVArun2v1DBoldDMwoLTraw          .push_back(tau.tauID("byIsolationMVArun2v1DBoldDMwoLTraw"				    ));
       //      nBranches_->tau_byIsolationMVArun2v1PWdR03oldDMwLTraw      .push_back(tau.tauID("byIsolationMVArun2v1PWdR03oldDMwLTraw"				    ));
       nBranches_->tau_byIsolationMVArun2v1PWnewDMwLTraw          .push_back(tau.tauID("byIsolationMVArun2v1PWnewDMwLTraw"				    ));
       //      nBranches_->tau_byIsolationMVArun2v1PWoldDMwLTraw          .push_back(tau.tauID("byIsolationMVArun2v1PWoldDMwLTraw"				    ));
       nBranches_->tau_byLooseIsolationMVArun2v1DBdR03oldDMwLT    .push_back(tau.tauID("byLooseIsolationMVArun2v1DBdR03oldDMwLT"				    ));
       nBranches_->tau_byLooseIsolationMVArun2v1DBnewDMwLT        .push_back(tau.tauID("byLooseIsolationMVArun2v1DBnewDMwLT"				    ));
-      nBranches_->tau_byLooseIsolationMVArun2v1DBoldDMwLT        .push_back(tau.tauID("byLooseIsolationMVArun2v1DBoldDMwLT"			    ));
+      nBranches_->tau_byLooseIsolationMVArun2v1DBoldDMwLT        .push_back(tau.tauID("byLooseIsolationMVArun2v1DBoldDMwLTNew"			    ));
       //      nBranches_->tau_byLooseIsolationMVArun2v1PWdR03oldDMwLT    .push_back(tau.tauID("byLooseIsolationMVArun2v1PWdR03oldDMwLT"				    ));
       nBranches_->tau_byLooseIsolationMVArun2v1PWnewDMwLT        .push_back(	tau.tauID("byLooseIsolationMVArun2v1PWnewDMwLT"			    ));
       //      nBranches_->tau_byLooseIsolationMVArun2v1PWoldDMwLT        .push_back(	tau.tauID("byLooseIsolationMVArun2v1PWoldDMwLT"			    ));
       
       nBranches_->tau_byMediumIsolationMVArun2v1DBdR03oldDMwLT    .push_back(tau.tauID("byMediumIsolationMVArun2v1DBdR03oldDMwLT"				    ));
       nBranches_->tau_byMediumIsolationMVArun2v1DBnewDMwLT        .push_back(	tau.tauID("byMediumIsolationMVArun2v1DBnewDMwLT"			    ));
-      nBranches_->tau_byMediumIsolationMVArun2v1DBoldDMwLT        .push_back(tau.tauID("byMediumIsolationMVArun2v1DBoldDMwLT"				    ));
+      nBranches_->tau_byMediumIsolationMVArun2v1DBoldDMwLT        .push_back(tau.tauID("byMediumIsolationMVArun2v1DBoldDMwLTNew"				    ));
       //      nBranches_->tau_byMediumIsolationMVArun2v1PWdR03oldDMwLT    .push_back(tau.tauID("byMediumIsolationMVArun2v1PWdR03oldDMwLT"				    ));
       nBranches_->tau_byMediumIsolationMVArun2v1PWnewDMwLT        .push_back(tau.tauID("byMediumIsolationMVArun2v1PWnewDMwLT"				    ));
       //      nBranches_->tau_byMediumIsolationMVArun2v1PWoldDMwLT        .push_back(tau.tauID("byMediumIsolationMVArun2v1PWoldDMwLT"				    ));
@@ -310,15 +310,17 @@ void TausNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
     
       nBranches_->tau_byTightIsolationMVArun2v1DBdR03oldDMwLT     .push_back(tau.tauID("byTightIsolationMVArun2v1DBdR03oldDMwLT"				    ));
       nBranches_->tau_byTightIsolationMVArun2v1DBnewDMwLT         .push_back(tau.tauID("byTightIsolationMVArun2v1DBnewDMwLT"			    ));
-      nBranches_->tau_byTightIsolationMVArun2v1DBoldDMwLT         .push_back(tau.tauID("byTightIsolationMVArun2v1DBoldDMwLT"				    ));
+      nBranches_->tau_byTightIsolationMVArun2v1DBoldDMwLT         .push_back(tau.tauID("byTightIsolationMVArun2v1DBoldDMwLTNew"				    ));
       //      nBranches_->tau_byTightIsolationMVArun2v1PWdR03oldDMwLT     .push_back(tau.tauID("byTightIsolationMVArun2v1PWdR03oldDMwLT"				    ));
       nBranches_->tau_byTightIsolationMVArun2v1PWnewDMwLT         .push_back(tau.tauID("byTightIsolationMVArun2v1PWnewDMwLT"			    ));
       //      nBranches_->tau_byTightIsolationMVArun2v1PWoldDMwLT         .push_back(tau.tauID("byTightIsolationMVArun2v1PWoldDMwLT"			    ));
       nBranches_->tau_byVLooseIsolationMVArun2v1DBdR03oldDMwLT    .push_back(tau.tauID("byVLooseIsolationMVArun2v1DBdR03oldDMwLT"				    ));
 
       nBranches_->tau_byVLooseIsolationMVArun2v1DBnewDMwLT        .push_back(	tau.tauID("byVLooseIsolationMVArun2v1DBnewDMwLT"			    ));
-      nBranches_->tau_byVLooseIsolationMVArun2v1DBoldDMwLT        .push_back(tau.tauID("byVLooseIsolationMVArun2v1DBoldDMwLT"			    ));
-      //      nBranches_->tau_byVLooseIsolationMVArun2v1PWdR03oldDMwLT    .push_back(tau.tauID("byVLooseIsolationMVArun2v1PWdR03oldDMwLT"			    ));
+      nBranches_->tau_byVLooseIsolationMVArun2v1DBoldDMwLT        .push_back(tau.tauID("byVLooseIsolationMVArun2v1DBoldDMwLTNew"			    ));
+      nBranches_->tau_byVVLooseIsolationMVArun2v1DBoldDMwLT       .push_back(tau.tauID("byVVLooseIsolationMVArun2v1DBoldDMwLTNew"                       ));
+           
+      //     nBranches_->tau_byVLooseIsolationMVArun2v1PWdR03oldDMwLT    .push_back(tau.tauID("byVLooseIsolationMVArun2v1PWdR03oldDMwLT"			    ));
       nBranches_->tau_byVLooseIsolationMVArun2v1PWnewDMwLT        .push_back(tau.tauID("byVLooseIsolationMVArun2v1PWnewDMwLT"			    ));
       //      nBranches_->tau_byVLooseIsolationMVArun2v1PWoldDMwLT        .push_back(tau.tauID("byVLooseIsolationMVArun2v1PWoldDMwLT"			    ));
       nBranches_->tau_byVTightIsolationMVArun2v1DBdR03oldDMwLT    .push_back(tau.tauID("byVTightIsolationMVArun2v1DBdR03oldDMwLT"			    ));
@@ -330,7 +332,7 @@ void TausNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
       //      nBranches_->tau_byVTightIsolationMVArun2v1PWoldDMwLT         .push_back(tau.tauID("byVTightIsolationMVArun2v1PWoldDMwLT"			    ));
       nBranches_->tau_byVVTightIsolationMVArun2v1DBdR03oldDMwLT    .push_back(tau.tauID("byVVTightIsolationMVArun2v1DBdR03oldDMwLT"			    ));
       nBranches_->tau_byVVTightIsolationMVArun2v1DBnewDMwLT        .push_back(tau.tauID("byVVTightIsolationMVArun2v1DBnewDMwLT"			    ));
-      nBranches_->tau_byVVTightIsolationMVArun2v1DBoldDMwLT        .push_back(tau.tauID("byVVTightIsolationMVArun2v1DBoldDMwLT"			    ));
+      nBranches_->tau_byVVTightIsolationMVArun2v1DBoldDMwLT        .push_back(tau.tauID("byVVTightIsolationMVArun2v1DBoldDMwLTNew"			    ));
       //      nBranches_->tau_byVVTightIsolationMVArun2v1PWdR03oldDMwLT    .push_back(tau.tauID("byVVTightIsolationMVArun2v1PWdR03oldDMwLT"			    ));
       nBranches_->tau_byVVTightIsolationMVArun2v1PWnewDMwLT        .push_back(tau.tauID("byVVTightIsolationMVArun2v1PWnewDMwLT"			    ));
 
@@ -376,7 +378,7 @@ void TausNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
               
       nBranches_->tau_pdgId  		      .push_back(boostedTau.pdgId());
       nBranches_->tau_charge 		      .push_back(boostedTau.charge());
-      //      nBranches_->tau_e      		      .push_back(boostedTau.energy());
+      nBranches_->tau_e      		      .push_back(boostedTau.energy());
       nBranches_->tau_eta    		      .push_back(boostedTau.eta()); 
       nBranches_->tau_mass   		      .push_back(boostedTau.mass());
       nBranches_->tau_pt     		      .push_back(boostedTau.pt());
@@ -615,7 +617,9 @@ void TausNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
       nBranches_->tau_byVLooseIsolationMVArun2v1DBdR03oldDMwLT    .push_back(boostedTau.tauID("byVLooseIsolationMVArun2v1DBdR03oldDMwLT"				    ));
 
       nBranches_->tau_byVLooseIsolationMVArun2v1DBnewDMwLT        .push_back(	boostedTau.tauID("byVLooseIsolationMVArun2v1DBnewDMwLT"			    ));
-      nBranches_->tau_byVLooseIsolationMVArun2v1DBoldDMwLT        .push_back(boostedTau.tauID("byVLooseIsolationMVArun2v1DBoldDMwLT"			    ));
+      nBranches_->tau_byVLooseIsolationMVArun2v1DBoldDMwLT        .push_back(boostedTau.tauID("byVLooseIsolationMVArun2v1DBoldDMwLT"));
+      nBranches_->tau_byVVLooseIsolationMVArun2v1DBoldDMwLT       .push_back(false);//boostedTau.tauID("byVVLooseIsolationMVArun2v1DBoldDMwLT"));// latest training just after re-running the standard tau ID. WP not there yet in the CMSSW release.
+     
       //      nBranches_->tau_byVLooseIsolationMVArun2v1PWdR03oldDMwLT    .push_back(boostedTau.tauID("byVLooseIsolationMVArun2v1PWdR03oldDMwLT"			    ));
       nBranches_->tau_byVLooseIsolationMVArun2v1PWnewDMwLT        .push_back(boostedTau.tauID("byVLooseIsolationMVArun2v1PWnewDMwLT"			    ));
       //      nBranches_->tau_byVLooseIsolationMVArun2v1PWoldDMwLT        .push_back(boostedTau.tauID("byVLooseIsolationMVArun2v1PWoldDMwLT"			    ));

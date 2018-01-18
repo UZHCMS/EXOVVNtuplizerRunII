@@ -1,6 +1,11 @@
 #ifndef GenEventNtuplizer_H
 #define GenEventNtuplizer_H
 
+#include <algorithm>
+#include <numeric>
+#include <functional>
+#include <iostream>
+
 #include "../interface/CandidateNtuplizer.h"
 #include "SimDataFormats/GeneratorProducts/interface/GenEventInfoProduct.h"
 #include "SimDataFormats/GeneratorProducts/interface/LHEEventProduct.h"
