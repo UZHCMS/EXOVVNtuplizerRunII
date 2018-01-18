@@ -1,4 +1,4 @@
- #include "../interface/ElectronsNtuplizer.h"
+#include "../interface/ElectronsNtuplizer.h"
 #include <memory>
 #include <vector>
 
@@ -12,6 +12,7 @@
 #include "FWCore/ParameterSet/interface/ParameterSet.h"
 
 #include "DataFormats/PatCandidates/interface/Electron.h"
+#include "DataFormats/EgammaCandidates/interface/GsfElectron.h"
 
 #include "DataFormats/EcalRecHit/interface/EcalRecHitCollections.h"
 #include "DataFormats/DetId/interface/DetId.h"
@@ -199,13 +200,13 @@ void ElectronsNtuplizer::fillBranches( edm::Event const & event, const edm::Even
     if ( fabs(ele.superCluster()->eta()) > 2.4 ) Aeff04 = 0.261;
 
     double Aeff03 = 0.5;
-    if ( fabs(ele.superCluster()->eta()) < 1.0 ) Aeff03 = 0.13;
-    if ( fabs(ele.superCluster()->eta()) > 1.0 && fabs(ele.superCluster()->eta()) < 1.479 ) Aeff03 = 0.14;
-    if ( fabs(ele.superCluster()->eta()) > 1.479 && fabs(ele.superCluster()->eta()) < 2.0 ) Aeff03 = 0.07;
-    if ( fabs(ele.superCluster()->eta()) > 2.0 && fabs(ele.superCluster()->eta()) < 2.2 ) Aeff03 = 0.09;
-    if ( fabs(ele.superCluster()->eta()) > 2.2 && fabs(ele.superCluster()->eta()) < 2.3 ) Aeff03 = 0.11;
-    if ( fabs(ele.superCluster()->eta()) > 2.3 && fabs(ele.superCluster()->eta()) < 2.4 ) Aeff03 = 0.11;
-    if ( fabs(ele.superCluster()->eta()) > 2.4 ) Aeff03 = 0.14;
+    if ( fabs(ele.superCluster()->eta()) < 1.0 ) Aeff03 = 0.1566;
+    if ( fabs(ele.superCluster()->eta()) > 1.0 && fabs(ele.superCluster()->eta()) < 1.479 ) Aeff03 = 0.1628;
+    if ( fabs(ele.superCluster()->eta()) > 1.479 && fabs(ele.superCluster()->eta()) < 2.0 ) Aeff03 = 0.1073;
+    if ( fabs(ele.superCluster()->eta()) > 2.0 && fabs(ele.superCluster()->eta()) < 2.2 ) Aeff03 = 0.0854;
+    if ( fabs(ele.superCluster()->eta()) > 2.2 && fabs(ele.superCluster()->eta()) < 2.3 ) Aeff03 = 0.1051;
+    if ( fabs(ele.superCluster()->eta()) > 2.3 && fabs(ele.superCluster()->eta()) < 2.4 ) Aeff03 = 0.1204;
+    if ( fabs(ele.superCluster()->eta()) > 2.4 ) Aeff03 = 0.1524;
 
     float  DeltaCorrectedIso = (ele.chargedHadronIso() + std::max(0., ele.neutralHadronIso() + ele.photonIso() - 0.5*ele.puChargedHadronIso()))/ele.pt();
     float  RhoCorrectedIso04 = ele.chargedHadronIso() + std::max(ele.neutralHadronIso() + ele.photonIso() - rho*Aeff04, 0.);
@@ -310,11 +311,11 @@ void ElectronsNtuplizer::fillBranches( edm::Event const & event, const edm::Even
     nBranches_->el_MVAscore           .push_back((*mva_value)[el]);
     nBranches_->el_MVAcategory        .push_back((*mva_categories)[el]);
 
-    bool isVetoElectronWithoutIPandIsolation   = eleIDpassedWithoutIPandIsolation("Veto"  ,ele) ;
-    bool isLooseElectronWithoutIPandIsolation  = eleIDpassedWithoutIPandIsolation("Loose" ,ele) ;
-    bool isMediumElectronWithoutIPandIsolation = eleIDpassedWithoutIPandIsolation("Medium",ele) ;
-    bool isTightElectronWithoutIPandIsolation  = eleIDpassedWithoutIPandIsolation("Tight" ,ele) ;
-    bool isHeepElectronWithoutIPandIsolation   = eleIDpassedWithoutIPandIsolation("Heep"  ,ele) ;
+    bool isVetoElectronWithoutIPandIsolation   = eleIDpassedWithoutIPandIsolation("Veto"  ,ele,rho) ;
+    bool isLooseElectronWithoutIPandIsolation  = eleIDpassedWithoutIPandIsolation("Loose" ,ele,rho) ;
+    bool isMediumElectronWithoutIPandIsolation = eleIDpassedWithoutIPandIsolation("Medium",ele,rho) ;
+    bool isTightElectronWithoutIPandIsolation  = eleIDpassedWithoutIPandIsolation("Tight" ,ele,rho) ;
+    bool isHeepElectronWithoutIPandIsolation   = eleIDpassedWithoutIPandIsolation("Heep"  ,ele,rho) ;
     
     nBranches_->el_isVetoElectronWithoutIPandIsolation  .push_back(isVetoElectronWithoutIPandIsolation);
     nBranches_->el_isLooseElectronWithoutIPandIsolation .push_back(isLooseElectronWithoutIPandIsolation);
@@ -809,7 +810,7 @@ bool ElectronsNtuplizer::eleIDpassedBoosted(std::string id, const pat::Electron 
 
 
 
-bool ElectronsNtuplizer::eleIDpassedWithoutIPandIsolation(std::string id, const pat::Electron &ele ){
+bool ElectronsNtuplizer::eleIDpassedWithoutIPandIsolation(std::string id, const pat::Electron &ele, float rho){
 
   // No requirements on isolation AND d0/dz cuts for tau analysis
   // https://twiki.cern.ch/twiki/bin/viewauth/CMS/CutBasedElectronIdentificationRun2#Working_points_for_2016_data_for
@@ -824,54 +825,59 @@ bool ElectronsNtuplizer::eleIDpassedWithoutIPandIsolation(std::string id, const 
   Float_t dEtaInSeed_ = dEtaInSeed( ele );
   Float_t dPhiIn_ = std::abs(ele.deltaPhiSuperClusterTrackAtVtx());
   Float_t hOverE_ = ele.hadronicOverEm();
+  Float_t E_ =ele.correctedEcalEnergy();/// to be checked
   Float_t ooEmooP_ = EleEInverseMinusPInverse(ele);
   Int_t expectedMissingInnerHits_ = ele.gsfTrack()->hitPattern().numberOfAllHits(reco::HitPattern::MISSING_INNER_HITS);
   Int_t passConversionVeto_ = ele.passConversionVeto(); 
-
-
+ 
+  bool pass_C_0_requirement=false;
+  Float_t C_0=0.;
+  
   //Barrel cuts 
   if(fabs(eta) <= 1.479){
   
     if(
        passConversionVeto_ && 
-       full5x5_sigmaIetaIeta_    < 0.0115 &&
-       fabs(dEtaInSeed_)        < 0.00749 &&
-       fabs(dPhiIn_)	        < 0.228 &&
-       hOverE_		        < 0.356 &&
-       ooEmooP_  	        < 0.299 &&
+       full5x5_sigmaIetaIeta_    < 0.0128 &&
+       fabs(dEtaInSeed_)        < 0.00523 &&
+       fabs(dPhiIn_)	        < 0.159 &&
+       //hOverE_		        < 0.05 &&
+       ooEmooP_  	        < 0.193 &&
        expectedMissingInnerHits_ <= 2.
-       ) isVetoElectron = true;
+       ){ isVetoElectron = true; C_0=0.05;}
 
     if(
        passConversionVeto_ && 
-       full5x5_sigmaIetaIeta_    < 0.011 &&
-       fabs(dEtaInSeed_)        < 0.00477 &&
-       fabs(dPhiIn_)	        < 0.222 &&
-       hOverE_		        < 0.298 &&
-       ooEmooP_  	        < 0.241 &&
+       full5x5_sigmaIetaIeta_    < 0.0105 &&
+       fabs(dEtaInSeed_)        < 0.00387 &&
+       fabs(dPhiIn_)	        < 0.0716 &&
+       //hOverE_		        < 0.05 &&
+       ooEmooP_  	        < 0.129 &&
        expectedMissingInnerHits_ <= 1.
-       ) isLooseElectron = true;
+       ){ isLooseElectron = true;C_0=0.05;}
 
     if(
        passConversionVeto_ && 
-       full5x5_sigmaIetaIeta_    < 0.00998 &&
-       fabs(dEtaInSeed_)        < 0.00311 &&
-       fabs(dPhiIn_)	        < 0.103 &&
-       hOverE_		        < 0.253 &&
-       ooEmooP_  	        < 0.134 &&
+       full5x5_sigmaIetaIeta_    < 0.0105 &&
+       fabs(dEtaInSeed_)        < 0.00365 &&
+       fabs(dPhiIn_)	        < 0.0588 &&
+       // hOverE_		        < 0.026 &&
+       ooEmooP_  	        < 0.0327 &&
        expectedMissingInnerHits_ <= 1.
-       ) isMediumElectron = true;
+       ){ isMediumElectron = true;C_0=0.026;}
 
     if(
        passConversionVeto_ && 
-       full5x5_sigmaIetaIeta_    < 0.00998 &&
-       fabs(dEtaInSeed_)        < 0.00308 &&
-       fabs(dPhiIn_)	        < 0.0816 &&
-       hOverE_		        < 0.0414 &&
-       ooEmooP_  	        < 0.0129 &&
+       full5x5_sigmaIetaIeta_    < 0.0104 &&
+       fabs(dEtaInSeed_)        < 0.00353 &&
+       fabs(dPhiIn_)	        < 0.0499 &&
+       //hOverE_		        < 0.026 &&
+       ooEmooP_  	        < 0.0278 &&
        expectedMissingInnerHits_ <= 1.
-       ) isTightElectron = true;
-    	      
+       ){ isTightElectron = true;C_0=0.026;}
+  
+    if ( hOverE_< C_0 +1.12 *E_+ 0.0368*rho/E_) pass_C_0_requirement =true; 
+  	      
   } 
   //Endcap cut
   else if(fabs(eta) > 1.479 && fabs(eta) < 2.5){
@@ -879,43 +885,46 @@ bool ElectronsNtuplizer::eleIDpassedWithoutIPandIsolation(std::string id, const 
 
     if(
        passConversionVeto_ && 
-       full5x5_sigmaIetaIeta_    < 0.037 &&
-       fabs(dEtaInSeed_)        < 0.00895 &&
-       fabs(dPhiIn_)	        < 0.213 &&
-       hOverE_		        < 0.211 &&
-       ooEmooP_  	        < 0.15 &&
+       full5x5_sigmaIetaIeta_    < 0.0445 &&
+       fabs(dEtaInSeed_)        < 0.00984 &&
+       fabs(dPhiIn_)	        < 0.157 &&
+       // hOverE_		        < 0.0962 &&
+       ooEmooP_  	        < 0.0962 &&
        expectedMissingInnerHits_ <= 3.
-       ) isVetoElectron = true;
+       ){ isVetoElectron = true;C_0=0.05;}
 
     if(
        passConversionVeto_ && 
-       full5x5_sigmaIetaIeta_    < 0.0314 &&
-       fabs(dEtaInSeed_)        < 0.00868 &&
-       fabs(dPhiIn_)	        < 0.213 &&
-       hOverE_		        < 0.101 &&
-       ooEmooP_  	        < 0.14 &&
+       full5x5_sigmaIetaIeta_    < 0.0356 &&
+       fabs(dEtaInSeed_)        < 0.0072 &&
+       fabs(dPhiIn_)	        < 0.147 &&
+       //hOverE_		        < 0.0414 &&
+       ooEmooP_  	        < 0.0875 &&
        expectedMissingInnerHits_ <= 1.
-       ) isLooseElectron = true;
+       ) {isLooseElectron = true;C_0=0.0414;}
 
     if(
        passConversionVeto_ && 
-       full5x5_sigmaIetaIeta_    < 0.0298 &&
-       fabs(dEtaInSeed_)        < 0.00609 &&
-       fabs(dPhiIn_)	        < 0.045 &&
-       hOverE_		        < 0.0878 &&
-       ooEmooP_  	        < 0.13 &&
+       full5x5_sigmaIetaIeta_    < 0.0309 &&
+       fabs(dEtaInSeed_)        < 0.00625 &&
+       fabs(dPhiIn_)	        < 0.0355 &&
+       //hOverE_		        < 0.026 &&
+       ooEmooP_  	        < 0.0335 &&
        expectedMissingInnerHits_ <= 1.
-       ) isMediumElectron = true;
+       ) {isMediumElectron = true;C_0=0.026;}
 
     if(
        passConversionVeto_ && 
-       full5x5_sigmaIetaIeta_    < 0.0292 &&
-       fabs(dEtaInSeed_)        < 0.00605 &&
-       fabs(dPhiIn_)	        < 0.0394 &&
-       hOverE_		        < 0.0641 &&
-       ooEmooP_  	        < 0.0129 &&
+       full5x5_sigmaIetaIeta_    < 0.0305 &&
+       fabs(dEtaInSeed_)        < 0.00567 &&
+       fabs(dPhiIn_)	        < 0.0165 &&
+       //hOverE_		        < 0.026 &&
+       ooEmooP_  	        < 0.0158 &&
        expectedMissingInnerHits_ <= 1.
-       ) isTightElectron = true;
+       ) {isTightElectron = true;C_0=0.026;}
+    
+    if ( hOverE_< C_0 +1.12 *E_+ 0.201*rho/E_) pass_C_0_requirement =true; 
+    
   }
 
 
@@ -989,10 +998,10 @@ bool ElectronsNtuplizer::eleIDpassedWithoutIPandIsolation(std::string id, const 
     	   
   }
 	     
-  if( id == "Veto" ) return isVetoElectron;
-  else if( id == "Loose" ) return isLooseElectron;
-  else if( id == "Medium" ) return isMediumElectron;
-  else if( id == "Tight" ) return isTightElectron;
+  if( id == "Veto" ) return (isVetoElectron && pass_C_0_requirement);
+  else if( id == "Loose" ) return (isLooseElectron && pass_C_0_requirement);
+  else if( id == "Medium" ) return (isMediumElectron && pass_C_0_requirement);
+  else if( id == "Tight" ) return (isTightElectron && pass_C_0_requirement);
   else if( id == "Heep" ) return isHeepElectron;
   else return false;
    
