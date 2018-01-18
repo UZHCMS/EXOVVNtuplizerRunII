@@ -13,17 +13,6 @@ cmsenv
 git init
 ```
 
-### getting the latest b-tagger
-(https://twiki.cern.ch/twiki/bin/viewauth/CMS/Hbbtagging#V4_training)
-
-=> included by default in 92X
-
-### update MET filter. Skip this!
-
-=> no obvious branch exists (seems to run fine 92X baseline, can be reomved?)
-```
-git cms-merge-topic -u cms-met:CMSSW_8_0_X-METFilterUpdate
-```
 
 
 ### getting the ntuplizer codes
@@ -38,46 +27,30 @@ git checkout -b DevelopmentBranch_9_4_0 UZHCMS/94X_ntuplizer
 cd $CMSSW_BASE/src
 ```
 
-The flags for running on Spring15(74) or Fall15(76) or Spring16(80) samples have to be changed with config["FALL15"]=False/True and config["SPRING16"]=False/True in python/ntuplizerOptions_*_cfi.py
 
-### updates of latest cut-based electron ID
-(https://twiki.cern.ch/twiki/bin/viewauth/CMS/CutBasedElectronIdentificationRun2#Recipe_for_regular_users_for_8_0)
-
-=> cut based ele id included by default in 92X
-
-### updates of latest HEEP electron ID. No Recipe for 94X. Skip this!
-(https://twiki.cern.ch/twiki/bin/viewauth/CMS/HEEPElectronIdentificationRun2#Recipe_for_regular_users)
-
-=> HEEP ID from here https://twiki.cern.ch/twiki/bin/viewauth/CMS/HEEPElectronIdentificationRun2
-
+### updates of latest cut-based electron ID and MVAID. HEEP are default in 94X
+(https://twiki.cern.ch/twiki/bin/view/CMS/CutBasedElectronIdentificationRun2 and 
 ```
+cd $CMSSW_BASE/src
 cmsenv
-git cms-addpkg RecoEgamma/EgammaIsolationAlgos 
-git cms-merge-topic rgoldouz:TrkIsoFix -u 
+git cms-init
+git cms-merge-topic lsoffi:CMSSW_9_4_0_pre3_TnP
+git cms-merge-topic guitargeek:ElectronID_MVA2017_940pre3
+scram b -j 8
+cd $CMSSW_BASE/external
+d slc6_amd64_gcc630/
+git clone https://github.com/lsoffi/RecoEgamma-PhotonIdentification.git data/RecoEgamma/PhotonIdentification/data
+cd data/RecoEgamma/PhotonIdentification/data
+git checkout CMSSW_9_4_0_pre3_TnP
+cd $CMSSW_BASE/external
+cd slc6_amd64_gcc630/
+git clone https://github.com/lsoffi/RecoEgamma-ElectronIdentification.git data/RecoEgamma/ElectronIdentification/data
+cd data/RecoEgamma/ElectronIdentification/data
+git checkout CMSSW_9_4_0_pre3_TnP
+cd $CMSSW_BASE/src
+scram b distclean
 scramv1 b -j 16
 ```
-
-### compile first, before adding MVA-based electron ID 
-(I don't konw why, but otherwise, $CMSSW_BASE/external/slc6_amd64_gcc530/data area will be deleted)
-```
-cd $CMSSW_BASE/src
-scram b -j8
-```
-
-### updates of latest MVA-based electron ID. Skip this!
-(https://twiki.cern.ch/twiki/bin/viewauth/CMS/MultivariateElectronIdentificationRun2#Recipes_and_implementation)
-
-=> I didn't look into this one yet, but seems to be included in 92X
-```
-mkdir -p $CMSSW_BASE/external/slc6_amd64_gcc530/data/RecoEgamma/ElectronIdentification/
-cd $CMSSW_BASE/external/slc6_amd64_gcc530/
-git clone https://github.com/ikrav/RecoEgamma-ElectronIdentification.git data/RecoEgamma/ElectronIdentification/data
-cd data/RecoEgamma/ElectronIdentification/data
-git checkout egm_id_80X_v1
-cd $CMSSW_BASE/src
-scram b -j8
-```
-
 
 
 ### running for data and MC! just set the proper flag in python/ntuplizerOptions_generic_cfi.py
