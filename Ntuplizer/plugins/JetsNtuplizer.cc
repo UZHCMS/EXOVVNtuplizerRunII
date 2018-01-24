@@ -244,16 +244,12 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
 
     JME::JetResolution resolution = JME::JetResolution(jerAK4chsName_res_);
     JME::JetResolutionScaleFactor resolution_sf = JME::JetResolutionScaleFactor(jerAK4chsName_sf_);
-
-
+   
     nBranches_->jetAK4_N = 0;
   
     for (const pat::Jet &j : *jets_) {
-	        
-     bool IDLoose = looseJetID(j);
-     bool IDTight = tightJetID(j);
-     bool IDTightWithoutLepVeto = tightJetIDWithoutLepVeto(j);
 
+     
      reco::Candidate::LorentzVector uncorrJet;
      double corr = 1;
      double corrUp = 1;
@@ -272,7 +268,10 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
      }
      else{
        uncorrJet = j.p4();
+       if (uncorrJet.pt() < 17.) continue;    
      }
+
+	       
 
      jecAK4Unc_->setJetEta( j.correctedP4(0).eta() );
      jecAK4Unc_->setJetPt( corr * j.correctedP4(0).pt() );
@@ -282,6 +281,10 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
      corrDown = corr * ( 1 - fabs(jecAK4Unc_->getUncertainty(-1)) );
 
      if (corr*uncorrJet.pt() < 17.) continue;    
+  
+     bool IDLoose = looseJetID(j);
+     bool IDTight = tightJetID(j);
+     bool IDTightWithoutLepVeto = tightJetIDWithoutLepVeto(j);
 
      nBranches_->jetAK4_N++;
 
@@ -490,17 +493,19 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
           
       }
       else{
-         uncorrJet = fj.p4();
-      }
 
+         uncorrJet = fj.p4();
+	 if( uncorrJet.pt() <= 170. ) continue;
+      }
+  
       jecAK8Unc_->setJetEta( fj.correctedP4(0).eta() );
       jecAK8Unc_->setJetPt( corr * fj.correctedP4(0).pt() );
       corrUp = corr * (1 + fabs(jecAK8Unc_->getUncertainty(1)));
       jecAK8Unc_->setJetEta( fj.correctedP4(0).eta() );
       jecAK8Unc_->setJetPt( corr * fj.correctedP4(0).pt() );
       corrDown = corr * ( 1 - fabs(jecAK8Unc_->getUncertainty(-1)) );   
+      if( corr*uncorrJet.pt() <= 170. ) continue;
       
-      if( corr*uncorrJet.pt() < 170. ) continue;
 
       bool IDLoose = looseJetID(fj);
       bool IDTight = tightJetID(fj);
