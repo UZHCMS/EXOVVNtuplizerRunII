@@ -5,13 +5,13 @@ config = dict()
 #--------- general ----------#
 
 #--------- Set Just one to true ----------#
-config["RUNONMC"] = False
+config["RUNONMC"] = True
 config["RUNONPromptReco"] = False
-config["RUNONReReco"] = True
+config["RUNONReReco"] = False
 #-----------------------------------------#
 
 config["USEJSON"] = not (config["RUNONMC"])
-config["JSONFILE"] = "JSON/Cert_294927-306462_13TeV_PromptReco_Collisions17_JSON.txt"
+config["JSONFILE"] = "Cert_294927-306462_13TeV_PromptReco_Collisions17_JSON.txt"
 config["BUNCHSPACING"] = 25
 config["USENOHF"] = False
 config["FILTEREVENTS"] = False
@@ -49,6 +49,6 @@ config["UpdateJetCollection"] = False #needed for Higgs-tagger in 80X
 config["DOMETRECLUSTERING"] = False
 
 #--------- JEC ----------#
-config["CORRJETSONTHEFLY"] = False
-config["CORRMETONTHEFLY"] = False
+config["CORRJETSONTHEFLY"] = True and config["RUNONMC"] # at the moment JEC available just for MC Fall17
+config["CORRMETONTHEFLY"] = True and config["RUNONMC"] # at the moment JEC available just for MC Fall17
 config["GETJECFROMDBFILE"] = False # If not yet in global tag, but db file available

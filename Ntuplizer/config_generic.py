@@ -26,9 +26,12 @@ options.maxEvents = -1
 #data file
 
 
-#options.inputFiles = '/store/mc/RunIIFall17MiniAOD/ZZTo4L_13TeV_powheg_pythia8/MINIAODSIM/94X_mc2017_realistic_v10-v2/60000/EA783E89-8AD9-E711-AFFE-0CC47A7C3458.root'
+options.inputFiles = '/store/mc/RunIIFall17MiniAOD/ZZTo4L_13TeV_powheg_pythia8/MINIAODSIM/94X_mc2017_realistic_v10-v2/60000/EA783E89-8AD9-E711-AFFE-0CC47A7C3458.root'
 
-options.inputFiles = '/store/data/Run2017F/JetHT/MINIAOD/17Nov2017-v1/70000/F6F6E56A-8ADF-E711-BF89-02163E01A25E.root'
+#options.inputFiles = '/store/data/Run2017F/JetHT/MINIAOD/17Nov2017-v1/70000/F6F6E56A-8ADF-E711-BF89-02163E01A25E.root'
+#options.inputFiles = '/store/data/Run2017D/SingleMuon/MINIAOD/17Nov2017-v1/60000/42E72A07-36E4-E711-9E0B-7845C4FAEFE9.root'
+
+#options.inputFiles = '/store/data/Run2017F/JetHT/MINIAOD/17Nov2017-v1/60000/2E078BBE-75E0-E711-B0A6-02163E01A355.root'
                      
 options.parseArguments()
 
@@ -81,7 +84,7 @@ process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_condD
 from Configuration.AlCa.GlobalTag import GlobalTag
 
 GT = ''
-if config["RUNONMC"]: GT = '94X_mc2017_realistic_v10'
+if config["RUNONMC"]: GT = '94X_mc2017_realistic_v12'
 elif config["RUNONReReco"]: GT = '94X_dataRun2_ReReco_EOY17_v2'
 elif config["RUNONPromptReco"]: GT = '92X_dataRun2_2017Prompt_v11'
 
@@ -359,7 +362,11 @@ bTagDiscriminators = [
     'pfCombinedInclusiveSecondaryVertexV2BJetTags',
     # 'pfTrackCountingHighPurBJetTags',
     # 'pfTrackCountingHighEffBJetTags',
-    'pfBoostedDoubleSecondaryVertexAK8BJetTags'    
+    'pfBoostedDoubleSecondaryVertexAK8BJetTags',
+    'pfDeepCSVJetTags:probb',
+    'pfDeepCSVJetTags:probbb',
+
+  
 ]
 
 #Needed in 80X to get the latest Hbb training
@@ -743,7 +750,7 @@ jecLevelsAK8Puppi = []
 jecLevelsForMET = []
 
 if config["BUNCHSPACING"] == 25 and config["RUNONMC"] :
-   JECprefix = "Summer16_23Sep2016V4"
+   JECprefix = "Fall17_17Nov2017_V4"
    jecAK8chsUncFile = "JEC/%s_MC_Uncertainty_AK8PFchs.txt"%(JECprefix)
    jecAK4chsUncFile = "JEC/%s_MC_Uncertainty_AK4PFchs.txt"%(JECprefix)
 
@@ -755,6 +762,7 @@ elif config["BUNCHSPACING"] == 25 and not(config["RUNONMC"]):
    jecAK4chsUncFile = "JEC/%s_DATA_Uncertainty_AK4PFchs.txt"%(JECprefix)
 
 print "jec unc file for ak8 ", jecAK8chsUncFile
+print "doing corrections to jets on th fly %s, to met on the fly %s" %(config["CORRJETSONTHEFLY"],config["CORRMETONTHEFLY"])
 if config["CORRJETSONTHEFLY"]:
    if config["RUNONMC"]:
      jecLevelsAK8chs = [
