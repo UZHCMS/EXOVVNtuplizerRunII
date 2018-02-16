@@ -306,7 +306,7 @@ public:
   std::vector<bool>  	      tau_byLooseCombinedIsolationDeltaBetaCorr3Hits  ;
   std::vector<bool>  	      tau_byMediumCombinedIsolationDeltaBetaCorr3Hits ;
   std::vector<bool>  	      tau_byTightCombinedIsolationDeltaBetaCorr3Hits  ;
-  std::vector<bool>  	      tau_byCombinedIsolationDeltaBetaCorrRaw3Hits    ;
+  std::vector<float>  	      tau_byCombinedIsolationDeltaBetaCorrRaw3Hits    ;
   std::vector<float>  	      tau_chargedIsoPtSum			      ;
   std::vector<float>  	      tau_neutralIsoPtSum			      ;
 //  std::vector<float>  	      tau_neutralIsoPtSum_0p5			      ;
@@ -467,7 +467,10 @@ public:
   std::vector<int>                jetAK4_genParton_pdgID;
   std::vector<int>                jetAK4_nbHadrons     ;
   std::vector<int>                jetAK4_ncHadrons     ;
-  std::vector<float>              jetAK4_csv  	       ;         
+  std::vector<float>              jetAK4_csv           ;
+  std::vector<float>              jetAK4_deep_csv_b    ;
+  std::vector<float>              jetAK4_deep_csv_bb   ;
+   	                
   std::vector<float>              jetAK4_vtxMass       ;
   std::vector<float>              jetAK4_vtxNtracks    ;
   std::vector<float>              jetAK4_vtx3DVal      ;
@@ -525,7 +528,10 @@ public:
   std::vector<int>            jetAK8_nbHadrons         ;
   std::vector<int>            jetAK8_ncHadrons         ;
   std::vector<float>  	      jetAK8_Hbbtag 	       ;
-  std::vector<float>  	      jetAK8_csv 	       ;    
+  std::vector<float>  	      jetAK8_csv               ;
+  std::vector<float>          jetAK8_deep_csv_b        ;  	        
+  std::vector<float>          jetAK8_deep_csv_bb       ;
+
   std::vector<float>  	      jetAK8_tau1              ;
   std::vector<float>  	      jetAK8_tau2              ;
   std::vector<float>  	      jetAK8_tau3              ; 
@@ -567,6 +573,10 @@ public:
   std::vector< std::vector<int  > > jetAK8_subjet_puppi_softdrop_partonFlavour;
   std::vector< std::vector<int  > > jetAK8_subjet_puppi_softdrop_hadronFlavour;
   std::vector< std::vector<float> > jetAK8_subjet_puppi_softdrop_csv    ;
+  std::vector< std::vector<float> > jetAK8_subjet_puppi_softdrop_deep_csv_b    ;
+  std::vector< std::vector<float> > jetAK8_subjet_puppi_softdrop_deep_csv_bb    ;
+
+
 
   /** chs and ATLAS */    
   std::vector<float>	      jetAK10_trimmed_mass           ;

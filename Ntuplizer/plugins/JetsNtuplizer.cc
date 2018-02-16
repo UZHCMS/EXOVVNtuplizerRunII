@@ -244,16 +244,12 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
 
     JME::JetResolution resolution = JME::JetResolution(jerAK4chsName_res_);
     JME::JetResolutionScaleFactor resolution_sf = JME::JetResolutionScaleFactor(jerAK4chsName_sf_);
-
-
+   
     nBranches_->jetAK4_N = 0;
   
     for (const pat::Jet &j : *jets_) {
-	        
-     bool IDLoose = looseJetID(j);
-     bool IDTight = tightJetID(j);
-     bool IDTightWithoutLepVeto = tightJetIDWithoutLepVeto(j);
 
+     
      reco::Candidate::LorentzVector uncorrJet;
      double corr = 1;
      double corrUp = 1;
@@ -272,7 +268,10 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
      }
      else{
        uncorrJet = j.p4();
+       if (uncorrJet.pt() < 17.) continue;    
      }
+
+	       
 
      jecAK4Unc_->setJetEta( j.correctedP4(0).eta() );
      jecAK4Unc_->setJetPt( corr * j.correctedP4(0).pt() );
@@ -282,6 +281,10 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
      corrDown = corr * ( 1 - fabs(jecAK4Unc_->getUncertainty(-1)) );
 
      if (corr*uncorrJet.pt() < 17.) continue;    
+  
+     bool IDLoose = looseJetID(j);
+     bool IDTight = tightJetID(j);
+     bool IDTightWithoutLepVeto = tightJetIDWithoutLepVeto(j);
 
      nBranches_->jetAK4_N++;
 
@@ -321,6 +324,11 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
      nBranches_->jetAK4_cemf	  .push_back(j.chargedEmEnergyFraction());   
      nBranches_->jetAK4_charge    .push_back(j.charge());
      nBranches_->jetAK4_csv	  .push_back(j.bDiscriminator("pfCombinedInclusiveSecondaryVertexV2BJetTags"));
+     nBranches_->jetAK4_deep_csv_bb  .push_back(j.bDiscriminator("pfDeepCSVJetTags:probbb"));
+     nBranches_->jetAK4_deep_csv_b   .push_back(j.bDiscriminator("pfDeepCSVJetTags:probb") );
+
+
+     //std:: cout << "j.bDiscriminator(pfCombinedInclusiveSecondaryVertexV2BJetTags) " << j.bDiscriminator("pfCombinedInclusiveSecondaryVertexV2BJetTags") << " deep b " << j.bDiscriminator("pfDeepCSVJetTags:probb")  << " deep bb " << j.bDiscriminator("pfDeepCSVJetTags:probbb")<< std::endl;
      nBranches_->jetAK4_vtxMass   .push_back(0); //j.userFloat("vtxMass")); 
      nBranches_->jetAK4_vtxNtracks.push_back(0); //j.userFloat("vtxNtracks")); 
      nBranches_->jetAK4_vtx3DVal  .push_back(0); //j.userFloat("vtx3DVal")); 
@@ -459,6 +467,9 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
     std::vector<int  > vPuppiSoftDropSubjetHadronFlavour;
     std::vector<float> vPuppiSoftDropSubjetssv    ;
     std::vector<float> vPuppiSoftDropSubjetcsv    ;
+    std::vector<float> vPuppiSoftDropSubjetcsv_deep_b     ;
+    std::vector<float> vPuppiSoftDropSubjetcsv_deep_bb    ;
+   
     std::vector<float> vPuppiSoftDropSubjettchp   ;
     std::vector<float> vPuppiSoftDropSubjettche   ;
     std::vector<float> vPuppiSoftDropSubjetjp     ;
@@ -490,17 +501,24 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
           
       }
       else{
-         uncorrJet = fj.p4();
-      }
 
+	if( uncorrJet.pt() >169  && uncorrJet.pt() <= 170.1 ){
+	  std::cout <<"jet Ak8  p4.pt()" <<fj.p4().pt() << " correctedp4 pt "<< fj.correctedP4(0).pt() <<std:: endl;
+	}
+
+	uncorrJet = fj.p4();
+	
+	if( uncorrJet.pt() <= 170.1 ) continue;
+      }
+  
       jecAK8Unc_->setJetEta( fj.correctedP4(0).eta() );
       jecAK8Unc_->setJetPt( corr * fj.correctedP4(0).pt() );
       corrUp = corr * (1 + fabs(jecAK8Unc_->getUncertainty(1)));
       jecAK8Unc_->setJetEta( fj.correctedP4(0).eta() );
       jecAK8Unc_->setJetPt( corr * fj.correctedP4(0).pt() );
       corrDown = corr * ( 1 - fabs(jecAK8Unc_->getUncertainty(-1)) );   
+      if( corr*uncorrJet.pt() <= 170.1 ) continue;
       
-      if( corr*uncorrJet.pt() < 170. ) continue;
 
       bool IDLoose = looseJetID(fj);
       bool IDTight = tightJetID(fj);
@@ -537,6 +555,9 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
       nBranches_->jetAK8_charge 	    .push_back(fj.charge());					 
       nBranches_->jetAK8_Hbbtag             .push_back(fj.bDiscriminator("pfBoostedDoubleSecondaryVertexAK8BJetTags"));       
       nBranches_->jetAK8_csv                .push_back(fj.bDiscriminator("pfCombinedInclusiveSecondaryVertexV2BJetTags"));
+      nBranches_->jetAK8_deep_csv_b         .push_back(fj.bDiscriminator("pfDeepCSVJetTags:probb") );
+      nBranches_->jetAK8_deep_csv_bb        .push_back(fj.bDiscriminator("pfDeepCSVJetTags:probbb"));
+
 
       nBranches_->jetAK8_tau1               .push_back(fj.userFloat("NjettinessAK8Puppi:tau1"));	  
       nBranches_->jetAK8_tau2               .push_back(fj.userFloat("NjettinessAK8Puppi:tau2"));
@@ -588,7 +609,11 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
       vPuppiSoftDropSubjetPartonFlavour.clear();
       vPuppiSoftDropSubjetHadronFlavour.clear();
       vPuppiSoftDropSubjetcsv.clear();
-    
+      vPuppiSoftDropSubjetcsv_deep_b.clear();
+      vPuppiSoftDropSubjetcsv_deep_bb.clear();
+
+
+
       nsubjets = 0;
     
       const std::vector<edm::Ptr<pat::Jet> > &wSubjets = fj.subjets("SoftDropPuppi");
@@ -608,7 +633,11 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
          vPuppiSoftDropSubjetHadronFlavour.push_back(abs(puppi_softdropsubjet.hadronFlavour()));
          vPuppiSoftDropSubjetcharge.push_back(puppi_softdropsubjet.charge());
          vPuppiSoftDropSubjetcsv.push_back(puppi_softdropsubjet.bDiscriminator("pfCombinedInclusiveSecondaryVertexV2BJetTags") );
-       
+         vPuppiSoftDropSubjetcsv_deep_b.push_back(puppi_softdropsubjet.bDiscriminator("pfDeepCSVJetTags:probb") );
+	 vPuppiSoftDropSubjetcsv_deep_bb.push_back(puppi_softdropsubjet.bDiscriminator("pfDeepCSVJetTags:probbb"));
+
+
+
        } 
        
        
@@ -658,6 +687,9 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
       nBranches_->jetAK8_subjet_puppi_softdrop_e.push_back(vPuppiSoftDropSubjete);
       nBranches_->jetAK8_subjet_puppi_softdrop_charge.push_back(vPuppiSoftDropSubjetcharge);
       nBranches_->jetAK8_subjet_puppi_softdrop_csv.push_back(vPuppiSoftDropSubjetcsv);
+      nBranches_->jetAK8_subjet_puppi_softdrop_deep_csv_b.push_back(vPuppiSoftDropSubjetcsv_deep_b);
+      nBranches_->jetAK8_subjet_puppi_softdrop_deep_csv_bb.push_back(vPuppiSoftDropSubjetcsv_deep_bb);
+
 
       if(isMC){
         nBranches_->jetAK8_subjet_puppi_softdrop_partonFlavour.push_back(vPuppiSoftDropSubjetPartonFlavour);

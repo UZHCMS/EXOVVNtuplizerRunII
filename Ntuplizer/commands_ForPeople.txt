@@ -8,21 +8,18 @@ voms-proxy-init  --voms cms --valid 200:00:00
 
 Then:
 
-python submit_all.py -d CRAM_MC_V1 -c config_generic.py -f samples/MC_v1.txt -s ""
+python submit_all.py -d CRAB_samples -c config_generic.py -f samples/Fall2017/Dataset_rereco_2017.txt -D True -l True -s ""
 
-python submit_all.py -d CRAM_MC_V1 -c config_generic.py -f samples/MC_v1_ext.txt -s "_ext"
+python submit_all.py -d CRAB_samples -c config_generic.py -f samples/Fall2017/MC2017_v2.txt  -s ""
 
+python submit_all.py -d CRAB_samples -c config_generic.py -f samples/Fall2017/MC2017_v2_ext.txt  -s "_ext"
 
-
-python submit_all.py -d crab_MC_V3 -c config_MC_crab_miniAODv2.py -f samples/Moriond17/samples_MC_Yuta.txt   -s ""
-python submit_all.py -d crab_MC_V3 -c config_MC_crab_miniAODv2.py -f samples/Moriond17/samples_MC_ext_Yuta.txt  -s "_ext" 
-python submit_all.py -d crab_MC_V3 -c config_MC_crab_miniAODv2.py -f samples/Moriond17/samples_MC_additional_Yuta.txt  -s "_additional" 
-
+python submit_all.py -d CRAB_samples -c config_generic.py -f samples/Fall2017/MC2017_v2_QCD.txt  -s ""
 
 To check the status and resubmit:
 
-ls crab_MC_V3/* |grep "MC_V3"  | awk {' print "crab resubmit " $0 }' |sed 's/:/ /' >resubmit.sh 
-ls crab_MC_V3/* |grep "MC_V3"  | awk {' print "crab status " $0 }' |sed 's/:/ /' >status.sh
+ls crab_samples/* |grep "_samples"  | awk {' print "crab resubmit " $0 }' |sed 's/:/ /' >resubmit.sh 
+ls crab_samples/* |grep "_samples"  | awk {' print "crab status " $0 }' |sed 's/:/ /' >status.sh
 
 chmod +x  status.sh
 chmod +x  resubmit.sh

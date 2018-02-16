@@ -43,7 +43,7 @@ def getOptions() :
     else:
         options.luminosity = True
     if options.isData == None:
-        options.luminosity = False
+        options.isData = False
     else:
         options.isData = True
     return options
@@ -74,7 +74,7 @@ def main():
     # config.JobType.pyCfgParams = ['DataProcessing=MC25ns_MiniAODv2','lheLabel=externalLHEProducer']
     config.JobType.inputFiles = [
  
-        './JSON/Cert_294927-305636_13TeV_PromptReco_Collisions17_JSON.txt'
+        './JSON/Cert_294927-306462_13TeV_PromptReco_Collisions17_JSON.txt'
         ]
 
     config.section_("Data")
@@ -82,17 +82,17 @@ def main():
     # config.Data.inputDBS = 'phys03' #to be commented in case of global#
     if options.luminosity == True :
         config.Data.splitting = 'LumiBased'
-        config.Data.unitsPerJob = 10
+        config.Data.unitsPerJob = 100
     else:
         config.Data.splitting = 'FileBased'
         config.Data.unitsPerJob = 1
     config.Data.ignoreLocality = True
     config.Data.publication = False
-    config.Data.outLFNDirBase = '/store/user/cgalloni/Ntuple_2017_v1'
+    config.Data.outLFNDirBase = '/store/user/cgalloni/Ntuple_2017_94v2_preliminary'
 
     config.section_("Site")
-    config.Site.storageSite = 'T2_CH_CSCS'
-    # config.Site.storageSite = 'T3_CH_PSI'
+    #config.Site.storageSite = 'T2_CH_CSCS'
+    config.Site.storageSite = 'T3_CH_PSI'
     config.Site.blacklist=['T1_US_FNAL','T2_US_Wisconsin','T2_FR_IPHC','T2_EE_Estonia','T2_DE_RWTH']
     #config.Site.whitelist=['T2_US_Nebraska','T2_US_Wisconsin','T2_FR_IPHC','T2_EE_Estonia',
     print 'Using config ' + options.config
@@ -124,9 +124,9 @@ def main():
         ptbin = job.split('/')[1]
         cond = job.split('/')[2]
 
-        config.General.requestName =  ptbin + ("_"+cond)if options.isData else ""  + options.string_to_add
+        config.General.requestName =  ptbin + (("_"+cond)if options.isData else "")  + options.string_to_add
         config.Data.inputDataset = job
-        config.Data.outputDatasetTag = ptbin  + ("_"+cond)if options.isData else "" +  options.string_to_add
+        config.Data.outputDatasetTag = ptbin  + (("_"+cond)if options.isData else "" ) +  options.string_to_add
         print "ptbin :%s and cond: %s " %(ptbin, cond)
         print 'Submitting ' + config.General.requestName + ', dataset = ' + job
         print 'Configuration :'
