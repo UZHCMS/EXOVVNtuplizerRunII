@@ -49,6 +49,6 @@ config["UpdateJetCollection"] = False #needed for Higgs-tagger in 80X
 config["DOMETRECLUSTERING"] = False
 
 #--------- JEC ----------#
-config["CORRJETSONTHEFLY"] = True and config["RUNONMC"] # at the moment JEC available just for MC Fall17
-config["CORRMETONTHEFLY"] = True and config["RUNONMC"] # at the moment JEC available just for MC Fall17
+config["CORRJETSONTHEFLY"] = True # at the moment JEC available just for MC Fall17
+config["CORRMETONTHEFLY"] = True  # at the moment JEC available just for MC Fall17
 config["GETJECFROMDBFILE"] = False # If not yet in global tag, but db file available

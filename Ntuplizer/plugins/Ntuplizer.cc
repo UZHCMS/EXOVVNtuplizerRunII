@@ -340,7 +340,7 @@ void Ntuplizer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
   edm::Handle<reco::VertexCollection> vertices;
   iEvent.getByToken(vtxToken_, vertices);
   if( vertices->empty() ) return; // skip the event if no PV found
-           
+  
   nBranches_->EVENT_event     = iEvent.id().event();
   nBranches_->EVENT_run       = iEvent.id().run();
   nBranches_->EVENT_lumiBlock = iEvent.id().luminosityBlock();  

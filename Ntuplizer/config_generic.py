@@ -49,6 +49,8 @@ process.source = cms.Source("PoolSource",
 #                            lumisToProcess = cms.untracked.VLuminosityBlockRange('282917:126'),
                             )                     
 
+
+print " process source filenames %s" %(process.source) 
 ######## Sequence settings ##########
 
 # https://twiki.cern.ch/twiki/bin/view/CMSPublic/WorkBookMiniAOD2015#ETmiss_filters
@@ -750,16 +752,28 @@ jecLevelsAK8Puppi = []
 jecLevelsForMET = []
 
 if config["BUNCHSPACING"] == 25 and config["RUNONMC"] :
-   JECprefix = "Fall17_17Nov2017_V4"
+   JECprefix = "Fall17_17Nov2017_V6"
    jecAK8chsUncFile = "JEC/%s_MC_Uncertainty_AK8PFchs.txt"%(JECprefix)
    jecAK4chsUncFile = "JEC/%s_MC_Uncertainty_AK4PFchs.txt"%(JECprefix)
 
 
 
 elif config["BUNCHSPACING"] == 25 and not(config["RUNONMC"]):
-   JECprefix = "Summer16_23Sep2016HV3"
+
+   JEC_runDependent_suffix= ""
+   inRunF = False
+   if any("Run2017F" in s for s in  options.inputFiles):inRunF= True
+   print  "is this run in 2017F ? %s ! "  %(inRunF)
+   if any("Run2017B" in s for s in  options.inputFiles): JEC_runDependent_suffix= "B"
+   elif any("Run2017C" in s for s in  options.inputFiles): JEC_runDependent_suffix= "C"
+   elif any("Run2017D" in s for s in  options.inputFiles): JEC_runDependent_suffix= "D"
+   elif any("Run2017E" in s for s in  options.inputFiles): JEC_runDependent_suffix= "E"
+   elif any("Run2017F" in s for s in  options.inputFiles): JEC_runDependent_suffix= "F"
+  
+   JECprefix = "Fall17_17Nov2017"+JEC_runDependent_suffix+"_V6"
    jecAK8chsUncFile = "JEC/%s_DATA_Uncertainty_AK8PFchs.txt"%(JECprefix)
    jecAK4chsUncFile = "JEC/%s_DATA_Uncertainty_AK4PFchs.txt"%(JECprefix)
+   print "jec JEC_runDependent_suffix %s ,  prefix %s " %(JEC_runDependent_suffix,JECprefix)
 
 print "jec unc file for ak8 ", jecAK8chsUncFile
 print "doing corrections to jets on th fly %s, to met on the fly %s" %(config["CORRJETSONTHEFLY"],config["CORRMETONTHEFLY"])
@@ -788,23 +802,23 @@ if config["CORRJETSONTHEFLY"]:
      	 'JEC/%s_DATA_L1FastJet_AK8PFchs.txt'%(JECprefix),
      	 'JEC/%s_DATA_L2Relative_AK8PFchs.txt'%(JECprefix),
      	 'JEC/%s_DATA_L3Absolute_AK8PFchs.txt'%(JECprefix),
-	     'JEC/%s_DATA_L2L3Residual_AK8PFchs.txt'%(JECprefix)
+         'JEC/%s_DATA_L2L3Residual_AK8PFchs.txt'%(JECprefix)
        ]
      jecLevelsAK8Groomedchs = [
      	 'JEC/%s_DATA_L2Relative_AK8PFchs.txt'%(JECprefix),
      	 'JEC/%s_DATA_L3Absolute_AK8PFchs.txt'%(JECprefix),
-	     'JEC/%s_DATA_L2L3Residual_AK8PFchs.txt'%(JECprefix)
+         'JEC/%s_DATA_L2L3Residual_AK8PFchs.txt'%(JECprefix)
        ]
      jecLevelsAK8Puppi = [
      	 'JEC/%s_DATA_L2Relative_AK8PFPuppi.txt'%(JECprefix),
      	 'JEC/%s_DATA_L3Absolute_AK8PFPuppi.txt'%(JECprefix),
-	     'JEC/%s_DATA_L2L3Residual_AK8PFPuppi.txt'%(JECprefix)
+         'JEC/%s_DATA_L2L3Residual_AK8PFPuppi.txt'%(JECprefix)
        ]
      jecLevelsAK4chs = [
      	 'JEC/%s_DATA_L1FastJet_AK4PFchs.txt'%(JECprefix),
      	 'JEC/%s_DATA_L2Relative_AK4PFchs.txt'%(JECprefix),
      	 'JEC/%s_DATA_L3Absolute_AK4PFchs.txt'%(JECprefix),
-	     'JEC/%s_DATA_L2L3Residual_AK4PFchs.txt'%(JECprefix)
+         'JEC/%s_DATA_L2L3Residual_AK4PFchs.txt'%(JECprefix)
        ]   
 if config["CORRMETONTHEFLY"]:  
    if config["RUNONMC"]:
@@ -818,7 +832,7 @@ if config["CORRMETONTHEFLY"]:
      	 'JEC/%s_DATA_L1FastJet_AK4PFchs.txt'%(JECprefix),
      	 'JEC/%s_DATA_L2Relative_AK4PFchs.txt'%(JECprefix),
      	 'JEC/%s_DATA_L3Absolute_AK4PFchs.txt'%(JECprefix),
-       'JEC/%s_DATA_L2L3Residual_AK4PFchs.txt'%(JECprefix)
+         'JEC/%s_DATA_L2L3Residual_AK4PFchs.txt'%(JECprefix)
        ]	
       			    
 #from PhysicsTools.SelectorUtils.pfJetIDSelector_cfi import pfJetIDSelector

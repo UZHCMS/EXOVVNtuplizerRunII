@@ -491,6 +491,9 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
       if( doCorrOnTheFly_ ){
     
          uncorrJet = fj.correctedP4(0);
+
+	 if( uncorrJet.pt() <= 170.1 ) continue;// it was crashing also with JEC applied on the fly
+
          jecAK8_->setJetEta( uncorrJet.eta() );
          jecAK8_->setJetPt ( uncorrJet.pt() );
          jecAK8_->setJetE  ( uncorrJet.energy() );
@@ -502,9 +505,6 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
       }
       else{
 
-	if( uncorrJet.pt() >169  && uncorrJet.pt() <= 170.1 ){
-	  std::cout <<"jet Ak8  p4.pt()" <<fj.p4().pt() << " correctedp4 pt "<< fj.correctedP4(0).pt() <<std:: endl;
-	}
 
 	uncorrJet = fj.p4();
 	
