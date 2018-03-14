@@ -5,9 +5,9 @@ config = dict()
 #--------- general ----------#
 
 #--------- Set Just one to true ----------#
-config["RUNONMC"] = True
+config["RUNONMC"] = False
 config["RUNONPromptReco"] = False
-config["RUNONReReco"] = False
+config["RUNONReReco"] = True
 #-----------------------------------------#
 
 config["USEJSON"] = not (config["RUNONMC"])

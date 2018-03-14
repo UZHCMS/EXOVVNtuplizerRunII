@@ -10,7 +10,7 @@ process.load("Configuration.StandardSequences.MagneticField_cff")
 process.load('Configuration.Geometry.GeometryRecoDB_cff')
 
 process.TFileService = cms.Service("TFileService",
-                                    fileName = cms.string('flatTuple.root')
+                                    fileName = cms.string('flatTuple_data_new_noJEC.root')
                                    )
 
 #from EXOVVNtuplizerRunII.Ntuplizer.ntuplizerOptions_data_cfi import config
@@ -29,14 +29,14 @@ options = VarParsing.VarParsing ('analysis')
 
 
 options.register( 'RunPeriod',
-                  'Run2017B',
+                  'Run2017F',
                   VarParsing.VarParsing.multiplicity.singleton, # singleton or list
                   VarParsing.VarParsing.varType.string,          # string, int, or float
                   "RunNumber (Default Run2017B)")
 
 ####
 
-options.maxEvents = -1
+options.maxEvents = 500# -1
 
 #data file
 
@@ -388,7 +388,8 @@ bTagDiscriminators = [
     'pfBoostedDoubleSecondaryVertexAK8BJetTags',
     'pfDeepCSVJetTags:probb',
     'pfDeepCSVJetTags:probbb',
-
+    'pfDeepCSVJetTags:BvsAll',
+    'pfDeepCSVDiscriminatorsJetTags:BvsAll'
   
 ]
 
