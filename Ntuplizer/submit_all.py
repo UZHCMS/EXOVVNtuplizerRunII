@@ -65,13 +65,15 @@ def main():
     config.section_("General")
     config.General.workArea = options.dir
     config.General.transferLogs = True
-
+    
     config.section_("JobType")
     config.JobType.pluginName = 'Analysis'
     config.JobType.psetName = options.config
+
     config.JobType.allowUndistributedCMSSW = True
     config.JobType.sendExternalFolder = True
     # config.JobType.pyCfgParams = ['DataProcessing=MC25ns_MiniAODv2','lheLabel=externalLHEProducer']
+    #config.JobType.pyCfgParams = ['RunPeriod']
     config.JobType.inputFiles = [
  
         './JSON/Cert_294927-306462_13TeV_PromptReco_Collisions17_JSON.txt'
@@ -79,6 +81,7 @@ def main():
 
     config.section_("Data")
     config.Data.inputDataset = None
+    config.Data.allowNonValidInputDataset = True #To allow to run on non valid dataset
     # config.Data.inputDBS = 'phys03' #to be commented in case of global#
     if options.luminosity == True :
         config.Data.splitting = 'LumiBased'
@@ -88,13 +91,14 @@ def main():
         config.Data.unitsPerJob = 1
     config.Data.ignoreLocality = True
     config.Data.publication = False
-    config.Data.outLFNDirBase = '/store/user/cgalloni/Ntuple_2017_94v2_preliminary'
+    #config.Data.outLFNDirBase = '/store/user/cgalloni/Ntuple_2017_94v2_preliminary'
+    config.Data.outLFNDirBase = '/store/user/cgalloni/Ntuple_2017_92v2_preliminary_JEC_V6'
 
     config.section_("Site")
     #config.Site.storageSite = 'T2_CH_CSCS'
     config.Site.storageSite = 'T3_CH_PSI'
-    config.Site.blacklist=['T1_US_FNAL','T2_US_Wisconsin','T2_FR_IPHC','T2_EE_Estonia','T2_DE_RWTH']
-    #config.Site.whitelist=['T2_US_Nebraska','T2_US_Wisconsin','T2_FR_IPHC','T2_EE_Estonia',
+    config.Site.blacklist=['T1_US_FNAL','T2_US_Wisconsin','T2_FR_IPHC','T2_EE_Estonia','T2_DE_RWTH','T2_KR_KNU','T2_KR_KISTI','T2_BR_SPRACE']
+    config.Site.whitelist=['T2_US_Nebraska','T2_US_Purdue','T2_CH_CSCS', 'T2_CH_CERN']
     print 'Using config ' + options.config
     print 'Writing to directory ' + options.dir
 
