@@ -325,10 +325,10 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
      nBranches_->jetAK4_charge    .push_back(j.charge());
      nBranches_->jetAK4_csv	  .push_back(j.bDiscriminator("pfCombinedInclusiveSecondaryVertexV2BJetTags"));
      nBranches_->jetAK4_deep_csv_bb  .push_back(j.bDiscriminator("pfDeepCSVJetTags:probbb"));
-     nBranches_->jetAK4_deep_csv_b   .push_back(j.bDiscriminator("pfDeepCSVDiscriminatorsJetTags:BvsAll ") );
+     nBranches_->jetAK4_deep_csv_b   .push_back(j.bDiscriminator("pfDeepCSVJetTags:probb") ); //recommended pfDeepCSVDiscriminatorsJetTags:BvsAll is defined = pfDeepCSVJetTags:probbb + pfDeepCSVJetTags:probb 
 
 
-     std:: cout << "j.bDiscriminator(pfCombinedInclusiveSecondaryVertexV2BJetTags) " << j.bDiscriminator("pfCombinedInclusiveSecondaryVertexV2BJetTags") << " deep b " << j.bDiscriminator("pfDeepCSVDiscriminatorsJetTags:BvsAllpfDeepCSVJetTags:BvsAll ")  << " deep bb " << j.bDiscriminator("pfDeepCSVJetTags:probbb")<< std::endl;
+     //std:: cout << "j.bDiscriminator(pfCombinedInclusiveSecondaryVertexV2BJetTags) " << j.bDiscriminator("pfCombinedInclusiveSecondaryVertexV2BJetTags") << " deep b vs all " << j.bDiscriminator("pfDeepCSVDiscriminatorsJetTags:BvsAll")  << " deep bb " << j.bDiscriminator("pfDeepCSVJetTags:probbb")<<  " deep b " << j.bDiscriminator("pfDeepCSVJetTags:probb")<< std::endl;
      nBranches_->jetAK4_vtxMass   .push_back(0); //j.userFloat("vtxMass")); 
      nBranches_->jetAK4_vtxNtracks.push_back(0); //j.userFloat("vtxNtracks")); 
      nBranches_->jetAK4_vtx3DVal  .push_back(0); //j.userFloat("vtx3DVal")); 
