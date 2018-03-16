@@ -10,7 +10,7 @@ process.load("Configuration.StandardSequences.MagneticField_cff")
 process.load('Configuration.Geometry.GeometryRecoDB_cff')
 
 process.TFileService = cms.Service("TFileService",
-                                    fileName = cms.string('flatTuple_data_new_noJEC.root')
+                                    fileName = cms.string('flatTuple.root')
                                    )
 
 #from EXOVVNtuplizerRunII.Ntuplizer.ntuplizerOptions_data_cfi import config
@@ -36,14 +36,14 @@ options.register( 'RunPeriod',
 
 ####
 
-options.maxEvents = 500# -1
+options.maxEvents = -1
 
 #data file
 
 
-#options.inputFiles = '/store/mc/RunIIFall17MiniAOD/ZZTo4L_13TeV_powheg_pythia8/MINIAODSIM/94X_mc2017_realistic_v10-v2/60000/EA783E89-8AD9-E711-AFFE-0CC47A7C3458.root'
+options.inputFiles = '/store/mc/RunIIFall17MiniAOD/ZZTo4L_13TeV_powheg_pythia8/MINIAODSIM/94X_mc2017_realistic_v10-v2/60000/EA783E89-8AD9-E711-AFFE-0CC47A7C3458.root'
 
-options.inputFiles = '/store/data/Run2017F/JetHT/MINIAOD/17Nov2017-v1/70000/F6F6E56A-8ADF-E711-BF89-02163E01A25E.root'
+#options.inputFiles = '/store/data/Run2017F/JetHT/MINIAOD/17Nov2017-v1/70000/F6F6E56A-8ADF-E711-BF89-02163E01A25E.root'
 #options.inputFiles = '/store/data/Run2017D/SingleMuon/MINIAOD/17Nov2017-v1/60000/42E72A07-36E4-E711-9E0B-7845C4FAEFE9.root'
 
 #options.inputFiles = '/store/data/Run2017F/JetHT/MINIAOD/17Nov2017-v1/60000/2E078BBE-75E0-E711-B0A6-02163E01A355.root'
@@ -388,7 +388,6 @@ bTagDiscriminators = [
     'pfBoostedDoubleSecondaryVertexAK8BJetTags',
     'pfDeepCSVJetTags:probb',
     'pfDeepCSVJetTags:probbb',
-    'pfDeepCSVJetTags:BvsAll',
     'pfDeepCSVDiscriminatorsJetTags:BvsAll'
   
 ]
