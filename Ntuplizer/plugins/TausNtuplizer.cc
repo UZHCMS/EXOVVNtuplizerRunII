@@ -325,7 +325,7 @@ void TausNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
       //      nBranches_->tau_byVLooseIsolationMVArun2v1PWoldDMwLT        .push_back(tau.tauID("byVLooseIsolationMVArun2v1PWoldDMwLT"			    ));
       nBranches_->tau_byVTightIsolationMVArun2v1DBdR03oldDMwLT    .push_back(tau.tauID("byVTightIsolationMVArun2v1DBdR03oldDMwLT"			    ));
       nBranches_->tau_byVTightIsolationMVArun2v1DBnewDMwLT        .push_back(tau.tauID("byVTightIsolationMVArun2v1DBnewDMwLT"			    ));
-      nBranches_->tau_byVTightIsolationMVArun2v1DBoldDMwLT        .push_back(tau.tauID("byVTightIsolationMVArun2v1DBoldDMwLT"			    ));
+      nBranches_->tau_byVTightIsolationMVArun2v1DBoldDMwLT        .push_back(tau.tauID("byVTightIsolationMVArun2v1DBoldDMwLTNew"			    ));
 
       //      nBranches_->tau_byVTightIsolationMVArun2v1PWdR03oldDMwLT     .push_back(tau.tauID("byVTightIsolationMVArun2v1PWdR03oldDMwLT"			    ));
       nBranches_->tau_byVTightIsolationMVArun2v1PWnewDMwLT         .push_back(tau.tauID("byVTightIsolationMVArun2v1PWnewDMwLT"			    ));
