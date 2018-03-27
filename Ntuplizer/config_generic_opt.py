@@ -41,9 +41,9 @@ options.maxEvents = -1
 #data file
 
 
-options.inputFiles = '/store/mc/RunIIFall17MiniAOD/ZZTo4L_13TeV_powheg_pythia8/MINIAODSIM/94X_mc2017_realistic_v10-v2/60000/EA783E89-8AD9-E711-AFFE-0CC47A7C3458.root'
+#options.inputFiles = '/store/mc/RunIIFall17MiniAOD/ZZTo4L_13TeV_powheg_pythia8/MINIAODSIM/94X_mc2017_realistic_v10-v2/60000/EA783E89-8AD9-E711-AFFE-0CC47A7C3458.root'
 
-#options.inputFiles = '/store/data/Run2017F/JetHT/MINIAOD/17Nov2017-v1/70000/F6F6E56A-8ADF-E711-BF89-02163E01A25E.root'
+options.inputFiles = '/store/data/Run2017F/JetHT/MINIAOD/17Nov2017-v1/70000/F6F6E56A-8ADF-E711-BF89-02163E01A25E.root'
 #options.inputFiles = '/store/data/Run2017D/SingleMuon/MINIAOD/17Nov2017-v1/60000/42E72A07-36E4-E711-9E0B-7845C4FAEFE9.root'
 
 #options.inputFiles = '/store/data/Run2017F/JetHT/MINIAOD/17Nov2017-v1/60000/2E078BBE-75E0-E711-B0A6-02163E01A355.root'
@@ -669,7 +669,7 @@ process.egmGsfElectronIDSequence = cms.Sequence(process.egmGsfElectronIDs)
 #                 'RecoEgamma.ElectronIdentification.Identification.cutBasedElectronID_Spring15_25ns_V1_cff']
       
 my_id_modules = [
-                 'RecoEgamma.ElectronIdentification.Identification.cutBasedElectronID_Fall17_94X_V1_Preliminary_cff',
+                 'RecoEgamma.ElectronIdentification.Identification.cutBasedElectronID_Fall17_94X_V1_cff',
                  'RecoEgamma.ElectronIdentification.Identification.cutBasedElectronHLTPreselecition_Summer16_V1_cff',
                  'RecoEgamma.ElectronIdentification.Identification.heepElectronID_HEEPV70_cff',
                  'RecoEgamma.ElectronIdentification.Identification.mvaElectronID_Fall17_noIso_V1_cff',
@@ -898,6 +898,7 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     doBoostedTaus     = cms.bool(config["DOTAUSBOOSTED"]),
     doMETSVFIT        = cms.bool(config["DOMETSVFIT"]),
     doMVAMET        = cms.bool(config["DOMVAMET"]),
+    doMultipleTauMVAversions = cms.bool(config["DOMULTIPLETAUMVAVERSIONS"]),
     vertices = cms.InputTag("offlineSlimmedPrimaryVertices"),
     muons = cms.InputTag("slimmedMuons"),
     electrons = cms.InputTag("slimmedElectrons"),
@@ -910,10 +911,10 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
 #    eleMediumIdMap = cms.InputTag("egmGsfElectronIDs:cutBasedElectronID-Spring15-25ns-V1-standalone-medium"),
 #    eleTightIdMap = cms.InputTag("egmGsfElectronIDs:cutBasedElectronID-Spring15-25ns-V1-standalone-tight"),
 
-    eleVetoIdMap = cms.InputTag("egmGsfElectronIDs:cutBasedElectronID-Fall17-94X-V1-Preliminary-veto"),
-    eleLooseIdMap = cms.InputTag("egmGsfElectronIDs:cutBasedElectronID-Fall17-94X-V1-Preliminary-loose"),
-    eleMediumIdMap = cms.InputTag("egmGsfElectronIDs:cutBasedElectronID-Fall17-94X-V1-Preliminary-medium"),
-    eleTightIdMap = cms.InputTag("egmGsfElectronIDs:cutBasedElectronID-Fall17-94X-V1-Preliminary-tight"),
+    eleVetoIdMap = cms.InputTag("egmGsfElectronIDs:cutBasedElectronID-Fall17-94X-V1-veto"),
+    eleLooseIdMap = cms.InputTag("egmGsfElectronIDs:cutBasedElectronID-Fall17-94X-V1-loose"),
+    eleMediumIdMap = cms.InputTag("egmGsfElectronIDs:cutBasedElectronID-Fall17-94X-V1-medium"),
+    eleTightIdMap = cms.InputTag("egmGsfElectronIDs:cutBasedElectronID-Fall17-94X-V1-tight"),
 
     eleHLTIdMap = cms.InputTag("egmGsfElectronIDs:cutBasedElectronHLTPreselection-Summer16-V1"), 
     eleHEEPIdMap = cms.InputTag("egmGsfElectronIDs:heepElectronID-HEEPV70"),
@@ -1135,9 +1136,10 @@ process.rerunMvaIsolation2SeqRun2 = cms.Sequence(
 
 
 # embed new id's into new tau collection
-embedID = cms.EDProducer("PATTauIDEmbedder",
-   src = cms.InputTag('slimmedTaus'),
-   tauIDSources = cms.PSet(
+if  not config["DOMULTIPLETAUMVAVERSIONS"]:
+  embedID = cms.EDProducer("PATTauIDEmbedder",
+                           src = cms.InputTag('slimmedTaus'),
+                           tauIDSources = cms.PSet(
       byIsolationMVArun2v1DBoldDMwLTrawNew = cms.InputTag('rerunDiscriminationByIsolationMVArun2v1raw'),
       byVLooseIsolationMVArun2v1DBoldDMwLTNew = cms.InputTag('rerunDiscriminationByIsolationMVArun2v1VLoose'),
       byVVLooseIsolationMVArun2v1DBoldDMwLTNew = cms.InputTag('rerunDiscriminationByIsolationMVArun2v1VVLoose'),
@@ -1147,9 +1149,329 @@ embedID = cms.EDProducer("PATTauIDEmbedder",
       byVTightIsolationMVArun2v1DBoldDMwLTNew = cms.InputTag('rerunDiscriminationByIsolationMVArun2v1VTight'),
       byVVTightIsolationMVArun2v1DBoldDMwLTNew = cms.InputTag('rerunDiscriminationByIsolationMVArun2v1VVTight'),
       ),
-   )
+                           )
+  
+  setattr(process, "NewTauIDsEmbedded", embedID)
 
-setattr(process, "NewTauIDsEmbedded", embedID)
+if  config["DOMULTIPLETAUMVAVERSIONS"]:
+
+
+  from CondCore.DBCommon.CondDBSetup_cfi import *
+
+
+  process.loadRecoTauTagMVAsFromPrepDB2 = cms.ESSource("PoolDBESSource",
+
+                                                       CondDBSetup,
+                                                       DumpStat = cms.untracked.bool(False),
+                                                       toGet = cms.VPSet(),                                             
+                                                       #  connect = cms.string("frontier://FrontierPrep/CMS_COND_PHYSICSTOOLS") # prep database
+                                                       #connect = cms.string('frontier://FrontierProd/CMS_CONDITIONS') # prod database
+                                                       connect = cms.string('sqlite_file:RecoTauTag_MVAs_2018Mar15.db')
+  )
+
+  #process.loadRecoTauTagMVAsFromPrepDB2
+
+  tauIdDiscrMVA_trainings_run2_2017_v2 = {
+    'tauIdMVAIsoDBoldDMwLT2017' : "tauIdMVAIsoDBoldDMwLT2017",
+    'tauIdMVAIsoDBnewDMwLT2017' : "tauIdMVAIsoDBnewDMwLT2017",
+    'tauIdMVAIsoDBoldDMdR0p3wLT2017' : "tauIdMVAIsoDBoldDMdR0p3wLT2017",
+    }
+  tauIdDiscrMVA_WPs_run2_2017_v2 = {
+    'tauIdMVAIsoDBoldDMwLT2017' : {
+      'Eff95' : "DBoldDMwLTEff95",
+      'Eff90' : "DBoldDMwLTEff90",
+      'Eff80' : "DBoldDMwLTEff80",
+      'Eff70' : "DBoldDMwLTEff70",
+      'Eff60' : "DBoldDMwLTEff60",
+      'Eff50' : "DBoldDMwLTEff50",
+      'Eff40' : "DBoldDMwLTEff40"
+      } ,
+    'tauIdMVAIsoDBnewDMwLT2017' : {
+      'Eff95' : "DBnewDMwLTEff95",
+      'Eff90' : "DBnewDMwLTEff90",
+      'Eff80' : "DBnewDMwLTEff80",
+      'Eff70' : "DBnewDMwLTEff70",
+      'Eff60' : "DBnewDMwLTEff60",
+      'Eff50' : "DBnewDMwLTEff50",
+      'Eff40' : "DBnewDMwLTEff40"
+      } ,
+    'tauIdMVAIsoDBoldDMdR0p3wLT2017' : {
+      'Eff95' : "DBoldDMdR0p3wLTEff95",
+      'Eff90' : "DBoldDMdR0p3wLTEff90",
+      'Eff80' : "DBoldDMdR0p3wLTEff80",
+      'Eff70' : "DBoldDMdR0p3wLTEff70",
+      'Eff60' : "DBoldDMdR0p3wLTEff60",
+      'Eff50' : "DBoldDMdR0p3wLTEff50",
+      'Eff40' : "DBoldDMdR0p3wLTEff40"
+     }
+    }
+  tauIdDiscrMVA_2017_v2_version = "v2"
+
+  tauIdDiscrMVA_mvaOutput_normalizations_v2 = {
+    'tauIdMVAIsoDBoldDMwLT2017' : "tauIdMVAIsoDBoldDMwLT_2017v2_dR0p5",
+    'tauIdMVAIsoDBnewDMwLT2017' : "tauIdMVAIsoDBnewDMwLT_2017v2_dR0p5",
+    'tauIdMVAIsoDBoldDMdR0p3wLT2017' : "tauIdMVAIsoDBoldDMwLT_2017v2_dR0p3",
+    }
+  def loadMVA_WPs_run2_2017_v2(process):
+                  print "LoadMVA_WPs_run2_2017_v2: performed::::"
+                  #global cms
+
+
+                  for training, gbrForestName in tauIdDiscrMVA_trainings_run2_2017_v2.items():
+                          print " printing tauIdDiscrMVA_trainings_run2_2017_v2.items(),  training %s , gbrForestName %s" %(training, gbrForestName)
+                          print " tauIdDiscrMVA_mvaOutput_normalizations_v2[training] %s"% tauIdDiscrMVA_mvaOutput_normalizations_v2[training]
+                          print "printato"
+ 
+                          process.loadRecoTauTagMVAsFromPrepDB2.toGet.append(
+                                  cms.PSet(
+                                          record = cms.string('GBRWrapperRcd'),
+                                          tag = cms.string("RecoTauTag_%s%s" % (gbrForestName, tauIdDiscrMVA_2017_v2_version)),
+                                          label = cms.untracked.string("RecoTauTag_%s%s" % (gbrForestName, tauIdDiscrMVA_2017_v2_version))
+                                  )
+                          )
+
+                          for WP in tauIdDiscrMVA_WPs_run2_2017_v2[training].keys():
+                                  process.loadRecoTauTagMVAsFromPrepDB2.toGet.append(
+                                          cms.PSet(
+                                                  record = cms.string('PhysicsTGraphPayloadRcd'),
+                                                  tag = cms.string("RecoTauTag_%s%s_WP%s" % (gbrForestName, tauIdDiscrMVA_2017_v2_version, WP)),
+                                                  label = cms.untracked.string("RecoTauTag_%s%s_WP%s" % (gbrForestName, tauIdDiscrMVA_2017_v2_version, WP))
+                                          )
+                                  )
+
+                          process.loadRecoTauTagMVAsFromPrepDB2.toGet.append(
+                                  cms.PSet(
+                                          record = cms.string('PhysicsTFormulaPayloadRcd'),
+                                          tag = cms.string("RecoTauTag_%s_mvaOutput_normalization" % (tauIdDiscrMVA_mvaOutput_normalizations_v2[training])),
+                                          label = cms.untracked.string("RecoTauTag_%s_mvaOutput_normalization" % (tauIdDiscrMVA_mvaOutput_normalizations_v2[training]))### https://github.com/cgalloni/cmssw/blob/CMSSW_8_0_X/RecoTauTag/Configuration/python/loadRecoTauTagMVAsFromPrepDB_cfi.py
+                                          #tag = cms.string("RecoTauTag_tauIdMVAIsoDBoldDMwLT_2017v2_dR0p5_mvaOutput_normalization"),
+                                          #label = cms.untracked.string("RecoTauTag_tauIdMVAIsoDBoldDMwLT_2017v2_dR0p5_mvaOutput_normalization"),
+
+                                  )
+  )
+
+
+
+
+
+
+
+  #======= for v2
+
+
+  loadMVA_WPs_run2_2017_v2(process)
+
+  process.rerunDiscriminationByIsolationMVArun2v2raw = patDiscriminationByIsolationMVArun2v1raw.clone(
+     PATTauProducer = cms.InputTag('slimmedTaus'),
+     Prediscriminants = noPrediscriminants,
+     loadMVAfromDB = cms.bool(True),
+     mvaName = cms.string("RecoTauTag_tauIdMVAIsoDBoldDMwLT2017v2"),# training with 2017 MC_v1 for oldDM # name of the training you want to use
+     mvaOpt = cms.string("DBoldDMwLTwGJ"), # option you want to use for your training (i.e., which variables are used to compute the BDT score)
+     requireDecayMode = cms.bool(True),
+     verbosity = cms.int32(0)
+  )
+
+
+  process.rerunDiscriminationByIsolationMVArun2v2VLoose = patDiscriminationByIsolationMVArun2v1VLoose.clone(
+     PATTauProducer = cms.InputTag('slimmedTaus'),    
+     Prediscriminants = noPrediscriminants,
+     toMultiplex = cms.InputTag('rerunDiscriminationByIsolationMVArun2v2raw'),
+     key = cms.InputTag('rerunDiscriminationByIsolationMVArun2v2raw:category'),
+     loadMVAfromDB = cms.bool(True),
+     mvaOutput_normalization = cms.string("RecoTauTag_tauIdMVAIsoDBoldDMwLT_2017v2_dR0p5_mvaOutput_normalization"), # normalization fo the training you want to use
+     mapping = cms.VPSet(
+        cms.PSet(
+           category = cms.uint32(0),
+           cut = cms.string("RecoTauTag_tauIdMVAIsoDBoldDMwLT2017v2_WPEff90"), # this is the name of the working point you want to use
+           variable = cms.string("pt"),
+        )
+     )
+  )
+
+  # here we produce all the other working points for the training
+  process.rerunDiscriminationByIsolationMVArun2v2VVLoose = process.rerunDiscriminationByIsolationMVArun2v2VLoose.clone()
+  process.rerunDiscriminationByIsolationMVArun2v2VVLoose.mapping[0].cut = cms.string("RecoTauTag_tauIdMVAIsoDBoldDMwLT2017v2_WPEff95")
+  process.rerunDiscriminationByIsolationMVArun2v2Loose = process.rerunDiscriminationByIsolationMVArun2v2VLoose.clone()
+  process.rerunDiscriminationByIsolationMVArun2v2Loose.mapping[0].cut = cms.string("RecoTauTag_tauIdMVAIsoDBoldDMwLT2017v2_WPEff80")
+  process.rerunDiscriminationByIsolationMVArun2v2Medium = process.rerunDiscriminationByIsolationMVArun2v2VLoose.clone()
+  process.rerunDiscriminationByIsolationMVArun2v2Medium.mapping[0].cut = cms.string("RecoTauTag_tauIdMVAIsoDBoldDMwLT2017v2_WPEff70")
+  process.rerunDiscriminationByIsolationMVArun2v2Tight = process.rerunDiscriminationByIsolationMVArun2v2VLoose.clone()
+  process.rerunDiscriminationByIsolationMVArun2v2Tight.mapping[0].cut = cms.string("RecoTauTag_tauIdMVAIsoDBoldDMwLT2017v2_WPEff60")
+  process.rerunDiscriminationByIsolationMVArun2v2VTight = process.rerunDiscriminationByIsolationMVArun2v2VLoose.clone()
+  process.rerunDiscriminationByIsolationMVArun2v2VTight.mapping[0].cut = cms.string("RecoTauTag_tauIdMVAIsoDBoldDMwLT2017v2_WPEff50")
+  process.rerunDiscriminationByIsolationMVArun2v2VVTight = process.rerunDiscriminationByIsolationMVArun2v2VLoose.clone()
+  process.rerunDiscriminationByIsolationMVArun2v2VVTight.mapping[0].cut = cms.string("RecoTauTag_tauIdMVAIsoDBoldDMwLT2017v2_WPEff40")
+
+  # this sequence has to be included in your cms.Path() before your analyzer which accesses the new variables is called.
+  process.rerunMvaIsolation2SeqRun2_2 = cms.Sequence(
+     process.rerunDiscriminationByIsolationMVArun2v2raw
+     *process.rerunDiscriminationByIsolationMVArun2v2VLoose
+     *process.rerunDiscriminationByIsolationMVArun2v2VVLoose
+     *process.rerunDiscriminationByIsolationMVArun2v2Loose
+     *process.rerunDiscriminationByIsolationMVArun2v2Medium
+     *process.rerunDiscriminationByIsolationMVArun2v2Tight
+     *process.rerunDiscriminationByIsolationMVArun2v2VTight
+     *process.rerunDiscriminationByIsolationMVArun2v2VVTight
+  )
+
+  #========== MVA newDM
+  process.rerunDiscriminationByIsolationMVArun2v2newDMraw = patDiscriminationByIsolationMVArun2v1raw.clone(
+     PATTauProducer = cms.InputTag('slimmedTaus'),
+     Prediscriminants = noPrediscriminants,
+     loadMVAfromDB = cms.bool(True),
+     mvaName = cms.string("RecoTauTag_tauIdMVAIsoDBnewDMwLT2017v2"),# training with 2017 MC_v1 for newDM # name of the training you want to use                                                                                                 
+     mvaOpt = cms.string("DBnewDMwLTwGJ"), # option you want to use for your training (i.e., which variables are used to compute the BDT score)                                                                                                 
+     requireDecayMode = cms.bool(True),
+     verbosity = cms.int32(0)
+  )
+
+
+  process.rerunDiscriminationByIsolationMVArun2v2newDMVLoose = patDiscriminationByIsolationMVArun2v1VLoose.clone(
+     PATTauProducer = cms.InputTag('slimmedTaus'),
+     Prediscriminants = noPrediscriminants,
+     toMultiplex = cms.InputTag('rerunDiscriminationByIsolationMVArun2v2newDMraw'),
+     key = cms.InputTag('rerunDiscriminationByIsolationMVArun2v2newDMraw:category'),
+     loadMVAfromDB = cms.bool(True),
+     mvaOutput_normalization = cms.string("RecoTauTag_tauIdMVAIsoDBnewDMwLT_2017v2_dR0p5_mvaOutput_normalization"), # normalization fo the training you want to use                                                                             
+     mapping = cms.VPSet(
+        cms.PSet(
+           category = cms.uint32(0),
+           cut = cms.string("RecoTauTag_tauIdMVAIsoDBnewDMwLT2017v2_WPEff90"), # this is the name of the working point you want to use                                                                                                          
+           variable = cms.string("pt"),
+        )
+     )
+  )
+
+  # here we produce all the other working points for the training                                                                                                                                                                               
+  process.rerunDiscriminationByIsolationMVArun2v2newDMVVLoose = process.rerunDiscriminationByIsolationMVArun2v2newDMVLoose.clone()
+  process.rerunDiscriminationByIsolationMVArun2v2newDMVVLoose.mapping[0].cut = cms.string("RecoTauTag_tauIdMVAIsoDBnewDMwLT2017v2_WPEff95")
+  process.rerunDiscriminationByIsolationMVArun2v2newDMLoose = process.rerunDiscriminationByIsolationMVArun2v2newDMVLoose.clone()
+  process.rerunDiscriminationByIsolationMVArun2v2newDMLoose.mapping[0].cut = cms.string("RecoTauTag_tauIdMVAIsoDBnewDMwLT2017v2_WPEff80")
+  process.rerunDiscriminationByIsolationMVArun2v2newDMMedium = process.rerunDiscriminationByIsolationMVArun2v2newDMVLoose.clone()
+  process.rerunDiscriminationByIsolationMVArun2v2newDMMedium.mapping[0].cut = cms.string("RecoTauTag_tauIdMVAIsoDBnewDMwLT2017v2_WPEff70")
+  process.rerunDiscriminationByIsolationMVArun2v2newDMTight = process.rerunDiscriminationByIsolationMVArun2v2newDMVLoose.clone()
+  process.rerunDiscriminationByIsolationMVArun2v2newDMTight.mapping[0].cut = cms.string("RecoTauTag_tauIdMVAIsoDBnewDMwLT2017v2_WPEff60")
+  process.rerunDiscriminationByIsolationMVArun2v2newDMVTight = process.rerunDiscriminationByIsolationMVArun2v2newDMVLoose.clone()
+  process.rerunDiscriminationByIsolationMVArun2v2newDMVTight.mapping[0].cut = cms.string("RecoTauTag_tauIdMVAIsoDBnewDMwLT2017v2_WPEff50")
+  process.rerunDiscriminationByIsolationMVArun2v2newDMVVTight = process.rerunDiscriminationByIsolationMVArun2v2newDMVLoose.clone()
+  process.rerunDiscriminationByIsolationMVArun2v2newDMVVTight.mapping[0].cut = cms.string("RecoTauTag_tauIdMVAIsoDBnewDMwLT2017v2_WPEff40")
+
+  # this sequence has to be included in your cms.Path() before your analyzer which accesses the new variables is called.                                                                                                                        
+  process.rerunMvaIsolation2SeqRun2_2_newDM = cms.Sequence(
+     process.rerunDiscriminationByIsolationMVArun2v2newDMraw
+     *process.rerunDiscriminationByIsolationMVArun2v2newDMVLoose
+     *process.rerunDiscriminationByIsolationMVArun2v2newDMVVLoose
+     *process.rerunDiscriminationByIsolationMVArun2v2newDMLoose
+     *process.rerunDiscriminationByIsolationMVArun2v2newDMMedium
+     *process.rerunDiscriminationByIsolationMVArun2v2newDMTight
+     *process.rerunDiscriminationByIsolationMVArun2v2newDMVTight
+     *process.rerunDiscriminationByIsolationMVArun2v2newDMVVTight
+  )
+
+
+  #========== MVA oldDM _dR0p3
+
+  process.rerunDiscriminationByIsolationMVArun2v2dR0p3raw = patDiscriminationByIsolationMVArun2v1raw.clone(
+     PATTauProducer = cms.InputTag('slimmedTaus'),
+     Prediscriminants = noPrediscriminants,
+     loadMVAfromDB = cms.bool(True),
+     mvaName = cms.string("RecoTauTag_tauIdMVAIsoDBoldDMdR0p3wLT2017v2"),#RecoTauTag_tauIdMVAIsoDBoldDMdR0p3wLT2017v2 training with 2017 MC_v1 for oldDM # name of the training you want to use
+     mvaOpt = cms.string("DBoldDMwLTwGJ"), # option you want to use for your training (i.e., which variables are used to compute the BDT score)
+     requireDecayMode = cms.bool(True),
+     verbosity = cms.int32(0)
+  )
+
+
+  process.rerunDiscriminationByIsolationMVArun2v2dR0p3VLoose = patDiscriminationByIsolationMVArun2v1VLoose.clone(
+     PATTauProducer = cms.InputTag('slimmedTaus'),    
+     Prediscriminants = noPrediscriminants,
+     toMultiplex = cms.InputTag('rerunDiscriminationByIsolationMVArun2v2dR0p3raw'),
+     key = cms.InputTag('rerunDiscriminationByIsolationMVArun2v2dR0p3raw:category'),
+     loadMVAfromDB = cms.bool(True),
+     mvaOutput_normalization = cms.string("RecoTauTag_tauIdMVAIsoDBoldDMwLT_2017v2_dR0p3_mvaOutput_normalization"), #RecoTauTag_tauIdMVAIsoDBoldDMwLT_2017v2_dR0p3_mvaOutput_normalization normalization fo the training you want to use
+     mapping = cms.VPSet(
+        cms.PSet(
+           category = cms.uint32(0),
+           cut = cms.string("RecoTauTag_tauIdMVAIsoDBoldDMdR0p3wLT2017v2_WPEff90"), # this is the name of the working point you want to use
+           variable = cms.string("pt"),
+        )
+     )
+  )
+
+  # here we produce all the other working points for the training
+  process.rerunDiscriminationByIsolationMVArun2v2dR0p3VVLoose = process.rerunDiscriminationByIsolationMVArun2v2dR0p3VLoose.clone()
+  process.rerunDiscriminationByIsolationMVArun2v2dR0p3VVLoose.mapping[0].cut = cms.string("RecoTauTag_tauIdMVAIsoDBoldDMdR0p3wLT2017v2_WPEff95")
+  process.rerunDiscriminationByIsolationMVArun2v2dR0p3Loose = process.rerunDiscriminationByIsolationMVArun2v2dR0p3VLoose.clone()
+  process.rerunDiscriminationByIsolationMVArun2v2dR0p3Loose.mapping[0].cut = cms.string("RecoTauTag_tauIdMVAIsoDBoldDMdR0p3wLT2017v2_WPEff80")
+  process.rerunDiscriminationByIsolationMVArun2v2dR0p3Medium = process.rerunDiscriminationByIsolationMVArun2v2dR0p3VLoose.clone()
+  process.rerunDiscriminationByIsolationMVArun2v2dR0p3Medium.mapping[0].cut = cms.string("RecoTauTag_tauIdMVAIsoDBoldDMdR0p3wLT2017v2_WPEff70")
+  process.rerunDiscriminationByIsolationMVArun2v2dR0p3Tight = process.rerunDiscriminationByIsolationMVArun2v2dR0p3VLoose.clone()
+  process.rerunDiscriminationByIsolationMVArun2v2dR0p3Tight.mapping[0].cut = cms.string("RecoTauTag_tauIdMVAIsoDBoldDMdR0p3wLT2017v2_WPEff60")
+  process.rerunDiscriminationByIsolationMVArun2v2dR0p3VTight = process.rerunDiscriminationByIsolationMVArun2v2dR0p3VLoose.clone()
+  process.rerunDiscriminationByIsolationMVArun2v2dR0p3VTight.mapping[0].cut = cms.string("RecoTauTag_tauIdMVAIsoDBoldDMdR0p3wLT2017v2_WPEff50")
+  process.rerunDiscriminationByIsolationMVArun2v2dR0p3VVTight = process.rerunDiscriminationByIsolationMVArun2v2dR0p3VLoose.clone()
+  process.rerunDiscriminationByIsolationMVArun2v2dR0p3VVTight.mapping[0].cut = cms.string("RecoTauTag_tauIdMVAIsoDBoldDMdR0p3wLT2017v2_WPEff40")
+
+  process.rerunMvaIsolation2SeqRun2_2_dR0p3 = cms.Sequence(
+    process.rerunDiscriminationByIsolationMVArun2v2dR0p3raw
+    *process.rerunDiscriminationByIsolationMVArun2v2dR0p3VLoose
+    *process.rerunDiscriminationByIsolationMVArun2v2dR0p3VVLoose
+    *process.rerunDiscriminationByIsolationMVArun2v2dR0p3Loose
+    *process.rerunDiscriminationByIsolationMVArun2v2dR0p3Medium
+    *process.rerunDiscriminationByIsolationMVArun2v2dR0p3Tight
+    *process.rerunDiscriminationByIsolationMVArun2v2dR0p3VTight
+    *process.rerunDiscriminationByIsolationMVArun2v2dR0p3VVTight
+    )
+
+  # this se
+
+
+
+
+
+
+  # embed new id's into new tau collection
+  embedID = cms.EDProducer("PATTauIDEmbedder",
+     src = cms.InputTag('slimmedTaus'),
+     tauIDSources = cms.PSet(
+        byIsolationMVArun2v1DBoldDMwLTrawNew = cms.InputTag('rerunDiscriminationByIsolationMVArun2v1raw'),
+        byVLooseIsolationMVArun2v1DBoldDMwLTNew = cms.InputTag('rerunDiscriminationByIsolationMVArun2v1VLoose'),
+        byVVLooseIsolationMVArun2v1DBoldDMwLTNew = cms.InputTag('rerunDiscriminationByIsolationMVArun2v1VVLoose'),
+        byLooseIsolationMVArun2v1DBoldDMwLTNew = cms.InputTag('rerunDiscriminationByIsolationMVArun2v1Loose'),
+        byMediumIsolationMVArun2v1DBoldDMwLTNew = cms.InputTag('rerunDiscriminationByIsolationMVArun2v1Medium'),
+        byTightIsolationMVArun2v1DBoldDMwLTNew = cms.InputTag('rerunDiscriminationByIsolationMVArun2v1Tight'),
+        byVTightIsolationMVArun2v1DBoldDMwLTNew = cms.InputTag('rerunDiscriminationByIsolationMVArun2v1VTight'),
+        byVVTightIsolationMVArun2v1DBoldDMwLTNew = cms.InputTag('rerunDiscriminationByIsolationMVArun2v1VVTight'),
+        byIsolationMVArun2v2DBoldDMwLTrawNew = cms.InputTag('rerunDiscriminationByIsolationMVArun2v2raw'),
+        byVLooseIsolationMVArun2v2DBoldDMwLTNew = cms.InputTag('rerunDiscriminationByIsolationMVArun2v2VLoose'),
+        byVVLooseIsolationMVArun2v2DBoldDMwLTNew = cms.InputTag('rerunDiscriminationByIsolationMVArun2v2VVLoose'),
+        byLooseIsolationMVArun2v2DBoldDMwLTNew = cms.InputTag('rerunDiscriminationByIsolationMVArun2v2Loose'),
+        byMediumIsolationMVArun2v2DBoldDMwLTNew = cms.InputTag('rerunDiscriminationByIsolationMVArun2v2Medium'),
+        byTightIsolationMVArun2v2DBoldDMwLTNew = cms.InputTag('rerunDiscriminationByIsolationMVArun2v2Tight'),
+        byVTightIsolationMVArun2v2DBoldDMwLTNew = cms.InputTag('rerunDiscriminationByIsolationMVArun2v2VTight'),
+        byVVTightIsolationMVArun2v2DBoldDMwLTNew = cms.InputTag('rerunDiscriminationByIsolationMVArun2v2VVTight'), 
+
+        byIsolationMVArun2v2DBnewDMwLTrawNew = cms.InputTag('rerunDiscriminationByIsolationMVArun2v2newDMraw'),
+        byVLooseIsolationMVArun2v2DBnewDMwLTNew = cms.InputTag('rerunDiscriminationByIsolationMVArun2v2newDMVLoose'),
+        byVVLooseIsolationMVArun2v2DBnewDMwLTNew = cms.InputTag('rerunDiscriminationByIsolationMVArun2v2newDMVVLoose'),
+        byLooseIsolationMVArun2v2DBnewDMwLTNew = cms.InputTag('rerunDiscriminationByIsolationMVArun2v2newDMLoose'),
+        byMediumIsolationMVArun2v2DBnewDMwLTNew = cms.InputTag('rerunDiscriminationByIsolationMVArun2v2newDMMedium'),
+        byTightIsolationMVArun2v2DBnewDMwLTNew = cms.InputTag('rerunDiscriminationByIsolationMVArun2v2newDMTight'),
+        byVTightIsolationMVArun2v2DBnewDMwLTNew = cms.InputTag('rerunDiscriminationByIsolationMVArun2v2newDMVTight'),
+        byVVTightIsolationMVArun2v2DBnewDMwLTNew = cms.InputTag('rerunDiscriminationByIsolationMVArun2v2newDMVVTight'),
+
+        byIsolationMVArun2v2DBoldDMdR0p3wLTrawNew = cms.InputTag('rerunDiscriminationByIsolationMVArun2v2dR0p3raw'),
+        byVLooseIsolationMVArun2v2DBoldDMdR0p3wLTNew = cms.InputTag('rerunDiscriminationByIsolationMVArun2v2dR0p3VLoose'),
+        byVVLooseIsolationMVArun2v2DBoldDMdR0p3wLTNew = cms.InputTag('rerunDiscriminationByIsolationMVArun2v2dR0p3VVLoose'),
+        byLooseIsolationMVArun2v2DBoldDMdR0p3wLTNew = cms.InputTag('rerunDiscriminationByIsolationMVArun2v2dR0p3Loose'),
+        byMediumIsolationMVArun2v2DBoldDMdR0p3wLTNew = cms.InputTag('rerunDiscriminationByIsolationMVArun2v2dR0p3Medium'),
+        byTightIsolationMVArun2v2DBoldDMdR0p3wLTNew = cms.InputTag('rerunDiscriminationByIsolationMVArun2v2dR0p3Tight'),
+        byVTightIsolationMVArun2v2DBoldDMdR0p3wLTNew = cms.InputTag('rerunDiscriminationByIsolationMVArun2v2dR0p3VTight'),
+        byVVTightIsolationMVArun2v2DBoldDMdR0p3wLTNew = cms.InputTag('rerunDiscriminationByIsolationMVArun2v2dR0p3VVTight'),
+        ),
+     )
+
+  setattr(process, "NewTauIDsEmbedded", embedID)
 
 
 
@@ -1161,6 +1483,11 @@ if config["DOHLTFILTERS"]:
 
 # For new MVA ID !
 process.p += process.rerunMvaIsolation2SeqRun2 
+if config["DOMULTIPLETAUMVAVERSIONS"]:
+  process.p += process.rerunMvaIsolation2SeqRun2_2
+  process.p += process.rerunMvaIsolation2SeqRun2_2_dR0p3
+  process.p += process.rerunMvaIsolation2SeqRun2_2_newDM
+
 process.p += getattr(process, "NewTauIDsEmbedded")
 # For new MVA ID END!
 

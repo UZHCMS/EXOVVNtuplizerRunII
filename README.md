@@ -38,7 +38,7 @@ git cms-merge-topic lsoffi:CMSSW_9_4_0_pre3_TnP
 git cms-merge-topic guitargeek:ElectronID_MVA2017_940pre3
 scram b -j 8
 cd $CMSSW_BASE/external
-d slc6_amd64_gcc630/
+cd slc6_amd64_gcc630/
 git clone https://github.com/lsoffi/RecoEgamma-PhotonIdentification.git data/RecoEgamma/PhotonIdentification/data
 cd data/RecoEgamma/PhotonIdentification/data
 git checkout CMSSW_9_4_0_pre3_TnP

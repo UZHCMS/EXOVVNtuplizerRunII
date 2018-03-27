@@ -296,6 +296,8 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
      nBranches_->jetAK4_jec	  .push_back(corr);
      nBranches_->jetAK4_jecUp 	  .push_back(corrUp);
      nBranches_->jetAK4_jecDown	  .push_back(corrDown);
+
+     //std:: cout<< "corr " << corr << " corrUp " << corrUp << "corr " << corrDown<< std::endl ;
      nBranches_->jetAK4_IDLoose   .push_back(IDLoose);
      nBranches_->jetAK4_IDTight   .push_back(IDTight);
      nBranches_->jetAK4_IDTightWithoutLepVeto   .push_back(IDTightWithoutLepVeto);

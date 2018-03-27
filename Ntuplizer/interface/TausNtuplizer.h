@@ -10,7 +10,7 @@ public:
   TausNtuplizer( edm::EDGetTokenT<pat::TauCollection> tauToken, edm::EDGetTokenT<pat::TauCollection> tauBoostedTauToken , edm::EDGetTokenT<double> rhoToken, edm::EDGetTokenT<pat::PackedCandidateCollection> packedpfcandidatesToken, edm::EDGetTokenT<reco::VertexCollection> verticeToken,  NtupleBranches* nBranches, std::map< std::string, bool >& runFlags );
    ~TausNtuplizer( void );
    
-   void fillBranches( edm::Event const & event, const edm::EventSetup& iSetup );
+   void fillBranches( edm::Event const & event, const edm::EventSetup& iSetup /* , std::map< std::string, bool >& runFlags  */  );
    
  private:
    
