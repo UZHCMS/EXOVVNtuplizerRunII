@@ -341,16 +341,18 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
 
       //      tree_->Branch( "tau_byVVTightIsolationMVArun2v1PWoldDMwLT"        , &tau_byVVTightIsolationMVArun2v1PWoldDMwLT);
 
-      // YT added
-//      tree_->Branch("tau_byIsolationMVArun2v1DBoldDMwLTrawNew", &tau_byIsolationMVArun2v1DBoldDMwLTrawNew);
-//      tree_->Branch("tau_byVLooseIsolationMVArun2v1DBoldDMwLTNew", &tau_byVLooseIsolationMVArun2v1DBoldDMwLTNew);
-//      tree_->Branch("tau_byLooseIsolationMVArun2v1DBoldDMwLTNew", &tau_byLooseIsolationMVArun2v1DBoldDMwLTNew);
-//      tree_->Branch("tau_byMediumIsolationMVArun2v1DBoldDMwLTNew", &tau_byMediumIsolationMVArun2v1DBoldDMwLTNew);
-//      tree_->Branch("tau_byTightIsolationMVArun2v1DBoldDMwLTNew", &tau_byTightIsolationMVArun2v1DBoldDMwLTNew);
-//      tree_->Branch("tau_byVTightIsolationMVArun2v1DBoldDMwLTNew", &tau_byVTightIsolationMVArun2v1DBoldDMwLTNew);
-//      tree_->Branch("tau_byVVTightIsolationMVArun2v1DBoldDMwLTNew", &tau_byVVTightIsolationMVArun2v1DBoldDMwLTNew);
-      // YT added end
-
+      // add multimple variables to save multiple MVA versions
+      // if ( runFlags["doMultipleTauMVAversions"] ){
+	tree_->Branch("tau_byIsolationMVArun2v2DBoldDMwLTraw", &tau_byIsolationMVArun2v2DBoldDMwLTraw);
+	tree_->Branch("tau_byVVLooseIsolationMVArun2v2DBoldDMwLT", &tau_byVVLooseIsolationMVArun2v2DBoldDMwLT);
+	tree_->Branch("tau_byVLooseIsolationMVArun2v2DBoldDMwLT", &tau_byVLooseIsolationMVArun2v2DBoldDMwLT);
+	tree_->Branch("tau_byLooseIsolationMVArun2v2DBoldDMwLT", &tau_byLooseIsolationMVArun2v2DBoldDMwLT);
+	tree_->Branch("tau_byMediumIsolationMVArun2v2DBoldDMwLT", &tau_byMediumIsolationMVArun2v2DBoldDMwLT);
+	tree_->Branch("tau_byTightIsolationMVArun2v2DBoldDMwLT", &tau_byTightIsolationMVArun2v2DBoldDMwLT);
+	tree_->Branch("tau_byVTightIsolationMVArun2v2DBoldDMwLT", &tau_byVTightIsolationMVArun2v2DBoldDMwLT);
+	tree_->Branch("tau_byVVTightIsolationMVArun2v2DBoldDMwLT", &tau_byVVTightIsolationMVArun2v2DBoldDMwLT);
+      
+	// }
 
       tree_->Branch( "tau_againstElectronMVA6raw"                     , &tau_againstElectronMVA6raw);
       tree_->Branch( "tau_againstElectronMVA6category"                , &tau_againstElectronMVA6category);
@@ -1017,14 +1019,15 @@ void NtupleBranches::reset( void ){
 
   //  tau_byVVTightIsolationMVArun2v1PWoldDMwLT.clear();
 
-
-//  tau_byIsolationMVArun2v1DBoldDMwLTrawNew.clear();
-//  tau_byVLooseIsolationMVArun2v1DBoldDMwLTNew.clear();
-//  tau_byLooseIsolationMVArun2v1DBoldDMwLTNew.clear();
-//  tau_byMediumIsolationMVArun2v1DBoldDMwLTNew.clear();
-//  tau_byTightIsolationMVArun2v1DBoldDMwLTNew.clear();
-//  tau_byVTightIsolationMVArun2v1DBoldDMwLTNew.clear();
-//  tau_byVVTightIsolationMVArun2v1DBoldDMwLTNew.clear();
+ 
+  tau_byIsolationMVArun2v2DBoldDMwLTraw.clear();
+  tau_byVVLooseIsolationMVArun2v2DBoldDMwLT.clear();
+  tau_byVLooseIsolationMVArun2v2DBoldDMwLT.clear();
+  tau_byLooseIsolationMVArun2v2DBoldDMwLT.clear();
+  tau_byMediumIsolationMVArun2v2DBoldDMwLT.clear();
+  tau_byTightIsolationMVArun2v2DBoldDMwLT.clear();
+  tau_byVTightIsolationMVArun2v2DBoldDMwLT.clear();
+  tau_byVVTightIsolationMVArun2v2DBoldDMwLT.clear();
   
 
   tau_againstElectronMVA6raw.clear();

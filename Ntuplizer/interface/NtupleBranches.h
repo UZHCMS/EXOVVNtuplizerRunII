@@ -377,13 +377,14 @@ public:
   std::vector<bool>  	      tau_byVVTightIsolationMVArun2v1PWoldDMwLT			      ;
 
   // YT added : newly added for the MVA training
-//  std::vector<bool>  	      tau_byIsolationMVArun2v1DBoldDMwLTrawNew;
-//  std::vector<bool>  	      tau_byVLooseIsolationMVArun2v1DBoldDMwLTNew;
-//  std::vector<bool>  	      tau_byLooseIsolationMVArun2v1DBoldDMwLTNew;
-//  std::vector<bool>  	      tau_byMediumIsolationMVArun2v1DBoldDMwLTNew;
-//  std::vector<bool>  	      tau_byTightIsolationMVArun2v1DBoldDMwLTNew;
-//  std::vector<bool>  	      tau_byVTightIsolationMVArun2v1DBoldDMwLTNew;
-//  std::vector<bool>  	      tau_byVVTightIsolationMVArun2v1DBoldDMwLTNew;
+  std::vector<float>  	      tau_byIsolationMVArun2v2DBoldDMwLTraw;
+  std::vector<bool>  	      tau_byVVLooseIsolationMVArun2v2DBoldDMwLT;
+  std::vector<bool>  	      tau_byVLooseIsolationMVArun2v2DBoldDMwLT;
+  std::vector<bool>  	      tau_byLooseIsolationMVArun2v2DBoldDMwLT;
+  std::vector<bool>  	      tau_byMediumIsolationMVArun2v2DBoldDMwLT;
+  std::vector<bool>  	      tau_byTightIsolationMVArun2v2DBoldDMwLT;
+  std::vector<bool>  	      tau_byVTightIsolationMVArun2v2DBoldDMwLT;
+  std::vector<bool>  	      tau_byVVTightIsolationMVArun2v2DBoldDMwLT;
   // YT added : newly added for the MVA training
 
   std::vector<float>  	      tau_againstElectronMVA6raw			      ;

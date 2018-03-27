@@ -75,7 +75,7 @@ def main():
     # config.JobType.pyCfgParams = ['DataProcessing=MC25ns_MiniAODv2','lheLabel=externalLHEProducer']
     #config.JobType.pyCfgParams = ['RunPeriod']
     config.JobType.inputFiles = [
- 
+        'RecoTauTag_MVAs_2018Mar15.db',
         './JSON/Cert_294927-306462_13TeV_PromptReco_Collisions17_JSON.txt'
         ]
 
@@ -89,16 +89,18 @@ def main():
     else:
         config.Data.splitting = 'FileBased'
         config.Data.unitsPerJob = 1
-    config.Data.ignoreLocality = True
+    #config.Data.ignoreLocality = True
     config.Data.publication = False
     #config.Data.outLFNDirBase = '/store/user/cgalloni/Ntuple_2017_94v2_preliminary'
-    config.Data.outLFNDirBase = '/store/user/cgalloni/Ntuple_2017_92v2_preliminary_JEC_V6'
+    config.Data.outLFNDirBase = '/store/user/cgalloni/Ntuple_2017_94v2_preliminary_JEC_V6_tau_iso_JECUNC'
+    #config.Data.outLFNDirBase = '/store/t3groups/uniz-higgs/Fall17'
+
 
     config.section_("Site")
     #config.Site.storageSite = 'T2_CH_CSCS'
     config.Site.storageSite = 'T3_CH_PSI'
-    config.Site.blacklist=['T1_US_FNAL','T2_US_Wisconsin','T2_FR_IPHC','T2_EE_Estonia','T2_DE_RWTH','T2_KR_KNU','T2_KR_KISTI','T2_BR_SPRACE']
-    config.Site.whitelist=['T2_US_Nebraska','T2_US_Purdue','T2_CH_CSCS', 'T2_CH_CERN']
+    #config.Site.blacklist=['T1_US_FNAL','T2_US_Wisconsin','T2_FR_IPHC','T2_EE_Estonia','T2_DE_RWTH','T2_KR_KNU','T2_KR_KISTI','T2_BR_SPRACE']
+    #config.Site.whitelist=['T2_US_Nebraska','T2_US_Purdue','T2_CH_CSCS', 'T2_CH_CERN']
     print 'Using config ' + options.config
     print 'Writing to directory ' + options.dir
 
