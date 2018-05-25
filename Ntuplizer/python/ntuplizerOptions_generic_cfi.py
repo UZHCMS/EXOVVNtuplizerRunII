@@ -5,9 +5,9 @@ config = dict()
 #--------- general ----------#
 
 #--------- Set Just one to true ----------#
-config["RUNONMC"] = True
+config["RUNONMC"] = False
 config["RUNONPromptReco"] = False
-config["RUNONReReco"] = False
+config["RUNONReReco"] = True
 #-----------------------------------------#
 
 config["USEJSON"] = not (config["RUNONMC"])
@@ -52,3 +52,5 @@ config["DOMETRECLUSTERING"] = False
 config["CORRJETSONTHEFLY"] = True # at the moment JEC available just for MC Fall17
 config["CORRMETONTHEFLY"] = True  # at the moment JEC available just for MC Fall17
 config["GETJECFROMDBFILE"] = False # If not yet in global tag, but db file available
+#--------- TAU ----------#
+config["DOMULTIPLETAUMVAVERSIONS"] = True #This flag eneables the possibility to access a sqlite *db file and save the latest training of the tau MVA isolation "v2" in parellel as the one of "v1" taken from the CMSSW database.
