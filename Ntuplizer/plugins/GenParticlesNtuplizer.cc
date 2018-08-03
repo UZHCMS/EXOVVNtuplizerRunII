@@ -104,13 +104,19 @@ GenParticlesNtuplizer::~GenParticlesNtuplizer( void )
               Int_t taupdgId = abs((*genParticles_)[p].daughter(d)->pdgId());
               
               if(!(taupdgId >= 11 && taupdgId<=16)){
-	              TLorentzVector taudau;
-	              taudau.SetPtEtaPhiM(taupt, taueta, tauphi, taumass);
-	              tau += taudau;
-	              decaymode = 4;
+	        TLorentzVector taudau;
+	        taudau.SetPtEtaPhiM(taupt, taueta, tauphi, taumass);
+	        tau += taudau;
+	        decaymode = 4;
               }
-              if(taupdgId==11) decaymode = 2; // electron decay
-              if(taupdgId==13) decaymode = 3; // muon decay
+              if(taupdgId==11){ // electron decay
+	        decaymode = 2;
+	        tau += taudau;
+	      }
+              if(taupdgId==13){ // muon decay
+		decaymode = 3;
+	        tau += taudau;
+	      }
           
             }
 
