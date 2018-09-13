@@ -165,6 +165,7 @@ bool TriggersNtuplizer::findTrigger( std::string trigName ){
        trigName.find("HLT_Ele27_eta2p1_WPTight_Gsf_v") != std::string::npos||
        trigName.find("HLT_Ele32_eta2p1_WPTight_Gsf_v") != std::string::npos||
        trigName.find("HLT_Ele32_WPTight_Gsf_v") != std::string::npos||
+       trigName.find("HLT_Ele35_WPTight_Gsf_v") != std::string::npos||
        trigName.find("HLT_Ele45_WPLoose_Gsf_L1JetTauSeeded") != std::string::npos||
        trigName.find("HLT_DoubleMediumIsoPFTau40_Trk1_eta2p1_Reg") != std::string::npos||
        trigName.find("HLT_DoubleMediumIsoPFTau35_Trk1_eta2p1_Reg") != std::string::npos||
@@ -184,7 +185,10 @@ bool TriggersNtuplizer::findTrigger( std::string trigName ){
        trigName.find("HLT_Mu23_TrkIsoVVL_Ele8_CaloIdL_TrackIdL_IsoVL_v") != std::string::npos||
        trigName.find("HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ_v") != std::string::npos||
        trigName.find("HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ_v") != std::string::npos||
-       // MET triggers
+       trigName.find("HLT_IsoMu20_eta2p1_LooseChargedIsoPFTau27_eta2p1_CrossL1_v") != std::string::npos||
+       trigName.find("HLT_Mu12_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ_v") != std::string::npos||
+       trigName.find("HLT_Ele24_eta2p1_WPTight_Gsf_LooseChargedIsoPFTau30_eta2p1_CrossL1_v") != std::string::npos||    
+   // MET triggers
        trigName.find("HLT_PFMET110_PFMHT110_IDTight_v") != std::string::npos||
        trigName.find("HLT_PFMET120_PFMHT120_IDTight_v") != std::string::npos||
        trigName.find("HLT_PFMETNoMu90_PFMHTNoMu90_IDTight_v") != std::string::npos||

@@ -84,15 +84,15 @@ def main():
     config.Data.allowNonValidInputDataset = True #To allow to run on non valid dataset
     # config.Data.inputDBS = 'phys03' #to be commented in case of global#
     if options.luminosity == True :
-        config.Data.splitting = 'LumiBased'
-        config.Data.unitsPerJob = 25
+        config.Data.splitting = 'Automatic'#'EventAwareLumiBased' #LumiBased'
+        #config.Data.unitsPerJob = #10000#25
     else:
         config.Data.splitting = 'FileBased'
         config.Data.unitsPerJob = 1
     #config.Data.ignoreLocality = True
     config.Data.publication = False
     #config.Data.outLFNDirBase = '/store/user/cgalloni/Ntuple_2017_94v2_preliminary'
-    config.Data.outLFNDirBase = '/store/user/cgalloni/Ntuple_2017_94v2_preliminary_JEC_V6_tau_iso_JECUNC'
+    config.Data.outLFNDirBase = '/store/user/cgalloni/Ntuple_2017_94v2_preliminary_JEC_V6_tau_iso_JECUNC_ExtDY'
     #config.Data.outLFNDirBase = '/pnfs/psi.ch/cms/trivcat/store/t3groups/uniz-higgs/Fall17'
 
     config.section_("Site")
@@ -129,7 +129,12 @@ def main():
         ptbin = job.split('/')[1]
         cond = job.split('/')[2]
 
-        config.General.requestName =  ptbin + (("_"+cond)if options.isData else "")  + options.string_to_add
+        #config.General.requestName=  ptbin + (("_"+cond)if options.isData else "")  + options.string_to_add
+        requestName_string =  ptbin + (("_"+cond)if options.isData else "")  + options.string_to_add
+        if "RunIIFall17MiniAOD" in requestName_string : requestName_string=requestName_string.replace("RunIIFall17MiniAOD","")
+        if "realistic" in requestName_string : requestName_string=requestName_string.replace("_realistic","")
+        if "TuneCP5_13TeV-madgraphMLM-pythia8_v2" in requestName_string : requestName_string=requestName_string.replace("_TuneCP5_13TeV-madgraphMLM-pythia8_v2","")
+        config.General.requestName=requestName_string
         config.Data.inputDataset = job
         config.JobType.pyCfgParams = ["RunPeriod="+job]  
         config.Data.outputDatasetTag = ptbin  + (("_"+cond)if options.isData else "" ) +  options.string_to_add
