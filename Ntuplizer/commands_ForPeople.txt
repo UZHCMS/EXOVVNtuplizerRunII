@@ -19,12 +19,12 @@ python submit_all_opt.py -d CRAB_tot -c config_generic_opt.py -f samples/Fall201
 
 
 
-For MC, no need to use run dependent corrections:
+For MC, no need to use run dependent corrections, just to change the RUNONMC flag in python/ntuplizerOptions_generic_cfi.py
 
-python submit_all.py -d CRAB_tot -c config_generic_opt.py -f samples/Fall2017/MC2017_v2.txt  -s ""
-python submit_all.py -d CRAB_tot -c config_generic_opt.py -f samples/Fall2017/MC2017_v2_ext.txt  -s "_ext"
-python submit_all.py -d CRAB_tot -c config_generic_opt.py -f samples/Fall2016/MC2016_v2.txt  -s ""
-python submit_all.py -d CRAB_tot -c config_generic_opt.py -f samples/Fall2016/MC2016_v2_ext.txt  -s "_ext"
+python submit_all_opt.py -d CRAB_tot -c config_generic_opt.py -f samples/Fall2017/MC2017_v2.txt  -s ""
+python submit_all_opt.py -d CRAB_tot -c config_generic_opt.py -f samples/Fall2017/MC2017_v2_ext.txt  -s "_ext"
+python submit_all_opt.py -d CRAB_tot -c config_generic_opt.py -f samples/Fall2016/MC2016_v2.txt  -s ""
+python submit_all_opt.py -d CRAB_tot -c config_generic_opt.py -f samples/Fall2016/MC2016_v2_ext.txt  -s "_ext"
 
 
 
