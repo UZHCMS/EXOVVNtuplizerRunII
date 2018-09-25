@@ -113,7 +113,8 @@ process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_condD
 from Configuration.AlCa.GlobalTag import GlobalTag
 
 GT = ''
-if config["RUNONMC"]: GT = '94X_mc2017_realistic_v12'
+if config["RUNONMC"] and ("Fall17" in options.RunPeriod): GT = '94X_mc2017_realistic_v12'
+elif config["RUNONMC"] and ("Summer16" in options.RunPeriod): GT = '94X_mcRun2_asymptotic_v3 '
 elif config["RUNONReReco"] and ("2017" in options.RunPeriod): GT = '94X_dataRun2_v6' #'94X_dataRun2_ReReco_EOY17_v2'
 elif config["RUNONReReco"] and ("2016" in options.RunPeriod): GT = '94X_dataRun2_v10'
 elif config["RUNONPromptReco"]: GT = '92X_dataRun2_2017Prompt_v11'
