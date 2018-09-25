@@ -620,6 +620,7 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
      //NEW FOR ICHEP
     tree_->Branch("passFilter_CSCTightHaloTrkMuUnvetoFilter", &passFilter_CSCTightHaloTrkMuUnvetoFilter_   ,"passFilter_CSCTightHaloTrkMuUnvetoFilter_/O");
     tree_->Branch("passFilter_globalTightHalo2016"          , &passFilter_globalTightHalo2016_             ,"passFilter_globalTightHalo2016_/O");
+    tree_->Branch("passFilter_globalSuperTightHalo2016"          , &passFilter_globalSuperTightHalo2016_             ,"passFilter_globalSuperTightHalo2016_/O");
     tree_->Branch("passFilter_HcalStripHalo"                , &passFilter_HcalStripHalo_                   ,"passFilter_HcalStripHalo_/O");
     tree_->Branch("passFilter_chargedHadronTrackResolution" , &passFilter_chargedHadronTrackResolution_    ,"passFilter_chargedHadronTrackResolution_/O");
     tree_->Branch("passFilter_muonBadTrack"                 , &passFilter_muonBadTrack_                    ,"passFilter_muonBadTrack_/O");
@@ -1272,6 +1273,7 @@ void NtupleBranches::reset( void ){
    //NEW FOR ICHEP
   passFilter_CSCTightHaloTrkMuUnvetoFilter_   = false;
   passFilter_globalTightHalo2016_             = false;
+  passFilter_globalSuperTightHalo2016_             = false;
   passFilter_HcalStripHalo_                   = false;
   passFilter_chargedHadronTrackResolution_    = false;
   passFilter_muonBadTrack_                    = false;

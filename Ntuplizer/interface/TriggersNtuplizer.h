@@ -56,6 +56,7 @@ private:
    // NEW FOR ICHEP
    std::string CSCTightHaloTrkMuUnvetoFilter_Selector_  ;
    std::string globalTightHalo2016Filter_Selector_  ;
+   std::string globalSuperTightHalo2016Filter_Selector_  ;
    std::string HcalStripHaloFilter_Selector_  ;
    std::string chargedHadronTrackResolutionFilter_Selector_ ;
    std::string muonBadTrackFilter_Selector_ ;

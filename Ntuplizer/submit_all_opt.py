@@ -28,6 +28,8 @@ def getOptions() :
     parser.add_option("-D", "--isData", dest="isData",
         help=("If is data saving the run period in the name"),
         metavar="isData")
+    parser.add_option('--runUpToEarlyF', dest='runUpToEarlyF',
+        help=("If 2016 data, run F is split in 2 for JEC corrections"), default = False)
     parser.add_option("-s", "--string", dest="string_to_add",
         help=("Splitting job by lumi sections or by files"),
         metavar="STRING")
@@ -46,6 +48,9 @@ def getOptions() :
         options.isData = False
     else:
         options.isData = True
+
+
+
     return options
 
 
@@ -81,18 +86,20 @@ def main():
 
     config.section_("Data")
     config.Data.inputDataset = None
-    config.Data.allowNonValidInputDataset = True #To allow to run on non valid dataset
+    config.Data.allowNonValidInputDataset = True if ( not options.isData) else False #To allow to run on non valid dataset
     # config.Data.inputDBS = 'phys03' #to be commented in case of global#
     if options.luminosity == True :
         config.Data.splitting = 'Automatic'#'EventAwareLumiBased' #LumiBased'
         #config.Data.unitsPerJob = #10000#25
+
+
     else:
         config.Data.splitting = 'FileBased'
         config.Data.unitsPerJob = 1
     #config.Data.ignoreLocality = True
     config.Data.publication = False
     #config.Data.outLFNDirBase = '/store/user/cgalloni/Ntuple_2017_94v2_preliminary'
-    config.Data.outLFNDirBase = '/store/user/cgalloni/Ntuple_2017_94v2_preliminary_JEC_V6_tau_iso_JECUNC_ExtDY'
+    config.Data.outLFNDirBase = '/store/user/cgalloni/Ntuple_2017_94X_2016-2017'
     #config.Data.outLFNDirBase = '/pnfs/psi.ch/cms/trivcat/store/t3groups/uniz-higgs/Fall17'
 
     config.section_("Site")
@@ -128,6 +135,7 @@ def main():
 
         ptbin = job.split('/')[1]
         cond = job.split('/')[2]
+        outputDatasetTag=""
 
         #config.General.requestName=  ptbin + (("_"+cond)if options.isData else "")  + options.string_to_add
         requestName_string =  ptbin + (("_"+cond)if options.isData else "")  + options.string_to_add
@@ -136,8 +144,25 @@ def main():
         if "TuneCP5_13TeV-madgraphMLM-pythia8_v2" in requestName_string : requestName_string=requestName_string.replace("_TuneCP5_13TeV-madgraphMLM-pythia8_v2","")
         config.General.requestName=requestName_string
         config.Data.inputDataset = job
-        config.JobType.pyCfgParams = ["RunPeriod="+job]  
-        config.Data.outputDatasetTag = ptbin  + (("_"+cond)if options.isData else "" ) +  options.string_to_add
+        if ("Run2017" in job and options.isData):
+            config.Data.lumimask='./JSON/Cert_294927-306462_13TeV_PromptReco_Collisions17_JSON.txt'
+        elif ("Run2016" in job and options.isData and options.runUpToEarlyF) :
+            config.Data.lumimask='./JSON/Cert_271036-284044_13TeV_PromptReco_Collisions16_JSON_UpToEarlyF.txt'
+            
+        elif ("Run2016" in job  and options.isData and not options.runUpToEarlyF) :
+            config.Data.lumimask='./JSON/Cert_271036-284044_13TeV_PromptReco_Collisions16_JSON_FromEarlyF.txt'
+          
+
+        config.JobType.pyCfgParams = ["RunPeriod="+job , "runUpToEarlyF=True" if options.runUpToEarlyF else "runUpToEarlyF= False" ]  
+        
+        outputDatasetTag = ptbin  + (("_"+cond)if options.isData else "" ) +  options.string_to_add 
+
+        if("Run2016" in job and options.isData and options.runUpToEarlyF) :
+            outputDatasetTag += "_UpToEarlyF" 
+        if("Run2016" in job and options.isData and not options.runUpToEarlyF) :
+            outputDatasetTag += "_FromLateF" 
+
+        config.Data.outputDatasetTag = outputDatasetTag
         print "ptbin :%s and cond: %s " %(ptbin, cond)
         print 'Submitting ' + config.General.requestName + ', dataset = ' + job
         print 'Configuration :'
@@ -146,9 +171,9 @@ def main():
         try :
             from multiprocessing import Process
             p = Process(target=submit, args=(config,))
-            p.start()
-            p.join()
-            # submit(config)
+            #p.start()
+            #p.join()
+            ## submit(config)
         except :
             print 'Not submitted.'
 

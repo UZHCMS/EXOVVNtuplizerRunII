@@ -10,25 +10,38 @@ voms-proxy-init  --voms cms --valid 200:00:00
 
 This is to  run data with JEC that are run dependent:
 
-python submit_all_opt.py -d CRAB_tau_multiple_v6 -c config_generic_opt.py -f samples/Fall2017/Dataset_SingleMuon_2017.txt -D True -l True -s ""
+
+
+
+python submit_all_opt.py -d CRAB_tot -c config_generic_opt.py -f samples/Fall2017/Dataset_rereco_2017.txt -D True -l True -s ""
+python submit_all_opt.py -d CRAB_tot -c config_generic_opt.py -f samples/Fall2017/Dataset_rereco_2016.txt -D True -l True -s "" --runUpToEarlyF True
+python submit_all_opt.py -d CRAB_tot -c config_generic_opt.py -f samples/Fall2017/Dataset_rereco_2016.txt -D True -l True -s "" 
 
 
 
 For MC, no need to use run dependent corrections:
 
-python submit_all.py -d CRAB_tau_multiple_v6 -c config_generic.py -f samples/Fall2017/MC2017_v2_izaak.txt  -s ""
-
-python submit_all.py -d CRAB_tau_multiple_v6 -c config_generic.py -f samples/Fall2017/MC2017_v2_ext.txt  -s "_ext"
+python submit_all.py -d CRAB_tot -c config_generic_opt.py -f samples/Fall2017/MC2017_v2.txt  -s ""
+python submit_all.py -d CRAB_tot -c config_generic_opt.py -f samples/Fall2017/MC2017_v2_ext.txt  -s "_ext"
+python submit_all.py -d CRAB_tot -c config_generic_opt.py -f samples/Fall2016/MC2016_v2.txt  -s ""
+python submit_all.py -d CRAB_tot -c config_generic_opt.py -f samples/Fall2016/MC2016_v2_ext.txt  -s "_ext"
 
 
 
 To check the status and resubmit:
 
-ls CRAB_tau_multiple_v6/* |grep "_tau_multiple_v6"  | awk {' print "crab resubmit " $0 }' |sed 's/:/ /' >resubmit.sh 
-ls CRAB_tau_multiple_v6/* |grep "_tau_multiple_v6"  | awk {' print "crab status " $0 }' |sed 's/:/ /' >status.sh
+ls CRAB_tot* |grep "_tot"  | awk {' print "crab resubmit " $0 }' |sed 's/:/ /' >resubmit.sh 
+ls CRAB_tot/* |grep "_tot"  | awk {' print "crab status " $0 }' |sed 's/:/ /' >status.sh
 
 chmod +x  status.sh
 chmod +x  resubmit.sh
 
 ./status.sh
 ./resubmit.sh
+
+====
+Used previously
+python submit_all_opt.py -d CRAB_tau_multiple_v6 -c config_generic_opt.py -f samples/Fall2017/Dataset_SingleMuon_2017.txt -D True -l True -s ""
+python submit_all.py -d CRAB_tau_multiple_v6 -c config_generic.py -f samples/Fall2017/MC2017_v2_izaak.txt  -s ""
+
+python submit_all.py -d CRAB_tau_multiple_v6 -c config_generic.py -f samples/Fall2017/MC2017_v2_ext.txt  -s "_ext"

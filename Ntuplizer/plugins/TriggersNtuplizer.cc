@@ -49,6 +49,7 @@ TriggersNtuplizer::TriggersNtuplizer( edm::EDGetTokenT<edm::TriggerResults> toke
   //NEW FOR ICHEP
   CSCTightHaloTrkMuUnvetoFilter_Selector_       =  iConfig.getParameter<std::string> ("noiseFilterSelection_CSCTightHaloTrkMuUnvetoFilter");
   globalTightHalo2016Filter_Selector_           =  iConfig.getParameter<std::string> ("noiseFilterSelection_globalTightHalo2016Filter");
+  globalSuperTightHalo2016Filter_Selector_      =  iConfig.getParameter<std::string> ("noiseFilterSelection_globalSuperTightHalo2016Filter");
   HcalStripHaloFilter_Selector_                 =  iConfig.getParameter<std::string> ("noiseFilterSelection_HcalStripHaloFilter");
   chargedHadronTrackResolutionFilter_Selector_  =  iConfig.getParameter<std::string> ("noiseFilterSelection_chargedHadronTrackResolutionFilter");
   muonBadTrackFilter_Selector_                  =  iConfig.getParameter<std::string> ("noiseFilterSelection_muonBadTrackFilter");
@@ -165,7 +166,9 @@ bool TriggersNtuplizer::findTrigger( std::string trigName ){
        trigName.find("HLT_Ele27_eta2p1_WPTight_Gsf_v") != std::string::npos||
        trigName.find("HLT_Ele32_eta2p1_WPTight_Gsf_v") != std::string::npos||
        trigName.find("HLT_Ele32_WPTight_Gsf_v") != std::string::npos||
-       trigName.find("HLT_Ele35_WPTight_Gsf_v") != std::string::npos||
+       trigName.find("HLT_Ele32_WPTight_Gsf_") != std::string::npos|| //All the ones for Ele32
+       trigName.find("HLT_Ele28_WPTight_Gsf_") != std::string::npos|| // in 2018
+       trigName.find("HLT_Ele35_WPTight_Gsf_") != std::string::npos||
        trigName.find("HLT_Ele45_WPLoose_Gsf_L1JetTauSeeded") != std::string::npos||
        trigName.find("HLT_DoubleMediumIsoPFTau40_Trk1_eta2p1_Reg") != std::string::npos||
        trigName.find("HLT_DoubleMediumIsoPFTau35_Trk1_eta2p1_Reg") != std::string::npos||
@@ -419,6 +422,8 @@ void TriggersNtuplizer::fillBranches( edm::Event const & event, const edm::Event
         nBranches_->passFilter_CSCTightHaloTrkMuUnvetoFilter_ = noiseFilterBits_->accept(i);
       if (names.triggerName(i) == globalTightHalo2016Filter_Selector_           )
         nBranches_->passFilter_globalTightHalo2016_ = noiseFilterBits_->accept(i); // TO BE USED FOR ICHEP 2016
+      if (names.triggerName(i) == globalSuperTightHalo2016Filter_Selector_           )
+        nBranches_->passFilter_globalSuperTightHalo2016_ = noiseFilterBits_->accept(i); // TO BE USED FOR ICHEP 2016
       if (names.triggerName(i) == HcalStripHaloFilter_Selector_                 )
         nBranches_->passFilter_HcalStripHalo_ = noiseFilterBits_->accept(i);
       if (names.triggerName(i) == chargedHadronTrackResolutionFilter_Selector_  )
