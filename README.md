@@ -7,10 +7,10 @@ Ntuplizer for searches for heavy resonances decaying to dibosons
 Setting up CMSSW (for september reprocessing):
 
 ```
-cmsrel CMSSW_9_4_0
-cd CMSSW_9_4_0/src
+cmsrel CMSSW_9_4_9
+cd CMSSW_9_4_9/src
 cmsenv
-git init
+git cms-init
 ```
 
 
@@ -25,35 +25,22 @@ git remote add UZHCMS https://github.com/UZHCMS/EXOVVNtuplizerRunII
 git fetch UZHCMS
 git checkout -b DevelopmentBranch_9_4_0 UZHCMS/94X_ntuplizer
 cd $CMSSW_BASE/src
-```
-
-
-### updates of latest cut-based electron ID and MVAID. HEEP are default in 94X
-(https://twiki.cern.ch/twiki/bin/view/CMS/CutBasedElectronIdentificationRun2 and 
-```
-cd $CMSSW_BASE/src
-cmsenv
-git cms-init
-git cms-merge-topic lsoffi:CMSSW_9_4_0_pre3_TnP
-git cms-merge-topic guitargeek:ElectronID_MVA2017_940pre3
 scram b -j 8
-cd $CMSSW_BASE/external
-cd slc6_amd64_gcc630/
-git clone https://github.com/lsoffi/RecoEgamma-PhotonIdentification.git data/RecoEgamma/PhotonIdentification/data
-cd data/RecoEgamma/PhotonIdentification/data
-git checkout CMSSW_9_4_0_pre3_TnP
-cd $CMSSW_BASE/external
-cd slc6_amd64_gcc630/
-git clone https://github.com/lsoffi/RecoEgamma-ElectronIdentification.git data/RecoEgamma/ElectronIdentification/data
-cd data/RecoEgamma/ElectronIdentification/data
-git checkout CMSSW_9_4_0_pre3_TnP
-cd $CMSSW_BASE/src
-scram b distclean
-scramv1 b -j 16
 ```
 
 
-### running for data and MC! just set the proper flag in python/ntuplizerOptions_generic_cfi.py
+### update the cut-based electron ID and MVAID to V2. HEEP are included by default in 94X
+(https://twiki.cern.ch/twiki/bin/view/CMS/CutBasedElectronIdentificationRun2)
+```
+cd $CMSSW_BASE/src
+git cms-merge-topic guitargeek:EgammaID_9_4_X
+cd $CMSSW_BASE/src
+scram b -j 8
+```
+
+
+### running for data and MC
+Just set the proper flag in python/ntuplizerOptions_generic_cfi.py
 
 ```
 cmsRun config_generic.py 
