@@ -38,7 +38,7 @@ TausNtuplizer::~TausNtuplizer( void )
 void TausNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetup& iSetup // , std::map< std::string, bool >& runFlags 
 				  ){
  
-  bool doMultipleTauMVA_versions =true;
+//  bool doMultipleTauMVA_versions =true;
 
   if ( !doBoostedTaus_ ) return;
   event.getByToken( tauBoostedTauInputToken_ , boostedTaus_  ); 
