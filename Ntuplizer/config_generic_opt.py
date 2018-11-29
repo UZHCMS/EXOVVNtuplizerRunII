@@ -1,4 +1,4 @@
-#cmsRun  config_generic_opt.py  RunPeriod=Run2017D
+#cmsRun  config_generic_opt.py  RunPeriod=Run2017D 
 
 ###### Process initialization ##########
 
@@ -33,6 +33,12 @@ options.register( 'RunPeriod',
                   VarParsing.VarParsing.multiplicity.singleton, # singleton or list
                   VarParsing.VarParsing.varType.string,          # string, int, or float
                   "RunNumber (Default Run2017B)")
+
+options.register( 'runUpToEarlyF',
+                  'True',
+                  VarParsing.VarParsing.multiplicity.singleton, # singleton or list                                                                                                                                 
+                  VarParsing.VarParsing.varType.int,          # string, int, or float                                                                                                                        
+                  "1")# https://twiki.cern.ch/twiki/bin/view/CMSPublic/SWGuideAboutPythonConfigFile
 
 ####
 
@@ -107,9 +113,12 @@ process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_condD
 from Configuration.AlCa.GlobalTag import GlobalTag
 
 GT = ''
-if config["RUNONMC"]: GT = '94X_mc2017_realistic_v12'
-elif config["RUNONReReco"]: GT = '94X_dataRun2_ReReco_EOY17_v2'
+if config["RUNONMC"] and ("Fall17" in options.RunPeriod): GT = '94X_mc2017_realistic_v12'
+elif config["RUNONMC"] and ("Summer16" in options.RunPeriod): GT = '94X_mcRun2_asymptotic_v3 '
+elif config["RUNONReReco"] and ("2017" in options.RunPeriod): GT = '94X_dataRun2_v6' #'94X_dataRun2_ReReco_EOY17_v2'
+elif config["RUNONReReco"] and ("2016" in options.RunPeriod): GT = '94X_dataRun2_v10'
 elif config["RUNONPromptReco"]: GT = '92X_dataRun2_2017Prompt_v11'
+
 
 print "*************************************** GLOBAL TAG *************************************************" 
 print GT
@@ -773,23 +782,38 @@ jecLevelsAK8Puppi = []
 jecLevelsForMET = []
 
 if config["BUNCHSPACING"] == 25 and config["RUNONMC"] :
-   JECprefix = "Fall17_17Nov2017_V6"
-   jecAK8chsUncFile = "JEC/%s_MC_Uncertainty_AK8PFchs.txt"%(JECprefix)
-   jecAK4chsUncFile = "JEC/%s_MC_Uncertainty_AK4PFchs.txt"%(JECprefix)
+  JECprefix = ""
+  if ("Fall17" in options.RunPeriod):
+    JECprefix = "Fall17_17Nov2017_V8"
+  elif ("Summer16" in options.RunPeriod):
+    JECprefix = "Summer16_07Aug2017_V11"
+
+  jecAK8chsUncFile = "JEC/%s_MC_Uncertainty_AK8PFchs.txt"%(JECprefix)
+  jecAK4chsUncFile = "JEC/%s_MC_Uncertainty_AK4PFchs.txt"%(JECprefix)
 
 
 
 elif config["BUNCHSPACING"] == 25 and not(config["RUNONMC"]):
 
    JEC_runDependent_suffix= ""
-   
-   if ("Run2017B" in  options.RunPeriod): JEC_runDependent_suffix= "B"
-   elif ("Run2017C" in  options.RunPeriod): JEC_runDependent_suffix= "C"
-   elif ("Run2017D" in  options.RunPeriod): JEC_runDependent_suffix= "D"
-   elif ("Run2017E" in  options.RunPeriod): JEC_runDependent_suffix= "E"
-   elif ("Run2017F" in  options.RunPeriod): JEC_runDependent_suffix= "F"
-  
-   JECprefix = "Fall17_17Nov2017"+JEC_runDependent_suffix+"_V6"
+   if ("2017" in options.RunPeriod):
+     if ("Run2017B" in  options.RunPeriod): JEC_runDependent_suffix= "B"
+     elif ("Run2017C" in  options.RunPeriod): JEC_runDependent_suffix= "C"
+     elif ("Run2017D" in  options.RunPeriod): JEC_runDependent_suffix= "D"
+     elif ("Run2017E" in  options.RunPeriod): JEC_runDependent_suffix= "E"
+     elif ("Run2017F" in  options.RunPeriod): JEC_runDependent_suffix= "F"
+     
+     JECprefix = "Fall17_17Nov2017"+JEC_runDependent_suffix+"_V6"
+   elif ("2016" in options.RunPeriod):
+     if ("Run2016D" in  options.RunPeriod or "Run2016B" in  options.RunPeriod  or "Run2016C" in  options.RunPeriod  ): JEC_runDependent_suffix= "ABC"
+     elif ("Run2016E" in  options.RunPeriod): JEC_runDependent_suffix= "EF"
+     elif ("Run2016G" in  options.RunPeriod): JEC_runDependent_suffix= "GH"
+     elif ("Run2016F" in  options.RunPeriod and  not options.runUpToEarlyF): JEC_runDependent_suffix= "GH"
+     elif ("Run2016F" in  options.RunPeriod and   options.runUpToEarlyF): JEC_runDependent_suffix= "EF"
+
+
+     JECprefix = "Summer16_07Aug2017"+JEC_runDependent_suffix+"_V11"
+
    jecAK8chsUncFile = "JEC/%s_DATA_Uncertainty_AK8PFchs.txt"%(JECprefix)
    jecAK4chsUncFile = "JEC/%s_DATA_Uncertainty_AK4PFchs.txt"%(JECprefix)
    print "jec JEC_runDependent_suffix %s ,  prefix %s " %(JEC_runDependent_suffix,JECprefix)

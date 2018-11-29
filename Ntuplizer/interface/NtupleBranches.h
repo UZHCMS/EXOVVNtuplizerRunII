@@ -650,6 +650,7 @@ public:
   bool passFilter_METFilters_;
   bool passFilter_CSCTightHaloTrkMuUnvetoFilter_   ;
   bool passFilter_globalTightHalo2016_             ;
+  bool passFilter_globalSuperTightHalo2016_             ;
   bool passFilter_HcalStripHalo_                   ;
   bool passFilter_chargedHadronTrackResolution_    ;
   bool passFilter_muonBadTrack_                    ;
