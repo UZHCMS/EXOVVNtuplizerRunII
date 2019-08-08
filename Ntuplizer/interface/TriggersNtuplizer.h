@@ -69,7 +69,8 @@ private:
    bool doTriggerObjects_;
    bool doHltFilters_;
    bool runOnMC_;
-        
+   bool isJpsiMu_;
+   bool isJpsiEle_;
 };
 
 #endif // TriggersNtuplizer_H

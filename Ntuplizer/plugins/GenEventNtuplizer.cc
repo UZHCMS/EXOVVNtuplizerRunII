@@ -1,10 +1,12 @@
 #include "../interface/GenEventNtuplizer.h"
 
 //===================================================================================================================
-GenEventNtuplizer::GenEventNtuplizer( std::vector< edm::EDGetTokenT< GenEventInfoProduct > > tokens, NtupleBranches* nBranches,  std::vector< edm::EDGetTokenT< LHEEventProduct > > tokens_lhe )
+GenEventNtuplizer::GenEventNtuplizer( std::vector< edm::EDGetTokenT< GenEventInfoProduct > > tokens, NtupleBranches* nBranches,  std::vector< edm::EDGetTokenT< LHEEventProduct > > tokens_lhe, std::map< std::string, bool >& runFlags )
    : CandidateNtuplizer( nBranches )
    , geneventToken_( tokens[0] )
    , lheEventProductToken_( tokens_lhe[0])
+   , isJpsiMu_( runFlags["doJpsiMu"]  )
+   , isJpsiEle_( runFlags["doJpsiEle"]  )
 {
 
 }
@@ -17,7 +19,16 @@ GenEventNtuplizer::~GenEventNtuplizer( void )
 
 //===================================================================================================================
 void GenEventNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetup& iSetup ){
-
+  //chunk to remove those events with no jspi if that analysis is chosen
+  std::vector<int> doJpsi_;
+  if(isJpsiEle_) {
+    doJpsi_ = nBranches_->IsJpsiEle;
+    //std::cout<<"im getting inside the electron part"<<std::endl;
+  }else if(isJpsiMu_){
+    doJpsi_ = nBranches_->IsJpsiMu;
+    //std::cout<<"nbranch thing\t"<<size(isJpsi_)<<"; "<< isJpsi_[0]<<std::endl;
+  }
+  
   event.getByToken(geneventToken_, geneventInfo_);  
   
   nBranches_->genWeight=geneventInfo_->weight();

@@ -59,6 +59,9 @@ private:
    edm::Handle<edm::SortedCollection<EcalRecHit,edm::StrictWeakOrdering<EcalRecHit>>> _ebRecHits;
    edm::Handle<pat::TauCollection> 	     taus_         ;  
    bool doBoostedTaus_;
+   bool isJpsiMu_;
+   bool isJpsiEle_;
+
 };
 
 #endif // ElectronsNtuplizer_H

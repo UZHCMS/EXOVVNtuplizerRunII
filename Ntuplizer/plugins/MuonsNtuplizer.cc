@@ -15,6 +15,8 @@ MuonsNtuplizer::MuonsNtuplizer( edm::EDGetTokenT<pat::MuonCollection>    muonTok
 	, rhoToken_	    ( rhoToken     )
 	, boostedtauToken_  ( boostedtauToken   )  
 	, doBoostedTaus_    ( runFlags["doBoostedTaus"]  )
+	, isJpsiMu_( runFlags["doJpsiMu"]  )
+	, isJpsiEle_( runFlags["doJpsiEle"]  )
 {
 }
 
@@ -165,6 +167,17 @@ float MuonCorrTrackIso(pat::Muon muon, bool highpt, edm::Handle<pat::TauCollecti
 } 
 //===================================================================================================================
 void MuonsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetup& iSetup ){
+  //chunk to remove those events with no jspi if that analysis is chosen
+  std::vector<int> doJpsi_ = nBranches_->IsJpsiEle;
+  if(isJpsiEle_) {
+    doJpsi_ = nBranches_->IsJpsiEle;
+    //std::cout<<"im getting inside the electron part"<<std::endl;
+  //chunk to remove those events with no jspi if that analysis is chosen
+  }else if(isJpsiMu_){
+    doJpsi_ = nBranches_->IsJpsiMu;
+    //std::cout<<"nbranch thing\t"<<size(isJpsi_)<<"; "<< isJpsi_[0]<<std::endl;
+  }
+  if(size(doJpsi_)>0) if(doJpsi_[0]==0) return;
   // bool doTausBoosted = event.getByToken( tauInputToken_ , taus_ ); 
 
   event.getByToken(muonToken_	, muons_    ); 

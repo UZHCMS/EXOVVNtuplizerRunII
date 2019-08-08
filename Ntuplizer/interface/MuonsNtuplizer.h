@@ -28,7 +28,8 @@ private:
    edm::Handle<double> 			    rho_         ;
    edm::Handle<pat::TauCollection> 	    taus_        ;
    bool doBoostedTaus_;
-
+   bool isJpsiMu_;
+   bool isJpsiEle_;
 };
 
 #endif // MuonsNtuplizer_H

@@ -1,11 +1,12 @@
 #include "../interface/GenParticlesNtuplizer.h"
  
 //===================================================================================================================        
-GenParticlesNtuplizer::GenParticlesNtuplizer( std::vector<edm::EDGetTokenT<reco::GenParticleCollection>> tokens, 
-					      NtupleBranches* nBranches ) 
+GenParticlesNtuplizer::GenParticlesNtuplizer( std::vector<edm::EDGetTokenT<reco::GenParticleCollection>> tokens, NtupleBranches* nBranches, std::map< std::string, bool >& runFlags ) 
 
    : CandidateNtuplizer( nBranches )
    , genParticlesToken_( tokens[0] )
+   , isJpsiMu_( runFlags["doJpsiMu"])
+   , isJpsiEle_( runFlags["doJpsiEle"]  )
 {
 
 }
@@ -16,10 +17,20 @@ GenParticlesNtuplizer::~GenParticlesNtuplizer( void )
 }
 
 //===================================================================================================================        
-  void GenParticlesNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetup& iSetup ){
-  
-    event.getByToken(genParticlesToken_ , genParticles_); 
+void GenParticlesNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetup& iSetup ){
+  //chunk to remove those events with no jspi if that analysis is chosen
+  std::vector<int> doJpsi_;
+  if(isJpsiEle_) {
+    doJpsi_ = nBranches_->IsJpsiEle;
+    //std::cout<<"im getting inside the electron part"<<std::endl;
+  }else if(isJpsiMu_){
+    doJpsi_ = nBranches_->IsJpsiMu;
+    //std::cout<<"nbranch thing\t"<<size(isJpsi_)<<"; "<< isJpsi_[0]<<std::endl;
+  }
+  if(size(doJpsi_)>0) if(doJpsi_[0]==0) return;
+   
 
+    event.getByToken(genParticlesToken_ , genParticles_); 
 
    /* here we want to save  gen particles info*/
    
@@ -42,8 +53,8 @@ GenParticlesNtuplizer::~GenParticlesNtuplizer( void )
       bool isPhoton( abs((*genParticles_)[p].pdgId())==22 && (*genParticles_)[p].pt()>10. );
       bool isGluon( abs((*genParticles_)[p].pdgId())==22 && (*genParticles_)[p].pt()>10. );
       bool isWZH( abs((*genParticles_)[p].pdgId())>=23 && abs((*genParticles_)[p].pdgId())<=25 );
-      bool isHeavyMeson( abs((*genParticles_)[p].pdgId())>=400 && abs((*genParticles_)[p].pdgId())<=1000 );
-      bool isHeavyBaryon( abs((*genParticles_)[p].pdgId())>=4000 && abs((*genParticles_)[p].pdgId())<=10000 );
+      bool isHeavyMeson( abs((*genParticles_)[p].pdgId())>0 && abs((*genParticles_)[p].pdgId())<=1000 );
+      bool isHeavyBaryon( abs((*genParticles_)[p].pdgId())>=1000);
       bool isBSM( (abs((*genParticles_)[p].pdgId())>=30 && abs((*genParticles_)[p].pdgId())<=50) || abs((*genParticles_)[p].pdgId())>=1000000 );
       
       if(!isLepton && !isQuark && !isPhoton && !isGluon && !isWZH && !isHeavyMeson && !isHeavyBaryon && !isBSM && !isDirectPromptTauDecayProduct && !fromHardProcessFinalState && !isDirectHardProcessTauDecayProductFinalState) continue;

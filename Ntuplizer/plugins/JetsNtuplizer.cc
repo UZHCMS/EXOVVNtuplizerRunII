@@ -20,6 +20,9 @@ JetsNtuplizer::JetsNtuplizer( std::vector<edm::EDGetTokenT<pat::JetCollection>> 
   , doAK8Jets_ (runFlags["doAK8Jets"])
   , doPuppiRecluster_ (runFlags["doPuppiRecluster"])
   , runOnMC_   (runFlags["runOnMC"])
+  , isJpsiMu_( runFlags["doJpsiMu"]  )
+  , isJpsiEle_( runFlags["doJpsiEle"]  )
+
    //, flavourToken_			( flavourToken 	) //For subjet flavour matching!! Not done yet.
     
 {
@@ -222,7 +225,18 @@ void JetsNtuplizer::initJetCorrUncertainty( void ){
 
 //===================================================================================================================
 void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetup& iSetup ){
-  
+  //chunk to remove those events with no jspi if that analysis is chosen
+  std::vector<int> doJpsi_;
+  if(isJpsiEle_) {
+    doJpsi_ = nBranches_->IsJpsiEle;
+    // std::cout<<"im getting inside the electron part"<<std::endl;
+  //chunk to remove those events with no jspi if that analysis is chosen
+  }else if(isJpsiMu_){
+    doJpsi_ = nBranches_->IsJpsiMu;
+    //std::cout<<"nbranch thing\t"<<size(isJpsi_)<<"; "<< isJpsi_[0]<<std::endl;
+  }
+  if(size(doJpsi_)>0) if(doJpsi_[0]==0) return;
+
   event.getByToken(jetInputToken_   , jets_     );
   event.getByToken(fatjetInputToken_, fatjets_  );
   event.getByToken(rhoToken_	    , rho_	);

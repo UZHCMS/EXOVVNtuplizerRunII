@@ -7,8 +7,8 @@ Ntuplizer for searches for heavy resonances decaying to dibosons
 Setting up CMSSW (for september reprocessing):
 
 ```
-cmsrel CMSSW_9_4_9
-cd CMSSW_9_4_9/src
+cmsrel CMSSW_10_2_10
+cd CMSSW_10_2_10/src
 cmsenv
 git cms-init
 ```
@@ -23,19 +23,28 @@ git clone https://github.com/${GITUSER}/EXOVVNtuplizerRunII
 cd EXOVVNtuplizerRunII
 git remote add UZHCMS https://github.com/UZHCMS/EXOVVNtuplizerRunII
 git fetch UZHCMS
-git checkout -b DevelopmentBranch_9_4_0 UZHCMS/94X_ntuplizer
+git checkout -b DevelopmentBranch_10_2_10_BcMu UZHCMS/10210_ntuplizer_BcMu
 cd $CMSSW_BASE/src
 scram b -j 8
 ```
 
 
-### update the cut-based electron ID and MVAID to V2. HEEP are included by default in 94X
+### Update the electronIDs: not really used, but for consistency
 (https://twiki.cern.ch/twiki/bin/view/CMS/CutBasedElectronIdentificationRun2)
 ```
-cd $CMSSW_BASE/src
-git cms-merge-topic guitargeek:EgammaID_9_4_X
-cd $CMSSW_BASE/src
+git cms-merge-topic cms-egamma:EgammaPostRecoTools 
 scram b -j 8
+
+git cms-addpkg EgammaAnalysis/ElectronTools
+rm EgammaAnalysis/ElectronTools/data -rf
+git clone https://github.com/cms-egamma/EgammaAnalysis-ElectronTools.git EgammaAnalysis/ElectronTools/data
+cd EgammaAnalysis/ElectronTools/data
+git checkout ScalesSmearing2018_Dev
+cd -
+git cms-merge-topic cms-egamma:EgammaPostRecoTools_dev
+scram b clean 
+scam b distclean 
+scram b -j 8 
 ```
 
 
@@ -44,6 +53,21 @@ Just set the proper flag in python/ntuplizerOptions_generic_cfi.py
 
 ```
 cmsRun config_generic.py 
+
+```
+
+
+
+### CRAB submission 
+List the dataset list you would like to process in sample/sample.txt
+Modify in the submission script the info relative to the user, the storage element (T2_CH_CSCS, T3_CH_PSI).
+Examples of submissions are available in files like commands_ForAll.txt , and here:
+you need to specify the directory where you want to store the crab project directory, the configaruion file that has to be run with `cmsRun`, the txt file with the sample list and any additional string you want to attach to the dataset name.
+
+```
+cmsenv
+source /cvmfs/cms.cern.ch/crab3/crab.sh
+python submit_all.py -d CRAB_dir -c config_generic_pablo.py -f samples/sample.txt  -s ""
 
 ```
 

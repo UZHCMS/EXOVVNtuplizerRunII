@@ -619,15 +619,15 @@ public:
   std::map<std::string,bool> HLT_isFired;
 	 
   /** HLT trigger objects */
-  //  std::vector<float>  		    triggerObject_pt	      ;
+  std::vector<float>  		    triggerObject_pt	      ;
   std::vector<float>  		    triggerObject_eta	      ;
   std::vector<float>  		    triggerObject_phi	      ;
-  //  std::vector<float>  		    triggerObject_mass	      ;
+  std::vector<float>  		    triggerObject_mass	      ;
   std::vector<std::string>  		    triggerObject_lastname    ;
-  //  std::vector< std::vector<float> > triggerObject_filterIDs   ; // as defined in http://cmslxr.fnal.gov/lxr/source/DataFormats/HLTReco/interface/TriggerTypeDefs.h
+  std::vector< std::vector<float> > triggerObject_filterIDs   ; // as defined in http://cmslxr.fnal.gov/lxr/source/DataFormats/HLTReco/interface/TriggerTypeDefs.h
   //  std::vector< std::vector<std::string> > triggerObject_filterLabels;
   std::map<std::string, std::vector<std::string> > triggerObject_filterLabels;
-  //  std::vector< std::vector<int> >   triggerObject_firedTrigger; // as defined in plugins/TriggersNtuplizer.cc
+  std::vector< std::vector<int> >   triggerObject_firedTrigger; // as defined in plugins/TriggersNtuplizer.cc
 
 
   /** HLT filter decisions */
@@ -699,6 +699,92 @@ public:
   int                               EVENT_event            ;
   int                               EVENT_run              ;
   int                               EVENT_lumiBlock        ;
+  /*-------------------------JPSI VARIABLES---------------------*/
+  std::vector<int  >                IsJpsiMu    ;   
+  std::vector<int  >                IsJpsiEle   ;   
+
+  std::vector<float>                Jpsi_mu1_pt      ;
+  std::vector<float>                Jpsi_mu1_eta     ;
+  std::vector<float>                Jpsi_mu1_phi     ;
+  std::vector<int  >                Jpsi_mu1_ch      ;   
+  std::vector<int  >                Jpsi_mu1_isLoose   ;
+  std::vector<int  >                Jpsi_mu1_isTight   ;
+  std::vector<int  >                Jpsi_mu1_isPF      ;
+  std::vector<int  >                Jpsi_mu1_isGlobal  ;
+  std::vector<int  >                Jpsi_mu1_isTracker ;
+  std::vector<int  >                Jpsi_mu1_isSoft    ;
+
+  std::vector<float>                Jpsi_mu2_pt      ;
+  std::vector<float>                Jpsi_mu2_eta     ;
+  std::vector<float>                Jpsi_mu2_phi     ;
+  std::vector<int  >                Jpsi_mu2_ch   ;   
+  std::vector<float>                Jpsi_mu2_isLoose   ;
+  std::vector<float>                Jpsi_mu2_isTight   ;
+  std::vector<float>                Jpsi_mu2_isPF      ;
+  std::vector<float>                Jpsi_mu2_isGlobal  ;
+  std::vector<float>                Jpsi_mu2_isTracker ;
+  std::vector<float>                Jpsi_mu2_isSoft    ;
+
+  std::vector<float>                Jpsi_mu3_pt      ;
+  std::vector<float>                Jpsi_mu3_eta     ;
+  std::vector<float>                Jpsi_mu3_phi     ;
+  std::vector<int  >                Jpsi_mu3_ch   ;   
+  std::vector<float>                Jpsi_mu3_isLoose   ;
+  std::vector<float>                Jpsi_mu3_isTight   ;
+  std::vector<float>                Jpsi_mu3_isPF      ;
+  std::vector<float>                Jpsi_mu3_isGlobal  ;
+  std::vector<float>                Jpsi_mu3_isTracker ;
+  std::vector<float>                Jpsi_mu3_isSoft    ;
+  std::vector<float>                Jpsi_mu3_x       ;
+  std::vector<float>                Jpsi_mu3_y       ;
+  std::vector<float>                Jpsi_mu3_z       ;
+
+  std::vector<float>                Jpsi_mu3_isopt03      ;
+  std::vector<float>                Jpsi_mu3_isopt04      ;
+  std::vector<float>                Jpsi_mu3_isopt05      ;
+  std::vector<float>                Jpsi_mu3_isopt06      ;
+  std::vector<float>                Jpsi_mu3_isopt07      ;
+  std::vector<float>                Jpsi_dr_mu3pf      ;
+
+
+  std::vector<float>                Jpsi_dx      ;
+  std::vector<float>                Jpsi_dy      ;
+  std::vector<float>                Jpsi_dz      ;
+  std::vector<float>                Jpsi_pt      ;
+  std::vector<float>                Jpsi_eta     ;
+  std::vector<float>                Jpsi_phi     ;
+  std::vector<float>                Jpsi_mass       ;
+  std::vector<float>                Jpsi_vtxprob    ;
+  std::vector<float>                Jpsi_vtxz       ;
+
+
+  std::vector<float>                Jpsi_trimu_dx      ;
+  std::vector<float>                Jpsi_trimu_dy      ;
+  std::vector<float>                Jpsi_trimu_dz      ;
+  std::vector<float>                Jpsi_trimu_pt      ;
+  std::vector<float>                Jpsi_trimu_eta     ;
+  std::vector<float>                Jpsi_trimu_phi     ;
+  std::vector<float>                Jpsi_trimu_mass    ;
+  std::vector<float>                Jpsi_trimu_vtxprob ;
+  std::vector<float>                Jpsi_trimu_vtxz    ;
+
+  std::vector<float>                Jpsi_PV_x       ;
+  std::vector<float>                Jpsi_PV_y       ;
+  std::vector<float>                Jpsi_PV_z       ;
+
+  std::vector<float>                Jpsi_flightSig3D             ; 
+  std::vector<float>                Jpsi_flightLength3D          ;
+  std::vector<float>                Jpsi_flightLengthErr3D       ;
+  std::vector<float>                Jpsi_flightSig2D             ; 
+  std::vector<float>                Jpsi_flightLength2D          ;
+  std::vector<float>                Jpsi_flightLengthErr2D       ;
+  std::vector<float>                Jpsi_trimu_flightSig3D       ; 
+  std::vector<float>                Jpsi_trimu_flightLength3D    ;
+  std::vector<float>                Jpsi_trimu_flightLengthErr3D ;
+  std::vector<float>                Jpsi_trimu_flightSig2D       ; 
+  std::vector<float>                Jpsi_trimu_flightLength2D    ;
+  std::vector<float>                Jpsi_trimu_flightLengthErr2D ;
+
 
   /*--------------------------PV infos--------------------------*/
   int                               PV_N		     ;
@@ -707,7 +793,9 @@ public:
   std::vector<float>                PV_ndof          ;
   std::vector<float>                PV_rho           ;
   std::vector<float>                PV_z             ;
-    
+  std::vector<float>                BeamSpot_x0;
+  std::vector<float>                BeamSpot_y0;
+  std::vector<float>                BeamSpot_z0;
   /*--------------------------PU infos--------------------------*/  			       
   std::vector<float  >                nPuVtxTrue             ;// the *true* mean number of the poisson distribution for this event from which the number of interactions each bunch crossing has been sampled // In MC it can be float 
   std::vector<int  >                nPuVtx                 ;// the number of pileup interactions that have been added to the event in the current bunch crossing

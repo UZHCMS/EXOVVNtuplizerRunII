@@ -82,25 +82,25 @@ def main():
     config.section_("Data")
     config.Data.inputDataset = None
     config.Data.allowNonValidInputDataset = True #To allow to run on non valid dataset
-    # config.Data.inputDBS = 'phys03' #to be commented in case of global#
+    config.Data.inputDBS = 'phys03' #to be commented in case of global#
     if options.luminosity == True :
         config.Data.splitting = 'LumiBased'
         config.Data.unitsPerJob = 100
     else:
         config.Data.splitting = 'FileBased'
         config.Data.unitsPerJob = 1
-    #config.Data.ignoreLocality = True
+    config.Data.ignoreLocality = True
     config.Data.publication = False
     #config.Data.outLFNDirBase = '/store/user/cgalloni/Ntuple_2017_94v2_preliminary'
-    config.Data.outLFNDirBase = '/store/user/cgalloni/Ntuple_2017_94v2_preliminary_JEC_V6_tau_iso_JECUNC'
+    config.Data.outLFNDirBase = '/store/user/cgalloni/Ntuple_Pablo/'
     #config.Data.outLFNDirBase = '/store/t3groups/uniz-higgs/Fall17'
 
 
     config.section_("Site")
-    #config.Site.storageSite = 'T2_CH_CSCS'
-    config.Site.storageSite = 'T3_CH_PSI'
+    config.Site.storageSite = 'T2_CH_CSCS'
+    #config.Site.storageSite = 'T3_CH_PSI'
     #config.Site.blacklist=['T1_US_FNAL','T2_US_Wisconsin','T2_FR_IPHC','T2_EE_Estonia','T2_DE_RWTH','T2_KR_KNU','T2_KR_KISTI','T2_BR_SPRACE']
-    #config.Site.whitelist=['T2_US_Nebraska','T2_US_Purdue','T2_CH_CSCS', 'T2_CH_CERN']
+    config.Site.whitelist=['T2_US_Nebraska','T2_US_Purdue','T2_CH_CSCS', 'T2_CH_CERN', 'T2_FR_IPHC']
     print 'Using config ' + options.config
     print 'Writing to directory ' + options.dir
 

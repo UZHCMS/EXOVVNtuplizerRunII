@@ -29,6 +29,8 @@ TriggersNtuplizer::TriggersNtuplizer( edm::EDGetTokenT<edm::TriggerResults> toke
    , doTriggerObjects_	( runFlags["doTriggerObjects"] )
    , doHltFilters_	( runFlags["doHltFilters"] )
    , runOnMC_           ( runFlags["runOnMC"] )
+   , isJpsiMu_( runFlags["doJpsiMu"]  )
+   , isJpsiEle_( runFlags["doJpsiEle"]  )
 {
 
   HBHENoiseFilter_Selector_ =  iConfig.getParameter<std::string> ("noiseFilterSelection_HBHENoiseFilter");
@@ -211,7 +213,8 @@ bool TriggersNtuplizer::findTrigger( std::string trigName ){
        trigName.find("HLT_DoubleMediumIsoPFTau40_Trk1_eta2p1_Reg_v")!= std::string::npos || 
        trigName.find("HLT_DoubleMediumCombinedIsoPFTau35_Trk1_eta2p1_Reg_v")!= std::string::npos || 
        trigName.find("HLT_DoubleMediumCombinedIsoPFTau40_Trk1_eta2p1_Reg_v")!= std::string::npos || 
-       trigName.find("HLT_DoubleMediumCombinedIsoPFTau40_Trk1_eta2p1_v")!= std::string::npos
+       trigName.find("HLT_DoubleMediumCombinedIsoPFTau40_Trk1_eta2p1_v")!= std::string::npos ||
+       trigName.find("HLT_DoubleMu4_JpsiTrk_Displaced_v15")!= std::string::npos
 
    ) return true;
    else
@@ -283,7 +286,9 @@ bool TriggersNtuplizer::findFilter( std::string filterName ){
 	 //       filterName.find("hltDiMuonGlb17Trk8RelTrkIsoFiltered0p4") != std::string::npos || 
        filterName.find("hltDoublePFTau32TrackPt1MediumIsolationDz02Reg") != std::string::npos || 
        filterName.find("hltDoublePFTau35TrackPt1MediumIsolationDz02Reg") != std::string::npos || 
-       filterName.find("hltDoublePFTau40TrackPt1MediumIsolationDz02Reg") != std::string::npos
+       filterName.find("hltDoublePFTau40TrackPt1MediumIsolationDz02Reg") != std::string::npos ||
+       filterName.find("hltJpsiTkVertexFilter") != std::string::npos 
+
        ) return true;
    else
      return false;   
@@ -293,7 +298,17 @@ bool TriggersNtuplizer::findFilter( std::string filterName ){
 
 //===================================================================================================================
 void TriggersNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetup& iSetup ){
-
+  //std::cout<<"!!!--->Trigers Ntuplizer<---!!!"<<std::endl;
+  //chunk to remove those events with no jspi if that analysis is chosen
+  std::vector<int> doJpsi_;
+  if(isJpsiEle_) {
+    doJpsi_ = nBranches_->IsJpsiEle;
+    //std::cout<<"im getting inside the electron part"<<std::endl;
+  }else if(isJpsiMu_){
+    doJpsi_ = nBranches_->IsJpsiMu;
+    //std::cout<<"nbranch thing\t"<<size(isJpsi_)<<"; "<< isJpsi_[0]<<std::endl;
+  }
+  if(size(doJpsi_)>0) if(doJpsi_[0]==0) return;
   event.getByToken(HLTtriggersToken_, HLTtriggers_);
   event.getByToken(triggerObjects_  , triggerObjects);
   event.getByToken(triggerPrescales_, triggerPrescales);
@@ -302,82 +317,126 @@ void TriggersNtuplizer::fillBranches( edm::Event const & event, const edm::Event
 
 
   if (doTriggerDecisions_) {
-  	 for (unsigned int i = 0, n = HLTtriggers_->size(); i < n; ++i) {
-  	  if( findTrigger(trigNames.triggerName(i)) ){
-   	     nBranches_->HLT_isFired[trigNames.triggerName(i)] = HLTtriggers_->accept(i);
-	     // std::cout << "Trigger " << trigNames.triggerName(i) << ": " << (HLTtriggers_->accept(i) ? "PASS" : "fail (or not run)") << std::endl;
-   	  }
-   	}
+    for (unsigned int i = 0, n = HLTtriggers_->size(); i < n; ++i) {
+      //std::cout<<"im here inside the trigger thingy:   "<<findFilter(trigNames.triggerName(i))<<" , "<<trigNames.triggerName(i)<<std::endl;
+      if( findTrigger(trigNames.triggerName(i)) ){
+	nBranches_->HLT_isFired[trigNames.triggerName(i)] = HLTtriggers_->accept(i);
+	// std::cout << "Trigger " << trigNames.triggerName(i) << ": " << (HLTtriggers_->accept(i) ? "PASS" : "fail (or not run)") << std::endl;
+      }
+    }
 
   } //doTriggerDecisions_
+ 
+
 
   ////////////////// Trigger objects ///////////////////////////////////
   if (doTriggerObjects_) {
 
-    for (pat::TriggerObjectStandAlone obj : *triggerObjects) {
-      
-      obj.unpackPathNames(trigNames);
-      obj.unpackFilterLabels(event, *HLTtriggers_);
+     	std::vector<int> vfiredTrigger; vfiredTrigger.clear();
+	std::vector<float> vfilterIDs; vfilterIDs.clear();
 
-      std::vector<std::string> pathNamesAll  = obj.pathNames(false);
+  	for (pat::TriggerObjectStandAlone obj : *triggerObjects) {
 
-      for (unsigned h = 0, n = pathNamesAll.size(); h < n; ++h) {
+  		obj.unpackPathNames(trigNames);
+		obj.unpackFilterLabels(event, *HLTtriggers_);
 
-	//		  bool isBoth = obj.hasPathName( pathNamesAll[h], true , true );
-	//		  bool isL3   = obj.hasPathName( pathNamesAll[h], false, true );
-	//		  bool isBoth = obj.hasPathName( pathNamesLast[h], true , true );
-	//		  bool isL3   = obj.hasPathName( pathNamesLast[h], false, true );
-	
-	
-	//			if( isBoth || isL3 ){
-	
+  		std::vector<std::string> pathNamesAll  = obj.pathNames(false);
+		//  		std::vector<std::string> pathNamesLast = obj.pathNames(true);
 
-	
-	std::vector<std::string> vfilterLabels; vfilterLabels.clear();
-	
-	bool isFilterExist = false;
-	
-	for (unsigned hh = 0; hh < obj.filterLabels().size(); ++hh){
-	  if(findFilter(obj.filterLabels()[hh])){
-	    vfilterLabels.push_back( obj.filterLabels()[hh]);
-	    isFilterExist = true;
-	  }
-	}
-	
-	
-	if(isFilterExist){
-	  //			     nBranches_->triggerObject_pt  .push_back(obj.pt());
-	  nBranches_->triggerObject_eta .push_back(obj.eta());
-	  nBranches_->triggerObject_phi .push_back(obj.phi());
-	  //			     nBranches_->triggerObject_mass.push_back(obj.mass());
-	  nBranches_->triggerObject_lastname.push_back(pathNamesAll[h]);
-	  
-	  if(nBranches_->triggerObject_filterLabels.find(pathNamesAll[h]) == nBranches_->triggerObject_filterLabels.end()){
+		//		std::cout << "Size of pathNames All = " << pathNamesAll.size() << ", Last = " << pathNamesLast.size()  << std::endl;
+		//		for (unsigned h = 0, n = pathNamesLast.size(); h < n; ++h) {
+		//		  std::cout << "\t Lastname = " << pathNamesLast[h] << std::endl;
+		//		}
+		for (unsigned h = 0, n = pathNamesAll.size(); h < n; ++h) {
 
-	    nBranches_->triggerObject_filterLabels[pathNamesAll[h]] = vfilterLabels;
+		  //		  bool isBoth = obj.hasPathName( pathNamesAll[h], true , true );
+		  //		  bool isL3   = obj.hasPathName( pathNamesAll[h], false, true );
+		  //		  bool isBoth = obj.hasPathName( pathNamesLast[h], true , true );
+		  //		  bool isL3   = obj.hasPathName( pathNamesLast[h], false, true );
 
-	  }else{
-	    
-	    //			       std::vector<std::string> vec1 = nBranches_->triggerObject_filterLabels["test"];
-	    std::vector<std::string> vec1 = nBranches_->triggerObject_filterLabels[pathNamesAll[h]];
-	    
-	    //			       std::cout << "before : size of vec1 = " << vec1.size() << std::endl;
-	    //			       for(int ii = 0; ii < (int)vec1.size(); ii++){
-	    //				 std::cout << "\t\t " << vec1.at(ii) << std::endl;
-	    //			       }
-	    
-	    vec1.insert(vec1.end(), vfilterLabels.begin(), vfilterLabels.end());
-	    
-	    //			       std::cout << "after : size of vec1 = " << vec1.size() << std::endl;
-	    //			       for(int ii = 0; ii < (int)vec1.size(); ii++){
-	    //				 std::cout << "\t\t " << vec1.at(ii) << std::endl;
-	    //			       }
-	    
-	    nBranches_->triggerObject_filterLabels[pathNamesAll[h]] = vec1;
-	  }	  
-	}
-      }      
-    }
+		  //		  std::cout << "trigger object =" << pathNamesLast[h] << "(isBoth, isL3) = " << isBoth << " " << isL3 << std::endl;
+		  //		  std::cout << "\t Finalname = " << pathNamesAll[h] << "(isBoth, isL3) = " << isBoth << " " << isL3 << std::endl;
+			
+		//			if( isBoth || isL3 ){
+
+
+		  for (unsigned hh = 0; hh < obj.filterIds().size(); ++hh) vfilterIDs.push_back( obj.filterIds()[hh]); // as defined in http://cmslxr.fnal.gov/lxr/source/DataFormats/HLTReco/interface/TriggerTypeDefs.h
+
+			   std::vector<std::string> vfilterLabels; vfilterLabels.clear();
+
+			   bool isFilterExist = false;
+
+			   for (unsigned hh = 0; hh < obj.filterLabels().size(); ++hh){
+			     if(findFilter(obj.filterLabels()[hh])){
+			       vfilterLabels.push_back( obj.filterLabels()[hh]);
+			       isFilterExist = true;
+			     }
+			   }
+
+			   
+			   if(isFilterExist){
+			     nBranches_->triggerObject_pt  .push_back(obj.pt());
+			     nBranches_->triggerObject_eta .push_back(obj.eta());
+			     nBranches_->triggerObject_phi .push_back(obj.phi());
+			     nBranches_->triggerObject_mass.push_back(obj.mass());
+			     nBranches_->triggerObject_lastname.push_back(pathNamesAll[h]);
+			     //		 	     nBranches_->triggerObject_lastname.push_back("test");
+
+			     //			     if(nBranches_->triggerObject_filterLabels.find(pathNamesLast[h]) == nBranches_->triggerObject_filterLabels.end()){
+			     if(nBranches_->triggerObject_filterLabels.find(pathNamesAll[h]) == nBranches_->triggerObject_filterLabels.end()){
+			       //  std::cout << "index NOT found !!!" << std::endl;
+			       nBranches_->triggerObject_filterLabels[pathNamesAll[h]] = vfilterLabels;
+			       //			       nBranches_->triggerObject_filterLabels["test"] = vfilterLabels;
+			     }else{
+			       // add to the original
+			       // std::cout << "index found !!!" << std::endl;
+			       
+			       //			       std::vector<std::string> vec1 = nBranches_->triggerObject_filterLabels["test"];
+			       std::vector<std::string> vec1 = nBranches_->triggerObject_filterLabels[pathNamesAll[h]];
+			       
+//			       std::cout << "before : size of vec1 = " << vec1.size() << std::endl;
+//			       for(int ii = 0; ii < (int)vec1.size(); ii++){
+//				 std::cout << "\t\t " << vec1.at(ii) << std::endl;
+//			       }
+
+			       vec1.insert(vec1.end(), vfilterLabels.begin(), vfilterLabels.end());
+
+//			       std::cout << "after : size of vec1 = " << vec1.size() << std::endl;
+//			       for(int ii = 0; ii < (int)vec1.size(); ii++){
+//				 std::cout << "\t\t " << vec1.at(ii) << std::endl;
+//			       }
+
+			       nBranches_->triggerObject_filterLabels[pathNamesAll[h]] = vec1;
+			     }
+
+			   }
+
+
+  			   if( pathNamesAll[h] == "HLT_AK8PFJet360_TrimMass30_v1") vfiredTrigger.push_back( 0 );
+  			   if( pathNamesAll[h] == "HLT_AK8PFHT700_TrimR0p1PT0p03Mass50_v1") vfiredTrigger.push_back( 1 );
+  			   if( pathNamesAll[h] == "HLT_AK8DiPFJet280_200_TrimMass30_BTagCSV0p41_v1") vfiredTrigger.push_back( 2 );
+  			   if( pathNamesAll[h] == "HLT_PFHT650_WideJetMJJ950DEtaJJ1p5_v1") vfiredTrigger.push_back( 3 );
+  			   if( pathNamesAll[h] == "HLT_PFHT650_WideJetMJJ900DEtaJJ1p5_v1") vfiredTrigger.push_back( 4 );
+  			   if( pathNamesAll[h] == "HLT_PFHT900_v1") vfiredTrigger.push_back( 5 );
+  			   if( pathNamesAll[h] == "HLT_IsoMu24_eta2p1_v1") vfiredTrigger.push_back( 6 );
+  			   if( pathNamesAll[h] == "HLT_IsoMu24_eta2p1_v2") vfiredTrigger.push_back( 7 );
+  			   if( pathNamesAll[h] == "HLT_Mu45_eta2p1_v1") vfiredTrigger.push_back( 8 );
+  			   if( pathNamesAll[h] == "HLT_Mu50_eta2p1_v1") vfiredTrigger.push_back( 9 );
+  			   if( pathNamesAll[h] == "HLT_Ele23_CaloIdL_TrackIdL_IsoVL_v1") vfiredTrigger.push_back( 10 );
+  			   if( pathNamesAll[h] == "HLT_Ele32_eta2p1_WP75_Gsf_v1") vfiredTrigger.push_back( 11 );
+  			   if( pathNamesAll[h] == "HLT_Ele105_CaloIdVT_GsfTrkIdT_v1") vfiredTrigger.push_back( 12 );
+  			   if( pathNamesAll[h] == "HLT_Ele105_CaloIdVT_GsfTrkIdT_v2") vfiredTrigger.push_back( 13 );
+  			   if( pathNamesAll[h] == "HLT_Ele115_CaloIdVT_GsfTrkIdT_v1") vfiredTrigger.push_back( 14 );
+
+
+  			   // else vfiredTrigger.push_back( -99 );
+			   //  			}
+			
+		}
+
+  		nBranches_->triggerObject_firedTrigger.push_back(vfiredTrigger);
+		nBranches_->triggerObject_filterIDs.push_back(vfilterIDs);
+  	}
   } //doTriggerObjects_
 
 
@@ -422,8 +481,6 @@ void TriggersNtuplizer::fillBranches( edm::Event const & event, const edm::Event
         nBranches_->passFilter_CSCTightHaloTrkMuUnvetoFilter_ = noiseFilterBits_->accept(i);
       if (names.triggerName(i) == globalTightHalo2016Filter_Selector_           )
         nBranches_->passFilter_globalTightHalo2016_ = noiseFilterBits_->accept(i); // TO BE USED FOR ICHEP 2016
-      if (names.triggerName(i) == globalSuperTightHalo2016Filter_Selector_           )
-        nBranches_->passFilter_globalSuperTightHalo2016_ = noiseFilterBits_->accept(i); // TO BE USED FOR ICHEP 2016
       if (names.triggerName(i) == HcalStripHaloFilter_Selector_                 )
         nBranches_->passFilter_HcalStripHalo_ = noiseFilterBits_->accept(i);
       if (names.triggerName(i) == chargedHadronTrackResolutionFilter_Selector_  )

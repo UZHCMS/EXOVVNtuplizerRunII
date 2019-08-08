@@ -32,6 +32,8 @@ public:
    
    bool doBoostedTaus_;
    TauIdMVAAuxiliaries clusterVariables_;
+   bool isJpsiMu_;
+   bool isJpsiEle_;
 };
 
 #endif // TausNtuplizer_H

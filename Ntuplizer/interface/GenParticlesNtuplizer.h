@@ -7,7 +7,7 @@ class GenParticlesNtuplizer : public CandidateNtuplizer {
 
 public:
   GenParticlesNtuplizer( std::vector<edm::EDGetTokenT<reco::GenParticleCollection>> tokens, 
-			 NtupleBranches* nBranches );
+			 NtupleBranches* nBranches, std::map< std::string, bool >&  runFlags );
 
   ~GenParticlesNtuplizer( void ); 
 
@@ -16,6 +16,8 @@ public:
 private:
    edm::EDGetTokenT<reco::GenParticleCollection> genParticlesToken_;
    edm::Handle< reco::GenParticleCollection >  genParticles_;
+   bool isJpsiMu_;
+   bool isJpsiEle_;
 
 };
 

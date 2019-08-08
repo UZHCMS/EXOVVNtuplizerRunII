@@ -59,6 +59,8 @@ ElectronsNtuplizer::ElectronsNtuplizer( edm::EDGetTokenT<edm::View<pat::Electron
 	, ebRecHitsToken_ ( ebRecHitsToken )
 	, boostedtauToken_		   ( boostedtauToken    )
 	, doBoostedTaus_   	   ( runFlags["doBoostedTaus"]  )
+	, isJpsiMu_( runFlags["doJpsiMu"]  )
+	, isJpsiEle_( runFlags["doJpsiEle"]  )
 {
 
 }
@@ -137,46 +139,54 @@ float ElectronCorrPFIso(pat::Electron ele, double Aeff03, float rho, edm::Handle
 
 void ElectronsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetup& iSetup ){
   // bool doTausBoosted_ = event.getByToken( tauInputToken_ , taus_ ); 
- 
-    
-   event.getByToken(electronToken_ , electrons_ ); 
-   event.getByToken(verticeToken_  , vertices_  );
-   event.getByToken(rhoToken_	   , rho_       );
-   event.getByToken(boostedtauToken_   , taus_      );
+ //chunk to remove those events with no jspi if that analysis is chosen
+  std::vector<int> doJpsi_;
+  if(isJpsiEle_) {
+    doJpsi_ = nBranches_->IsJpsiEle;
+    //std::cout<<"im getting inside the electron part"<<std::endl;
+  }else if(isJpsiMu_){
+    doJpsi_ = nBranches_->IsJpsiMu;
+    //std::cout<<"nbranch thing\t"<<size(isJpsi_)<<"; "<< isJpsi_[0]<<std::endl;
+  }
 
-   event.getByToken(electronVetoIdMapToken_  , veto_id_decisions   );
-   event.getByToken(electronLooseIdMapToken_ , loose_id_decisions  );
-   event.getByToken(electronMediumIdMapToken_, medium_id_decisions );
-   event.getByToken(electronTightIdMapToken_ , tight_id_decisions  );
-   event.getByToken(electronHLTIdMapToken_, hlt_id_decisions );
-   event.getByToken(electronHEEPIdMapToken_  , heep_id_decisions   );
-   event.getByToken(electronMVAMediumIdMapToken_, mva_medium_id_decisions );
-   event.getByToken(electronMVATightIdMapToken_ , mva_tight_id_decisions  );
-   event.getByToken(mvaValuesMapToken_ , mva_value);
-   event.getByToken(mvaCategoriesMapToken_ , mva_categories);
-   event.getByToken(ebRecHitsToken_, _ebRecHits);
-   
+  event.getByToken(electronToken_ , electrons_ ); 
+  event.getByToken(verticeToken_  , vertices_  );
+  event.getByToken(rhoToken_	   , rho_       );
+  event.getByToken(boostedtauToken_   , taus_      );
+  
+  event.getByToken(electronVetoIdMapToken_  , veto_id_decisions   );
+  event.getByToken(electronLooseIdMapToken_ , loose_id_decisions  );
+  event.getByToken(electronMediumIdMapToken_, medium_id_decisions );
+  event.getByToken(electronTightIdMapToken_ , tight_id_decisions  );
+  event.getByToken(electronHLTIdMapToken_, hlt_id_decisions );
+  event.getByToken(electronHEEPIdMapToken_  , heep_id_decisions   );
+  event.getByToken(electronMVAMediumIdMapToken_, mva_medium_id_decisions );
+  event.getByToken(electronMVATightIdMapToken_ , mva_tight_id_decisions  );
+  event.getByToken(mvaValuesMapToken_ , mva_value);
+  event.getByToken(mvaCategoriesMapToken_ , mva_categories);
+  event.getByToken(ebRecHitsToken_, _ebRecHits);
+  
    
   
-   // Find the first vertex in the collection that passes good quality criteria
-   // reco::VertexCollection::const_iterator firstGoodVertex = vertices_->end();
-   reco::VertexCollection::const_iterator firstVertex = vertices_->begin();
-   reco::VertexCollection::const_iterator firstGoodVertex = vertices_->begin();
+  // Find the first vertex in the collection that passes good quality criteria
+  // reco::VertexCollection::const_iterator firstGoodVertex = vertices_->end();
+  reco::VertexCollection::const_iterator firstVertex = vertices_->begin();
+  reco::VertexCollection::const_iterator firstGoodVertex = vertices_->begin();
 
-   int firstGoodVertexIdx = 0;
-   for( reco::VertexCollection::const_iterator vtx = vertices_->begin(); vtx != vertices_->end(); ++vtx, ++firstGoodVertexIdx){
-     bool isFake = (vtx->chi2()==0 && vtx->ndof()==0);
-     // Check the goodness
-     if( !isFake && vtx->ndof()>=4. && vtx->position().Rho()<=2.0 && fabs(vtx->position().Z())<=24.0) {
-       firstGoodVertex = vtx;
-       break;
-     }
+  int firstGoodVertexIdx = 0;
+  for( reco::VertexCollection::const_iterator vtx = vertices_->begin(); vtx != vertices_->end(); ++vtx, ++firstGoodVertexIdx){
+    bool isFake = (vtx->chi2()==0 && vtx->ndof()==0);
+    // Check the goodness
+    if( !isFake && vtx->ndof()>=4. && vtx->position().Rho()<=2.0 && fabs(vtx->position().Z())<=24.0) {
+      firstGoodVertex = vtx;
+      break;
+    }
      
-   }
+  }
 
-   int nele = 0;
+  int nele = 0;
 
-   for (const pat::Electron &ele : *electrons_) {
+  for (const pat::Electron &ele : *electrons_) {
    	                 
     nBranches_->el_pdgId	   .push_back(ele.pdgId());
     nBranches_->el_charge	   .push_back(ele.charge());

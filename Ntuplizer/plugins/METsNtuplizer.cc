@@ -20,21 +20,22 @@ METsNtuplizer::METsNtuplizer( 	edm::EDGetTokenT<pat::METCollection>     mettoken
 				NtupleBranches* 			 nBranches   , 
 				std::map< std::string, bool >&                        runFlags 	)
 									
-: CandidateNtuplizer ( nBranches    )
-, metInputToken_     ( mettoken     )
-, metpuppiInputToken_( metpuppitoken)
-, metmvaInputToken_  ( metmvatoken  )
-, jetInputToken_     ( jettoken     )
-, muonInputToken_    ( muontoken    )	    
-, rhoToken_	     ( rhotoken     )	    
-, verticeToken_	     ( vtxtoken     )	
-, metSigToken_       ( metSigtoken  )
-, metCovToken_       ( metCovtoken  )
-, jetCorrLabel_	     ( jecAK4labels )
-, corrFormulas_	     ( corrformulas )	
-, doMETSVFIT_        ( runFlags["doMETSVFIT"]  )					    
-, doMVAMET_        ( runFlags["doMVAMET"]  )					    
-
+  : CandidateNtuplizer ( nBranches    )
+  , metInputToken_     ( mettoken     )
+  , metpuppiInputToken_( metpuppitoken)
+  , metmvaInputToken_  ( metmvatoken  )
+  , jetInputToken_     ( jettoken     )
+  , muonInputToken_    ( muontoken    )	    
+  , rhoToken_	     ( rhotoken     )	    
+  , verticeToken_	     ( vtxtoken     )	
+  , metSigToken_       ( metSigtoken  )
+  , metCovToken_       ( metCovtoken  )
+  , jetCorrLabel_	     ( jecAK4labels )
+  , corrFormulas_	     ( corrformulas )	
+  , doMETSVFIT_        ( runFlags["doMETSVFIT"]  )					    
+  , doMVAMET_        ( runFlags["doMVAMET"]  )					    
+  , isJpsiMu_( runFlags["doJpsiMu"]  )
+  , isJpsiEle_( runFlags["doJpsiEle"]  )
 {
         if( jetCorrLabel_.size() != 0 ){
 	   offsetCorrLabel_.push_back(jetCorrLabel_[0]);
@@ -183,8 +184,17 @@ void METsNtuplizer::addTypeICorr( edm::Event const & event ){
 
 //===================================================================================================================
 void METsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetup& iSetup ){
-
-
+  //chunk to remove those events with no jspi if that analysis is chosen
+  std::vector<int> doJpsi_;
+  if(isJpsiEle_) {
+    doJpsi_ = nBranches_->IsJpsiEle;
+    //std::cout<<"im getting inside the electron part"<<std::endl;
+  }else if(isJpsiMu_){
+    doJpsi_ = nBranches_->IsJpsiMu;
+    //std::cout<<"nbranch thing\t"<<size(isJpsi_)<<"; "<< isJpsi_[0]<<std::endl;
+  }
+  if(size(doJpsi_)>0) if(doJpsi_[0]==0) return;
+  
 
   // PFMET
 	

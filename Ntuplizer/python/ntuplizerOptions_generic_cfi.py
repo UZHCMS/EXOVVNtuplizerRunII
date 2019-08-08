@@ -5,13 +5,13 @@ config = dict()
 #--------- general ----------#
 
 #--------- Set Just one to true ----------#
-config["RUNONMC"] = False
+config["RUNONMC"] = True #False
 config["RUNONPromptReco"] = False
-config["RUNONReReco"] = True
+config["RUNONReReco"] =False# True
 #-----------------------------------------#
 
 config["USEJSON"] = not (config["RUNONMC"])
-config["JSONFILE"] = "Cert_294927-306462_13TeV_PromptReco_Collisions17_JSON.txt"
+config["JSONFILE"] = "JSON/Cert_294927-306462_13TeV_PromptReco_Collisions17_JSON.txt" #"Cert_294927-306462_13TeV_PromptReco_Collisions17_JSON.txt"
 config["BUNCHSPACING"] = 25
 config["USENOHF"] = False
 config["FILTEREVENTS"] = False
@@ -21,19 +21,21 @@ config["DOGENPARTICLES"] = (True and config["RUNONMC"])
 config["DOGENJETS"] = (True and config["RUNONMC"])
 config["DOGENEVENT"] = (True and config["RUNONMC"])
 config["DOPILEUP"] = (True and config["RUNONMC"])
-config["DOELECTRONS"] = True
-config["DOMUONS"] = True
-config["DOTAUS"] = True
-config["DOAK8JETS"] = True
-config["DOAK4JETS"] = True
-config["DOVERTICES"] = True
+config["DOELECTRONS"] = False #True
+config["DOMUONS"] = False #True
+config["DOTAUS"] = False #True
+config["DOAK8JETS"] = False #True
+config["DOAK4JETS"] =False # True
+config["DOVERTICES"] = True #True
 config["DOTRIGGERDECISIONS"] = True
-config["DOTRIGGEROBJECTS"] = False
+config["DOTRIGGEROBJECTS"] = True
 config["DOHLTFILTERS"] = True
 config["DOMISSINGET"] = True
-config["DOTAUSBOOSTED"] = True
+config["DOTAUSBOOSTED"] =False # True
 config["DOMETSVFIT"] = True
 config["DOMVAMET"] = False
+config["DOJPSIMU"] = True
+config["DOJPSIELE"] = False
 
 #--------- AK8 jets reclustering ----------#
 config["ADDAK8GENJETS"] = (True and config["RUNONMC"]) #! Add AK8 gen jet collection with pruned and softdrop mass
@@ -49,8 +51,8 @@ config["UpdateJetCollection"] = False #needed for Higgs-tagger in 80X
 config["DOMETRECLUSTERING"] = False
 
 #--------- JEC ----------#
-config["CORRJETSONTHEFLY"] = True # at the moment JEC available just for MC Fall17
-config["CORRMETONTHEFLY"] = True  # at the moment JEC available just for MC Fall17
+config["CORRJETSONTHEFLY"] = False#True # at the moment JEC available just for MC Fall17
+config["CORRMETONTHEFLY"] = False #True  # at the moment JEC available just for MC Fall17
 config["GETJECFROMDBFILE"] = False # If not yet in global tag, but db file available
 #--------- TAU ----------#
-config["DOMULTIPLETAUMVAVERSIONS"] = True #This flag eneables the possibility to access a sqlite *db file and save the latest training of the tau MVA isolation "v2" in parellel as the one of "v1" taken from the CMSSW database.
+config["DOMULTIPLETAUMVAVERSIONS"] = False#True #This flag eneables the possibility to access a sqlite *db file and save the latest training of the tau MVA isolation "v2" in parellel as the one of "v1" taken from the CMSSW database.

@@ -2,12 +2,13 @@
 
 //===================================================================================================================        
 
-GenJetsNtuplizer::GenJetsNtuplizer( edm::EDGetTokenT<reco::GenJetCollection> token, edm::EDGetTokenT<pat::JetCollection> AK8token, NtupleBranches* nBranches )
+GenJetsNtuplizer::GenJetsNtuplizer( edm::EDGetTokenT<reco::GenJetCollection> token, edm::EDGetTokenT<pat::JetCollection> AK8token, NtupleBranches* nBranches, std::map< std::string, bool >& runFlags )
 
   : CandidateNtuplizer     ( nBranches )
-    , genJetInputToken_	    ( token     )
-      , genJetAK8InputToken_	  ( AK8token  )
-
+  , genJetInputToken_	    ( token     )
+  , genJetAK8InputToken_	  ( AK8token  )
+  , isJpsiMu_( runFlags["doJpsiMu"]  )
+  , isJpsiEle_( runFlags["doJpsiEle"]  )
 {
 }
 
@@ -18,7 +19,18 @@ GenJetsNtuplizer::~GenJetsNtuplizer( void )
 
 //===================================================================================================================
 void GenJetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetup& iSetup ){
-  
+  //chunk to remove those events with no jspi if that analysis is chosen
+  std::vector<int> doJpsi_;
+  if(isJpsiEle_) {
+    doJpsi_ = nBranches_->IsJpsiEle;
+    //std::cout<<"im getting inside the electron part"<<std::endl;
+  }else if(isJpsiMu_){
+    doJpsi_ = nBranches_->IsJpsiMu;
+    //std::cout<<"nbranch thing\t"<<size(isJpsi_)<<"; "<< isJpsi_[0]<<std::endl;
+  }
+  if(size(doJpsi_)>0) if(doJpsi_[0]==0) return;
+
+ 
   bool doGenAK8  = event.getByToken(genJetAK8InputToken_, genJetsAK8_ );
   
   event.getByToken(genJetInputToken_   , genJets_    );

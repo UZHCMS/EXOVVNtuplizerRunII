@@ -48,6 +48,7 @@ private:
   NtupleBranches* nBranches_;
   std::map<std::string,CandidateNtuplizer*>                 nTuplizers_         ;
   
+  edm::EDGetTokenT<reco::BeamSpot>                          beamToken_          ;
   edm::EDGetTokenT<reco::VertexCollection>                  vtxToken_           ;
   edm::EDGetTokenT<double>                                  rhoToken_           ;
   edm::EDGetTokenT<pat::PackedCandidateCollection>          packedpfcandidatesToken_;

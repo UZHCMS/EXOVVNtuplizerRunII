@@ -3,9 +3,15 @@
 #include <cmath>
 
 //===================================================================================================================
-VerticesNtuplizer::VerticesNtuplizer( std::vector<edm::EDGetTokenT<reco::VertexCollection>> tokens, NtupleBranches* nBranches )
+VerticesNtuplizer::VerticesNtuplizer( std::vector<edm::EDGetTokenT<reco::VertexCollection>> tokens,
+				      edm::EDGetTokenT<reco::BeamSpot>             beamToken,
+				      NtupleBranches* nBranches,
+				      std::map< std::string, bool >& runFlags) 
    : CandidateNtuplizer( nBranches )
-   , vtxToken_( tokens[0] )
+   , vtxToken_ ( tokens[0])
+   , beamToken_( beamToken)
+   , isJpsiMu_( runFlags["doJpsiMu"]  )
+   , isJpsiEle_( runFlags["doJpsiEle"]  )
 {
 
 }
@@ -18,9 +24,30 @@ VerticesNtuplizer::~VerticesNtuplizer( void )
 
 //===================================================================================================================
 void VerticesNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetup& iSetup ){
+  //std::cout<<"this is just a test to see if i can read the branch"<<IsJpsimunu<<std::endl;
+  //chunk to remove those events with no jspi if that analysis is chosen
+  std::vector<int> doJpsi_;
+  if(isJpsiEle_) {
+    doJpsi_ = nBranches_->IsJpsiEle;
+    //std::cout<<"im getting inside the electron part"<<std::endl;
+  }else if(isJpsiMu_){
+    doJpsi_ = nBranches_->IsJpsiMu;
+    //std::cout<<"nbranch thing\t"<<size(isJpsi_)<<"; "<< isJpsi_[0]<<std::endl;
+  }
+  if(size(doJpsi_)>0) if(doJpsi_[0]==0) return;
+ 
 
   event.getByToken(vtxToken_, vertices_);
-    
+  event.getByToken(beamToken_, beamSpot_);
+  //std::cout<<beamSpot_->z0()<<std::endl;
+  nBranches_->BeamSpot_x0.push_back(beamSpot_->x0());
+  nBranches_->BeamSpot_y0.push_back(beamSpot_->y0());
+  nBranches_->BeamSpot_z0.push_back(beamSpot_->z0());
+  //reco::BeamSpot beamSpot;
+  //double z0 = beamSpot.z0();
+  //std::cout<<"this is z0 "<< z0 << std::endl;
+  //edm::Handle<reco::BeamSpot> beamSpotHandle;
+  //event.getByLabel("offlineBeamSpot", beamSpotHandle);
   nBranches_->PV_N = vertices_->size();
   
   nBranches_->PV_filter = true;
@@ -44,4 +71,25 @@ void VerticesNtuplizer::fillBranches( edm::Event const & event, const edm::Event
   
   if ( firstGoodVertex==vertices_->end() ) nBranches_->PV_filter = false;
   
+
+  /*
+  if ( beamSpotHandle.isValid() ){
+    beamSpot = *beamSpotHandle;
+
+  } else{
+    edm::LogInfo("MyAnalyzer")
+      << "No beam spot available from EventSetup \n";
+  }
+
+  double x0 = beamSpot.x0();
+  double y0 = beamSpot.y0();
+  double z0 = beamSpot.z0();
+  double sigmaz = beamSpot.sigmaZ();
+  double dxdz = beamSpot.dxdz();
+  double BeamWidthX = beamSpot.BeamWidthX();
+  double BeamWidthY = beamSpot.BeamWidthY();
+
+  // print the beam spot object
+  // cout << beamSpot << endl;
+  std::cout<<"this is z0 "<< z0 << std::endl;*/
 }

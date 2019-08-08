@@ -80,7 +80,9 @@ public:
   bool doAK8Jets_;
   bool doPuppiRecluster_;
   bool runOnMC_;
-
+  bool isJpsiMu_;
+  bool isJpsiEle_;
+   
 };
 
 #endif // JetsNtuplizer_H

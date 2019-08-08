@@ -23,7 +23,8 @@ TausNtuplizer::TausNtuplizer( edm::EDGetTokenT<pat::TauCollection> tauToken,edm:
   , packedpfcandidatesToken_(packedpfcandidatesToken)
   , verticeToken_     	    ( verticeToken  )	 
   , doBoostedTaus_     	    ( runFlags["doBoostedTaus"]  )	 
- 
+  , isJpsiMu_( runFlags["doJpsiMu"]  )
+  , isJpsiEle_( runFlags["doJpsiEle"]  )
 {
  
 }
@@ -37,7 +38,15 @@ TausNtuplizer::~TausNtuplizer( void )
 //===================================================================================================================
 void TausNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetup& iSetup // , std::map< std::string, bool >& runFlags 
 				  ){
- 
+  //chunk to remove those events with no jspi if that analysis is chosen
+  std::vector<int> doJpsi_;
+  if(isJpsiEle_) {
+    doJpsi_ = nBranches_->IsJpsiEle;
+    std::cout<<"im getting inside the electron part"<<std::endl;
+  }else if(isJpsiMu_){
+    doJpsi_ = nBranches_->IsJpsiMu;
+    //std::cout<<"nbranch thing\t"<<size(isJpsi_)<<"; "<< isJpsi_[0]<<std::endl;
+  }
 //  bool doMultipleTauMVA_versions =true;
 
   if ( !doBoostedTaus_ ) return;
