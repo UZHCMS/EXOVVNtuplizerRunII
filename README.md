@@ -49,19 +49,21 @@ scram b -j 8
 
 
 ### running for data and MC
-Just set the proper flag in python/ntuplizerOptions_generic_cfi.py
-
+Just set the proper flags in python/ntuplizerOptions_generic_cfi.py
+and then run your config 
 ```
 cmsRun config_generic.py 
-
 ```
-
+or
+```
+cmsRun config_generic_pablo.py 
+```
 
 
 ### CRAB submission 
 List the dataset list you would like to process in sample/sample.txt
 Modify in the submission script the info relative to the user, the storage element (T2_CH_CSCS, T3_CH_PSI).
-Examples of submissions are available in files like commands_ForAll.txt , and here:
+Examples of submissions are available in files like `commands_ForPeople.txt` and `commands_sample_submission_CRAB.txt`, and here:
 you need to specify the directory where you want to store the crab project directory, the configaruion file that has to be run with `cmsRun`, the txt file with the sample list and any additional string you want to attach to the dataset name.
 
 ```
