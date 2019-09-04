@@ -14,6 +14,7 @@ TriggersNtuplizer::TriggersNtuplizer( edm::EDGetTokenT<edm::TriggerResults> toke
 				      edm::EDGetTokenT<bool> HBHENoiseFilterLooseResultToken,
 				      edm::EDGetTokenT<bool> HBHENoiseFilterTightResultToken,
 				      edm::EDGetTokenT<bool> HBHENoiseIsoFilterResultToken,
+				      edm::EDGetTokenT<bool> ecalBadCalibFilterUpdateToken,
 				      NtupleBranches* nBranches,
 				      const edm::ParameterSet& iConfig,
 				      std::map< std::string, bool >& runFlags)
@@ -25,6 +26,7 @@ TriggersNtuplizer::TriggersNtuplizer( edm::EDGetTokenT<edm::TriggerResults> toke
    , HBHENoiseFilterLoose_Selector_( HBHENoiseFilterLooseResultToken )
    , HBHENoiseFilterTight_Selector_( HBHENoiseFilterTightResultToken )
    , HBHENoiseIsoFilter_Selector_( HBHENoiseIsoFilterResultToken )
+   , ecalBadCalibFilter_Selector_( ecalBadCalibFilterUpdateToken )
    , doTriggerDecisions_( runFlags["doTriggerDecisions"] )
    , doTriggerObjects_	( runFlags["doTriggerObjects"] )
    , doHltFilters_	( runFlags["doHltFilters"] )
@@ -34,6 +36,7 @@ TriggersNtuplizer::TriggersNtuplizer( edm::EDGetTokenT<edm::TriggerResults> toke
 {
 
   HBHENoiseFilter_Selector_ =  iConfig.getParameter<std::string> ("noiseFilterSelection_HBHENoiseFilter");
+
   CSCHaloNoiseFilter_Selector_ =  iConfig.getParameter<std::string> ("noiseFilterSelection_CSCTightHaloFilter");
   CSCTightHalo2015Filter_Selector_ =  iConfig.getParameter<std::string> ("noiseFilterSelection_CSCTightHalo2015Filter");
   HCALlaserNoiseFilter_Selector_ =  iConfig.getParameter<std::string> ("noiseFilterSelection_hcalLaserEventFilter");
@@ -61,7 +64,8 @@ TriggersNtuplizer::TriggersNtuplizer( edm::EDGetTokenT<edm::TriggerResults> toke
   badMuons_Selector_  =  iConfig.getParameter<std::string> ("noiseFilterSelection_badMuonsFilter");
   duplicateMuons_Selector_  =  iConfig.getParameter<std::string> ("noiseFilterSelection_duplicateMuonsFilter");
   nobadMuons_Selector_  =  iConfig.getParameter<std::string> ("noiseFilterSelection_nobadMuonsFilter");
-
+  //iConfig.getParameter<std::string> (" noiseFilterSelection_ecalBadCalibReducedMINIAODFilter
+  
 }
 
 //===================================================================================================================
@@ -528,6 +532,12 @@ void TriggersNtuplizer::fillBranches( edm::Event const & event, const edm::Event
 
        nBranches_->passFilter_HBHEIso_ = HBHENoiseIsoFilterResult;
 
+       edm::Handle< bool > passecalBadCalibFilterUpdate ;
+       event.getByToken(ecalBadCalibFilter_Selector_,passecalBadCalibFilterUpdate);
+       bool    _passecalBadCalibFilterUpdate = true;
+       _passecalBadCalibFilterUpdate =(*passecalBadCalibFilterUpdate );
+       nBranches_->passFilter_ecalBadCalib_ = _passecalBadCalibFilterUpdate;
+       
     //}
 
   } //doHltFilters_

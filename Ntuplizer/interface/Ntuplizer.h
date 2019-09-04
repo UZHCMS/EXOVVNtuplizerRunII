@@ -68,19 +68,19 @@ private:
   edm::EDGetTokenT<double>                                  tauspinnerIsRightLeftToken_;
 
   
-  edm::EDGetTokenT<pat::JetCollection>                      jetToken_           ;
-  edm::EDGetTokenT<pat::JetCollection>                      fatjetToken_        ;
-  edm::EDGetTokenT<pat::JetCollection>                      prunedjetToken_     ;
-  edm::EDGetTokenT<pat::JetCollection>                      softdropjetToken_   ;
-  edm::EDGetTokenT<pat::JetCollection>                      trimmedjetToken_     ;
-  edm::EDGetTokenT<pat::JetCollection>                      puppijetToken_     ;
-  edm::EDGetTokenT<pat::JetCollection>                      puppiprunedjetToken_     ;
-  edm::EDGetTokenT<pat::JetCollection>                      puppisoftdropjetToken_     ;
-  edm::EDGetTokenT<reco::GenJetCollection>                  genJetToken_	;
-  edm::EDGetTokenT<pat::JetCollection>                      genJetAK8Token_	;
+  /* edm::EDGetTokenT<pat::JetCollection>                      jetToken_           ; */
+  /* edm::EDGetTokenT<pat::JetCollection>                      fatjetToken_        ; */
+  /* edm::EDGetTokenT<pat::JetCollection>                      prunedjetToken_     ; */
+  /* edm::EDGetTokenT<pat::JetCollection>                      softdropjetToken_   ; */
+  /* edm::EDGetTokenT<pat::JetCollection>                      trimmedjetToken_     ; */
+  /* edm::EDGetTokenT<pat::JetCollection>                      puppijetToken_     ; */
+  /* edm::EDGetTokenT<pat::JetCollection>                      puppiprunedjetToken_     ; */
+  /* edm::EDGetTokenT<pat::JetCollection>                      puppisoftdropjetToken_     ; */
+  /* edm::EDGetTokenT<reco::GenJetCollection>                  genJetToken_	; */
+  /* edm::EDGetTokenT<pat::JetCollection>                      genJetAK8Token_	; */
   
 
-  edm::EDGetTokenT<reco::JetFlavourMatchingCollection> 	    flavourToken_	;
+  /* edm::EDGetTokenT<reco::JetFlavourMatchingCollection> 	    flavourToken_	; */
 
   edm::EDGetTokenT<pat::MuonCollection>     		    muonToken_  	;	
   edm::EDGetTokenT<edm::View<pat::Electron> >		    electronToken_	;
@@ -96,7 +96,7 @@ private:
   edm::EDGetTokenT<edm::ValueMap<int> >                     mvaCategoriesMapToken_;
   edm::EDGetTokenT<edm::SortedCollection<EcalRecHit,edm::StrictWeakOrdering<EcalRecHit>>> ebRecHitsToken_;
   edm::EDGetTokenT<pat::TauCollection> 	    		    tauToken_		;
-  edm::EDGetTokenT<pat::TauCollection> 	    		    tauBoostedTauToken_	;
+  // edm::EDGetTokenT<pat::TauCollection> 	    		    tauBoostedTauToken_	;
 
 
   edm::EDGetTokenT<pat::METCollection> 	    		    metToken_		;
@@ -114,5 +114,6 @@ private:
   edm::EDGetTokenT<bool>                                    HBHENoiseFilterLooseResultToken_;
   edm::EDGetTokenT<bool>                                    HBHENoiseFilterTightResultToken_;
   edm::EDGetTokenT<bool>                                    HBHENoiseIsoFilterResultToken_;  
+  edm::EDGetTokenT<bool>                                    ecalBadCalibFilterUpdateToken_;
 
 };

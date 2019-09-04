@@ -202,6 +202,9 @@ void METsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
 
   if( doCorrOnTheFly_ ) addTypeICorr(event);
 
+  event.getByToken(rhoToken_ , rho_ );
+  nBranches_->rho = *(rho_.product()); //moving this from JetsNtuplizer.cc to here
+
   for (const pat::MET &met : *METs_) {
     //const float rawPt	= met.shiftedPt(pat::MET::NoShift, pat::MET::Raw);
     //const float rawPhi  = met.shiftedPhi(pat::MET::NoShift, pat::MET::Raw);

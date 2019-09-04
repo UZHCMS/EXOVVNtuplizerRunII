@@ -12,8 +12,7 @@ public:
                       std::vector<edm::EDGetTokenT<edm::ValueMap<bool> > > eleIDtokens  ,
 	 	      edm::EDGetTokenT<edm::ValueMap<float> > mvaValuesMapToken  ,
 	 	      edm::EDGetTokenT<edm::ValueMap<int> > mvaCategoriesMapToken  ,	
-	 	      edm::EDGetTokenT<edm::SortedCollection<EcalRecHit,edm::StrictWeakOrdering<EcalRecHit>>> ebRecHitsToken, 	      
-		      edm::EDGetTokenT<pat::TauCollection>                 boostedtauToken  ,
+	 	      edm::EDGetTokenT<edm::SortedCollection<EcalRecHit,edm::StrictWeakOrdering<EcalRecHit>>> ebRecHitsToken,
 		      NtupleBranches*				           nBranches    ,
 		      std::map< std::string, bool >&                       runFlags 
 		      );
@@ -24,7 +23,7 @@ public:
   float dEtaInSeed( const pat::Electron &ele );
   float EleEInverseMinusPInverse( const pat::Electron &ele );
   bool  eleIDpassed( std::string id, const pat::Electron &ele );
-  bool  eleIDpassedBoosted( std::string id, const pat::Electron &ele );
+  //bool  eleIDpassedBoosted( std::string id, const pat::Electron &ele );
   bool  eleIDpassedWithoutIPandIsolation( std::string id, const pat::Electron &ele, float rho );
   
 private:
@@ -42,7 +41,7 @@ private:
    edm::EDGetTokenT<edm::ValueMap<float> >   mvaValuesMapToken_;
    edm::EDGetTokenT<edm::ValueMap<int> >     mvaCategoriesMapToken_;
    edm::EDGetTokenT<edm::SortedCollection<EcalRecHit,edm::StrictWeakOrdering<EcalRecHit>>> ebRecHitsToken_; 
-   edm::EDGetTokenT<pat::TauCollection>      boostedtauToken_  ;
+   
    edm::Handle<edm::View<pat::Electron> >    electrons_    ;
    edm::Handle<reco::VertexCollection> 	     vertices_     ;
    edm::Handle<double> 			     rho_	   ;
@@ -57,8 +56,6 @@ private:
    edm::Handle<edm::ValueMap<float> >        mva_value;
    edm::Handle<edm::ValueMap<int> >          mva_categories;
    edm::Handle<edm::SortedCollection<EcalRecHit,edm::StrictWeakOrdering<EcalRecHit>>> _ebRecHits;
-   edm::Handle<pat::TauCollection> 	     taus_         ;  
-   bool doBoostedTaus_;
    bool isJpsiMu_;
    bool isJpsiEle_;
 
