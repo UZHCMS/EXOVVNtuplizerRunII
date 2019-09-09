@@ -1,4 +1,4 @@
-	# EXOVVNtuplizerRunII
+# EXOVVNtuplizerRunII
 
 Ntuplizer for searches for heavy resonances decaying to dibosons
 
@@ -15,7 +15,7 @@ git cms-init
 
 
 
-### getting the ntuplizer codes
+### getting the ntuplizer code
 ```
 cd $CMSSW_BASE/src
 export GITUSER=`git config user.github`
@@ -23,8 +23,14 @@ git clone https://github.com/${GITUSER}/EXOVVNtuplizerRunII
 cd EXOVVNtuplizerRunII
 git remote add UZHCMS https://github.com/UZHCMS/EXOVVNtuplizerRunII
 git fetch UZHCMS
-git checkout -b DevelopmentBranch_10_2_10_BcMu UZHCMS/10210_ntuplizer_BcMu
+git checkout -b Development_BcMu_10210_NoLepProducers UZHCMS/BcMu_10210_NoLepProducers
 cd $CMSSW_BASE/src
+scram b -j 8
+```
+
+### JETMET filters to remove noise events
+cd $CMSSW_BASE/src
+git cms-addpkg RecoMET/METFilters 
 scram b -j 8
 ```
 
@@ -50,13 +56,14 @@ scram b -j 8
 
 ### running for data and MC
 Just set the proper flags in python/ntuplizerOptions_generic_cfi.py
-and then run your config 
+and then run your config, as for example so :
+
 ```
-cmsRun config_generic.py 
+cmsRun config_generic_opt_skimmed.py RunPeriod="Fall17" (on 2017 MC)
 ```
 or
 ```
-cmsRun config_generic_pablo.py 
+cmsRun config_generic_opt_skimmed.py RunPeriod="Run2017B" (for 2017 data)
 ```
 
 
@@ -64,24 +71,21 @@ cmsRun config_generic_pablo.py
 List the dataset list you would like to process in sample/sample.txt
 Modify in the submission script the info relative to the user, the storage element (T2_CH_CSCS, T3_CH_PSI).
 Examples of submissions are available in files like `commands_ForPeople.txt` and `commands_sample_submission_CRAB.txt`, and here:
-you need to specify the directory where you want to store the crab project directory, the configaruion file that has to be run with `cmsRun`, the txt file with the sample list and any additional string you want to attach to the dataset name.
+you need to specify the directory where you want to store the crab project directory, the configaruion file that has to be run with `cmsRun`, the txt file with the sample list and any additional string you want to attach to the dataset name. Do a print of the command, before sending the jobs, to be sure that all options are well taken.
 
 ```
 cmsenv
 source /cvmfs/cms.cern.ch/crab3/crab.sh
-python submit_all.py -d CRAB_dir -c config_generic_pablo.py -f samples/sample.txt  -s ""
+python submit_all_opt.py -d CRAB_dir -c config_generic_opt_skimmed.py -f samples/sample.txt  -s ""
 
 ```
 
 
-to recluster jets and MET, or to add the Higgs-tagger the following flags can be changed:
+to recluster the MET the following flags can be changed:
 ```
-config["DOAK8RECLUSTERING"] = False
-config["DOHBBTAG"] = False
-config["DOAK8PRUNEDRECLUSTERING"] = False
 config["DOMETRECLUSTERING"] = False
 ```
-If you want to use Higgs tagger the first two flags must all be set to True.
+
 
 ### Batch submission
 

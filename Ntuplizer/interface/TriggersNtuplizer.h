@@ -15,6 +15,8 @@ public:
 		     edm::EDGetTokenT<bool> HBHENoiseFilterLooseResultToken, 
 		     edm::EDGetTokenT<bool> HBHENoiseFilterTightResultToken, 
 		     edm::EDGetTokenT<bool> HBHENoiseIsoFilterResultToken, 
+		     edm::EDGetTokenT<bool>  ecalBadCalibFilterUpdateToken,
+
 		     NtupleBranches* nBranches, 
 		     const edm::ParameterSet& iConfig, 
 		     std::map< std::string, bool >& runFlags );
@@ -40,6 +42,7 @@ private:
    edm::EDGetTokenT<bool> HBHENoiseFilterLoose_Selector_;
    edm::EDGetTokenT<bool> HBHENoiseFilterTight_Selector_;
    edm::EDGetTokenT<bool> HBHENoiseIsoFilter_Selector_;
+   edm::EDGetTokenT<bool> ecalBadCalibFilter_Selector_; 
    std::string CSCHaloNoiseFilter_Selector_;
    std::string CSCTightHalo2015Filter_Selector_;
    std::string HCALlaserNoiseFilter_Selector_;
@@ -64,7 +67,8 @@ private:
    std::string badMuons_Selector_;
    std::string duplicateMuons_Selector_;
    std::string nobadMuons_Selector_;
-   
+   //std::string  ecalBadCalibFilter_Selector_;
+
    bool doTriggerDecisions_;
    bool doTriggerObjects_;
    bool doHltFilters_;

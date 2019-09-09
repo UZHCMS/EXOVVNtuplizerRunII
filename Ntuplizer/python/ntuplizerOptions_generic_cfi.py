@@ -18,9 +18,6 @@ config["FILTEREVENTS"] = False
 config["DOGENPARTICLES"] = (True and config["RUNONMC"])
 config["DOGENEVENT"] = (True and config["RUNONMC"])
 config["DOPILEUP"] = (True and config["RUNONMC"])
-config["DOELECTRONS"] = False #True
-config["DOMUONS"] = False #True
-config["DOTAUS"] = False #True
 config["DOVERTICES"] = True #True
 config["DOTRIGGERDECISIONS"] = True
 config["DOTRIGGEROBJECTS"] = True
@@ -38,5 +35,3 @@ config["DOMETSVFIT"] = True
 
 config["CORRMETONTHEFLY"] = True  # at the moment JEC available just for MC Fall17
 
-#--------- TAU ----------#
-config["DOMULTIPLETAUMVAVERSIONS"] = False#True #This flag eneables the possibility to access a sqlite *db file and save the latest training of the tau MVA isolation "v2" in parellel as the one of "v1" taken from the CMSSW database.
