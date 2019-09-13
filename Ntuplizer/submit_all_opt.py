@@ -80,7 +80,10 @@ def main():
     # config.JobType.pyCfgParams = ['DataProcessing=MC25ns_MiniAODv2','lheLabel=externalLHEProducer']
     #config.JobType.pyCfgParams = ['RunPeriod']
     config.JobType.inputFiles = [
-        './JSON/Cert_294927-306462_13TeV_PromptReco_Collisions17_JSON.txt'
+        './JSON/Cert_294927-306462_13TeV_PromptReco_Collisions17_JSON.txt',
+        './JSON/Cert_271036-284044_13TeV_PromptReco_Collisions16_JSON_FromEarlyF.txt',
+        './JSON/Cert_271036-284044_13TeV_PromptReco_Collisions16_JSON_UpToEarlyF.txt',
+        './JSON/Cert_314472-325175_13TeV_17SeptEarlyReReco2018ABC_PromptEraD_Collisions18_JSON.txt',
         ]
 
     config.section_("Data")
@@ -98,7 +101,7 @@ def main():
     #config.Data.ignoreLocality = True
     config.Data.publication = False
     #config.Data.outLFNDirBase = '/store/user/cgalloni/Ntuple_2017_94v2_preliminary'
-    config.Data.outLFNDirBase = '/store/user/cgalloni/Ntuple_2017_94X_2016-2017'
+    config.Data.outLFNDirBase = '/store/user/cgalloni/Ntuple_Pablo_v2'
     #config.Data.outLFNDirBase = '/pnfs/psi.ch/cms/trivcat/store/t3groups/uniz-higgs/Fall17'
 
     config.section_("Site")
@@ -145,9 +148,10 @@ def main():
         config.Data.inputDataset = job
         if ("Run2017" in job and options.isData):
             config.Data.lumimask='./JSON/Cert_294927-306462_13TeV_PromptReco_Collisions17_JSON.txt'
+        elif ("Run2018" in job and options.isData):
+             config.Data.lumimask='./JSON/Cert_314472-325175_13TeV_17SeptEarlyReReco2018ABC_PromptEraD_Collisions18_JSON.txt'
         elif ("Run2016" in job and options.isData and options.runUpToEarlyF) :
-            config.Data.lumimask='./JSON/Cert_271036-284044_13TeV_PromptReco_Collisions16_JSON_UpToEarlyF.txt'
-            
+            config.Data.lumimask='./JSON/Cert_271036-284044_13TeV_PromptReco_Collisions16_JSON_UpToEarlyF.txt'    
         elif ("Run2016" in job  and options.isData and not options.runUpToEarlyF) :
             config.Data.lumimask='./JSON/Cert_271036-284044_13TeV_PromptReco_Collisions16_JSON_FromEarlyF.txt'
           
@@ -170,7 +174,7 @@ def main():
         try :
             from multiprocessing import Process
             p = Process(target=submit, args=(config,))
-            #p.start()
+            p.start() ## comment this out just to print the configuration that will be sent to crab
             #p.join()
             ## submit(config)
         except :

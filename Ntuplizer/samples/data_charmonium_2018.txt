@@ -1,0 +1,4 @@
+/Charmonium/Run2018A-17Sep2018-v1/MINIAOD
+/Charmonium/Run2018B-17Sep2018-v1/MINIAOD
+/Charmonium/Run2018C-17Sep2018-v1/MINIAOD
+/Charmonium/Run2018D-PromptReco-v2/MINIAOD

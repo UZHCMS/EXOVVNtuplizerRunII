@@ -9,10 +9,11 @@ config["RUNONMC"] = True
 #-----------------------------------------#
 
 config["USEJSON"] = not (config["RUNONMC"])
-config["JSONFILE"] = "JSON/Cert_294927-306462_13TeV_PromptReco_Collisions17_JSON.txt" #"Cert_294927-306462_13TeV_PromptReco_Collisions17_JSON.txt"
-
+#config["JSONFILE"] = "JSON/Cert_294927-306462_13TeV_PromptReco_Collisions17_JSON.txt" #data 2017
+#config["JSONFILE"] = "JSON/Cert_271036-284044_13TeV_PromptReco_Collisions16_JSON.txt" # data 2016
+config["JSONFILE"] = "JSON/Cert_314472-325175_13TeV_17SeptEarlyReReco2018ABC_PromptEraD_Collisions18_JSON.txt" # data 2018
 config["USENOHF"] = False
-config["FILTEREVENTS"] = False
+
 
 #--------- basic sequences ----------#
 config["DOGENPARTICLES"] = (True and config["RUNONMC"])

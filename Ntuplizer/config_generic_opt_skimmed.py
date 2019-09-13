@@ -57,13 +57,16 @@ process.options  = cms.untracked.PSet(
                      )
 
 process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(options.maxEvents) )
-
-process.source = cms.Source("PoolSource",
-                            fileNames = cms.untracked.vstring(options.inputFiles),
-                            duplicateCheckMode = cms.untracked.string("noDuplicateCheck"),
-
-                            )                     
-
+if config["RUNONMC"]:
+  process.source = cms.Source("PoolSource",
+                              fileNames = cms.untracked.vstring(options.inputFiles),
+                              duplicateCheckMode = cms.untracked.string("noDuplicateCheck"),
+                              
+                              ) 
+else:                    
+  process.source = cms.Source("PoolSource",
+                              fileNames = cms.untracked.vstring(options.inputFiles),
+                              ) 
 
 print " process source filenames %s" %(process.source) 
 ######## Sequence settings ##########
@@ -110,26 +113,7 @@ if not(config["RUNONMC"]) and config["USEJSON"]:
   myLumis = LumiList.LumiList(filename = config["JSONFILE"]).getCMSSWString().split(',')
   process.source.lumisToProcess.extend(myLumis) 
 
-  if config["FILTEREVENTS"]:
   
-   fname = ""
-   if (options.inputFiles)[0].find("SingleMuon") != -1: fname = "RunLumiEventLists/SingleMuon_csc2015_Nov14.txt"
-   elif (options.inputFiles)[0].find("SingleElectron") != -1: fname = "RunLumiEventLists/SingleElectron_csc2015_Nov14.txt"
-   elif (options.inputFiles)[0].find("JetHT") != -1: fname = "RunLumiEventLists/JetHT_csc2015_Nov27.txt"
-   else:
-    print "** WARNING: EVENT LIST NOT FOUND! exiting... "
-    sys.exit()
-   
-   print "** FILTERING EVENT LIST: %s" %fname 
-   listEventsToSkip = []
-   fileEventsToSkip = open(fname,"r")
-
-   for line in fileEventsToSkip:
-     cleanLine = line.rstrip()
-     listEventsToSkip.append(cleanLine+"-"+cleanLine)
-
-   rangeEventsToSkip = cms.untracked.VEventRange(listEventsToSkip)
-   process.source.eventsToSkip = rangeEventsToSkip
 
 ####### Redo Jet clustering sequence ##########
 betapar = cms.double(0.0)
@@ -280,7 +264,7 @@ if  config["RUNONMC"] :
     GT ='94X_mcRun2_asymptotic_v3'
   elif ("Summer16" in options.RunPeriod):
     JECprefix = "Summer16_07Aug2017_V11"
-    GT = '102X_mc2017_realistic_v6'
+    GT = '94X_mc2017_realistic_v17'
   elif (("Autumn18" in options.RunPeriod) or ("Fall18" in options.RunPeriod)):
     JECprefix = "Autumn18_V8"
     GT = '102X_upgrade2018_realistic_v18'
@@ -301,7 +285,7 @@ else : #Data
      elif ("Run2017F" in  options.RunPeriod): JEC_runDependent_suffix= "F"
      
      JECprefix = "Fall17_17Nov2017"+JEC_runDependent_suffix+"_V32"
-     GT = '102X_dataRun2_v8'
+     GT = '94X_dataRun2_v11'
      
      
    elif ("2016" in options.RunPeriod):
@@ -313,19 +297,27 @@ else : #Data
 
 
      JECprefix = "Summer16_07Aug2017"+JEC_runDependent_suffix+"_V11"
-    
+     GT ='94X_dataRun2_v10'
+
    elif ("2018" in options.RunPeriod):
-     if ("Run2018A" in  options.RunPeriod ): JEC_runDependent_suffix= "A"
-     elif ("Run2018B" in  options.RunPeriod): JEC_runDependent_suffix= "B"
-     elif ("Run2018C" in  options.RunPeriod): JEC_runDependent_suffix= "C"
-     elif ("Run2018D" in  options.RunPeriod): JEC_runDependent_suffix= "D"
-    
+     if ("Run2018A" in  options.RunPeriod ): 
+       JEC_runDependent_suffix= "A"
+       GT="102X_dataRun2_Sep2018ABC_v2" 
+     elif ("Run2018B" in  options.RunPeriod): 
+       JEC_runDependent_suffix= "B"
+       GT="102X_dataRun2_Sep2018ABC_v2"
+     elif ("Run2018C" in  options.RunPeriod): 
+       JEC_runDependent_suffix= "C"
+       GT="102X_dataRun2_Sep2018ABC_v2"
+     elif ("Run2018D" in  options.RunPeriod): 
+       JEC_runDependent_suffix= "D"
+       GT = '102X_dataRun2_Prompt_v13' 
 
      JECprefix = "Autumn18_Run"+JEC_runDependent_suffix+"_V8"
-     GT ='94X_dataRun2_v10'
+    
    #jecAK8chsUncFile = "JEC/%s_DATA_Uncertainty_AK8PFchs.txt"%(JECprefix)
    jecAK4chsUncFile = "JEC/%s_DATA_Uncertainty_AK4PFchs.txt"%(JECprefix)
-   GT = '102X_dataRun2_v10' 
+ 
    print "jec JEC_runDependent_suffix %s ,  prefix %s " %(JEC_runDependent_suffix,JECprefix)
 
 print "jec prefix ", JECprefix
