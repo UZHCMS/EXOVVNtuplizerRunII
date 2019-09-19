@@ -41,11 +41,13 @@ options.register( 'runUpToEarlyF',
 
 
 
-options.maxEvents = 100
+options.maxEvents = -1
 
 #data file
      
-options.inputFiles ='file:/work/pmatorra/JpsiAnalysis/2018/CMSSW_10_2_10/src/EXOVVNtuplizerRunII/Ntuplizer/miniAOD_99.root'
+#options.inputFiles ='file:/work/pmatorra/JpsiAnalysis/2018/CMSSW_10_2_10/src/EXOVVNtuplizerRunII/Ntuplizer/miniAOD_99.root'
+#options.inputFiles = '/store/user/cgalloni/BJpsiX_MuMu_230819/Autumn18_10_2_9_miniAOD/190823_131752/0000/miniAOD_57.root'
+options.inputFiles = '/store/user/cgalloni/BcJpsiMuNu_020519/Fall18_10_2_9-MINIAODSIM_noDuplCheck/190506_100026/0000/miniAOD_99.root'
 #options.inputFiles ='/store/data/Run2018B/Charmonium/MINIAOD/17Sep2018-v1/10000/02CFE87F-7C17-1340-8300-FDA86C16D58C.root'
 
 options.parseArguments()

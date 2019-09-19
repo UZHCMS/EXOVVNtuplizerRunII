@@ -275,6 +275,10 @@ public:
   std::vector<float>                Jpsi_trimu_flightLength2D    ;
   std::vector<float>                Jpsi_trimu_flightLengthErr2D ;
 
+  std::vector<float>                Jpsi_doca;
+  std::vector<float>                Jpsi_d03D;
+  std::vector<float>                Jpsi_alpha;
+
 
   /*--------------------------PV infos--------------------------*/
   int                               PV_N		     ;

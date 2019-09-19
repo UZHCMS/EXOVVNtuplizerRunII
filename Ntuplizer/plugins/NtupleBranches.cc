@@ -289,6 +289,9 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch("Jpsi_trimu_flightLength2D", &Jpsi_trimu_flightLength2D);
     tree_->Branch("Jpsi_trimu_flightLengthErr2D", &Jpsi_trimu_flightLengthErr2D);
 
+    tree_->Branch("Jpsi_doca", &Jpsi_doca);
+    tree_->Branch("Jpsi_d03D", &Jpsi_d03D);
+    tree_->Branch("Jpsi_alpha", &Jpsi_alpha);
   }
 }
 
@@ -531,5 +534,8 @@ void NtupleBranches::reset( void ){
   Jpsi_trimu_flightLength2D.clear();
   Jpsi_trimu_flightLengthErr2D.clear();
   Jpsi_dr_mu3pf.clear();
+  Jpsi_doca.clear();
+  Jpsi_d03D.clear();
+  Jpsi_alpha.clear();
  
 } 

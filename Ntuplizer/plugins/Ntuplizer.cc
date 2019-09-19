@@ -148,6 +148,8 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
     nTuplizers_["JpsiMu"] = new JpsiMuNtuplizer( muonToken_   , 
 						 vtxToken_   , 
 						 packedpfcandidatesToken_,
+						 triggerToken_,
+						 triggerObjects_,
 						 nBranches_ );
   }
   if (runFlags["doJpsiEle"]) {

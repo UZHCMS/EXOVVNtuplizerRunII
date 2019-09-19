@@ -41,7 +41,6 @@
 #include "TrackingTools/TransientTrack/interface/TransientTrack.h"             
 #include "TrackingTools/TransientTrack/interface/TransientTrackBuilder.h"
 #include "TrackingTools/Records/interface/TransientTrackRecord.h"
-#include "TrackingTools/IPTools/interface/IPTools.h"
 
 #include "RecoVertex/VertexTools/interface/VertexDistance3D.h"
 #include "RecoVertex/VertexTools/interface/VertexDistanceXY.h"
@@ -84,25 +83,33 @@ struct track_entry_t {
  JpsiMuNtuplizer( edm::EDGetTokenT<pat::MuonCollection>    muonToken   , 
 		  edm::EDGetTokenT<reco::VertexCollection> verticeToken, 
 		  edm::EDGetTokenT<pat::PackedCandidateCollection> packedpfcandidatesToken,
+		  edm::EDGetTokenT<edm::TriggerResults> triggertoken,
+		  edm::EDGetTokenT<pat::TriggerObjectStandAloneCollection> triggerobject,
 		  NtupleBranches* nBranches );
   ~JpsiMuNtuplizer( void );
-  std::tuple<Float_t, Float_t> vertexProb(const std::vector<reco::TransientTrack> &tracks);
-  void getAllTracks(std::vector<track_entry_t> *out_vector, int onlyThisVertex);
+  //  std::tuple<Float_t, Float_t> vertexProb(const std::vector<reco::TransientTrack> &tracks);
+  std::tuple<Float_t, TransientVertex> vertexProb( const std::vector<reco::TransientTrack>& tracks);
+  //  void getAllTracks(std::vector<track_entry_t> *out_vector, int onlyThisVertex);
 
-
+  float MuonPFIso(pat::Muon muon, bool highpt);
+  double isoTrack(double docaCut, double r, double pmin);
   void fillBranches( edm::Event const & event, const edm::EventSetup& iSetup );
   
 private:
    edm::EDGetTokenT<pat::MuonCollection>    muonToken_   ;
    edm::EDGetTokenT<reco::VertexCollection> verticeToken_   ;
+   edm::EDGetTokenT<pat::PackedCandidateCollection>   		packedpfcandidatesToken_;
+   edm::EDGetTokenT<edm::TriggerResults> 		     HLTtriggersToken_;
+   edm::EDGetTokenT<pat::TriggerObjectStandAloneCollection>  triggerObjects_;
 
    //   edm::Handle<pat::JetCollection>      		       jets_		       ;
 
-   edm::Handle< reco::VertexCollection >  vertices_;
    edm::Handle<pat::MuonCollection>      		       muons_		       ;
-   edm::EDGetTokenT<pat::PackedCandidateCollection>   		packedpfcandidatesToken_;
-
+   edm::Handle< reco::VertexCollection >  vertices_;
    edm::Handle< std::vector<pat::PackedCandidate> > packedpfcandidates_   ;
+   edm::Handle< edm::TriggerResults> 			     HLTtriggers_;
+   edm::Handle<pat::TriggerObjectStandAloneCollection>	     triggerObjects;
+
 
    edm::ESHandle<TransientTrackBuilder> builder;
    AdaptiveVertexFitter avf;
