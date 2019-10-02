@@ -205,13 +205,16 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch("Jpsi_mu1_pt", &Jpsi_mu1_pt );
     tree_->Branch("Jpsi_mu1_eta", &Jpsi_mu1_eta );
     tree_->Branch("Jpsi_mu1_phi", &Jpsi_mu1_phi );
-    tree_->Branch("Jpsi_mu1_ch", &Jpsi_mu1_ch );
+    tree_->Branch("Jpsi_mu1_q", &Jpsi_mu1_q );
     tree_->Branch("Jpsi_mu1_isLoose"  , &Jpsi_mu1_isLoose   );
     tree_->Branch("Jpsi_mu1_isTight"  , &Jpsi_mu1_isTight   );
     tree_->Branch("Jpsi_mu1_isPF"     , &Jpsi_mu1_isPF      );
     tree_->Branch("Jpsi_mu1_isGlobal" , &Jpsi_mu1_isGlobal  );
     tree_->Branch("Jpsi_mu1_isTracker", &Jpsi_mu1_isTracker );
     tree_->Branch("Jpsi_mu1_isSoft"   , &Jpsi_mu1_isSoft    );
+    tree_->Branch("Jpsi_mu1_vx"   , &Jpsi_mu1_vx    );
+    tree_->Branch("Jpsi_mu1_vy"   , &Jpsi_mu1_vy    );
+    tree_->Branch("Jpsi_mu1_vz"   , &Jpsi_mu1_vz    );
 
 
 
@@ -219,27 +222,31 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch("Jpsi_mu2_pt", &Jpsi_mu2_pt );
     tree_->Branch("Jpsi_mu2_eta", &Jpsi_mu2_eta );
     tree_->Branch("Jpsi_mu2_phi", &Jpsi_mu2_phi );
-    tree_->Branch("Jpsi_mu2_ch", &Jpsi_mu2_ch );
+    tree_->Branch("Jpsi_mu2_q", &Jpsi_mu2_q );
     tree_->Branch("Jpsi_mu2_isLoose"  , &Jpsi_mu2_isLoose   );
     tree_->Branch("Jpsi_mu2_isTight"  , &Jpsi_mu2_isTight   );
     tree_->Branch("Jpsi_mu2_isPF"     , &Jpsi_mu2_isPF      );
     tree_->Branch("Jpsi_mu2_isGlobal" , &Jpsi_mu2_isGlobal  );
     tree_->Branch("Jpsi_mu2_isTracker", &Jpsi_mu2_isTracker );
     tree_->Branch("Jpsi_mu2_isSoft"   , &Jpsi_mu2_isSoft    );
+    tree_->Branch("Jpsi_mu2_vx"   , &Jpsi_mu2_vx    );
+    tree_->Branch("Jpsi_mu2_vy"   , &Jpsi_mu2_vy    );
+    tree_->Branch("Jpsi_mu2_vz"   , &Jpsi_mu2_vz    );
+
 
     tree_->Branch("Jpsi_mu3_pt", &Jpsi_mu3_pt );
     tree_->Branch("Jpsi_mu3_eta", &Jpsi_mu3_eta );
     tree_->Branch("Jpsi_mu3_phi", &Jpsi_mu3_phi );
-    tree_->Branch("Jpsi_mu3_ch", &Jpsi_mu3_ch );
+    tree_->Branch("Jpsi_mu3_q", &Jpsi_mu3_q );
     tree_->Branch("Jpsi_mu3_isLoose"  , &Jpsi_mu3_isLoose   );
     tree_->Branch("Jpsi_mu3_isTight"  , &Jpsi_mu3_isTight   );
     tree_->Branch("Jpsi_mu3_isPF"     , &Jpsi_mu3_isPF      );
     tree_->Branch("Jpsi_mu3_isGlobal" , &Jpsi_mu3_isGlobal  );
     tree_->Branch("Jpsi_mu3_isTracker", &Jpsi_mu3_isTracker );
     tree_->Branch("Jpsi_mu3_isSoft"   , &Jpsi_mu3_isSoft    );
-    tree_->Branch("Jpsi_mu3_x"   , &Jpsi_mu3_x    );
-    tree_->Branch("Jpsi_mu3_y"   , &Jpsi_mu3_y    );
-    tree_->Branch("Jpsi_mu3_z"   , &Jpsi_mu3_z    );
+    tree_->Branch("Jpsi_mu3_vx"   , &Jpsi_mu3_vx    );
+    tree_->Branch("Jpsi_mu3_vy"   , &Jpsi_mu3_vy    );
+    tree_->Branch("Jpsi_mu3_vz"   , &Jpsi_mu3_vz    );
 
     tree_->Branch("Jpsi_mu3_isopt03", &Jpsi_mu3_isopt03 );
     tree_->Branch("Jpsi_mu3_isopt04", &Jpsi_mu3_isopt04 );
@@ -248,50 +255,65 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch("Jpsi_mu3_isopt07", &Jpsi_mu3_isopt07 );
     tree_->Branch("Jpsi_dr_mu3pf"    , &Jpsi_dr_mu3pf     );
 
+    tree_->Branch("Jpsi_PV_vx", &Jpsi_PV_vx );
+    tree_->Branch("Jpsi_PV_vy", &Jpsi_PV_vy );
+    tree_->Branch("Jpsi_PV_vz", &Jpsi_PV_vz );
 
+    tree_->Branch("Jpsi_bbPV_vx", &Jpsi_bbPV_vx );
+    tree_->Branch("Jpsi_bbPV_vy", &Jpsi_bbPV_vy );
+    tree_->Branch("Jpsi_bbPV_vz", &Jpsi_bbPV_vz );
 
-    tree_->Branch("Jpsi_dx", &Jpsi_dx );
-    tree_->Branch("Jpsi_dy", &Jpsi_dy );
-    tree_->Branch("Jpsi_dz", &Jpsi_dz );
+    tree_->Branch("Jpsi_genPV_vx", &Jpsi_genPV_vx );
+    tree_->Branch("Jpsi_genPV_vy", &Jpsi_genPV_vy );
+    tree_->Branch("Jpsi_genPV_vz", &Jpsi_genPV_vz );
+
     tree_->Branch("Jpsi_pt", &Jpsi_pt );
     tree_->Branch("Jpsi_eta", &Jpsi_eta );
     tree_->Branch("Jpsi_phi", &Jpsi_phi );
     tree_->Branch("Jpsi_mass", &Jpsi_mass );
-    tree_->Branch("Jpsi_vtxprob", &Jpsi_vtxprob );
-    tree_->Branch("Jpsi_vtxz", &Jpsi_vtxz );
+    tree_->Branch("Jpsi_vprob", &Jpsi_vprob );
+    tree_->Branch("Jpsi_lip", &Jpsi_lip);
+    tree_->Branch("Jpsi_lips", &Jpsi_lips);
+    tree_->Branch("Jpsi_pvip", &Jpsi_pvip);
+    tree_->Branch("Jpsi_pvips", &Jpsi_pvips);
+    tree_->Branch("Jpsi_fl3d", &Jpsi_fl3d);
+    tree_->Branch("Jpsi_fls3d", &Jpsi_fls3d);
+    tree_->Branch("Jpsi_alpha", &Jpsi_alpha);
+    tree_->Branch("Jpsi_maxdoca", &Jpsi_maxdoca);
+    tree_->Branch("Jpsi_mindoca", &Jpsi_mindoca);
+    tree_->Branch("Jpsi_vx", &Jpsi_vx );
+    tree_->Branch("Jpsi_vy", &Jpsi_vy );
+    tree_->Branch("Jpsi_vz", &Jpsi_vz );
+    tree_->Branch("Jpsi_unfitpt", &Jpsi_unfitpt );
+    tree_->Branch("Jpsi_unfitmass", &Jpsi_unfitmass );
+    tree_->Branch("Jpsi_unfitvprob", &Jpsi_unfitvprob );
+    tree_->Branch("Jpsi_unfit_vx", &Jpsi_unfit_vx );
+    tree_->Branch("Jpsi_unfit_vy", &Jpsi_unfit_vy );
+    tree_->Branch("Jpsi_unfit_vz", &Jpsi_unfit_vz );
 
-    tree_->Branch("Jpsi_trimu_dx", &Jpsi_trimu_dx );
-    tree_->Branch("Jpsi_trimu_dy", &Jpsi_trimu_dy );
-    tree_->Branch("Jpsi_trimu_dz", &Jpsi_trimu_dz );
+
     tree_->Branch("Jpsi_trimu_pt", &Jpsi_trimu_pt );
     tree_->Branch("Jpsi_trimu_eta", &Jpsi_trimu_eta );
     tree_->Branch("Jpsi_trimu_phi", &Jpsi_trimu_phi );
     tree_->Branch("Jpsi_trimu_mass", &Jpsi_trimu_mass );
-    tree_->Branch("Jpsi_trimu_vtxprob", &Jpsi_trimu_vtxprob );
-    tree_->Branch("Jpsi_trimu_vtxz", &Jpsi_trimu_vtxz );
+    tree_->Branch("Jpsi_trimu_vprob", &Jpsi_trimu_vprob );
+    tree_->Branch("Jpsi_trimu_lip", &Jpsi_trimu_lip);
+    tree_->Branch("Jpsi_trimu_lips", &Jpsi_trimu_lips);
+    tree_->Branch("Jpsi_trimu_pvip", &Jpsi_trimu_pvip);
+    tree_->Branch("Jpsi_trimu_pvips", &Jpsi_trimu_pvips);
+    tree_->Branch("Jpsi_trimu_fl3d", &Jpsi_trimu_fl3d);
+    tree_->Branch("Jpsi_trimu_fls3d", &Jpsi_trimu_fls3d);
+    tree_->Branch("Jpsi_trimu_alpha", &Jpsi_trimu_alpha);
+    tree_->Branch("Jpsi_trimu_maxdoca", &Jpsi_trimu_maxdoca);
+    tree_->Branch("Jpsi_trimu_mindoca", &Jpsi_trimu_mindoca);
+    tree_->Branch("Jpsi_trimu_vx", &Jpsi_trimu_vx );
+    tree_->Branch("Jpsi_trimu_vy", &Jpsi_trimu_vy );
+    tree_->Branch("Jpsi_trimu_vz", &Jpsi_trimu_vz );
 
-    tree_->Branch("Jpsi_PV_x", &Jpsi_PV_x );
-    tree_->Branch("Jpsi_PV_y", &Jpsi_PV_y );
-    tree_->Branch("Jpsi_PV_z", &Jpsi_PV_z );
+    tree_->Branch("Jpsi_ngenmuons", &Jpsi_ngenmuons);
+    tree_->Branch("Jpsi_isgenmatched", &Jpsi_isgenmatched);
+    tree_->Branch("Jpsi_mu3_isgenmatched", &Jpsi_mu3_isgenmatched);
 
-    //flight part
-    tree_->Branch("Jpsi_flightSig3D", &Jpsi_flightSig3D);
-    tree_->Branch("Jpsi_flightLength3D", &Jpsi_flightLength3D);
-    tree_->Branch("Jpsi_flightLengthErr3D", &Jpsi_flightLengthErr3D);
-    tree_->Branch("Jpsi_flightSig2D", &Jpsi_flightSig2D);
-    tree_->Branch("Jpsi_flightLength2D", &Jpsi_flightLength2D);
-    tree_->Branch("Jpsi_flightLengthErr2D", &Jpsi_flightLengthErr2D);
-
-    tree_->Branch("Jpsi_trimu_flightSig3D", &Jpsi_trimu_flightSig3D);
-    tree_->Branch("Jpsi_trimu_flightLength3D", &Jpsi_trimu_flightLength3D);
-    tree_->Branch("Jpsi_trimu_flightLengthErr3D", &Jpsi_trimu_flightLengthErr3D);
-    tree_->Branch("Jpsi_trimu_flightSig2D", &Jpsi_trimu_flightSig2D);
-    tree_->Branch("Jpsi_trimu_flightLength2D", &Jpsi_trimu_flightLength2D);
-    tree_->Branch("Jpsi_trimu_flightLengthErr2D", &Jpsi_trimu_flightLengthErr2D);
-
-    tree_->Branch("Jpsi_doca", &Jpsi_doca);
-    tree_->Branch("Jpsi_d03D", &Jpsi_d03D);
-    tree_->Branch("Jpsi_alpha", &Jpsi_alpha);
   }
 }
 
@@ -456,38 +478,45 @@ void NtupleBranches::reset( void ){
   Jpsi_mu1_pt.clear();
   Jpsi_mu1_eta.clear();
   Jpsi_mu1_phi.clear();
-  Jpsi_mu1_ch.clear();
+  Jpsi_mu1_q.clear();
   Jpsi_mu1_isLoose.clear();
   Jpsi_mu1_isTight.clear();
   Jpsi_mu1_isPF.clear();
   Jpsi_mu1_isGlobal.clear();
   Jpsi_mu1_isTracker.clear();
   Jpsi_mu1_isSoft.clear();
+  Jpsi_mu1_vx.clear();
+  Jpsi_mu1_vy.clear();
+  Jpsi_mu1_vz.clear();
+
 
   Jpsi_mu2_pt.clear();
   Jpsi_mu2_eta.clear();
   Jpsi_mu2_phi.clear();
-  Jpsi_mu2_ch.clear();
+  Jpsi_mu2_q.clear();
   Jpsi_mu2_isLoose.clear();
   Jpsi_mu2_isTight.clear();
   Jpsi_mu2_isPF.clear();
   Jpsi_mu2_isGlobal.clear();
   Jpsi_mu2_isTracker.clear();
   Jpsi_mu2_isSoft.clear();
+  Jpsi_mu2_vx.clear();
+  Jpsi_mu2_vy.clear();
+  Jpsi_mu2_vz.clear();
 
   Jpsi_mu3_pt.clear();
   Jpsi_mu3_eta.clear();
   Jpsi_mu3_phi.clear();
-  Jpsi_mu3_ch.clear();
+  Jpsi_mu3_q.clear();
   Jpsi_mu3_isLoose.clear();
   Jpsi_mu3_isTight.clear();
   Jpsi_mu3_isPF.clear();
   Jpsi_mu3_isGlobal.clear();
   Jpsi_mu3_isTracker.clear();
   Jpsi_mu3_isSoft.clear();
-  Jpsi_mu3_x.clear();
-  Jpsi_mu3_y.clear();
-  Jpsi_mu3_z.clear();
+  Jpsi_mu3_vx.clear();
+  Jpsi_mu3_vy.clear();
+  Jpsi_mu3_vz.clear();
 
 
   Jpsi_mu3_isopt03.clear();
@@ -497,45 +526,65 @@ void NtupleBranches::reset( void ){
   Jpsi_mu3_isopt07.clear();
 
 
-  Jpsi_dx.clear();
-  Jpsi_dy.clear();
-  Jpsi_dz.clear();
   Jpsi_pt.clear();
   Jpsi_eta.clear();
   Jpsi_phi.clear();
   Jpsi_mass.clear();
-  Jpsi_vtxprob.clear();
-  Jpsi_vtxz.clear();
+  Jpsi_vprob.clear();
+  Jpsi_lip.clear();
+  Jpsi_lips.clear();
+  Jpsi_pvip.clear();
+  Jpsi_pvips.clear();
+  Jpsi_fl3d.clear();
+  Jpsi_fls3d.clear();
+  Jpsi_alpha.clear();
+  Jpsi_maxdoca.clear();
+  Jpsi_mindoca.clear();
+  Jpsi_vx.clear();
+  Jpsi_vy.clear();
+  Jpsi_vz.clear();
+  Jpsi_unfitpt.clear();
+  Jpsi_unfitmass.clear();
+  Jpsi_unfitvprob.clear();
+  Jpsi_unfit_vx.clear();
+  Jpsi_unfit_vy.clear();
+  Jpsi_unfit_vz.clear();
 
-  Jpsi_trimu_dx.clear();
-  Jpsi_trimu_dy.clear();
-  Jpsi_trimu_dz.clear();
   Jpsi_trimu_pt.clear();
   Jpsi_trimu_eta.clear();
   Jpsi_trimu_phi.clear();
   Jpsi_trimu_mass.clear();
-  Jpsi_trimu_vtxprob.clear();
-  Jpsi_trimu_vtxz.clear();
+  Jpsi_trimu_vprob.clear();
+  Jpsi_trimu_lip.clear();
+  Jpsi_trimu_lips.clear();
+  Jpsi_trimu_pvip.clear();
+  Jpsi_trimu_pvips.clear();
+  Jpsi_trimu_fl3d.clear();
+  Jpsi_trimu_fls3d.clear();
+  Jpsi_trimu_alpha.clear();
+  Jpsi_trimu_maxdoca.clear();
+  Jpsi_trimu_mindoca.clear();
+  Jpsi_trimu_vx.clear();
+  Jpsi_trimu_vy.clear();
+  Jpsi_trimu_vz.clear();
 
-  Jpsi_PV_x.clear();
-  Jpsi_PV_y.clear();
-  Jpsi_PV_z.clear();
+  Jpsi_PV_vx.clear();
+  Jpsi_PV_vy.clear();
+  Jpsi_PV_vz.clear();
 
-  Jpsi_flightSig3D.clear();
-  Jpsi_flightLength3D.clear();
-  Jpsi_flightLengthErr3D.clear();
-  Jpsi_flightSig2D.clear();
-  Jpsi_flightLength2D.clear();
-  Jpsi_flightLengthErr2D.clear();
-  Jpsi_trimu_flightSig3D.clear(); 
-  Jpsi_trimu_flightLength3D.clear();
-  Jpsi_trimu_flightLengthErr3D.clear();
-  Jpsi_trimu_flightSig2D.clear(); 
-  Jpsi_trimu_flightLength2D.clear();
-  Jpsi_trimu_flightLengthErr2D.clear();
+  Jpsi_bbPV_vx.clear();
+  Jpsi_bbPV_vy.clear();
+  Jpsi_bbPV_vz.clear();
+
+  Jpsi_genPV_vx.clear();
+  Jpsi_genPV_vy.clear();
+  Jpsi_genPV_vz.clear();
+
   Jpsi_dr_mu3pf.clear();
-  Jpsi_doca.clear();
-  Jpsi_d03D.clear();
-  Jpsi_alpha.clear();
+
+  Jpsi_ngenmuons.clear();
+  Jpsi_isgenmatched.clear();
+  Jpsi_mu3_isgenmatched.clear();
+
  
 } 

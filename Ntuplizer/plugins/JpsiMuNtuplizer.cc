@@ -1,27 +1,25 @@
 #include "../interface/JpsiMuNtuplizer.h"
-#include "DataFormats/PatCandidates/interface/PackedCandidate.h"
-#include "DataFormats/Candidate/interface/Candidate.h"
-#include "JetMETCorrections/Modules/interface/JetResolution.h"
-#include <CondFormats/JetMETObjects/interface/JetResolutionObject.h>
-#include "DataFormats/BeamSpot/interface/BeamSpot.h"
-#include "TrackingTools/PatternTools/interface/ClosestApproachInRPhi.h"
-#include <cmath>
-#include <vector>
+
 
 //===================================================================================================================
 JpsiMuNtuplizer::JpsiMuNtuplizer( edm::EDGetTokenT<pat::MuonCollection>    muonToken   ,
 				  edm::EDGetTokenT<reco::VertexCollection> verticeToken, 
+				  edm::EDGetTokenT<reco::BeamSpot> bsToken,
 				  edm::EDGetTokenT<pat::PackedCandidateCollection> packedpfcandidatesToken,
 				  edm::EDGetTokenT<edm::TriggerResults> triggertoken,
 				  edm::EDGetTokenT<pat::TriggerObjectStandAloneCollection> triggerobject,
+				  edm::EDGetTokenT<reco::GenParticleCollection> genptoken,
+				  std::map< std::string, bool >& runFlags,
 				  NtupleBranches* nBranches )
   : CandidateNtuplizer ( nBranches )
   , muonToken_	        ( muonToken )
   , verticeToken_          ( verticeToken )
+  , bsToken_          ( bsToken )
   , packedpfcandidatesToken_(packedpfcandidatesToken) 
   , HLTtriggersToken_	( triggertoken )
   , triggerObjects_	( triggerobject )
-
+  , genParticlesToken_( genptoken )
+  , runOnMC_   (runFlags["runOnMC"])
    
 {
 }
@@ -33,6 +31,9 @@ JpsiMuNtuplizer::~JpsiMuNtuplizer( void )
 }
 
 
+TVector3 JpsiMuNtuplizer::getVertex(const reco::GenParticle& part){
+  return TVector3(part.vx(),part.vy(),part.vz());
+}
 
 float JpsiMuNtuplizer::MuonPFIso(pat::Muon muon, bool highpt){
 
@@ -48,8 +49,8 @@ float JpsiMuNtuplizer::MuonPFIso(pat::Muon muon, bool highpt){
 
 double JpsiMuNtuplizer::isoTrack(double docaCut, double r, double pmin) {
 
-  const double pCut(pmin), coneSize(r);
-  const bool verbose(false);
+///  const double pCut(pmin), coneSize(r);
+///  const bool verbose(false);
 
 ///  double iso(-1.), p(0.), sumP(0.);
 ///  TSimpleTrack *ps;
@@ -147,6 +148,45 @@ double JpsiMuNtuplizer::isoTrack(double docaCut, double r, double pmin) {
 }
 
 
+Float_t JpsiMuNtuplizer::getMaxDoca(std::vector<RefCountedKinematicParticle> &kinParticles){
+
+  double maxDoca = -1.0;
+
+  TwoTrackMinimumDistance md;
+  std::vector<RefCountedKinematicParticle>::iterator in_it, out_it;
+
+  for (out_it = kinParticles.begin(); out_it != kinParticles.end(); ++out_it) {
+    for (in_it = out_it + 1; in_it != kinParticles.end(); ++in_it) {
+      md.calculate((*out_it)->currentState().freeTrajectoryState(),(*in_it)->currentState().freeTrajectoryState());
+      if (md.distance() > maxDoca)
+	maxDoca = md.distance();
+    }
+  }
+
+  return maxDoca;
+}
+
+
+
+Float_t JpsiMuNtuplizer::getMinDoca(std::vector<RefCountedKinematicParticle> &kinParticles) {
+
+  double minDoca = 99999.9;
+
+  TwoTrackMinimumDistance md;
+  unsigned j,k,n;
+
+  n = kinParticles.size();
+  for (j = 0; j < n; j++) {
+    for (k = j+1; k < n; k++) {
+      md.calculate(kinParticles[j]->currentState().freeTrajectoryState(),kinParticles[k]->currentState().freeTrajectoryState());
+      if (md.distance() < minDoca)
+	minDoca = md.distance();
+    }
+  }
+
+  return minDoca;
+}
+
 
 
 
@@ -184,6 +224,72 @@ std::tuple<Float_t, TransientVertex> JpsiMuNtuplizer::vertexProb( const std::vec
 
 
 
+particle_cand JpsiMuNtuplizer::calculateIPvariables(
+						    AnalyticalImpactPointExtrapolator extrapolator,
+						    RefCountedKinematicParticle particle,
+						    RefCountedKinematicVertex vertex,
+						    reco::Vertex wrtVertex
+						    ){
+
+  TrajectoryStateOnSurface tsos = extrapolator.extrapolate(particle->currentState().freeTrajectoryState(),
+							   RecoVertex::convertPos(wrtVertex.position()));
+
+
+  VertexDistance3D a3d;  
+
+  std::pair<bool,Measurement1D> currentIp = IPTools::signedDecayLength3D(tsos, GlobalVector(0,0,1), wrtVertex);
+  std::pair<bool,Measurement1D> cur3DIP = IPTools::absoluteImpactParameter(tsos, wrtVertex, a3d);
+  
+  // flight length
+  Float_t fl3d = a3d.distance(wrtVertex, vertex->vertexState()).value();
+  Float_t fl3de = a3d.distance(wrtVertex, vertex->vertexState()).error();
+  Float_t fls3d = -1;
+
+  if(fl3de!=0) fls3d = fl3d/fl3de;
+
+  // longitudinal impact parameters
+  Float_t lip = currentIp.second.value();
+  Float_t lipe = currentIp.second.error();
+  Float_t lips = -1;
+  
+  if(lipe!=0) lips = lip/lipe;
+
+  // impact parameter to the PV
+  Float_t pvip = cur3DIP.second.value();
+  Float_t pvipe = cur3DIP.second.error();
+  Float_t pvips = -1;
+  
+  if(pvipe!=0) pvips = pvip/pvipe;
+
+  // opening angle
+  TVector3 plab = TVector3(particle->currentState().globalMomentum().x(),
+			   particle->currentState().globalMomentum().y(),
+			   particle->currentState().globalMomentum().z());
+
+  const TVector3 tv3diff = TVector3(vertex->vertexState().position().x() - wrtVertex.position().x(),
+				    vertex->vertexState().position().y() - wrtVertex.position().y(),
+				    vertex->vertexState().position().z() - wrtVertex.position().z()
+				    );
+
+  Float_t alpha = -1;
+
+  if(plab.Mag() != 0. && tv3diff.Mag()!=0){
+    alpha = plab.Dot(tv3diff) / (plab.Mag() * tv3diff.Mag());
+  }
+
+  particle_cand cand = {
+    lip,
+    lips,
+    pvip, 
+    pvips,
+    fl3d,
+    fls3d,
+    alpha
+  };
+
+
+  return cand;
+}
 
 
 
@@ -192,12 +298,14 @@ std::tuple<Float_t, TransientVertex> JpsiMuNtuplizer::vertexProb( const std::vec
 void JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetup& iSetup ){
 
   
-  /*
+  std::cout << "---------------- event, run, lumi = " << event.id().event() << " " << event.id().run() << " " << event.id().luminosityBlock() << "----------------" << std::endl;
+  
+  /********************************************************************
    *
    * Step1: check if the J/psi trigger is fired.
    * Namely, HLT_DoubleMu4_JpsiTrk_Displaced_v
    *
-   */
+   ********************************************************************/
 
   event.getByToken(HLTtriggersToken_, HLTtriggers_);
 
@@ -217,22 +325,21 @@ void JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
 
   if(!isTriggered) return;
 
-  std::cout << "finalTriggerName = "  << finalTriggerName << std::endl;
+  //  std::cout << "finalTriggerName = "  << finalTriggerName << std::endl;
 
 
 
-  /*
+  /********************************************************************
    *
    * Step2: pre-select muons for building J/psi candidates ... 
+   * For muons, no requirement applied
    *
-   */
+   ********************************************************************/
 
   event.getByToken(verticeToken_   , vertices_     );
+  event.getByToken(bsToken_   , bs_     );
   event.getByToken(muonToken_	, muons_    );
   event.getByToken(triggerObjects_  , triggerObjects);
-
-  reco::VertexCollection::const_iterator firstGoodVertex = vertices_->begin();
-
 
   std::vector<pat::Muon> muoncollection;
   std::vector<int> muoncollection_id;
@@ -247,16 +354,13 @@ void JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
     if(TMath::Abs(muon.eta()) > 2.4) continue;
     if(!(muon.track().isNonnull())) continue;
 
-    bool isSoft = muon.isSoftMuon(*firstGoodVertex);
-    bool isGlobal = muon.isGlobalMuon();
+    //    bool isSoft = muon.isSoftMuon(*firstGoodVertex);
+    //    bool isGlobal = muon.isGlobalMuon();
     //    bool isTracker = muon.isTrackerMuon();
     //    bool isLoose = muon.isLooseMuon();
     //    bool isTight =  muon.isTightMuon(*firstGoodVertex);
     //    bool isPF = muon.isPFMuon();
-
-    if(!(isSoft && isGlobal)) continue;
-
-    // remove muons, that is far away from PV ?
+    //    if(!(isSoft && isGlobal)) continue;
     //    if(TMath::Abs(muon.muonBestTrack()->dz(firstGoodVertex->position())) > 0.5) continue;
 
     
@@ -305,21 +409,24 @@ void JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
   if(!( muoncollection.size() >= 2)) return;
 
 
-  /*
+
+
+  /********************************************************************
    *
    * Step3: building J/psi candidates 
    *
-   */
+   ********************************************************************/
+
   iSetup.get<TransientTrackRecord>().get("TransientTrackBuilder", builder);
 
-  Float_t Jpsi_max_pt = -1;
+  Float_t jpsi_max_pt = -1;
   unsigned int idx_mu1 = -1;
   unsigned int idx_mu2 = -1;
   unsigned int mcidx_mu1 = -1;
   unsigned int mcidx_mu2 = -1;
-  TLorentzVector Jpsi_tlv_highest;
-  Float_t Jpsi_vprob_highest;
-  TransientVertex Jpsi_vertex_highest;
+  TLorentzVector jpsi_tlv_highest;
+  Float_t jpsi_vprob_highest = -9;
+  TransientVertex jpsi_vertex_highest;
 
   for(int imu = 0; imu < (int)muoncollection.size(); imu++){
     for(int jmu = imu+1; jmu < (int)muoncollection.size(); jmu++){
@@ -344,48 +451,131 @@ void JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
 
       
       std::vector<reco::TransientTrack> transient_tracks_dimuon;
-      const reco::TrackRef track1_muon_ = muoncollection[imu].muonBestTrack();
-      const reco::TrackRef track2_muon_ = muoncollection[jmu].muonBestTrack();
       
-      transient_tracks_dimuon.push_back((*builder).build(track1_muon_));
-      transient_tracks_dimuon.push_back((*builder).build(track2_muon_));
-
+      transient_tracks_dimuon.push_back((*builder).build(muoncollection[imu].muonBestTrack()));
+      transient_tracks_dimuon.push_back((*builder).build(muoncollection[jmu].muonBestTrack()));
+      
       Float_t vprob_jpsi = -9;
       TransientVertex vertex_jpsi;
       std::tie(vprob_jpsi, vertex_jpsi) = vertexProb(transient_tracks_dimuon);
+      //      if(!(vprob_jpsi > 0)) continue;
 
-      if(!(vprob_jpsi > 0)) continue;
-
-      if(Jpsi_max_pt < jpsi_pt){
-	Jpsi_max_pt = jpsi_pt;
+      if(jpsi_max_pt < jpsi_pt){
+	jpsi_max_pt = jpsi_pt;
 	idx_mu1 = muoncollection_id[imu];
 	idx_mu2 = muoncollection_id[jmu];
 	mcidx_mu1 = imu;
 	mcidx_mu2 = jmu;
-	Jpsi_tlv_highest = tlv_jpsi;
-	Jpsi_vprob_highest = vprob_jpsi;
-	Jpsi_vertex_highest = vertex_jpsi;
+	jpsi_tlv_highest = tlv_jpsi;
+	jpsi_vprob_highest = vprob_jpsi;
+	jpsi_vertex_highest = vertex_jpsi;
       }
     }
   }
 
-  if(Jpsi_max_pt < 8) return;
-
-  std::cout << "J/psi candidate found with (vprob, pt) = (" << Jpsi_vprob_highest << ", " << Jpsi_max_pt << ")" << std::endl;
+  if(jpsi_max_pt == -1) return;
 
 
 
-  /*
+
+  /********************************************************************
    *
-   * Step4: 3rd muon selection
+   * Step4: Kinematic fit for the J/psi candidate
    *
-   */
+   ********************************************************************/
+
+  const reco::TrackRef track1_muon = muoncollection[mcidx_mu1].muonBestTrack();
+  const reco::TrackRef track2_muon = muoncollection[mcidx_mu2].muonBestTrack();
+  reco::TransientTrack tt1_muon = (*builder).build(track1_muon);
+  reco::TransientTrack tt2_muon = (*builder).build(track2_muon);
+
+  KinematicParticleFactoryFromTransientTrack pFactory;
+  std::vector<RefCountedKinematicParticle> muonParticles;
+
+  muonParticles.push_back(pFactory.particle(tt1_muon, muon_mass, chi, ndf, muon_sigma));
+  muonParticles.push_back(pFactory.particle(tt2_muon, muon_mass, chi, ndf, muon_sigma));
+  
+  //creating the vertex fitter
+  KinematicParticleVertexFitter kpvFitter;
+
+  //reconstructing a J/Psi decay
+  RefCountedKinematicTree jpTree = kpvFitter.fit(muonParticles);
+
+  if(jpTree->isEmpty() || !jpTree->isValid() || !jpTree->isConsistent()) return;
+
+  //creating the particle fitter
+  KinematicParticleFitter csFitter;
+
+  // creating the constraint
+  KinematicConstraint* jpsi_constraint = new MassKinematicConstraint(jpsi_mass, jp_m_sigma);
+
+  //the constrained fit
+  jpTree = csFitter.fit(jpsi_constraint, jpTree);
+
+  //getting the J/Psi KinematicParticle
+  jpTree->movePointerToTheTop();
+  RefCountedKinematicParticle jpsi_part = jpTree->currentParticle();
+  if(!jpsi_part->currentState().isValid()) return;
+
+  RefCountedKinematicVertex jpsi_vertex = jpTree->currentDecayVertex();
+  if(!jpsi_vertex->vertexIsValid()) return; 
+
+  if(TMath::Prob(jpsi_vertex->chiSquared(), jpsi_vertex->degreesOfFreedom()) <=0) return;
+
+
+  /********************************************************************
+   *
+   * Step5: determine bbbar-PV, extrapolated back from the J/psi candidate
+   * There are several ways to do this ...
+   * 1) using minimum lip
+   * 2) using minimum pvip
+   * 3) using PV (first content of the PV collection)
+   *
+   ********************************************************************/
+
+  // define extrapolator
+  edm::ESHandle<MagneticField> fieldHandle;
+  iSetup.get<IdealMagneticFieldRecord>().get(fieldHandle);
+  fMagneticField = fieldHandle.product();
+
+  AnalyticalImpactPointExtrapolator extrapolator(fMagneticField);
+
+  Float_t max_criteria = 999;
+  reco::Vertex closestVertex; 
+
+  for( reco::VertexCollection::const_iterator vtx = vertices_->begin(); vtx != vertices_->end(); ++vtx){
+    
+    //    bool isFake = (vtx->chi2()==0 && vtx->ndof()==0);
+    
+//    if(
+//       !(!isFake && vtx->ndof()>=4. && vtx->position().Rho()<=2.0 && fabs(vtx->position().Z())<=24.0)
+//       ) continue;
+    
+
+    particle_cand cand = calculateIPvariables(extrapolator, jpsi_part, jpsi_vertex, *vtx);
+
+    
+    //    if(TMath::Abs(cand.lip) < max_criteria){
+    if(TMath::Abs(cand.pvip) < max_criteria){
+      //      max_criteria = TMath::Abs(cand.lip);
+      max_criteria = TMath::Abs(cand.pvip);
+      closestVertex = *vtx;
+    }
+  }
+
+
+  
+  /********************************************************************
+   *
+   * Step6: 3rd muon selection
+   *
+   ********************************************************************/
 
   //  event.getByToken( packedpfcandidatesToken_               , packedpfcandidates_      ); 
 
   pat::Muon mu3;
   Float_t max_pt3 = -1;
-
+  
   for(size_t imuon = 0; imuon < muons_->size(); ++ imuon){
 
     const pat::Muon & muon = (*muons_)[imuon];
@@ -395,136 +585,42 @@ void JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
     if(!(muon.track().isNonnull())) continue;
     if(imuon==idx_mu1 || imuon==idx_mu2) continue;
 
-    bool isSoft = muon.isSoftMuon(*firstGoodVertex);
-    bool isTight =  muon.isTightMuon(*firstGoodVertex);
-
-    if(!(isSoft && isTight)) continue;
-
-    /// whatever selection you want to have for the 3rd muon ... 
-    
     if(muon.pt() > max_pt3){
       max_pt3 = muon.pt();
       mu3 = muon;
-      std::cout << "This is the one: " << imuon  << std::endl;
     }
   }
 
   if(max_pt3==-1) return;
 
-  std::cout << "3rd muon found with pt= " << max_pt3 << std::endl;
 
-  /*
-   *
-   * Step5: filling up branches ...
-   *
-   */
+  std::vector<RefCountedKinematicParticle> allParticles;
 
-
-  /*
-   * J/psi kinematics
-   */
-  GlobalVector Jpsi_direction_highest(Jpsi_tlv_highest.Px(), Jpsi_tlv_highest.Py(), Jpsi_tlv_highest.Pz()); //To compute sign of IP
-
-  double Jpsi_flightSig3D = reco::SecondaryVertex::computeDist3d(*firstGoodVertex,Jpsi_vertex_highest,Jpsi_direction_highest,true).significance();
-  double Jpsi_flightLength3D = reco::SecondaryVertex::computeDist3d(*firstGoodVertex,Jpsi_vertex_highest,Jpsi_direction_highest,true).value();
-  double Jpsi_flightLengthErr3D = reco::SecondaryVertex::computeDist3d(*firstGoodVertex,Jpsi_vertex_highest,Jpsi_direction_highest,true).error();
-
-  double Jpsi_flightSig2D = reco::SecondaryVertex::computeDist2d(*firstGoodVertex,Jpsi_vertex_highest,Jpsi_direction_highest,true).significance();
-  double Jpsi_flightLength2D = reco::SecondaryVertex::computeDist2d(*firstGoodVertex,Jpsi_vertex_highest,Jpsi_direction_highest,true).value();
-  double Jpsi_flightLengthErr2D = reco::SecondaryVertex::computeDist2d(*firstGoodVertex,Jpsi_vertex_highest,Jpsi_direction_highest,true).error();
-
-
-  TLorentzVector tlv_muon3;
-  tlv_muon3.SetPtEtaPhiM(mu3.pt(), mu3.eta(), mu3.phi(), mu3.mass());
-
-  TLorentzVector tlv_B = Jpsi_tlv_highest + tlv_muon3;
-
-  std::vector<reco::TransientTrack> transient_tracks_trimuon;
-
-  const reco::TrackRef track1_muon = muoncollection[mcidx_mu1].muonBestTrack();
-  const reco::TrackRef track2_muon = muoncollection[mcidx_mu2].muonBestTrack();
   const reco::TrackRef track3_muon = mu3.muonBestTrack();
-  transient_tracks_trimuon.push_back((*builder).build(track1_muon));
-  transient_tracks_trimuon.push_back((*builder).build(track2_muon));
-  transient_tracks_trimuon.push_back((*builder).build(track3_muon));
-  
-  Float_t vprob_B = -9;
-  TransientVertex B_vertex;
-  std::tie(vprob_B, B_vertex) = vertexProb(transient_tracks_trimuon);
+  reco::TransientTrack tt3_muon = (*builder).build(track3_muon);
 
-  
-  if(vprob_B==-9) return;
+  allParticles.push_back(pFactory.particle(tt3_muon, muon_mass, chi, ndf, muon_sigma));
+  allParticles.push_back(jpsi_part);
 
-  GlobalVector direction(tlv_B.Px(), tlv_B.Py(), tlv_B.Pz()); //To compute sign of IP
+  RefCountedKinematicTree bcTree = kpvFitter.fit(allParticles);
 
-  double B_flightSig3D = -999;
-  double B_flightLength3D =  -999; 
-  double B_flightLengthErr3D = -999; 
-	
-  double B_flightSig2D =  -999; 
-  double B_flightLength2D = -999; 
-  double B_flightLengthErr2D = -999; 
+  if(bcTree->isEmpty() || !bcTree->isValid() || !bcTree->isConsistent()) return;
 
-  B_flightSig3D = reco::SecondaryVertex::computeDist3d(*firstGoodVertex,B_vertex,direction,true).significance();
-  B_flightLength3D = reco::SecondaryVertex::computeDist3d(*firstGoodVertex,B_vertex,direction,true).value();
-  B_flightLengthErr3D = reco::SecondaryVertex::computeDist3d(*firstGoodVertex,B_vertex,direction,true).error();
-	    
-  B_flightSig2D = reco::SecondaryVertex::computeDist2d(*firstGoodVertex,B_vertex,direction,true).significance();
-  B_flightLength2D = reco::SecondaryVertex::computeDist2d(*firstGoodVertex,B_vertex,direction,true).value();
-  B_flightLengthErr2D = reco::SecondaryVertex::computeDist2d(*firstGoodVertex,B_vertex,direction,true).error();
+  RefCountedKinematicParticle bc_part = bcTree->currentParticle();
+  if(!bc_part->currentState().isValid()) return;
 
-  // distance to closest apporach
-  double doca = -1;
-  TrajectoryStateClosestToPoint mu1TS = (*builder).build(track1_muon).impactPointTSCP();
-  TrajectoryStateClosestToPoint mu2TS = (*builder).build(track2_muon).impactPointTSCP();
-  if (mu1TS.isValid() && mu2TS.isValid()) {
-    ClosestApproachInRPhi cApp;
-    cApp.calculate(mu1TS.theState(), mu2TS.theState());
-    if (cApp.status()){
-      std::cout << "distance of closest apporach: " << cApp.distance() << std::endl;
-      doca = cApp.distance();
-    }
-  }
-  
+  RefCountedKinematicVertex bc_vertex = bcTree->currentDecayVertex();
+  if(!bc_vertex->vertexIsValid()) return; 
+
+  particle_cand JPcand = calculateIPvariables(extrapolator, jpsi_part, jpsi_vertex, closestVertex);
+  particle_cand Bcand = calculateIPvariables(extrapolator, bc_part, bc_vertex, closestVertex);
 
 
-  // impact parameter calculation
-  double d03D = IPTools::absoluteImpactParameter3D((*builder).build(track1_muon), *firstGoodVertex).second.value();
+  std::cout << "J/psi candidate (lip, lips, pvip, pvips, fl3d, fls3d, alpha) = " << JPcand.lip << " " << JPcand.lips << " " << JPcand.pvip << " " << JPcand.pvips << " " << JPcand.fl3d << " " << JPcand.fls3d << " " << JPcand.alpha << std::endl;
+
+  std::cout << "B candidate (lip, lips, pvip, pvips, fl3d, fls3d, alpha) = " << Bcand.lip << " " << Bcand.lips << " " << Bcand.pvip << " " << Bcand.pvips << " " << Bcand.fl3d << " " << Bcand.fls3d << " " << Bcand.alpha << std::endl;
 
 
-  // opening angle between (PV, SV) vector and the B's flight direction
-  math::XYZVector vtx_vec(B_vertex.position().x() - firstGoodVertex->position().x(),
-			  B_vertex.position().y() - firstGoodVertex->position().y(),
-			  B_vertex.position().z() - firstGoodVertex->position().z());
-  
-
-  math::XYZVector pt_vec(tlv_B.Px(),
-			 tlv_B.Py(),
-			 tlv_B.Pz());
-  
-  double den = (vtx_vec.R() * pt_vec.R());
-  double alpha = -1; 
-
-  if(den != 0.){
-    alpha = vtx_vec.Dot(pt_vec)/den; 
-  }
-
-  //  std::cout << "opening angle:" << alpha << std::endl;
-
-
-
-
-  // Isolation calculation
-  
-
-//  GlobalPoint point = fitter.fitted_vtx();
-//  auto bs_pos = bs.position(point.z());
-//  math::XYZVector delta(point.x() - bs_pos.x(), point.y() - bs_pos.y(), 0.);
-//  math::XYZVector pt(p4.px(), p4.py(), 0.);
-//  double den = (delta.R() * pt.R());
-//  return (den != 0.) ? delta.Dot(pt)/den : -2;
-
-//
 //	Float_t min_dR_pf = 999.;
 //	Float_t iso_pt03 =0.;
 //	Float_t iso_pt04 =0.;
@@ -560,97 +656,265 @@ void JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
 	//jpsi part
 
 
-  nBranches_->Jpsi_flightSig3D.push_back(Jpsi_flightSig3D);
-  nBranches_->Jpsi_flightLength3D.push_back(Jpsi_flightLength3D);
-  nBranches_->Jpsi_flightLengthErr3D.push_back(Jpsi_flightLengthErr3D);
-  nBranches_->Jpsi_flightSig2D.push_back(Jpsi_flightSig2D);
-  nBranches_->Jpsi_flightLength2D.push_back(Jpsi_flightLength2D);
-  nBranches_->Jpsi_flightLengthErr2D.push_back(Jpsi_flightLengthErr2D);
+  /********************************************************************
+   *
+   * Step7: Filling branches ...
+   *
+   ********************************************************************/
 
-  nBranches_->Jpsi_trimu_flightSig3D.push_back(B_flightSig3D);
-  nBranches_->Jpsi_trimu_flightLength3D.push_back(B_flightLength3D);
-  nBranches_->Jpsi_trimu_flightLengthErr3D.push_back(B_flightLengthErr3D);
-  nBranches_->Jpsi_trimu_flightSig2D.push_back(B_flightSig2D);
-  nBranches_->Jpsi_trimu_flightLength2D.push_back(B_flightLength2D);
-  nBranches_->Jpsi_trimu_flightLengthErr2D.push_back(B_flightLengthErr2D);
+  bool isMC = runOnMC_;
+  
+  TVector3 genvertex(-9.,-9.,-9.);
+  
+  std::vector<const reco::Candidate*> gen_nr_mu;
+  std::vector<const reco::Candidate*> gen_jpsi_mu;
+  
 
-  //  isJpsiMu_=1;
-  //save muon branches
+  if(isMC){
+    event.getByToken(genParticlesToken_ , genParticles_); 
+    
+    for( unsigned p=0; p < genParticles_->size(); ++p){
+
+      //      std::cout << "gen: " << (*genParticles_)[p].pdgId() << " " << (*genParticles_)[p].status() << std::endl;
+
+      // Bc daughters loop
+      if(TMath::Abs((*genParticles_)[p].pdgId())==541 && (*genParticles_)[p].status()==2){
+
+	// retrieve production vertex
+	genvertex = getVertex((*genParticles_)[p]);
+
+	for(int idd = 0; idd < (int)(*genParticles_)[p].numberOfDaughters(); idd++){
+	  Int_t dpid = (*genParticles_)[p].daughter(idd)->pdgId();
+	  //	  std::cout << "\t -> " <<  << " " << (*genParticles_)[p].daughter(idd)->status()<< std::endl;
+	  if(TMath::Abs(dpid)==13) gen_nr_mu.push_back((*genParticles_)[p].daughter(idd));
+	}
+      }
+
+      // J/psi loop
+      if(TMath::Abs((*genParticles_)[p].pdgId())==443 && 
+	 (*genParticles_)[p].status()==2 && 
+	 TMath::Abs((*genParticles_)[p].mother(0)->pdgId())==541){
+
+	//	std::cout << "nMon = " << (*genParticles_)[p].numberOfMothers() << std::endl;
+	//	std::cout << "mother pdgId = " <<  << std::endl;
+
+	for(int idd = 0; idd < (int)(*genParticles_)[p].numberOfDaughters(); idd++){
+	  Int_t dpid = (*genParticles_)[p].daughter(idd)->pdgId();
+	  if(TMath::Abs(dpid)==13) gen_jpsi_mu.push_back((*genParticles_)[p].daughter(idd));
+	  //	  std::cout << "\t -> " << (*genParticles_)[p].daughter(idd)->pdgId() << " " << (*genParticles_)[p].daughter(idd)->status()<< std::endl;
+	}
+      }
+
+      
+    }
+  }
+
+
+
   nBranches_->Jpsi_mu1_isLoose.push_back(muoncollection[mcidx_mu1].isLooseMuon());
-  nBranches_->Jpsi_mu1_isTight.push_back(muoncollection[mcidx_mu1].isTightMuon(*firstGoodVertex));
+  nBranches_->Jpsi_mu1_isTight.push_back(muoncollection[mcidx_mu1].isTightMuon(closestVertex));
   nBranches_->Jpsi_mu1_isPF.push_back(muoncollection[mcidx_mu1].isPFMuon());
   nBranches_->Jpsi_mu1_isGlobal.push_back(muoncollection[mcidx_mu1].isGlobalMuon());
   nBranches_->Jpsi_mu1_isTracker.push_back(muoncollection[mcidx_mu1].isTrackerMuon());
-  nBranches_->Jpsi_mu1_isSoft.push_back(muoncollection[mcidx_mu1].isSoftMuon(*firstGoodVertex));
+  nBranches_->Jpsi_mu1_isSoft.push_back(muoncollection[mcidx_mu1].isSoftMuon(closestVertex));
   nBranches_->Jpsi_mu1_pt.push_back(muoncollection[mcidx_mu1].pt());
   nBranches_->Jpsi_mu1_eta.push_back(muoncollection[mcidx_mu1].eta());
   nBranches_->Jpsi_mu1_phi.push_back(muoncollection[mcidx_mu1].phi());
-  nBranches_->Jpsi_mu1_ch.push_back(muoncollection[mcidx_mu1].charge());
+  nBranches_->Jpsi_mu1_q.push_back(muoncollection[mcidx_mu1].charge());
+  nBranches_->Jpsi_mu1_vx.push_back(muoncollection[mcidx_mu1].vx());
+  nBranches_->Jpsi_mu1_vy.push_back(muoncollection[mcidx_mu1].vy());
+  nBranches_->Jpsi_mu1_vz.push_back(muoncollection[mcidx_mu1].vz());
   
   nBranches_->Jpsi_mu2_isLoose.push_back(muoncollection[mcidx_mu2].isLooseMuon());
-  nBranches_->Jpsi_mu2_isTight.push_back(muoncollection[mcidx_mu2].isTightMuon(*firstGoodVertex));
+  nBranches_->Jpsi_mu2_isTight.push_back(muoncollection[mcidx_mu2].isTightMuon(closestVertex));
   nBranches_->Jpsi_mu2_isPF.push_back(muoncollection[mcidx_mu2].isPFMuon());
   nBranches_->Jpsi_mu2_isGlobal.push_back(muoncollection[mcidx_mu2].isGlobalMuon());
   nBranches_->Jpsi_mu2_isTracker.push_back(muoncollection[mcidx_mu2].isTrackerMuon());
-  nBranches_->Jpsi_mu2_isSoft.push_back(muoncollection[mcidx_mu2].isSoftMuon(*firstGoodVertex));
+  nBranches_->Jpsi_mu2_isSoft.push_back(muoncollection[mcidx_mu2].isSoftMuon(closestVertex));
   nBranches_->Jpsi_mu2_pt.push_back(muoncollection[mcidx_mu2].pt());
   nBranches_->Jpsi_mu2_eta.push_back(muoncollection[mcidx_mu2].eta());
   nBranches_->Jpsi_mu2_phi.push_back(muoncollection[mcidx_mu2].phi());
-  nBranches_->Jpsi_mu2_ch.push_back(muoncollection[mcidx_mu2].charge());
+  nBranches_->Jpsi_mu2_q.push_back(muoncollection[mcidx_mu2].charge());
+  nBranches_->Jpsi_mu2_vx.push_back(muoncollection[mcidx_mu2].vx());
+  nBranches_->Jpsi_mu2_vy.push_back(muoncollection[mcidx_mu2].vy());
+  nBranches_->Jpsi_mu2_vz.push_back(muoncollection[mcidx_mu2].vz());
 
   nBranches_->Jpsi_mu3_isLoose.push_back(mu3.isLooseMuon());
-  nBranches_->Jpsi_mu3_isTight.push_back(mu3.isTightMuon(*firstGoodVertex));
+  nBranches_->Jpsi_mu3_isTight.push_back(mu3.isTightMuon(closestVertex));
   nBranches_->Jpsi_mu3_isPF.push_back(mu3.isPFMuon());
   nBranches_->Jpsi_mu3_isGlobal.push_back(mu3.isGlobalMuon());
   nBranches_->Jpsi_mu3_isTracker.push_back(mu3.isTrackerMuon());
-  nBranches_->Jpsi_mu3_isSoft.push_back(mu3.isSoftMuon(*firstGoodVertex));
+  nBranches_->Jpsi_mu3_isSoft.push_back(mu3.isSoftMuon(closestVertex));
   nBranches_->Jpsi_mu3_pt.push_back(mu3.pt());
   nBranches_->Jpsi_mu3_eta.push_back(mu3.eta());
   nBranches_->Jpsi_mu3_phi.push_back(mu3.phi());
-  nBranches_->Jpsi_mu3_ch.push_back(mu3.charge());
-  nBranches_->Jpsi_mu3_x.push_back(mu3.vx());
-  nBranches_->Jpsi_mu3_y.push_back(mu3.vy());
-  nBranches_->Jpsi_mu3_z.push_back(mu3.vz());
+  nBranches_->Jpsi_mu3_q.push_back(mu3.charge());
+  nBranches_->Jpsi_mu3_vx.push_back(mu3.vx());
+  nBranches_->Jpsi_mu3_vy.push_back(mu3.vy());
+  nBranches_->Jpsi_mu3_vz.push_back(mu3.vz());
 
-  nBranches_->Jpsi_PV_x.push_back(firstGoodVertex->position().x());
-  nBranches_->Jpsi_PV_y.push_back(firstGoodVertex->position().y());
-  nBranches_->Jpsi_PV_z.push_back(firstGoodVertex->position().z());
+  nBranches_->Jpsi_PV_vx.push_back(vertices_->begin()->position().x());
+  nBranches_->Jpsi_PV_vy.push_back(vertices_->begin()->position().y());
+  nBranches_->Jpsi_PV_vz.push_back(vertices_->begin()->position().z());
 
-  nBranches_->Jpsi_dx.push_back(Jpsi_vertex_highest.position().x()-firstGoodVertex->position().x());
-  nBranches_->Jpsi_dy.push_back(Jpsi_vertex_highest.position().y()-firstGoodVertex->position().y());
-  nBranches_->Jpsi_dz.push_back(Jpsi_vertex_highest.position().z()-firstGoodVertex->position().z());	  
+  nBranches_->Jpsi_bbPV_vx.push_back(closestVertex.position().x());
+  nBranches_->Jpsi_bbPV_vy.push_back(closestVertex.position().y());
+  nBranches_->Jpsi_bbPV_vz.push_back(closestVertex.position().z());
 
-  nBranches_->Jpsi_pt.push_back(Jpsi_tlv_highest.Pt());
-  nBranches_->Jpsi_eta.push_back(Jpsi_tlv_highest.Eta());
-  nBranches_->Jpsi_phi.push_back(Jpsi_tlv_highest.Phi());
-  nBranches_->Jpsi_mass.push_back(Jpsi_tlv_highest.M());
-  nBranches_->Jpsi_vtxprob.push_back(Jpsi_vprob_highest);
-  nBranches_->Jpsi_vtxz.push_back(Jpsi_vertex_highest.position().z());
+  // -9 if there is no Bc found 
+  nBranches_->Jpsi_genPV_vx.push_back(genvertex.x());
+  nBranches_->Jpsi_genPV_vy.push_back(genvertex.y());
+  nBranches_->Jpsi_genPV_vz.push_back(genvertex.z());
 
-  nBranches_->Jpsi_trimu_pt.push_back(tlv_B.Pt());
-  nBranches_->Jpsi_trimu_eta.push_back(tlv_B.Eta());
-  nBranches_->Jpsi_trimu_phi.push_back(tlv_B.Phi());
-  nBranches_->Jpsi_trimu_mass.push_back(tlv_B.M());
+  nBranches_->Jpsi_pt.push_back(jpsi_part->currentState().globalMomentum().perp());
+  nBranches_->Jpsi_eta.push_back(jpsi_part->currentState().globalMomentum().eta());
+  nBranches_->Jpsi_phi.push_back(jpsi_part->currentState().globalMomentum().phi());
+  nBranches_->Jpsi_mass.push_back(jpsi_part->currentState().mass());
+  nBranches_->Jpsi_vprob.push_back(TMath::Prob(jpsi_part->chiSquared(), jpsi_part->degreesOfFreedom()));
+  nBranches_->Jpsi_lip.push_back(JPcand.lip);
+  nBranches_->Jpsi_lips.push_back(JPcand.lips);
+  nBranches_->Jpsi_pvip.push_back(JPcand.pvip);
+  nBranches_->Jpsi_pvips.push_back(JPcand.pvips);
+  nBranches_->Jpsi_fl3d.push_back(JPcand.fl3d);
+  nBranches_->Jpsi_fls3d.push_back(JPcand.fls3d);
+  nBranches_->Jpsi_alpha.push_back(JPcand.alpha);
+  nBranches_->Jpsi_maxdoca.push_back(getMaxDoca(muonParticles));
+  nBranches_->Jpsi_mindoca.push_back(getMinDoca(muonParticles));
+  nBranches_->Jpsi_vx.push_back(jpsi_vertex->vertexState().position().x());
+  nBranches_->Jpsi_vy.push_back(jpsi_vertex->vertexState().position().y());
+  nBranches_->Jpsi_vz.push_back(jpsi_vertex->vertexState().position().z());  
+  nBranches_->Jpsi_unfitpt.push_back(jpsi_tlv_highest.Pt());
+  nBranches_->Jpsi_unfitmass.push_back(jpsi_tlv_highest.M());
+  nBranches_->Jpsi_unfitvprob.push_back(jpsi_vprob_highest);
 
-  nBranches_->Jpsi_trimu_vtxprob.push_back(vprob_B);
-  nBranches_->Jpsi_trimu_vtxz.push_back(B_vertex.position().z());
-
-  nBranches_->Jpsi_trimu_dx.push_back(B_vertex.position().x()-firstGoodVertex->position().x());
-  nBranches_->Jpsi_trimu_dy.push_back(B_vertex.position().y()-firstGoodVertex->position().y());
-  nBranches_->Jpsi_trimu_dz.push_back(B_vertex.position().z()-firstGoodVertex->position().z());
-  nBranches_->IsJpsiMu.push_back(1.);
-
-  nBranches_->Jpsi_doca.push_back(doca);
-  nBranches_->Jpsi_d03D.push_back(d03D);
-  nBranches_->Jpsi_alpha.push_back(alpha);
+  if(jpsi_vprob_highest!=-9){
+    nBranches_->Jpsi_unfit_vx.push_back(jpsi_vertex_highest.position().x());
+    nBranches_->Jpsi_unfit_vy.push_back(jpsi_vertex_highest.position().y());
+    nBranches_->Jpsi_unfit_vz.push_back(jpsi_vertex_highest.position().z());
+  }
 
 
+  nBranches_->Jpsi_trimu_pt.push_back(bc_part->currentState().globalMomentum().perp());
+  nBranches_->Jpsi_trimu_eta.push_back(bc_part->currentState().globalMomentum().eta());
+  nBranches_->Jpsi_trimu_phi.push_back(bc_part->currentState().globalMomentum().phi());
+  nBranches_->Jpsi_trimu_mass.push_back(bc_part->currentState().mass());
+  nBranches_->Jpsi_trimu_vprob.push_back(TMath::Prob(bc_part->chiSquared(), bc_part->degreesOfFreedom()));
+  nBranches_->Jpsi_trimu_lip.push_back(Bcand.lip);
+  nBranches_->Jpsi_trimu_lips.push_back(Bcand.lips);
+  nBranches_->Jpsi_trimu_pvip.push_back(Bcand.pvip);
+  nBranches_->Jpsi_trimu_pvips.push_back(Bcand.pvips);
+  nBranches_->Jpsi_trimu_fl3d.push_back(Bcand.fl3d);
+  nBranches_->Jpsi_trimu_fls3d.push_back(Bcand.fls3d);
+  nBranches_->Jpsi_trimu_alpha.push_back(Bcand.alpha);
 
-  //if(isJpsiMu_==0){
-  //std::cout<<"this should be working and i am returning"<<std::endl;
-  //    return;
-  //  }
+  std::vector<RefCountedKinematicParticle> allParticles4doc;
+
+  allParticles4doc.push_back(pFactory.particle(tt1_muon, muon_mass, chi, ndf, muon_sigma));
+  allParticles4doc.push_back(pFactory.particle(tt2_muon, muon_mass, chi, ndf, muon_sigma));
+  allParticles4doc.push_back(pFactory.particle(tt3_muon, muon_mass, chi, ndf, muon_sigma));
+
+  nBranches_->Jpsi_trimu_maxdoca.push_back(getMaxDoca(allParticles4doc));
+  nBranches_->Jpsi_trimu_mindoca.push_back(getMinDoca(allParticles4doc));
+  nBranches_->Jpsi_trimu_vx.push_back(bc_vertex->vertexState().position().x());
+  nBranches_->Jpsi_trimu_vy.push_back(bc_vertex->vertexState().position().y());
+  nBranches_->Jpsi_trimu_vz.push_back(bc_vertex->vertexState().position().z());  
+
+  std::cout << gen_nr_mu.size() + gen_jpsi_mu.size() << std::endl;
+  nBranches_->Jpsi_ngenmuons.push_back(gen_nr_mu.size() + gen_jpsi_mu.size());
+
+  //  std::vector<reco::GenParticle> gen_nr_mu;
+  //  std::vector<reco::GenParticle> gen_jpsi_dimuon;
+
+  bool flag_nr_match = false;
+  if(gen_nr_mu.size()==1){
+    Float_t _dR = reco::deltaR(
+			       gen_nr_mu[0]->eta(), gen_nr_mu[0]->phi(), 
+			       mu3.eta(), mu3.phi());
+
+    if(_dR < 0.1) flag_nr_match = true;
+  }
+
+  bool flag_jpsi_match = false;
+  if(gen_jpsi_mu.size()==2){
+
+    Float_t _dR_11 = reco::deltaR(gen_jpsi_mu[0]->eta(), gen_jpsi_mu[0]->phi(), 
+				muoncollection[mcidx_mu1].eta(), muoncollection[mcidx_mu1].phi());
+    
+    Float_t _dR_22 = reco::deltaR(gen_jpsi_mu[1]->eta(), gen_jpsi_mu[1]->phi(), 
+				muoncollection[mcidx_mu2].eta(), muoncollection[mcidx_mu2].phi());
+
+    Float_t _dR_21 = reco::deltaR(gen_jpsi_mu[1]->eta(), gen_jpsi_mu[1]->phi(), 
+				muoncollection[mcidx_mu1].eta(), muoncollection[mcidx_mu1].phi());
+    
+    Float_t _dR_12 = reco::deltaR(gen_jpsi_mu[0]->eta(), gen_jpsi_mu[0]->phi(), 
+				muoncollection[mcidx_mu2].eta(), muoncollection[mcidx_mu2].phi());
+      
+
+    if(_dR_11 < 0.1 && _dR_22 < 0.1) flag_jpsi_match = true;
+    if(_dR_21 < 0.1 && _dR_12 < 0.1) flag_jpsi_match = true;
+  }
+
+  
+  nBranches_->Jpsi_isgenmatched.push_back((int)flag_jpsi_match);
+  nBranches_->Jpsi_mu3_isgenmatched.push_back((int)flag_nr_match);
+
 
 }
 
 
+void JpsiMuNtuplizer::printout(const RefCountedKinematicVertex& myVertex){
+  std::cout << "Vertex:" << std::endl;
+  if (myVertex->vertexIsValid()) {
+    std::cout << "\t Decay vertex: " << myVertex->position() << myVertex->chiSquared() << " " << myVertex->degreesOfFreedom()
+	      << std::endl;
+  } else
+    std::cout << "\t Decay vertex Not valid\n";
+}
+
+void JpsiMuNtuplizer::printout(const RefCountedKinematicParticle& myParticle){
+  std::cout << "Particle:" << std::endl;
+  //accessing the reconstructed Bs meson parameters:
+  //SK: uncomment if needed  AlgebraicVector7 bs_par = myParticle->currentState().kinematicParameters().vector();
+
+  //and their joint covariance matrix:
+  //SK:uncomment if needed  AlgebraicSymMatrix77 bs_er = myParticle->currentState().kinematicParametersError().matrix();
+  std::cout << "\t Momentum at vertex: " << myParticle->currentState().globalMomentum() << std::endl;
+  std::cout << "\t Parameters at vertex: " << myParticle->currentState().kinematicParameters().vector() << std::endl;
+}
+
+void JpsiMuNtuplizer::printout(const RefCountedKinematicTree& myTree){
+  if (!myTree->isValid()) {
+    std::cout << "Tree is invalid. Fit failed.\n";
+    return;
+  }
+
+  //accessing the tree components, move pointer to top
+  myTree->movePointerToTheTop();
+
+  //We are now at the top of the decay tree getting the B_s reconstructed KinematicPartlcle
+  RefCountedKinematicParticle b_s = myTree->currentParticle();
+  printout(b_s);
+
+  // The B_s decay vertex
+  RefCountedKinematicVertex b_dec_vertex = myTree->currentDecayVertex();
+  printout(b_dec_vertex);
+
+  // Get all the children of Bs:
+  //In this way, the pointer is not moved
+  std::vector<RefCountedKinematicParticle> bs_children = myTree->finalStateParticles();
+
+  for (unsigned int i = 0; i < bs_children.size(); ++i) {
+    printout(bs_children[i]);
+  }
+
+  std::cout << "\t ------------------------------------------" << std::endl;
+
+  //Now navigating down the tree , pointer is moved:
+  bool child = myTree->movePointerToTheFirstChild();
+
+  if (child)
+    while (myTree->movePointerToTheNextChild()) {
+      RefCountedKinematicParticle aChild = myTree->currentParticle();
+      printout(aChild);
+    }
+}

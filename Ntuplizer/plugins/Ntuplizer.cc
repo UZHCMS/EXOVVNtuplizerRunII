@@ -147,9 +147,12 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
     std::cout<<"\n\n --->GETTING INSIDE HERE<---\n\n"<<std::endl;
     nTuplizers_["JpsiMu"] = new JpsiMuNtuplizer( muonToken_   , 
 						 vtxToken_   , 
+						 beamToken_ ,
 						 packedpfcandidatesToken_,
 						 triggerToken_,
 						 triggerObjects_,
+						 genparticleToken_,
+						 runFlags,
 						 nBranches_ );
   }
   if (runFlags["doJpsiEle"]) {
