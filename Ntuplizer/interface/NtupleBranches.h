@@ -68,11 +68,6 @@ public:
   std::vector<int  >              genParticle_nMoth    ;
   std::vector<std::vector<int> >  genParticle_mother   ; 
   std::vector<std::vector<int> >  genParticle_dau      ;
-  std::vector<float >  genParticle_tauvispt      ;
-  std::vector<float >  genParticle_tauviseta      ;
-  std::vector<float >  genParticle_tauvisphi      ;
-  std::vector<float >  genParticle_tauvismass      ;
-  std::vector<int >  genParticle_taudecay      ;
 
   /** generator info */
   float                           lheV_pt              ;
@@ -285,6 +280,12 @@ public:
   std::vector<float>                Jpsi_trimu_vx      ;
   std::vector<float>                Jpsi_trimu_vy      ;
   std::vector<float>                Jpsi_trimu_vz      ;
+  std::vector<float>                Jpsi_trimu_unfitpt      ;
+  std::vector<float>                Jpsi_trimu_unfitmass       ;
+  std::vector<float>                Jpsi_trimu_unfitvprob    ;
+  std::vector<float>                Jpsi_trimu_unfit_vx;
+  std::vector<float>                Jpsi_trimu_unfit_vy;
+  std::vector<float>                Jpsi_trimu_unfit_vz;
 
   std::vector<float>                Jpsi_PV_vx       ;
   std::vector<float>                Jpsi_PV_vy       ;

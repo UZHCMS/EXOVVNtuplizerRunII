@@ -38,11 +38,6 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
       tree_->Branch( "genParticle_nMoth"     , &genParticle_nMoth      );
       tree_->Branch( "genParticle_nDau"	     , &genParticle_nDau       ); 
       tree_->Branch( "genParticle_dau"	     , &genParticle_dau        );
-      tree_->Branch( "genParticle_tauvispt"	     , &genParticle_tauvispt        );
-      tree_->Branch( "genParticle_tauviseta"	     , &genParticle_tauviseta        );
-      tree_->Branch( "genParticle_tauvisphi"	     , &genParticle_tauvisphi       );
-      tree_->Branch( "genParticle_tauvismass"	     , &genParticle_tauvismass        );
-      tree_->Branch( "genParticle_taudecay"	     , &genParticle_taudecay        );
 
 
     } //doGenParticles
@@ -309,6 +304,12 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch("Jpsi_trimu_vx", &Jpsi_trimu_vx );
     tree_->Branch("Jpsi_trimu_vy", &Jpsi_trimu_vy );
     tree_->Branch("Jpsi_trimu_vz", &Jpsi_trimu_vz );
+    tree_->Branch("Jpsi_trimu_unfitpt", &Jpsi_trimu_unfitpt );
+    tree_->Branch("Jpsi_trimu_unfitmass", &Jpsi_trimu_unfitmass );
+    tree_->Branch("Jpsi_trimu_unfitvprob", &Jpsi_trimu_unfitvprob );
+    tree_->Branch("Jpsi_trimu_unfit_vx", &Jpsi_trimu_unfit_vx );
+    tree_->Branch("Jpsi_trimu_unfit_vy", &Jpsi_trimu_unfit_vy );
+    tree_->Branch("Jpsi_trimu_unfit_vz", &Jpsi_trimu_unfit_vz );
 
     tree_->Branch("Jpsi_ngenmuons", &Jpsi_ngenmuons);
     tree_->Branch("Jpsi_isgenmatched", &Jpsi_isgenmatched);
@@ -340,11 +341,6 @@ void NtupleBranches::reset( void ){
   genParticle_nMoth.clear();
   genParticle_nDau.clear();
   genParticle_dau.clear();
-  genParticle_tauvispt.clear();
-  genParticle_tauviseta.clear();
-  genParticle_tauvisphi.clear();
-  genParticle_tauvismass.clear();
-  genParticle_taudecay.clear();
   
   /** generator info */
   genWeight   = 0;
@@ -567,6 +563,12 @@ void NtupleBranches::reset( void ){
   Jpsi_trimu_vx.clear();
   Jpsi_trimu_vy.clear();
   Jpsi_trimu_vz.clear();
+  Jpsi_trimu_unfitpt.clear();
+  Jpsi_trimu_unfitmass.clear();
+  Jpsi_trimu_unfitvprob.clear();
+  Jpsi_trimu_unfit_vx.clear();
+  Jpsi_trimu_unfit_vy.clear();
+  Jpsi_trimu_unfit_vz.clear();
 
   Jpsi_PV_vx.clear();
   Jpsi_PV_vy.clear();

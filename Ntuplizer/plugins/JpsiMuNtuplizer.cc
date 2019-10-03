@@ -555,10 +555,10 @@ void JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
     particle_cand cand = calculateIPvariables(extrapolator, jpsi_part, jpsi_vertex, *vtx);
 
     
-    //    if(TMath::Abs(cand.lip) < max_criteria){
-    if(TMath::Abs(cand.pvip) < max_criteria){
-      //      max_criteria = TMath::Abs(cand.lip);
-      max_criteria = TMath::Abs(cand.pvip);
+    if(TMath::Abs(cand.lip) < max_criteria){
+      //    if(TMath::Abs(cand.pvip) < max_criteria){
+      max_criteria = TMath::Abs(cand.lip);
+      //      max_criteria = TMath::Abs(cand.pvip);
       closestVertex = *vtx;
     }
   }
@@ -619,6 +619,24 @@ void JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
   std::cout << "J/psi candidate (lip, lips, pvip, pvips, fl3d, fls3d, alpha) = " << JPcand.lip << " " << JPcand.lips << " " << JPcand.pvip << " " << JPcand.pvips << " " << JPcand.fl3d << " " << JPcand.fls3d << " " << JPcand.alpha << std::endl;
 
   std::cout << "B candidate (lip, lips, pvip, pvips, fl3d, fls3d, alpha) = " << Bcand.lip << " " << Bcand.lips << " " << Bcand.pvip << " " << Bcand.pvips << " " << Bcand.fl3d << " " << Bcand.fls3d << " " << Bcand.alpha << std::endl;
+
+
+
+  // for unfit variables from here 
+  TLorentzVector tlv_mu3;
+  tlv_mu3.SetPtEtaPhiM(mu3.pt(), mu3.eta(), mu3.phi(), mu3.mass());
+
+  TLorentzVector tlv_B = jpsi_tlv_highest + tlv_mu3;
+
+  std::vector<reco::TransientTrack> transient_tracks_trimuon;
+  transient_tracks_trimuon.push_back(tt1_muon);
+  transient_tracks_trimuon.push_back(tt2_muon);
+  transient_tracks_trimuon.push_back(tt3_muon);
+
+  Float_t vprob_bc = -9;
+  TransientVertex vertex_bc;
+  std::tie(vprob_bc, vertex_bc) = vertexProb(transient_tracks_trimuon);
+  // to here
 
 
 //	Float_t min_dR_pf = 999.;
@@ -819,11 +837,19 @@ void JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
   nBranches_->Jpsi_trimu_vy.push_back(bc_vertex->vertexState().position().y());
   nBranches_->Jpsi_trimu_vz.push_back(bc_vertex->vertexState().position().z());  
 
-  std::cout << gen_nr_mu.size() + gen_jpsi_mu.size() << std::endl;
-  nBranches_->Jpsi_ngenmuons.push_back(gen_nr_mu.size() + gen_jpsi_mu.size());
+  nBranches_->Jpsi_trimu_unfitpt.push_back(tlv_B.Pt());
+  nBranches_->Jpsi_trimu_unfitmass.push_back(tlv_B.M());
+  nBranches_->Jpsi_trimu_unfitvprob.push_back(vprob_bc);
+  
+  if(vprob_bc!=-9){
+    nBranches_->Jpsi_trimu_unfit_vx.push_back(vertex_bc.position().x());
+    nBranches_->Jpsi_trimu_unfit_vy.push_back(vertex_bc.position().y());
+    nBranches_->Jpsi_trimu_unfit_vz.push_back(vertex_bc.position().z());
+  }
 
-  //  std::vector<reco::GenParticle> gen_nr_mu;
-  //  std::vector<reco::GenParticle> gen_jpsi_dimuon;
+
+  
+  nBranches_->Jpsi_ngenmuons.push_back(gen_nr_mu.size() + gen_jpsi_mu.size());
 
   bool flag_nr_match = false;
   if(gen_nr_mu.size()==1){
@@ -857,6 +883,8 @@ void JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
   
   nBranches_->Jpsi_isgenmatched.push_back((int)flag_jpsi_match);
   nBranches_->Jpsi_mu3_isgenmatched.push_back((int)flag_nr_match);
+
+  nBranches_->IsJpsiMu.push_back(1.);
 
 
 }
