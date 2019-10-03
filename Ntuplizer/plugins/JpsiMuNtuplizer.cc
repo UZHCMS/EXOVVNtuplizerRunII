@@ -35,7 +35,7 @@ TVector3 JpsiMuNtuplizer::getVertex(const reco::GenParticle& part){
   return TVector3(part.vx(),part.vy(),part.vz());
 }
 
-float JpsiMuNtuplizer::MuonPFIso(pat::Muon muon, bool highpt){
+float JpsiMuNtuplizer::MuonPFIso(pat::Muon muon){
 
   float sumChargedHadronPt = muon.pfIsolationR04().sumChargedHadronPt;
   float sumNeutralHadronEt = muon.pfIsolationR04().sumNeutralHadronEt;
@@ -337,7 +337,7 @@ void JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
    ********************************************************************/
 
   event.getByToken(verticeToken_   , vertices_     );
-  event.getByToken(bsToken_   , bs_     );
+  event.getByToken(bsToken_   , beamspot_     );
   event.getByToken(muonToken_	, muons_    );
   event.getByToken(triggerObjects_  , triggerObjects);
 
@@ -481,6 +481,7 @@ void JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
   /********************************************************************
    *
    * Step4: Kinematic fit for the J/psi candidate
+   *        Use kinematicFitPackage
    *
    ********************************************************************/
 
@@ -526,10 +527,19 @@ void JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
   /********************************************************************
    *
    * Step5: determine bbbar-PV, extrapolated back from the J/psi candidate
-   * There are several ways to do this ...
+   *
+   * We tried several possibilities
+   * 
    * 1) using minimum lip
    * 2) using minimum pvip
    * 3) using PV (first content of the PV collection)
+   *
+   * and found that 1) or 2) is the best.
+   * 
+   * Note: we can refit the vertex each time, by excluding the muons from J/psi
+   * but since the efficiency of selecting the right vertex is already quite high (w/o vertex refit)
+   * and I don't think it is necessary to complicate things at this stage 
+   * (we do the refit once we select B candidate)
    *
    ********************************************************************/
 
@@ -568,10 +578,10 @@ void JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
   /********************************************************************
    *
    * Step6: 3rd muon selection
+   *        Just select highest in pT but there might be better selection ... 
    *
    ********************************************************************/
 
-  //  event.getByToken( packedpfcandidatesToken_               , packedpfcandidates_      ); 
 
   pat::Muon mu3;
   Float_t max_pt3 = -1;
@@ -585,6 +595,8 @@ void JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
     if(!(muon.track().isNonnull())) continue;
     if(imuon==idx_mu1 || imuon==idx_mu2) continue;
 
+    // shall we put delta z cut here maybe? 
+
     if(muon.pt() > max_pt3){
       max_pt3 = muon.pt();
       mu3 = muon;
@@ -593,11 +605,91 @@ void JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
 
   if(max_pt3==-1) return;
 
-
-  std::vector<RefCountedKinematicParticle> allParticles;
-
   const reco::TrackRef track3_muon = mu3.muonBestTrack();
   reco::TransientTrack tt3_muon = (*builder).build(track3_muon);
+
+  /********************************************************************
+   *
+   * Step7: bbPV vertex refit by excluding 3 muon candidates
+   *
+   ********************************************************************/
+
+  event.getByToken( packedpfcandidatesToken_               , packedpfcandidates_      ); 
+  std::vector<pat::PackedCandidate> pfcollection; 
+  std::vector<reco::TransientTrack> mytracks;
+
+  int counter = 0;
+  for( size_t ii = 0; ii < packedpfcandidates_->size(); ++ii ){   
+    
+    pat::PackedCandidate pf = (*packedpfcandidates_)[ii];
+    
+    //    if(pf.pt() < 0.5) continue;
+    
+    if(!pf.hasTrackDetails()) continue;
+
+    if(pf.vertexRef()->z()!=closestVertex.position().z()) continue;
+
+    counter+=1;
+
+    Float_t _dR1 = reco::deltaR(pf.eta(), pf.phi(), 
+				track1_muon->eta(), track1_muon->phi());
+
+    Float_t _dR2 = reco::deltaR(pf.eta(), pf.phi(), 
+				track2_muon->eta(), track2_muon->phi());
+
+    Float_t _dR3 = reco::deltaR(pf.eta(), pf.phi(), 
+				track3_muon->eta(), track3_muon->phi());
+
+
+    if(_dR1 < 0.1 || _dR2 < 0.1 || _dR3 < 0.1){
+      //      std::cout << "This track is matched to the muon: " << pf.pdgId() << " " << pf.pt() << " " << track1_muon->pt() << " " << track2_muon->pt() << " " << track3_muon->pt() << std::endl;
+
+      if(TMath::Abs(pf.pdgId()) == 13) continue;
+    }
+
+    reco::TransientTrack  tt_track = (*builder).build(pf.pseudoTrack());
+    //    transientTrack.setBeamSpot(beamspot_);
+    mytracks.push_back(tt_track);
+    
+    //   Float_t precut_dz = closestVertex.position().z() - pf.vz();
+    //    if(TMath::Abs(precut_dz) > 0.5) continue;
+    //      Float_t precut_dz = vz_jpsi - pf.vz();
+    //      if(TMath::Abs(precut_dz) > 0.5) continue;
+
+    //    if(!pf.trackHighPurity()) continue;    
+    //    if(pf.pseudoTrack().hitPattern().numberOfValidHits() < 3) continue;
+    //    if(pf.pseudoTrack().normalizedChi2() > 100) continue;
+    
+    //    if(TMath::Abs(pf.pdgId())==211 && TMath::Abs(pf.eta()) < 2.3){
+    //      pfcollection.push_back(pf);
+    //    }
+  }
+
+
+  std::cout << counter << " " << mytracks.size() << std::endl;
+  TransientVertex myVertex; 
+  
+  if( mytracks.size()>1 ){
+    AdaptiveVertexFitter  theFitter;
+    
+    myVertex = theFitter.vertex(mytracks);  // if you don't want the beam constraint
+    //    TransientVertex myVertex = theFitter.vertex(mytracks, beamspot_);  // if you don't want the beam constraint
+    //    std::cout << "TEST   " << closestVertex.position().z() << " " << myVertex.position().z() << std::endl;
+
+  }
+  
+
+
+
+
+
+  /********************************************************************
+   *
+   * Step7: Kinematic fit for B candidate
+   *
+   ********************************************************************/
+
+  std::vector<RefCountedKinematicParticle> allParticles;
 
   allParticles.push_back(pFactory.particle(tt3_muon, muon_mass, chi, ndf, muon_sigma));
   allParticles.push_back(jpsi_part);
@@ -612,8 +704,16 @@ void JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
   RefCountedKinematicVertex bc_vertex = bcTree->currentDecayVertex();
   if(!bc_vertex->vertexIsValid()) return; 
 
-  particle_cand JPcand = calculateIPvariables(extrapolator, jpsi_part, jpsi_vertex, closestVertex);
-  particle_cand Bcand = calculateIPvariables(extrapolator, bc_part, bc_vertex, closestVertex);
+  particle_cand JPcand;
+  particle_cand Bcand;
+
+  if(myVertex.isValid()){
+    JPcand = calculateIPvariables(extrapolator, jpsi_part, jpsi_vertex, myVertex);
+    Bcand = calculateIPvariables(extrapolator, bc_part, bc_vertex, myVertex);
+  }else{
+    JPcand = calculateIPvariables(extrapolator, jpsi_part, jpsi_vertex, closestVertex);
+    Bcand = calculateIPvariables(extrapolator, bc_part, bc_vertex, closestVertex);
+  }
 
 
   std::cout << "J/psi candidate (lip, lips, pvip, pvips, fl3d, fls3d, alpha) = " << JPcand.lip << " " << JPcand.lips << " " << JPcand.pvip << " " << JPcand.pvips << " " << JPcand.fl3d << " " << JPcand.fls3d << " " << JPcand.alpha << std::endl;
@@ -621,6 +721,12 @@ void JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
   std::cout << "B candidate (lip, lips, pvip, pvips, fl3d, fls3d, alpha) = " << Bcand.lip << " " << Bcand.lips << " " << Bcand.pvip << " " << Bcand.pvips << " " << Bcand.fl3d << " " << Bcand.fls3d << " " << Bcand.alpha << std::endl;
 
 
+
+  /********************************************************************
+   *
+   * Step8: Filling branches
+   *
+   ********************************************************************/
 
   // for unfit variables from here 
   TLorentzVector tlv_mu3;
@@ -636,34 +742,22 @@ void JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
   Float_t vprob_bc = -9;
   TransientVertex vertex_bc;
   std::tie(vprob_bc, vertex_bc) = vertexProb(transient_tracks_trimuon);
-  // to here
 
 
-//	Float_t min_dR_pf = 999.;
-//	Float_t iso_pt03 =0.;
-//	Float_t iso_pt04 =0.;
-//	Float_t iso_pt05 =0.;
-//	Float_t iso_pt06 =0.;
-//	Float_t iso_pt07 =0.;
-//
-//	//isolation part
-//	for(int kkk = 0; kkk < numOfch; kkk ++){
-//	  
-//	  pat::PackedCandidate _pf = pfcollection[kkk];
-//	  if(TMath::Abs(_pf.pdgId())!=211) continue;
-//	  TLorentzVector tlv_iso;
-//	  tlv_iso.SetPtEtaPhiM(_pf.pt(), _pf.eta(), _pf.phi(), _pf.mass());
-//	  Float_t dR_iso = tlv_muon3.DeltaR(tlv_iso);
-//	  if(min_dR_pf>dR_iso) min_dR_pf=dR_iso;
-//	  if(dR_iso>0.7) continue; 
-//	  if(dR_iso<0.7)  iso_pt07 += tlv_iso.Pt();
-//	  if(dR_iso<0.6)  iso_pt06 += tlv_iso.Pt();
-//	  if(dR_iso<0.5)  iso_pt05 += tlv_iso.Pt();
-//	  if(dR_iso<0.4)  iso_pt04 += tlv_iso.Pt();
-//	  if(dR_iso<0.3)  iso_pt03 += tlv_iso.Pt();
-//	  //std::cout<<dR_iso<<"<-dr, pt03->"<<iso_pt07<<std::endl;
-//	}
-	//isolation part
+
+  Float_t iso_pt03 =0.;
+
+  for(int kkk = 0; kkk < (int)pfcollection.size(); kkk ++){
+	  
+    pat::PackedCandidate _pf = pfcollection[kkk];
+
+    Float_t _dR = reco::deltaR(_pf.eta(), _pf.phi(),
+			       bc_part->currentState().globalMomentum().eta(), bc_part->currentState().globalMomentum().phi());
+
+
+    if(_dR < 0.3)  iso_pt03 += _pf.pt();
+  }
+
 //	nBranches_->Jpsi_mu3_isopt03.push_back(iso_pt03);
 //	nBranches_->Jpsi_mu3_isopt04.push_back(iso_pt04);
 //	nBranches_->Jpsi_mu3_isopt05.push_back(iso_pt05);
@@ -674,58 +768,6 @@ void JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
 	//jpsi part
 
 
-  /********************************************************************
-   *
-   * Step7: Filling branches ...
-   *
-   ********************************************************************/
-
-  bool isMC = runOnMC_;
-  
-  TVector3 genvertex(-9.,-9.,-9.);
-  
-  std::vector<const reco::Candidate*> gen_nr_mu;
-  std::vector<const reco::Candidate*> gen_jpsi_mu;
-  
-
-  if(isMC){
-    event.getByToken(genParticlesToken_ , genParticles_); 
-    
-    for( unsigned p=0; p < genParticles_->size(); ++p){
-
-      //      std::cout << "gen: " << (*genParticles_)[p].pdgId() << " " << (*genParticles_)[p].status() << std::endl;
-
-      // Bc daughters loop
-      if(TMath::Abs((*genParticles_)[p].pdgId())==541 && (*genParticles_)[p].status()==2){
-
-	// retrieve production vertex
-	genvertex = getVertex((*genParticles_)[p]);
-
-	for(int idd = 0; idd < (int)(*genParticles_)[p].numberOfDaughters(); idd++){
-	  Int_t dpid = (*genParticles_)[p].daughter(idd)->pdgId();
-	  //	  std::cout << "\t -> " <<  << " " << (*genParticles_)[p].daughter(idd)->status()<< std::endl;
-	  if(TMath::Abs(dpid)==13) gen_nr_mu.push_back((*genParticles_)[p].daughter(idd));
-	}
-      }
-
-      // J/psi loop
-      if(TMath::Abs((*genParticles_)[p].pdgId())==443 && 
-	 (*genParticles_)[p].status()==2 && 
-	 TMath::Abs((*genParticles_)[p].mother(0)->pdgId())==541){
-
-	//	std::cout << "nMon = " << (*genParticles_)[p].numberOfMothers() << std::endl;
-	//	std::cout << "mother pdgId = " <<  << std::endl;
-
-	for(int idd = 0; idd < (int)(*genParticles_)[p].numberOfDaughters(); idd++){
-	  Int_t dpid = (*genParticles_)[p].daughter(idd)->pdgId();
-	  if(TMath::Abs(dpid)==13) gen_jpsi_mu.push_back((*genParticles_)[p].daughter(idd));
-	  //	  std::cout << "\t -> " << (*genParticles_)[p].daughter(idd)->pdgId() << " " << (*genParticles_)[p].daughter(idd)->status()<< std::endl;
-	}
-      }
-
-      
-    }
-  }
 
 
 
@@ -742,6 +784,8 @@ void JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
   nBranches_->Jpsi_mu1_vx.push_back(muoncollection[mcidx_mu1].vx());
   nBranches_->Jpsi_mu1_vy.push_back(muoncollection[mcidx_mu1].vy());
   nBranches_->Jpsi_mu1_vz.push_back(muoncollection[mcidx_mu1].vz());
+  nBranches_->Jpsi_mu1_dbiso.push_back(MuonPFIso(muoncollection[mcidx_mu1]));
+
   
   nBranches_->Jpsi_mu2_isLoose.push_back(muoncollection[mcidx_mu2].isLooseMuon());
   nBranches_->Jpsi_mu2_isTight.push_back(muoncollection[mcidx_mu2].isTightMuon(closestVertex));
@@ -756,6 +800,7 @@ void JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
   nBranches_->Jpsi_mu2_vx.push_back(muoncollection[mcidx_mu2].vx());
   nBranches_->Jpsi_mu2_vy.push_back(muoncollection[mcidx_mu2].vy());
   nBranches_->Jpsi_mu2_vz.push_back(muoncollection[mcidx_mu2].vz());
+  nBranches_->Jpsi_mu2_dbiso.push_back(MuonPFIso(muoncollection[mcidx_mu2]));
 
   nBranches_->Jpsi_mu3_isLoose.push_back(mu3.isLooseMuon());
   nBranches_->Jpsi_mu3_isTight.push_back(mu3.isTightMuon(closestVertex));
@@ -770,19 +815,25 @@ void JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
   nBranches_->Jpsi_mu3_vx.push_back(mu3.vx());
   nBranches_->Jpsi_mu3_vy.push_back(mu3.vy());
   nBranches_->Jpsi_mu3_vz.push_back(mu3.vz());
+  nBranches_->Jpsi_mu3_dbiso.push_back(MuonPFIso(mu3));
 
   nBranches_->Jpsi_PV_vx.push_back(vertices_->begin()->position().x());
   nBranches_->Jpsi_PV_vy.push_back(vertices_->begin()->position().y());
   nBranches_->Jpsi_PV_vz.push_back(vertices_->begin()->position().z());
 
+  if(myVertex.isValid()){
+    nBranches_->Jpsi_bbPV_refit_vx.push_back(myVertex.position().x());
+    nBranches_->Jpsi_bbPV_refit_vy.push_back(myVertex.position().y());
+    nBranches_->Jpsi_bbPV_refit_vz.push_back(myVertex.position().z());
+  }else{
+    nBranches_->Jpsi_bbPV_refit_vx.push_back(-1);
+    nBranches_->Jpsi_bbPV_refit_vy.push_back(-1);
+    nBranches_->Jpsi_bbPV_refit_vz.push_back(-1);
+  }
+
   nBranches_->Jpsi_bbPV_vx.push_back(closestVertex.position().x());
   nBranches_->Jpsi_bbPV_vy.push_back(closestVertex.position().y());
   nBranches_->Jpsi_bbPV_vz.push_back(closestVertex.position().z());
-
-  // -9 if there is no Bc found 
-  nBranches_->Jpsi_genPV_vx.push_back(genvertex.x());
-  nBranches_->Jpsi_genPV_vy.push_back(genvertex.y());
-  nBranches_->Jpsi_genPV_vz.push_back(genvertex.z());
 
   nBranches_->Jpsi_pt.push_back(jpsi_part->currentState().globalMomentum().perp());
   nBranches_->Jpsi_eta.push_back(jpsi_part->currentState().globalMomentum().eta());
@@ -837,6 +888,9 @@ void JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
   nBranches_->Jpsi_trimu_vy.push_back(bc_vertex->vertexState().position().y());
   nBranches_->Jpsi_trimu_vz.push_back(bc_vertex->vertexState().position().z());  
 
+  nBranches_->Jpsi_trimu_iso_pt03.push_back(iso_pt03);
+
+
   nBranches_->Jpsi_trimu_unfitpt.push_back(tlv_B.Pt());
   nBranches_->Jpsi_trimu_unfitmass.push_back(tlv_B.M());
   nBranches_->Jpsi_trimu_unfitvprob.push_back(vprob_bc);
@@ -848,13 +902,59 @@ void JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
   }
 
 
-  
-  nBranches_->Jpsi_ngenmuons.push_back(gen_nr_mu.size() + gen_jpsi_mu.size());
 
+
+  bool isMC = runOnMC_;
+  
+  TVector3 genvertex(-9.,-9.,-9.);
+  
+  std::vector<const reco::Candidate*> gen_nr_mu;
+  std::vector<const reco::Candidate*> gen_jpsi_mu;
+  
+
+  if(isMC){
+    event.getByToken(genParticlesToken_ , genParticles_); 
+    
+    for( unsigned p=0; p < genParticles_->size(); ++p){
+
+      //      std::cout << "gen: " << (*genParticles_)[p].pdgId() << " " << (*genParticles_)[p].status() << std::endl;
+
+      // Bc daughters loop
+      if(TMath::Abs((*genParticles_)[p].pdgId())==541 && (*genParticles_)[p].status()==2){
+
+	// retrieve production vertex
+	genvertex = getVertex((*genParticles_)[p]);
+
+	for(int idd = 0; idd < (int)(*genParticles_)[p].numberOfDaughters(); idd++){
+	  Int_t dpid = (*genParticles_)[p].daughter(idd)->pdgId();
+	  //	  std::cout << "\t -> " <<  << " " << (*genParticles_)[p].daughter(idd)->status()<< std::endl;
+	  if(TMath::Abs(dpid)==13) gen_nr_mu.push_back((*genParticles_)[p].daughter(idd));
+	}
+      }
+
+      // J/psi loop
+      if(TMath::Abs((*genParticles_)[p].pdgId())==443 && 
+	 (*genParticles_)[p].status()==2 && 
+	 TMath::Abs((*genParticles_)[p].mother(0)->pdgId())==541){
+
+	//	std::cout << "nMon = " << (*genParticles_)[p].numberOfMothers() << std::endl;
+	//	std::cout << "mother pdgId = " <<  << std::endl;
+
+	for(int idd = 0; idd < (int)(*genParticles_)[p].numberOfDaughters(); idd++){
+	  Int_t dpid = (*genParticles_)[p].daughter(idd)->pdgId();
+	  if(TMath::Abs(dpid)==13) gen_jpsi_mu.push_back((*genParticles_)[p].daughter(idd));
+	  //	  std::cout << "\t -> " << (*genParticles_)[p].daughter(idd)->pdgId() << " " << (*genParticles_)[p].daughter(idd)->status()<< std::endl;
+	}
+      }
+
+      
+    }
+  }
+
+  
   bool flag_nr_match = false;
   if(gen_nr_mu.size()==1){
-    Float_t _dR = reco::deltaR(
-			       gen_nr_mu[0]->eta(), gen_nr_mu[0]->phi(), 
+    Float_t _dR = reco::deltaR(gen_nr_mu[0]->eta(), gen_nr_mu[0]->phi(), 
 			       mu3.eta(), mu3.phi());
 
     if(_dR < 0.1) flag_nr_match = true;
@@ -881,6 +981,11 @@ void JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
   }
 
   
+  // -9 if there is no Bc found 
+  nBranches_->Jpsi_genPV_vx.push_back(genvertex.x());
+  nBranches_->Jpsi_genPV_vy.push_back(genvertex.y());
+  nBranches_->Jpsi_genPV_vz.push_back(genvertex.z());
+  nBranches_->Jpsi_ngenmuons.push_back(gen_nr_mu.size() + gen_jpsi_mu.size());
   nBranches_->Jpsi_isgenmatched.push_back((int)flag_jpsi_match);
   nBranches_->Jpsi_mu3_isgenmatched.push_back((int)flag_nr_match);
 

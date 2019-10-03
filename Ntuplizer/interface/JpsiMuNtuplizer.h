@@ -140,7 +140,7 @@ class JpsiMuNtuplizer : public CandidateNtuplizer {
 				     reco::Vertex wrtVertex);
 
 
-  float MuonPFIso(pat::Muon muon, bool highpt);
+  float MuonPFIso(pat::Muon muon);
   double isoTrack(double docaCut, double r, double pmin);
   void fillBranches( edm::Event const & event, const edm::EventSetup& iSetup );
   Float_t getMaxDoca(std::vector<RefCountedKinematicParticle> &kinParticles);
@@ -162,7 +162,7 @@ private:
 
    edm::Handle<pat::MuonCollection>      		       muons_		       ;
    edm::Handle< reco::VertexCollection >  vertices_;
-   edm::Handle< reco::BeamSpot >  bs_;
+   edm::Handle< reco::BeamSpot >  beamspot_;
    edm::Handle< std::vector<pat::PackedCandidate> > packedpfcandidates_   ;
    edm::Handle< edm::TriggerResults> 			     HLTtriggers_;
    edm::Handle<pat::TriggerObjectStandAloneCollection>	     triggerObjects;

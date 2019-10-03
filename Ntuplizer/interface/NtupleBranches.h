@@ -201,6 +201,7 @@ public:
   std::vector<float>                Jpsi_mu1_vx       ;
   std::vector<float>                Jpsi_mu1_vy       ;
   std::vector<float>                Jpsi_mu1_vz       ;
+  std::vector<float>                Jpsi_mu1_dbiso       ;
 
   std::vector<float>                Jpsi_mu2_pt      ;
   std::vector<float>                Jpsi_mu2_eta     ;
@@ -215,6 +216,7 @@ public:
   std::vector<float>                Jpsi_mu2_vx       ;
   std::vector<float>                Jpsi_mu2_vy       ;
   std::vector<float>                Jpsi_mu2_vz       ;
+  std::vector<float>                Jpsi_mu2_dbiso       ;
 
   std::vector<float>                Jpsi_mu3_pt      ;
   std::vector<float>                Jpsi_mu3_eta     ;
@@ -229,14 +231,7 @@ public:
   std::vector<float>                Jpsi_mu3_vx       ;
   std::vector<float>                Jpsi_mu3_vy       ;
   std::vector<float>                Jpsi_mu3_vz       ;
-
-  std::vector<float>                Jpsi_mu3_isopt03      ;
-  std::vector<float>                Jpsi_mu3_isopt04      ;
-  std::vector<float>                Jpsi_mu3_isopt05      ;
-  std::vector<float>                Jpsi_mu3_isopt06      ;
-  std::vector<float>                Jpsi_mu3_isopt07      ;
-  std::vector<float>                Jpsi_dr_mu3pf      ;
-
+  std::vector<float>                Jpsi_mu3_dbiso       ;
 
   std::vector<float>                Jpsi_pt      ;
   std::vector<float>                Jpsi_eta     ;
@@ -280,6 +275,7 @@ public:
   std::vector<float>                Jpsi_trimu_vx      ;
   std::vector<float>                Jpsi_trimu_vy      ;
   std::vector<float>                Jpsi_trimu_vz      ;
+  std::vector<float>                Jpsi_trimu_iso_pt03      ;
   std::vector<float>                Jpsi_trimu_unfitpt      ;
   std::vector<float>                Jpsi_trimu_unfitmass       ;
   std::vector<float>                Jpsi_trimu_unfitvprob    ;
@@ -294,6 +290,10 @@ public:
   std::vector<float>                Jpsi_bbPV_vx       ;
   std::vector<float>                Jpsi_bbPV_vy       ;
   std::vector<float>                Jpsi_bbPV_vz       ;
+
+  std::vector<float>                Jpsi_bbPV_refit_vx       ;
+  std::vector<float>                Jpsi_bbPV_refit_vy       ;
+  std::vector<float>                Jpsi_bbPV_refit_vz       ;
 
   std::vector<float>                Jpsi_genPV_vx       ;
   std::vector<float>                Jpsi_genPV_vy       ;
