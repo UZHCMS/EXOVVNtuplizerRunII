@@ -24,6 +24,7 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
 	vtxToken_             	    (consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("vertices"))),
 	rhoToken_             	    (consumes<double>(iConfig.getParameter<edm::InputTag>("rho"))),
 	packedpfcandidatesToken_    (consumes<std::vector<pat::PackedCandidate>>(iConfig.getParameter<edm::InputTag>("packedpfcandidates"))),
+	losttrackToken_    (consumes<std::vector<pat::PackedCandidate>>(iConfig.getParameter<edm::InputTag>("losttrack"))),
 	puinfoToken_          	    (consumes<std::vector<PileupSummaryInfo> >(iConfig.getParameter<edm::InputTag>("PUInfo"))),
 	geneventToken_        	    (consumes<GenEventInfoProduct>(iConfig.getParameter<edm::InputTag>("genEventInfo"))),     
 	lheEventProductToken_       (consumes<LHEEventProduct>(iConfig.getParameter<edm::InputTag>("externallheProducer"))),     
@@ -147,7 +148,13 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
     std::cout<<"\n\n --->GETTING INSIDE HERE<---\n\n"<<std::endl;
     nTuplizers_["JpsiMu"] = new JpsiMuNtuplizer( muonToken_   , 
 						 vtxToken_   , 
+						 beamToken_ ,
 						 packedpfcandidatesToken_,
+						 losttrackToken_,
+						 triggerToken_,
+						 triggerObjects_,
+						 genparticleToken_,
+						 runFlags,
 						 nBranches_ );
   }
   if (runFlags["doJpsiEle"]) {

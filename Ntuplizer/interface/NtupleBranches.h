@@ -68,11 +68,6 @@ public:
   std::vector<int  >              genParticle_nMoth    ;
   std::vector<std::vector<int> >  genParticle_mother   ; 
   std::vector<std::vector<int> >  genParticle_dau      ;
-  std::vector<float >  genParticle_tauvispt      ;
-  std::vector<float >  genParticle_tauviseta      ;
-  std::vector<float >  genParticle_tauvisphi      ;
-  std::vector<float >  genParticle_tauvismass      ;
-  std::vector<int >  genParticle_taudecay      ;
 
   /** generator info */
   float                           lheV_pt              ;
@@ -196,84 +191,123 @@ public:
   std::vector<float>                Jpsi_mu1_pt      ;
   std::vector<float>                Jpsi_mu1_eta     ;
   std::vector<float>                Jpsi_mu1_phi     ;
-  std::vector<int  >                Jpsi_mu1_ch      ;   
+  std::vector<int  >                Jpsi_mu1_q      ;   
   std::vector<int  >                Jpsi_mu1_isLoose   ;
   std::vector<int  >                Jpsi_mu1_isTight   ;
   std::vector<int  >                Jpsi_mu1_isPF      ;
   std::vector<int  >                Jpsi_mu1_isGlobal  ;
   std::vector<int  >                Jpsi_mu1_isTracker ;
   std::vector<int  >                Jpsi_mu1_isSoft    ;
+  std::vector<float>                Jpsi_mu1_vx       ;
+  std::vector<float>                Jpsi_mu1_vy       ;
+  std::vector<float>                Jpsi_mu1_vz       ;
+  std::vector<float>                Jpsi_mu1_iso       ;
+  std::vector<float>                Jpsi_mu1_dbiso       ;
 
   std::vector<float>                Jpsi_mu2_pt      ;
   std::vector<float>                Jpsi_mu2_eta     ;
   std::vector<float>                Jpsi_mu2_phi     ;
-  std::vector<int  >                Jpsi_mu2_ch   ;   
-  std::vector<float>                Jpsi_mu2_isLoose   ;
-  std::vector<float>                Jpsi_mu2_isTight   ;
-  std::vector<float>                Jpsi_mu2_isPF      ;
-  std::vector<float>                Jpsi_mu2_isGlobal  ;
-  std::vector<float>                Jpsi_mu2_isTracker ;
-  std::vector<float>                Jpsi_mu2_isSoft    ;
+  std::vector<int  >                Jpsi_mu2_q   ;   
+  std::vector<int  >                Jpsi_mu2_isLoose   ;
+  std::vector<int  >                Jpsi_mu2_isTight   ;
+  std::vector<int  >                Jpsi_mu2_isPF      ;
+  std::vector<int  >                Jpsi_mu2_isGlobal  ;
+  std::vector<int  >                Jpsi_mu2_isTracker ;
+  std::vector<int  >                Jpsi_mu2_isSoft    ;
+  std::vector<float>                Jpsi_mu2_vx       ;
+  std::vector<float>                Jpsi_mu2_vy       ;
+  std::vector<float>                Jpsi_mu2_vz       ;
+  std::vector<float>                Jpsi_mu2_iso       ;
+  std::vector<float>                Jpsi_mu2_dbiso       ;
 
   std::vector<float>                Jpsi_mu3_pt      ;
   std::vector<float>                Jpsi_mu3_eta     ;
   std::vector<float>                Jpsi_mu3_phi     ;
-  std::vector<int  >                Jpsi_mu3_ch   ;   
-  std::vector<float>                Jpsi_mu3_isLoose   ;
-  std::vector<float>                Jpsi_mu3_isTight   ;
-  std::vector<float>                Jpsi_mu3_isPF      ;
-  std::vector<float>                Jpsi_mu3_isGlobal  ;
-  std::vector<float>                Jpsi_mu3_isTracker ;
-  std::vector<float>                Jpsi_mu3_isSoft    ;
-  std::vector<float>                Jpsi_mu3_x       ;
-  std::vector<float>                Jpsi_mu3_y       ;
-  std::vector<float>                Jpsi_mu3_z       ;
+  std::vector<int  >                Jpsi_mu3_q   ;   
+  std::vector<int  >                Jpsi_mu3_isLoose   ;
+  std::vector<int  >                Jpsi_mu3_isTight   ;
+  std::vector<int  >                Jpsi_mu3_isPF      ;
+  std::vector<int  >                Jpsi_mu3_isGlobal  ;
+  std::vector<int  >                Jpsi_mu3_isTracker ;
+  std::vector<int  >                Jpsi_mu3_isSoft    ;
+  std::vector<float>                Jpsi_mu3_vx       ;
+  std::vector<float>                Jpsi_mu3_vy       ;
+  std::vector<float>                Jpsi_mu3_vz       ;
+  std::vector<float>                Jpsi_mu3_iso       ;
+  std::vector<float>                Jpsi_mu3_dbiso       ;
 
-  std::vector<float>                Jpsi_mu3_isopt03      ;
-  std::vector<float>                Jpsi_mu3_isopt04      ;
-  std::vector<float>                Jpsi_mu3_isopt05      ;
-  std::vector<float>                Jpsi_mu3_isopt06      ;
-  std::vector<float>                Jpsi_mu3_isopt07      ;
-  std::vector<float>                Jpsi_dr_mu3pf      ;
-
-
-  std::vector<float>                Jpsi_dx      ;
-  std::vector<float>                Jpsi_dy      ;
-  std::vector<float>                Jpsi_dz      ;
   std::vector<float>                Jpsi_pt      ;
   std::vector<float>                Jpsi_eta     ;
   std::vector<float>                Jpsi_phi     ;
   std::vector<float>                Jpsi_mass       ;
-  std::vector<float>                Jpsi_vtxprob    ;
-  std::vector<float>                Jpsi_vtxz       ;
+  std::vector<float>                Jpsi_vprob    ;
+  std::vector<float>                Jpsi_lip;
+  std::vector<float>                Jpsi_lips;
+  std::vector<float>                Jpsi_pvip;
+  std::vector<float>                Jpsi_pvips;
+  std::vector<float>                Jpsi_fl3d;
+  std::vector<float>                Jpsi_fls3d;
+  std::vector<float>                Jpsi_alpha;
+  std::vector<float>                Jpsi_maxdoca;
+  std::vector<float>                Jpsi_mindoca;
+  std::vector<float>                Jpsi_vx      ;
+  std::vector<float>                Jpsi_vy      ;
+  std::vector<float>                Jpsi_vz      ;
+  std::vector<float>                Jpsi_unfitpt      ;
+  std::vector<float>                Jpsi_unfitmass       ;
+  std::vector<float>                Jpsi_unfitvprob    ;
+  std::vector<float>                Jpsi_unfit_vx;
+  std::vector<float>                Jpsi_unfit_vy;
+  std::vector<float>                Jpsi_unfit_vz;
 
 
-  std::vector<float>                Jpsi_trimu_dx      ;
-  std::vector<float>                Jpsi_trimu_dy      ;
-  std::vector<float>                Jpsi_trimu_dz      ;
   std::vector<float>                Jpsi_trimu_pt      ;
   std::vector<float>                Jpsi_trimu_eta     ;
   std::vector<float>                Jpsi_trimu_phi     ;
   std::vector<float>                Jpsi_trimu_mass    ;
-  std::vector<float>                Jpsi_trimu_vtxprob ;
-  std::vector<float>                Jpsi_trimu_vtxz    ;
+  std::vector<float>                Jpsi_trimu_vprob ;
+  std::vector<float>                Jpsi_trimu_lip;
+  std::vector<float>                Jpsi_trimu_lips;
+  std::vector<float>                Jpsi_trimu_pvip;
+  std::vector<float>                Jpsi_trimu_pvips;
+  std::vector<float>                Jpsi_trimu_fl3d;
+  std::vector<float>                Jpsi_trimu_fls3d;
+  std::vector<float>                Jpsi_trimu_alpha;
+  std::vector<float>                Jpsi_trimu_maxdoca;
+  std::vector<float>                Jpsi_trimu_mindoca;
+  std::vector<float>                Jpsi_trimu_vx      ;
+  std::vector<float>                Jpsi_trimu_vy      ;
+  std::vector<float>                Jpsi_trimu_vz      ;
+  std::vector<float>                Jpsi_trimu_iso;
+  std::vector<int  >                Jpsi_trimu_iso_ntracks;
+  std::vector<float>                Jpsi_trimu_iso_mindoca;
+  std::vector<float>                Jpsi_trimu_unfitpt      ;
+  std::vector<float>                Jpsi_trimu_unfitmass       ;
+  std::vector<float>                Jpsi_trimu_unfitvprob    ;
+  std::vector<float>                Jpsi_trimu_unfit_vx;
+  std::vector<float>                Jpsi_trimu_unfit_vy;
+  std::vector<float>                Jpsi_trimu_unfit_vz;
 
-  std::vector<float>                Jpsi_PV_x       ;
-  std::vector<float>                Jpsi_PV_y       ;
-  std::vector<float>                Jpsi_PV_z       ;
+  std::vector<float>                Jpsi_PV_vx       ;
+  std::vector<float>                Jpsi_PV_vy       ;
+  std::vector<float>                Jpsi_PV_vz       ;
 
-  std::vector<float>                Jpsi_flightSig3D             ; 
-  std::vector<float>                Jpsi_flightLength3D          ;
-  std::vector<float>                Jpsi_flightLengthErr3D       ;
-  std::vector<float>                Jpsi_flightSig2D             ; 
-  std::vector<float>                Jpsi_flightLength2D          ;
-  std::vector<float>                Jpsi_flightLengthErr2D       ;
-  std::vector<float>                Jpsi_trimu_flightSig3D       ; 
-  std::vector<float>                Jpsi_trimu_flightLength3D    ;
-  std::vector<float>                Jpsi_trimu_flightLengthErr3D ;
-  std::vector<float>                Jpsi_trimu_flightSig2D       ; 
-  std::vector<float>                Jpsi_trimu_flightLength2D    ;
-  std::vector<float>                Jpsi_trimu_flightLengthErr2D ;
+  std::vector<float>                Jpsi_bbPV_vx       ;
+  std::vector<float>                Jpsi_bbPV_vy       ;
+  std::vector<float>                Jpsi_bbPV_vz       ;
+
+  std::vector<float>                Jpsi_bbPV_refit_vx       ;
+  std::vector<float>                Jpsi_bbPV_refit_vy       ;
+  std::vector<float>                Jpsi_bbPV_refit_vz       ;
+
+  std::vector<float>                Jpsi_genPV_vx       ;
+  std::vector<float>                Jpsi_genPV_vy       ;
+  std::vector<float>                Jpsi_genPV_vz       ;
+
+  std::vector<int  >                Jpsi_ngenmuons      ;
+  std::vector<int  >                Jpsi_isgenmatched;
+  std::vector<int  >                Jpsi_mu3_isgenmatched;
+
 
 
   /*--------------------------PV infos--------------------------*/

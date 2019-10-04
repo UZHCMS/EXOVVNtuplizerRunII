@@ -53,6 +53,8 @@ private:
   edm::EDGetTokenT<double>                                  rhoToken_           ;
   edm::EDGetTokenT<pat::PackedCandidateCollection>          packedpfcandidatesToken_;
 
+  edm::EDGetTokenT<pat::PackedCandidateCollection>          losttrackToken_;
+
   edm::EDGetTokenT< std::vector<PileupSummaryInfo> >        puinfoToken_        ;
   edm::EDGetTokenT< GenEventInfoProduct >                   geneventToken_      ;
   edm::EDGetTokenT<LHEEventProduct>	                    lheEventProductToken_;

@@ -22,12 +22,13 @@ void GenParticlesNtuplizer::fillBranches( edm::Event const & event, const edm::E
   std::vector<int> doJpsi_;
   if(isJpsiEle_) {
     doJpsi_ = nBranches_->IsJpsiEle;
-    //std::cout<<"im getting inside the electron part"<<std::endl;
   }else if(isJpsiMu_){
     doJpsi_ = nBranches_->IsJpsiMu;
-    //std::cout<<"nbranch thing\t"<<size(isJpsi_)<<"; "<< isJpsi_[0]<<std::endl;
   }
-  if(size(doJpsi_)>0) if(doJpsi_[0]==0) return;
+
+  if(size(doJpsi_)==0) return;
+
+  //  if(size(doJpsi_)>0) if(doJpsi_[0]==0) return;
    
 
     event.getByToken(genParticlesToken_ , genParticles_); 
@@ -56,8 +57,11 @@ void GenParticlesNtuplizer::fillBranches( edm::Event const & event, const edm::E
       bool isHeavyMeson( abs((*genParticles_)[p].pdgId())>0 && abs((*genParticles_)[p].pdgId())<=1000 );
       bool isHeavyBaryon( abs((*genParticles_)[p].pdgId())>=1000);
       bool isBSM( (abs((*genParticles_)[p].pdgId())>=30 && abs((*genParticles_)[p].pdgId())<=50) || abs((*genParticles_)[p].pdgId())>=1000000 );
+      bool isB( (abs((*genParticles_)[p].pdgId())>=511 && abs((*genParticles_)[p].pdgId())<=545));
+      bool isStatus2( (*genParticles_)[p].status()==2 );
+      bool isStatus1( (*genParticles_)[p].status()==1 );
       
-      if(!isLepton && !isQuark && !isPhoton && !isGluon && !isWZH && !isHeavyMeson && !isHeavyBaryon && !isBSM && !isDirectPromptTauDecayProduct && !fromHardProcessFinalState && !isDirectHardProcessTauDecayProductFinalState) continue;
+      if(!isLepton && !isQuark && !isPhoton && !isGluon && !isWZH && !isHeavyMeson && !isHeavyBaryon && !isBSM && !isDirectPromptTauDecayProduct && !fromHardProcessFinalState && !isDirectHardProcessTauDecayProductFinalState && !isB && !isStatus2 && !isStatus1) continue;
       
 //      nBranches_->genParticle_px    .push_back((*genParticles_)[p].px()     );
 //      nBranches_->genParticle_py    .push_back((*genParticles_)[p].py()     );
@@ -84,78 +88,6 @@ void GenParticlesNtuplizer::fillBranches( edm::Event const & event, const edm::E
         vDau.push_back( (*genParticles_)[p].daughter(d)->pdgId() );
 	      nDau++;
       }
-
-
-      if(abs((*genParticles_)[p].pdgId())==15 && (*genParticles_)[p].statusFlags().isPrompt() && (*genParticles_)[p].status()==2){
-
-        if(nDau>1){
-
-          bool flag_radioactive_gamma = false;
-          bool flag_radioactive_tau = false;
-          
-          for( unsigned int d=0; d<(*genParticles_)[p].numberOfDaughters(); ++d ){
-            Int_t taupdgId = abs((*genParticles_)[p].daughter(d)->pdgId());
-            
-            if(taupdgId==22) flag_radioactive_gamma = true;   
-            if(taupdgId==15) flag_radioactive_tau = true; 
-              
-          }
-
-          if(!(flag_radioactive_gamma && flag_radioactive_tau)){
-
-            TLorentzVector tau;
-            tau.SetPtEtaPhiM(0,0,0,0);
-            Int_t decaymode = -1;
-          
-            for( unsigned int d=0; d<(*genParticles_)[p].numberOfDaughters(); ++d ){
-              Float_t taupt = (*genParticles_)[p].daughter(d)->pt();
-              Float_t taueta = (*genParticles_)[p].daughter(d)->eta();
-              Float_t tauphi = (*genParticles_)[p].daughter(d)->phi();
-              Float_t taumass = (*genParticles_)[p].daughter(d)->mass();
-              Int_t taupdgId = abs((*genParticles_)[p].daughter(d)->pdgId());
-              
-              TLorentzVector taudau;
-              taudau.SetPtEtaPhiM(taupt, taueta, tauphi, taumass);
-              if(!(taupdgId >= 11 && taupdgId<=16)){
-	              tau += taudau;
-	              decaymode = 4;
-              }
-              if(taupdgId==11){ // electron decay
-	              decaymode = 2;
-	              tau += taudau;
-	            }
-              if(taupdgId==13){ // muon decay
-		            decaymode = 3;
-	              tau += taudau;
-	            }
-          
-            }
-
-            nBranches_->genParticle_tauvispt  .push_back( (float)tau.Pt()  );
-            nBranches_->genParticle_tauviseta  .push_back( (float)tau.Eta()  );
-            nBranches_->genParticle_tauvisphi  .push_back( (float)tau.Phi()  );
-            nBranches_->genParticle_tauvismass  .push_back( (float)tau.M()  );
-            nBranches_->genParticle_taudecay  .push_back( decaymode  );
-          }
-          else{
-            nBranches_->genParticle_tauvispt  .push_back( -99.  );
-            nBranches_->genParticle_tauviseta  .push_back( -99.  );
-            nBranches_->genParticle_tauvisphi  .push_back( -99.  );
-            nBranches_->genParticle_tauvismass  .push_back( -99.  );
-            nBranches_->genParticle_taudecay  .push_back( 0  ); // self decay (tau -> tau)
-          }
-          
-        }else{
-          nBranches_->genParticle_tauvispt  .push_back( -99.  );
-          nBranches_->genParticle_tauviseta  .push_back( -99.  );
-          nBranches_->genParticle_tauvisphi  .push_back( -99.  );
-          nBranches_->genParticle_tauvismass  .push_back( -99.  );
-          
-          nBranches_->genParticle_taudecay  .push_back( -1  ); // self decay (tau -> tau)
-          
-        }
-      }
-      
 
       for( unsigned int m=0; m<(*genParticles_)[p].numberOfMothers(); ++m ){
         vMoth.push_back( (*genParticles_)[p].mother(m)->pdgId() );

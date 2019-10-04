@@ -14,6 +14,7 @@
 #include "JetMETCorrections/Modules/interface/JetResolution.h"
 #include <CondFormats/JetMETObjects/interface/JetResolutionObject.h>
 
+#include "DataFormats/BeamSpot/interface/BeamSpot.h"
 
 // for vertexing
 #include "PhysicsTools/PatUtils/interface/TriggerHelper.h"
@@ -41,17 +42,43 @@
 #include "TrackingTools/TransientTrack/interface/TransientTrack.h"             
 #include "TrackingTools/TransientTrack/interface/TransientTrackBuilder.h"
 #include "TrackingTools/Records/interface/TransientTrackRecord.h"
-#include "TrackingTools/IPTools/interface/IPTools.h"
+#include "TrackingTools/GeomPropagators/interface/AnalyticalImpactPointExtrapolator.h"
+#include "TrackingTools/PatternTools/interface/TwoTrackMinimumDistance.h"
+#include "TrackingTools/PatternTools/interface/TransverseImpactPointExtrapolator.h"
+#include "TrackingTools/PatternTools/interface/ClosestApproachInRPhi.h"
+#include "MagneticField/Engine/interface/MagneticField.h"
+#include "MagneticField/Records/interface/IdealMagneticFieldRecord.h"
 
-#include "RecoVertex/VertexTools/interface/VertexDistance3D.h"
+#include "RecoVertex/KinematicFit/interface/KinematicParticleFitter.h"
+#include "RecoVertex/KinematicFit/interface/KinematicParticleVertexFitter.h"
+#include "RecoVertex/KinematicFit/interface/KinematicConstrainedVertexFitter.h"
+#include "RecoVertex/KinematicFit/interface/MassKinematicConstraint.h"
+#include "RecoVertex/KinematicFit/interface/MultiTrackMassKinematicConstraint.h"
+#include "RecoVertex/KinematicFitPrimitives/interface/KinematicParticleFactoryFromTransientTrack.h"
 #include "RecoVertex/VertexTools/interface/VertexDistanceXY.h"
-#include "RecoVertex/PrimaryVertexProducer/interface/VertexHigherPtSquared.h"
-#include "RecoVertex/KalmanVertexFit/interface/KalmanVertexFitter.h"
-#include "RecoBTag/SecondaryVertex/interface/SecondaryVertex.h"
-
+#include "RecoVertex/VertexTools/interface/VertexDistance3D.h"
+#include "RecoVertex/VertexPrimitives/interface/ConvertToFromReco.h"
+#include "RecoVertex/AdaptiveVertexFit/interface/AdaptiveVertexFitter.h"
 #include "RecoVertex/VertexPrimitives/interface/TransientVertex.h"
 #include "RecoVertex/KalmanVertexFit/interface/KalmanVertexFitter.h"
-#include "RecoVertex/AdaptiveVertexFit/interface/AdaptiveVertexFitter.h"
+
+#include "RecoVertex/PrimaryVertexProducer/interface/VertexHigherPtSquared.h"
+#include "RecoBTag/SecondaryVertex/interface/SecondaryVertex.h"
+#include "RecoVertex/KinematicFitPrimitives/interface/RefCountedKinematicTree.h"
+
+
+
+// kinematic fit package
+#include "DataFormats/TrackReco/interface/Track.h"
+#include "DataFormats/TrackReco/interface/TrackFwd.h"
+#include "FWCore/Framework/interface/MakerMacros.h"
+
+#include "RecoVertex/KinematicFitPrimitives/interface/ParticleMass.h"
+#include "RecoVertex/KinematicFitPrimitives/interface/MultiTrackKinematicConstraint.h"
+#include "RecoVertex/KinematicFit/interface/TwoTrackMassKinematicConstraint.h"
+
+
+#include "CommonTools/Statistics/interface/ChiSquaredProbability.h"
 
 
 
@@ -64,52 +91,107 @@
 #include <algorithm> 
 #include <stdio.h>
 #include <stdlib.h>
+#include <vector>
 #include <map>
-//IN CASE THERE'S ONE LIBRARY MISSING OR SOMETHING
 
+struct particle_cand 
+{
 
-class JpsiMuNtuplizer : public CandidateNtuplizer {
-// ----------------------------------------------------------------------
+  // Longitudinal impact parameter and its significance
+  Float_t lip;
+  Float_t lips;
+  
+  // Impact parameter for the PV and its significance
+  Float_t pvip;
+  Float_t pvips;
 
-struct track_entry_t {
-  track_entry_t(int ix, int pid, bool mfit) : trackIx(ix), particleID(pid), massFit(mfit) {}
-  int trackIx;
-  int particleID;
-  bool massFit;
+  // Flight length and its significance
+  Float_t fl3d;
+  Float_t fls3d;
+  
+  // opening angle
+  Float_t alpha;
+
 };
 
 
+
+class JpsiMuNtuplizer : public CandidateNtuplizer {
+
+
  public:
- typedef std::set<track_entry_t>::iterator HFDecayTreeTrackIterator;
- JpsiMuNtuplizer( edm::EDGetTokenT<pat::MuonCollection>    muonToken   , 
-		  edm::EDGetTokenT<reco::VertexCollection> verticeToken, 
-		  edm::EDGetTokenT<pat::PackedCandidateCollection> packedpfcandidatesToken,
-		  NtupleBranches* nBranches );
+  JpsiMuNtuplizer( edm::EDGetTokenT<pat::MuonCollection>    muonToken   , 
+		   edm::EDGetTokenT<reco::VertexCollection> verticeToken, 
+		   edm::EDGetTokenT<reco::BeamSpot> bsToken, 
+		   edm::EDGetTokenT<pat::PackedCandidateCollection> packedpfcandidatesToken,
+		   edm::EDGetTokenT<pat::PackedCandidateCollection> losttrackToken,
+		   edm::EDGetTokenT<edm::TriggerResults> triggertoken,
+		   edm::EDGetTokenT<pat::TriggerObjectStandAloneCollection> triggerobject,
+		   edm::EDGetTokenT<reco::GenParticleCollection> genptoken, 
+		   std::map< std::string, bool >& runFlags,
+		   NtupleBranches* nBranches );
+
   ~JpsiMuNtuplizer( void );
-  std::tuple<Float_t, Float_t> vertexProb(const std::vector<reco::TransientTrack> &tracks);
-  void getAllTracks(std::vector<track_entry_t> *out_vector, int onlyThisVertex);
+
+  std::tuple<Float_t, TransientVertex> vertexProb( const std::vector<reco::TransientTrack>& tracks);
+
+  particle_cand calculateIPvariables(AnalyticalImpactPointExtrapolator extrapolator,
+				     RefCountedKinematicParticle particle,
+				     RefCountedKinematicVertex vertex,
+				     reco::Vertex wrtVertex);
+  
+  std::pair<bool, Measurement1D> absoluteImpactParameter(const TrajectoryStateOnSurface& tsos,
+							 RefCountedKinematicVertex vertex,
+							 VertexDistance& distanceComputer);
 
 
+  float MuonPFIso(pat::Muon muon);
+  double isoTrack(double docaCut, double r, double pmin);
   void fillBranches( edm::Event const & event, const edm::EventSetup& iSetup );
+  Float_t getMaxDoca(std::vector<RefCountedKinematicParticle> &kinParticles);
+  Float_t getMinDoca(std::vector<RefCountedKinematicParticle> &kinParticles);
+  TVector3 getVertex(const reco::GenParticle& part);
+
+  void printout(const RefCountedKinematicVertex& myVertex);
+  void printout(const RefCountedKinematicParticle& myParticle);
+  void printout(const RefCountedKinematicTree& myTree);
   
 private:
    edm::EDGetTokenT<pat::MuonCollection>    muonToken_   ;
    edm::EDGetTokenT<reco::VertexCollection> verticeToken_   ;
-
-   //   edm::Handle<pat::JetCollection>      		       jets_		       ;
-
-   edm::Handle< reco::VertexCollection >  vertices_;
-   edm::Handle<pat::MuonCollection>      		       muons_		       ;
+   edm::EDGetTokenT<reco::BeamSpot> bsToken_   ;
    edm::EDGetTokenT<pat::PackedCandidateCollection>   		packedpfcandidatesToken_;
+   edm::EDGetTokenT<pat::PackedCandidateCollection>   		losttrackToken_;
+   edm::EDGetTokenT<edm::TriggerResults> 		     HLTtriggersToken_;
+   edm::EDGetTokenT<pat::TriggerObjectStandAloneCollection>  triggerObjects_;
+   edm::EDGetTokenT<reco::GenParticleCollection> genParticlesToken_;
 
+   edm::Handle<pat::MuonCollection>      		       muons_		       ;
+   edm::Handle< reco::VertexCollection >  vertices_;
+   edm::Handle< reco::BeamSpot >  beamspot_;
    edm::Handle< std::vector<pat::PackedCandidate> > packedpfcandidates_   ;
+   edm::Handle< std::vector<pat::PackedCandidate> > losttrack_   ;
+   edm::Handle< edm::TriggerResults> 			     HLTtriggers_;
+   edm::Handle<pat::TriggerObjectStandAloneCollection>	     triggerObjects;
+   edm::Handle< reco::GenParticleCollection >  genParticles_;
 
    edm::ESHandle<TransientTrackBuilder> builder;
-   AdaptiveVertexFitter avf;
 
-   //BS part
-   std::set<track_entry_t> fTrackIndices; // added tracks
-   std::vector<HFDecayTreeTrackIterator> fSubVertices;
+   const MagneticField                 *fMagneticField;
+
+   ParticleMass muon_mass = 0.1056583;
+   ParticleMass jpsi_mass = 3.09687;
+   float muon_sigma = 0.0000001;
+   float jp_m_sigma = 0.00004;
+   float chi = 0.;
+   float ndf = 0.;
+
+   bool runOnMC_;   
+   
 };
 
+
+
+
 #endif // JpsiMuNtuplizer_H
+
