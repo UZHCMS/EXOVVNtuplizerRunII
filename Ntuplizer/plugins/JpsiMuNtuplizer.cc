@@ -6,6 +6,7 @@ JpsiMuNtuplizer::JpsiMuNtuplizer( edm::EDGetTokenT<pat::MuonCollection>    muonT
 				  edm::EDGetTokenT<reco::VertexCollection> verticeToken, 
 				  edm::EDGetTokenT<reco::BeamSpot> bsToken,
 				  edm::EDGetTokenT<pat::PackedCandidateCollection> packedpfcandidatesToken,
+				  edm::EDGetTokenT<pat::PackedCandidateCollection> losttrackToken,
 				  edm::EDGetTokenT<edm::TriggerResults> triggertoken,
 				  edm::EDGetTokenT<pat::TriggerObjectStandAloneCollection> triggerobject,
 				  edm::EDGetTokenT<reco::GenParticleCollection> genptoken,
@@ -16,6 +17,7 @@ JpsiMuNtuplizer::JpsiMuNtuplizer( edm::EDGetTokenT<pat::MuonCollection>    muonT
   , verticeToken_          ( verticeToken )
   , bsToken_          ( bsToken )
   , packedpfcandidatesToken_(packedpfcandidatesToken) 
+  , losttrackToken_(losttrackToken) 
   , HLTtriggersToken_	( triggertoken )
   , triggerObjects_	( triggerobject )
   , genParticlesToken_( genptoken )
@@ -219,6 +221,23 @@ std::tuple<Float_t, TransientVertex> JpsiMuNtuplizer::vertexProb( const std::vec
     return std::forward_as_tuple(-9, vertex);
 
   }
+}
+
+
+//adapt absoluteImpactParameter functionality for RefCountedKinematicVertex
+std::pair<bool, Measurement1D> JpsiMuNtuplizer::absoluteImpactParameter(const TrajectoryStateOnSurface& tsos,
+						       RefCountedKinematicVertex vertex,
+						       VertexDistance& distanceComputer){
+  if (!tsos.isValid()) {
+    return std::pair<bool, Measurement1D>(false, Measurement1D(0., 0.));
+  }
+  GlobalPoint refPoint = tsos.globalPosition();
+  GlobalError refPointErr = tsos.cartesianError().position();
+  GlobalPoint vertexPosition = vertex->vertexState().position();
+  GlobalError vertexPositionErr = RecoVertex::convertError(vertex->vertexState().error());
+  return std::pair<bool, Measurement1D>(
+				   true,
+				   distanceComputer.distance(VertexState(vertexPosition, vertexPositionErr), VertexState(refPoint, refPointErr)));
 }
 
 
@@ -552,9 +571,11 @@ void JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
 
   Float_t max_criteria = 999;
   reco::Vertex closestVertex; 
+  int counter = 0;
 
   for( reco::VertexCollection::const_iterator vtx = vertices_->begin(); vtx != vertices_->end(); ++vtx){
-    
+
+    //    std::cout << "vtx:" << vtx->position().z() << std::endl;
     //    bool isFake = (vtx->chi2()==0 && vtx->ndof()==0);
     
 //    if(
@@ -562,6 +583,7 @@ void JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
 //       ) continue;
     
 
+    
     particle_cand cand = calculateIPvariables(extrapolator, jpsi_part, jpsi_vertex, *vtx);
 
     
@@ -571,6 +593,8 @@ void JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
       //      max_criteria = TMath::Abs(cand.pvip);
       closestVertex = *vtx;
     }
+
+    counter += 1;
   }
 
 
@@ -615,21 +639,31 @@ void JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
    ********************************************************************/
 
   event.getByToken( packedpfcandidatesToken_               , packedpfcandidates_      ); 
-  std::vector<pat::PackedCandidate> pfcollection; 
+  event.getByToken( losttrackToken_               , losttrack_      ); 
+
+  std::vector<pat::PackedCandidate> mypfcollection; 
   std::vector<reco::TransientTrack> mytracks;
 
-  int counter = 0;
   for( size_t ii = 0; ii < packedpfcandidates_->size(); ++ii ){   
     
     pat::PackedCandidate pf = (*packedpfcandidates_)[ii];
     
     //    if(pf.pt() < 0.5) continue;
     
+    //    std::cout << pf.pdgId() << std::endl;
     if(!pf.hasTrackDetails()) continue;
+    //    std::cout << "\t -> passed" << std::endl;
 
+//    bool ismatch = false;
+//    for( reco::VertexCollection::const_iterator vtx = vertices_->begin(); vtx != vertices_->end(); ++vtx){
+//      //      std::cout << counter << " " << vtx->position().z() << std::endl;
+//      if(pf.vertexRef()->z()==vtx->position().z()) ismatch = true;
+//    }
+//
+//    if(!ismatch) std::cout << "This does not belong any PV !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << std::endl;
+
+//    std::cout << pf.vertexRef()->z() << " " << closestVertex.position().z() << std::endl;
     if(pf.vertexRef()->z()!=closestVertex.position().z()) continue;
-
-    counter+=1;
 
     Float_t _dR1 = reco::deltaR(pf.eta(), pf.phi(), 
 				track1_muon->eta(), track1_muon->phi());
@@ -661,12 +695,12 @@ void JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
     //    if(pf.pseudoTrack().normalizedChi2() > 100) continue;
     
     //    if(TMath::Abs(pf.pdgId())==211 && TMath::Abs(pf.eta()) < 2.3){
-    //      pfcollection.push_back(pf);
+    if(pf.pt() > 0.5) mypfcollection.push_back(pf);
     //    }
   }
 
 
-  std::cout << counter << " " << mytracks.size() << std::endl;
+
   TransientVertex myVertex; 
   
   if( mytracks.size()>1 ){
@@ -678,6 +712,25 @@ void JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
 
   }
   
+
+
+
+
+
+
+
+//  for( size_t ii = 0; ii < losttrack_->size(); ++ii ){   
+//    
+//    pat::PackedCandidate pf = (*losttrack_)[ii];
+//    
+//    //    if(pf.pt() < 0.5) continue;
+//    
+//    if(!pf.hasTrackDetails()) continue;
+//
+//    std::cout << "lost track" << pf.vertexRef()->z() << " " << closestVertex.position().z() << std::endl;
+//    if(pf.vertexRef()->z()!=closestVertex.position().z()) continue;
+//
+//  }
 
 
 
@@ -708,9 +761,11 @@ void JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
   particle_cand Bcand;
 
   if(myVertex.isValid()){
+    //    std::cout << "refittex vertex available" << std::endl;
     JPcand = calculateIPvariables(extrapolator, jpsi_part, jpsi_vertex, myVertex);
     Bcand = calculateIPvariables(extrapolator, bc_part, bc_vertex, myVertex);
   }else{
+    //    std::cout << "no refittex vertex available" << std::endl;
     JPcand = calculateIPvariables(extrapolator, jpsi_part, jpsi_vertex, closestVertex);
     Bcand = calculateIPvariables(extrapolator, bc_part, bc_vertex, closestVertex);
   }
@@ -724,7 +779,7 @@ void JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
 
   /********************************************************************
    *
-   * Step8: Filling branches
+   * Step8: calculation of the isolation quantities
    *
    ********************************************************************/
 
@@ -744,18 +799,56 @@ void JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
   std::tie(vprob_bc, vertex_bc) = vertexProb(transient_tracks_trimuon);
 
 
-
-  Float_t iso_pt03 =0.;
-
-  for(int kkk = 0; kkk < (int)pfcollection.size(); kkk ++){
-	  
-    pat::PackedCandidate _pf = pfcollection[kkk];
-
-    Float_t _dR = reco::deltaR(_pf.eta(), _pf.phi(),
+  Float_t iso = 0;
+  Float_t iso_mu1 = 0;
+  Float_t iso_mu2 = 0;
+  Float_t iso_mu3 = 0;
+  Int_t ntracks = 0;
+  Float_t iso_mindoca = 999; 
+  
+  
+  for(size_t itrk = 0; itrk < mypfcollection.size();  itrk++){
+    
+    Float_t _dR = reco::deltaR(mypfcollection[itrk].eta(), mypfcollection[itrk].phi(),
 			       bc_part->currentState().globalMomentum().eta(), bc_part->currentState().globalMomentum().phi());
 
+    if(_dR < 0.7) iso += mypfcollection[itrk].pt();
 
-    if(_dR < 0.3)  iso_pt03 += _pf.pt();
+    Float_t _dR1 = reco::deltaR(mypfcollection[itrk].eta(), mypfcollection[itrk].phi(),
+				muoncollection[mcidx_mu1].eta(), muoncollection[mcidx_mu1].phi());
+
+    if(_dR1 < 0.7) iso_mu1 += mypfcollection[itrk].pt();
+
+    Float_t _dR2 = reco::deltaR(mypfcollection[itrk].eta(), mypfcollection[itrk].phi(),
+				muoncollection[mcidx_mu2].eta(), muoncollection[mcidx_mu2].phi());
+
+    if(_dR2 < 0.7) iso_mu2 += mypfcollection[itrk].pt();
+
+    Float_t _dR3 = reco::deltaR(mypfcollection[itrk].eta(), mypfcollection[itrk].phi(),
+				mu3.eta(), mu3.phi());
+
+    if(_dR3 < 0.7) iso_mu3 += mypfcollection[itrk].pt();
+
+
+    //    TrajectoryStateOnSurface tsos = extrapolator.extrapolate(mytracks[itrk].impactPointState());
+    TrajectoryStateOnSurface tsos_pf = extrapolator.extrapolate(mytracks[itrk].impactPointState(), bc_vertex->position());
+
+    
+    //    TrajectoryStateOnSurface tsos = extrapolator.extrapolate(particle->currentState().freeTrajectoryState(),
+    //							     RecoVertex::convertPos(wrtVertex.position()));
+    
+
+    VertexDistance3D a3d_pf;  
+    // use own function here ... 
+    std::pair<bool,Measurement1D> cur3DIP_pf = JpsiMuNtuplizer::absoluteImpactParameter(tsos_pf, bc_vertex, a3d_pf);
+    
+    Float_t pvip_pf = cur3DIP_pf.second.value();
+
+    //    std::cout << itrk << ": Distance of closest apporach to the bc vertex = " << pvip << std::endl;
+    
+    if(pvip_pf < 0.03) ntracks+=1;
+
+    if(iso_mindoca > pvip_pf) iso_mindoca = pvip_pf;
   }
 
 //	nBranches_->Jpsi_mu3_isopt03.push_back(iso_pt03);
@@ -770,6 +863,11 @@ void JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
 
 
 
+  /********************************************************************
+   *
+   * Step9: Filling normal branches
+   *
+   ********************************************************************/
 
   nBranches_->Jpsi_mu1_isLoose.push_back(muoncollection[mcidx_mu1].isLooseMuon());
   nBranches_->Jpsi_mu1_isTight.push_back(muoncollection[mcidx_mu1].isTightMuon(closestVertex));
@@ -784,6 +882,7 @@ void JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
   nBranches_->Jpsi_mu1_vx.push_back(muoncollection[mcidx_mu1].vx());
   nBranches_->Jpsi_mu1_vy.push_back(muoncollection[mcidx_mu1].vy());
   nBranches_->Jpsi_mu1_vz.push_back(muoncollection[mcidx_mu1].vz());
+  nBranches_->Jpsi_mu1_iso.push_back(iso_mu1);
   nBranches_->Jpsi_mu1_dbiso.push_back(MuonPFIso(muoncollection[mcidx_mu1]));
 
   
@@ -800,6 +899,7 @@ void JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
   nBranches_->Jpsi_mu2_vx.push_back(muoncollection[mcidx_mu2].vx());
   nBranches_->Jpsi_mu2_vy.push_back(muoncollection[mcidx_mu2].vy());
   nBranches_->Jpsi_mu2_vz.push_back(muoncollection[mcidx_mu2].vz());
+  nBranches_->Jpsi_mu2_iso.push_back(iso_mu2);
   nBranches_->Jpsi_mu2_dbiso.push_back(MuonPFIso(muoncollection[mcidx_mu2]));
 
   nBranches_->Jpsi_mu3_isLoose.push_back(mu3.isLooseMuon());
@@ -815,6 +915,7 @@ void JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
   nBranches_->Jpsi_mu3_vx.push_back(mu3.vx());
   nBranches_->Jpsi_mu3_vy.push_back(mu3.vy());
   nBranches_->Jpsi_mu3_vz.push_back(mu3.vz());
+  nBranches_->Jpsi_mu3_iso.push_back(iso_mu3);
   nBranches_->Jpsi_mu3_dbiso.push_back(MuonPFIso(mu3));
 
   nBranches_->Jpsi_PV_vx.push_back(vertices_->begin()->position().x());
@@ -888,7 +989,9 @@ void JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
   nBranches_->Jpsi_trimu_vy.push_back(bc_vertex->vertexState().position().y());
   nBranches_->Jpsi_trimu_vz.push_back(bc_vertex->vertexState().position().z());  
 
-  nBranches_->Jpsi_trimu_iso_pt03.push_back(iso_pt03);
+  nBranches_->Jpsi_trimu_iso.push_back(iso);
+  nBranches_->Jpsi_trimu_iso_ntracks.push_back(ntracks);
+  nBranches_->Jpsi_trimu_iso_mindoca.push_back(iso_mindoca);
 
 
   nBranches_->Jpsi_trimu_unfitpt.push_back(tlv_B.Pt());
@@ -903,6 +1006,12 @@ void JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
 
 
 
+
+  /********************************************************************
+   *
+   * Step10: check gen-matching and fill them
+   *
+   ********************************************************************/
 
   bool isMC = runOnMC_;
   

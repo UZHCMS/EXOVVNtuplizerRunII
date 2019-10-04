@@ -124,6 +124,7 @@ class JpsiMuNtuplizer : public CandidateNtuplizer {
 		   edm::EDGetTokenT<reco::VertexCollection> verticeToken, 
 		   edm::EDGetTokenT<reco::BeamSpot> bsToken, 
 		   edm::EDGetTokenT<pat::PackedCandidateCollection> packedpfcandidatesToken,
+		   edm::EDGetTokenT<pat::PackedCandidateCollection> losttrackToken,
 		   edm::EDGetTokenT<edm::TriggerResults> triggertoken,
 		   edm::EDGetTokenT<pat::TriggerObjectStandAloneCollection> triggerobject,
 		   edm::EDGetTokenT<reco::GenParticleCollection> genptoken, 
@@ -138,6 +139,10 @@ class JpsiMuNtuplizer : public CandidateNtuplizer {
 				     RefCountedKinematicParticle particle,
 				     RefCountedKinematicVertex vertex,
 				     reco::Vertex wrtVertex);
+  
+  std::pair<bool, Measurement1D> absoluteImpactParameter(const TrajectoryStateOnSurface& tsos,
+							 RefCountedKinematicVertex vertex,
+							 VertexDistance& distanceComputer);
 
 
   float MuonPFIso(pat::Muon muon);
@@ -156,6 +161,7 @@ private:
    edm::EDGetTokenT<reco::VertexCollection> verticeToken_   ;
    edm::EDGetTokenT<reco::BeamSpot> bsToken_   ;
    edm::EDGetTokenT<pat::PackedCandidateCollection>   		packedpfcandidatesToken_;
+   edm::EDGetTokenT<pat::PackedCandidateCollection>   		losttrackToken_;
    edm::EDGetTokenT<edm::TriggerResults> 		     HLTtriggersToken_;
    edm::EDGetTokenT<pat::TriggerObjectStandAloneCollection>  triggerObjects_;
    edm::EDGetTokenT<reco::GenParticleCollection> genParticlesToken_;
@@ -164,6 +170,7 @@ private:
    edm::Handle< reco::VertexCollection >  vertices_;
    edm::Handle< reco::BeamSpot >  beamspot_;
    edm::Handle< std::vector<pat::PackedCandidate> > packedpfcandidates_   ;
+   edm::Handle< std::vector<pat::PackedCandidate> > losttrack_   ;
    edm::Handle< edm::TriggerResults> 			     HLTtriggers_;
    edm::Handle<pat::TriggerObjectStandAloneCollection>	     triggerObjects;
    edm::Handle< reco::GenParticleCollection >  genParticles_;

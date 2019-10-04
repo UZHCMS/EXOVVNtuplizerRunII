@@ -210,6 +210,7 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch("Jpsi_mu1_vx"   , &Jpsi_mu1_vx    );
     tree_->Branch("Jpsi_mu1_vy"   , &Jpsi_mu1_vy    );
     tree_->Branch("Jpsi_mu1_vz"   , &Jpsi_mu1_vz    );
+    tree_->Branch("Jpsi_mu1_iso"   , &Jpsi_mu1_iso    );
     tree_->Branch("Jpsi_mu1_dbiso"   , &Jpsi_mu1_dbiso    );
 
 
@@ -228,6 +229,7 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch("Jpsi_mu2_vx"   , &Jpsi_mu2_vx    );
     tree_->Branch("Jpsi_mu2_vy"   , &Jpsi_mu2_vy    );
     tree_->Branch("Jpsi_mu2_vz"   , &Jpsi_mu2_vz    );
+    tree_->Branch("Jpsi_mu2_iso"   , &Jpsi_mu2_iso    );
     tree_->Branch("Jpsi_mu2_dbiso"   , &Jpsi_mu2_dbiso    );
 
 
@@ -244,6 +246,7 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch("Jpsi_mu3_vx"   , &Jpsi_mu3_vx    );
     tree_->Branch("Jpsi_mu3_vy"   , &Jpsi_mu3_vy    );
     tree_->Branch("Jpsi_mu3_vz"   , &Jpsi_mu3_vz    );
+    tree_->Branch("Jpsi_mu3_iso"   , &Jpsi_mu3_iso    );
     tree_->Branch("Jpsi_mu3_dbiso"   , &Jpsi_mu3_dbiso    );
 
     tree_->Branch("Jpsi_PV_vx", &Jpsi_PV_vx );
@@ -304,7 +307,9 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch("Jpsi_trimu_vx", &Jpsi_trimu_vx );
     tree_->Branch("Jpsi_trimu_vy", &Jpsi_trimu_vy );
     tree_->Branch("Jpsi_trimu_vz", &Jpsi_trimu_vz );
-    tree_->Branch("Jpsi_trimu_iso_pt03", &Jpsi_trimu_iso_pt03 );
+    tree_->Branch("Jpsi_trimu_iso", &Jpsi_trimu_iso);
+    tree_->Branch("Jpsi_trimu_iso_ntracks", &Jpsi_trimu_iso_ntracks );
+    tree_->Branch("Jpsi_trimu_iso_mindoca", &Jpsi_trimu_iso_mindoca );
     tree_->Branch("Jpsi_trimu_unfitpt", &Jpsi_trimu_unfitpt );
     tree_->Branch("Jpsi_trimu_unfitmass", &Jpsi_trimu_unfitmass );
     tree_->Branch("Jpsi_trimu_unfitvprob", &Jpsi_trimu_unfitvprob );
@@ -485,8 +490,8 @@ void NtupleBranches::reset( void ){
   Jpsi_mu1_vx.clear();
   Jpsi_mu1_vy.clear();
   Jpsi_mu1_vz.clear();
+  Jpsi_mu1_iso.clear();
   Jpsi_mu1_dbiso.clear();
-
 
   Jpsi_mu2_pt.clear();
   Jpsi_mu2_eta.clear();
@@ -501,6 +506,7 @@ void NtupleBranches::reset( void ){
   Jpsi_mu2_vx.clear();
   Jpsi_mu2_vy.clear();
   Jpsi_mu2_vz.clear();
+  Jpsi_mu2_iso.clear();
   Jpsi_mu2_dbiso.clear();
 
   Jpsi_mu3_pt.clear();
@@ -516,6 +522,7 @@ void NtupleBranches::reset( void ){
   Jpsi_mu3_vx.clear();
   Jpsi_mu3_vy.clear();
   Jpsi_mu3_vz.clear();
+  Jpsi_mu3_iso.clear();
   Jpsi_mu3_dbiso.clear();
 
   Jpsi_pt.clear();
@@ -559,7 +566,9 @@ void NtupleBranches::reset( void ){
   Jpsi_trimu_vx.clear();
   Jpsi_trimu_vy.clear();
   Jpsi_trimu_vz.clear();
-  Jpsi_trimu_iso_pt03.clear();
+  Jpsi_trimu_iso.clear();
+  Jpsi_trimu_iso_ntracks.clear();
+  Jpsi_trimu_iso_mindoca.clear();
   Jpsi_trimu_unfitpt.clear();
   Jpsi_trimu_unfitmass.clear();
   Jpsi_trimu_unfitvprob.clear();

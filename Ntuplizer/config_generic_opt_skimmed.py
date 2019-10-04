@@ -454,7 +454,8 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     # summary
     noiseFilterSelection_metFilters = cms.string('Flag_METFilters'),
 
-    packedpfcandidates = cms.InputTag('packedPFCandidates')
+    packedpfcandidates = cms.InputTag('packedPFCandidates'),
+    losttrack = cms.InputTag('lostTracks')
 )
 
 process.load('RecoMET.METFilters.ecalBadCalibFilter_cfi')
