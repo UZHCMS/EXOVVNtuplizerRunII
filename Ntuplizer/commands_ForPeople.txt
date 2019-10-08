@@ -1,7 +1,7 @@
 
 For everybody:
 
-change in submit_all.py in the output dir "cgalloni" with your username
+change in submit_all_opt.py in the output dir "cgalloni" with your username
  
 cmsenv 
 source /cvmfs/cms.cern.ch/crab3/crab.sh

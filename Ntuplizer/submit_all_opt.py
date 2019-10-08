@@ -20,7 +20,7 @@ def getOptions() :
         help=("The crab directory you want to use "),
         metavar="DIR")
     parser.add_option("-f", "--datasets", dest="datasets",
-        help=("File listing datasets to run over"),
+        help=("txt file listing datasets to run over"),
         metavar="FILE")
     parser.add_option("-l", "--luminosity", dest="luminosity",
         help=("Splitting job by lumi sections or by files"),
@@ -42,12 +42,10 @@ def getOptions() :
         parser.error(usage)
     if options.luminosity == None:
         options.luminosity = False
-    else:
-        options.luminosity = True
+   
     if options.isData == None:
         options.isData = False
-    else:
-        options.isData = True
+   
 
 
 
@@ -98,17 +96,18 @@ def main():
     else:
         config.Data.splitting = 'FileBased'
         config.Data.unitsPerJob = 1
-    #config.Data.ignoreLocality = True
+   
     config.Data.publication = False
     #config.Data.outLFNDirBase = '/store/user/cgalloni/Ntuple_2017_94v2_preliminary'
-    config.Data.outLFNDirBase = '/store/user/cgalloni/Ntuple_Pablo_v2'
+    config.Data.outLFNDirBase = '/store/user/cgalloni/Ntuple_BPH'
     #config.Data.outLFNDirBase = '/pnfs/psi.ch/cms/trivcat/store/t3groups/uniz-higgs/Fall17'
 
     config.section_("Site")
-    #config.Site.storageSite = 'T2_CH_CSCS'
-    config.Site.storageSite = 'T3_CH_PSI'
+    config.Site.storageSite = 'T2_CH_CSCS' 
+    config.Data.ignoreLocality = True
+    #config.Site.storageSite = 'T3_CH_PSI'
     #config.Site.blacklist=['T1_US_FNAL','T2_US_Wisconsin','T2_FR_IPHC','T2_EE_Estonia','T2_DE_RWTH','T2_KR_KNU','T2_KR_KISTI','T2_BR_SPRACE']
-    #config.Site.whitelist=['T2_US_Nebraska','T2_US_Purdue','T2_CH_CSCS', 'T2_CH_CERN', 'T2_IT_Pisa','T2_US_MIT', 'T2_US_Florida', 'T2_US_UCSD', 'T2_IT_Bari','T2_IT_Legnaro']
+    config.Site.whitelist=['T2_US_Nebraska','T2_US_Purdue','T2_CH_CSCS','T2_US_Wisconsin', 'T2_CH_CERN', 'T2_IT_Pisa','T2_US_MIT', 'T2_US_Florida', 'T2_US_UCSD', 'T2_IT_Bari','T2_IT_Legnaro']
     print 'Using config ' + options.config
     print 'Writing to directory ' + options.dir
 
@@ -174,7 +173,7 @@ def main():
         try :
             from multiprocessing import Process
             p = Process(target=submit, args=(config,))
-            p.start() ## comment this out just to print the configuration that will be sent to crab
+            #p.start() ## comment this out just to print the configuration that will be sent to crab
             #p.join()
             ## submit(config)
         except :
