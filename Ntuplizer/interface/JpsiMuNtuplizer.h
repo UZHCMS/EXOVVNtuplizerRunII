@@ -187,6 +187,7 @@ private:
    float ndf = 0.;
 
    bool runOnMC_;   
+   bool doCutFlow_;
    
 };
 

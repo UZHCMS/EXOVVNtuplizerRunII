@@ -28,7 +28,7 @@ config["DOMVAMET"] = False
 config["DOJPSIMU"] = True
 config["DOJPSIELE"] = False
 config["DOGENHIST"] = (True and config["RUNONMC"]);
-config["DOCUTFLOW"] = False;
+config["DOCUTFLOW"] = True;
 
 
 #--------- MET reclustering ----------#

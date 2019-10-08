@@ -22,6 +22,7 @@ JpsiMuNtuplizer::JpsiMuNtuplizer( edm::EDGetTokenT<pat::MuonCollection>    muonT
     , triggerObjects_	( triggerobject )
     , genParticlesToken_( genptoken )
     , runOnMC_   (runFlags["runOnMC"])
+    , doCutFlow_ (runFlags["doCutFlow"])
    
 {
 }
@@ -347,10 +348,6 @@ void JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
         }
     }
 
-    if(!isTriggered) return;
-
-    //  std::cout << "finalTriggerName = "  << finalTriggerName << std::endl;
-
 
 
     /********************************************************************
@@ -370,6 +367,40 @@ void JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
     muoncollection.clear();
     muoncollection_id.clear();
 
+    // bools keeping track of muon 1 or 2 for cutflow purposes
+    bool mu1passpteta = false;
+    bool mu2passpteta = false;
+    bool mu3passpteta = false;
+    bool mu1passtrigmatch = false;
+    bool mu2passtrigmatch = false;
+ // Precut
+    if( doCutFlow_) {
+       nBranches_->cutflow_perevt->Fill(0);
+      
+       for(size_t imuon = 0; imuon < muons_->size(); ++ imuon){
+
+           const pat::Muon & muon = (*muons_)[imuon];
+           // right now we're just checking that there are at least two muons passing our kinematic cuts
+           // so we don't care if there are more than two muons that pass right now
+           if(mu2passpteta) continue;
+           if(muon.pt() < 4) continue;
+           if(TMath::Abs(muon.eta()) > 2.4) continue;
+           if(!(muon.track().isNonnull())) continue;
+           // If we're on the Second muon, then the second muon is what passed 
+           if (mu1passpteta && !mu2passpteta) { mu2passpteta = true;}
+           // If we're on the First muon, then the first muon is what passed
+           if (!mu1passpteta) {mu1passpteta = true;}
+           }
+
+       if (mu1passpteta) {nBranches_->cutflow_perevt->Fill(1);}
+       if (mu2passpteta) {nBranches_->cutflow_perevt->Fill(2);}
+    }
+    if(!isTriggered) return;
+ // evt Triggered
+    if( doCutFlow_) {
+       nBranches_->cutflow_perevt->Fill(3);
+      }
+//Now time to begin the cutflow in earnest
     for(size_t imuon = 0; imuon < muons_->size(); ++ imuon){
 
         const pat::Muon & muon = (*muons_)[imuon];
@@ -377,7 +408,6 @@ void JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
         if(muon.pt() < 4) continue;
         if(TMath::Abs(muon.eta()) > 2.4) continue;
         if(!(muon.track().isNonnull())) continue;
-
         //    bool isSoft = muon.isSoftMuon(*firstGoodVertex);
         //    bool isGlobal = muon.isGlobalMuon();
         //    bool isTracker = muon.isTrackerMuon();
@@ -425,9 +455,16 @@ void JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
         }
 
         if(!trigMatch) continue;
-
+        // If we're on the Second muon, then the second muon is what passed 
+        if (mu1passtrigmatch && !mu2passtrigmatch) { mu2passtrigmatch = true;}
+        // If we're on the First muon, then the first muon is what passed
+        if (!mu1passtrigmatch) {mu1passtrigmatch = true;}
         muoncollection.push_back(muon);
         muoncollection_id.push_back(imuon);
+    }
+  if( doCutFlow_) {
+    if (mu1passtrigmatch) {nBranches_->cutflow_perevt->Fill(4);}
+    if (mu2passtrigmatch) {nBranches_->cutflow_perevt->Fill(5);}
     }
 
     if(!( muoncollection.size() >= 2)) return;
@@ -472,7 +509,10 @@ void JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
             if(mu1.charge() + mu2.charge() !=0) continue;
             if(jpsi_mass < 2.95) continue; // a little bit broad winder to take into account FSR ...
             if(jpsi_mass > 3.25) continue;
-
+            // Jpsi mass cut passed
+            if ( doCutFlow_) {
+               nBranches_->cutflow_perevt->Fill(6);
+               }
       
             std::vector<reco::TransientTrack> transient_tracks_dimuon;
       
@@ -547,6 +587,10 @@ void JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
 
     if(TMath::Prob(jpsi_vertex->chiSquared(), jpsi_vertex->degreesOfFreedom()) <=0) return;
 
+    // Jpsi kinematic fit passed
+    if( doCutFlow_) {
+      nBranches_->cutflow_perevt->Fill(7);
+      }
 
     /********************************************************************
      *
@@ -623,11 +667,11 @@ void JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
         if(TMath::Abs(muon.eta()) > 2.4) continue;
         if(!(muon.track().isNonnull())) continue;
         if(imuon==idx_mu1 || imuon==idx_mu2) continue;
-
+        mu3passpteta = true;
         // shall we put delta z cut here maybe? 
         max_pt3=2;
         if(muon.pt() > max_pt3){
-            // max_pt3 = muon.pt();
+          if(!doMultipleMuon3) { max_pt3 = muon.pt();}
             mu3_vec.push_back(muon);
             if (!doMultipleMuon3) break;
       
@@ -635,6 +679,10 @@ void JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
     }
 
     if(max_pt3==-1) return;
+    //mu3 passed pT and eta cut
+    if( doCutFlow_ && mu3passpteta ) {
+      nBranches_->cutflow_perevt->Fill(8);
+      }
 
     int nmuo =0;
     for( auto mu3: mu3_vec){
@@ -1110,9 +1158,11 @@ void JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
         nBranches_->Jpsi_mu3_isgenmatched.push_back((int)flag_nr_match);
 
         nBranches_->IsJpsiMu.push_back(1.);
-
-
     }
+    // B Candidate Kinematic fit passed
+    if( doCutFlow_) {
+      nBranches_->cutflow_perevt->Fill(9);
+      }
 }
 
 
