@@ -31,8 +31,9 @@ public:
   ~Ntuplizer();
   
   static void fillDescriptions(edm::ConfigurationDescriptions& descriptions);
-  
-  
+ public:
+  std::map< std::string, bool > runFlags;
+ 
 private:
   virtual void beginJob()                                                                   override;
   virtual void analyze(const edm::Event&, const edm::EventSetup&)                           override;
@@ -46,6 +47,7 @@ private:
   // ----------member data ---------------------------
   
   NtupleBranches* nBranches_;
+
   std::map<std::string,CandidateNtuplizer*>                 nTuplizers_         ;
   
   edm::EDGetTokenT<reco::BeamSpot>                          beamToken_          ;

@@ -366,7 +366,9 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     doMissingEt       = cms.bool(config["DOMISSINGET"]),
     doMETSVFIT        = cms.bool(config["DOMETSVFIT"]),
     doMVAMET          = cms.bool(config["DOMVAMET"]),
-  
+    doGenHist         = cms.bool(config["DOGENHIST"]),
+    doCutFlow         = cms.bool(config["DOCUTFLOW"]),
+
     vertices = cms.InputTag("offlineSlimmedPrimaryVertices"),
     beamSpot = cms.InputTag("offlineBeamSpot"),
     taus = cms.InputTag("slimmedTaus"),

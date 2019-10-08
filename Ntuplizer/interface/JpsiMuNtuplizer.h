@@ -2,17 +2,17 @@
 #define JpsiMuNtuplizer_H
 
 #include "../interface/CandidateNtuplizer.h"
-#include "SimDataFormats/JetMatching/interface/JetFlavourMatching.h"
-#include "SimDataFormats/JetMatching/interface/JetFlavour.h"
+//#include "SimDataFormats/JetMatching/interface/JetFlavourMatching.h"
+//#include "SimDataFormats/JetMatching/interface/JetFlavour.h"
 
 #include "DataFormats/VertexReco/interface/VertexFwd.h"
 #include "DataFormats/VertexReco/interface/Vertex.h"
-#include "DataFormats/PatCandidates/interface/Jet.h"
+//#include "DataFormats/PatCandidates/interface/Jet.h"
 #include "DataFormats/PatCandidates/interface/PackedCandidate.h"
 #include "DataFormats/Candidate/interface/Candidate.h"
 
 #include "JetMETCorrections/Modules/interface/JetResolution.h"
-#include <CondFormats/JetMETObjects/interface/JetResolutionObject.h>
+//#include <CondFormats/JetMETObjects/interface/JetResolutionObject.h>
 
 #include "DataFormats/BeamSpot/interface/BeamSpot.h"
 
@@ -32,11 +32,11 @@
 #include "DataFormats/MuonReco/interface/MuonQuality.h"
 
 #include "DataFormats/Math/interface/deltaR.h"
-#include "DataFormats/Common/interface/TriggerResults.h"
-#include "DataFormats/PatCandidates/interface/TriggerObjectStandAlone.h"
+//#include "DataFormats/Common/interface/TriggerResults.h"
+//#include "DataFormats/PatCandidates/interface/TriggerObjectStandAlone.h"
 #include "DataFormats/HepMCCandidate/interface/GenParticle.h"
 #include "DataFormats/HepMCCandidate/interface/GenParticleFwd.h"
-#include "DataFormats/PatCandidates/interface/TriggerEvent.h"
+//#include "DataFormats/PatCandidates/interface/TriggerEvent.h"
 
 #include "TrackingTools/IPTools/interface/IPTools.h"
 #include "TrackingTools/TransientTrack/interface/TransientTrack.h"             

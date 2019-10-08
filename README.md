@@ -29,6 +29,7 @@ scram b -j 8
 ```
 
 ### JETMET filters to remove noise events
+```
 cd $CMSSW_BASE/src
 git cms-addpkg RecoMET/METFilters 
 scram b -j 8

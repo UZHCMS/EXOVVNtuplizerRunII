@@ -51,11 +51,11 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
 	triggerToken_	      	    (consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("HLT"))),
 	triggerObjects_	      	    (consumes<pat::TriggerObjectStandAloneCollection>(iConfig.getParameter<edm::InputTag>("triggerobjects"))),
 	triggerPrescales_     	    (consumes<pat::PackedTriggerPrescales>(iConfig.getParameter<edm::InputTag>("triggerprescales"))),
-        noiseFilterToken_     	    (consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("noiseFilter"))),
-        HBHENoiseFilterLooseResultToken_(consumes<bool>(iConfig.getParameter<edm::InputTag>("noiseFilterSelection_HBHENoiseFilterLoose"))),
-        HBHENoiseFilterTightResultToken_(consumes<bool>(iConfig.getParameter<edm::InputTag>("noiseFilterSelection_HBHENoiseFilterTight"))),
-	HBHENoiseIsoFilterResultToken_(consumes<bool>(iConfig.getParameter<edm::InputTag>("noiseFilterSelection_HBHENoiseIsoFilter"))),
-	 ecalBadCalibFilterUpdateToken_(consumes< bool >(iConfig.getParameter<edm::InputTag>("noiseFilterSelection_ecalBadCalibReducedMINIAODFilter")))
+                                 noiseFilterToken_     	    (consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("noiseFilter"))),
+                                 HBHENoiseFilterLooseResultToken_(consumes<bool>(iConfig.getParameter<edm::InputTag>("noiseFilterSelection_HBHENoiseFilterLoose"))),
+                                 HBHENoiseFilterTightResultToken_(consumes<bool>(iConfig.getParameter<edm::InputTag>("noiseFilterSelection_HBHENoiseFilterTight"))),
+                                 HBHENoiseIsoFilterResultToken_(consumes<bool>(iConfig.getParameter<edm::InputTag>("noiseFilterSelection_HBHENoiseIsoFilter"))),
+                                 ecalBadCalibFilterUpdateToken_(consumes< bool >(iConfig.getParameter<edm::InputTag>("noiseFilterSelection_ecalBadCalibReducedMINIAODFilter")))
 
 {
 
@@ -63,8 +63,9 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
   /*=======================================================================================*/
   edm::Service<TFileService> fs;
   TTree* tree = fs->make<TTree>( "tree", "tree" );
-  
-  std::map< std::string, bool > runFlags;
+  // cutflow_perevt = fs->make<TH1F>("cutflow_perevt", "Per Event Ntuplizer Cutflow", 7, 0, 7);
+ 
+  //std::map< std::string, bool > runFlags;
   runFlags["runOnMC"] = iConfig.getParameter<bool>("runOnMC");
   runFlags["doGenParticles"] = iConfig.getParameter<bool>("doGenParticles");
   runFlags["doGenEvent"] = iConfig.getParameter<bool>("doGenEvent");
@@ -78,7 +79,8 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
   runFlags["doMVAMET"] = iConfig.getParameter<bool>("doMVAMET");
   runFlags["doJpsiMu"] = iConfig.getParameter<bool>("doJpsiMu");
   runFlags["doJpsiEle"] = iConfig.getParameter<bool>("doJpsiEle");
-
+  runFlags["doGenHist"] = iConfig.getParameter<bool>("doGenHist");
+  runFlags["doCutFlow"] = iConfig.getParameter<bool>("doCutFlow");
   
   electronToken_	      	    =consumes<edm::View<pat::Electron> >(iConfig.getParameter<edm::InputTag>("electrons"));
     // eleVetoIdMapToken_    	    =consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("eleVetoIdMap"));
@@ -95,8 +97,43 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
   jecpath = "EXOVVNtuplizerRunII/Ntuplizer/data/" + jecpath;
   //jecpath = std::string("data/") + jecpath;
   std::cout << "jecpath  "<< jecpath  <<std::endl;
+ 
   nBranches_ = new NtupleBranches( runFlags, tree );
   
+  /*=======================================================================================*/
+  /* Histogram buildinng, definition in NtupleBrances */
+  /* Histogram for cutflow */
+  if (runFlags["doCutFlow"]) {
+      nBranches_->cutflow_perevt = new TH1F("cutflow_perevt", "Per Event Ntuplizer Cutflow", 7, 0, 7);
+  }
+  
+  
+  /* Histogram for genParticles */ 
+  if (runFlags["doGenHist"]){
+      nBranches_->genParticle_Bdau_X_id=fs->make<TH1F>("genParticle_Bdau_X_id", "Identity of X in B->J/#psi+X;id;Events;", 18, 0, 18);
+      nBranches_->genParticle_Bdau_X_pt =fs->make<TH1F>("genParticle_Bdau_X_pt", "p_{T} of X in B->J/#psi+X;pt[GeV];Events;", 100, 0, 20);
+      nBranches_->genParticle_Bdau_X_eta =fs->make<TH1F>("genParticle_Bdau_X_eta", "#eta of X in B->J/#psi+X", 10, -2.4, 2.4);
+      nBranches_->genParticle_Bdau_X_phi =fs->make<TH1F>("genParticle_Bdau_X_phi", "#phi of X in B->J/#psi+X", 40, -3.2, 3.2);
+      nBranches_->genParticle_Bdau_X_mass =fs->make<TH1F>("genParticle_Bdau_X_mass", "#phi of X in B->J/#psi+X", 40, -3.2, 3.2);
+      nBranches_->genParticle_Bdau_mu1_pt =fs->make<TH1F>("genParticle_Bdau_mu1_pt", "p_{T} of #mu_{J/#psi,1} in B->J/#psi+X;pt[GeV];Events;", 50, 0, 10);
+      nBranches_->genParticle_Bdau_mu1_eta =fs->make<TH1F>("genParticle_Bdau_mu1_eta", "#eta of #mu_{J/#psi,1} in B->J/#psi+X", 10, -2.4, 2.4);
+      nBranches_->genParticle_Bdau_mu1_phi =fs->make<TH1F>("genParticle_Bdau_mu1_phi", "#phi of #mu_{J/#psi,1} in B->J/#psi+X", 40, -3.2, 3.2);
+      nBranches_->genParticle_Bdau_mu2_pt =fs->make<TH1F>("genParticle_Bdau_mu2_pt", "p_{T} of #mu_{J/#psi,2} in B->J/#psi+X;pt[GeV];Events;", 50, 0, 10);
+      nBranches_->genParticle_Bdau_mu2_eta =fs->make<TH1F>("genParticle_Bdau_mu2_eta", "#eta of #mu_{J/#psi,2} in B->J/#psi+X", 10, -2.4, 2.4);
+      nBranches_->genParticle_Bdau_mu2_phi =fs->make<TH1F>("genParticle_Bdau_mu2_phi", "#phi of #mu_{J/#psi,2} in B->J/#psi+X", 40, -3.2, 3.2);
+      nBranches_->genParticle_Bdau_Jpsi_pt =fs->make<TH1F>("genParticle_Bdau_Jpsi_pt", "p_{T} of J/#psi in B->J/#psi+X;pt[GeV];Events;", 100, 0, 20);
+      nBranches_->genParticle_Bdau_Jpsi_eta =fs->make<TH1F>("genParticle_Bdau_Jpsi_eta", "#eta of J/#psi in B->J/#psi+X", 10, -2.4, 2.4);
+      nBranches_->genParticle_Bdau_Jpsi_phi =fs->make<TH1F>("genParticle_Bdau_Jpsi_phi", "#phi of J/#psi in B->J/#psi+X", 40, -3.2, 3.2);
+      nBranches_->genParticle_Bdau_Jpsi_mass =fs->make<TH1F>("genParticle_Bdau_Jpsi_mass", "mass of J/#psi in B->J/#psi+X", 40, 0, 8);
+      nBranches_->genParticle_Bvis_pt =fs->make<TH1F>("genParticle_Bvis_pt", "Visible p_{T} of B in B->J/#psi+X;pt[GeV];Events;", 100, 0, 20);
+      nBranches_->genParticle_Bvis_eta =fs->make<TH1F>("genParticle_Bvis_eta", "Visible #eta of B in B->J/#psi+X", 10, -2.4, 2.4);
+      nBranches_->genParticle_Bvis_phi =fs->make<TH1F>("genParticle_Bvis_phi", "Visible #phi of B in B->J/#psi+X", 40, -3.2, 3.2);
+      nBranches_->genParticle_Bvis_mass =fs->make<TH1F>("genParticle_Bvis_mass", "Visible mass of B in B->J/#psi+X", 50, 0, 10);
+  } 
+  if (runFlags["doCutFlow"] ||runFlags["doGenHist"]) {
+      nBranches_-> LabelHistograms( runFlags );
+  }
+
   /*=======================================================================================*/
  
   /*=======================================================================================*/
@@ -204,6 +241,13 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
       nTuplizers_["genEvent"] = new GenEventNtuplizer( geneTokens, nBranches_ , lheTokens, runFlags);
     }
   }
+
+
+  // if (runFlags["doGenHist"] || runFlags["doGenHist"]){
+  //     LabelHistogram(nBranches_, runFlags );
+
+
+  // }
 }
 
 ///////////////////////////////////////////////////////////////////////////////////
@@ -240,8 +284,12 @@ void Ntuplizer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
   nBranches_->fillTree();
   
   nBranches_->reset();    
-  
+ 
 }
+
+
+
+
 
 
 ///////////////////////////////////////////////////////////////////////////////////
@@ -249,7 +297,56 @@ void Ntuplizer::beginJob(){
 }
 
 ///////////////////////////////////////////////////////////////////////////////////
-void Ntuplizer::endJob() {
+void Ntuplizer::endJob( ) {
+    // if(runFlags["doGenHist"] || runFlags["doCutFlow"]){
+    //     nBranches_->LabelHistograms(runFlags);
+    //     nBranches_->WriteHistograms(runFlags);
+    // }
+
+    std::cout << " print runFlags[doGenHist]  " << runFlags["doGenHist"] <<std::endl;
+
+    //if ( nBranches_->genParticle_Bdau_X_pt->GetEntries() > 0 ) {
+    //nBranches_->genParticle_Bdau_X_id->Draw();
+    //nBranches_->genParticle_Bdau_X_id->Write("flatTuple.root");
+   // nBranches_->genParticle_Bdau_X_pt->Draw();
+   // nBranches_->genParticle_Bdau_X_pt->Write();
+   // nBranches_->genParticle_Bdau_X_eta->Draw();
+   // nBranches_->genParticle_Bdau_X_eta->Write();
+   // nBranches_->genParticle_Bdau_X_phi->Draw();
+   // nBranches_->genParticle_Bdau_X_phi->Write();
+   // nBranches_->genParticle_Bdau_mu1_pt->Draw();
+   // nBranches_->genParticle_Bdau_mu1_pt->Write();
+   // nBranches_->genParticle_Bdau_mu1_eta->Draw();
+   // nBranches_->genParticle_Bdau_mu1_eta->Write();
+   // nBranches_->genParticle_Bdau_mu1_phi->Draw();
+   // nBranches_->genParticle_Bdau_mu1_phi->Write();
+   // nBranches_->genParticle_Bdau_mu2_pt->Draw();
+   // nBranches_->genParticle_Bdau_mu2_pt->Write();
+   // nBranches_->genParticle_Bdau_mu2_eta->Draw();
+   // nBranches_->genParticle_Bdau_mu2_eta->Write();
+   // nBranches_->genParticle_Bdau_mu2_phi->Draw();
+   // nBranches_->genParticle_Bdau_mu2_phi->Write();
+   // nBranches_->genParticle_Bdau_Jpsi_mass->Draw();
+   // nBranches_->genParticle_Bdau_Jpsi_mass->Write();
+   // nBranches_->genParticle_Bdau_Jpsi_pt->Draw();
+   // nBranches_->genParticle_Bdau_Jpsi_pt->Write();
+   // nBranches_->genParticle_Bdau_Jpsi_eta->Draw();
+   // nBranches_->genParticle_Bdau_Jpsi_eta->Write();
+   // nBranches_->genParticle_Bdau_Jpsi_phi->Draw();
+   // nBranches_->genParticle_Bdau_Jpsi_phi->Write();
+   // nBranches_->genParticle_Bvis_mass->Draw();
+   // nBranches_->genParticle_Bvis_mass->Write();
+   // nBranches_->genParticle_Bvis_pt->Draw();
+   // nBranches_->genParticle_Bvis_pt->Write();
+   // nBranches_->genParticle_Bvis_eta->Draw();
+   // nBranches_->genParticle_Bvis_eta->Write();
+   // nBranches_->genParticle_Bvis_phi->Draw();
+   // nBranches_->genParticle_Bvis_phi->Write();
+    //  }
+// if ( nBranches_->cutflow_perevt->GetEntries() > 0 ) {
+//    nBranches_->cutflow_perevt->Draw();
+//    nBranches_->cutflow_perevt->Write();
+//    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////////

@@ -7,6 +7,7 @@ GenParticlesNtuplizer::GenParticlesNtuplizer( std::vector<edm::EDGetTokenT<reco:
    , genParticlesToken_( tokens[0] )
    , isJpsiMu_( runFlags["doJpsiMu"])
    , isJpsiEle_( runFlags["doJpsiEle"]  )
+   , doGenHist_( runFlags["doGenHist"]  )
 {
 
 }
@@ -26,12 +27,94 @@ void GenParticlesNtuplizer::fillBranches( edm::Event const & event, const edm::E
     doJpsi_ = nBranches_->IsJpsiMu;
   }
 
-  if(size(doJpsi_)==0) return;
+  event.getByToken(genParticlesToken_ , genParticles_); 
 
-  //  if(size(doJpsi_)>0) if(doJpsi_[0]==0) return;
-   
+  if ( doGenHist_ ) {
+      for( unsigned p=0; p<genParticles_->size(); ++p ){
+          // Looking At B mesons who decay to Jpsi+X. Catalogue what else they decay to in addition to the Jpsi. Get the particle's pdgid, the pT, eta, and phi of it and the two muons from the jpsi, the jpsi's (aka dimuon) pt, eta, phi, and mass, and the B's visible pt, eta, phi, and mass
+          if ( (  abs((*genParticles_)[p].pdgId()) >= 500
+                  && abs((*genParticles_)[p].pdgId()) < 600 )
+               && (*genParticles_)[p].status() == 2 ) {
+              TLorentzVector mu1, mu2, X;
+          
+              for (unsigned int d=0; d<(*genParticles_)[p].numberOfDaughters(); ++d ) {
+                   if ( fabs((*genParticles_)[p].daughter(d)->pdgId()) == 12  || fabs((*genParticles_)[p].daughter(d)->pdgId()) == 14  || fabs((*genParticles_)[p].daughter(d)->pdgId()) == 16 ) {continue;} 
+                  if ( (*genParticles_)[p].daughter(d)->pdgId() == 443 ) { 
+                      // Loop over jpsi daughters & get the two mus. if there aren't two mus then skip it
+                      for ( unsigned int jd=0; jd<(*genParticles_)[p].daughter(d)->numberOfDaughters(); ++jd ) {
+                            if ( (*genParticles_)[p].daughter(d)->daughter(jd)->pdgId() == 13 ) {
+                              mu1.SetPtEtaPhiM((*genParticles_)[p].daughter(d)->daughter(jd)->pt(),(*genParticles_)[p].daughter(d)->daughter(jd)->eta(),(*genParticles_)[p].daughter(d)->daughter(jd)->phi(), (*genParticles_)[p].daughter(d)->daughter(jd)->mass());
+                          } 
+                          else if ( (*genParticles_)[p].daughter(d)->daughter(jd)->pdgId() == -13 ) {
+                              mu2.SetPtEtaPhiM((*genParticles_)[p].daughter(d)->daughter(jd)->pt(), (*genParticles_)[p].daughter(d)->daughter(jd)->eta(),(*genParticles_)[p].daughter(d)->daughter(jd)->phi(), (*genParticles_)[p].daughter(d)->daughter(jd)->mass());
+                          }
+                      }
+                  } 
+              }
+              if (mu1.Pt() > 0 && mu2.Pt() > 0) {
+                  float min_dau_pt =0;
+                  int dau_index=0;
+                  for (unsigned int d=0; d<(*genParticles_)[p].numberOfDaughters(); ++d ) {
+                  
+                      if ( fabs((*genParticles_)[p].daughter(d)->pdgId()) == 12   || fabs((*genParticles_)[p].daughter(d)->pdgId()) == 14  || fabs((*genParticles_)[p].daughter(d)->pdgId()) == 16 ) {continue;} 
+                      if ( (*genParticles_)[p].daughter(d)->pdgId() == 443 ) {continue;}
 
-    event.getByToken(genParticlesToken_ , genParticles_); 
+                      if ((*genParticles_)[p].daughter(d)->pt() >min_dau_pt){
+                          min_dau_pt= (*genParticles_)[p].daughter(d)->pt();
+                          dau_index=d;
+                      }
+                  }
+
+                  
+                  // Histogram with bins labeled in Ntuplizer.cc
+                  std::vector<int> bin={13,111,211,113,213,221,331,233,333,311,321,313,323,411,421,441,551,553};
+                  std::vector<int>::iterator it =std::find(bin.begin(), bin.end(),fabs((*genParticles_)[p].daughter(dau_index)->pdgId())); 
+                  if (it==bin.end() ) continue;
+                  int index = std::distance(bin.begin(), it);
+                  // mu+-, pi0,, pi+-,rho0,rho+-,eta, etaP,omega,phi,K0, K+, K*0,K*+, D+
+                  //    D0, eta_c,eta_b, upsilon.
+                  
+                     
+  
+                     
+                  // nBranches_->genParticle_Bdau_X_id->Fill(index); 
+                  nBranches_->genParticle_Bdau_X_id->Fill(index); 
+                  
+                 
+                  X.SetPtEtaPhiM((*genParticles_)[p].daughter(dau_index)->pt(),
+                                 (*genParticles_)[p].daughter(dau_index)->eta(),
+                                 (*genParticles_)[p].daughter(dau_index)->phi(),
+                                 (*genParticles_)[p].daughter(dau_index)->mass());
+               
+                 
+              }
+              if (X.Pt() > 0) {
+                  nBranches_->genParticle_Bdau_X_pt->Fill(X.Pt()); 
+                  nBranches_->genParticle_Bdau_X_eta->Fill(X.Eta()); 
+                  nBranches_->genParticle_Bdau_X_phi->Fill(X.Phi()); 
+                  nBranches_->genParticle_Bdau_mu1_pt->Fill(mu1.Pt()); 
+                  nBranches_->genParticle_Bdau_mu1_eta->Fill(mu1.Eta()); 
+                  nBranches_->genParticle_Bdau_mu1_phi->Fill(mu1.Phi()); 
+                  nBranches_->genParticle_Bdau_mu2_pt->Fill(mu2.Pt()); 
+                  nBranches_->genParticle_Bdau_mu2_eta->Fill(mu2.Eta()); 
+                  nBranches_->genParticle_Bdau_mu2_phi->Fill(mu2.Phi()); 
+                  nBranches_->genParticle_Bdau_Jpsi_mass->Fill((mu1+mu2).M()); 
+                  nBranches_->genParticle_Bdau_Jpsi_pt->Fill((mu1+mu2).Pt()); 
+                  nBranches_->genParticle_Bdau_Jpsi_eta->Fill((mu1+mu2).Eta()); 
+                  nBranches_->genParticle_Bdau_Jpsi_phi->Fill((mu1+mu2).Phi()); 
+                  nBranches_->genParticle_Bvis_mass->Fill((mu1+mu2+X).M()); 
+                  nBranches_->genParticle_Bvis_pt->Fill((mu1+mu2+X).Pt()); 
+                  nBranches_->genParticle_Bvis_eta->Fill((mu1+mu2+X).Eta()); 
+                  nBranches_->genParticle_Bvis_phi->Fill((mu1+mu2+X).Phi()); 
+              }
+          }
+      }
+
+  }
+
+  if(size(doJpsi_)==0 ) return;
+
+     
 
    /* here we want to save  gen particles info*/
    
@@ -41,7 +124,7 @@ void GenParticlesNtuplizer::fillBranches( edm::Event const & event, const edm::E
     int nDau  = 0;  
     //nBranches_->genParticle_N = genParticles_->size(); // the genParticles are filtered below
     for( unsigned p=0; p<genParticles_->size(); ++p ){
-      //if( (*genParticles_)[p].status() != 3 ) continue;
+      
       vDau.clear(); vMoth.clear();
       nDau = 0; nMoth = 0;
       

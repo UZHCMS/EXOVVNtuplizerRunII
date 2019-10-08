@@ -20,13 +20,16 @@ config["DOGENPARTICLES"] = (True and config["RUNONMC"])
 config["DOGENEVENT"] = (True and config["RUNONMC"])
 config["DOPILEUP"] = (True and config["RUNONMC"])
 config["DOVERTICES"] = True #True
-config["DOTRIGGERDECISIONS"] = False
+config["DOTRIGGERDECISIONS"] = True
 config["DOTRIGGEROBJECTS"] = False
 config["DOHLTFILTERS"] = True
 config["DOMISSINGET"] = True
 config["DOMVAMET"] = False
 config["DOJPSIMU"] = True
 config["DOJPSIELE"] = False
+config["DOGENHIST"] = (True and config["RUNONMC"]);
+config["DOCUTFLOW"] = False;
+
 
 #--------- MET reclustering ----------#
 config["DOMETRECLUSTERING"] = False

@@ -111,6 +111,9 @@ bool TriggersNtuplizer::findTrigger( std::string trigName ){
        trigName.find("HLT_Mu45_eta2p1") != std::string::npos ||
        //trigName.find("HLT_Mu50_eta2p1") != std::string::npos ||
 
+       trigName.find("HLT_DoubleMu4_JpsiTrk_Displaced_v")!= std::string::npos || //BPH
+       trigName.find("HLT_Dimuon0_Jpsi3p5_Muon2_v")!= std::string::npos||//BPH
+
        trigName.find("HLT_Mu50_v") != std::string::npos ||
        trigName.find("HLT_TkMu50_v") != std::string::npos ||
        trigName.find("HLT_Ele27_WPTight_Gsf") != std::string::npos ||
