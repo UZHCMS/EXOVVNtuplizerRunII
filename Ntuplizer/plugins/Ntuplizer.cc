@@ -104,7 +104,7 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
   /* Histogram buildinng, definition in NtupleBrances */
   /* Histogram for cutflow */
   if (runFlags["doCutFlow"]) {
-      nBranches_->cutflow_perevt = new TH1F("cutflow_perevt", "Per Event Ntuplizer Cutflow", 7, 0, 7);
+      nBranches_->cutflow_perevt = fs->make<TH1F>("cutflow_perevt", "Per Event Ntuplizer Cutflow", 10, 0, 10);
   }
   
   
@@ -298,55 +298,6 @@ void Ntuplizer::beginJob(){
 
 ///////////////////////////////////////////////////////////////////////////////////
 void Ntuplizer::endJob( ) {
-    // if(runFlags["doGenHist"] || runFlags["doCutFlow"]){
-    //     nBranches_->LabelHistograms(runFlags);
-    //     nBranches_->WriteHistograms(runFlags);
-    // }
-
-    std::cout << " print runFlags[doGenHist]  " << runFlags["doGenHist"] <<std::endl;
-
-    //if ( nBranches_->genParticle_Bdau_X_pt->GetEntries() > 0 ) {
-    //nBranches_->genParticle_Bdau_X_id->Draw();
-    //nBranches_->genParticle_Bdau_X_id->Write("flatTuple.root");
-   // nBranches_->genParticle_Bdau_X_pt->Draw();
-   // nBranches_->genParticle_Bdau_X_pt->Write();
-   // nBranches_->genParticle_Bdau_X_eta->Draw();
-   // nBranches_->genParticle_Bdau_X_eta->Write();
-   // nBranches_->genParticle_Bdau_X_phi->Draw();
-   // nBranches_->genParticle_Bdau_X_phi->Write();
-   // nBranches_->genParticle_Bdau_mu1_pt->Draw();
-   // nBranches_->genParticle_Bdau_mu1_pt->Write();
-   // nBranches_->genParticle_Bdau_mu1_eta->Draw();
-   // nBranches_->genParticle_Bdau_mu1_eta->Write();
-   // nBranches_->genParticle_Bdau_mu1_phi->Draw();
-   // nBranches_->genParticle_Bdau_mu1_phi->Write();
-   // nBranches_->genParticle_Bdau_mu2_pt->Draw();
-   // nBranches_->genParticle_Bdau_mu2_pt->Write();
-   // nBranches_->genParticle_Bdau_mu2_eta->Draw();
-   // nBranches_->genParticle_Bdau_mu2_eta->Write();
-   // nBranches_->genParticle_Bdau_mu2_phi->Draw();
-   // nBranches_->genParticle_Bdau_mu2_phi->Write();
-   // nBranches_->genParticle_Bdau_Jpsi_mass->Draw();
-   // nBranches_->genParticle_Bdau_Jpsi_mass->Write();
-   // nBranches_->genParticle_Bdau_Jpsi_pt->Draw();
-   // nBranches_->genParticle_Bdau_Jpsi_pt->Write();
-   // nBranches_->genParticle_Bdau_Jpsi_eta->Draw();
-   // nBranches_->genParticle_Bdau_Jpsi_eta->Write();
-   // nBranches_->genParticle_Bdau_Jpsi_phi->Draw();
-   // nBranches_->genParticle_Bdau_Jpsi_phi->Write();
-   // nBranches_->genParticle_Bvis_mass->Draw();
-   // nBranches_->genParticle_Bvis_mass->Write();
-   // nBranches_->genParticle_Bvis_pt->Draw();
-   // nBranches_->genParticle_Bvis_pt->Write();
-   // nBranches_->genParticle_Bvis_eta->Draw();
-   // nBranches_->genParticle_Bvis_eta->Write();
-   // nBranches_->genParticle_Bvis_phi->Draw();
-   // nBranches_->genParticle_Bvis_phi->Write();
-    //  }
-// if ( nBranches_->cutflow_perevt->GetEntries() > 0 ) {
-//    nBranches_->cutflow_perevt->Draw();
-//    nBranches_->cutflow_perevt->Write();
-//    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////////

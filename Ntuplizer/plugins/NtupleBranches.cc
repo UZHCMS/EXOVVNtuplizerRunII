@@ -603,7 +603,7 @@ void NtupleBranches::reset( void ){
 
 void NtupleBranches::LabelHistograms( std::map< std::string, bool >& runFlags ){
     if ( runFlags["doCutFlow"] ){
-        std::vector bins_string = {"Precut","p_{T} & #eta (#mu_{1},#mu_{2})","softID(#mu_{1},#mu_{2})","J/#psi mass", "Trigger", "Trig matched","p_{T}(#mu_{3})"};
+        std::vector bins_string = {"Precut", "p_{T} & #eta (#mu_{1})","p_{T} & #eta (#mu_{2})","Trigger","Trig matched #mu_{1}","Trig matched #mu_{2}","J/#psi mass", "J/#psi kinematic","p_{T}(#mu_{3})","B kinematic"};
         for (int i=0; i< cutflow_perevt->GetNbinsX(); i++){
             cutflow_perevt->GetXaxis()->SetBinLabel(i+1, bins_string[i]);
         }
