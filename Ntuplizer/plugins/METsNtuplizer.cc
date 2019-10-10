@@ -184,19 +184,13 @@ void METsNtuplizer::addTypeICorr( edm::Event const & event ){
 
 //===================================================================================================================
 void METsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetup& iSetup ){
-  //chunk to remove those events with no jspi if that analysis is chosen
-  std::vector<int> doJpsi_;
-  if(isJpsiEle_) {
-    doJpsi_ = nBranches_->IsJpsiEle;
-    //std::cout<<"im getting inside the electron part"<<std::endl;
-  }else if(isJpsiMu_){
-    doJpsi_ = nBranches_->IsJpsiMu;
-    //std::cout<<"nbranch thing\t"<<size(isJpsi_)<<"; "<< isJpsi_[0]<<std::endl;
-  }
-  if(size(doJpsi_)>0) if(doJpsi_[0]==0) return;
-  
-
-  // PFMET
+    //Skip events with no jspi if that analysis is chosen
+   
+    if(isJpsiEle_ ||isJpsiMu_){
+        if ( nBranches_->Jpsi_trimu_pt.size() <1)  return;
+    }
+      
+        // PFMET
 	
   event.getByToken(metInputToken_, METs_ );
 

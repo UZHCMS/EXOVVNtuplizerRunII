@@ -305,243 +305,239 @@ bool TriggersNtuplizer::findFilter( std::string filterName ){
 
 //===================================================================================================================
 void TriggersNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetup& iSetup ){
-  //std::cout<<"!!!--->Trigers Ntuplizer<---!!!"<<std::endl;
-  //chunk to remove those events with no jspi if that analysis is chosen
-  std::vector<int> doJpsi_;
-  if(isJpsiEle_) {
-    doJpsi_ = nBranches_->IsJpsiEle;
-    //std::cout<<"im getting inside the electron part"<<std::endl;
-  }else if(isJpsiMu_){
-    doJpsi_ = nBranches_->IsJpsiMu;
-    //std::cout<<"nbranch thing\t"<<size(isJpsi_)<<"; "<< isJpsi_[0]<<std::endl;
-  }
-  if(size(doJpsi_)>0) if(doJpsi_[0]==0) return;
-  event.getByToken(HLTtriggersToken_, HLTtriggers_);
-  event.getByToken(triggerObjects_  , triggerObjects);
-  event.getByToken(triggerPrescales_, triggerPrescales);
-
-  const edm::TriggerNames& trigNames = event.triggerNames(*HLTtriggers_);
-
-
-  if (doTriggerDecisions_) {
-    for (unsigned int i = 0, n = HLTtriggers_->size(); i < n; ++i) {
-      //std::cout<<"im here inside the trigger thingy:   "<<findFilter(trigNames.triggerName(i))<<" , "<<trigNames.triggerName(i)<<std::endl;
-      if( findTrigger(trigNames.triggerName(i)) ){
-	nBranches_->HLT_isFired[trigNames.triggerName(i)] = HLTtriggers_->accept(i);
-	// std::cout << "Trigger " << trigNames.triggerName(i) << ": " << (HLTtriggers_->accept(i) ? "PASS" : "fail (or not run)") << std::endl;
-      }
+  
+    //Skip events with no jspi if that analysis is chosen
+   
+    if(isJpsiEle_ || isJpsiMu_){
+        if ( nBranches_->Jpsi_trimu_pt.size() <1)  return;
     }
 
-  } //doTriggerDecisions_
+    event.getByToken(HLTtriggersToken_, HLTtriggers_);
+    event.getByToken(triggerObjects_  , triggerObjects);
+    event.getByToken(triggerPrescales_, triggerPrescales);
+
+    const edm::TriggerNames& trigNames = event.triggerNames(*HLTtriggers_);
+
+
+    if (doTriggerDecisions_) {
+        for (unsigned int i = 0, n = HLTtriggers_->size(); i < n; ++i) {
+            //std::cout<<"im here inside the trigger thingy:   "<<findFilter(trigNames.triggerName(i))<<" , "<<trigNames.triggerName(i)<<std::endl;
+            if( findTrigger(trigNames.triggerName(i)) ){
+                nBranches_->HLT_isFired[trigNames.triggerName(i)] = HLTtriggers_->accept(i);
+                // std::cout << "Trigger " << trigNames.triggerName(i) << ": " << (HLTtriggers_->accept(i) ? "PASS" : "fail (or not run)") << std::endl;
+            }
+        }
+
+    } //doTriggerDecisions_
  
 
 
-  ////////////////// Trigger objects ///////////////////////////////////
-  if (doTriggerObjects_) {
+    ////////////////// Trigger objects ///////////////////////////////////
+    if (doTriggerObjects_) {
 
-     	std::vector<int> vfiredTrigger; vfiredTrigger.clear();
-	std::vector<float> vfilterIDs; vfilterIDs.clear();
+        std::vector<int> vfiredTrigger; vfiredTrigger.clear();
+        std::vector<float> vfilterIDs; vfilterIDs.clear();
 
-  	for (pat::TriggerObjectStandAlone obj : *triggerObjects) {
+        for (pat::TriggerObjectStandAlone obj : *triggerObjects) {
 
-  		obj.unpackPathNames(trigNames);
-		obj.unpackFilterLabels(event, *HLTtriggers_);
+            obj.unpackPathNames(trigNames);
+            obj.unpackFilterLabels(event, *HLTtriggers_);
 
-  		std::vector<std::string> pathNamesAll  = obj.pathNames(false);
-		//  		std::vector<std::string> pathNamesLast = obj.pathNames(true);
+            std::vector<std::string> pathNamesAll  = obj.pathNames(false);
+            //  		std::vector<std::string> pathNamesLast = obj.pathNames(true);
 
-		//		std::cout << "Size of pathNames All = " << pathNamesAll.size() << ", Last = " << pathNamesLast.size()  << std::endl;
-		//		for (unsigned h = 0, n = pathNamesLast.size(); h < n; ++h) {
-		//		  std::cout << "\t Lastname = " << pathNamesLast[h] << std::endl;
-		//		}
-		for (unsigned h = 0, n = pathNamesAll.size(); h < n; ++h) {
+            //		std::cout << "Size of pathNames All = " << pathNamesAll.size() << ", Last = " << pathNamesLast.size()  << std::endl;
+            //		for (unsigned h = 0, n = pathNamesLast.size(); h < n; ++h) {
+            //		  std::cout << "\t Lastname = " << pathNamesLast[h] << std::endl;
+            //		}
+            for (unsigned h = 0, n = pathNamesAll.size(); h < n; ++h) {
 
-		  //		  bool isBoth = obj.hasPathName( pathNamesAll[h], true , true );
-		  //		  bool isL3   = obj.hasPathName( pathNamesAll[h], false, true );
-		  //		  bool isBoth = obj.hasPathName( pathNamesLast[h], true , true );
-		  //		  bool isL3   = obj.hasPathName( pathNamesLast[h], false, true );
+                //		  bool isBoth = obj.hasPathName( pathNamesAll[h], true , true );
+                //		  bool isL3   = obj.hasPathName( pathNamesAll[h], false, true );
+                //		  bool isBoth = obj.hasPathName( pathNamesLast[h], true , true );
+                //		  bool isL3   = obj.hasPathName( pathNamesLast[h], false, true );
 
-		  //		  std::cout << "trigger object =" << pathNamesLast[h] << "(isBoth, isL3) = " << isBoth << " " << isL3 << std::endl;
-		  //		  std::cout << "\t Finalname = " << pathNamesAll[h] << "(isBoth, isL3) = " << isBoth << " " << isL3 << std::endl;
+                //		  std::cout << "trigger object =" << pathNamesLast[h] << "(isBoth, isL3) = " << isBoth << " " << isL3 << std::endl;
+                //		  std::cout << "\t Finalname = " << pathNamesAll[h] << "(isBoth, isL3) = " << isBoth << " " << isL3 << std::endl;
 			
-		//			if( isBoth || isL3 ){
+                //			if( isBoth || isL3 ){
 
 
-		  for (unsigned hh = 0; hh < obj.filterIds().size(); ++hh) vfilterIDs.push_back( obj.filterIds()[hh]); // as defined in http://cmslxr.fnal.gov/lxr/source/DataFormats/HLTReco/interface/TriggerTypeDefs.h
+                for (unsigned hh = 0; hh < obj.filterIds().size(); ++hh) vfilterIDs.push_back( obj.filterIds()[hh]); // as defined in http://cmslxr.fnal.gov/lxr/source/DataFormats/HLTReco/interface/TriggerTypeDefs.h
 
-			   std::vector<std::string> vfilterLabels; vfilterLabels.clear();
+                std::vector<std::string> vfilterLabels; vfilterLabels.clear();
 
-			   bool isFilterExist = false;
+                bool isFilterExist = false;
 
-			   for (unsigned hh = 0; hh < obj.filterLabels().size(); ++hh){
-			     if(findFilter(obj.filterLabels()[hh])){
-			       vfilterLabels.push_back( obj.filterLabels()[hh]);
-			       isFilterExist = true;
-			     }
-			   }
+                for (unsigned hh = 0; hh < obj.filterLabels().size(); ++hh){
+                    if(findFilter(obj.filterLabels()[hh])){
+                        vfilterLabels.push_back( obj.filterLabels()[hh]);
+                        isFilterExist = true;
+                    }
+                }
 
 			   
-			   if(isFilterExist){
-			     nBranches_->triggerObject_pt  .push_back(obj.pt());
-			     nBranches_->triggerObject_eta .push_back(obj.eta());
-			     nBranches_->triggerObject_phi .push_back(obj.phi());
-			     nBranches_->triggerObject_mass.push_back(obj.mass());
-			     nBranches_->triggerObject_lastname.push_back(pathNamesAll[h]);
-			     //		 	     nBranches_->triggerObject_lastname.push_back("test");
+                if(isFilterExist){
+                    nBranches_->triggerObject_pt  .push_back(obj.pt());
+                    nBranches_->triggerObject_eta .push_back(obj.eta());
+                    nBranches_->triggerObject_phi .push_back(obj.phi());
+                    nBranches_->triggerObject_mass.push_back(obj.mass());
+                    nBranches_->triggerObject_lastname.push_back(pathNamesAll[h]);
+                    //		 	     nBranches_->triggerObject_lastname.push_back("test");
 
-			     //			     if(nBranches_->triggerObject_filterLabels.find(pathNamesLast[h]) == nBranches_->triggerObject_filterLabels.end()){
-			     if(nBranches_->triggerObject_filterLabels.find(pathNamesAll[h]) == nBranches_->triggerObject_filterLabels.end()){
-			       //  std::cout << "index NOT found !!!" << std::endl;
-			       nBranches_->triggerObject_filterLabels[pathNamesAll[h]] = vfilterLabels;
-			       //			       nBranches_->triggerObject_filterLabels["test"] = vfilterLabels;
-			     }else{
-			       // add to the original
-			       // std::cout << "index found !!!" << std::endl;
+                    //			     if(nBranches_->triggerObject_filterLabels.find(pathNamesLast[h]) == nBranches_->triggerObject_filterLabels.end()){
+                    if(nBranches_->triggerObject_filterLabels.find(pathNamesAll[h]) == nBranches_->triggerObject_filterLabels.end()){
+                        //  std::cout << "index NOT found !!!" << std::endl;
+                        nBranches_->triggerObject_filterLabels[pathNamesAll[h]] = vfilterLabels;
+                        //			       nBranches_->triggerObject_filterLabels["test"] = vfilterLabels;
+                    }else{
+                        // add to the original
+                        // std::cout << "index found !!!" << std::endl;
 			       
-			       //			       std::vector<std::string> vec1 = nBranches_->triggerObject_filterLabels["test"];
-			       std::vector<std::string> vec1 = nBranches_->triggerObject_filterLabels[pathNamesAll[h]];
+                        //			       std::vector<std::string> vec1 = nBranches_->triggerObject_filterLabels["test"];
+                        std::vector<std::string> vec1 = nBranches_->triggerObject_filterLabels[pathNamesAll[h]];
 			       
-//			       std::cout << "before : size of vec1 = " << vec1.size() << std::endl;
-//			       for(int ii = 0; ii < (int)vec1.size(); ii++){
-//				 std::cout << "\t\t " << vec1.at(ii) << std::endl;
-//			       }
+                        //			       std::cout << "before : size of vec1 = " << vec1.size() << std::endl;
+                        //			       for(int ii = 0; ii < (int)vec1.size(); ii++){
+                        //				 std::cout << "\t\t " << vec1.at(ii) << std::endl;
+                        //			       }
 
-			       vec1.insert(vec1.end(), vfilterLabels.begin(), vfilterLabels.end());
+                        vec1.insert(vec1.end(), vfilterLabels.begin(), vfilterLabels.end());
 
-//			       std::cout << "after : size of vec1 = " << vec1.size() << std::endl;
-//			       for(int ii = 0; ii < (int)vec1.size(); ii++){
-//				 std::cout << "\t\t " << vec1.at(ii) << std::endl;
-//			       }
+                        //			       std::cout << "after : size of vec1 = " << vec1.size() << std::endl;
+                        //			       for(int ii = 0; ii < (int)vec1.size(); ii++){
+                        //				 std::cout << "\t\t " << vec1.at(ii) << std::endl;
+                        //			       }
 
-			       nBranches_->triggerObject_filterLabels[pathNamesAll[h]] = vec1;
-			     }
+                        nBranches_->triggerObject_filterLabels[pathNamesAll[h]] = vec1;
+                    }
 
-			   }
-
-
-  			   if( pathNamesAll[h] == "HLT_AK8PFJet360_TrimMass30_v1") vfiredTrigger.push_back( 0 );
-  			   if( pathNamesAll[h] == "HLT_AK8PFHT700_TrimR0p1PT0p03Mass50_v1") vfiredTrigger.push_back( 1 );
-  			   if( pathNamesAll[h] == "HLT_AK8DiPFJet280_200_TrimMass30_BTagCSV0p41_v1") vfiredTrigger.push_back( 2 );
-  			   if( pathNamesAll[h] == "HLT_PFHT650_WideJetMJJ950DEtaJJ1p5_v1") vfiredTrigger.push_back( 3 );
-  			   if( pathNamesAll[h] == "HLT_PFHT650_WideJetMJJ900DEtaJJ1p5_v1") vfiredTrigger.push_back( 4 );
-  			   if( pathNamesAll[h] == "HLT_PFHT900_v1") vfiredTrigger.push_back( 5 );
-  			   if( pathNamesAll[h] == "HLT_IsoMu24_eta2p1_v1") vfiredTrigger.push_back( 6 );
-  			   if( pathNamesAll[h] == "HLT_IsoMu24_eta2p1_v2") vfiredTrigger.push_back( 7 );
-  			   if( pathNamesAll[h] == "HLT_Mu45_eta2p1_v1") vfiredTrigger.push_back( 8 );
-  			   if( pathNamesAll[h] == "HLT_Mu50_eta2p1_v1") vfiredTrigger.push_back( 9 );
-  			   if( pathNamesAll[h] == "HLT_Ele23_CaloIdL_TrackIdL_IsoVL_v1") vfiredTrigger.push_back( 10 );
-  			   if( pathNamesAll[h] == "HLT_Ele32_eta2p1_WP75_Gsf_v1") vfiredTrigger.push_back( 11 );
-  			   if( pathNamesAll[h] == "HLT_Ele105_CaloIdVT_GsfTrkIdT_v1") vfiredTrigger.push_back( 12 );
-  			   if( pathNamesAll[h] == "HLT_Ele105_CaloIdVT_GsfTrkIdT_v2") vfiredTrigger.push_back( 13 );
-  			   if( pathNamesAll[h] == "HLT_Ele115_CaloIdVT_GsfTrkIdT_v1") vfiredTrigger.push_back( 14 );
+                }
 
 
-  			   // else vfiredTrigger.push_back( -99 );
-			   //  			}
+                if( pathNamesAll[h] == "HLT_AK8PFJet360_TrimMass30_v1") vfiredTrigger.push_back( 0 );
+                if( pathNamesAll[h] == "HLT_AK8PFHT700_TrimR0p1PT0p03Mass50_v1") vfiredTrigger.push_back( 1 );
+                if( pathNamesAll[h] == "HLT_AK8DiPFJet280_200_TrimMass30_BTagCSV0p41_v1") vfiredTrigger.push_back( 2 );
+                if( pathNamesAll[h] == "HLT_PFHT650_WideJetMJJ950DEtaJJ1p5_v1") vfiredTrigger.push_back( 3 );
+                if( pathNamesAll[h] == "HLT_PFHT650_WideJetMJJ900DEtaJJ1p5_v1") vfiredTrigger.push_back( 4 );
+                if( pathNamesAll[h] == "HLT_PFHT900_v1") vfiredTrigger.push_back( 5 );
+                if( pathNamesAll[h] == "HLT_IsoMu24_eta2p1_v1") vfiredTrigger.push_back( 6 );
+                if( pathNamesAll[h] == "HLT_IsoMu24_eta2p1_v2") vfiredTrigger.push_back( 7 );
+                if( pathNamesAll[h] == "HLT_Mu45_eta2p1_v1") vfiredTrigger.push_back( 8 );
+                if( pathNamesAll[h] == "HLT_Mu50_eta2p1_v1") vfiredTrigger.push_back( 9 );
+                if( pathNamesAll[h] == "HLT_Ele23_CaloIdL_TrackIdL_IsoVL_v1") vfiredTrigger.push_back( 10 );
+                if( pathNamesAll[h] == "HLT_Ele32_eta2p1_WP75_Gsf_v1") vfiredTrigger.push_back( 11 );
+                if( pathNamesAll[h] == "HLT_Ele105_CaloIdVT_GsfTrkIdT_v1") vfiredTrigger.push_back( 12 );
+                if( pathNamesAll[h] == "HLT_Ele105_CaloIdVT_GsfTrkIdT_v2") vfiredTrigger.push_back( 13 );
+                if( pathNamesAll[h] == "HLT_Ele115_CaloIdVT_GsfTrkIdT_v1") vfiredTrigger.push_back( 14 );
+
+
+                // else vfiredTrigger.push_back( -99 );
+                //  			}
 			
-		}
+            }
 
-  		nBranches_->triggerObject_firedTrigger.push_back(vfiredTrigger);
-		nBranches_->triggerObject_filterIDs.push_back(vfilterIDs);
-  	}
-  } //doTriggerObjects_
+            nBranches_->triggerObject_firedTrigger.push_back(vfiredTrigger);
+            nBranches_->triggerObject_filterIDs.push_back(vfilterIDs);
+        }
+    } //doTriggerObjects_
 
 
-  // HLT Noise Filters
-  // for deprecation see https://twiki.cern.ch/twiki/bin/viewauth/CMS/MissingETOptionalFiltersRun2
-  if (doHltFilters_) {
+    // HLT Noise Filters
+    // for deprecation see https://twiki.cern.ch/twiki/bin/viewauth/CMS/MissingETOptionalFiltersRun2
+    if (doHltFilters_) {
 
-    event.getByToken(noiseFilterToken_, noiseFilterBits_);
-    const edm::TriggerNames &names = event.triggerNames(*noiseFilterBits_);
+        event.getByToken(noiseFilterToken_, noiseFilterBits_);
+        const edm::TriggerNames &names = event.triggerNames(*noiseFilterBits_);
 
-    for (unsigned int i = 0, n = noiseFilterBits_->size(); i < n; ++i) {
-      if (names.triggerName(i) == HBHENoiseFilter_Selector_)
-        nBranches_->passFilter_HBHE_ = noiseFilterBits_->accept(i);
-      if (names.triggerName(i) == CSCHaloNoiseFilter_Selector_)
-        nBranches_->passFilter_CSCHalo_ = noiseFilterBits_->accept(i); // DEPRECATED
-      if (names.triggerName(i) == CSCTightHalo2015Filter_Selector_)
-        nBranches_->passFilter_CSCTightHalo2015_ = noiseFilterBits_->accept(i); // TO BE USED
-      if (names.triggerName(i) == HCALlaserNoiseFilter_Selector_)
-        nBranches_->passFilter_HCALlaser_ = noiseFilterBits_->accept(i); // DEPRECATED
-      if (names.triggerName(i) == ECALDeadCellNoiseFilter_Selector_)
-        nBranches_->passFilter_ECALDeadCell_ = noiseFilterBits_->accept(i); // under scrutiny
-      if (names.triggerName(i) == GoodVtxNoiseFilter_Selector_)
-        nBranches_->passFilter_GoodVtx_ = noiseFilterBits_->accept(i); // TO BE USED
-      if (names.triggerName(i) == TrkFailureNoiseFilter_Selector_)
-        nBranches_->passFilter_TrkFailure_ = noiseFilterBits_->accept(i); // DEPRECATED
-      if (names.triggerName(i) == EEBadScNoiseFilter_Selector_)
-        nBranches_->passFilter_EEBadSc_ = noiseFilterBits_->accept(i); // under scrutiny
-      if (names.triggerName(i) == ECALlaserNoiseFilter_Selector_)
-        nBranches_->passFilter_ECALlaser_ = noiseFilterBits_->accept(i); // DEPRECATED
-      if (names.triggerName(i) == TrkPOGNoiseFilter_Selector_)
-        nBranches_->passFilter_TrkPOG_ = noiseFilterBits_->accept(i); // DEPRECATED
-      if (names.triggerName(i) == TrkPOG_manystrip_NoiseFilter_Selector_)
-        nBranches_->passFilter_TrkPOG_manystrip_ = noiseFilterBits_->accept(i); // DEPRECATED
-      if (names.triggerName(i) == TrkPOG_toomanystrip_NoiseFilter_Selector_)
-        nBranches_->passFilter_TrkPOG_toomanystrip_ = noiseFilterBits_->accept(i); // DEPRECATED
-      if (names.triggerName(i) == TrkPOG_logError_NoiseFilter_Selector_)
-        nBranches_->passFilter_TrkPOG_logError_ = noiseFilterBits_->accept(i); // DEPRECATED
-      if (names.triggerName(i) == METFilters_Selector_)
-        nBranches_->passFilter_METFilters_ = noiseFilterBits_->accept(i); // DEPRECATED
-       //NEW FOR ICHEP
-      if (names.triggerName(i) == CSCTightHaloTrkMuUnvetoFilter_Selector_)
-        nBranches_->passFilter_CSCTightHaloTrkMuUnvetoFilter_ = noiseFilterBits_->accept(i);
-      if (names.triggerName(i) == globalTightHalo2016Filter_Selector_           )
-        nBranches_->passFilter_globalTightHalo2016_ = noiseFilterBits_->accept(i); // TO BE USED FOR ICHEP 2016
-      if (names.triggerName(i) == HcalStripHaloFilter_Selector_                 )
-        nBranches_->passFilter_HcalStripHalo_ = noiseFilterBits_->accept(i);
-      if (names.triggerName(i) == chargedHadronTrackResolutionFilter_Selector_  )
-        nBranches_->passFilter_chargedHadronTrackResolution_ = noiseFilterBits_->accept(i); // TO BE USED FOR ICHEP 2016
-      if (names.triggerName(i) == muonBadTrackFilter_Selector_                  )
-        nBranches_->passFilter_muonBadTrack_ = noiseFilterBits_->accept(i); // TO BE USED FOR ICHEP 2016
-      //NEW FOR MORIOND
-      if (names.triggerName(i) == badMuons_Selector_                  )
-        nBranches_->flag_badMuons_ = noiseFilterBits_->accept(i); // TO BE USED FOR ICHEP 2016
+        for (unsigned int i = 0, n = noiseFilterBits_->size(); i < n; ++i) {
+            if (names.triggerName(i) == HBHENoiseFilter_Selector_)
+                nBranches_->passFilter_HBHE_ = noiseFilterBits_->accept(i);
+            if (names.triggerName(i) == CSCHaloNoiseFilter_Selector_)
+                nBranches_->passFilter_CSCHalo_ = noiseFilterBits_->accept(i); // DEPRECATED
+            if (names.triggerName(i) == CSCTightHalo2015Filter_Selector_)
+                nBranches_->passFilter_CSCTightHalo2015_ = noiseFilterBits_->accept(i); // TO BE USED
+            if (names.triggerName(i) == HCALlaserNoiseFilter_Selector_)
+                nBranches_->passFilter_HCALlaser_ = noiseFilterBits_->accept(i); // DEPRECATED
+            if (names.triggerName(i) == ECALDeadCellNoiseFilter_Selector_)
+                nBranches_->passFilter_ECALDeadCell_ = noiseFilterBits_->accept(i); // under scrutiny
+            if (names.triggerName(i) == GoodVtxNoiseFilter_Selector_)
+                nBranches_->passFilter_GoodVtx_ = noiseFilterBits_->accept(i); // TO BE USED
+            if (names.triggerName(i) == TrkFailureNoiseFilter_Selector_)
+                nBranches_->passFilter_TrkFailure_ = noiseFilterBits_->accept(i); // DEPRECATED
+            if (names.triggerName(i) == EEBadScNoiseFilter_Selector_)
+                nBranches_->passFilter_EEBadSc_ = noiseFilterBits_->accept(i); // under scrutiny
+            if (names.triggerName(i) == ECALlaserNoiseFilter_Selector_)
+                nBranches_->passFilter_ECALlaser_ = noiseFilterBits_->accept(i); // DEPRECATED
+            if (names.triggerName(i) == TrkPOGNoiseFilter_Selector_)
+                nBranches_->passFilter_TrkPOG_ = noiseFilterBits_->accept(i); // DEPRECATED
+            if (names.triggerName(i) == TrkPOG_manystrip_NoiseFilter_Selector_)
+                nBranches_->passFilter_TrkPOG_manystrip_ = noiseFilterBits_->accept(i); // DEPRECATED
+            if (names.triggerName(i) == TrkPOG_toomanystrip_NoiseFilter_Selector_)
+                nBranches_->passFilter_TrkPOG_toomanystrip_ = noiseFilterBits_->accept(i); // DEPRECATED
+            if (names.triggerName(i) == TrkPOG_logError_NoiseFilter_Selector_)
+                nBranches_->passFilter_TrkPOG_logError_ = noiseFilterBits_->accept(i); // DEPRECATED
+            if (names.triggerName(i) == METFilters_Selector_)
+                nBranches_->passFilter_METFilters_ = noiseFilterBits_->accept(i); // DEPRECATED
+            //NEW FOR ICHEP
+            if (names.triggerName(i) == CSCTightHaloTrkMuUnvetoFilter_Selector_)
+                nBranches_->passFilter_CSCTightHaloTrkMuUnvetoFilter_ = noiseFilterBits_->accept(i);
+            if (names.triggerName(i) == globalTightHalo2016Filter_Selector_           )
+                nBranches_->passFilter_globalTightHalo2016_ = noiseFilterBits_->accept(i); // TO BE USED FOR ICHEP 2016
+            if (names.triggerName(i) == HcalStripHaloFilter_Selector_                 )
+                nBranches_->passFilter_HcalStripHalo_ = noiseFilterBits_->accept(i);
+            if (names.triggerName(i) == chargedHadronTrackResolutionFilter_Selector_  )
+                nBranches_->passFilter_chargedHadronTrackResolution_ = noiseFilterBits_->accept(i); // TO BE USED FOR ICHEP 2016
+            if (names.triggerName(i) == muonBadTrackFilter_Selector_                  )
+                nBranches_->passFilter_muonBadTrack_ = noiseFilterBits_->accept(i); // TO BE USED FOR ICHEP 2016
+            //NEW FOR MORIOND
+            if (names.triggerName(i) == badMuons_Selector_                  )
+                nBranches_->flag_badMuons_ = noiseFilterBits_->accept(i); // TO BE USED FOR ICHEP 2016
 
-      if (names.triggerName(i) == duplicateMuons_Selector_                  )
-        nBranches_->flag_duplicateMuons_ = noiseFilterBits_->accept(i); // TO BE USED FOR ICHEP 2016
+            if (names.triggerName(i) == duplicateMuons_Selector_                  )
+                nBranches_->flag_duplicateMuons_ = noiseFilterBits_->accept(i); // TO BE USED FOR ICHEP 2016
 
-      if (names.triggerName(i) == nobadMuons_Selector_                  )
-        nBranches_->flag_nobadMuons_ = noiseFilterBits_->accept(i); // TO BE USED FOR ICHEP 2016
+            if (names.triggerName(i) == nobadMuons_Selector_                  )
+                nBranches_->flag_nobadMuons_ = noiseFilterBits_->accept(i); // TO BE USED FOR ICHEP 2016
 
-    }
+        }
 
-    //if( !runOnMC_ /*&& event.id().run() < 251585*/ ){
+        //if( !runOnMC_ /*&& event.id().run() < 251585*/ ){
 
-       edm::Handle<bool> HBHENoiseFilterLooseResultHandle;
-       event.getByToken(HBHENoiseFilterLoose_Selector_, HBHENoiseFilterLooseResultHandle);
-       bool HBHENoiseFilterLooseResult = *HBHENoiseFilterLooseResultHandle;
-       if (!HBHENoiseFilterLooseResultHandle.isValid()) {
-         LogDebug("") << "CaloTowerAnalyzer: Could not find HBHENoiseFilterResult" << std::endl;
-       }
+        edm::Handle<bool> HBHENoiseFilterLooseResultHandle;
+        event.getByToken(HBHENoiseFilterLoose_Selector_, HBHENoiseFilterLooseResultHandle);
+        bool HBHENoiseFilterLooseResult = *HBHENoiseFilterLooseResultHandle;
+        if (!HBHENoiseFilterLooseResultHandle.isValid()) {
+            LogDebug("") << "CaloTowerAnalyzer: Could not find HBHENoiseFilterResult" << std::endl;
+        }
 
-       nBranches_->passFilter_HBHELoose_ = HBHENoiseFilterLooseResult;
+        nBranches_->passFilter_HBHELoose_ = HBHENoiseFilterLooseResult;
 
-       edm::Handle<bool> HBHENoiseFilterTightResultHandle;
-       event.getByToken(HBHENoiseFilterTight_Selector_, HBHENoiseFilterTightResultHandle);
-       bool HBHENoiseFilterTightResult = *HBHENoiseFilterTightResultHandle;
-       if (!HBHENoiseFilterTightResultHandle.isValid()) {
-         LogDebug("") << "CaloTowerAnalyzer: Could not find HBHENoiseFilterResult" << std::endl;
-       }
+        edm::Handle<bool> HBHENoiseFilterTightResultHandle;
+        event.getByToken(HBHENoiseFilterTight_Selector_, HBHENoiseFilterTightResultHandle);
+        bool HBHENoiseFilterTightResult = *HBHENoiseFilterTightResultHandle;
+        if (!HBHENoiseFilterTightResultHandle.isValid()) {
+            LogDebug("") << "CaloTowerAnalyzer: Could not find HBHENoiseFilterResult" << std::endl;
+        }
 
-       nBranches_->passFilter_HBHETight_ = HBHENoiseFilterTightResult;
+        nBranches_->passFilter_HBHETight_ = HBHENoiseFilterTightResult;
 
         edm::Handle<bool> HBHENoiseIsoFilterResultHandle;
-       event.getByToken(HBHENoiseIsoFilter_Selector_, HBHENoiseIsoFilterResultHandle);
-       bool HBHENoiseIsoFilterResult = *HBHENoiseIsoFilterResultHandle;
-       if (!HBHENoiseIsoFilterResultHandle.isValid()) {
-         LogDebug("") << "CaloTowerAnalyzer: Could not find HBHENoiseFilterResult" << std::endl;
-       }
+        event.getByToken(HBHENoiseIsoFilter_Selector_, HBHENoiseIsoFilterResultHandle);
+        bool HBHENoiseIsoFilterResult = *HBHENoiseIsoFilterResultHandle;
+        if (!HBHENoiseIsoFilterResultHandle.isValid()) {
+            LogDebug("") << "CaloTowerAnalyzer: Could not find HBHENoiseFilterResult" << std::endl;
+        }
 
-       nBranches_->passFilter_HBHEIso_ = HBHENoiseIsoFilterResult;
+        nBranches_->passFilter_HBHEIso_ = HBHENoiseIsoFilterResult;
 
-       edm::Handle< bool > passecalBadCalibFilterUpdate ;
-       event.getByToken(ecalBadCalibFilter_Selector_,passecalBadCalibFilterUpdate);
-       bool    _passecalBadCalibFilterUpdate = true;
-       _passecalBadCalibFilterUpdate =(*passecalBadCalibFilterUpdate );
-       nBranches_->passFilter_ecalBadCalib_ = _passecalBadCalibFilterUpdate;
+        edm::Handle< bool > passecalBadCalibFilterUpdate ;
+        event.getByToken(ecalBadCalibFilter_Selector_,passecalBadCalibFilterUpdate);
+        bool    _passecalBadCalibFilterUpdate = true;
+        _passecalBadCalibFilterUpdate =(*passecalBadCalibFilterUpdate );
+        nBranches_->passFilter_ecalBadCalib_ = _passecalBadCalibFilterUpdate;
        
-    //}
+        //}
 
-  } //doHltFilters_
+    } //doHltFilters_
 }

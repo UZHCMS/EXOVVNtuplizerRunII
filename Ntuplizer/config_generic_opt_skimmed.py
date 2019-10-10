@@ -33,10 +33,10 @@ options.register( 'RunPeriod',
                   "RunNumber (Default Run2017B)")
 
 options.register( 'runUpToEarlyF',
-                  'True',
+                  'false',
                   VarParsing.VarParsing.multiplicity.singleton, # singleton or list                                                                                                                                 
-                  VarParsing.VarParsing.varType.int,          # string, int, or float                                                                                                                        
-                  "1")# https://twiki.cern.ch/twiki/bin/view/CMSPublic/SWGuideAboutPythonConfigFile
+                  VarParsing.VarParsing.varType.bool,          # string, int, or float                                                                                                                        
+                  "false")# https://twiki.cern.ch/twiki/bin/view/CMSPublic/SWGuideAboutPythonConfigFile
 
 ####
 

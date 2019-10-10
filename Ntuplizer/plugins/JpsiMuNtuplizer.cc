@@ -331,20 +331,40 @@ void JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
 
     bool isTriggered = false;
     const edm::TriggerNames& trigNames = event.triggerNames(*HLTtriggers_);
-    std::string finalTriggerName = "";
+    std::string finalTriggerName="";
+    std::string finalTriggerFilterObjName="";
 
     for (unsigned int i = 0, n = HLTtriggers_->size(); i < n; ++i) {
 
         // if(trigNames.triggerName(i).find("HLT_DoubleMu4_JpsiTrk_Displaced_v")!= std::string::npos || trigNames.triggerName(i).find("HLT_Dimuon0_Jpsi3p5_Muon2_v")!= std::string::npos ){
            
         //     nBranches_->HLT_BPH_isFired[trigNames.triggerName(i)] = HLTtriggers_->accept(i);
-            if(trigNames.triggerName(i).find("HLT_DoubleMu4_JpsiTrk_Displaced_v")!= std::string::npos){
+        if(trigNames.triggerName(i).find("HLT_DoubleMu4_JpsiTrk_Displaced_v")!= std::string::npos){
+            nBranches_->HLT_BPH_isFired[trigNames.triggerName(i)] = HLTtriggers_->accept(i);
             if(HLTtriggers_->accept(i)){
                 isTriggered = true;
-                finalTriggerName = trigNames.triggerName(i);  
+                finalTriggerName=trigNames.triggerName(i);  
+                finalTriggerFilterObjName="hltJpsiTkVertexFilter";
                 // std::cout << "finalTriggerName = "  << finalTriggerName << std::endl;
                
             }
+        }
+
+    }
+    // Second trigger if fist one didn't fire
+    if (!isTriggered){
+        for (unsigned int i = 0, n = HLTtriggers_->size(); i < n; ++i) {
+            if(trigNames.triggerName(i).find("HLT_DoubleMu4_JpsiTrk_Displaced_v")!= std::string::npos){
+                nBranches_->HLT_BPH_isFired[trigNames.triggerName(i)] = HLTtriggers_->accept(i);
+                if(HLTtriggers_->accept(i)){
+                    isTriggered = true;
+                    finalTriggerName=trigNames.triggerName(i);  
+                    finalTriggerFilterObjName="hltVertexmumuFilterJpsiMuon3p5";
+                    // std::cout << "finalTriggerName = "  << finalTriggerName << std::endl;
+                    
+                }
+            }
+
         }
     }
 
@@ -441,7 +461,7 @@ void JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
     
             for (unsigned hh = 0; hh < obj.filterLabels().size(); ++hh){
 	
-                if(obj.filterLabels()[hh].find("hltJpsiTkVertexFilter") != std::string::npos){
+                if(obj.filterLabels()[hh].find(finalTriggerFilterObjName) != std::string::npos){
                     isFilterExist = true;
                 }
             }

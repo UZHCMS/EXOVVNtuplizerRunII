@@ -154,14 +154,14 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
     nTuplizers_["MET"] = new METsNtuplizer( metToken_          , 
 					    metpuppiToken_     , 
 					    metmvaToken_     , 
-                                            jetForMetCorrToken_, 
+                        jetForMetCorrToken_, 
 					    muonToken_         ,
 					    rhoToken_	       ,
 					    vtxToken_	       ,
 					    metSigToken_       ,
 					    metCovToken_       ,
 					    jecAK4Labels       ,
-                                            corrFormulas       ,
+                        corrFormulas       ,
 					    nBranches_         ,
 					    runFlags  );
   }
@@ -278,7 +278,7 @@ void Ntuplizer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
   nBranches_->EVENT_lumiBlock = iEvent.id().luminosityBlock();  
   //std::cout<<"before the branches loop"<<std::endl; 
   for( std::map<std::string,CandidateNtuplizer*>::iterator it = nTuplizers_.begin(); it != nTuplizers_.end(); ++it ){
-    //std::cout << "Fill Branchines: " << it->first << std::endl;
+    // std::cout << "Fill Branchines: " << it->first << std::endl;
     (it->second)->fillBranches( iEvent, iSetup );
   }
   nBranches_->fillTree();
