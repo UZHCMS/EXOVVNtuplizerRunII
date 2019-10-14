@@ -87,7 +87,7 @@ def main():
     config.section_("Data")
     config.Data.inputDataset = None
     config.Data.allowNonValidInputDataset = True if ( not options.isData) else False #To allow to run on non valid dataset
-    # config.Data.inputDBS = 'phys03' #to be commented in case of global#
+    #config.Data.inputDBS = 'phys03' #to be commented in case of global#
 
     print "1)options.luminosity ", options.luminosity
 
@@ -96,7 +96,7 @@ def main():
         #config.Data.unitsPerJob = #10000#25
     else:
         config.Data.splitting = 'FileBased'
-        config.Data.unitsPerJob = 1
+        config.Data.unitsPerJob = 100
     
 
     config.Data.publication = False

@@ -354,7 +354,7 @@ void JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
     // Second trigger if fist one didn't fire
     if (!isTriggered){
         for (unsigned int i = 0, n = HLTtriggers_->size(); i < n; ++i) {
-            if(trigNames.triggerName(i).find("HLT_DoubleMu4_JpsiTrk_Displaced_v")!= std::string::npos){
+            if(trigNames.triggerName(i).find("HLT_Dimuon0_Jpsi3p5_Muon2_v")!= std::string::npos){
                 nBranches_->HLT_BPH_isFired[trigNames.triggerName(i)] = HLTtriggers_->accept(i);
                 if(HLTtriggers_->accept(i)){
                     isTriggered = true;

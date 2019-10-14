@@ -15,17 +15,17 @@ python submit_all_opt.py -d CRAB_tot -c config_generic_opt_skimmed.py -f samples
 
 for 2017: 
 
-python submit_all_opt.py -d CRAB_tot -c config_generic_opt.py -f samples/data_charmonium_2017.txt  -D True -l True -s ""
-python submit_all_opt.py -d CRAB_tot -c config_generic_opt.py -f samples/data_charmonium_2016.txt -D True -l True -s "" --runUpToEarlyF True
+python submit_all_opt.py -d CRAB_tot -c config_generic_opt_skimmed.py -f samples/data_charmonium_2017.txt  -D True -l True -s ""
 
 for 2016:
-python submit_all_opt.py -d CRAB_tot -c config_generic_opt.py -f samples/data_charmonium_2016.txt -D True -l True -s "" 
+python submit_all_opt.py -d CRAB_tot -c config_generic_opt_skimmed.py -f samples/data_charmonium_2016.txt -D True -l True -s "" --runUpToEarlyF True
+python submit_all_opt.py -d CRAB_tot -c config_generic_opt_skimmed.py -f samples/data_charmonium_2016.txt -D True -l True -s "" 
 
 
 
 For MC, no need to use run dependent corrections, just to change the RUNONMC flag in python/ntuplizerOptions_generic_cfi.py
 
-python submit_all_opt.py -d CRAB_tot -c config_generic_opt.py -f samples/BJpsiX_270819.txt  -s ""
+python submit_all_opt.py -d CRAB_tot -c config_generic_opt_skimmed.py -f samples/BJpsiX_270819.txt  -s ""
 
 
 
