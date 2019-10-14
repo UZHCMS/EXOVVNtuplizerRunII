@@ -21,12 +21,10 @@ GenEventNtuplizer::~GenEventNtuplizer( void )
 void GenEventNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetup& iSetup ){
   //chunk to remove those events with no jspi if that analysis is chosen
   std::vector<int> doJpsi_;
-  if(isJpsiEle_) {
-    doJpsi_ = nBranches_->IsJpsiEle;
-    //std::cout<<"im getting inside the electron part"<<std::endl;
-  }else if(isJpsiMu_){
-    doJpsi_ = nBranches_->IsJpsiMu;
-    //std::cout<<"nbranch thing\t"<<size(isJpsi_)<<"; "<< isJpsi_[0]<<std::endl;
+  //Skip events with no jspi if that analysis is chosen
+  
+  if(isJpsiEle_ || isJpsiMu_){
+      if ( nBranches_->Jpsi_trimu_pt.size() <1)  return;
   }
   
   event.getByToken(geneventToken_, geneventInfo_);  

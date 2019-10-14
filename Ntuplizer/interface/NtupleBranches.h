@@ -44,8 +44,34 @@ public:
   void getEventByLabels( edm::EventBase const & event );
   void reset( void );
   void fillTree( void ){ tree_->Fill(); };
-
+  void LabelHistograms (std::map< std::string, bool >& runFlags );
   //=================================================================================================================== 
+
+  /* output histogram */
+  /* Cutflow */
+  TH1F* cutflow_perevt ;
+  
+  /* Histogram for genParticles */
+   TH1F* genParticle_Bdau_X_id;
+   TH1F* genParticle_Bdau_X_pt; 
+   TH1F* genParticle_Bdau_X_eta; 
+   TH1F* genParticle_Bdau_X_phi; 
+   TH1F* genParticle_Bdau_X_mass; 
+   TH1F* genParticle_Bdau_mu1_pt;
+   TH1F* genParticle_Bdau_mu1_eta;
+   TH1F* genParticle_Bdau_mu1_phi; 
+   TH1F* genParticle_Bdau_mu2_pt;
+   TH1F* genParticle_Bdau_mu2_eta; 
+   TH1F* genParticle_Bdau_mu2_phi; 
+   TH1F* genParticle_Bdau_Jpsi_pt; 
+   TH1F* genParticle_Bdau_Jpsi_eta; 
+   TH1F* genParticle_Bdau_Jpsi_phi; 
+   TH1F* genParticle_Bdau_Jpsi_mass;
+   TH1F* genParticle_Bvis_pt; 
+   TH1F* genParticle_Bvis_eta;
+   TH1F* genParticle_Bvis_phi; 
+   TH1F* genParticle_Bvis_mass;
+
   /* output tree variables*/
     
   /** genParticles */
@@ -308,6 +334,20 @@ public:
   std::vector<int  >                Jpsi_isgenmatched;
   std::vector<int  >                Jpsi_mu3_isgenmatched;
 
+
+  /** HLT trigger decisions for Jpsi */
+  std::map<std::string,bool> HLT_BPH_isFired;
+	 
+  /** HLT trigger objects */
+  /* std::vector<float>  		    triggerObject_pt	      ; */
+  /* std::vector<float>  		    triggerObject_eta	      ; */
+  /* std::vector<float>  		    triggerObject_phi	      ; */
+  /* std::vector<float>  		    triggerObject_mass	      ; */
+  /* std::vector<std::string>  		    triggerObject_lastname    ; */
+  /* std::vector< std::vector<float> > triggerObject_filterIDs   ; // as defined in http://cmslxr.fnal.gov/lxr/source/DataFormats/HLTReco/interface/TriggerTypeDefs.h */
+  /* //  std::vector< std::vector<std::string> > triggerObject_filterLabels; */
+  /* std::map<std::string, std::vector<std::string> > triggerObject_filterLabels; */
+  /* std::vector< std::vector<int> >   triggerObject_firedTrigger; // as defined in plugins/TriggersNtuplizer.cc */
 
 
   /*--------------------------PV infos--------------------------*/

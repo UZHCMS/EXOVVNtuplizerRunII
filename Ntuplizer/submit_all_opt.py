@@ -20,11 +20,11 @@ def getOptions() :
         help=("The crab directory you want to use "),
         metavar="DIR")
     parser.add_option("-f", "--datasets", dest="datasets",
-        help=("File listing datasets to run over"),
+        help=("txt file listing datasets to run over"),
         metavar="FILE")
     parser.add_option("-l", "--luminosity", dest="luminosity",
         help=("Splitting job by lumi sections or by files"),
-        metavar="LUMI")
+        metavar="luminosity")
     parser.add_option("-D", "--isData", dest="isData",
         help=("If is data saving the run period in the name"),
         metavar="isData")
@@ -42,12 +42,10 @@ def getOptions() :
         parser.error(usage)
     if options.luminosity == None:
         options.luminosity = False
-    else:
-        options.luminosity = True
+   
     if options.isData == None:
         options.isData = False
-    else:
-        options.isData = True
+   
 
 
 
@@ -89,26 +87,29 @@ def main():
     config.section_("Data")
     config.Data.inputDataset = None
     config.Data.allowNonValidInputDataset = True if ( not options.isData) else False #To allow to run on non valid dataset
-    # config.Data.inputDBS = 'phys03' #to be commented in case of global#
-    if options.luminosity == True :
-        config.Data.splitting = 'Automatic'#'EventAwareLumiBased' #LumiBased'
+    #config.Data.inputDBS = 'phys03' #to be commented in case of global#
+
+    print "1)options.luminosity ", options.luminosity
+
+    if options.luminosity :
+        config.Data.splitting = 'Automatic' #'EventAwareLumiBased' #LumiBased'
         #config.Data.unitsPerJob = #10000#25
-
-
     else:
         config.Data.splitting = 'FileBased'
-        config.Data.unitsPerJob = 1
-    #config.Data.ignoreLocality = True
+        config.Data.unitsPerJob = 100
+    
+
     config.Data.publication = False
     #config.Data.outLFNDirBase = '/store/user/cgalloni/Ntuple_2017_94v2_preliminary'
-    config.Data.outLFNDirBase = '/store/user/cgalloni/Ntuple_Pablo_v2'
+    config.Data.outLFNDirBase = '/store/user/cgalloni/Ntuple_BPH_v0'
     #config.Data.outLFNDirBase = '/pnfs/psi.ch/cms/trivcat/store/t3groups/uniz-higgs/Fall17'
 
     config.section_("Site")
-    #config.Site.storageSite = 'T2_CH_CSCS'
-    config.Site.storageSite = 'T3_CH_PSI'
+    config.Site.storageSite = 'T2_CH_CSCS' 
+    config.Data.ignoreLocality = True
+    #config.Site.storageSite = 'T3_CH_PSI'
     #config.Site.blacklist=['T1_US_FNAL','T2_US_Wisconsin','T2_FR_IPHC','T2_EE_Estonia','T2_DE_RWTH','T2_KR_KNU','T2_KR_KISTI','T2_BR_SPRACE']
-    #config.Site.whitelist=['T2_US_Nebraska','T2_US_Purdue','T2_CH_CSCS', 'T2_CH_CERN', 'T2_IT_Pisa','T2_US_MIT', 'T2_US_Florida', 'T2_US_UCSD', 'T2_IT_Bari','T2_IT_Legnaro']
+    config.Site.whitelist=['T2_US_Nebraska','T2_US_Purdue','T2_CH_CSCS','T2_US_Wisconsin', 'T2_CH_CERN', 'T2_IT_Pisa','T2_US_MIT', 'T2_US_Florida', 'T2_US_UCSD', 'T2_IT_Bari','T2_IT_Legnaro']
     print 'Using config ' + options.config
     print 'Writing to directory ' + options.dir
 
@@ -143,20 +144,20 @@ def main():
         requestName_string =  ptbin + (("_"+cond)if options.isData else "")  + options.string_to_add
         if "RunIIFall17MiniAOD" in requestName_string : requestName_string=requestName_string.replace("RunIIFall17MiniAOD","")
         if "realistic" in requestName_string : requestName_string=requestName_string.replace("_realistic","")
-        if "TuneCP5_13TeV-madgraphMLM-pythia8_v2" in requestName_string : requestName_string=requestName_string.replace("_TuneCP5_13TeV-madgraphMLM-pythia8_v2","")
+       
         config.General.requestName=requestName_string
         config.Data.inputDataset = job
-        if ("Run2017" in job and options.isData):
-            config.Data.lumimask='./JSON/Cert_294927-306462_13TeV_PromptReco_Collisions17_JSON.txt'
-        elif ("Run2018" in job and options.isData):
-             config.Data.lumimask='./JSON/Cert_314472-325175_13TeV_17SeptEarlyReReco2018ABC_PromptEraD_Collisions18_JSON.txt'
-        elif ("Run2016" in job and options.isData and options.runUpToEarlyF) :
-            config.Data.lumimask='./JSON/Cert_271036-284044_13TeV_PromptReco_Collisions16_JSON_UpToEarlyF.txt'    
-        elif ("Run2016" in job  and options.isData and not options.runUpToEarlyF) :
-            config.Data.lumimask='./JSON/Cert_271036-284044_13TeV_PromptReco_Collisions16_JSON_FromEarlyF.txt'
+        #if ("Run2017" in job and options.isData):
+        #    config.Data.lumimask='./JSON/Cert_294927-306462_13TeV_PromptReco_Collisions17_JSON.txt'
+        #elif ("Run2018" in job and options.isData):
+        #     config.Data.lumimask='./JSON/Cert_314472-325175_13TeV_17SeptEarlyReReco2018ABC_PromptEraD_Collisions18_JSON.txt'
+        #elif ("Run2016" in job and options.isData and options.runUpToEarlyF) :
+        #    config.Data.lumimask='./JSON/Cert_271036-284044_13TeV_PromptReco_Collisions16_JSON_UpToEarlyF.txt'    
+        #elif ("Run2016" in job  and options.isData and not options.runUpToEarlyF) :
+        #    config.Data.lumimask='./JSON/Cert_271036-284044_13TeV_PromptReco_Collisions16_JSON_FromEarlyF.txt'
           
 
-        config.JobType.pyCfgParams = ["RunPeriod="+job , "runUpToEarlyF=True" if options.runUpToEarlyF else "runUpToEarlyF= False" ]  
+        config.JobType.pyCfgParams = ["RunPeriod="+job , "runUpToEarlyF=true" if options.runUpToEarlyF else "runUpToEarlyF=false" ]  
         
         outputDatasetTag = ptbin  + (("_"+cond)if options.isData else "" ) +  options.string_to_add 
 

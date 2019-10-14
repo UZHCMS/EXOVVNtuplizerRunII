@@ -24,18 +24,12 @@ VerticesNtuplizer::~VerticesNtuplizer( void )
 
 //===================================================================================================================
 void VerticesNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetup& iSetup ){
-  //std::cout<<"this is just a test to see if i can read the branch"<<IsJpsimunu<<std::endl;
-  //chunk to remove those events with no jspi if that analysis is chosen
-  std::vector<int> doJpsi_;
-  if(isJpsiEle_) {
-    doJpsi_ = nBranches_->IsJpsiEle;
-    //std::cout<<"im getting inside the electron part"<<std::endl;
-  }else if(isJpsiMu_){
-    doJpsi_ = nBranches_->IsJpsiMu;
-    //std::cout<<"nbranch thing\t"<<size(isJpsi_)<<"; "<< isJpsi_[0]<<std::endl;
-  }
-  if(size(doJpsi_)>0) if(doJpsi_[0]==0) return;
- 
+  
+    //Skip events with no jspi if that analysis is chosen
+   
+    if(isJpsiEle_ || isJpsiMu_){
+        if ( nBranches_->Jpsi_trimu_pt.size() <1)  return;
+    }
 
   event.getByToken(vtxToken_, vertices_);
   event.getByToken(beamToken_, beamSpot_);

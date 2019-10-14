@@ -1,5 +1,6 @@
 #cmsRun  config_generic_opt_skimmed.py  RunPeriod="Fall17" # for MC
 #cmsRun  config_generic_opt_skimmed.py  RunPeriod="Run2017B" # for Data
+#cmsRun  config_generic_opt_skimmed.py  RunPeriod="Autumn18" # for MC from 2018
 
 
 ###### Process initialization ##########
@@ -32,10 +33,10 @@ options.register( 'RunPeriod',
                   "RunNumber (Default Run2017B)")
 
 options.register( 'runUpToEarlyF',
-                  'True',
+                  'false',
                   VarParsing.VarParsing.multiplicity.singleton, # singleton or list                                                                                                                                 
-                  VarParsing.VarParsing.varType.int,          # string, int, or float                                                                                                                        
-                  "1")# https://twiki.cern.ch/twiki/bin/view/CMSPublic/SWGuideAboutPythonConfigFile
+                  VarParsing.VarParsing.varType.bool,          # string, int, or float                                                                                                                        
+                  "false")# https://twiki.cern.ch/twiki/bin/view/CMSPublic/SWGuideAboutPythonConfigFile
 
 ####
 
@@ -49,6 +50,7 @@ options.maxEvents = -1
 #options.inputFiles = '/store/user/cgalloni/BJpsiX_MuMu_230819/Autumn18_10_2_9_miniAOD/190823_131752/0000/miniAOD_57.root'
 options.inputFiles = '/store/user/cgalloni/BcJpsiMuNu_020519/Fall18_10_2_9-MINIAODSIM_noDuplCheck/190506_100026/0000/miniAOD_99.root'
 #options.inputFiles ='/store/data/Run2018B/Charmonium/MINIAOD/17Sep2018-v1/10000/02CFE87F-7C17-1340-8300-FDA86C16D58C.root'
+#options.inputFiles ='/store/user/cgalloni/BJpsiX_MuMu_270819/Autumn18_10_2_9_miniAOD/190827_143312/0005/miniAOD_5000.root'
 
 options.parseArguments()
 
@@ -366,7 +368,9 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     doMissingEt       = cms.bool(config["DOMISSINGET"]),
     doMETSVFIT        = cms.bool(config["DOMETSVFIT"]),
     doMVAMET          = cms.bool(config["DOMVAMET"]),
-  
+    doGenHist         = cms.bool(config["DOGENHIST"]),
+    doCutFlow         = cms.bool(config["DOCUTFLOW"]),
+
     vertices = cms.InputTag("offlineSlimmedPrimaryVertices"),
     beamSpot = cms.InputTag("offlineBeamSpot"),
     taus = cms.InputTag("slimmedTaus"),
