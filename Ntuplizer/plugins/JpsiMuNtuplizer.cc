@@ -539,9 +539,6 @@ void JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
             if(jpsi_mass < 2.95) continue; // a little bit broad winder to take into account FSR ...
             if(jpsi_mass > 3.25) continue;
             // Jpsi mass cut passed
-            if ( doCutFlow_) {
-               nBranches_->cutflow_perevt->Fill(6);
-               }
       
             std::vector<reco::TransientTrack> transient_tracks_dimuon;
       
@@ -568,7 +565,9 @@ void JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
 
     if(jpsi_max_pt == -1) return;
 
-
+    if ( doCutFlow_) {
+       nBranches_->cutflow_perevt->Fill(6);
+       }
 
 
     /********************************************************************
