@@ -145,6 +145,8 @@ class JpsiMuNtuplizer : public CandidateNtuplizer {
 							 VertexDistance& distanceComputer);
 
 
+  math::PtEtaPhiMLorentzVector daughter_p4(std::vector< RefCountedKinematicParticle > fitted_children, size_t i);
+
   float MuonPFIso(pat::Muon muon);
   double isoTrack(double docaCut, double r, double pmin);
   void fillBranches( edm::Event const & event, const edm::EventSetup& iSetup );

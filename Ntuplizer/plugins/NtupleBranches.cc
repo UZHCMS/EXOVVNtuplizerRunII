@@ -201,6 +201,11 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch("Jpsi_mu1_pt", &Jpsi_mu1_pt );
     tree_->Branch("Jpsi_mu1_eta", &Jpsi_mu1_eta );
     tree_->Branch("Jpsi_mu1_phi", &Jpsi_mu1_phi );
+    tree_->Branch("Jpsi_mu1_mass", &Jpsi_mu1_mass );
+    tree_->Branch("Jpsi_mu1_unfit_pt", &Jpsi_mu1_unfit_pt );
+    tree_->Branch("Jpsi_mu1_unfit_eta", &Jpsi_mu1_unfit_eta );
+    tree_->Branch("Jpsi_mu1_unfit_phi", &Jpsi_mu1_unfit_phi );
+    tree_->Branch("Jpsi_mu1_unfit_mass", &Jpsi_mu1_unfit_mass );
     tree_->Branch("Jpsi_mu1_q", &Jpsi_mu1_q );
     tree_->Branch("Jpsi_mu1_isLoose"  , &Jpsi_mu1_isLoose   );
     tree_->Branch("Jpsi_mu1_isTight"  , &Jpsi_mu1_isTight   );
@@ -214,12 +219,14 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch("Jpsi_mu1_iso"   , &Jpsi_mu1_iso    );
     tree_->Branch("Jpsi_mu1_dbiso"   , &Jpsi_mu1_dbiso    );
 
-
-
-
     tree_->Branch("Jpsi_mu2_pt", &Jpsi_mu2_pt );
     tree_->Branch("Jpsi_mu2_eta", &Jpsi_mu2_eta );
     tree_->Branch("Jpsi_mu2_phi", &Jpsi_mu2_phi );
+    tree_->Branch("Jpsi_mu2_mass", &Jpsi_mu2_mass );
+    tree_->Branch("Jpsi_mu2_unfit_pt", &Jpsi_mu2_unfit_pt );
+    tree_->Branch("Jpsi_mu2_unfit_eta", &Jpsi_mu2_unfit_eta );
+    tree_->Branch("Jpsi_mu2_unfit_phi", &Jpsi_mu2_unfit_phi );
+    tree_->Branch("Jpsi_mu2_unfit_mass", &Jpsi_mu2_unfit_mass );
     tree_->Branch("Jpsi_mu2_q", &Jpsi_mu2_q );
     tree_->Branch("Jpsi_mu2_isLoose"  , &Jpsi_mu2_isLoose   );
     tree_->Branch("Jpsi_mu2_isTight"  , &Jpsi_mu2_isTight   );
@@ -233,10 +240,14 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch("Jpsi_mu2_iso"   , &Jpsi_mu2_iso    );
     tree_->Branch("Jpsi_mu2_dbiso"   , &Jpsi_mu2_dbiso    );
 
-
     tree_->Branch("Jpsi_mu3_pt", &Jpsi_mu3_pt );
     tree_->Branch("Jpsi_mu3_eta", &Jpsi_mu3_eta );
     tree_->Branch("Jpsi_mu3_phi", &Jpsi_mu3_phi );
+    tree_->Branch("Jpsi_mu3_mass", &Jpsi_mu3_mass );
+    tree_->Branch("Jpsi_mu3_unfit_pt", &Jpsi_mu3_unfit_pt );
+    tree_->Branch("Jpsi_mu3_unfit_eta", &Jpsi_mu3_unfit_eta );
+    tree_->Branch("Jpsi_mu3_unfit_phi", &Jpsi_mu3_unfit_phi );
+    tree_->Branch("Jpsi_mu3_unfit_mass", &Jpsi_mu3_unfit_mass );
     tree_->Branch("Jpsi_mu3_q", &Jpsi_mu3_q );
     tree_->Branch("Jpsi_mu3_isLoose"  , &Jpsi_mu3_isLoose   );
     tree_->Branch("Jpsi_mu3_isTight"  , &Jpsi_mu3_isTight   );
@@ -283,9 +294,9 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch("Jpsi_vx", &Jpsi_vx );
     tree_->Branch("Jpsi_vy", &Jpsi_vy );
     tree_->Branch("Jpsi_vz", &Jpsi_vz );
-    tree_->Branch("Jpsi_unfitpt", &Jpsi_unfitpt );
-    tree_->Branch("Jpsi_unfitmass", &Jpsi_unfitmass );
-    tree_->Branch("Jpsi_unfitvprob", &Jpsi_unfitvprob );
+    tree_->Branch("Jpsi_unfit_pt", &Jpsi_unfit_pt );
+    tree_->Branch("Jpsi_unfit_mass", &Jpsi_unfit_mass );
+    tree_->Branch("Jpsi_unfit_vprob", &Jpsi_unfit_vprob );
     tree_->Branch("Jpsi_unfit_vx", &Jpsi_unfit_vx );
     tree_->Branch("Jpsi_unfit_vy", &Jpsi_unfit_vy );
     tree_->Branch("Jpsi_unfit_vz", &Jpsi_unfit_vz );
@@ -311,9 +322,9 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch("Jpsi_trimu_iso", &Jpsi_trimu_iso);
     tree_->Branch("Jpsi_trimu_iso_ntracks", &Jpsi_trimu_iso_ntracks );
     tree_->Branch("Jpsi_trimu_iso_mindoca", &Jpsi_trimu_iso_mindoca );
-    tree_->Branch("Jpsi_trimu_unfitpt", &Jpsi_trimu_unfitpt );
-    tree_->Branch("Jpsi_trimu_unfitmass", &Jpsi_trimu_unfitmass );
-    tree_->Branch("Jpsi_trimu_unfitvprob", &Jpsi_trimu_unfitvprob );
+    tree_->Branch("Jpsi_trimu_unfit_pt", &Jpsi_trimu_unfit_pt );
+    tree_->Branch("Jpsi_trimu_unfit_mass", &Jpsi_trimu_unfit_mass );
+    tree_->Branch("Jpsi_trimu_unfit_vprob", &Jpsi_trimu_unfit_vprob );
     tree_->Branch("Jpsi_trimu_unfit_vx", &Jpsi_trimu_unfit_vx );
     tree_->Branch("Jpsi_trimu_unfit_vy", &Jpsi_trimu_unfit_vy );
     tree_->Branch("Jpsi_trimu_unfit_vz", &Jpsi_trimu_unfit_vz );
@@ -481,6 +492,11 @@ void NtupleBranches::reset( void ){
   Jpsi_mu1_pt.clear();
   Jpsi_mu1_eta.clear();
   Jpsi_mu1_phi.clear();
+  Jpsi_mu1_mass.clear();
+  Jpsi_mu1_unfit_pt.clear();
+  Jpsi_mu1_unfit_eta.clear();
+  Jpsi_mu1_unfit_phi.clear();
+  Jpsi_mu1_unfit_mass.clear();
   Jpsi_mu1_q.clear();
   Jpsi_mu1_isLoose.clear();
   Jpsi_mu1_isTight.clear();
@@ -497,6 +513,11 @@ void NtupleBranches::reset( void ){
   Jpsi_mu2_pt.clear();
   Jpsi_mu2_eta.clear();
   Jpsi_mu2_phi.clear();
+  Jpsi_mu2_mass.clear();
+  Jpsi_mu2_unfit_pt.clear();
+  Jpsi_mu2_unfit_eta.clear();
+  Jpsi_mu2_unfit_phi.clear();
+  Jpsi_mu2_unfit_mass.clear();
   Jpsi_mu2_q.clear();
   Jpsi_mu2_isLoose.clear();
   Jpsi_mu2_isTight.clear();
@@ -513,6 +534,11 @@ void NtupleBranches::reset( void ){
   Jpsi_mu3_pt.clear();
   Jpsi_mu3_eta.clear();
   Jpsi_mu3_phi.clear();
+  Jpsi_mu3_mass.clear();
+  Jpsi_mu3_unfit_pt.clear();
+  Jpsi_mu3_unfit_eta.clear();
+  Jpsi_mu3_unfit_phi.clear();
+  Jpsi_mu3_unfit_mass.clear();
   Jpsi_mu3_q.clear();
   Jpsi_mu3_isLoose.clear();
   Jpsi_mu3_isTight.clear();
@@ -543,9 +569,9 @@ void NtupleBranches::reset( void ){
   Jpsi_vx.clear();
   Jpsi_vy.clear();
   Jpsi_vz.clear();
-  Jpsi_unfitpt.clear();
-  Jpsi_unfitmass.clear();
-  Jpsi_unfitvprob.clear();
+  Jpsi_unfit_pt.clear();
+  Jpsi_unfit_mass.clear();
+  Jpsi_unfit_vprob.clear();
   Jpsi_unfit_vx.clear();
   Jpsi_unfit_vy.clear();
   Jpsi_unfit_vz.clear();
@@ -570,9 +596,9 @@ void NtupleBranches::reset( void ){
   Jpsi_trimu_iso.clear();
   Jpsi_trimu_iso_ntracks.clear();
   Jpsi_trimu_iso_mindoca.clear();
-  Jpsi_trimu_unfitpt.clear();
-  Jpsi_trimu_unfitmass.clear();
-  Jpsi_trimu_unfitvprob.clear();
+  Jpsi_trimu_unfit_pt.clear();
+  Jpsi_trimu_unfit_mass.clear();
+  Jpsi_trimu_unfit_vprob.clear();
   Jpsi_trimu_unfit_vx.clear();
   Jpsi_trimu_unfit_vy.clear();
   Jpsi_trimu_unfit_vz.clear();

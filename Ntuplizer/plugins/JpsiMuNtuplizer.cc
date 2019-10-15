@@ -312,7 +312,16 @@ particle_cand JpsiMuNtuplizer::calculateIPvariables(
 }
 
 
+math::PtEtaPhiMLorentzVector JpsiMuNtuplizer::daughter_p4(std::vector< RefCountedKinematicParticle > fitted_children, size_t i){
+  const auto& state = fitted_children.at(i)->currentState();
 
+  return math::PtEtaPhiMLorentzVector(
+				      state.globalMomentum().perp(), 
+				      state.globalMomentum().eta() ,
+				      state.globalMomentum().phi() ,
+				      state.mass()
+				      );
+}
 
 
 void JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetup& iSetup ){
@@ -607,6 +616,18 @@ void JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
 
     if(TMath::Prob(jpsi_vertex->chiSquared(), jpsi_vertex->degreesOfFreedom()) <=0) return;
 
+    std::vector< RefCountedKinematicParticle > jpsi_children = jpTree->finalStateParticles();
+
+    math::PtEtaPhiMLorentzVector mu1_fit = daughter_p4(jpsi_children, 0);
+    math::PtEtaPhiMLorentzVector mu2_fit = daughter_p4(jpsi_children, 1);
+
+
+//    std::cout << "before fit1: " << muoncollection[mcidx_mu1].pt() << " " << muoncollection[mcidx_mu1].eta() << " " << muoncollection[mcidx_mu1].phi() << " " << muoncollection[mcidx_mu1].mass() << " " << muoncollection[mcidx_mu1].charge()  << std::endl;
+//    std::cout << "before fit2: " << muoncollection[mcidx_mu2].pt() << " " << muoncollection[mcidx_mu2].eta() << " " << muoncollection[mcidx_mu2].phi() << " " << muoncollection[mcidx_mu2].mass() << " " << muoncollection[mcidx_mu2].charge() << std::endl;
+//
+//    std::cout << "after fit1: " << mu1_fit.pt() << " " << mu1_fit.eta() << " " << mu1_fit.phi() << " " << mu1_fit.mass() << std::endl;
+//    std::cout << "after fit2: " << mu2_fit.pt() << " " << mu2_fit.eta() << " " << mu2_fit.phi() << " " << mu2_fit.mass() << std::endl;
+
     // Jpsi kinematic fit passed
     if( doCutFlow_) {
       nBranches_->cutflow_perevt->Fill(7);
@@ -678,7 +699,7 @@ void JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
 
     std::vector<pat::Muon> mu3_vec;
     Float_t max_pt3 = -1;
-  
+
     for(size_t imuon = 0; imuon < muons_->size(); ++ imuon){
 
         const pat::Muon & muon = (*muons_)[imuon];
@@ -689,6 +710,10 @@ void JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
         if(imuon==idx_mu1 || imuon==idx_mu2) continue;
         mu3passpteta = true;
         // shall we put delta z cut here maybe? 
+
+	
+	//	std::cout << "muon3 pt = " << muon.pt() << std::endl;
+	
         max_pt3=2;
         if(muon.pt() > max_pt3){
           if(!doMultipleMuon3) { max_pt3 = muon.pt();}
@@ -704,9 +729,9 @@ void JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
       nBranches_->cutflow_perevt->Fill(8);
       }
 
-    int nmuo =0;
+    //    int nmuo =0;
     for( auto mu3: mu3_vec){
-        nmuo++;
+      //        nmuo++;
      
         const reco::TrackRef track3_muon = mu3.muonBestTrack();
         reco::TransientTrack tt3_muon = (*builder).build(track3_muon);
@@ -850,6 +875,16 @@ void JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
         }
 
 
+
+	std::vector< RefCountedKinematicParticle > bc_children = bcTree->finalStateParticles();
+	math::PtEtaPhiMLorentzVector mu3_fit = daughter_p4(bc_children, 0);
+
+
+	//	std::cout << "before fit3: " << mu3.pt() << " " << mu3.eta() << " " << mu3.phi() << " " << mu3.mass() << std::endl;
+	//	std::cout << "after fit3: " << mu3_fit.pt() << " " << mu3_fit.eta() << " " << mu3_fit.phi() << " " << mu3_fit.mass() << std::endl;
+
+
+
         // std::cout << "J/psi candidate (lip, lips, pvip, pvips, fl3d, fls3d, alpha) = " << JPcand.lip << " " << JPcand.lips << " " << JPcand.pvip << " " << JPcand.pvips << " " << JPcand.fl3d << " " << JPcand.fls3d << " " << JPcand.alpha << std::endl;
 
         //std::cout << "B candidate (lip, lips, pvip, pvips, fl3d, fls3d, alpha) = " << Bcand.lip << " " << Bcand.lips << " " << Bcand.pvip << " " << Bcand.pvips << " " << Bcand.fl3d << " " << Bcand.fls3d << " " << Bcand.alpha << std::endl;
@@ -894,17 +929,20 @@ void JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
             if(_dR < 0.7) iso += mypfcollection[itrk].pt();
 
             Float_t _dR1 = reco::deltaR(mypfcollection[itrk].eta(), mypfcollection[itrk].phi(),
-                                        muoncollection[mcidx_mu1].eta(), muoncollection[mcidx_mu1].phi());
+                                        mu1_fit.eta(), mu1_fit.phi());
+					//                                        muoncollection[mcidx_mu1].eta(), muoncollection[mcidx_mu1].phi());
 
             if(_dR1 < 0.7) iso_mu1 += mypfcollection[itrk].pt();
 
             Float_t _dR2 = reco::deltaR(mypfcollection[itrk].eta(), mypfcollection[itrk].phi(),
-                                        muoncollection[mcidx_mu2].eta(), muoncollection[mcidx_mu2].phi());
+                                        mu2_fit.eta(), mu2_fit.phi());
+	    //                                        muoncollection[mcidx_mu2].eta(), muoncollection[mcidx_mu2].phi());
 
             if(_dR2 < 0.7) iso_mu2 += mypfcollection[itrk].pt();
 
             Float_t _dR3 = reco::deltaR(mypfcollection[itrk].eta(), mypfcollection[itrk].phi(),
-                                        mu3.eta(), mu3.phi());
+					mu3_fit.eta(), mu3_fit.phi());
+					//                                        mu3.eta(), mu3.phi());
 
             if(_dR3 < 0.7) iso_mu3 += mypfcollection[itrk].pt();
 
@@ -948,49 +986,63 @@ void JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
          *
          ********************************************************************/
 
+        nBranches_->Jpsi_mu1_pt.push_back(mu1_fit.pt());
+        nBranches_->Jpsi_mu1_eta.push_back(mu1_fit.eta());
+        nBranches_->Jpsi_mu1_phi.push_back(mu1_fit.phi());
+        nBranches_->Jpsi_mu1_mass.push_back(mu1_fit.mass());
+        nBranches_->Jpsi_mu1_unfit_pt.push_back(muoncollection[mcidx_mu1].pt());
+        nBranches_->Jpsi_mu1_unfit_eta.push_back(muoncollection[mcidx_mu1].eta());
+        nBranches_->Jpsi_mu1_unfit_phi.push_back(muoncollection[mcidx_mu1].phi());
+        nBranches_->Jpsi_mu1_unfit_mass.push_back(muoncollection[mcidx_mu1].mass());
+        nBranches_->Jpsi_mu1_q.push_back(muoncollection[mcidx_mu1].charge());
         nBranches_->Jpsi_mu1_isLoose.push_back(muoncollection[mcidx_mu1].isLooseMuon());
         nBranches_->Jpsi_mu1_isTight.push_back(muoncollection[mcidx_mu1].isTightMuon(closestVertex));
         nBranches_->Jpsi_mu1_isPF.push_back(muoncollection[mcidx_mu1].isPFMuon());
         nBranches_->Jpsi_mu1_isGlobal.push_back(muoncollection[mcidx_mu1].isGlobalMuon());
         nBranches_->Jpsi_mu1_isTracker.push_back(muoncollection[mcidx_mu1].isTrackerMuon());
         nBranches_->Jpsi_mu1_isSoft.push_back(muoncollection[mcidx_mu1].isSoftMuon(closestVertex));
-        nBranches_->Jpsi_mu1_pt.push_back(muoncollection[mcidx_mu1].pt());
-        nBranches_->Jpsi_mu1_eta.push_back(muoncollection[mcidx_mu1].eta());
-        nBranches_->Jpsi_mu1_phi.push_back(muoncollection[mcidx_mu1].phi());
-        nBranches_->Jpsi_mu1_q.push_back(muoncollection[mcidx_mu1].charge());
         nBranches_->Jpsi_mu1_vx.push_back(muoncollection[mcidx_mu1].vx());
         nBranches_->Jpsi_mu1_vy.push_back(muoncollection[mcidx_mu1].vy());
         nBranches_->Jpsi_mu1_vz.push_back(muoncollection[mcidx_mu1].vz());
         nBranches_->Jpsi_mu1_iso.push_back(iso_mu1);
         nBranches_->Jpsi_mu1_dbiso.push_back(MuonPFIso(muoncollection[mcidx_mu1]));
-
   
+        nBranches_->Jpsi_mu2_pt.push_back(mu2_fit.pt());
+        nBranches_->Jpsi_mu2_eta.push_back(mu2_fit.eta());
+        nBranches_->Jpsi_mu2_phi.push_back(mu2_fit.phi());
+        nBranches_->Jpsi_mu2_mass.push_back(mu2_fit.mass());
+        nBranches_->Jpsi_mu2_unfit_pt.push_back(muoncollection[mcidx_mu2].pt());
+        nBranches_->Jpsi_mu2_unfit_eta.push_back(muoncollection[mcidx_mu2].eta());
+        nBranches_->Jpsi_mu2_unfit_phi.push_back(muoncollection[mcidx_mu2].phi());
+        nBranches_->Jpsi_mu2_unfit_mass.push_back(muoncollection[mcidx_mu2].mass());
+        nBranches_->Jpsi_mu2_q.push_back(muoncollection[mcidx_mu2].charge());
         nBranches_->Jpsi_mu2_isLoose.push_back(muoncollection[mcidx_mu2].isLooseMuon());
         nBranches_->Jpsi_mu2_isTight.push_back(muoncollection[mcidx_mu2].isTightMuon(closestVertex));
         nBranches_->Jpsi_mu2_isPF.push_back(muoncollection[mcidx_mu2].isPFMuon());
         nBranches_->Jpsi_mu2_isGlobal.push_back(muoncollection[mcidx_mu2].isGlobalMuon());
         nBranches_->Jpsi_mu2_isTracker.push_back(muoncollection[mcidx_mu2].isTrackerMuon());
         nBranches_->Jpsi_mu2_isSoft.push_back(muoncollection[mcidx_mu2].isSoftMuon(closestVertex));
-        nBranches_->Jpsi_mu2_pt.push_back(muoncollection[mcidx_mu2].pt());
-        nBranches_->Jpsi_mu2_eta.push_back(muoncollection[mcidx_mu2].eta());
-        nBranches_->Jpsi_mu2_phi.push_back(muoncollection[mcidx_mu2].phi());
-        nBranches_->Jpsi_mu2_q.push_back(muoncollection[mcidx_mu2].charge());
         nBranches_->Jpsi_mu2_vx.push_back(muoncollection[mcidx_mu2].vx());
         nBranches_->Jpsi_mu2_vy.push_back(muoncollection[mcidx_mu2].vy());
         nBranches_->Jpsi_mu2_vz.push_back(muoncollection[mcidx_mu2].vz());
         nBranches_->Jpsi_mu2_iso.push_back(iso_mu2);
         nBranches_->Jpsi_mu2_dbiso.push_back(MuonPFIso(muoncollection[mcidx_mu2]));
 
+        nBranches_->Jpsi_mu3_unfit_pt.push_back(mu3.pt());
+        nBranches_->Jpsi_mu3_unfit_eta.push_back(mu3.eta());
+        nBranches_->Jpsi_mu3_unfit_phi.push_back(mu3.phi());
+        nBranches_->Jpsi_mu3_unfit_mass.push_back(mu3.mass());
+        nBranches_->Jpsi_mu3_pt.push_back(mu3_fit.pt());
+        nBranches_->Jpsi_mu3_eta.push_back(mu3_fit.eta());
+        nBranches_->Jpsi_mu3_phi.push_back(mu3_fit.phi());
+        nBranches_->Jpsi_mu3_mass.push_back(mu3_fit.mass());
+        nBranches_->Jpsi_mu3_q.push_back(mu3.charge());
         nBranches_->Jpsi_mu3_isLoose.push_back(mu3.isLooseMuon());
         nBranches_->Jpsi_mu3_isTight.push_back(mu3.isTightMuon(closestVertex));
         nBranches_->Jpsi_mu3_isPF.push_back(mu3.isPFMuon());
         nBranches_->Jpsi_mu3_isGlobal.push_back(mu3.isGlobalMuon());
         nBranches_->Jpsi_mu3_isTracker.push_back(mu3.isTrackerMuon());
         nBranches_->Jpsi_mu3_isSoft.push_back(mu3.isSoftMuon(closestVertex));
-        nBranches_->Jpsi_mu3_pt.push_back(mu3.pt());
-        nBranches_->Jpsi_mu3_eta.push_back(mu3.eta());
-        nBranches_->Jpsi_mu3_phi.push_back(mu3.phi());
-        nBranches_->Jpsi_mu3_q.push_back(mu3.charge());
         nBranches_->Jpsi_mu3_vx.push_back(mu3.vx());
         nBranches_->Jpsi_mu3_vy.push_back(mu3.vy());
         nBranches_->Jpsi_mu3_vz.push_back(mu3.vz());
@@ -1032,9 +1084,9 @@ void JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
         nBranches_->Jpsi_vx.push_back(jpsi_vertex->vertexState().position().x());
         nBranches_->Jpsi_vy.push_back(jpsi_vertex->vertexState().position().y());
         nBranches_->Jpsi_vz.push_back(jpsi_vertex->vertexState().position().z());  
-        nBranches_->Jpsi_unfitpt.push_back(jpsi_tlv_highest.Pt());
-        nBranches_->Jpsi_unfitmass.push_back(jpsi_tlv_highest.M());
-        nBranches_->Jpsi_unfitvprob.push_back(jpsi_vprob_highest);
+        nBranches_->Jpsi_unfit_pt.push_back(jpsi_tlv_highest.Pt());
+        nBranches_->Jpsi_unfit_mass.push_back(jpsi_tlv_highest.M());
+        nBranches_->Jpsi_unfit_vprob.push_back(jpsi_vprob_highest);
 
         if(jpsi_vprob_highest!=-9){
             nBranches_->Jpsi_unfit_vx.push_back(jpsi_vertex_highest.position().x());
@@ -1073,9 +1125,9 @@ void JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
         nBranches_->Jpsi_trimu_iso_mindoca.push_back(iso_mindoca);
 
 
-        nBranches_->Jpsi_trimu_unfitpt.push_back(tlv_B.Pt());
-        nBranches_->Jpsi_trimu_unfitmass.push_back(tlv_B.M());
-        nBranches_->Jpsi_trimu_unfitvprob.push_back(vprob_bc);
+        nBranches_->Jpsi_trimu_unfit_pt.push_back(tlv_B.Pt());
+        nBranches_->Jpsi_trimu_unfit_mass.push_back(tlv_B.M());
+        nBranches_->Jpsi_trimu_unfit_vprob.push_back(vprob_bc);
   
         if(vprob_bc!=-9){
             nBranches_->Jpsi_trimu_unfit_vx.push_back(vertex_bc.position().x());
@@ -1143,7 +1195,7 @@ void JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
         bool flag_nr_match = false;
         if(gen_nr_mu.size()==1){
             Float_t _dR = reco::deltaR(gen_nr_mu[0]->eta(), gen_nr_mu[0]->phi(), 
-                                       mu3.eta(), mu3.phi());
+                                       mu3_fit.eta(), mu3_fit.phi());
 
             if(_dR < 0.1) flag_nr_match = true;
         }
@@ -1152,16 +1204,20 @@ void JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
         if(gen_jpsi_mu.size()==2){
 
             Float_t _dR_11 = reco::deltaR(gen_jpsi_mu[0]->eta(), gen_jpsi_mu[0]->phi(), 
-                                          muoncollection[mcidx_mu1].eta(), muoncollection[mcidx_mu1].phi());
+					  mu1_fit.eta(), mu1_fit.phi());
+					  //                                          muoncollection[mcidx_mu1].eta(), muoncollection[mcidx_mu1].phi());
     
             Float_t _dR_22 = reco::deltaR(gen_jpsi_mu[1]->eta(), gen_jpsi_mu[1]->phi(), 
-                                          muoncollection[mcidx_mu2].eta(), muoncollection[mcidx_mu2].phi());
+					  mu2_fit.eta(), mu2_fit.phi());
+					  //                                          muoncollection[mcidx_mu2].eta(), muoncollection[mcidx_mu2].phi());
 
             Float_t _dR_21 = reco::deltaR(gen_jpsi_mu[1]->eta(), gen_jpsi_mu[1]->phi(), 
-                                          muoncollection[mcidx_mu1].eta(), muoncollection[mcidx_mu1].phi());
+					  mu1_fit.eta(), mu1_fit.phi());
+					  //                                          muoncollection[mcidx_mu1].eta(), muoncollection[mcidx_mu1].phi());
     
             Float_t _dR_12 = reco::deltaR(gen_jpsi_mu[0]->eta(), gen_jpsi_mu[0]->phi(), 
-                                          muoncollection[mcidx_mu2].eta(), muoncollection[mcidx_mu2].phi());
+					  mu2_fit.eta(), mu2_fit.phi());
+					  //                                          muoncollection[mcidx_mu2].eta(), muoncollection[mcidx_mu2].phi());
       
 
             if(_dR_11 < 0.1 && _dR_22 < 0.1) flag_jpsi_match = true;
