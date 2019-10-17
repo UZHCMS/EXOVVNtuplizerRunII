@@ -264,6 +264,8 @@ public:
   std::vector<float>                Jpsi_mu3_unfit_eta     ;
   std::vector<float>                Jpsi_mu3_unfit_phi     ;
   std::vector<float>                Jpsi_mu3_unfit_mass     ;
+  std::vector<float>                Jpsi_mu3_doca2mu1;
+  std::vector<float>                Jpsi_mu3_doca2mu2;
   std::vector<int  >                Jpsi_mu3_q   ;   
   std::vector<int  >                Jpsi_mu3_isLoose   ;
   std::vector<int  >                Jpsi_mu3_isTight   ;
