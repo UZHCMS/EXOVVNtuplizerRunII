@@ -1048,6 +1048,18 @@ void JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
         nBranches_->Jpsi_mu3_iso.push_back(iso_mu3);
         nBranches_->Jpsi_mu3_dbiso.push_back(MuonPFIso(mu3));
 
+	std::vector<RefCountedKinematicParticle> mu13;
+	mu13.push_back(pFactory.particle(tt1_muon, muon_mass, chi, ndf, muon_sigma));
+	mu13.push_back(pFactory.particle(tt3_muon, muon_mass, chi, ndf, muon_sigma));
+
+	std::vector<RefCountedKinematicParticle> mu23;
+	mu23.push_back(pFactory.particle(tt2_muon, muon_mass, chi, ndf, muon_sigma));
+	mu23.push_back(pFactory.particle(tt3_muon, muon_mass, chi, ndf, muon_sigma));
+
+        nBranches_->Jpsi_mu3_doca2mu1.push_back(getMaxDoca(mu13));
+        nBranches_->Jpsi_mu3_doca2mu2.push_back(getMaxDoca(mu23));
+	
+
         nBranches_->Jpsi_PV_vx.push_back(vertices_->begin()->position().x());
         nBranches_->Jpsi_PV_vy.push_back(vertices_->begin()->position().y());
         nBranches_->Jpsi_PV_vz.push_back(vertices_->begin()->position().z());
