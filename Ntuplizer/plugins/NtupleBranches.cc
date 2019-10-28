@@ -248,6 +248,8 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch("Jpsi_mu3_unfit_eta", &Jpsi_mu3_unfit_eta );
     tree_->Branch("Jpsi_mu3_unfit_phi", &Jpsi_mu3_unfit_phi );
     tree_->Branch("Jpsi_mu3_unfit_mass", &Jpsi_mu3_unfit_mass );
+    tree_->Branch("Jpsi_mu3_doca2mu1", &Jpsi_mu3_doca2mu1 );
+    tree_->Branch("Jpsi_mu3_doca2mu2", &Jpsi_mu3_doca2mu2 );
     tree_->Branch("Jpsi_mu3_q", &Jpsi_mu3_q );
     tree_->Branch("Jpsi_mu3_isLoose"  , &Jpsi_mu3_isLoose   );
     tree_->Branch("Jpsi_mu3_isTight"  , &Jpsi_mu3_isTight   );
@@ -539,6 +541,8 @@ void NtupleBranches::reset( void ){
   Jpsi_mu3_unfit_eta.clear();
   Jpsi_mu3_unfit_phi.clear();
   Jpsi_mu3_unfit_mass.clear();
+  Jpsi_mu3_doca2mu1.clear();
+  Jpsi_mu3_doca2mu2.clear();
   Jpsi_mu3_q.clear();
   Jpsi_mu3_isLoose.clear();
   Jpsi_mu3_isTight.clear();
