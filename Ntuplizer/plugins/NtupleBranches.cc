@@ -472,6 +472,9 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch("JpsiTau_isgenmatched", &JpsiTau_isgenmatched);
     tree_->Branch("JpsiTau_isgen3", &JpsiTau_isgen3);
     tree_->Branch("JpsiTau_isgen3matched", &JpsiTau_isgen3matched);
+    tree_->Branch("JpsiTau_nch", &JpsiTau_nch);
+    tree_->Branch("JpsiTau_ngentau3", &JpsiTau_ngentau3); 
+    tree_->Branch("JpsiTau_ngentau", &JpsiTau_ngentau);
 
   }
 
@@ -902,6 +905,9 @@ void NtupleBranches::reset( void ){
 
   JpsiTau_isgen3.clear();
   JpsiTau_isgen3matched.clear();
+  JpsiTau_nch.clear();
+  JpsiTau_ngentau3.clear();
+  JpsiTau_ngentau.clear();
 
 
 

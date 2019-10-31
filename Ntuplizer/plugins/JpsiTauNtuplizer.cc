@@ -1162,6 +1162,59 @@ void JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
        *
        ********************************************************************/
 
+
+      nBranches_->JpsiTau_tau_fullfit_pt.push_back(cands[ic].cand_tau_fullfit_pt);
+      nBranches_->JpsiTau_tau_fullfit_eta.push_back(cands[ic].cand_tau_fullfit_eta);
+      nBranches_->JpsiTau_tau_fullfit_phi.push_back(cands[ic].cand_tau_fullfit_phi);
+      nBranches_->JpsiTau_tau_fullfit_mass.push_back(cands[ic].cand_tau_fullfit_mass);
+      nBranches_->JpsiTau_tau_pt.push_back(cands[ic].cand_tau_pt);
+      nBranches_->JpsiTau_tau_eta.push_back(cands[ic].cand_tau_eta);
+      nBranches_->JpsiTau_tau_phi.push_back(cands[ic].cand_tau_phi);
+      nBranches_->JpsiTau_tau_mass.push_back(cands[ic].cand_tau_mass);
+      nBranches_->JpsiTau_tau_q.push_back(cands[ic].cand_tau_charge);
+      nBranches_->JpsiTau_tau_vx.push_back(cands[ic].cand_tau_vx);
+      nBranches_->JpsiTau_tau_vy.push_back(cands[ic].cand_tau_vy);
+      nBranches_->JpsiTau_tau_vz.push_back(cands[ic].cand_tau_vz);
+      nBranches_->JpsiTau_tau_iso.push_back(cands[ic].cand_tau_iso);
+
+
+
+      nBranches_->JpsiTau_B_pt.push_back(cands[ic].cand_b_pt);
+      nBranches_->JpsiTau_B_eta.push_back(cands[ic].cand_b_eta);
+      nBranches_->JpsiTau_B_phi.push_back(cands[ic].cand_b_phi);
+      nBranches_->JpsiTau_B_mass.push_back(cands[ic].cand_b_mass);
+      nBranches_->JpsiTau_B_vprob.push_back(cands[ic].cand_b_vprob);
+      nBranches_->JpsiTau_B_lip.push_back(cands[ic].cand_b_lip);
+      nBranches_->JpsiTau_B_lips.push_back(cands[ic].cand_b_lips);
+      nBranches_->JpsiTau_B_pvip.push_back(cands[ic].cand_b_pvip);
+      nBranches_->JpsiTau_B_pvips.push_back(cands[ic].cand_b_pvips);
+      nBranches_->JpsiTau_B_fls3d.push_back(cands[ic].cand_b_fls3d);
+      nBranches_->JpsiTau_B_fl3d.push_back(cands[ic].cand_b_fl3d);
+      nBranches_->JpsiTau_B_alpha.push_back(cands[ic].cand_b_alpha);
+
+      std::vector<RefCountedKinematicParticle> allParticles4doc;
+      
+      allParticles4doc.push_back(pFactory.particle(tt1_muon, muon_mass, chi, ndf, muon_sigma));
+      allParticles4doc.push_back(pFactory.particle(tt2_muon, muon_mass, chi, ndf, muon_sigma));
+      allParticles4doc.push_back(pFactory.particle(mytracks[cands[ic].cand_tau_id1], pion_mass, chi, ndf, pion_sigma));
+      allParticles4doc.push_back(pFactory.particle(mytracks[cands[ic].cand_tau_id2], pion_mass, chi, ndf, pion_sigma));
+      allParticles4doc.push_back(pFactory.particle(mytracks[cands[ic].cand_tau_id3], pion_mass, chi, ndf, pion_sigma));
+
+
+      nBranches_->JpsiTau_B_maxdoca.push_back(getMaxDoca(allParticles4doc));
+      nBranches_->JpsiTau_B_mindoca.push_back(getMinDoca(allParticles4doc));
+      nBranches_->JpsiTau_B_vx.push_back(cands[ic].cand_b_vx);
+      nBranches_->JpsiTau_B_vy.push_back(cands[ic].cand_b_vy);
+      nBranches_->JpsiTau_B_vz.push_back(cands[ic].cand_b_vz);
+
+      nBranches_->JpsiTau_B_iso.push_back(cands[ic].cand_tau_iso);
+      nBranches_->JpsiTau_B_iso_ntracks.push_back(cands[ic].cand_tau_iso_ntracks);
+      nBranches_->JpsiTau_B_iso_mindoca.push_back(cands[ic].cand_tau_iso_mindoca);
+
+
+
+
+
       nBranches_->JpsiTau_mu1_pt.push_back(mu1_fit.pt());
       nBranches_->JpsiTau_mu1_eta.push_back(mu1_fit.eta());
       nBranches_->JpsiTau_mu1_phi.push_back(mu1_fit.phi());
@@ -1203,20 +1256,6 @@ void JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
       nBranches_->JpsiTau_mu2_vz.push_back(muoncollection[mcidx_mu2].vz());
       nBranches_->JpsiTau_mu2_iso.push_back(2.);
       nBranches_->JpsiTau_mu2_dbiso.push_back(MuonPFIso(muoncollection[mcidx_mu2]));
-
-      nBranches_->JpsiTau_tau_fullfit_pt.push_back(cands[ic].cand_tau_fullfit_pt);
-      nBranches_->JpsiTau_tau_fullfit_eta.push_back(cands[ic].cand_tau_fullfit_eta);
-      nBranches_->JpsiTau_tau_fullfit_phi.push_back(cands[ic].cand_tau_fullfit_phi);
-      nBranches_->JpsiTau_tau_fullfit_mass.push_back(cands[ic].cand_tau_fullfit_mass);
-      nBranches_->JpsiTau_tau_pt.push_back(cands[ic].cand_tau_pt);
-      nBranches_->JpsiTau_tau_eta.push_back(cands[ic].cand_tau_eta);
-      nBranches_->JpsiTau_tau_phi.push_back(cands[ic].cand_tau_phi);
-      nBranches_->JpsiTau_tau_mass.push_back(cands[ic].cand_tau_mass);
-      nBranches_->JpsiTau_tau_q.push_back(cands[ic].cand_tau_charge);
-      nBranches_->JpsiTau_tau_vx.push_back(cands[ic].cand_tau_vx);
-      nBranches_->JpsiTau_tau_vy.push_back(cands[ic].cand_tau_vy);
-      nBranches_->JpsiTau_tau_vz.push_back(cands[ic].cand_tau_vz);
-      nBranches_->JpsiTau_tau_iso.push_back(cands[ic].cand_tau_iso);
 
       nBranches_->JpsiTau_PV_vx.push_back(vertices_->begin()->position().x());
       nBranches_->JpsiTau_PV_vy.push_back(vertices_->begin()->position().y());
@@ -1264,49 +1303,12 @@ void JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
       }
 
 
-      nBranches_->JpsiTau_B_pt.push_back(cands[ic].cand_b_pt);
-      nBranches_->JpsiTau_B_eta.push_back(cands[ic].cand_b_eta);
-      nBranches_->JpsiTau_B_phi.push_back(cands[ic].cand_b_phi);
-      nBranches_->JpsiTau_B_mass.push_back(cands[ic].cand_b_mass);
-      nBranches_->JpsiTau_B_vprob.push_back(cands[ic].cand_b_vprob);
-      nBranches_->JpsiTau_B_lip.push_back(cands[ic].cand_b_lip);
-      nBranches_->JpsiTau_B_lips.push_back(cands[ic].cand_b_lips);
-      nBranches_->JpsiTau_B_pvip.push_back(cands[ic].cand_b_pvip);
-      nBranches_->JpsiTau_B_pvips.push_back(cands[ic].cand_b_pvips);
-      nBranches_->JpsiTau_B_fls3d.push_back(cands[ic].cand_b_fls3d);
-      nBranches_->JpsiTau_B_fl3d.push_back(cands[ic].cand_b_fl3d);
-      nBranches_->JpsiTau_B_alpha.push_back(cands[ic].cand_b_alpha);
-
-      std::vector<RefCountedKinematicParticle> allParticles4doc;
-      
-      allParticles4doc.push_back(pFactory.particle(tt1_muon, muon_mass, chi, ndf, muon_sigma));
-      allParticles4doc.push_back(pFactory.particle(tt2_muon, muon_mass, chi, ndf, muon_sigma));
-      allParticles4doc.push_back(pFactory.particle(mytracks[cands[ic].cand_tau_id1], pion_mass, chi, ndf, pion_sigma));
-      allParticles4doc.push_back(pFactory.particle(mytracks[cands[ic].cand_tau_id2], pion_mass, chi, ndf, pion_sigma));
-      allParticles4doc.push_back(pFactory.particle(mytracks[cands[ic].cand_tau_id3], pion_mass, chi, ndf, pion_sigma));
-
-
-      nBranches_->JpsiTau_B_maxdoca.push_back(getMaxDoca(allParticles4doc));
-      nBranches_->JpsiTau_B_mindoca.push_back(getMinDoca(allParticles4doc));
-      nBranches_->JpsiTau_B_vx.push_back(cands[ic].cand_b_vx);
-      nBranches_->JpsiTau_B_vy.push_back(cands[ic].cand_b_vy);
-      nBranches_->JpsiTau_B_vz.push_back(cands[ic].cand_b_vz);
-
-      nBranches_->JpsiTau_B_iso.push_back(cands[ic].cand_tau_iso);
-      nBranches_->JpsiTau_B_iso_ntracks.push_back(cands[ic].cand_tau_iso_ntracks);
-      nBranches_->JpsiTau_B_iso_mindoca.push_back(cands[ic].cand_tau_iso_mindoca);
-
-
-
-
-
       /********************************************************************
        *
        * Step10: check gen-matching and fill them
        *
        ********************************************************************/
 
-  
       TVector3 genvertex(-9.,-9.,-9.);
   
       std::vector<const reco::Candidate*> gen_nr_mu;
@@ -1384,12 +1386,22 @@ void JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
       nBranches_->JpsiTau_ngenmuons.push_back(gen_nr_mu.size() + gen_jpsi_mu.size());
       nBranches_->JpsiTau_isgenmatched.push_back((int)flag_jpsi_match);
 
-      nBranches_->JpsiTau_isgen3.push_back(isgen3);
-      nBranches_->JpsiTau_isgen3matched.push_back(isgen3matched);
 
+
+
+
+
+  
 
     }
 
+
+
+    nBranches_->JpsiTau_isgen3.push_back(isgen3);
+    nBranches_->JpsiTau_isgen3matched.push_back(isgen3matched);
+    nBranches_->JpsiTau_nch.push_back(numOfch);
+    nBranches_->JpsiTau_ngentau3.push_back(gps.size());
+    nBranches_->JpsiTau_ngentau.push_back(vec_gentaudm.size());
     nBranches_->IsJpsiTau.push_back(1.);
     nBranches_->JpsiTau_nCandidates.push_back(nBranches_->JpsiTau_mu1_pt.size());
 
