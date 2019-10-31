@@ -23,6 +23,7 @@ private:
 
    bool isJpsiMu_;
    bool isJpsiEle_;
+   bool isJpsiTau_;
 };
 
 #endif // VerticesNtuplizer_H

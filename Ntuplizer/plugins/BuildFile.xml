@@ -31,4 +31,6 @@
 <use name="root"/>
 <use name="DataFormats/Math"/>
 <use name="DataFormats/TrackReco"/>
+<use   name="DataFormats/HepMCCandidate"/>
+<use   name="PhysicsTools/JetMCUtils"/>
 <flags EDM_PLUGIN="1"/>

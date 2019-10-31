@@ -33,6 +33,7 @@ TriggersNtuplizer::TriggersNtuplizer( edm::EDGetTokenT<edm::TriggerResults> toke
    , runOnMC_           ( runFlags["runOnMC"] )
    , isJpsiMu_( runFlags["doJpsiMu"]  )
    , isJpsiEle_( runFlags["doJpsiEle"]  )
+   , isJpsiTau_( runFlags["doJpsiTau"]  )
 {
 
   HBHENoiseFilter_Selector_ =  iConfig.getParameter<std::string> ("noiseFilterSelection_HBHENoiseFilter");
@@ -308,9 +309,18 @@ void TriggersNtuplizer::fillBranches( edm::Event const & event, const edm::Event
   
     //Skip events with no jspi if that analysis is chosen
    
+    bool rflag = false;
+    
     if(isJpsiEle_ || isJpsiMu_){
-        if ( nBranches_->Jpsi_trimu_pt.size() <1)  return;
+      if ( nBranches_->JpsiMu_B_pt.size() >=1) rflag = true;
     }
+    
+    if(isJpsiTau_){
+      if ( nBranches_->JpsiTau_B_pt.size() >=1)  rflag = true;
+    }
+
+    if(rflag==false) return;
+
 
     event.getByToken(HLTtriggersToken_, HLTtriggers_);
     event.getByToken(triggerObjects_  , triggerObjects);

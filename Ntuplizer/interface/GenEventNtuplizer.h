@@ -35,6 +35,7 @@ private:
    edm::Handle<LHEEventProduct> lheEventProduct_;
    bool isJpsiMu_;
    bool isJpsiEle_;
+   bool isJpsiTau_;
 
 };
 

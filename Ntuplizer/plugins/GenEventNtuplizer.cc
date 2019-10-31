@@ -7,6 +7,7 @@ GenEventNtuplizer::GenEventNtuplizer( std::vector< edm::EDGetTokenT< GenEventInf
    , lheEventProductToken_( tokens_lhe[0])
    , isJpsiMu_( runFlags["doJpsiMu"]  )
    , isJpsiEle_( runFlags["doJpsiEle"]  )
+   , isJpsiTau_( runFlags["doJpsiTau"]  )
 {
 
 }
@@ -19,13 +20,20 @@ GenEventNtuplizer::~GenEventNtuplizer( void )
 
 //===================================================================================================================
 void GenEventNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetup& iSetup ){
-  //chunk to remove those events with no jspi if that analysis is chosen
-  std::vector<int> doJpsi_;
+
   //Skip events with no jspi if that analysis is chosen
-  
-  if(isJpsiEle_ || isJpsiMu_){
-      if ( nBranches_->Jpsi_trimu_pt.size() <1)  return;
-  }
+
+    bool rflag = false;
+    
+    if(isJpsiEle_ || isJpsiMu_){
+      if ( nBranches_->JpsiMu_B_pt.size() >=1) rflag = true;
+    }
+    
+    if(isJpsiTau_){
+      if ( nBranches_->JpsiTau_B_pt.size() >=1)  rflag = true;
+    }
+
+    if(rflag==false) return;
   
   event.getByToken(geneventToken_, geneventInfo_);  
   

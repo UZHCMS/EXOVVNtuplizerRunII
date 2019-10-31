@@ -36,6 +36,7 @@ METsNtuplizer::METsNtuplizer( 	edm::EDGetTokenT<pat::METCollection>     mettoken
   , doMVAMET_        ( runFlags["doMVAMET"]  )					    
   , isJpsiMu_( runFlags["doJpsiMu"]  )
   , isJpsiEle_( runFlags["doJpsiEle"]  )
+  , isJpsiTau_( runFlags["doJpsiTau"]  )
 {
         if( jetCorrLabel_.size() != 0 ){
 	   offsetCorrLabel_.push_back(jetCorrLabel_[0]);
@@ -186,9 +187,17 @@ void METsNtuplizer::addTypeICorr( edm::Event const & event ){
 void METsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetup& iSetup ){
     //Skip events with no jspi if that analysis is chosen
    
-    if(isJpsiEle_ ||isJpsiMu_){
-        if ( nBranches_->Jpsi_trimu_pt.size() <1)  return;
+    bool rflag = false;
+    
+    if(isJpsiEle_ || isJpsiMu_){
+      if ( nBranches_->JpsiMu_B_pt.size() >=1) rflag = true;
     }
+    
+    if(isJpsiTau_){
+      if ( nBranches_->JpsiTau_B_pt.size() >=1)  rflag = true;
+    }
+
+    if(rflag==false) return;
       
         // PFMET
 	
