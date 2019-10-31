@@ -489,6 +489,9 @@ public:
   std::vector<int  >                JpsiTau_isgenmatched;
   std::vector<bool  >                JpsiTau_isgen3;
   std::vector<bool  >                JpsiTau_isgen3matched;
+  std::vector<int> JpsiTau_nch;
+  std::vector<int> JpsiTau_ngentau3;
+  std::vector<int> JpsiTau_ngentau;
 
 
   /** HLT trigger objects */
