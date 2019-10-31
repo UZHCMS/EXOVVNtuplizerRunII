@@ -6,6 +6,7 @@ PileUpNtuplizer::PileUpNtuplizer( std::vector< edm::EDGetTokenT< std::vector<Pil
    , pileUpToken_( tokens[0] )
    , isJpsiMu_( runFlags["doJpsiMu"]  )
    , isJpsiEle_( runFlags["doJpsiEle"]  )
+   , isJpsiTau_( runFlags["doJpsiTau"]  )
 {
 
 }
@@ -21,9 +22,18 @@ void PileUpNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
  
     //Skip events with no jspi if that analysis is chosen
    
+    bool rflag = false;
+    
     if(isJpsiEle_ || isJpsiMu_){
-        if ( nBranches_->Jpsi_trimu_pt.size() <1)  return;
+      if ( nBranches_->JpsiMu_B_pt.size() >=1) rflag = true;
     }
+    
+    if(isJpsiTau_){
+      if ( nBranches_->JpsiTau_B_pt.size() >=1)  rflag = true;
+    }
+
+    if(rflag==false) return;
+
 
     event.getByToken(pileUpToken_, pileUpInfo_);  
 

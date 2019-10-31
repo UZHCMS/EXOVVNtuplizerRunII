@@ -9,6 +9,7 @@
 #include "../interface/VerticesNtuplizer.h"
 #include "../interface/JpsiMuNtuplizer.h"
 #include "../interface/JpsiEleNtuplizer.h"
+#include "../interface/JpsiTauNtuplizer.h"
 
 #include "DataFormats/PatCandidates/interface/TriggerObjectStandAlone.h"
 #include "DataFormats/PatCandidates/interface/PackedTriggerPrescales.h"
@@ -29,10 +30,11 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
 	geneventToken_        	    (consumes<GenEventInfoProduct>(iConfig.getParameter<edm::InputTag>("genEventInfo"))),     
 	lheEventProductToken_       (consumes<LHEEventProduct>(iConfig.getParameter<edm::InputTag>("externallheProducer"))),     
 	genparticleToken_     	    (consumes<reco::GenParticleCollection>(iConfig.getParameter<edm::InputTag>("genparticles"))),
-	
+	gentauToken_     	    (consumes<std::vector<reco::GenJet>>(iConfig.getParameter<edm::InputTag>("gentaus"))),
 	
 
 	muonToken_	      	    (consumes<pat::MuonCollection>(iConfig.getParameter<edm::InputTag>("muons"))),
+	electronToken_	      	    (consumes<pat::ElectronCollection>(iConfig.getParameter<edm::InputTag>("electrons"))),
 	//mvaValuesMapToken_          (consumes<edm::ValueMap<float> >(iConfig.getParameter<edm::InputTag>("mvaValuesMap"))),
 	//mvaCategoriesMapToken_      (consumes<edm::ValueMap<int> >(iConfig.getParameter<edm::InputTag>("mvaCategoriesMap"))),
 	ebRecHitsToken_             (consumes<edm::SortedCollection<EcalRecHit,edm::StrictWeakOrdering<EcalRecHit>>>(iConfig.getParameter<edm::InputTag>("ebRecHits"))),
@@ -79,10 +81,11 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
   runFlags["doMVAMET"] = iConfig.getParameter<bool>("doMVAMET");
   runFlags["doJpsiMu"] = iConfig.getParameter<bool>("doJpsiMu");
   runFlags["doJpsiEle"] = iConfig.getParameter<bool>("doJpsiEle");
+  runFlags["doJpsiTau"] = iConfig.getParameter<bool>("doJpsiTau");
   runFlags["doGenHist"] = iConfig.getParameter<bool>("doGenHist");
   runFlags["doCutFlow"] = iConfig.getParameter<bool>("doCutFlow");
   
-  electronToken_	      	    =consumes<edm::View<pat::Electron> >(iConfig.getParameter<edm::InputTag>("electrons"));
+  //  electronToken_	      	    =consumes<edm::View<pat::Electron> >(iConfig.getParameter<edm::InputTag>("electrons"));
     // eleVetoIdMapToken_    	    =consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("eleVetoIdMap"));
     // eleLooseIdMapToken_   	    =consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("eleLooseIdMap"));
     // eleMediumIdMapToken_  	    =consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("eleMediumIdMap"));
@@ -182,7 +185,7 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
 						     runFlags    );
   }
   if (runFlags["doJpsiMu"]) {
-    std::cout<<"\n\n --->GETTING INSIDE HERE<---\n\n"<<std::endl;
+    std::cout<<"\n\n --->GETTING INSIDE doJpsiMu<---\n\n"<<std::endl;
     nTuplizers_["JpsiMu"] = new JpsiMuNtuplizer( muonToken_   , 
 						 vtxToken_   , 
 						 beamToken_ ,
@@ -194,8 +197,23 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
 						 runFlags,
 						 nBranches_ );
   }
+  if (runFlags["doJpsiTau"]) {
+    std::cout<<"\n\n --->GETTING INSIDE doJpsiTau<---\n\n"<<std::endl;
+    nTuplizers_["JpsiTau"] = new JpsiTauNtuplizer( muonToken_   , 
+						   vtxToken_   , 
+						   beamToken_ ,
+						   packedpfcandidatesToken_,
+						   losttrackToken_,
+						   triggerToken_,
+						   triggerObjects_,
+						   genparticleToken_,
+						   gentauToken_,
+						   runFlags,
+						   nBranches_ );
+  }
+
   if (runFlags["doJpsiEle"]) {
-    std::cout<<"\n\n --->GETTING INSIDE THE ELECTRON PART<---\n\n"<<std::endl;
+    std::cout<<"\n\n --->GETTING INSIDE doJpsiEle<---\n\n"<<std::endl;
     nTuplizers_["JpsiEle"] = new JpsiEleNtuplizer( electronToken_   , 
 					     vtxToken_   , 
 					     nBranches_ );

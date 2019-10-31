@@ -7,6 +7,7 @@ GenParticlesNtuplizer::GenParticlesNtuplizer( std::vector<edm::EDGetTokenT<reco:
    , genParticlesToken_( tokens[0] )
    , isJpsiMu_( runFlags["doJpsiMu"])
    , isJpsiEle_( runFlags["doJpsiEle"]  )
+   , isJpsiTau_( runFlags["doJpsiTau"]  )
    , doGenHist_( runFlags["doGenHist"]  )
 {
 
@@ -110,9 +111,18 @@ void GenParticlesNtuplizer::fillBranches( edm::Event const & event, const edm::E
   
     //Skip events with no jspi if that analysis is chosen
    
+    bool rflag = false;
+    
     if(isJpsiEle_ || isJpsiMu_){
-        if ( nBranches_->Jpsi_trimu_pt.size() <1)  return;
+      if ( nBranches_->JpsiMu_B_pt.size() >=1) rflag = true;
     }
+    
+    if(isJpsiTau_){
+      if ( nBranches_->JpsiTau_B_pt.size() >=1)  rflag = true;
+    }
+
+    if(rflag==false) return;
+    
   
     /* here we want to save  gen particles info*/
    

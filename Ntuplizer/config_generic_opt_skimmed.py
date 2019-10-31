@@ -42,15 +42,18 @@ options.register( 'runUpToEarlyF',
 
 
 
-options.maxEvents = -1
+options.maxEvents = 1000
+#options.maxEvents = -1
 
 #data file
      
 #options.inputFiles ='file:/work/pmatorra/JpsiAnalysis/2018/CMSSW_10_2_10/src/EXOVVNtuplizerRunII/Ntuplizer/miniAOD_99.root'
 #options.inputFiles = '/store/user/cgalloni/BJpsiX_MuMu_230819/Autumn18_10_2_9_miniAOD/190823_131752/0000/miniAOD_57.root'
-options.inputFiles = '/store/user/cgalloni/BcJpsiMuNu_020519/Fall18_10_2_9-MINIAODSIM_noDuplCheck/190506_100026/0000/miniAOD_99.root'
+#options.inputFiles = '/store/user/cgalloni/BcJpsiMuNu_020519/Fall18_10_2_9-MINIAODSIM_noDuplCheck/190506_100026/0000/miniAOD_99.root'
+#options.inputFiles = '/store/mc/RunIIAutumn18MiniAOD/BuToKJpsi_ToMuMu_probefilter_SoftQCDnonD_TuneCP5_13TeV-pythia8-evtgen/MINIAODSIM/PUPoissonAve20_BParking_102X_upgrade2018_realistic_v15-v2/120000/FDD42175-87DC-D648-860B-F240C5E2CB91.root'
 #options.inputFiles ='/store/data/Run2018B/Charmonium/MINIAOD/17Sep2018-v1/10000/02CFE87F-7C17-1340-8300-FDA86C16D58C.root'
 #options.inputFiles ='/store/user/cgalloni/BJpsiX_MuMu_270819/Autumn18_10_2_9_miniAOD/190827_143312/0005/miniAOD_5000.root'
+options.inputFiles = '/store/user/cgalloni/BcJpsiTauNu_020519/Fall18_10_2_9-MINIAODSIM_noDuplCheck_020519/190505_141436/0000/miniAOD_99.root'
 
 options.parseArguments()
 
@@ -361,6 +364,7 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     doPileUp	      = cms.bool(config["DOPILEUP"]),
     doJpsiMu	      = cms.bool(config["DOJPSIMU"]),
     doJpsiEle	      = cms.bool(config["DOJPSIELE"]),
+    doJpsiTau	      = cms.bool(config["DOJPSITAU"]),
     doVertices	      = cms.bool(config["DOVERTICES"]),
     doTriggerDecisions= cms.bool(config["DOTRIGGERDECISIONS"]),
     doTriggerObjects  = cms.bool(config["DOTRIGGEROBJECTS"]),
@@ -411,6 +415,7 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     jetsForMetCorr = cms.InputTag(jetsAK4),
     rho = cms.InputTag("fixedGridRhoFastjetAll"),
     genparticles = cms.InputTag("prunedGenParticles"),
+    gentaus = cms.InputTag("tauGenJets"),
     PUInfo = cms.InputTag("slimmedAddPileupInfo"),
     genEventInfo = cms.InputTag("generator"),
     externallheProducer = cms.InputTag("externalLHEProducer"),
@@ -500,6 +505,13 @@ if config["DOHLTFILTERS"]:
  process.p += process.BadChargedCandidateSequence
 
 process.p += process.ecalBadCalibReducedMINIAODFilter
+
+if config["RUNONMC"]:
+  process.load("PhysicsTools.JetMCAlgos.TauGenJets_cfi")
+  process.tauGenJets.GenParticles = cms.InputTag('prunedGenParticles')
+  process.p += process.tauGenJets
+
+
 process.p += process.ntuplizer
 process.p.associate(pattask)
 

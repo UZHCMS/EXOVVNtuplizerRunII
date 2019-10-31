@@ -1,9 +1,8 @@
-#ifndef JpsiMuNtuplizer_H
-#define JpsiMuNtuplizer_H
+#ifndef JpsiTauNtuplizer_H
+#define JpsiTauNtuplizer_H
 
 #include "../interface/CandidateNtuplizer.h"
 #include "../interface/MyStruct.h"
-//#include "../interface/common.h"
 //#include "SimDataFormats/JetMatching/interface/JetFlavourMatching.h"
 //#include "SimDataFormats/JetMatching/interface/JetFlavour.h"
 
@@ -69,19 +68,19 @@
 #include "RecoVertex/KinematicFitPrimitives/interface/RefCountedKinematicTree.h"
 
 
-
 // kinematic fit package
 #include "DataFormats/TrackReco/interface/Track.h"
 #include "DataFormats/TrackReco/interface/TrackFwd.h"
 #include "FWCore/Framework/interface/MakerMacros.h"
 
+#include "RecoVertex/KinematicFitPrimitives/interface/ParticleMass.h"
 #include "RecoVertex/KinematicFitPrimitives/interface/MultiTrackKinematicConstraint.h"
 #include "RecoVertex/KinematicFit/interface/TwoTrackMassKinematicConstraint.h"
-#include "RecoVertex/KinematicFitPrimitives/interface/ParticleMass.h"
+
 
 #include "CommonTools/Statistics/interface/ChiSquaredProbability.h"
 
-
+#include "PhysicsTools/JetMCUtils/interface/JetMCTag.h"
 
 #include <tuple>
 #include <sstream>
@@ -117,11 +116,11 @@
 
 
 
-class JpsiMuNtuplizer : public CandidateNtuplizer {
+class JpsiTauNtuplizer : public CandidateNtuplizer {
 
 
  public:
-  JpsiMuNtuplizer( edm::EDGetTokenT<pat::MuonCollection>    muonToken   , 
+  JpsiTauNtuplizer( edm::EDGetTokenT<pat::MuonCollection>    muonToken   , 
 		   edm::EDGetTokenT<reco::VertexCollection> verticeToken, 
 		   edm::EDGetTokenT<reco::BeamSpot> bsToken, 
 		   edm::EDGetTokenT<pat::PackedCandidateCollection> packedpfcandidatesToken,
@@ -129,10 +128,11 @@ class JpsiMuNtuplizer : public CandidateNtuplizer {
 		   edm::EDGetTokenT<edm::TriggerResults> triggertoken,
 		   edm::EDGetTokenT<pat::TriggerObjectStandAloneCollection> triggerobject,
 		   edm::EDGetTokenT<reco::GenParticleCollection> genptoken, 
+		    edm::EDGetTokenT<std::vector<reco::GenJet>> genttoken,
 		   std::map< std::string, bool >& runFlags,
 		   NtupleBranches* nBranches );
 
-  ~JpsiMuNtuplizer( void );
+  ~JpsiTauNtuplizer( void );
 
   std::tuple<Float_t, TransientVertex> vertexProb( const std::vector<reco::TransientTrack>& tracks);
 
@@ -149,7 +149,6 @@ class JpsiMuNtuplizer : public CandidateNtuplizer {
   math::PtEtaPhiMLorentzVector daughter_p4(std::vector< RefCountedKinematicParticle > fitted_children, size_t i);
 
   float MuonPFIso(pat::Muon muon);
-  double isoTrack(double docaCut, double r, double pmin);
   void fillBranches( edm::Event const & event, const edm::EventSetup& iSetup );
   Float_t getMaxDoca(std::vector<RefCountedKinematicParticle> &kinParticles);
   Float_t getMinDoca(std::vector<RefCountedKinematicParticle> &kinParticles);
@@ -158,6 +157,8 @@ class JpsiMuNtuplizer : public CandidateNtuplizer {
   void printout(const RefCountedKinematicVertex& myVertex);
   void printout(const RefCountedKinematicParticle& myParticle);
   void printout(const RefCountedKinematicTree& myTree);
+
+  Int_t decaymode_id(std::string str);
   
 private:
    edm::EDGetTokenT<pat::MuonCollection>    muonToken_   ;
@@ -168,6 +169,7 @@ private:
    edm::EDGetTokenT<edm::TriggerResults> 		     HLTtriggersToken_;
    edm::EDGetTokenT<pat::TriggerObjectStandAloneCollection>  triggerObjects_;
    edm::EDGetTokenT<reco::GenParticleCollection> genParticlesToken_;
+   edm::EDGetTokenT<std::vector<reco::GenJet>> genTauToken_;
 
    edm::Handle<pat::MuonCollection>      		       muons_		       ;
    edm::Handle< reco::VertexCollection >  vertices_;
@@ -177,6 +179,7 @@ private:
    edm::Handle< edm::TriggerResults> 			     HLTtriggers_;
    edm::Handle<pat::TriggerObjectStandAloneCollection>	     triggerObjects;
    edm::Handle< reco::GenParticleCollection >  genParticles_;
+   edm::Handle< std::vector<reco::GenJet> >  genTaus_;
 
    edm::ESHandle<TransientTrackBuilder> builder;
 
@@ -194,7 +197,6 @@ private:
    float chi = 0.;
    float ndf = 0.;
 
-
    bool runOnMC_;   
    bool doCutFlow_;
    
@@ -203,5 +205,5 @@ private:
 
 
 
-#endif // JpsiMuNtuplizer_H
+#endif // JpsiTauNtuplizer_H
 

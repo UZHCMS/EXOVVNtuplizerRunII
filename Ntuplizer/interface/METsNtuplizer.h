@@ -69,7 +69,7 @@ public:
     bool doMVAMET_;
     bool isJpsiMu_;
     bool isJpsiEle_;
-
+    bool isJpsiTau_;
 };
 
 #endif // METsNtuplizer_H
