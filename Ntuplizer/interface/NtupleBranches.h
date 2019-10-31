@@ -415,7 +415,18 @@ public:
   std::vector<float>                JpsiTau_tau_vx       ;
   std::vector<float>                JpsiTau_tau_vy       ;
   std::vector<float>                JpsiTau_tau_vz       ;
-  std::vector<float>                JpsiTau_tau_iso       ;
+
+  std::vector<float>       JpsiTau_tau_max_dr_3prong;
+  std::vector<float>       JpsiTau_tau_lip;
+  std::vector<float>       JpsiTau_tau_lips;
+  std::vector<float>       JpsiTau_tau_pvip;
+  std::vector<float>       JpsiTau_tau_pvips;
+  std::vector<float>       JpsiTau_tau_fl3d;
+  std::vector<float>       JpsiTau_tau_fls3d;
+  std::vector<float>       JpsiTau_tau_alpha;
+  std::vector<float>       JpsiTau_tau_vprob;
+  std::vector<bool>       JpsiTau_tau_isRight;
+
 
   std::vector<float>                JpsiTau_Jpsi_pt      ;
   std::vector<float>                JpsiTau_Jpsi_eta     ;

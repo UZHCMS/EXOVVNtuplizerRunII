@@ -404,7 +404,18 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch("JpsiTau_tau_vx"   , &JpsiTau_tau_vx    );
     tree_->Branch("JpsiTau_tau_vy"   , &JpsiTau_tau_vy    );
     tree_->Branch("JpsiTau_tau_vz"   , &JpsiTau_tau_vz    );
-    tree_->Branch("JpsiTau_tau_iso"   , &JpsiTau_tau_iso    );
+
+    tree_->Branch("JpsiTau_tau_max_dr_3prong", &JpsiTau_tau_max_dr_3prong);
+    tree_->Branch("JpsiTau_tau_lip", &JpsiTau_tau_lip);
+    tree_->Branch("JpsiTau_tau_lips", &JpsiTau_tau_lips);
+    tree_->Branch("JpsiTau_tau_pvip", &JpsiTau_tau_pvip);
+    tree_->Branch("JpsiTau_tau_pvips", &JpsiTau_tau_pvips);
+    tree_->Branch("JpsiTau_tau_fl3d", &JpsiTau_tau_fl3d);
+    tree_->Branch("JpsiTau_tau_fls3d", &JpsiTau_tau_fls3d);
+    tree_->Branch("JpsiTau_tau_alpha", &JpsiTau_tau_alpha);
+    tree_->Branch("JpsiTau_tau_vprob", &JpsiTau_tau_vprob);
+    tree_->Branch("JpsiTau_tau_isRight", &JpsiTau_tau_isRight);
+
 
     tree_->Branch("JpsiTau_PV_vx", &JpsiTau_PV_vx );
     tree_->Branch("JpsiTau_PV_vy", &JpsiTau_PV_vy );
@@ -837,7 +848,19 @@ void NtupleBranches::reset( void ){
   JpsiTau_tau_vx.clear();
   JpsiTau_tau_vy.clear();
   JpsiTau_tau_vz.clear();
-  JpsiTau_tau_iso.clear();
+
+
+  JpsiTau_tau_max_dr_3prong.clear();
+  JpsiTau_tau_lip.clear();
+  JpsiTau_tau_lips.clear();
+  JpsiTau_tau_pvip.clear();
+  JpsiTau_tau_pvips.clear();
+  JpsiTau_tau_fl3d.clear();
+  JpsiTau_tau_fls3d.clear();
+  JpsiTau_tau_alpha.clear();
+  JpsiTau_tau_vprob.clear();
+  JpsiTau_tau_isRight.clear();
+
 
   JpsiTau_Jpsi_pt.clear();
   JpsiTau_Jpsi_eta.clear();

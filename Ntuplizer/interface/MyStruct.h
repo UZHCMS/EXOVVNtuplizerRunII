@@ -47,9 +47,6 @@ struct taucand{
   Float_t cand_tau_vx;
   Float_t cand_tau_vy;
   Float_t cand_tau_vz;
-  Float_t cand_tau_iso;
-  Float_t cand_tau_iso_ntracks;
-  Float_t cand_tau_iso_mindoca;
   Float_t cand_tau_max_dr_3prong;	
   Int_t cand_tau_charge;
   Bool_t cand_tau_isRight;
@@ -70,6 +67,10 @@ struct taucand{
   Float_t cand_b_fl3d;
   Float_t cand_b_fls3d;
   Float_t cand_b_alpha;
+  Float_t cand_b_iso;
+  Float_t cand_b_iso_ntracks;
+  Float_t cand_b_iso_mindoca;
+
     
   bool operator<(const taucand& another) const { 
     return cand_tau_pt > another.cand_tau_pt;
