@@ -1094,9 +1094,6 @@ void JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 	    (Float_t) tau_vertex->vertexState().position().x(), 
 	    (Float_t) tau_vertex->vertexState().position().y(), 
 	    (Float_t) tau_vertex->vertexState().position().z(), 
-	    (Float_t) iso,
-	    (Float_t) ntracks,
-	    (Float_t) iso_mindoca,
 	    (Float_t) max_dr_3prong, 
 	    (Int_t) tau_charge,
 	    (Bool_t) isRight,
@@ -1117,6 +1114,9 @@ void JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 	    (Float_t) Bcand.fl3d,
 	    (Float_t) Bcand.fls3d, 
 	    (Float_t) Bcand.alpha,
+	    (Float_t) iso,
+	    (Float_t) ntracks,
+	    (Float_t) iso_mindoca,
 	  };
 	  
 	//	std::cout << cands.size() << std::endl;
@@ -1175,9 +1175,17 @@ void JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
       nBranches_->JpsiTau_tau_vx.push_back(cands[ic].cand_tau_vx);
       nBranches_->JpsiTau_tau_vy.push_back(cands[ic].cand_tau_vy);
       nBranches_->JpsiTau_tau_vz.push_back(cands[ic].cand_tau_vz);
-      nBranches_->JpsiTau_tau_iso.push_back(cands[ic].cand_tau_iso);
 
-
+      nBranches_->JpsiTau_tau_max_dr_3prong.push_back(cands[ic].cand_tau_max_dr_3prong);
+      nBranches_->JpsiTau_tau_lip.push_back(cands[ic].cand_tau_lip);
+      nBranches_->JpsiTau_tau_lips.push_back(cands[ic].cand_tau_lips);
+      nBranches_->JpsiTau_tau_pvip.push_back(cands[ic].cand_tau_pvip);
+      nBranches_->JpsiTau_tau_pvips.push_back(cands[ic].cand_tau_pvips);
+      nBranches_->JpsiTau_tau_fl3d.push_back(cands[ic].cand_tau_fl3d);
+      nBranches_->JpsiTau_tau_fls3d.push_back(cands[ic].cand_tau_fls3d);
+      nBranches_->JpsiTau_tau_alpha.push_back(cands[ic].cand_tau_alpha);
+      nBranches_->JpsiTau_tau_vprob.push_back(cands[ic].cand_tau_vprob);
+      nBranches_->JpsiTau_tau_isRight.push_back(cands[ic].cand_tau_isRight);
 
       nBranches_->JpsiTau_B_pt.push_back(cands[ic].cand_b_pt);
       nBranches_->JpsiTau_B_eta.push_back(cands[ic].cand_b_eta);
@@ -1207,9 +1215,9 @@ void JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
       nBranches_->JpsiTau_B_vy.push_back(cands[ic].cand_b_vy);
       nBranches_->JpsiTau_B_vz.push_back(cands[ic].cand_b_vz);
 
-      nBranches_->JpsiTau_B_iso.push_back(cands[ic].cand_tau_iso);
-      nBranches_->JpsiTau_B_iso_ntracks.push_back(cands[ic].cand_tau_iso_ntracks);
-      nBranches_->JpsiTau_B_iso_mindoca.push_back(cands[ic].cand_tau_iso_mindoca);
+      nBranches_->JpsiTau_B_iso.push_back(cands[ic].cand_b_iso);
+      nBranches_->JpsiTau_B_iso_ntracks.push_back(cands[ic].cand_b_iso_ntracks);
+      nBranches_->JpsiTau_B_iso_mindoca.push_back(cands[ic].cand_b_iso_mindoca);
 
 
 
