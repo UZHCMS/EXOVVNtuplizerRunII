@@ -968,15 +968,15 @@ void JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 	  Bcand = calculateIPvariables(extrapolator, bc_part, bc_vertex, closestVertex);
 
 	  
-	  //	  std::vector< RefCountedKinematicParticle > bc_children = bcTree->finalStateParticles();
+	  std::vector< RefCountedKinematicParticle > bc_children = bcTree->finalStateParticles();
 	  
 	  //	  const auto& state = fitted_children.at(i)->currentState();
 
-	  //	  math::PtEtaPhiMLorentzVector tt1_fit = daughter_p4(bc_children, 0);
-	  //	  math::PtEtaPhiMLorentzVector tt2_fit = daughter_p4(bc_children, 1);
-	  //	  math::PtEtaPhiMLorentzVector tt3_fit = daughter_p4(bc_children, 2);
+	  math::PtEtaPhiMLorentzVector tt1_fit = daughter_p4(bc_children, 0);
+	  math::PtEtaPhiMLorentzVector tt2_fit = daughter_p4(bc_children, 1);
+	  math::PtEtaPhiMLorentzVector tt3_fit = daughter_p4(bc_children, 2);
 
-	  //	  math::PtEtaPhiMLorentzVector tlv_tau = tt1_fit + tt2_fit + tt3_fit;
+	  math::PtEtaPhiMLorentzVector tlv_tau_fit = tt1_fit + tt2_fit + tt3_fit;
 
 
 	  // calculation of the isolation 
@@ -1075,10 +1075,10 @@ void JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 	    iii,
 	    jjj,
 	    kkk,
-//	    (Float_t) bc_children.at(0)->currentState().globalMomentum().perp(), 
-//	    (Float_t) bc_children.at(0)->currentState().globalMomentum().eta(), 
-//	    (Float_t) bc_children.at(0)->currentState().globalMomentum().phi(), 
-//	    (Float_t) bc_children.at(0)->currentState().mass(), 
+	    (Float_t) tlv_tau_fit.Pt(),
+	    (Float_t) tlv_tau_fit.Eta(),
+	    (Float_t) tlv_tau_fit.Phi(),
+	    (Float_t) tlv_tau_fit.M(),
 	    (Float_t) tlv_tau.Pt(),
 	    (Float_t) tlv_tau.Eta(),
 	    (Float_t) tlv_tau.Phi(),
@@ -1204,10 +1204,10 @@ void JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
       nBranches_->JpsiTau_mu2_iso.push_back(2.);
       nBranches_->JpsiTau_mu2_dbiso.push_back(MuonPFIso(muoncollection[mcidx_mu2]));
 
-//      nBranches_->JpsiTau_tau_pfit_pt.push_back(cands[ic].cand_tau_pfit_pt);
-//      nBranches_->JpsiTau_tau_pfit_eta.push_back(cands[ic].cand_tau_pfit_eta);
-//      nBranches_->JpsiTau_tau_pfit_phi.push_back(cands[ic].cand_tau_pfit_phi);
-//      nBranches_->JpsiTau_tau_pfit_mass.push_back(cands[ic].cand_tau_pfit_mass);
+      nBranches_->JpsiTau_tau_fullfit_pt.push_back(cands[ic].cand_tau_fullfit_pt);
+      nBranches_->JpsiTau_tau_fullfit_eta.push_back(cands[ic].cand_tau_fullfit_eta);
+      nBranches_->JpsiTau_tau_fullfit_phi.push_back(cands[ic].cand_tau_fullfit_phi);
+      nBranches_->JpsiTau_tau_fullfit_mass.push_back(cands[ic].cand_tau_fullfit_mass);
       nBranches_->JpsiTau_tau_pt.push_back(cands[ic].cand_tau_pt);
       nBranches_->JpsiTau_tau_eta.push_back(cands[ic].cand_tau_eta);
       nBranches_->JpsiTau_tau_phi.push_back(cands[ic].cand_tau_phi);

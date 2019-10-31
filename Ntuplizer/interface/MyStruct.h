@@ -28,6 +28,10 @@ struct taucand{
   Int_t cand_tau_id1;
   Int_t cand_tau_id2;
   Int_t cand_tau_id3;
+  Float_t cand_tau_fullfit_pt;
+  Float_t cand_tau_fullfit_eta;
+  Float_t cand_tau_fullfit_phi;
+  Float_t cand_tau_fullfit_mass;
   Float_t cand_tau_pt;
   Float_t cand_tau_eta;
   Float_t cand_tau_phi;

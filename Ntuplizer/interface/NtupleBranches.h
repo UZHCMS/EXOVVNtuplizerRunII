@@ -403,6 +403,10 @@ public:
   std::vector<float>                JpsiTau_mu2_iso       ;
   std::vector<float>                JpsiTau_mu2_dbiso       ;
 
+  std::vector<float>                JpsiTau_tau_fullfit_pt      ;
+  std::vector<float>                JpsiTau_tau_fullfit_eta     ;
+  std::vector<float>                JpsiTau_tau_fullfit_phi     ;
+  std::vector<float>                JpsiTau_tau_fullfit_mass     ;
   std::vector<float>                JpsiTau_tau_pt      ;
   std::vector<float>                JpsiTau_tau_eta     ;
   std::vector<float>                JpsiTau_tau_phi     ;

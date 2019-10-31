@@ -392,6 +392,10 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch("JpsiTau_mu2_iso"   , &JpsiTau_mu2_iso    );
     tree_->Branch("JpsiTau_mu2_dbiso"   , &JpsiTau_mu2_dbiso    );
 
+    tree_->Branch("JpsiTau_tau_fullfit_pt", &JpsiTau_tau_fullfit_pt );
+    tree_->Branch("JpsiTau_tau_fullfit_eta", &JpsiTau_tau_fullfit_eta );
+    tree_->Branch("JpsiTau_tau_fullfit_phi", &JpsiTau_tau_fullfit_phi );
+    tree_->Branch("JpsiTau_tau_fullfit_mass", &JpsiTau_tau_fullfit_mass );
     tree_->Branch("JpsiTau_tau_pt", &JpsiTau_tau_pt );
     tree_->Branch("JpsiTau_tau_eta", &JpsiTau_tau_eta );
     tree_->Branch("JpsiTau_tau_phi", &JpsiTau_tau_phi );
@@ -818,6 +822,10 @@ void NtupleBranches::reset( void ){
   JpsiTau_mu2_iso.clear();
   JpsiTau_mu2_dbiso.clear();
 
+  JpsiTau_tau_fullfit_pt.clear();
+  JpsiTau_tau_fullfit_eta.clear();
+  JpsiTau_tau_fullfit_phi.clear();
+  JpsiTau_tau_fullfit_mass.clear();
   JpsiTau_tau_pt.clear();
   JpsiTau_tau_eta.clear();
   JpsiTau_tau_phi.clear();
