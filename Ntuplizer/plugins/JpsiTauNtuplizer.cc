@@ -510,10 +510,10 @@ void JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
   
     //creating the vertex fitter
     KinematicParticleVertexFitter kpvFitter;
-
+   
     //reconstructing a J/Psi decay
     RefCountedKinematicTree jpTree = kpvFitter.fit(muonParticles);
-
+   
     if(jpTree->isEmpty() || !jpTree->isValid() || !jpTree->isConsistent()) return;
 
     //creating the particle fitter
@@ -521,7 +521,6 @@ void JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 
     // creating the constraint
     KinematicConstraint* jpsi_constraint = new MassKinematicConstraint(jpsi_mass, jp_m_sigma);
-
     //the constrained fit
     jpTree = csFitter.fit(jpsi_constraint, jpTree);
 
@@ -530,12 +529,13 @@ void JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
     RefCountedKinematicParticle jpsi_part = jpTree->currentParticle();
     if(!jpsi_part->currentState().isValid()) return;
 
-    RefCountedKinematicVertex jpsi_vertex = jpTree->currentDecayVertex();
-    if(!jpsi_vertex->vertexIsValid()) return; 
+  RefCountedKinematicVertex jpsi_vertex = jpTree->currentDecayVertex();
+   if(!jpsi_vertex->vertexIsValid()) return; 
 
     if(TMath::Prob(jpsi_vertex->chiSquared(), jpsi_vertex->degreesOfFreedom()) <=0) return;
 
     std::vector< RefCountedKinematicParticle > jpsi_children = jpTree->finalStateParticles();
+
 
     math::PtEtaPhiMLorentzVector mu1_fit = daughter_p4(jpsi_children, 0);
     math::PtEtaPhiMLorentzVector mu2_fit = daughter_p4(jpsi_children, 1);
@@ -594,7 +594,7 @@ void JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 
     
         particle_cand cand = calculateIPvariables(extrapolator, jpsi_part, jpsi_vertex, *vtx);
-
+ 
     
         if(TMath::Abs(cand.lip) < max_criteria){
             //    if(TMath::Abs(cand.pvip) < max_criteria){
@@ -687,7 +687,7 @@ void JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
       if(TMath::Abs((*genParticles_)[p].pdgId())!=15) continue;
       if(TMath::Abs((*genParticles_)[p].status())!=2) continue;
       
-      std::cout << "\t Tau found with # of daughters = " << (*genParticles_)[p].numberOfDaughters() << " with mother = " << (*genParticles_)[p].mother(0)->pdgId() << std::endl;
+      // std::cout << "\t Tau found with # of daughters = " << (*genParticles_)[p].numberOfDaughters() << " with mother = " << (*genParticles_)[p].mother(0)->pdgId() << std::endl;
       
       
       // calculate visible pt ... 
@@ -699,7 +699,7 @@ void JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
       
       for(int idd = 0; idd < (int)(*genParticles_)[p].numberOfDaughters(); idd++){
 
-	std::cout << "\t\t -> " << (*genParticles_)[p].daughter(idd)->pdgId() << " (pT = " << (*genParticles_)[p].daughter(idd)->pt() << ")" << std::endl;
+	// std::cout << "\t\t -> " << (*genParticles_)[p].daughter(idd)->pdgId() << " (pT = " << (*genParticles_)[p].daughter(idd)->pt() << ")" << std::endl;
 
 	if(
 	   TMath::Abs((*genParticles_)[p].daughter(idd)->pdgId())==12 ||
@@ -801,42 +801,20 @@ void JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
       vec_gentaup4.push_back(genvis);
 
 
-      //      if(isBc){
-	
-      //      }
-      
-      
-
-      //      for( unsigned int d=0; d < (*genParticles_)[p].numberOfDaughters(); ++d ){
-	
-//	Int_t taupdgId = (*genParticles_)[p].daughter(d)->pdgId();
-//	
-//	std::cout << "\t\t --> tau decay:" << taupdgId << std::endl;
-//	
-//	if(TMath::Abs(taupdgId)!=211) continue;
-//	  
-//	TLorentzVector tlv_gen_pion;
-//	
-//	tlv_gen_pion.SetPtEtaPhiM((*genParticles_)[p].daughter(d)->pt(),
-//				  (*genParticles_)[p].daughter(d)->eta(),
-//				  (*genParticles_)[p].daughter(d)->phi(),
-//				  (*genParticles_)[p].daughter(d)->mass());
-	
-//	
-//      }
+  
 
       
       if(gp.size()==3){
-	//	std::cout << "\t -----> This has been registered with mother = " << (*genParticles_)[p].mother(0)->pdgId() << std::endl;
-	gps.push_back(gp);
-	ppdgId.push_back((*genParticles_)[p].mother(0)->pdgId());
-	vec_gentau3pp4.push_back(genvis);
+          //	std::cout << "\t -----> This has been registered with mother = " << (*genParticles_)[p].mother(0)->pdgId() << std::endl;
+          gps.push_back(gp);
+          ppdgId.push_back((*genParticles_)[p].mother(0)->pdgId());
+          vec_gentau3pp4.push_back(genvis);
 
-	//	if(TMath::Abs((*genParticles_)[p].mother(0)->pdgId())==541){
-	isgen3matched = matched;
-	//	}
+          //	if(TMath::Abs((*genParticles_)[p].mother(0)->pdgId())==541){
+          isgen3matched = matched;
+          //	}
       }else{
-	isgen3matched = false;
+          isgen3matched = false;
       }
     }
 
@@ -847,7 +825,7 @@ void JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 
 
   //////////////////////////////
-  std::cout << "Starts to build tau candidate out of " << numOfch << " pion candidates" << std::endl;
+  // std::cout << "Starts to build tau candidate out of " << numOfch << " pion candidates" << std::endl;
 
 
     std::vector<taucand> cands;
@@ -899,9 +877,10 @@ void JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 
 	  //getting the J/Psi KinematicParticle
 	  tauTree->movePointerToTheTop();
+
+
 	  RefCountedKinematicParticle tau_part = tauTree->currentParticle();
 	  if(!tau_part->currentState().isValid()) continue;
-	  
 	  RefCountedKinematicVertex tau_vertex = tauTree->currentDecayVertex();
 	  if(!tau_vertex->vertexIsValid()) continue; 
 
@@ -943,11 +922,11 @@ void JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 	  allParticles.push_back(pFactory.particle(mytracks[iii], pion_mass, chi, ndf, pion_sigma));
 	  allParticles.push_back(pFactory.particle(mytracks[jjj], pion_mass, chi, ndf, pion_sigma));
 	  allParticles.push_back(pFactory.particle(mytracks[kkk], pion_mass, chi, ndf, pion_sigma));
-	  allParticles.push_back(tau_part);
+      // allParticles.push_back(tau_part);
 	  allParticles.push_back(jpsi_part);
-	  
+
 	  RefCountedKinematicTree bcTree = kpvFitter.fit(allParticles);
-	  
+
 	  if(bcTree->isEmpty() || !bcTree->isValid() || !bcTree->isConsistent()) continue;
 	  
 
@@ -956,7 +935,7 @@ void JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 
 	  RefCountedKinematicVertex bc_vertex = bcTree->currentDecayVertex();
 	  if(!bc_vertex->vertexIsValid()) continue;
-
+ 
 	  //	  if(TMath::Prob(bc_vertex->chiSquared(), bc_vertex->degreesOfFreedom()) <=0.1) continue; 
 
 	  
@@ -969,7 +948,7 @@ void JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 
 	  
 	  std::vector< RefCountedKinematicParticle > bc_children = bcTree->finalStateParticles();
-	  
+
 	  //	  const auto& state = fitted_children.at(i)->currentState();
 
 	  math::PtEtaPhiMLorentzVector tt1_fit = daughter_p4(bc_children, 0);
@@ -994,12 +973,12 @@ void JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 	    iso += pfcollection[itrk].pt();
 
             TrajectoryStateOnSurface tsos_pf = extrapolator.extrapolate(mytracks[itrk].impactPointState(), bc_vertex->position());
-
+     
     
 	    VertexDistance3D a3d_pf;  
 
             std::pair<bool,Measurement1D> cur3DIP_pf = JpsiTauNtuplizer::absoluteImpactParameter(tsos_pf, bc_vertex, a3d_pf);
-    
+
             Float_t pvip_pf = cur3DIP_pf.second.value();
 
             //    std::cout << itrk << ": Distance of closest apporach to the bc vertex = " << pvip << std::endl;
@@ -1305,9 +1284,9 @@ void JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
       nBranches_->JpsiTau_Jpsi_unfit_vprob.push_back(jpsi_vprob_highest);
 
       if(jpsi_vprob_highest!=-9){
-	nBranches_->JpsiTau_Jpsi_unfit_vx.push_back(jpsi_vertex_highest.position().x());
-	nBranches_->JpsiTau_Jpsi_unfit_vy.push_back(jpsi_vertex_highest.position().y());
-	nBranches_->JpsiTau_Jpsi_unfit_vz.push_back(jpsi_vertex_highest.position().z());
+          nBranches_->JpsiTau_Jpsi_unfit_vx.push_back(jpsi_vertex_highest.position().x());
+          nBranches_->JpsiTau_Jpsi_unfit_vy.push_back(jpsi_vertex_highest.position().y());
+          nBranches_->JpsiTau_Jpsi_unfit_vz.push_back(jpsi_vertex_highest.position().z());
       }
 
 
@@ -1421,127 +1400,6 @@ void JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 
 
 
-
-//    //    bool doMultipleMuon3 = true;  // false: to slect jus 1 J/psi, 1 mu3 and 1 B Meson candidate; true: to select multiple mu3 and B meson candidates
-//
-//    std::vector<pat::Muon> mu3_vec;
-//    Float_t max_pt3 = -1;
-//
-//    for(size_t imuon = 0; imuon < muons_->size(); ++ imuon){
-//
-//        const pat::Muon & muon = (*muons_)[imuon];
-//
-//        if(muon.pt() < 2) continue; // there was a 4 but maybe it's best to optimize it.
-//        if(TMath::Abs(muon.eta()) > 2.4) continue;
-//        if(!(muon.track().isNonnull())) continue;
-//        if(imuon==idx_mu1 || imuon==idx_mu2) continue;
-//        mu3passpteta = true;
-//        // shall we put delta z cut here maybe? 
-//
-//	
-//	//	std::cout << "muon3 pt = " << muon.pt() << std::endl;
-//	
-//        max_pt3=2;
-//        if(muon.pt() > max_pt3){
-//          if(!doMultipleMuon3) { max_pt3 = muon.pt();}
-//            mu3_vec.push_back(muon);
-//            if (!doMultipleMuon3) break;
-//      
-//        }
-//    }
-//
-//    if(max_pt3==-1) return;
-//    //mu3 passed pT and eta cut
-//    if( doCutFlow_ && mu3passpteta ) {
-//      nBranches_->cutflow_perevt->Fill(8);
-//      }
-
-
-//        /********************************************************************
-//         *
-//         * Step8: calculation of the isolation quantities
-//         *
-//         ********************************************************************/
-//
-//        // for unfit variables from here 
-//        TLorentzVector tlv_mu3;
-//        tlv_mu3.SetPtEtaPhiM(mu3.pt(), mu3.eta(), mu3.phi(), mu3.mass());
-//
-//        TLorentzVector tlv_B = jpsi_tlv_highest + tlv_mu3;
-//
-//        std::vector<reco::TransientTrack> transient_tracks_trimuon;
-//        transient_tracks_trimuon.push_back(tt1_muon);
-//        transient_tracks_trimuon.push_back(tt2_muon);
-//        transient_tracks_trimuon.push_back(tt3_muon);
-//
-//        Float_t vprob_bc = -9;
-//        TransientVertex vertex_bc;
-//        std::tie(vprob_bc, vertex_bc) = vertexProb(transient_tracks_trimuon);
-//
-//
-//        Float_t iso = 0;
-//        Float_t iso_mu1 = 0;
-//        Float_t iso_mu2 = 0;
-//        Float_t iso_mu3 = 0;
-//        Int_t ntracks = 0;
-//        Float_t iso_mindoca = 999; 
-//  
-//  
-//        for(size_t itrk = 0; itrk < mypfcollection.size();  itrk++){
-//    
-//            Float_t _dR = reco::deltaR(mypfcollection[itrk].eta(), mypfcollection[itrk].phi(),
-//                                       bc_part->currentState().globalMomentum().eta(), bc_part->currentState().globalMomentum().phi());
-//
-//            if(_dR < 0.7) iso += mypfcollection[itrk].pt();
-//
-//            Float_t _dR1 = reco::deltaR(mypfcollection[itrk].eta(), mypfcollection[itrk].phi(),
-//                                        mu1_fit.eta(), mu1_fit.phi());
-//					//                                        muoncollection[mcidx_mu1].eta(), muoncollection[mcidx_mu1].phi());
-//
-//            if(_dR1 < 0.7) iso_mu1 += mypfcollection[itrk].pt();
-//
-//            Float_t _dR2 = reco::deltaR(mypfcollection[itrk].eta(), mypfcollection[itrk].phi(),
-//                                        mu2_fit.eta(), mu2_fit.phi());
-//	    //                                        muoncollection[mcidx_mu2].eta(), muoncollection[mcidx_mu2].phi());
-//
-//            if(_dR2 < 0.7) iso_mu2 += mypfcollection[itrk].pt();
-//
-//            Float_t _dR3 = reco::deltaR(mypfcollection[itrk].eta(), mypfcollection[itrk].phi(),
-//					mu3_fit.eta(), mu3_fit.phi());
-//					//                                        mu3.eta(), mu3.phi());
-//
-//            if(_dR3 < 0.7) iso_mu3 += mypfcollection[itrk].pt();
-//
-//
-//            //    TrajectoryStateOnSurface tsos = extrapolator.extrapolate(mytracks[itrk].impactPointState());
-//            TrajectoryStateOnSurface tsos_pf = extrapolator.extrapolate(mytracks[itrk].impactPointState(), bc_vertex->position());
-//
-//    
-//            //    TrajectoryStateOnSurface tsos = extrapolator.extrapolate(particle->currentState().freeTrajectoryState(),
-//            //							     RecoVertex::convertPos(wrtVertex.position()));
-//    
-//
-//            VertexDistance3D a3d_pf;  
-//            // use own function here ... 
-//            std::pair<bool,Measurement1D> cur3DIP_pf = JpsiTauNtuplizer::absoluteImpactParameter(tsos_pf, bc_vertex, a3d_pf);
-//    
-//            Float_t pvip_pf = cur3DIP_pf.second.value();
-//
-//            //    std::cout << itrk << ": Distance of closest apporach to the bc vertex = " << pvip << std::endl;
-//    
-//            if(pvip_pf < 0.03) ntracks+=1;
-//
-//            if(iso_mindoca > pvip_pf) iso_mindoca = pvip_pf;
-//        }
-
-        //	nBranches_->JpsiTau_mu3_isopt03.push_back(iso_pt03);
-        //	nBranches_->JpsiTau_mu3_isopt04.push_back(iso_pt04);
-        //	nBranches_->JpsiTau_mu3_isopt05.push_back(iso_pt05);
-        //	nBranches_->JpsiTau_mu3_isopt06.push_back(iso_pt06);
-        //	nBranches_->JpsiTau_mu3_isopt07.push_back(iso_pt07);
-        //	nBranches_->JpsiTau_dr_mu3pf.push_back(min_dR_pf);  
-        //flight part
-        //jpsi part
 
 
 
