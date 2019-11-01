@@ -415,6 +415,8 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch("JpsiTau_tau_alpha", &JpsiTau_tau_alpha);
     tree_->Branch("JpsiTau_tau_vprob", &JpsiTau_tau_vprob);
     tree_->Branch("JpsiTau_tau_isRight", &JpsiTau_tau_isRight);
+    tree_->Branch("JpsiTau_tau_matched_ppdgId", &JpsiTau_tau_matched_ppdgId);
+    tree_->Branch("JpsiTau_tau_matched_gentaupt", &JpsiTau_tau_matched_gentaupt);
 
 
     tree_->Branch("JpsiTau_PV_vx", &JpsiTau_PV_vx );
@@ -860,7 +862,8 @@ void NtupleBranches::reset( void ){
   JpsiTau_tau_alpha.clear();
   JpsiTau_tau_vprob.clear();
   JpsiTau_tau_isRight.clear();
-
+  JpsiTau_tau_matched_ppdgId.clear();
+  JpsiTau_tau_matched_gentaupt.clear();
 
   JpsiTau_Jpsi_pt.clear();
   JpsiTau_Jpsi_eta.clear();
