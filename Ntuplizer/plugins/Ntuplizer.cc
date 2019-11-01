@@ -21,20 +21,22 @@
 
 ///////////////////////////////////////////////////////////////////////////////////
 Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
-        beamToken_                  (consumes<reco::BeamSpot>(iConfig.getParameter<edm::InputTag>("beamSpot"))),
+ 
+
+  beamToken_                  (consumes<reco::BeamSpot>(iConfig.getParameter<edm::InputTag>("beamSpot"))),
 	vtxToken_             	    (consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("vertices"))),
 	rhoToken_             	    (consumes<double>(iConfig.getParameter<edm::InputTag>("rho"))),
-	packedpfcandidatesToken_    (consumes<std::vector<pat::PackedCandidate>>(iConfig.getParameter<edm::InputTag>("packedpfcandidates"))),
-	losttrackToken_    (consumes<std::vector<pat::PackedCandidate>>(iConfig.getParameter<edm::InputTag>("losttrack"))),
+	packedpfcandidatesToken_    (consumes<std::vector<pat::PackedCandidate>>(iConfig.getParameter<edm::InputTag>("packedpfcandidates"))), 
+    losttrackToken_    (consumes<std::vector<pat::PackedCandidate>>(iConfig.getParameter<edm::InputTag>("losttrack"))),
 	puinfoToken_          	    (consumes<std::vector<PileupSummaryInfo> >(iConfig.getParameter<edm::InputTag>("PUInfo"))),
 	geneventToken_        	    (consumes<GenEventInfoProduct>(iConfig.getParameter<edm::InputTag>("genEventInfo"))),     
 	lheEventProductToken_       (consumes<LHEEventProduct>(iConfig.getParameter<edm::InputTag>("externallheProducer"))),     
 	genparticleToken_     	    (consumes<reco::GenParticleCollection>(iConfig.getParameter<edm::InputTag>("genparticles"))),
-	gentauToken_     	    (consumes<std::vector<reco::GenJet>>(iConfig.getParameter<edm::InputTag>("gentaus"))),
-	
+    gentauToken_     	    (consumes<std::vector<reco::GenJet>>(iConfig.getParameter<edm::InputTag>("gentaus"))),
 
 	muonToken_	      	    (consumes<pat::MuonCollection>(iConfig.getParameter<edm::InputTag>("muons"))),
 	electronToken_	      	    (consumes<pat::ElectronCollection>(iConfig.getParameter<edm::InputTag>("electrons"))),
+
 	//mvaValuesMapToken_          (consumes<edm::ValueMap<float> >(iConfig.getParameter<edm::InputTag>("mvaValuesMap"))),
 	//mvaCategoriesMapToken_      (consumes<edm::ValueMap<int> >(iConfig.getParameter<edm::InputTag>("mvaCategoriesMap"))),
 	ebRecHitsToken_             (consumes<edm::SortedCollection<EcalRecHit,edm::StrictWeakOrdering<EcalRecHit>>>(iConfig.getParameter<edm::InputTag>("ebRecHits"))),
@@ -53,11 +55,11 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
 	triggerToken_	      	    (consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("HLT"))),
 	triggerObjects_	      	    (consumes<pat::TriggerObjectStandAloneCollection>(iConfig.getParameter<edm::InputTag>("triggerobjects"))),
 	triggerPrescales_     	    (consumes<pat::PackedTriggerPrescales>(iConfig.getParameter<edm::InputTag>("triggerprescales"))),
-                                 noiseFilterToken_     	    (consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("noiseFilter"))),
-                                 HBHENoiseFilterLooseResultToken_(consumes<bool>(iConfig.getParameter<edm::InputTag>("noiseFilterSelection_HBHENoiseFilterLoose"))),
-                                 HBHENoiseFilterTightResultToken_(consumes<bool>(iConfig.getParameter<edm::InputTag>("noiseFilterSelection_HBHENoiseFilterTight"))),
-                                 HBHENoiseIsoFilterResultToken_(consumes<bool>(iConfig.getParameter<edm::InputTag>("noiseFilterSelection_HBHENoiseIsoFilter"))),
-                                 ecalBadCalibFilterUpdateToken_(consumes< bool >(iConfig.getParameter<edm::InputTag>("noiseFilterSelection_ecalBadCalibReducedMINIAODFilter")))
+        noiseFilterToken_     	    (consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("noiseFilter"))),
+        HBHENoiseFilterLooseResultToken_(consumes<bool>(iConfig.getParameter<edm::InputTag>("noiseFilterSelection_HBHENoiseFilterLoose"))),
+        HBHENoiseFilterTightResultToken_(consumes<bool>(iConfig.getParameter<edm::InputTag>("noiseFilterSelection_HBHENoiseFilterTight"))),
+	HBHENoiseIsoFilterResultToken_(consumes<bool>(iConfig.getParameter<edm::InputTag>("noiseFilterSelection_HBHENoiseIsoFilter"))),
+	 ecalBadCalibFilterUpdateToken_(consumes< bool >(iConfig.getParameter<edm::InputTag>("noiseFilterSelection_ecalBadCalibReducedMINIAODFilter")))
 
 {
 
@@ -85,7 +87,7 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
   runFlags["doGenHist"] = iConfig.getParameter<bool>("doGenHist");
   runFlags["doCutFlow"] = iConfig.getParameter<bool>("doCutFlow");
   
-  //  electronToken_	      	    =consumes<edm::View<pat::Electron> >(iConfig.getParameter<edm::InputTag>("electrons"));
+  // electronToken_	      	    =consumes<edm::View<pat::Electron> >(iConfig.getParameter<edm::InputTag>("electrons"));
     // eleVetoIdMapToken_    	    =consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("eleVetoIdMap"));
     // eleLooseIdMapToken_   	    =consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("eleLooseIdMap"));
     // eleMediumIdMapToken_  	    =consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("eleMediumIdMap"));
@@ -115,23 +117,23 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
   if (runFlags["doGenHist"]){
       nBranches_->genParticle_Bdau_X_id=fs->make<TH1F>("genParticle_Bdau_X_id", "Identity of X in B->J/#psi+X;id;Events;", 18, 0, 18);
       nBranches_->genParticle_Bdau_X_pt =fs->make<TH1F>("genParticle_Bdau_X_pt", "p_{T} of X in B->J/#psi+X;pt[GeV];Events;", 100, 0, 20);
-      nBranches_->genParticle_Bdau_X_eta =fs->make<TH1F>("genParticle_Bdau_X_eta", "#eta of X in B->J/#psi+X", 10, -2.4, 2.4);
-      nBranches_->genParticle_Bdau_X_phi =fs->make<TH1F>("genParticle_Bdau_X_phi", "#phi of X in B->J/#psi+X", 40, -3.2, 3.2);
-      nBranches_->genParticle_Bdau_X_mass =fs->make<TH1F>("genParticle_Bdau_X_mass", "#phi of X in B->J/#psi+X", 40, -3.2, 3.2);
+      nBranches_->genParticle_Bdau_X_eta =fs->make<TH1F>("genParticle_Bdau_X_eta", "#eta of X in B->J/#psi+X", 48, -2.4, 2.4);
+      nBranches_->genParticle_Bdau_X_phi =fs->make<TH1F>("genParticle_Bdau_X_phi", "#phi of X in B->J/#psi+X", 64, -3.2, 3.2);
+      nBranches_->genParticle_Bdau_X_mass =fs->make<TH1F>("genParticle_Bdau_X_mass", "#phi of X in B->J/#psi+X", 64, -3.2, 3.2);
       nBranches_->genParticle_Bdau_mu1_pt =fs->make<TH1F>("genParticle_Bdau_mu1_pt", "p_{T} of #mu_{J/#psi,1} in B->J/#psi+X;pt[GeV];Events;", 50, 0, 10);
-      nBranches_->genParticle_Bdau_mu1_eta =fs->make<TH1F>("genParticle_Bdau_mu1_eta", "#eta of #mu_{J/#psi,1} in B->J/#psi+X", 10, -2.4, 2.4);
-      nBranches_->genParticle_Bdau_mu1_phi =fs->make<TH1F>("genParticle_Bdau_mu1_phi", "#phi of #mu_{J/#psi,1} in B->J/#psi+X", 40, -3.2, 3.2);
+      nBranches_->genParticle_Bdau_mu1_eta =fs->make<TH1F>("genParticle_Bdau_mu1_eta", "#eta of #mu_{J/#psi,1} in B->J/#psi+X", 48, -2.4, 2.4);
+      nBranches_->genParticle_Bdau_mu1_phi =fs->make<TH1F>("genParticle_Bdau_mu1_phi", "#phi of #mu_{J/#psi,1} in B->J/#psi+X", 64, -3.2, 3.2);
       nBranches_->genParticle_Bdau_mu2_pt =fs->make<TH1F>("genParticle_Bdau_mu2_pt", "p_{T} of #mu_{J/#psi,2} in B->J/#psi+X;pt[GeV];Events;", 50, 0, 10);
-      nBranches_->genParticle_Bdau_mu2_eta =fs->make<TH1F>("genParticle_Bdau_mu2_eta", "#eta of #mu_{J/#psi,2} in B->J/#psi+X", 10, -2.4, 2.4);
-      nBranches_->genParticle_Bdau_mu2_phi =fs->make<TH1F>("genParticle_Bdau_mu2_phi", "#phi of #mu_{J/#psi,2} in B->J/#psi+X", 40, -3.2, 3.2);
+      nBranches_->genParticle_Bdau_mu2_eta =fs->make<TH1F>("genParticle_Bdau_mu2_eta", "#eta of #mu_{J/#psi,2} in B->J/#psi+X", 48, -2.4, 2.4);
+      nBranches_->genParticle_Bdau_mu2_phi =fs->make<TH1F>("genParticle_Bdau_mu2_phi", "#phi of #mu_{J/#psi,2} in B->J/#psi+X", 64, -3.2, 3.2);
       nBranches_->genParticle_Bdau_Jpsi_pt =fs->make<TH1F>("genParticle_Bdau_Jpsi_pt", "p_{T} of J/#psi in B->J/#psi+X;pt[GeV];Events;", 100, 0, 20);
-      nBranches_->genParticle_Bdau_Jpsi_eta =fs->make<TH1F>("genParticle_Bdau_Jpsi_eta", "#eta of J/#psi in B->J/#psi+X", 10, -2.4, 2.4);
-      nBranches_->genParticle_Bdau_Jpsi_phi =fs->make<TH1F>("genParticle_Bdau_Jpsi_phi", "#phi of J/#psi in B->J/#psi+X", 40, -3.2, 3.2);
-      nBranches_->genParticle_Bdau_Jpsi_mass =fs->make<TH1F>("genParticle_Bdau_Jpsi_mass", "mass of J/#psi in B->J/#psi+X", 40, 0, 8);
+      nBranches_->genParticle_Bdau_Jpsi_eta =fs->make<TH1F>("genParticle_Bdau_Jpsi_eta", "#eta of J/#psi in B->J/#psi+X", 48, -2.4, 2.4);
+      nBranches_->genParticle_Bdau_Jpsi_phi =fs->make<TH1F>("genParticle_Bdau_Jpsi_phi", "#phi of J/#psi in B->J/#psi+X", 64, -3.2, 3.2);
+      nBranches_->genParticle_Bdau_Jpsi_mass =fs->make<TH1F>("genParticle_Bdau_Jpsi_mass", "mass of J/#psi in B->J/#psi+X", 100, 0, 20);
       nBranches_->genParticle_Bvis_pt =fs->make<TH1F>("genParticle_Bvis_pt", "Visible p_{T} of B in B->J/#psi+X;pt[GeV];Events;", 100, 0, 20);
-      nBranches_->genParticle_Bvis_eta =fs->make<TH1F>("genParticle_Bvis_eta", "Visible #eta of B in B->J/#psi+X", 10, -2.4, 2.4);
-      nBranches_->genParticle_Bvis_phi =fs->make<TH1F>("genParticle_Bvis_phi", "Visible #phi of B in B->J/#psi+X", 40, -3.2, 3.2);
-      nBranches_->genParticle_Bvis_mass =fs->make<TH1F>("genParticle_Bvis_mass", "Visible mass of B in B->J/#psi+X", 50, 0, 10);
+      nBranches_->genParticle_Bvis_eta =fs->make<TH1F>("genParticle_Bvis_eta", "Visible #eta of B in B->J/#psi+X", 48, -2.4, 2.4);
+      nBranches_->genParticle_Bvis_phi =fs->make<TH1F>("genParticle_Bvis_phi", "Visible #phi of B in B->J/#psi+X", 64, -3.2, 3.2);
+      nBranches_->genParticle_Bvis_mass =fs->make<TH1F>("genParticle_Bvis_mass", "Visible mass of B in B->J/#psi+X", 100, 0, 20);
   } 
   if (runFlags["doCutFlow"] ||runFlags["doGenHist"]) {
       nBranches_-> LabelHistograms( runFlags );
@@ -212,12 +214,10 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
 						   nBranches_ );
   }
 
-  if (runFlags["doJpsiEle"]) {
-    std::cout<<"\n\n --->GETTING INSIDE doJpsiEle<---\n\n"<<std::endl;
-    nTuplizers_["JpsiEle"] = new JpsiEleNtuplizer( electronToken_   , 
-					     vtxToken_   , 
-					     nBranches_ );
-  }
+  // if (runFlags["doJpsiEle"]) {
+  //     std::cout<<"\n\n --->GETTING INSIDE doJpsiEle<---\n\n"<<std::endl;
+  //     nTuplizers_["JpsiEle"] = new JpsiEleNtuplizer( electronToken_,  vtxToken_   ,  nBranches_ );
+  // }
 
   if (runFlags["doTriggerDecisions"] || runFlags["doTriggerObjects"] || runFlags["doTriggerDecisions"]) {
     nTuplizers_["triggers"] = new TriggersNtuplizer( triggerToken_, 

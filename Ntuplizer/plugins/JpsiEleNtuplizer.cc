@@ -6,10 +6,10 @@
 #include <cmath>
 
 //===================================================================================================================
-JpsiEleNtuplizer::JpsiEleNtuplizer( edm::EDGetTokenT<edm::View<pat::Electron>>    electronToken   ,
-			      //			      std::vector<edm::EDGetTokenT<reco::VertexCollection> > tokens,
-			      edm::EDGetTokenT<reco::VertexCollection> verticeToken, 
-			      NtupleBranches* nBranches )
+JpsiEleNtuplizer::JpsiEleNtuplizer( edm::EDGetTokenT<pat::Electron>   electronToken   ,
+                                    //std::vector<edm::EDGetTokenT<reco::VertexCollection> > tokens,
+                                    edm::EDGetTokenT<reco::VertexCollection> verticeToken, 
+                                    NtupleBranches* nBranches )
   : CandidateNtuplizer ( nBranches )
   , electronToken_         ( electronToken )
   , verticeToken_          ( verticeToken )
@@ -62,10 +62,10 @@ void JpsiEleNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
   std::vector<reco::TransientTrack> transient_tracks_trimuon;
   unsigned int nmus = 0;
   unsigned int isJpsimunu_=0;
-  for (const pat::Electron &ele : *electrons_){
-    nmus++;
-    std::cout<<nmus<<std::endl;
-  }
+  // for  (auto ele : electrons_){
+  //   nmus++;
+  //   std::cout<<nmus<<std::endl;
+  // }
   /*
   for (const pat::Muon &mu : *muons_) {
     nmus++;

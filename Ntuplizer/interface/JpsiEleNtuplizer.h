@@ -64,22 +64,20 @@
 class JpsiEleNtuplizer : public CandidateNtuplizer {
 
 public:
-  JpsiEleNtuplizer( edm::EDGetTokenT<edm::View<pat::Electron>>    electronToken   , 
-		 edm::EDGetTokenT<reco::VertexCollection> verticeToken, 
-		 NtupleBranches* nBranches );
+  JpsiEleNtuplizer( edm::EDGetTokenT<pat::Electron>    electronToken   , edm::EDGetTokenT<reco::VertexCollection> verticeToken, NtupleBranches* nBranches );
   ~JpsiEleNtuplizer( void );
   std::tuple<Float_t, Float_t> vertexProb(const std::vector<reco::TransientTrack> &tracks);
 
   void fillBranches( edm::Event const & event, const edm::EventSetup& iSetup );
   
 private:
-   edm::EDGetTokenT<edm::View<pat::Electron> > electronToken_;
+   edm::EDGetTokenT<pat::Electron> electronToken_;
    edm::EDGetTokenT<reco::VertexCollection> verticeToken_   ;
 
    //   edm::Handle<pat::JetCollection>      		       jets_		       ;
 
    edm::Handle< reco::VertexCollection >  vertices_;
-   edm::Handle<edm::View<pat::Electron> >    electrons_    ;
+   edm::Handle<pat::Electron>     electrons_    ;
    edm::ESHandle<TransientTrackBuilder> builder;
 
 };
