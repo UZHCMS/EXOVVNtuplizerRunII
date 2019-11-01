@@ -6,6 +6,18 @@ This is a small script that submits a config over many datasets
 import os
 from optparse import OptionParser
 
+import datetime
+
+d_today = datetime.datetime.now()
+
+#d_today = datetime.date.today() 
+
+d_today = str(d_today).split('.')[0]
+d_today = d_today.replace(' ', '-').replace(':','')
+
+print d_today
+
+
 def getOptions() :
     """
     Parse and return the arguments provided by the user.
@@ -92,13 +104,13 @@ def main():
     config.Data.ignoreLocality = True
     config.Data.publication = False
     #config.Data.outLFNDirBase = '/store/user/cgalloni/Ntuple_2017_94v2_preliminary'
-    config.Data.outLFNDirBase = '/store/user/ytakahas/RJpsi_20191031_BcJpsiTauNu_020519'
+    config.Data.outLFNDirBase = '/store/user/ytakahas/RJpsi_' + str(d_today) + '_BcJpsiTauNu_020519'
 #    config.Data.outLFNDirBase = '/store/user/ytakahas/RJpsi_20191002_BJpsiX_020519'
 
 
     config.section_("Site")
-    #config.Site.storageSite = 'T2_CH_CSCS'
-    config.Site.storageSite = 'T3_CH_PSI'
+    config.Site.storageSite = 'T2_CH_CSCS'
+#    config.Site.storageSite = 'T3_CH_PSI'
     #config.Site.blacklist=['T1_US_FNAL','T2_US_Wisconsin','T2_FR_IPHC','T2_EE_Estonia','T2_DE_RWTH','T2_KR_KNU','T2_KR_KISTI','T2_BR_SPRACE']
     config.Site.whitelist=['T2_US_Nebraska','T2_US_Purdue','T2_CH_CSCS', 'T2_CH_CERN']
     print 'Using config ' + options.config
@@ -130,9 +142,12 @@ def main():
         ptbin = job.split('/')[1]
         cond = job.split('/')[2]
 
-        config.General.requestName =  ptbin + (("_"+cond)if options.isData else "")  + options.string_to_add
+#        print 'ptbin =', ptbin
+#        print '2nd = ', (("_"+cond) if options.isData else "")
+#        print '3rd = ', options.string_to_add
+        config.General.requestName =  ptbin + (("_"+cond)if options.isData else "")  + "_" + options.string_to_add
         config.Data.inputDataset = job
-        config.Data.outputDatasetTag = ptbin  + (("_"+cond)if options.isData else "" ) +  options.string_to_add
+        config.Data.outputDatasetTag = ptbin  + (("_"+cond)if options.isData else "" ) + "_" + options.string_to_add
         print "ptbin :%s and cond: %s " %(ptbin, cond)
         print 'Submitting ' + config.General.requestName + ', dataset = ' + job
         print 'Configuration :'

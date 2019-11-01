@@ -631,7 +631,9 @@ void JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
       if(!pf.hasTrackDetails()) continue;
 
       // use the PF candidates that come from closestVertex
-      if(pf.vertexRef()->z()!=closestVertex.position().z()) continue;
+      //      if(pf.vertexRef()->z()!=closestVertex.position().z()) continue;
+      Float_t precut_dz = pf.vertexRef()->z() - closestVertex.position().z();
+      if(TMath::Abs(precut_dz) > 0.5) continue;
 
       Bool_t hpflag = pf.trackHighPurity();
       if(!hpflag) continue;
@@ -687,7 +689,7 @@ void JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
       if(TMath::Abs((*genParticles_)[p].pdgId())!=15) continue;
       if(TMath::Abs((*genParticles_)[p].status())!=2) continue;
       
-      // std::cout << "\t Tau found with # of daughters = " << (*genParticles_)[p].numberOfDaughters() << " with mother = " << (*genParticles_)[p].mother(0)->pdgId() << std::endl;
+      std::cout << "\t Tau found with # of daughters = " << (*genParticles_)[p].numberOfDaughters() << " with mother = " << (*genParticles_)[p].mother(0)->pdgId() << std::endl;
       
       
       // calculate visible pt ... 
@@ -698,8 +700,12 @@ void JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
       Int_t nprong = 0;
       
       for(int idd = 0; idd < (int)(*genParticles_)[p].numberOfDaughters(); idd++){
+	
+	std::cout << "\t\t -> " << (*genParticles_)[p].daughter(idd)->pdgId() << " (pT, eta, phi) = " 
+		  << (*genParticles_)[p].daughter(idd)->pt() << " " 
+		  << (*genParticles_)[p].daughter(idd)->eta() << " " 
+		  << (*genParticles_)[p].daughter(idd)->phi() << std::endl;
 
-	// std::cout << "\t\t -> " << (*genParticles_)[p].daughter(idd)->pdgId() << " (pT = " << (*genParticles_)[p].daughter(idd)->pt() << ")" << std::endl;
 
 	if(
 	   TMath::Abs((*genParticles_)[p].daughter(idd)->pdgId())==12 ||
@@ -760,7 +766,7 @@ void JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 
 	  //////////////////////////////////////
 	  if(min_dr == 999) matched = false;
-	  //	  else std::cout << "matched!" << std::endl;
+	  else std::cout << "matched!" << std::endl;
 	  //	  else{
 	  gp.push_back(_genvis_);
 	  //	  }
@@ -805,13 +811,14 @@ void JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 
       
       if(gp.size()==3){
-          //	std::cout << "\t -----> This has been registered with mother = " << (*genParticles_)[p].mother(0)->pdgId() << std::endl;
-          gps.push_back(gp);
-          ppdgId.push_back((*genParticles_)[p].mother(0)->pdgId());
-          vec_gentau3pp4.push_back(genvis);
+	std::cout << "\t -----> This has been registered with mother = " << (*genParticles_)[p].mother(0)->pdgId() << std::endl;
+	gps.push_back(gp);
+	ppdgId.push_back((*genParticles_)[p].mother(0)->pdgId());
+	vec_gentau3pp4.push_back(genvis);
+	
+	//	if(TMath::Abs((*genParticles_)[p].mother(0)->pdgId())==541){
+	isgen3matched = matched;
 
-          //	if(TMath::Abs((*genParticles_)[p].mother(0)->pdgId())==541){
-          isgen3matched = matched;
           //	}
       }else{
           isgen3matched = false;
@@ -825,7 +832,7 @@ void JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 
 
   //////////////////////////////
-  // std::cout << "Starts to build tau candidate out of " << numOfch << " pion candidates" << std::endl;
+   std::cout << "Starts to build tau candidate out of " << numOfch << " pion candidates" << std::endl;
 
 
     std::vector<taucand> cands;
@@ -850,6 +857,7 @@ void JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 
 	  if(TMath::Abs(tau_charge)!=3) continue; 
 
+	  //	  std::cout << iii << " " << jjj << " " << kkk << std::endl;
 
 	  /* reconstruct taus*/
 
@@ -1001,6 +1009,9 @@ void JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 	if(max_dr_3prong < dR_23) max_dr_3prong = dR_23;
 
 
+	//	std::cout << "\t tau1 (pt, eta, phi) = "  << tau1_fit.Pt()  << "  " << tau1_fit.Eta() <<  " " << tau1_fit.Phi() << std::endl;
+	//	std::cout << "\t tau2 (pt, eta, phi) = "  << tau2_fit.Pt()  << "  " << tau2_fit.Eta() <<  " " << tau2_fit.Phi() << std::endl;
+	//	std::cout << "\t tau3 (pt, eta, phi) = "  << tau3_fit.Pt()  << "  " << tau3_fit.Eta() <<  " " << tau3_fit.Phi() << std::endl;
 	// check gen. info. 
 
 
@@ -1011,6 +1022,8 @@ void JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 	
 	if(isMC){
 
+	  //	  std::cout << "gps size = "  << gps.size()<<std::endl;
+
 	  for(unsigned int mmm=0; mmm < gps.size(); mmm++){
 	    
 	    Bool_t isRight1_ = false;
@@ -1019,19 +1032,28 @@ void JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 	    
 	    std::vector<TLorentzVector> tlvs = gps[mmm];
 	    
+
+	    //	    std::cout << "gp size = "  << tlvs.size()<<std::endl;
+
 	    for(unsigned int nnn=0; nnn < tlvs.size(); nnn++){
+
+	      //	      std::cout << tlvs[nnn].Pt() << " " << tlvs[nnn].Eta() << " " << tlvs[nnn].Phi() << " " << tlvs[nnn].M() << std::endl;
 	      
+	      //	      std::cout << "before (isRight1,2,3) = " << isRight1_ << " " << isRight2_ << " " << isRight3_ << std::endl;
+
 	      if(
-		 reco::deltaR(tau1_fit.Eta(), tau1_fit.Phi(), tlvs[nnn].Eta(), tlvs[nnn].Phi())
+		 reco::deltaR(tau1_fit.Eta(), tau1_fit.Phi(), tlvs[nnn].Eta(), tlvs[nnn].Phi()) < 0.1
 		 ) isRight1_ = true; 
 
 	      else if(
-		      reco::deltaR(tau2_fit.Eta(), tau2_fit.Phi(), tlvs[nnn].Eta(), tlvs[nnn].Phi())
+		      reco::deltaR(tau2_fit.Eta(), tau2_fit.Phi(), tlvs[nnn].Eta(), tlvs[nnn].Phi()) < 0.1
 		      ) isRight2_ = true; 
 
 	      else if(
-		      reco::deltaR(tau3_fit.Eta(), tau3_fit.Phi(), tlvs[nnn].Eta(), tlvs[nnn].Phi())
+		      reco::deltaR(tau3_fit.Eta(), tau3_fit.Phi(), tlvs[nnn].Eta(), tlvs[nnn].Phi()) < 0.1
 		      ) isRight3_ = true; 
+
+	      //	      std::cout << "after (isRight1,2,3) = " << isRight1_ << " " << isRight2_ << " " << isRight3_ << std::endl;
 
 	      //	      else if(tlv_pion2.DeltaR(tlvs[nnn]) < 0.1) isRight2_ = true;
 	      //	      else if(tlv_pion3.DeltaR(tlvs[nnn]) < 0.1) isRight3_ = true;
@@ -1165,6 +1187,8 @@ void JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
       nBranches_->JpsiTau_tau_alpha.push_back(cands[ic].cand_tau_alpha);
       nBranches_->JpsiTau_tau_vprob.push_back(cands[ic].cand_tau_vprob);
       nBranches_->JpsiTau_tau_isRight.push_back(cands[ic].cand_tau_isRight);
+      nBranches_->JpsiTau_tau_matched_ppdgId.push_back(cands[ic].cand_tau_matched_ppdgId);
+      nBranches_->JpsiTau_tau_matched_gentaupt.push_back(cands[ic].cand_tau_matched_gentaupt);
 
       nBranches_->JpsiTau_B_pt.push_back(cands[ic].cand_b_pt);
       nBranches_->JpsiTau_B_eta.push_back(cands[ic].cand_b_eta);

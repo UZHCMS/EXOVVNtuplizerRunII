@@ -425,7 +425,9 @@ public:
   std::vector<float>       JpsiTau_tau_fls3d;
   std::vector<float>       JpsiTau_tau_alpha;
   std::vector<float>       JpsiTau_tau_vprob;
-  std::vector<bool>       JpsiTau_tau_isRight;
+  std::vector<bool>        JpsiTau_tau_isRight;
+  std::vector<int>         JpsiTau_tau_matched_ppdgId;
+  std::vector<float>       JpsiTau_tau_matched_gentaupt;
 
 
   std::vector<float>                JpsiTau_Jpsi_pt      ;
