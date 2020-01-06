@@ -33,6 +33,8 @@ public:
   static void fillDescriptions(edm::ConfigurationDescriptions& descriptions);
  public:
   std::map< std::string, bool > runFlags;
+  std::map< std::string, double > runValues;
+  std::map< std::string, std::string > runStrings;
  
 private:
   virtual void beginJob()                                                                   override;
@@ -54,6 +56,7 @@ private:
   edm::EDGetTokenT<reco::VertexCollection>                  vtxToken_           ;
   edm::EDGetTokenT<double>                                  rhoToken_           ;
   edm::EDGetTokenT<pat::PackedCandidateCollection>          packedpfcandidatesToken_;
+  edm::EDGetTokenT<std::vector<reco::VertexCompositePtrCandidate>>          svToken_;
 
   edm::EDGetTokenT<pat::PackedCandidateCollection>          losttrackToken_;
 

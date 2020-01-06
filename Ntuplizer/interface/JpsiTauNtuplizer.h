@@ -82,6 +82,8 @@
 
 #include "PhysicsTools/JetMCUtils/interface/JetMCTag.h"
 
+#include "FWCore/ParameterSet/interface/FileInPath.h"
+
 #include <tuple>
 #include <sstream>
 #include <iostream>
@@ -130,6 +132,8 @@ class JpsiTauNtuplizer : public CandidateNtuplizer {
 		   edm::EDGetTokenT<reco::GenParticleCollection> genptoken, 
 		    edm::EDGetTokenT<std::vector<reco::GenJet>> genttoken,
 		   std::map< std::string, bool >& runFlags,
+		   std::map< std::string, double >& runValues,
+		    std::map< std::string, std::string >& runStrings,
 		   NtupleBranches* nBranches );
 
   ~JpsiTauNtuplizer( void );
@@ -198,8 +202,18 @@ private:
    float ndf = 0.;
 
    bool runOnMC_;   
-   bool doCutFlow_;
+   bool useDNN_;
+
+   float c_dz;
+   float c_fsig;
+   float c_vprob;
+   float c_dnn;
    
+   std::string dnnfile_;
+
+   bool doCutFlow_;
+   std::map<std::tuple<Int_t, Float_t, Float_t, Float_t>, std::vector<Int_t>> DNNidx;
+   std::map<std::tuple<Int_t, Float_t, Float_t, Float_t>, std::vector<Float_t>> DNNval;
 };
 
 

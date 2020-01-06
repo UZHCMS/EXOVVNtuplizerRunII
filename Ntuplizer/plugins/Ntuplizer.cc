@@ -27,6 +27,7 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
 	vtxToken_             	    (consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("vertices"))),
 	rhoToken_             	    (consumes<double>(iConfig.getParameter<edm::InputTag>("rho"))),
 	packedpfcandidatesToken_    (consumes<std::vector<pat::PackedCandidate>>(iConfig.getParameter<edm::InputTag>("packedpfcandidates"))), 
+        svToken_                    (consumes<std::vector<reco::VertexCompositePtrCandidate>>(iConfig.getParameter<edm::InputTag>("SecondaryVertices"))), 
     losttrackToken_    (consumes<std::vector<pat::PackedCandidate>>(iConfig.getParameter<edm::InputTag>("losttrack"))),
 	puinfoToken_          	    (consumes<std::vector<PileupSummaryInfo> >(iConfig.getParameter<edm::InputTag>("PUInfo"))),
 	geneventToken_        	    (consumes<GenEventInfoProduct>(iConfig.getParameter<edm::InputTag>("genEventInfo"))),     
@@ -71,6 +72,7 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
  
   //std::map< std::string, bool > runFlags;
   runFlags["runOnMC"] = iConfig.getParameter<bool>("runOnMC");
+  runFlags["useDNN"] = iConfig.getParameter<bool>("useDNN");
   runFlags["doGenParticles"] = iConfig.getParameter<bool>("doGenParticles");
   runFlags["doGenEvent"] = iConfig.getParameter<bool>("doGenEvent");
   runFlags["doPileUp"] = iConfig.getParameter<bool>("doPileUp");
@@ -86,6 +88,17 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
   runFlags["doJpsiTau"] = iConfig.getParameter<bool>("doJpsiTau");
   runFlags["doGenHist"] = iConfig.getParameter<bool>("doGenHist");
   runFlags["doCutFlow"] = iConfig.getParameter<bool>("doCutFlow");
+
+  runValues["dzcut"] = iConfig.getParameter<double>("dzcut");
+  runValues["fsigcut"] = iConfig.getParameter<double>("fsigcut");
+  runValues["vprobcut"] = iConfig.getParameter<double>("vprobcut");
+  runValues["dnncut"] = iConfig.getParameter<double>("dnncut");
+
+  runStrings["dnnfile"] = iConfig.getParameter<std::string>("dnnfile");  
+
+
+  std::cout << "dnn file: " << runStrings["dnnfile"] << std::endl;
+  std::cout << "(dzcut, fsigcut, vprobcut) = " << runValues["dzcut"] << " " << runValues["fsigcut"] << " " << runValues["vprobcut"] << " " << runValues["dnncut"] << std::endl;
   
   // electronToken_	      	    =consumes<edm::View<pat::Electron> >(iConfig.getParameter<edm::InputTag>("electrons"));
     // eleVetoIdMapToken_    	    =consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("eleVetoIdMap"));
@@ -211,6 +224,8 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
 						   genparticleToken_,
 						   gentauToken_,
 						   runFlags,
+						   runValues,
+						   runStrings,
 						   nBranches_ );
   }
 

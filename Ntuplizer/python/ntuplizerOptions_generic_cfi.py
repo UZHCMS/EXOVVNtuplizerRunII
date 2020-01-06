@@ -8,6 +8,16 @@ config = dict()
 config["RUNONMC"] = True
 #-----------------------------------------#
 
+#--------- For taus ----------#
+config["USEDNN"] = True
+config["DZCUT"] = 0.25 # this is fixed !!
+config["FSIGCUT"] = 3
+config["VPROBCUT"] = 0.1
+config["DNNCUT"] = 0.05
+config["DNNFILE"] = "data/DNN/tau_10_small.root"
+#config["DNNFILE"] = "data/DNN/BJpsiX.root"
+
+
 config["USEJSON"] = not (config["RUNONMC"])
 #config["JSONFILE"] = "JSON/Cert_294927-306462_13TeV_PromptReco_Collisions17_JSON.txt" #data 2017
 #config["JSONFILE"] = "JSON/Cert_271036-284044_13TeV_PromptReco_Collisions16_JSON.txt" # data 2016
@@ -25,7 +35,7 @@ config["DOTRIGGEROBJECTS"] = False
 config["DOHLTFILTERS"] = True
 config["DOMISSINGET"] = True
 config["DOMVAMET"] = False
-config["DOJPSIMU"] = True
+config["DOJPSIMU"] = False
 config["DOJPSIELE"] = False
 config["DOJPSITAU"] = True
 config["DOGENHIST"] = (True and config["RUNONMC"]);
