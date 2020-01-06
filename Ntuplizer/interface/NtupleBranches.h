@@ -215,6 +215,22 @@ public:
   std::vector<int  >                IsJpsiEle   ;   
   std::vector<int  >                IsJpsiTau   ;
 
+  std::vector<bool >   JpsiTau_isRight_bS;
+  std::vector<bool >   JpsiTau_isRight_aS;
+  std::vector<int  >   JpsiTau_isRight_bS_ith;
+  std::vector<int  >   JpsiTau_isRight_aS_ith;
+  std::vector<int  >   JpsiTau_isRight_bS_n;
+  std::vector<int  >   JpsiTau_isRight_aS_n;
+
+  std::vector<float  >   JpsiTau_pf1_pt;
+  std::vector<float  >   JpsiTau_pf1_eta;
+  std::vector<float  >   JpsiTau_pf1_phi;
+
+  std::vector<float  >   JpsiTau_pf2_pt;
+  std::vector<float  >   JpsiTau_pf2_eta;
+  std::vector<float  >   JpsiTau_pf2_phi;
+
+
   std::vector<int  >                JpsiMu_nCandidates ;
   std::vector<float>                JpsiMu_mu1_pt      ;
   std::vector<float>                JpsiMu_mu1_eta     ;
@@ -360,6 +376,7 @@ public:
   ////////////////////////////////////////
 
   std::vector<int  >                JpsiTau_nCandidates ;
+  std::vector<int  >                JpsiTau_nCandidates_bS ;
 
   std::vector<float>                JpsiTau_mu1_pt      ;
   std::vector<float>                JpsiTau_mu1_eta     ;
@@ -428,6 +445,10 @@ public:
   std::vector<bool>        JpsiTau_tau_isRight;
   std::vector<int>         JpsiTau_tau_matched_ppdgId;
   std::vector<float>       JpsiTau_tau_matched_gentaupt;
+  std::vector<float>       JpsiTau_tau_sumofdnn; 
+  std::vector<int>       JpsiTau_tau_pfidx1;
+  std::vector<int>       JpsiTau_tau_pfidx2;
+  std::vector<int>       JpsiTau_tau_pfidx3;
 
 
   std::vector<float>                JpsiTau_Jpsi_pt      ;
@@ -505,6 +526,7 @@ public:
   std::vector<int> JpsiTau_nch;
   std::vector<int> JpsiTau_ngentau3;
   std::vector<int> JpsiTau_ngentau;
+  std::vector<float> JpsiTau_gentaupt;
 
 
   /** HLT trigger objects */

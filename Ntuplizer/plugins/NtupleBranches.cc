@@ -347,8 +347,24 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
 
   if (runFlags["doJpsiTau"]){
     tree_->Branch("IsJpsiTau", &IsJpsiTau );
+    tree_->Branch("JpsiTau_isRight_bS", &JpsiTau_isRight_bS );
+    tree_->Branch("JpsiTau_isRight_aS", &JpsiTau_isRight_aS );
+    tree_->Branch("JpsiTau_isRight_bS_ith", &JpsiTau_isRight_bS_ith );
+    tree_->Branch("JpsiTau_isRight_aS_ith", &JpsiTau_isRight_aS_ith );
+    tree_->Branch("JpsiTau_isRight_bS_n", &JpsiTau_isRight_bS_n );
+    tree_->Branch("JpsiTau_isRight_aS_n", &JpsiTau_isRight_aS_n );
+
+    tree_->Branch("JpsiTau_pf1_pt", &JpsiTau_pf1_pt );
+    tree_->Branch("JpsiTau_pf1_eta", &JpsiTau_pf1_eta );
+    tree_->Branch("JpsiTau_pf1_phi", &JpsiTau_pf1_phi );
+
+    tree_->Branch("JpsiTau_pf2_pt", &JpsiTau_pf2_pt );
+    tree_->Branch("JpsiTau_pf2_eta", &JpsiTau_pf2_eta );
+    tree_->Branch("JpsiTau_pf2_phi", &JpsiTau_pf2_phi );
+
 
     tree_->Branch("JpsiTau_nCandidates", &JpsiTau_nCandidates );
+    tree_->Branch("JpsiTau_nCandidates_bS", &JpsiTau_nCandidates_bS );
 
     tree_->Branch("JpsiTau_mu1_pt", &JpsiTau_mu1_pt );
     tree_->Branch("JpsiTau_mu1_eta", &JpsiTau_mu1_eta );
@@ -417,6 +433,11 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch("JpsiTau_tau_isRight", &JpsiTau_tau_isRight);
     tree_->Branch("JpsiTau_tau_matched_ppdgId", &JpsiTau_tau_matched_ppdgId);
     tree_->Branch("JpsiTau_tau_matched_gentaupt", &JpsiTau_tau_matched_gentaupt);
+    //    tree_->Branch("JpsiTau_tau_gentaupt", &JpsiTau_tau_gentaupt);
+    tree_->Branch("JpsiTau_tau_sumofdnn", &JpsiTau_tau_sumofdnn);
+    tree_->Branch("JpsiTau_tau_pfidx1", &JpsiTau_tau_pfidx1);
+    tree_->Branch("JpsiTau_tau_pfidx2", &JpsiTau_tau_pfidx2);
+    tree_->Branch("JpsiTau_tau_pfidx3", &JpsiTau_tau_pfidx3);
 
 
     tree_->Branch("JpsiTau_PV_vx", &JpsiTau_PV_vx );
@@ -488,6 +509,7 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch("JpsiTau_nch", &JpsiTau_nch);
     tree_->Branch("JpsiTau_ngentau3", &JpsiTau_ngentau3); 
     tree_->Branch("JpsiTau_ngentau", &JpsiTau_ngentau);
+    tree_->Branch("JpsiTau_gentaupt", &JpsiTau_gentaupt);
 
   }
 
@@ -651,7 +673,21 @@ void NtupleBranches::reset( void ){
   IsJpsiEle.clear();
   IsJpsiTau.clear();
 
+  JpsiTau_isRight_bS.clear();
+  JpsiTau_isRight_aS.clear();
+  JpsiTau_isRight_bS_ith.clear();
+  JpsiTau_isRight_aS_ith.clear();
+  JpsiTau_isRight_bS_n.clear();
+  JpsiTau_isRight_aS_n.clear();
   JpsiMu_nCandidates.clear();
+
+  JpsiTau_pf1_pt.clear();
+  JpsiTau_pf1_eta.clear();
+  JpsiTau_pf1_phi.clear();
+  JpsiTau_pf2_pt.clear();
+  JpsiTau_pf2_eta.clear();
+  JpsiTau_pf2_phi.clear();
+
 
   JpsiMu_mu1_pt.clear();
   JpsiMu_mu1_eta.clear();
@@ -795,6 +831,7 @@ void NtupleBranches::reset( void ){
 
 
   JpsiTau_nCandidates.clear();
+  JpsiTau_nCandidates_bS.clear();
 
   JpsiTau_mu1_pt.clear();
   JpsiTau_mu1_eta.clear();
@@ -864,6 +901,11 @@ void NtupleBranches::reset( void ){
   JpsiTau_tau_isRight.clear();
   JpsiTau_tau_matched_ppdgId.clear();
   JpsiTau_tau_matched_gentaupt.clear();
+  JpsiTau_tau_sumofdnn.clear();
+  JpsiTau_tau_pfidx1.clear();
+  JpsiTau_tau_pfidx2.clear();
+  JpsiTau_tau_pfidx3.clear();
+
 
   JpsiTau_Jpsi_pt.clear();
   JpsiTau_Jpsi_eta.clear();
@@ -934,6 +976,7 @@ void NtupleBranches::reset( void ){
   JpsiTau_nch.clear();
   JpsiTau_ngentau3.clear();
   JpsiTau_ngentau.clear();
+  JpsiTau_gentaupt.clear();
 
 
 

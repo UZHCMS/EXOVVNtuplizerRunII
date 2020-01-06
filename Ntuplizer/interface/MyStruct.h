@@ -52,6 +52,7 @@ struct taucand{
   Bool_t cand_tau_isRight;
   Int_t cand_tau_matched_ppdgId;
   Float_t cand_tau_matched_gentaupt;
+  Float_t cand_tau_sumofdnn;
   Float_t cand_b_vprob;
   Float_t cand_b_vx;
   Float_t cand_b_vy;

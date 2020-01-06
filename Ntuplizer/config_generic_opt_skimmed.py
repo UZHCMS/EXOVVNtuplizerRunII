@@ -19,6 +19,12 @@ process.TFileService = cms.Service("TFileService",
 #from EXOVVNtuplizerRunII.Ntuplizer.ntuplizerOptions_data_cfi import config
 from EXOVVNtuplizerRunII.Ntuplizer.ntuplizerOptions_generic_cfi import config
 
+# change from its original value
+#config["DZCUT"] = 0.25
+#config["FSIGCUT"] = 3
+#config["VPROBCUT"] = 0.1
+#config["DNNCUT"] = 0.2
+
 				   
 ####### Config parser ##########
 
@@ -53,7 +59,10 @@ options.maxEvents = 1000
 #options.inputFiles = '/store/mc/RunIIAutumn18MiniAOD/BuToKJpsi_ToMuMu_probefilter_SoftQCDnonD_TuneCP5_13TeV-pythia8-evtgen/MINIAODSIM/PUPoissonAve20_BParking_102X_upgrade2018_realistic_v15-v2/120000/FDD42175-87DC-D648-860B-F240C5E2CB91.root'
 #options.inputFiles ='/store/data/Run2018B/Charmonium/MINIAOD/17Sep2018-v1/10000/02CFE87F-7C17-1340-8300-FDA86C16D58C.root'
 #options.inputFiles ='/store/user/cgalloni/BJpsiX_MuMu_270819/Autumn18_10_2_9_miniAOD/190827_143312/0005/miniAOD_5000.root'
-options.inputFiles = '/store/user/cgalloni/BcJpsiTauNu_020519/Fall18_10_2_9-MINIAODSIM_noDuplCheck_020519/190505_141436/0000/miniAOD_99.root'
+#options.inputFiles = '/store/user/cgalloni/BcJpsiTauNu_020519/Fall18_10_2_9-MINIAODSIM_noDuplCheck_020519/190505_141436/0000/miniAOD_99.root'
+#options.inputFiles = '/BcToJPsiTauNu_TuneCP5_13TeV-bcvegpy2-pythia8-evtgen/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v1/MINIAODSIM'
+options.inputFiles = '/store/mc/RunIIAutumn18MiniAOD/BcToJPsiTauNu_TuneCP5_13TeV-bcvegpy2-pythia8-evtgen/MINIAODSIM/102X_upgrade2018_realistic_v15-v1/260000/E342DC18-5142-1545-B077-D4405CE0BF05.root'
+#options.inputFiles = 'file:/scratch/ytakahas/E342DC18-5142-1545-B077-D4405CE0BF05.root'
 
 options.parseArguments()
 
@@ -359,6 +368,7 @@ if config["CORRMETONTHEFLY"]:
 ################## Ntuplizer ###################
 process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     runOnMC	      = cms.bool(config["RUNONMC"]),
+    useDNN	      = cms.bool(config["USEDNN"]),
     doGenParticles    = cms.bool(config["DOGENPARTICLES"]),
     doGenEvent	      = cms.bool(config["DOGENEVENT"]),
     doPileUp	      = cms.bool(config["DOPILEUP"]),
@@ -374,7 +384,11 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     doMVAMET          = cms.bool(config["DOMVAMET"]),
     doGenHist         = cms.bool(config["DOGENHIST"]),
     doCutFlow         = cms.bool(config["DOCUTFLOW"]),
-
+    dzcut             = cms.double(config['DZCUT']),
+    fsigcut           = cms.double(config['FSIGCUT']),
+    vprobcut          = cms.double(config['VPROBCUT']),
+    dnncut            = cms.double(config['DNNCUT']),
+    dnnfile           = cms.string(config['DNNFILE']),                        
     vertices = cms.InputTag("offlineSlimmedPrimaryVertices"),
     beamSpot = cms.InputTag("offlineBeamSpot"),
     taus = cms.InputTag("slimmedTaus"),
@@ -464,6 +478,7 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     noiseFilterSelection_metFilters = cms.string('Flag_METFilters'),
 
     packedpfcandidates = cms.InputTag('packedPFCandidates'),
+    SecondaryVertices = cms.InputTag('slimmedSecondaryVertices'),
     losttrack = cms.InputTag('lostTracks')
 )
 
