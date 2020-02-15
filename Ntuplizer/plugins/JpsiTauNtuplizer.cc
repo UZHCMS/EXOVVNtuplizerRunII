@@ -38,7 +38,7 @@ JpsiTauNtuplizer::JpsiTauNtuplizer( edm::EDGetTokenT<pat::MuonCollection>    muo
 
   std::cout << "UseDNN = " << useDNN_ << std::endl;
   std::cout << "DNN file =" << dnnfile_ << std::endl;
-  std::cout << "Confirm (dzcut, fsigcut, vprobcut) = " << c_dz << " " << c_fsig << " " << c_vprob << " " << c_dnn<< std::endl;
+  std::cout << "-- (dzcut, fsigcut, vprobcut) = " << c_dz << " " << c_fsig << " " << c_vprob << " " << c_dnn<< std::endl;
   
   if(useDNN_){
 
@@ -1214,7 +1214,7 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 	  if(!tau_vertex->vertexIsValid()) continue; 
 
 	  // 6.1.2020 commented out
-	  //	  if(TMath::Prob(tau_vertex->chiSquared(), tau_vertex->degreesOfFreedom()) <= c_vprob) continue;
+	  if(TMath::Prob(tau_vertex->chiSquared(), tau_vertex->degreesOfFreedom()) <= c_vprob) continue;
 
 	  
 	  std::vector< RefCountedKinematicParticle > tau_children = tauTree->finalStateParticles();
@@ -1230,7 +1230,7 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 
 
 	  // 6.1.2020 commented out
-	  //	  if(Taucand.fls3d < c_fsig) continue;
+	  if(Taucand.fls3d < c_fsig) continue;
 
 
 
@@ -1413,6 +1413,9 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
     }
     
     sort(cands.begin(), cands.end());
+
+
+    if(cands.size()==0) return false;
 
     //    std::vector<Int_t> dict_idx;
     Int_t ncomb = 0;
