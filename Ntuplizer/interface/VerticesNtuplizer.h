@@ -12,7 +12,7 @@ public:
 		     std::map< std::string, bool >&  runFlags  );
   ~VerticesNtuplizer( void );
   
-  void fillBranches( edm::Event const & event, const edm::EventSetup& iSetup );
+  bool fillBranches( edm::Event const & event, const edm::EventSetup& iSetup );
   
 private:
    edm::EDGetTokenT<reco::VertexCollection> vtxToken_   ;

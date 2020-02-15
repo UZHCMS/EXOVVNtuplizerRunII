@@ -23,7 +23,7 @@ public:
 		  std::map< std::string, bool >&                       runFlags );
    ~METsNtuplizer( void );
    
-   void 	fillBranches      ( edm::Event const & event, const edm::EventSetup& iSetup );
+   bool 	fillBranches      ( edm::Event const & event, const edm::EventSetup& iSetup );
    void   	addTypeICorr      ( edm::Event const & event );
    double 	getJEC            ( reco::Candidate::LorentzVector& rawJetP4, const pat::Jet& jet, double& jetCorrEtaMax, std::vector<std::string> jecPayloadNames_ );
    double 	getJECOffset      ( reco::Candidate::LorentzVector& rawJetP4, const pat::Jet& jet, double& jetCorrEtaMax, std::vector<std::string> jecPayloadNames_ );

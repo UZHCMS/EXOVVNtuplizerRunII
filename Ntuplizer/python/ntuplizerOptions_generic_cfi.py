@@ -13,8 +13,8 @@ config["USEDNN"] = True
 config["DZCUT"] = 0.25 # this is fixed !!
 config["FSIGCUT"] = 3
 config["VPROBCUT"] = 0.1
-config["DNNCUT"] = 0.05
-config["DNNFILE"] = "data/DNN/tau_10_small.root"
+config["DNNCUT"] = 0.1443
+config["DNNFILE"] = "data/DNN/BcJPsi"
 #config["DNNFILE"] = "data/DNN/BJpsiX.root"
 
 
@@ -26,27 +26,17 @@ config["USENOHF"] = False
 
 
 #--------- basic sequences ----------#
-config["DOGENPARTICLES"] = (True and config["RUNONMC"])
-config["DOGENEVENT"] = (True and config["RUNONMC"])
-config["DOPILEUP"] = (True and config["RUNONMC"])
-config["DOVERTICES"] = True #True
-config["DOTRIGGERDECISIONS"] = True
-config["DOTRIGGEROBJECTS"] = False
-config["DOHLTFILTERS"] = True
-config["DOMISSINGET"] = True
-config["DOMVAMET"] = False
+config["DOGENPARTICLES"] = (False and config["RUNONMC"])
+config["DOGENEVENT"] = (False and config["RUNONMC"])
+config["DOPILEUP"] = (False and config["RUNONMC"])
+config["DOVERTICES"] = True
+config["DOMISSINGET"] = False
 config["DOJPSIMU"] = False
-config["DOJPSIELE"] = False
 config["DOJPSITAU"] = True
 config["DOGENHIST"] = (True and config["RUNONMC"]);
 config["DOCUTFLOW"] = True;
 
-
-#--------- MET reclustering ----------#
-config["DOMETRECLUSTERING"] = False
-config["DOMETSVFIT"] = True
-
 #--------- JEC ----------#
 
-config["CORRMETONTHEFLY"] = True  # at the moment JEC available just for MC Fall17
+config["CORRMETONTHEFLY"] = False  # at the moment JEC available just for MC Fall17
 

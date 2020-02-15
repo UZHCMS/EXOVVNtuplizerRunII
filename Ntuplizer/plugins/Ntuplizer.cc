@@ -1,14 +1,11 @@
 #include "../interface/Ntuplizer.h"
 #include "../interface/CandidateNtuplizer.h"
-#include "../interface/GenJetsNtuplizer.h"
 #include "../interface/METsNtuplizer.h"
 #include "../interface/PileUpNtuplizer.h"
 #include "../interface/GenEventNtuplizer.h"
 #include "../interface/GenParticlesNtuplizer.h"
-#include "../interface/TriggersNtuplizer.h"
 #include "../interface/VerticesNtuplizer.h"
 #include "../interface/JpsiMuNtuplizer.h"
-#include "../interface/JpsiEleNtuplizer.h"
 #include "../interface/JpsiTauNtuplizer.h"
 
 #include "DataFormats/PatCandidates/interface/TriggerObjectStandAlone.h"
@@ -65,6 +62,9 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
 {
 
 
+  nevents = 0;
+  nevents_all = 0;
+
   /*=======================================================================================*/
   edm::Service<TFileService> fs;
   TTree* tree = fs->make<TTree>( "tree", "tree" );
@@ -77,14 +77,8 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
   runFlags["doGenEvent"] = iConfig.getParameter<bool>("doGenEvent");
   runFlags["doPileUp"] = iConfig.getParameter<bool>("doPileUp");
   runFlags["doVertices"] = iConfig.getParameter<bool>("doVertices");
-  runFlags["doTriggerDecisions"] = iConfig.getParameter<bool>("doTriggerDecisions");
-  runFlags["doTriggerObjects"] = iConfig.getParameter<bool>("doTriggerObjects");
-  runFlags["doHltFilters"] = iConfig.getParameter<bool>("doHltFilters");
   runFlags["doMissingEt"] = iConfig.getParameter<bool>("doMissingEt");
-  runFlags["doMETSVFIT"] = iConfig.getParameter<bool>("doMETSVFIT");
-  runFlags["doMVAMET"] = iConfig.getParameter<bool>("doMVAMET");
   runFlags["doJpsiMu"] = iConfig.getParameter<bool>("doJpsiMu");
-  runFlags["doJpsiEle"] = iConfig.getParameter<bool>("doJpsiEle");
   runFlags["doJpsiTau"] = iConfig.getParameter<bool>("doJpsiTau");
   runFlags["doGenHist"] = iConfig.getParameter<bool>("doGenHist");
   runFlags["doCutFlow"] = iConfig.getParameter<bool>("doCutFlow");
@@ -100,20 +94,9 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
   std::cout << "dnn file: " << runStrings["dnnfile"] << std::endl;
   std::cout << "(dzcut, fsigcut, vprobcut) = " << runValues["dzcut"] << " " << runValues["fsigcut"] << " " << runValues["vprobcut"] << " " << runValues["dnncut"] << std::endl;
   
-  // electronToken_	      	    =consumes<edm::View<pat::Electron> >(iConfig.getParameter<edm::InputTag>("electrons"));
-    // eleVetoIdMapToken_    	    =consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("eleVetoIdMap"));
-    // eleLooseIdMapToken_   	    =consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("eleLooseIdMap"));
-    // eleMediumIdMapToken_  	    =consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("eleMediumIdMap"));
-    // eleTightIdMapToken_   	    =consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("eleTightIdMap"));
-    // eleHLTIdMapToken_  	    =consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("eleHLTIdMap"));
-    // eleHEEPIdMapToken_    	    =consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("eleHEEPIdMap"));
-    // eleMVAMediumIdMapToken_     =consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("eleMVAMediumIdMap"));
-    // eleMVATightIdMapToken_      =consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("eleMVATightIdMap"));
- 
 
   std::string jecpath = iConfig.getParameter<std::string>("jecpath");
   jecpath = "EXOVVNtuplizerRunII/Ntuplizer/data/" + jecpath;
-  //jecpath = std::string("data/") + jecpath;
   std::cout << "jecpath  "<< jecpath  <<std::endl;
  
   nBranches_ = new NtupleBranches( runFlags, tree );
@@ -153,6 +136,8 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
   }
 
   /*=======================================================================================*/
+
+
  
   /*=======================================================================================*/
   if (runFlags["doMissingEt"]) {
@@ -199,6 +184,8 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
                                                      nBranches_  ,
 						     runFlags    );
   }
+
+
   if (runFlags["doJpsiMu"]) {
     std::cout<<"\n\n --->GETTING INSIDE doJpsiMu<---\n\n"<<std::endl;
     nTuplizers_["JpsiMu"] = new JpsiMuNtuplizer( muonToken_   , 
@@ -229,24 +216,6 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
 						   nBranches_ );
   }
 
-  // if (runFlags["doJpsiEle"]) {
-  //     std::cout<<"\n\n --->GETTING INSIDE doJpsiEle<---\n\n"<<std::endl;
-  //     nTuplizers_["JpsiEle"] = new JpsiEleNtuplizer( electronToken_,  vtxToken_   ,  nBranches_ );
-  // }
-
-  if (runFlags["doTriggerDecisions"] || runFlags["doTriggerObjects"] || runFlags["doTriggerDecisions"]) {
-    nTuplizers_["triggers"] = new TriggersNtuplizer( triggerToken_, 
-                                                     triggerObjects_, 
-						     triggerPrescales_,
-                                                     noiseFilterToken_,
-						     HBHENoiseFilterLooseResultToken_,
-						     HBHENoiseFilterTightResultToken_,
-						     HBHENoiseIsoFilterResultToken_,
-						     ecalBadCalibFilterUpdateToken_,
-						     nBranches_,
-                                                     iConfig,
-                                                     runFlags );
-  }
 
  
   /*=======================================================================================*/    
@@ -287,7 +256,7 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
 Ntuplizer::~Ntuplizer()
 {
 	  
-  for( std::map<std::string,CandidateNtuplizer*>::iterator it = nTuplizers_.begin(); it != nTuplizers_.end(); ++it ){
+  for( std::unordered_map<std::string,CandidateNtuplizer*>::iterator it = nTuplizers_.begin(); it != nTuplizers_.end(); ++it ){
     //std::cout << "deconstructor: Branches: " << it->first << std::endl;
     delete it->second;
   }
@@ -295,6 +264,8 @@ Ntuplizer::~Ntuplizer()
    
    delete nBranches_;
    
+   std::cout << "Total number of filled events = " << nevents << "/" << nevents_all << ", eff = " << Float_t(nevents)/Float_t(nevents_all) << std::endl;
+
 }
 
 ///////////////////////////////////////////////////////////////////////////////////
@@ -309,15 +280,27 @@ void Ntuplizer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
   nBranches_->EVENT_event     = iEvent.id().event();
   nBranches_->EVENT_run       = iEvent.id().run();
   nBranches_->EVENT_lumiBlock = iEvent.id().luminosityBlock();  
-  //std::cout<<"before the branches loop"<<std::endl; 
-  for( std::map<std::string,CandidateNtuplizer*>::iterator it = nTuplizers_.begin(); it != nTuplizers_.end(); ++it ){
-    // std::cout << "Fill Branchines: " << it->first << std::endl;
-    (it->second)->fillBranches( iEvent, iSetup );
+
+  //  std::cout<<" ----------------- before the branches loop"<<std::endl; 
+
+  bool isSave = true;
+  for( std::unordered_map<std::string,CandidateNtuplizer*>::iterator it = nTuplizers_.begin(); it != nTuplizers_.end(); ++it ){
+
+    isSave = (it->second)->fillBranches( iEvent, iSetup );
+    //    std::cout << "Fill Branchines: " << it->first << ", result = " << isSave << std::endl;
+    if(!isSave) break;
   }
-  nBranches_->fillTree();
+
+  //  std::cout << "isSave =  " << isSave << std::endl;
+  if(isSave){
+    //    std::cout << "-------------- save -----------" << std::endl;
+    nBranches_->fillTree();
+    nevents++;
+  }
   
   nBranches_->reset();    
  
+  nevents_all++;
 }
 
 
