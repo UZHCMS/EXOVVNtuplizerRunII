@@ -149,7 +149,7 @@ class JpsiMuNtuplizer : public CandidateNtuplizer {
   math::PtEtaPhiMLorentzVector daughter_p4(std::vector< RefCountedKinematicParticle > fitted_children, size_t i);
 
   float MuonPFIso(pat::Muon muon);
-  void fillBranches( edm::Event const & event, const edm::EventSetup& iSetup );
+  bool fillBranches( edm::Event const & event, const edm::EventSetup& iSetup );
   Float_t getMaxDoca(std::vector<RefCountedKinematicParticle> &kinParticles);
   Float_t getMinDoca(std::vector<RefCountedKinematicParticle> &kinParticles);
   TVector3 getVertex(const reco::GenParticle& part);

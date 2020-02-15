@@ -215,22 +215,6 @@ public:
   std::vector<int  >                IsJpsiEle   ;   
   std::vector<int  >                IsJpsiTau   ;
 
-  std::vector<bool >   JpsiTau_isRight_bS;
-  std::vector<bool >   JpsiTau_isRight_aS;
-  std::vector<int  >   JpsiTau_isRight_bS_ith;
-  std::vector<int  >   JpsiTau_isRight_aS_ith;
-  std::vector<int  >   JpsiTau_isRight_bS_n;
-  std::vector<int  >   JpsiTau_isRight_aS_n;
-
-  std::vector<float  >   JpsiTau_pf1_pt;
-  std::vector<float  >   JpsiTau_pf1_eta;
-  std::vector<float  >   JpsiTau_pf1_phi;
-
-  std::vector<float  >   JpsiTau_pf2_pt;
-  std::vector<float  >   JpsiTau_pf2_eta;
-  std::vector<float  >   JpsiTau_pf2_phi;
-
-
   std::vector<int  >                JpsiMu_nCandidates ;
   std::vector<float>                JpsiMu_mu1_pt      ;
   std::vector<float>                JpsiMu_mu1_eta     ;
@@ -376,16 +360,11 @@ public:
   ////////////////////////////////////////
 
   std::vector<int  >                JpsiTau_nCandidates ;
-  std::vector<int  >                JpsiTau_nCandidates_bS ;
 
   std::vector<float>                JpsiTau_mu1_pt      ;
   std::vector<float>                JpsiTau_mu1_eta     ;
   std::vector<float>                JpsiTau_mu1_phi     ;
   std::vector<float>                JpsiTau_mu1_mass     ;
-  std::vector<float>                JpsiTau_mu1_unfit_pt      ;
-  std::vector<float>                JpsiTau_mu1_unfit_eta     ;
-  std::vector<float>                JpsiTau_mu1_unfit_phi     ;
-  std::vector<float>                JpsiTau_mu1_unfit_mass     ;
   std::vector<int  >                JpsiTau_mu1_q      ;   
   std::vector<int  >                JpsiTau_mu1_isLoose   ;
   std::vector<int  >                JpsiTau_mu1_isTight   ;
@@ -403,10 +382,6 @@ public:
   std::vector<float>                JpsiTau_mu2_eta     ;
   std::vector<float>                JpsiTau_mu2_phi     ;
   std::vector<float>                JpsiTau_mu2_mass     ;
-  std::vector<float>                JpsiTau_mu2_unfit_pt      ;
-  std::vector<float>                JpsiTau_mu2_unfit_eta     ;
-  std::vector<float>                JpsiTau_mu2_unfit_phi     ;
-  std::vector<float>                JpsiTau_mu2_unfit_mass     ;
   std::vector<int  >                JpsiTau_mu2_q   ;   
   std::vector<int  >                JpsiTau_mu2_isLoose   ;
   std::vector<int  >                JpsiTau_mu2_isTight   ;
@@ -420,10 +395,10 @@ public:
   std::vector<float>                JpsiTau_mu2_iso       ;
   std::vector<float>                JpsiTau_mu2_dbiso       ;
 
-  std::vector<float>                JpsiTau_tau_fullfit_pt      ;
-  std::vector<float>                JpsiTau_tau_fullfit_eta     ;
-  std::vector<float>                JpsiTau_tau_fullfit_phi     ;
-  std::vector<float>                JpsiTau_tau_fullfit_mass     ;
+  //  std::vector<float>                JpsiTau_tau_fullfit_pt      ;
+  //  std::vector<float>                JpsiTau_tau_fullfit_eta     ;
+  //  std::vector<float>                JpsiTau_tau_fullfit_phi     ;
+  //  std::vector<float>                JpsiTau_tau_fullfit_mass     ;
   std::vector<float>                JpsiTau_tau_pt      ;
   std::vector<float>                JpsiTau_tau_eta     ;
   std::vector<float>                JpsiTau_tau_phi     ;
@@ -449,6 +424,10 @@ public:
   std::vector<int>       JpsiTau_tau_pfidx1;
   std::vector<int>       JpsiTau_tau_pfidx2;
   std::vector<int>       JpsiTau_tau_pfidx3;
+
+  std::vector<float>       JpsiTau_tau_pi1_dnn;
+  std::vector<float>       JpsiTau_tau_pi2_dnn;
+  std::vector<float>       JpsiTau_tau_pi3_dnn;
 
 
   std::vector<float>                JpsiTau_Jpsi_pt      ;

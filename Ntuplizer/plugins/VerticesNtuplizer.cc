@@ -24,21 +24,21 @@ VerticesNtuplizer::~VerticesNtuplizer( void )
 }
 
 //===================================================================================================================
-void VerticesNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetup& iSetup ){
+bool VerticesNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetup& iSetup ){
   
     //Skip events with no jspi if that analysis is chosen
    
-    bool rflag = false;
-    
-    if(isJpsiEle_ || isJpsiMu_){
-      if ( nBranches_->JpsiMu_B_pt.size() >=1) rflag = true;
-    }
-    
-    if(isJpsiTau_){
-      if ( nBranches_->JpsiTau_B_pt.size() >=1)  rflag = true;
-    }
-
-    if(rflag==false) return;
+//    bool rflag = false;
+//    
+//    if(isJpsiEle_ || isJpsiMu_){
+//      if ( nBranches_->JpsiMu_B_pt.size() >=1) rflag = true;
+//    }
+//    
+//    if(isJpsiTau_){
+//      if ( nBranches_->JpsiTau_B_pt.size() >=1)  rflag = true;
+//    }
+//
+//    if(rflag==false) return;
 
   event.getByToken(vtxToken_, vertices_);
   event.getByToken(beamToken_, beamSpot_);
@@ -95,4 +95,6 @@ void VerticesNtuplizer::fillBranches( edm::Event const & event, const edm::Event
   // print the beam spot object
   // cout << beamSpot << endl;
   std::cout<<"this is z0 "<< z0 << std::endl;*/
+
+  return true;
 }

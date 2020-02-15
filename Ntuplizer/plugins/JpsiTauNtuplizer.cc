@@ -41,57 +41,86 @@ JpsiTauNtuplizer::JpsiTauNtuplizer( edm::EDGetTokenT<pat::MuonCollection>    muo
   std::cout << "Confirm (dzcut, fsigcut, vprobcut) = " << c_dz << " " << c_fsig << " " << c_vprob << " " << c_dnn<< std::endl;
   
   if(useDNN_){
-    std::string dnnfilepath = "EXOVVNtuplizerRunII/Ntuplizer/" +  dnnfile_;
+
+/////    std::string dnnfilepath = "EXOVVNtuplizerRunII/Ntuplizer/" +  dnnfile_;
+/////    std::cout << "dnn file input = " << edm::FileInPath(dnnfilepath).fullPath() << std::endl;
+/////    TFile * dnnfile = new TFile((TString)edm::FileInPath(dnnfilepath).fullPath());
+/////    TTree *tree = (TTree*) dnnfile->Get("tree");
+/////    
+/////    
+/////    Float_t index[50];
+/////    Float_t dnn[50];
+/////    Float_t match[7];
+/////    
+/////    tree->SetBranchAddress("idx",&index);
+/////    tree->SetBranchAddress("DNN",&dnn);
+/////    tree->SetBranchAddress("match",&match);
+/////    
+/////    
+/////    for(int ii=0; ii < tree->GetEntries(); ii++){
+/////      
+/////      Long64_t tentry = tree->LoadTree(ii);
+/////      tree->GetEntry(tentry);
+/////      
+/////      std::vector<Int_t> vecidx;
+/////      std::vector<Float_t> vecval;
+/////      
+/////      for(int jj=0; jj < 50; jj++){
+/////	
+/////	if(index[jj]!=-99){
+/////
+/////	  //	  if(dnn[jj] > c_dnn){
+/////
+/////	    vecidx.push_back((int)index[jj]);
+/////	    vecval.push_back(dnn[jj]);
+/////
+/////	    //	  }
+/////
+/////	}
+/////      }
+/////      
+/////      //      std::cout << "registered: " <<(Int_t)match[0] << " " << (Float_t)match[1] << " " << (Float_t)match[2] << " " << (Float_t)match[3] << " " << vecidx.size() << " " << vecval.size() << std::endl;
+/////      DNNidx[std::make_tuple((Int_t)match[0], (Float_t)match[1], (Float_t)match[2], (Float_t)match[3])] = vecidx;
+/////      DNNval[std::make_tuple((Int_t)match[0], (Float_t)match[1], (Float_t)match[2], (Float_t)match[3])] = vecval;
+/////    }
+/////    
+/////    std::cout << tree->GetEntries() << " events read from DNN files" << std::endl;
+
+
+//    std::string filepath = "EXOVVNtuplizerRunII/Ntuplizer/" +  dnnfile_;
     //    TFile * dnnfile = new TFile((TString)dnnfile_);
-    std::cout << "dnn file input = " << edm::FileInPath(dnnfilepath).fullPath() << std::endl;
-    TFile * dnnfile = new TFile((TString)edm::FileInPath(dnnfilepath).fullPath());
-    TTree *tree = (TTree*) dnnfile->Get("tree");
+    //    std::cout << "dnn file path = " << edm::FileInPath(filepath).fullPath() << std::endl;
+    //  TFile * dnnfile = new TFile((TString)edm::FileInPath(dnnfilepath).fullPath());
     
-    
-    Float_t index[50];
-    Float_t dnn[50];
-    Float_t match[7];
-    
-    tree->SetBranchAddress("idx",&index);
-    tree->SetBranchAddress("DNN",&dnn);
-    tree->SetBranchAddress("match",&match);
-    
-    
-    for(int ii=0; ii < tree->GetEntries(); ii++){
-      
-      Long64_t tentry = tree->LoadTree(ii);
-      tree->GetEntry(tentry);
-      
-      std::vector<Int_t> vecidx;
-      std::vector<Float_t> vecval;
-      
-      for(int jj=0; jj < 50; jj++){
-	
-	if(index[jj]!=-99){
 
-	  if(dnn[jj] > c_dnn){
 
-	    vecidx.push_back((int)index[jj]);
-	    vecval.push_back(dnn[jj]);
 
-	  }
-
-	}
-      }
-      
-      //      std::cout << "registered: " <<(Int_t)match[0] << " " << (Float_t)match[1] << " " << (Float_t)match[2] << " " << (Float_t)match[3] << " " << vecidx.size() << " " << vecval.size() << std::endl;
-      DNNidx[std::make_tuple((Int_t)match[0], (Float_t)match[1], (Float_t)match[2], (Float_t)match[3])] = vecidx;
-      DNNval[std::make_tuple((Int_t)match[0], (Float_t)match[1], (Float_t)match[2], (Float_t)match[3])] = vecval;
-    }
+    graphDef = tensorflow::loadMetaGraph(dnnfile_);
+    session = tensorflow::createSession(graphDef, dnnfile_);
     
-    std::cout << tree->GetEntries() << " events read from DNN files" << std::endl;
+    data = tensorflow::Tensor(tensorflow::DT_FLOAT, { 1, 50, 8 }); // single batch of dimension 10
+    label = tensorflow::Tensor(tensorflow::DT_INT32, { 1,50}); 
+    add_global = tensorflow::Tensor(tensorflow::DT_FLOAT, { 1, 2 }); 
+    isTraining = tensorflow::Tensor(tensorflow::DT_BOOL, tensorflow::TensorShape()); 
+    norm = tensorflow::Tensor(tensorflow::DT_FLOAT, { 1, 50 }); 
+    
+  //  for (size_t i = 0; i < 10; i++) input.matrix<float>()(0, i) = float(i);
+
+
   }
 
+  
+
+  
 }
 
 //===================================================================================================================
 JpsiTauNtuplizer::~JpsiTauNtuplizer( void )
 {
+
+  tensorflow::closeSession(session);
+  delete graphDef;
+
 
 }
 
@@ -303,7 +332,7 @@ math::PtEtaPhiMLorentzVector JpsiTauNtuplizer::daughter_p4(std::vector< RefCount
 }
 
 
-void JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetup& iSetup ){
+bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetup& iSetup ){
 
   
     // std::cout << "---------------- event, run, lumi = " << event.id().event() << " " << event.id().run() << " " << event.id().luminosityBlock() << "----------------" << std::endl;
@@ -378,7 +407,7 @@ void JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
     // bools keeping track of muon 1 or 2 for cutflow purposes
     bool mu1passpteta = false;
     bool mu2passpteta = false;
-    bool mu3passpteta = false;
+    //    bool mu3passpteta = false;
     bool mu1passtrigmatch = false;
     bool mu2passtrigmatch = false;
  // Precut
@@ -404,7 +433,7 @@ void JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
        if (mu2passpteta) {nBranches_->cutflow_perevt->Fill(2);}
     }
 
-    if(!isTriggered) return;
+    if(!isTriggered) return false;
  // evt Triggered
     if( doCutFlow_) {
        nBranches_->cutflow_perevt->Fill(3);
@@ -468,16 +497,20 @@ void JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
         if (mu1passtrigmatch && !mu2passtrigmatch) { mu2passtrigmatch = true;}
         // If we're on the First muon, then the first muon is what passed
         if (!mu1passtrigmatch) {mu1passtrigmatch = true;}
+
+
+	//	std::cout << "This is muon ... " << muon.pt() << " " << muon.eta() << " " << muon.phi() << std::endl;
+
         muoncollection.push_back(muon);
         muoncollection_id.push_back(imuon);
     }
-  if( doCutFlow_) {
-    if (mu1passtrigmatch) {nBranches_->cutflow_perevt->Fill(4);}
-    if (mu2passtrigmatch) {nBranches_->cutflow_perevt->Fill(5);}
+
+    if( doCutFlow_) {
+      if (mu1passtrigmatch) {nBranches_->cutflow_perevt->Fill(4);}
+      if (mu2passtrigmatch) {nBranches_->cutflow_perevt->Fill(5);}
     }
-
-    if(!( muoncollection.size() >= 2)) return;
-
+    
+    if(!( muoncollection.size() >= 2)) return false;
 
 
 
@@ -543,11 +576,11 @@ void JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
         }
     }
 
-    if(jpsi_max_pt == -1) return;
+    if(jpsi_max_pt == -1) return false;
 
     if ( doCutFlow_) {
        nBranches_->cutflow_perevt->Fill(6);
-       }
+    }
 
 
     /********************************************************************
@@ -574,7 +607,7 @@ void JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
     //reconstructing a J/Psi decay
     RefCountedKinematicTree jpTree = kpvFitter.fit(muonParticles);
    
-    if(jpTree->isEmpty() || !jpTree->isValid() || !jpTree->isConsistent()) return;
+    if(jpTree->isEmpty() || !jpTree->isValid() || !jpTree->isConsistent()) return false;
 
     //creating the particle fitter
     KinematicParticleFitter csFitter;
@@ -587,12 +620,12 @@ void JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
     //getting the J/Psi KinematicParticle
     jpTree->movePointerToTheTop();
     RefCountedKinematicParticle jpsi_part = jpTree->currentParticle();
-    if(!jpsi_part->currentState().isValid()) return;
+    if(!jpsi_part->currentState().isValid()) return false; 
 
   RefCountedKinematicVertex jpsi_vertex = jpTree->currentDecayVertex();
-   if(!jpsi_vertex->vertexIsValid()) return; 
+   if(!jpsi_vertex->vertexIsValid()) return false; 
 
-    if(TMath::Prob(jpsi_vertex->chiSquared(), jpsi_vertex->degreesOfFreedom()) <=0) return;
+    if(TMath::Prob(jpsi_vertex->chiSquared(), jpsi_vertex->degreesOfFreedom()) <=0) return false;
 
     std::vector< RefCountedKinematicParticle > jpsi_children = jpTree->finalStateParticles();
 
@@ -682,64 +715,236 @@ void JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
     event.getByToken( losttrackToken_               , losttrack_      ); 
     
     std::vector<pat::PackedCandidate> pfcollection; 
-    std::vector<pat::PackedCandidate> pfcollection_pre; 
+    //    std::vector<pat::PackedCandidate> pfcollection_pre; 
     std::vector<reco::TransientTrack> mytracks;
     std::vector<Float_t> mydnn;
     
-    for( size_t ii = 0; ii < packedpfcandidates_->size(); ++ii ){   
-	
-      pat::PackedCandidate pf = (*packedpfcandidates_)[ii];
-	
-      pfcollection_pre.push_back(pf);
-    }
+//    for( size_t ii = 0; ii < packedpfcandidates_->size(); ++ii ){   
+//	
+//      pat::PackedCandidate pf = (*packedpfcandidates_)[ii];
+//	
+//      pfcollection_pre.push_back(pf);
+//    }
 
 
     if(useDNN_){
 
-      std::vector<Int_t> dnnidx;
-      std::vector<Float_t> dnnval;
 
-      if(pfcollection_pre.size()>=1){
-	dnnidx = DNNidx[std::make_tuple((Int_t)event.id().event(), (Float_t)pfcollection_pre[0].pt(), (Float_t)pfcollection_pre[0].eta(), (Float_t)pfcollection_pre[0].phi())];
-	dnnval = DNNval[std::make_tuple((Int_t)event.id().event(), (Float_t)pfcollection_pre[0].pt(), (Float_t)pfcollection_pre[0].eta(), (Float_t)pfcollection_pre[0].phi())];
-	std::cout << "check:" << (Int_t)event.id().event() << " " << (Float_t)pfcollection_pre[0].pt() << " " <<  (Float_t)pfcollection_pre[0].eta() << " " << (Float_t)pfcollection_pre[0].phi() << " " << dnnidx.size() << " " << dnnval.size() << std::endl;
-      }
+      ///////////////////////////////
+      std::vector<pfcand> pfcands;
+      //      std::vector<pat::PackedCandidate> pfmuon;
 
-      for(unsigned int idx=0; idx < dnnidx.size(); idx++){
-	Int_t dnn_idx = dnnidx[idx]; 
-	Float_t dnn_val = dnnval[idx];
-	//	if(iii==-1) continue;
-	
-	std::cout << dnn_idx << " " << dnn_val << std::endl;
-	//	std::cout << iii << " " << std::endl; 
-	
-	const pat::PackedCandidate prefilter_pf = (*packedpfcandidates_)[dnn_idx];
-	//	if(prefilter_pf.pt() < 0.5) continue;	      
-	//	if(!prefilter_pf.hasTrackDetails()) continue;
-    
-	//	std::cout << "\t found list but removed due to no track details ..." << iii << " " << prefilter_pf.hasTrack Details()<< std::endl; 
-	
 
-	Float_t precut_dz = prefilter_pf.vz() - closestVertex.position().z();
+      Int_t count_dnn = 0;
+      Int_t count_dnn_muon = 0;
+
+      for( size_t ii = 0; ii < packedpfcandidates_->size(); ++ii ){   
+	
+	pat::PackedCandidate pf = (*packedpfcandidates_)[ii];
+	
+	// first for the muon ... 
+
+//	if(TMath::Abs(pf.pdgId())==13){
+//	  std::cout << pf.pt() << " " << pf.eta() << " " << pf.phi() << " " <<  TMath::Abs(pf.charge()) << " " <<  TMath::Abs(pf.pdgId()) << " " <<  pf.pt() << " " <<  pf.isGlobalMuon() << " " <<  pf.hasTrackDetails() << std::endl;
+//	}
+	
+	if(TMath::Abs(pf.eta()) < 2.4 && 
+	   TMath::Abs(pf.charge())==1 &&
+	   TMath::Abs(pf.pdgId())==13 && 
+	   pf.pt() > 4. &&
+   	   pf.isGlobalMuon() > 0.5 &&
+	   pf.hasTrackDetails() > 0.5
+	   ){
+
+	  //	  std::cout << "CHECK1: " <<count_dnn<< std::endl;	  
+
+	  if(count_dnn < 50){
+	    data.tensor<float, 3>()(0, count_dnn, 0) = pf.eta();
+	    data.tensor<float, 3>()(0, count_dnn, 1) = pf.phi();
+	    data.tensor<float, 3>()(0, count_dnn, 2) = TMath::Log(pf.pt());
+	    data.tensor<float, 3>()(0, count_dnn, 3) = TMath::Log(pf.energy());
+	    data.tensor<float, 3>()(0, count_dnn, 4) = pf.charge();
+	    data.tensor<float, 3>()(0, count_dnn, 5) = TMath::Abs(closestVertex.position().z() - pf.pseudoTrack().vz());
+	    data.tensor<float, 3>()(0, count_dnn, 6) = TMath::Sqrt( TMath::Power((closestVertex.position().x() - pf.pseudoTrack().vx()), 2) + TMath::Power((closestVertex.position().y() - pf.pseudoTrack().vy()), 2));
+	    data.tensor<float, 3>()(0, count_dnn, 7) = pf.isGlobalMuon();
+	    
+	    label.matrix<int>()(0, count_dnn) = 0;
+	    norm.matrix<float>()(0, count_dnn) = float(1);
+
+	    count_dnn_muon++;
+	    count_dnn++;
+	  }
+	}
+
+	
+	if(pf.pt() < 0.5) continue;
+	if(!pf.hasTrackDetails()) continue;
+	
+	// use the PF candidates that come from closestVertex
+	//      if(pf.vertexRef()->z()!=closestVertex.position().z()) continue;
+	
+	//      Float_t precut_dz = pf.vertexRef()->z() - closestVertex.position().z();
+	Float_t precut_dz = pf.vz() - closestVertex.position().z();
 	if(TMath::Abs(precut_dz) > c_dz) continue;
 	
-	Bool_t hpflag = prefilter_pf.trackHighPurity();
+	Bool_t hpflag = pf.trackHighPurity();
 	if(!hpflag) continue;
+	if(pf.pseudoTrack().hitPattern().numberOfValidPixelHits() < 0) continue;
+	if(pf.pseudoTrack().hitPattern().numberOfValidHits() < 3) continue;
+	if(pf.pseudoTrack().normalizedChi2() > 100) continue;
 	
-	//	if(prefilter_pf.pseudoTrack().hitPattern().numberOfValidHits() < 3) continue;
-	//	if(prefilter_pf.pseudoTrack().normalizedChi2() > 100) continue;
-	
-	//	if(TMath::Abs(pf.pdgId())!=211) continue; 
+	if(TMath::Abs(pf.pdgId())!=211) continue; 
+	if(TMath::Abs(pf.eta()) > 2.3) continue; 
 
-	if(TMath::Abs(prefilter_pf.eta()) > 2.3) continue; 
+	//	pfcollection.push_back(pf);
+	//	reco::TransientTrack  tt_track = (*builder).build(pf.pseudoTrack());
+	//	mytracks.push_back(tt_track);
 	
-	pfcollection.push_back(prefilter_pf);
-	reco::TransientTrack  tt_track = (*builder).build(prefilter_pf.pseudoTrack());
-	mytracks.push_back(tt_track);
-	mydnn.push_back(dnn_val);
+
+
+	pfcand _cand_ = {
+	  (Int_t)ii,
+	  (Float_t) abs(precut_dz)
+	};
+	  
+	//	std::cout << cands.size() << std::endl;
+	pfcands.push_back(_cand_);
+      }
+
+      //sorting by distance to the vertex
+      sort(pfcands.begin(), pfcands.end());
+      
+      // filling information in for evaluation
+
+//      for(int imu = 0; imu < (int)muoncollection.size() && imu<50; imu++){
+//	const pat::Muon mu = muoncollection[imu];
+//
+//
+//      }
+
+      for(size_t ic = 0; ic < pfcands.size(); ic++){
+	Int_t idx = pfcands[ic].cand_idx;
+
+	pat::PackedCandidate pf = (*packedpfcandidates_)[idx];
+
+	//	std::cout << "CHECK2: " <<count_dnn<< " " << pfcands[ic].cand_absdz <<std::endl;
+
+	if(count_dnn < 50){
+	  data.tensor<float, 3>()(0, count_dnn, 0) = pf.eta();
+	  data.tensor<float, 3>()(0, count_dnn, 1) = pf.phi();
+	  data.tensor<float, 3>()(0, count_dnn, 2) = TMath::Log(pf.pt());
+	  data.tensor<float, 3>()(0, count_dnn, 3) = TMath::Log(pf.energy());
+	  data.tensor<float, 3>()(0, count_dnn, 4) = pf.charge();
+	  data.tensor<float, 3>()(0, count_dnn, 5) = TMath::Abs(closestVertex.position().z() - pf.pseudoTrack().vz());
+	  data.tensor<float, 3>()(0, count_dnn, 6) = TMath::Sqrt( TMath::Power((closestVertex.position().x() - pf.pseudoTrack().vx()), 2) + TMath::Power((closestVertex.position().y() - pf.pseudoTrack().vy()), 2));
+	  data.tensor<float, 3>()(0, count_dnn, 7) = pf.isGlobalMuon();
+	  
+	  label.matrix<int>()(0, count_dnn) = 0;
+	  norm.matrix<float>()(0, count_dnn) = float(1);
+	  count_dnn++;
+
+	  pfcollection.push_back(pf);
+	  reco::TransientTrack  tt_track = (*builder).build(pf.pseudoTrack());
+	  mytracks.push_back(tt_track);
+
+	}
+
+
+      }
+
+      
+      for(int ic=count_dnn; ic<50; ic++){
+	
+	//	std::cout << "CHECK3: " <<ic<< std::endl;
+	data.tensor<float, 3>()(0, ic, 0) = 0;
+	data.tensor<float, 3>()(0, ic, 1) = 0;
+	data.tensor<float, 3>()(0, ic, 2) = 0;
+	data.tensor<float, 3>()(0, ic, 3) = 0;
+	data.tensor<float, 3>()(0, ic, 4) = 0;
+	data.tensor<float, 3>()(0, ic, 5) = 0;
+	data.tensor<float, 3>()(0, ic, 6) = 0;
+	data.tensor<float, 3>()(0, ic, 7) = 0;
+	
+	label.matrix<int>()(0, ic) = 0;
+	norm.matrix<float>()(0, ic) = float(1);
 
       }
       
+
+      add_global.matrix<float>()(0, 0) = float(count_dnn_muon); // Number of muons around 0.5 cm from PV
+      add_global.matrix<float>()(0, 1) = float(count_dnn/100); //Number of charged pf candidates around 0.5 cm from PV
+      isTraining.scalar<bool>()() = false; //Number of charged pf candidates around 0.5 cm from PV
+
+
+      std::vector<tensorflow::Tensor> outputs;
+      tensorflow::run(session, {  { "Placeholder:0", data },  { "Placeholder_1:0", label }, { "Placeholder_2:0", add_global } , {"Placeholder_3:0", isTraining}, {"Placeholder_4:0", norm}}, { "Reshape_13:0" }, &outputs);
+      
+      auto finalOutputTensor = outputs[0].tensor<float, 3>();
+      
+      //      std::cout << "bg:" << finalOutputTensor(0, 0, 0) << std::endl;
+      //      std::cout << "count_muon, count_dnn = " << count_dnn_muon << " " << count_dnn << std::endl;
+
+      for(int ic=count_dnn_muon; ic<count_dnn; ic++){
+	//	std::cout << "pf dnn = " << ic << " " << finalOutputTensor(0, ic, 0) << " " << finalOutputTensor(0, ic, 1) << std::endl;
+	mydnn.push_back(finalOutputTensor(0, ic, 1));
+      }
+
+
+
+
+
+
+      /////////////////////////////////
+      /////////////////////////////////
+
+
+//      std::vector<Int_t> dnnidx;
+//      std::vector<Float_t> dnnval;
+//
+//      if(pfcollection_pre.size()>=1){
+//	dnnidx = DNNidx[std::make_tuple((Int_t)event.id().event(), (Float_t)pfcollection_pre[0].pt(), (Float_t)pfcollection_pre[0].eta(), (Float_t)pfcollection_pre[0].phi())];
+//	dnnval = DNNval[std::make_tuple((Int_t)event.id().event(), (Float_t)pfcollection_pre[0].pt(), (Float_t)pfcollection_pre[0].eta(), (Float_t)pfcollection_pre[0].phi())];
+//	std::cout << "check:" << (Int_t)event.id().event() << " " << (Float_t)pfcollection_pre[0].pt() << " " <<  (Float_t)pfcollection_pre[0].eta() << " " << (Float_t)pfcollection_pre[0].phi() << " " << dnnidx.size() << " " << dnnval.size() << std::endl;
+//      }
+//
+//      for(unsigned int idx=0; idx < dnnidx.size(); idx++){
+//	Int_t dnn_idx = dnnidx[idx]; 
+//	Float_t dnn_val = dnnval[idx];
+//	//	if(iii==-1) continue;
+//	
+//	std::cout << dnn_idx << " " << dnn_val << std::endl;
+//	//	std::cout << iii << " " << std::endl; 
+//	
+//	const pat::PackedCandidate prefilter_pf = (*packedpfcandidates_)[dnn_idx];
+//	//	if(prefilter_pf.pt() < 0.5) continue;	      
+//	//	if(!prefilter_pf.hasTrackDetails()) continue;
+//    
+//	//	std::cout << "\t found list but removed due to no track details ..." << iii << " " << prefilter_pf.hasTrack Details()<< std::endl; 
+//	
+//
+//	Float_t precut_dz = prefilter_pf.vz() - closestVertex.position().z();
+//	if(TMath::Abs(precut_dz) > c_dz) continue;
+//	
+//	Bool_t hpflag = prefilter_pf.trackHighPurity();
+//	if(!hpflag) continue;
+//	
+//	//	if(prefilter_pf.pseudoTrack().hitPattern().numberOfValidHits() < 3) continue;
+//	//	if(prefilter_pf.pseudoTrack().normalizedChi2() > 100) continue;
+//	
+//	//	if(TMath::Abs(pf.pdgId())!=211) continue; 
+//
+//	if(TMath::Abs(prefilter_pf.eta()) > 2.3) continue; 
+//	
+//	//	pfcollection.push_back(prefilter_pf);
+//	reco::TransientTrack  tt_track = (*builder).build(prefilter_pf.pseudoTrack());
+//	mytracks.push_back(tt_track);
+//	mydnn.push_back(dnn_val);
+//
+//      }
+      
+      /////////////////////////////////
+      /////////////////////////////////
+
 
 
     }else{
@@ -761,7 +966,7 @@ void JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 	
 	Bool_t hpflag = pf.trackHighPurity();
 	if(!hpflag) continue;
-	
+	if(pf.pseudoTrack().hitPattern().numberOfValidPixelHits() < 0) continue;
 	if(pf.pseudoTrack().hitPattern().numberOfValidHits() < 3) continue;
 	if(pf.pseudoTrack().normalizedChi2() > 100) continue;
 	
@@ -792,6 +997,7 @@ void JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
     // retrieve gen. information 
     Int_t numOfch = (size_t)pfcollection.size();
 
+    //    std::cout << "CHECK5: " << numOfch << " " << mydnn.size() << std::endl;
 
   std::vector<std::vector<TLorentzVector>> gps;
   std::vector<Int_t> ppdgId;
@@ -885,12 +1091,12 @@ void JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 	    }
 	  }
 
-	  if(min_dr2!=999) std::cout << "pf matched !!!" << std::endl;
+	  //	  if(min_dr2!=999) std::cout << "pf matched !!!" << std::endl;
 
 
 	  //////////////////////////////////////
 	  if(min_dr == 999) matched = false;
-	  else std::cout << "matched!" << std::endl;
+	  //	  else std::cout << "matched!" << std::endl;
 	  //	  else{
 	  gp.push_back(_genvis_);
 	  //	  }
@@ -963,18 +1169,20 @@ void JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
     for(int iii = 0; iii < numOfch; iii ++){
       
       pat::PackedCandidate pf1 = pfcollection[iii];
-      const reco::Track pf1_track = pf1.pseudoTrack();
+
+      if(mydnn[iii] < c_dnn) continue;
 
       for(int jjj = iii+1; jjj < numOfch; jjj ++){
 	
 	pat::PackedCandidate pf2 = pfcollection[jjj];
-	const reco::Track pf2_track = pf2.pseudoTrack();
+
+	if(mydnn[jjj] < c_dnn) continue;
 
 	for(int kkk = jjj+1; kkk < numOfch; kkk ++){
 
 	  pat::PackedCandidate pf3 = pfcollection[kkk];
-	  const reco::Track pf3_track = pf3.pseudoTrack();
 
+	  if(mydnn[kkk] < c_dnn) continue;
 
 	  Int_t tau_charge = pf1.charge() + pf2.charge() + pf3.charge(); 
 
@@ -997,18 +1205,8 @@ void JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 
 	  if(tauTree->isEmpty() || !tauTree->isValid() || !tauTree->isConsistent()) continue;
 
-	  //creating the particle fitter
-	  //	  KinematicParticleFitter csFitter;
-
-	  // creating the constraint
-	  //	  KinematicConstraint* tau_constraint = new MassKinematicConstraint(tau_mass, tau_m_sigma);
-
-	  //    //the constrained fit
-	  //    tauTree = csFitter.fit(jpsi_constraint, tauTree);
-
 	  //getting the J/Psi KinematicParticle
 	  tauTree->movePointerToTheTop();
-
 
 	  RefCountedKinematicParticle tau_part = tauTree->currentParticle();
 	  if(!tau_part->currentState().isValid()) continue;
@@ -1025,31 +1223,15 @@ void JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 	  math::PtEtaPhiMLorentzVector tau2_fit = daughter_p4(tau_children, 1);
 	  math::PtEtaPhiMLorentzVector tau3_fit = daughter_p4(tau_children, 2);
 
-	  math::PtEtaPhiMLorentzVector tlv_tau = tau1_fit + tau2_fit + tau3_fit;
+	  //	  math::PtEtaPhiMLorentzVector tlv_tau = tau1_fit + tau2_fit + tau3_fit;
 
 	  particle_cand Taucand; 
 	  Taucand = calculateIPvariables(extrapolator, tau_part, tau_vertex, closestVertex);
 
 
-	  //	  if(Taucand.fls3d < 3) continue;
-
 	  // 6.1.2020 commented out
 	  //	  if(Taucand.fls3d < c_fsig) continue;
 
-
-//	  
-//	  Float_t vprob_3 = -9;
-//	  TransientVertex vertex_3;
-//	  
-//	  std::vector<reco::TransientTrack> transient_tracks; 
-//	  transient_tracks.push_back(mytracks[iii]);
-//	  transient_tracks.push_back(mytracks[jjj]);
-//	  transient_tracks.push_back(mytracks[kkk]);
-//	  
-//	  std::tie(vprob_3, vertex_3) = vertexProb(transient_tracks);
-//
-//	  if(vprob_3 == -9) continue;
-	  
 
 
 	  std::vector<RefCountedKinematicParticle> allParticles;
@@ -1057,7 +1239,6 @@ void JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 	  allParticles.push_back(pFactory.particle(mytracks[iii], pion_mass, chi, ndf, pion_sigma));
 	  allParticles.push_back(pFactory.particle(mytracks[jjj], pion_mass, chi, ndf, pion_sigma));
 	  allParticles.push_back(pFactory.particle(mytracks[kkk], pion_mass, chi, ndf, pion_sigma));
-      // allParticles.push_back(tau_part);
 	  allParticles.push_back(jpsi_part);
 
 	  RefCountedKinematicTree bcTree = kpvFitter.fit(allParticles);
@@ -1071,20 +1252,10 @@ void JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 	  RefCountedKinematicVertex bc_vertex = bcTree->currentDecayVertex();
 	  if(!bc_vertex->vertexIsValid()) continue;
  
-	  //	  if(TMath::Prob(bc_vertex->chiSquared(), bc_vertex->degreesOfFreedom()) <=0.1) continue; 
-
-	  
-
-	  //	  const auto& Taucand = bc_children.at(0); 
-	  //	  const auto& JPcand = bc_children.at(1); 
-
 	  particle_cand Bcand; 
 	  Bcand = calculateIPvariables(extrapolator, bc_part, bc_vertex, closestVertex);
-
 	  
 	  std::vector< RefCountedKinematicParticle > bc_children = bcTree->finalStateParticles();
-
-	  //	  const auto& state = fitted_children.at(i)->currentState();
 
 	  math::PtEtaPhiMLorentzVector tt1_fit = daughter_p4(bc_children, 0);
 	  math::PtEtaPhiMLorentzVector tt2_fit = daughter_p4(bc_children, 1);
@@ -1092,9 +1263,7 @@ void JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 
 	  math::PtEtaPhiMLorentzVector tlv_tau_fit = tt1_fit + tt2_fit + tt3_fit;
 
-
 	  // calculation of the isolation 
-
 
 	  Float_t iso = 0;
 	  Int_t ntracks = 0;
@@ -1136,20 +1305,12 @@ void JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 	if(max_dr_3prong < dR_23) max_dr_3prong = dR_23;
 
 
-	//	std::cout << "\t tau1 (pt, eta, phi) = "  << tau1_fit.Pt()  << "  " << tau1_fit.Eta() <<  " " << tau1_fit.Phi() << std::endl;
-	//	std::cout << "\t tau2 (pt, eta, phi) = "  << tau2_fit.Pt()  << "  " << tau2_fit.Eta() <<  " " << tau2_fit.Phi() << std::endl;
-	//	std::cout << "\t tau3 (pt, eta, phi) = "  << tau3_fit.Pt()  << "  " << tau3_fit.Eta() <<  " " << tau3_fit.Phi() << std::endl;
-	// check gen. info. 
-
-
 
 	Bool_t isRight = false; 
 	Int_t pid = -999;
 	Float_t matched_gentaupt = -999;
 	
 	if(isMC){
-
-	  //	  std::cout << "gps size = "  << gps.size()<<std::endl;
 
 	  for(unsigned int mmm=0; mmm < gps.size(); mmm++){
 	    
@@ -1159,31 +1320,20 @@ void JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 	    
 	    std::vector<TLorentzVector> tlvs = gps[mmm];
 	    
-
-	    //	    std::cout << "gp size = "  << tlvs.size()<<std::endl;
-
 	    for(unsigned int nnn=0; nnn < tlvs.size(); nnn++){
-
-	      //	      std::cout << tlvs[nnn].Pt() << " " << tlvs[nnn].Eta() << " " << tlvs[nnn].Phi() << " " << tlvs[nnn].M() << std::endl;
-	      
-	      //	      std::cout << "before (isRight1,2,3) = " << isRight1_ << " " << isRight2_ << " " << isRight3_ << std::endl;
 
 	      if(
 		 reco::deltaR(tau1_fit.Eta(), tau1_fit.Phi(), tlvs[nnn].Eta(), tlvs[nnn].Phi()) < 0.1
 		 ) isRight1_ = true; 
-
-	      else if(
-		      reco::deltaR(tau2_fit.Eta(), tau2_fit.Phi(), tlvs[nnn].Eta(), tlvs[nnn].Phi()) < 0.1
-		      ) isRight2_ = true; 
-
-	      else if(
-		      reco::deltaR(tau3_fit.Eta(), tau3_fit.Phi(), tlvs[nnn].Eta(), tlvs[nnn].Phi()) < 0.1
-		      ) isRight3_ = true; 
-
-	      //	      std::cout << "after (isRight1,2,3) = " << isRight1_ << " " << isRight2_ << " " << isRight3_ << std::endl;
-
-	      //	      else if(tlv_pion2.DeltaR(tlvs[nnn]) < 0.1) isRight2_ = true;
-	      //	      else if(tlv_pion3.DeltaR(tlvs[nnn]) < 0.1) isRight3_ = true;
+	      
+	      if(
+		 reco::deltaR(tau2_fit.Eta(), tau2_fit.Phi(), tlvs[nnn].Eta(), tlvs[nnn].Phi()) < 0.1
+		 ) isRight2_ = true; 
+	      
+	      if(
+		 reco::deltaR(tau3_fit.Eta(), tau3_fit.Phi(), tlvs[nnn].Eta(), tlvs[nnn].Phi()) < 0.1
+		 ) isRight3_ = true; 
+	      
 	      
 	    }
 	    
@@ -1201,6 +1351,7 @@ void JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 	Float_t sumofdnn = -1;
 	if(useDNN_){
 	  sumofdnn = mydnn[iii] + mydnn[jjj] + mydnn[kkk];
+	  //	  std::cout << "dnn output: "<< sumofdnn << " " <<  mydnn[iii] << " " << mydnn[jjj] << " " << mydnn[kkk] << std::endl;
 	}
 
 
@@ -1212,10 +1363,10 @@ void JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 	    (Float_t) tlv_tau_fit.Eta(),
 	    (Float_t) tlv_tau_fit.Phi(),
 	    (Float_t) tlv_tau_fit.M(),
-	    (Float_t) tlv_tau.Pt(),
-	    (Float_t) tlv_tau.Eta(),
-	    (Float_t) tlv_tau.Phi(),
-	    (Float_t) tlv_tau.M(),
+	    //	    (Float_t) tlv_tau.Pt(),
+	    //	    (Float_t) tlv_tau.Eta(),
+	    //	    (Float_t) tlv_tau.Phi(),
+	    //	    (Float_t) tlv_tau.M(),
 	    (Float_t) Taucand.lip, 
 	    (Float_t) Taucand.lips, 
 	    (Float_t) Taucand.pvip, 
@@ -1233,6 +1384,9 @@ void JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 	    (Int_t) pid,
 	    (Float_t) matched_gentaupt, 
 	    (Float_t) sumofdnn,
+	    (Float_t) mydnn[iii],
+	    (Float_t) mydnn[jjj],
+	    (Float_t) mydnn[kkk],
 	    (Float_t) TMath::Prob(bc_vertex->chiSquared(), bc_vertex->degreesOfFreedom()),
 	    (Float_t) bc_vertex->vertexState().position().x(),
 	    (Float_t) bc_vertex->vertexState().position().y(),
@@ -1253,7 +1407,6 @@ void JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 	    (Float_t) iso_mindoca,
 	  };
 	  
-	//	std::cout << cands.size() << std::endl;
 	  cands.push_back(_cand_);
 	}
       }
@@ -1264,49 +1417,7 @@ void JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
     //    std::vector<Int_t> dict_idx;
     Int_t ncomb = 0;
 
-    bool isRight_bS = false;
-    bool isRight_aS = false;
-    int isRight_bS_ith = -1;
-    int isRight_aS_ith = -1;
-    int isRight_bS_n = 0;
-    int isRight_aS_n = 0;
-
-
     for(int ic=0; ic < (int)cands.size(); ic++){
-      
-//      Int_t _idx1 = cands[ic].cand_tau_id1;
-//      Int_t _idx2 = cands[ic].cand_tau_id2;
-//      Int_t _idx3 = cands[ic].cand_tau_id3;
-      
-      //      bool flag_overlap = false;
-//      for(int idc=0; idc<(int) dict_idx.size(); idc++){
-//	
-//	if(_idx1 == dict_idx[idc] || 
-//	   _idx2 == dict_idx[idc] || 
-//	   _idx3 == dict_idx[idc])
-//	  
-//	  flag_overlap = true;
-//      }
-
-      if(cands[ic].cand_tau_isRight==true){
-	isRight_bS = true;
-	isRight_bS_ith = ic;
-	isRight_bS_n += 1;
-      }
-      
-      
-      //      if(flag_overlap) continue; 
-
-      if(cands[ic].cand_tau_isRight==true){
-	isRight_aS = true;
-	isRight_aS_ith = ncomb;
-	isRight_aS_n += 1;
-      }
-      
-      //    std::cout << "\t ----> kept ! " << std::endl;
-//      dict_idx.push_back(_idx1);
-//      dict_idx.push_back(_idx2);
-//      dict_idx.push_back(_idx3);
       
       ncomb += 1;
 
@@ -1318,17 +1429,17 @@ void JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
        ********************************************************************/
 
       // if the candidate has less than 2 GeV, remove it.
-      if(cands[ic].cand_tau_fullfit_pt < 2.) continue;
+      if(cands[ic].cand_tau_pt < 2.) continue;
 
 
-      nBranches_->JpsiTau_tau_fullfit_pt.push_back(cands[ic].cand_tau_fullfit_pt);
-      nBranches_->JpsiTau_tau_fullfit_eta.push_back(cands[ic].cand_tau_fullfit_eta);
-      nBranches_->JpsiTau_tau_fullfit_phi.push_back(cands[ic].cand_tau_fullfit_phi);
-      nBranches_->JpsiTau_tau_fullfit_mass.push_back(cands[ic].cand_tau_fullfit_mass);
       nBranches_->JpsiTau_tau_pt.push_back(cands[ic].cand_tau_pt);
       nBranches_->JpsiTau_tau_eta.push_back(cands[ic].cand_tau_eta);
       nBranches_->JpsiTau_tau_phi.push_back(cands[ic].cand_tau_phi);
       nBranches_->JpsiTau_tau_mass.push_back(cands[ic].cand_tau_mass);
+      //      nBranches_->JpsiTau_tau_pt.push_back(cands[ic].cand_tau_pt);
+      //      nBranches_->JpsiTau_tau_eta.push_back(cands[ic].cand_tau_eta);
+      //      nBranches_->JpsiTau_tau_phi.push_back(cands[ic].cand_tau_phi);
+      //      nBranches_->JpsiTau_tau_mass.push_back(cands[ic].cand_tau_mass);
       nBranches_->JpsiTau_tau_q.push_back(cands[ic].cand_tau_charge);
       nBranches_->JpsiTau_tau_vx.push_back(cands[ic].cand_tau_vx);
       nBranches_->JpsiTau_tau_vy.push_back(cands[ic].cand_tau_vy);
@@ -1350,6 +1461,9 @@ void JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
       nBranches_->JpsiTau_tau_pfidx1.push_back(cands[ic].cand_tau_id1);
       nBranches_->JpsiTau_tau_pfidx2.push_back(cands[ic].cand_tau_id2);
       nBranches_->JpsiTau_tau_pfidx3.push_back(cands[ic].cand_tau_id3);
+      nBranches_->JpsiTau_tau_pi1_dnn.push_back(cands[ic].cand_tau_pi1_dnn);
+      nBranches_->JpsiTau_tau_pi2_dnn.push_back(cands[ic].cand_tau_pi2_dnn);
+      nBranches_->JpsiTau_tau_pi3_dnn.push_back(cands[ic].cand_tau_pi3_dnn);
 
       nBranches_->JpsiTau_B_pt.push_back(cands[ic].cand_b_pt);
       nBranches_->JpsiTau_B_eta.push_back(cands[ic].cand_b_eta);
@@ -1399,10 +1513,6 @@ void JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
       nBranches_->JpsiTau_mu1_eta.push_back(mu1_fit.eta());
       nBranches_->JpsiTau_mu1_phi.push_back(mu1_fit.phi());
       nBranches_->JpsiTau_mu1_mass.push_back(mu1_fit.mass());
-      nBranches_->JpsiTau_mu1_unfit_pt.push_back(muoncollection[mcidx_mu1].pt());
-      nBranches_->JpsiTau_mu1_unfit_eta.push_back(muoncollection[mcidx_mu1].eta());
-      nBranches_->JpsiTau_mu1_unfit_phi.push_back(muoncollection[mcidx_mu1].phi());
-      nBranches_->JpsiTau_mu1_unfit_mass.push_back(muoncollection[mcidx_mu1].mass());
       nBranches_->JpsiTau_mu1_q.push_back(muoncollection[mcidx_mu1].charge());
       nBranches_->JpsiTau_mu1_isLoose.push_back(muoncollection[mcidx_mu1].isLooseMuon());
       nBranches_->JpsiTau_mu1_isTight.push_back(muoncollection[mcidx_mu1].isTightMuon(closestVertex));
@@ -1420,10 +1530,6 @@ void JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
       nBranches_->JpsiTau_mu2_eta.push_back(mu2_fit.eta());
       nBranches_->JpsiTau_mu2_phi.push_back(mu2_fit.phi());
       nBranches_->JpsiTau_mu2_mass.push_back(mu2_fit.mass());
-      nBranches_->JpsiTau_mu2_unfit_pt.push_back(muoncollection[mcidx_mu2].pt());
-      nBranches_->JpsiTau_mu2_unfit_eta.push_back(muoncollection[mcidx_mu2].eta());
-      nBranches_->JpsiTau_mu2_unfit_phi.push_back(muoncollection[mcidx_mu2].phi());
-      nBranches_->JpsiTau_mu2_unfit_mass.push_back(muoncollection[mcidx_mu2].mass());
       nBranches_->JpsiTau_mu2_q.push_back(muoncollection[mcidx_mu2].charge());
       nBranches_->JpsiTau_mu2_isLoose.push_back(muoncollection[mcidx_mu2].isLooseMuon());
       nBranches_->JpsiTau_mu2_isTight.push_back(muoncollection[mcidx_mu2].isTightMuon(closestVertex));
@@ -1588,47 +1694,20 @@ void JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 
     nBranches_->IsJpsiTau.push_back(1.);
     //    nBranches_->JpsiTau_nCandidates.push_back(nBranches_->JpsiTau_mu1_pt.size());
-    nBranches_->JpsiTau_nCandidates_bS.push_back((int)cands.size());
+    //    nBranches_->JpsiTau_nCandidates_bS.push_back((int)cands.size());
     nBranches_->JpsiTau_nCandidates.push_back(ncomb);
 
-
-    nBranches_->JpsiTau_isRight_bS.push_back(isRight_bS);
-    nBranches_->JpsiTau_isRight_aS.push_back(isRight_aS);
-    nBranches_->JpsiTau_isRight_bS_ith.push_back(isRight_bS_ith);
-    nBranches_->JpsiTau_isRight_aS_ith.push_back(isRight_aS_ith);
-    nBranches_->JpsiTau_isRight_bS_n.push_back(isRight_bS_n);
-    nBranches_->JpsiTau_isRight_aS_n.push_back(isRight_aS_n);
-
-    if(pfcollection_pre.size()>=1){
-      nBranches_->JpsiTau_pf1_pt.push_back(pfcollection_pre[0].pt());
-      nBranches_->JpsiTau_pf1_eta.push_back(pfcollection_pre[0].eta());
-      nBranches_->JpsiTau_pf1_phi.push_back(pfcollection_pre[0].phi());
-    }else{
-      nBranches_->JpsiTau_pf1_pt.push_back(-1);
-      nBranches_->JpsiTau_pf1_eta.push_back(-1);
-      nBranches_->JpsiTau_pf1_phi.push_back(-1);
-    }
-    if(pfcollection_pre.size()>=2){
-      nBranches_->JpsiTau_pf2_pt.push_back(pfcollection_pre[1].pt());
-      nBranches_->JpsiTau_pf2_eta.push_back(pfcollection_pre[1].eta());
-      nBranches_->JpsiTau_pf2_phi.push_back(pfcollection_pre[1].phi());
-    }else{
-      nBranches_->JpsiTau_pf2_pt.push_back(-1);
-      nBranches_->JpsiTau_pf2_eta.push_back(-1);
-      nBranches_->JpsiTau_pf2_phi.push_back(-1);
-    }
 
     // B Candidate Kinematic fit passed
     if( doCutFlow_) {
       nBranches_->cutflow_perevt->Fill(8);
-      nBranches_->cutflow_perevt->Fill(9);
     }
 
 
 
 
 
-
+    return true;
 
 }
 

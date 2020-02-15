@@ -28,10 +28,10 @@ struct taucand{
   Int_t cand_tau_id1;
   Int_t cand_tau_id2;
   Int_t cand_tau_id3;
-  Float_t cand_tau_fullfit_pt;
-  Float_t cand_tau_fullfit_eta;
-  Float_t cand_tau_fullfit_phi;
-  Float_t cand_tau_fullfit_mass;
+//  Float_t cand_tau_fullfit_pt;
+//  Float_t cand_tau_fullfit_eta;
+//  Float_t cand_tau_fullfit_phi;
+//  Float_t cand_tau_fullfit_mass;
   Float_t cand_tau_pt;
   Float_t cand_tau_eta;
   Float_t cand_tau_phi;
@@ -53,6 +53,9 @@ struct taucand{
   Int_t cand_tau_matched_ppdgId;
   Float_t cand_tau_matched_gentaupt;
   Float_t cand_tau_sumofdnn;
+  Float_t cand_tau_pi1_dnn;
+  Float_t cand_tau_pi2_dnn;
+  Float_t cand_tau_pi3_dnn;
   Float_t cand_b_vprob;
   Float_t cand_b_vx;
   Float_t cand_b_vy;
@@ -71,12 +74,30 @@ struct taucand{
   Float_t cand_b_iso;
   Float_t cand_b_iso_ntracks;
   Float_t cand_b_iso_mindoca;
-
     
   bool operator<(const taucand& another) const { 
     return cand_tau_pt > another.cand_tau_pt;
   }
 };
+
+
+
+
+
+
+struct pfcand{
+  
+  Int_t cand_idx;
+  Float_t cand_absdz;
+    
+  bool operator<(const pfcand& another) const { 
+    return cand_absdz < another.cand_absdz;
+  }
+};
+
+
+
+
 
 
 #endif

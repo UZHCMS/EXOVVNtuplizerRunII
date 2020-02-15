@@ -225,7 +225,7 @@ math::PtEtaPhiMLorentzVector JpsiMuNtuplizer::daughter_p4(std::vector< RefCounte
 }
 
 
-void JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetup& iSetup ){
+bool JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetup& iSetup ){
 
   
     // std::cout << "---------------- event, run, lumi = " << event.id().event() << " " << event.id().run() << " " << event.id().luminosityBlock() << "----------------" << std::endl;
@@ -325,7 +325,7 @@ void JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
        if (mu1passpteta) {nBranches_->cutflow_perevt->Fill(1);}
        if (mu2passpteta) {nBranches_->cutflow_perevt->Fill(2);}
     }
-    if(!isTriggered) return;
+    if(!isTriggered) return false;
  // evt Triggered
     if( doCutFlow_) {
        nBranches_->cutflow_perevt->Fill(3);
@@ -397,7 +397,7 @@ void JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
     if (mu2passtrigmatch) {nBranches_->cutflow_perevt->Fill(5);}
     }
 
-    if(!( muoncollection.size() >= 2)) return;
+    if(!( muoncollection.size() >= 2)) return false;
 
 
 
@@ -464,7 +464,7 @@ void JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
         }
     }
 
-    if(jpsi_max_pt == -1) return;
+    if(jpsi_max_pt == -1) return false;
 
     if ( doCutFlow_) {
        nBranches_->cutflow_perevt->Fill(6);
@@ -495,7 +495,7 @@ void JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
     //reconstructing a J/Psi decay
     RefCountedKinematicTree jpTree = kpvFitter.fit(muonParticles);
 
-    if(jpTree->isEmpty() || !jpTree->isValid() || !jpTree->isConsistent()) return;
+    if(jpTree->isEmpty() || !jpTree->isValid() || !jpTree->isConsistent()) return false;
 
     //creating the particle fitter
     KinematicParticleFitter csFitter;
@@ -509,12 +509,12 @@ void JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
     //getting the J/Psi KinematicParticle
     jpTree->movePointerToTheTop();
     RefCountedKinematicParticle jpsi_part = jpTree->currentParticle();
-    if(!jpsi_part->currentState().isValid()) return;
+    if(!jpsi_part->currentState().isValid()) return false;
 
     RefCountedKinematicVertex jpsi_vertex = jpTree->currentDecayVertex();
-    if(!jpsi_vertex->vertexIsValid()) return; 
+    if(!jpsi_vertex->vertexIsValid()) return false; 
 
-    if(TMath::Prob(jpsi_vertex->chiSquared(), jpsi_vertex->degreesOfFreedom()) <=0) return;
+    if(TMath::Prob(jpsi_vertex->chiSquared(), jpsi_vertex->degreesOfFreedom()) <=0) return false;
 
     std::vector< RefCountedKinematicParticle > jpsi_children = jpTree->finalStateParticles();
 
@@ -623,7 +623,7 @@ void JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
         }
     }
 
-    if(max_pt3==-1) return;
+    if(max_pt3==-1) return false;
     //mu3 passed pT and eta cut
     if( doCutFlow_ && mu3passpteta ) {
       nBranches_->cutflow_perevt->Fill(8);
@@ -753,13 +753,13 @@ void JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
 
         RefCountedKinematicTree bcTree = kpvFitter.fit(allParticles);
 
-        if(bcTree->isEmpty() || !bcTree->isValid() || !bcTree->isConsistent()) return;
+        if(bcTree->isEmpty() || !bcTree->isValid() || !bcTree->isConsistent()) continue;
 
         RefCountedKinematicParticle bc_part = bcTree->currentParticle();
-        if(!bc_part->currentState().isValid()) return;
+        if(!bc_part->currentState().isValid()) continue;
 
         RefCountedKinematicVertex bc_vertex = bcTree->currentDecayVertex();
-        if(!bc_vertex->vertexIsValid()) return; 
+        if(!bc_vertex->vertexIsValid()) continue;
 
         particle_cand JPcand;
         particle_cand Bcand;
@@ -1155,6 +1155,8 @@ void JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
     if( doCutFlow_) {
       nBranches_->cutflow_perevt->Fill(9);
       }
+
+    return true;
 }
 
 

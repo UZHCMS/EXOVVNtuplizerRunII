@@ -19,7 +19,7 @@ GenParticlesNtuplizer::~GenParticlesNtuplizer( void )
 }
 
 //===================================================================================================================        
-void GenParticlesNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetup& iSetup ){
+bool GenParticlesNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetup& iSetup ){
   
 
     event.getByToken(genParticlesToken_ , genParticles_); 
@@ -111,17 +111,17 @@ void GenParticlesNtuplizer::fillBranches( edm::Event const & event, const edm::E
   
     //Skip events with no jspi if that analysis is chosen
    
-    bool rflag = false;
-    
-    if(isJpsiEle_ || isJpsiMu_){
-      if ( nBranches_->JpsiMu_B_pt.size() >=1) rflag = true;
-    }
-    
-    if(isJpsiTau_){
-      if ( nBranches_->JpsiTau_B_pt.size() >=1)  rflag = true;
-    }
-
-    if(rflag==false) return;
+//    bool rflag = false;
+//    
+//    if(isJpsiEle_ || isJpsiMu_){
+//      if ( nBranches_->JpsiMu_B_pt.size() >=1) rflag = true;
+//    }
+//    
+//    if(isJpsiTau_){
+//      if ( nBranches_->JpsiTau_B_pt.size() >=1)  rflag = true;
+//    }
+//
+//    if(rflag==false) return;
     
   
     /* here we want to save  gen particles info*/
@@ -194,5 +194,7 @@ void GenParticlesNtuplizer::fillBranches( edm::Event const & event, const edm::E
 
     nBranches_->genParticle_N = nBranches_->genParticle_pt.size(); // save number of save genParticles
     
+
+    return true;
 }
 

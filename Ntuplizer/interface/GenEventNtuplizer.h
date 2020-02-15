@@ -24,7 +24,7 @@ public:
   GenEventNtuplizer( std::vector< edm::EDGetTokenT< GenEventInfoProduct > > tokens, NtupleBranches* nBranches ,std::vector< edm::EDGetTokenT< LHEEventProduct > > tokens_lhe,std::map< std::string, bool >&  runFlags );
   ~GenEventNtuplizer( void );
   
-  void fillBranches( edm::Event const & event, const edm::EventSetup& iSetup );
+  bool fillBranches( edm::Event const & event, const edm::EventSetup& iSetup );
   
 private:
    edm::EDGetTokenT< GenEventInfoProduct > geneventToken_; 

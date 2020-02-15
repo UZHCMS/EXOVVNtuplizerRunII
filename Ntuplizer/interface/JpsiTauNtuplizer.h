@@ -83,6 +83,8 @@
 #include "PhysicsTools/JetMCUtils/interface/JetMCTag.h"
 
 #include "FWCore/ParameterSet/interface/FileInPath.h"
+#include "PhysicsTools/TensorFlow/interface/TensorFlow.h"
+
 
 #include <tuple>
 #include <sstream>
@@ -153,7 +155,7 @@ class JpsiTauNtuplizer : public CandidateNtuplizer {
   math::PtEtaPhiMLorentzVector daughter_p4(std::vector< RefCountedKinematicParticle > fitted_children, size_t i);
 
   float MuonPFIso(pat::Muon muon);
-  void fillBranches( edm::Event const & event, const edm::EventSetup& iSetup );
+  bool fillBranches( edm::Event const & event, const edm::EventSetup& iSetup );
   Float_t getMaxDoca(std::vector<RefCountedKinematicParticle> &kinParticles);
   Float_t getMinDoca(std::vector<RefCountedKinematicParticle> &kinParticles);
   TVector3 getVertex(const reco::GenParticle& part);
@@ -208,6 +210,15 @@ private:
    float c_fsig;
    float c_vprob;
    float c_dnn;
+
+   tensorflow::MetaGraphDef* graphDef;
+   tensorflow::Session* session;
+   tensorflow::Tensor data; // (tensorflow::DT_FLOAT, { 1, 50, 8 }); // single batch of dimension 10
+   tensorflow::Tensor label; // (tensorflow::DT_FLOAT, { 1,50}); 
+   tensorflow::Tensor add_global; //(tensorflow::DT_FLOAT, { 1, 2 }); 
+   tensorflow::Tensor isTraining; //(tensorflow::DT_FLOAT, { 1, 2 }); 
+   tensorflow::Tensor norm; //(tensorflow::DT_FLOAT, { 1, 2 }); 
+
    
    std::string dnnfile_;
 

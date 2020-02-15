@@ -14,7 +14,7 @@ public:
 
   ~GenParticlesNtuplizer( void ); 
 
-  void fillBranches( edm::Event const & event, const edm::EventSetup& iSetup  );
+  bool fillBranches( edm::Event const & event, const edm::EventSetup& iSetup  );
 
 private:
    edm::EDGetTokenT<reco::GenParticleCollection> genParticlesToken_;

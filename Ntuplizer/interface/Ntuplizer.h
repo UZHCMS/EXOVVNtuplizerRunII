@@ -47,10 +47,12 @@ private:
   virtual void endLuminosityBlock(edm::LuminosityBlock const  &, edm::EventSetup const&)    override;
   
   // ----------member data ---------------------------
-  
+
+  Int_t nevents;
+  Int_t nevents_all;
   NtupleBranches* nBranches_;
 
-  std::map<std::string,CandidateNtuplizer*>                 nTuplizers_         ;
+  std::unordered_map<std::string,CandidateNtuplizer*>                 nTuplizers_         ;
   
   edm::EDGetTokenT<reco::BeamSpot>                          beamToken_          ;
   edm::EDGetTokenT<reco::VertexCollection>                  vtxToken_           ;

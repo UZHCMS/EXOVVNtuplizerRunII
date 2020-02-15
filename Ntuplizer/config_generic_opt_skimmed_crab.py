@@ -25,6 +25,11 @@ config["FSIGCUT"] = VALFSIG
 config["VPROBCUT"] = VALVPROB
 config["DNNCUT"] = VALDNN
 
+#config["DZCUT"] = 0.25
+#config["FSIGCUT"] = 3
+#config["VPROBCUT"] = 0.1
+#config["DNNCUT"] = 0.1443
+
 				   
 ####### Config parser ##########
 
@@ -48,7 +53,7 @@ options.register( 'runUpToEarlyF',
 
 
 
-options.maxEvents = 200
+options.maxEvents = 1000
 #options.maxEvents = -1
 
 #data file
@@ -149,46 +154,6 @@ process.chs = cms.EDFilter("CandPtrSelector",
 
 process.ak4PFJetsCHS = ak4PFJetsCHS.clone( src = 'chs' )
 process.ak4PFJetsCHS.doAreaFastjet = True
-
-
-
-
-
-
-# ###### Recluster MET ##########
-if config["DOMETRECLUSTERING"]:
-
-  from PhysicsTools.PatAlgos.tools.jetTools import switchJetCollection
-		  
-  switchJetCollection(process,
-                      jetSource = cms.InputTag('ak4PFJetsCHS'),
-                      jetCorrections = ('AK4PFchs', jet_corr_levels, ''),
-                      genParticles = cms.InputTag('prunedGenParticles'),
-                      pvSource = cms.InputTag('offlineSlimmedPrimaryVertices')
-                      )
-		  		
-  process.patJets.addGenJetMatch = cms.bool(False) 
-  process.patJets.addGenPartonMatch = cms.bool(False) 
-  process.patJets.addPartonJetMatch = cms.bool(False) 
-  
-  from PhysicsTools.PatUtils.tools.runMETCorrectionsAndUncertainties import runMetCorAndUncFromMiniAOD
-
-  #default configuration for miniAOD reprocessing, change the isData flag to run on data
-  #for a full met computation, remove the pfCandColl input
-  runMetCorAndUncFromMiniAOD(process,
-                           isData=not(config["RUNONMC"]),
-                           )
-  process.patPFMetT1T2Corr.type1JetPtThreshold = cms.double(15.0)
-  process.patPFMetT2Corr.type1JetPtThreshold = cms.double(15.0)
-  process.slimmedMETs.t01Variation = cms.InputTag("slimmedMETs","","RECO")
-  
-  if config["RUNONMC"]:
-    process.patPFMetT1T2Corr.jetCorrLabelRes = cms.InputTag("L3Absolute")
-    process.patPFMetT1T2SmearCorr.jetCorrLabelRes = cms.InputTag("L3Absolute")
-    process.patPFMetT2Corr.jetCorrLabelRes = cms.InputTag("L3Absolute")
-    process.patPFMetT2SmearCorr.jetCorrLabelRes = cms.InputTag("L3Absolute")
-    process.shiftedPatJetEnDown.jetCorrLabelUpToL3Res = cms.InputTag("ak4PFCHSL1FastL2L3Corrector")
-    process.shiftedPatJetEnUp.jetCorrLabelUpToL3Res = cms.InputTag("ak4PFCHSL1FastL2L3Corrector")
 			           
 ####### Adding HEEP id ##########
 
@@ -212,20 +177,6 @@ from PhysicsTools.SelectorUtils.tools.vid_id_tools import *
 
 ####### Event filters ###########
 
-##___________________________HCAL_Noise_Filter________________________________||
-if config["DOHLTFILTERS"]:
- process.load('CommonTools.RecoAlgos.HBHENoiseFilterResultProducer_cfi')
- process.HBHENoiseFilterResultProducer.minZeros = cms.int32(99999)
- process.HBHENoiseFilterResultProducer.IgnoreTS4TS5ifJetInLowBVRegion=cms.bool(False) 
- ##___________________________BadChargedCandidate_Noise_Filter________________________________|| 
- process.load('Configuration.StandardSequences.Services_cff')
- process.load('RecoMET.METFilters.BadChargedCandidateFilter_cfi')
- # process.load('EXOVVNtuplizerRunII.Ntuplizer.BadChargedCandidateFilter_cfi')
- process.BadChargedCandidateFilter.muons = cms.InputTag("slimmedMuons")
- process.BadChargedCandidateFilter.PFCandidates = cms.InputTag("packedPFCandidates")
- process.BadChargedCandidateFilter.debug = cms.bool(False)
- process.BadChargedCandidateSequence = cms.Sequence (process.BadChargedCandidateFilter)
- 
 
 ####### Ntuplizer initialization ##########
 jetsAK4 = "slimmedJets"
@@ -236,25 +187,9 @@ METS_EGclean = "slimmedMETsEGClean"
 METS_MEGclean = "slimmedMETsMuEGClean"
 METS_uncorr = "slimmedMETsUncorrected"
 
-if config["DOMETRECLUSTERING"]: jetsAK4 = "selectedPatJets"
 if config["USENOHF"]: METS = "slimmedMETsNoHF"  
 
 ##___________________ MET significance and covariance matrix ______________________##
-
-if config["DOMETSVFIT"]:
-  print "Using event pfMET covariance for SVfit"
-  process.load("RecoMET.METProducers.METSignificance_cfi")
-  process.load("RecoMET.METProducers.METSignificanceParams_cfi")
-  pattask.add(process.METSignificance)
-
-if config["DOMVAMET"]:
-  from RecoMET.METPUSubtraction.jet_recorrections import recorrectJets
-  recorrectJets(process, isData=True)
-  
-  from RecoMET.METPUSubtraction.MVAMETConfiguration_cff import runMVAMET
-  runMVAMET( process, jetCollectionPF="patJetsReapplyJEC")
-  process.MVAMET.srcLeptons  = cms.VInputTag("slimmedMuons", "slimmedElectrons", "slimmedTaus")
-  process.MVAMET.requireOS = cms.bool(False)
 
 
 
@@ -373,15 +308,9 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     doGenEvent	      = cms.bool(config["DOGENEVENT"]),
     doPileUp	      = cms.bool(config["DOPILEUP"]),
     doJpsiMu	      = cms.bool(config["DOJPSIMU"]),
-    doJpsiEle	      = cms.bool(config["DOJPSIELE"]),
     doJpsiTau	      = cms.bool(config["DOJPSITAU"]),
     doVertices	      = cms.bool(config["DOVERTICES"]),
-    doTriggerDecisions= cms.bool(config["DOTRIGGERDECISIONS"]),
-    doTriggerObjects  = cms.bool(config["DOTRIGGEROBJECTS"]),
-    doHltFilters      = cms.bool(config["DOHLTFILTERS"]),
     doMissingEt       = cms.bool(config["DOMISSINGET"]),
-    doMETSVFIT        = cms.bool(config["DOMETSVFIT"]),
-    doMVAMET          = cms.bool(config["DOMVAMET"]),
     doGenHist         = cms.bool(config["DOGENHIST"]),
     doCutFlow         = cms.bool(config["DOCUTFLOW"]),
     dzcut             = cms.double(config['DZCUT']),
@@ -515,9 +444,6 @@ process.TransientTrackBuilderESProducer = cms.ESProducer("TransientTrackBuilderE
 
 ####### Final path ##########
 process.p = cms.Path()
-if config["DOHLTFILTERS"]:
- process.p += process.HBHENoiseFilterResultProducer
- process.p += process.BadChargedCandidateSequence
 
 process.p += process.ecalBadCalibReducedMINIAODFilter
 

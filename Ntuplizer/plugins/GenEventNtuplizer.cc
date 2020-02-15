@@ -19,21 +19,21 @@ GenEventNtuplizer::~GenEventNtuplizer( void )
 }
 
 //===================================================================================================================
-void GenEventNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetup& iSetup ){
+bool GenEventNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetup& iSetup ){
 
   //Skip events with no jspi if that analysis is chosen
 
-    bool rflag = false;
-    
-    if(isJpsiEle_ || isJpsiMu_){
-      if ( nBranches_->JpsiMu_B_pt.size() >=1) rflag = true;
-    }
-    
-    if(isJpsiTau_){
-      if ( nBranches_->JpsiTau_B_pt.size() >=1)  rflag = true;
-    }
-
-    if(rflag==false) return;
+//    bool rflag = false;
+//    
+//    if(isJpsiEle_ || isJpsiMu_){
+//      if ( nBranches_->JpsiMu_B_pt.size() >=1) rflag = true;
+//    }
+//    
+//    if(isJpsiTau_){
+//      if ( nBranches_->JpsiTau_B_pt.size() >=1)  rflag = true;
+//    }
+//
+//    if(rflag==false) return;
   
   event.getByToken(geneventToken_, geneventInfo_);  
   
@@ -156,4 +156,5 @@ void GenEventNtuplizer::fillBranches( edm::Event const & event, const edm::Event
   nBranches_->genFacRenWeightDown = weightFacRenDown;
   nBranches_->PDF_rms = 1. + pdfRMS;
 
+  return true;
 }
