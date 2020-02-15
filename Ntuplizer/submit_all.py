@@ -1,4 +1,3 @@
-
 #!/usr/bin/env python
 """
 This is a small script that submits a config over many datasets
@@ -17,6 +16,7 @@ d_today = d_today.replace(' ', '-').replace(':','')
 
 print d_today
 
+username = os.environ['USER']
 
 def getOptions() :
     """
@@ -26,38 +26,40 @@ def getOptions() :
 
     parser = OptionParser(usage=usage)
     parser.add_option("-c", "--config", dest="config",
-        help=("The crab script you want to submit "),
-        metavar="CONFIG")
+                      help=("The crab script you want to submit "),
+                      metavar="CONFIG")
     parser.add_option("-d", "--dir", dest="dir",
-        help=("The crab directory you want to use "),
-        metavar="DIR")
+                      help=("The crab directory you want to use "),
+                      metavar="DIR")
     parser.add_option("-f", "--datasets", dest="datasets",
-        help=("File listing datasets to run over"),
-        metavar="FILE")
-    parser.add_option("-l", "--luminosity", dest="luminosity",
-        help=("Splitting job by lumi sections or by files"),
-        metavar="LUMI")
-    parser.add_option("-D", "--isData", dest="isData",
-        help=("If is data saving the run period in the name"),
-        metavar="isData")
+                      help=("File listing datasets to run over"),
+                      metavar="FILE")
+    
+    parser.add_option('-l', '--luminosity', action="store_true", default=False, dest='luminosity')
+
+#    parser.add_option("-l", "--luminosity", dest="luminosity",
+#                      help=("Splitting job by lumi sections or by files"),
+#                      metavar="LUMI")
+    parser.add_option('-D', '--isData', action="store_true", default=False, dest='isData')
+#    parser.add_option("-D", "--isData", dest="isData",
+#                      help=("If is data saving the run period in the name"),
+#                      metavar="isData")
     parser.add_option("-s", "--string", dest="string_to_add",
-        help=("Splitting job by lumi sections or by files"),
-        metavar="STRING")
+                      help=("Splitting job by lumi sections or by files"),
+                      metavar="STRING")
+    parser.add_option("-n", "--numOfFiles", dest="numOfFiles", default=None,
+                      help=("Number of files per job"))
+
+    parser.add_option('-g', '--isGlobal', action="store_true", default=False, dest='isGlobal', metavar="STRING")
 
 
     (options, args) = parser.parse_args()
 
+#    print 'options.luminosity = ', options.luminosity
 
     if options.config == None or options.dir == None:
         parser.error(usage)
-    if options.luminosity == None:
-        options.luminosity = False
-    else:
-        options.luminosity = True
-    if options.isData == None:
-        options.isData = False
-    else:
-        options.isData = True
+
     return options
 
 
@@ -75,7 +77,6 @@ def main():
     # We want to put all the CRAB project directories from the tasks we submit here into one common directory.
     # That's why we need to set this parameter (here or above in the configuration file, it does not matter, we will not overwrite it).
     config.section_("General")
-    config.General.workArea = options.dir
     config.General.transferLogs = True
     
     config.section_("JobType")
@@ -88,23 +89,30 @@ def main():
     #config.JobType.pyCfgParams = ['RunPeriod']
     config.JobType.inputFiles = [
 #        'RecoTauTag_MVAs_2018Mar15.db',
-        './JSON/Cert_294927-306462_13TeV_PromptReco_Collisions17_JSON.txt'
+        './JSON/Cert_294927-306462_13TeV_PromptReco_Collisions17_JSON.txt',
+        './data/DNN/tau_10_small.root'
         ]
 
     config.section_("Data")
     config.Data.inputDataset = None
     config.Data.allowNonValidInputDataset = True #To allow to run on non valid dataset
-    config.Data.inputDBS = 'phys03' #to be commented in case of global#
+
+    if not options.isGlobal:
+        config.Data.inputDBS = 'phys03' #to be commented in case of global#
     if options.luminosity == True :
-        config.Data.splitting = 'LumiBased'
-        config.Data.unitsPerJob = 100
+        config.Data.splitting = 'Automatic'
+#        config.Data.splitting = 'LumiBased'
+#        config.Data.unitsPerJob = 5
     else:
         config.Data.splitting = 'FileBased'
-        config.Data.unitsPerJob = 1
+        config.Data.unitsPerJob = 10
+
+    if options.numOfFiles!=None:
+        config.Data.unitsPerJob = int(options.numOfFiles)
+        
     config.Data.ignoreLocality = True
     config.Data.publication = False
     #config.Data.outLFNDirBase = '/store/user/cgalloni/Ntuple_2017_94v2_preliminary'
-    config.Data.outLFNDirBase = '/store/user/ytakahas/RJpsi_' + str(d_today) + '_BcJpsiTauNu_020519'
 #    config.Data.outLFNDirBase = '/store/user/ytakahas/RJpsi_20191002_BJpsiX_020519'
 
 
@@ -139,15 +147,19 @@ def main():
 
     for ijob, job in enumerate(jobs) :
 
+        if job.find('#')!=-1: continue
+
         ptbin = job.split('/')[1]
         cond = job.split('/')[2]
 
 #        print 'ptbin =', ptbin
 #        print '2nd = ', (("_"+cond) if options.isData else "")
 #        print '3rd = ', options.string_to_add
-        config.General.requestName =  ptbin + (("_"+cond)if options.isData else "")  + "_" + options.string_to_add
+        config.General.requestName =  ptbin + (("_"+cond) if options.isData else "")  + "_" + options.string_to_add
         config.Data.inputDataset = job
-        config.Data.outputDatasetTag = ptbin  + (("_"+cond)if options.isData else "" ) + "_" + options.string_to_add
+        config.Data.outputDatasetTag = ptbin  + (("_"+cond) if options.isData else "") + "_" + options.string_to_add
+        config.Data.outLFNDirBase = '/store/user/' + username + '/' + ptbin + '_' + str(d_today) + '_' + options.string_to_add
+        config.General.workArea = options.dir + '_' + ptbin + '_' + cond
         print "ptbin :%s and cond: %s " %(ptbin, cond)
         print 'Submitting ' + config.General.requestName + ', dataset = ' + job
         print 'Configuration :'
@@ -158,7 +170,7 @@ def main():
             p = Process(target=submit, args=(config,))
             p.start()
             p.join()
-            # submit(config)
+#            submit(config)
         except :
             print 'Not submitted.'
 
