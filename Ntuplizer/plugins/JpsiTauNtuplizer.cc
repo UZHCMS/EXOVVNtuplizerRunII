@@ -32,7 +32,6 @@ JpsiTauNtuplizer::JpsiTauNtuplizer( edm::EDGetTokenT<pat::MuonCollection>    muo
     , c_vprob (runValues["vprobcut"])
     , c_dnn (runValues["dnncut"])
     , dnnfile_ (runStrings["dnnfile"])      
-    , doCutFlow_ (runFlags["doCutFlow"])
    
 {
 
@@ -94,9 +93,25 @@ JpsiTauNtuplizer::JpsiTauNtuplizer( edm::EDGetTokenT<pat::MuonCollection>    muo
     
 
 
+    
+    std::string dnnfilepath = edm::FileInPath("EXOVVNtuplizerRunII/Ntuplizer/" +  dnnfile_).fullPath();
 
-    graphDef = tensorflow::loadMetaGraph(dnnfile_);
-    session = tensorflow::createSession(graphDef, dnnfile_);
+    std::cout << "dnn file path = " << dnnfilepath << std::endl;
+    //    std::replace(dnnfilepath.begin(), dnnfilepath.end(), "D", "");
+
+    std::string tbr = "DUMMY";  // to be replaced
+    auto pos = dnnfilepath.find(tbr);
+    auto len = tbr.length();
+    if (pos != std::string::npos) {
+      dnnfilepath.replace(pos, len, ""); // s == "a|b"
+    }
+    std::cout << "dnn file dir. = " << dnnfilepath << std::endl;    
+
+    
+    graphDef = tensorflow::loadMetaGraph(dnnfilepath);
+    session = tensorflow::createSession(graphDef, dnnfilepath);
+    //    graphDef = tensorflow::loadMetaGraph(edm::FileInPath(dnnfilepath).fullPath());
+    //    session = tensorflow::createSession(graphDef, edm::FileInPath(dnnfilepath).fullPath());
     
     data = tensorflow::Tensor(tensorflow::DT_FLOAT, { 1, 50, 8 }); // single batch of dimension 10
     label = tensorflow::Tensor(tensorflow::DT_INT32, { 1,50}); 
@@ -345,6 +360,7 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
      ********************************************************************/
 
     event.getByToken(HLTtriggersToken_, HLTtriggers_);
+    nBranches_->cutflow_perevt->Fill(0);
 
     bool isTriggered = false;
     const edm::TriggerNames& trigNames = event.triggerNames(*HLTtriggers_);
@@ -386,6 +402,9 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
     }
 
 
+    if(!isTriggered) return false;
+    nBranches_->cutflow_perevt->Fill(1);
+
 
     /********************************************************************
      *
@@ -404,41 +423,8 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
     muoncollection.clear();
     muoncollection_id.clear();
 
-    // bools keeping track of muon 1 or 2 for cutflow purposes
-    bool mu1passpteta = false;
-    bool mu2passpteta = false;
-    //    bool mu3passpteta = false;
-    bool mu1passtrigmatch = false;
-    bool mu2passtrigmatch = false;
- // Precut
-    if( doCutFlow_) {
-       nBranches_->cutflow_perevt->Fill(0);
-      
-       for(size_t imuon = 0; imuon < muons_->size(); ++ imuon){
+    //Now time to begin the cutflow in earnest
 
-           const pat::Muon & muon = (*muons_)[imuon];
-           // right now we're just checking that there are at least two muons passing our kinematic cuts
-           // so we don't care if there are more than two muons that pass right now
-           if(mu2passpteta) continue;
-           if(muon.pt() < 4) continue;
-           if(TMath::Abs(muon.eta()) > 2.4) continue;
-           if(!(muon.track().isNonnull())) continue;
-           // If we're on the Second muon, then the second muon is what passed 
-           if (mu1passpteta && !mu2passpteta) { mu2passpteta = true;}
-           // If we're on the First muon, then the first muon is what passed
-           if (!mu1passpteta) {mu1passpteta = true;}
-           }
-
-       if (mu1passpteta) {nBranches_->cutflow_perevt->Fill(1);}
-       if (mu2passpteta) {nBranches_->cutflow_perevt->Fill(2);}
-    }
-
-    if(!isTriggered) return false;
- // evt Triggered
-    if( doCutFlow_) {
-       nBranches_->cutflow_perevt->Fill(3);
-      }
-//Now time to begin the cutflow in earnest
     for(size_t imuon = 0; imuon < muons_->size(); ++ imuon){
 
         const pat::Muon & muon = (*muons_)[imuon];
@@ -494,9 +480,9 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 
         if(!trigMatch) continue;
         // If we're on the Second muon, then the second muon is what passed 
-        if (mu1passtrigmatch && !mu2passtrigmatch) { mu2passtrigmatch = true;}
+	//        if (mu1passtrigmatch && !mu2passtrigmatch) { mu2passtrigmatch = true;}
         // If we're on the First muon, then the first muon is what passed
-        if (!mu1passtrigmatch) {mu1passtrigmatch = true;}
+	//        if (!mu1passtrigmatch) {mu1passtrigmatch = true;}
 
 
 	//	std::cout << "This is muon ... " << muon.pt() << " " << muon.eta() << " " << muon.phi() << std::endl;
@@ -505,13 +491,9 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
         muoncollection_id.push_back(imuon);
     }
 
-    if( doCutFlow_) {
-      if (mu1passtrigmatch) {nBranches_->cutflow_perevt->Fill(4);}
-      if (mu2passtrigmatch) {nBranches_->cutflow_perevt->Fill(5);}
-    }
-    
     if(!( muoncollection.size() >= 2)) return false;
 
+    nBranches_->cutflow_perevt->Fill(2);
 
 
     /********************************************************************
@@ -578,9 +560,7 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 
     if(jpsi_max_pt == -1) return false;
 
-    if ( doCutFlow_) {
-       nBranches_->cutflow_perevt->Fill(6);
-    }
+    nBranches_->cutflow_perevt->Fill(3);
 
 
     /********************************************************************
@@ -641,9 +621,7 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 //    std::cout << "after fit2: " << mu2_fit.pt() << " " << mu2_fit.eta() << " " << mu2_fit.phi() << " " << mu2_fit.mass() << std::endl;
 
     // Jpsi kinematic fit passed
-    if( doCutFlow_) {
-      nBranches_->cutflow_perevt->Fill(7);
-      }
+    nBranches_->cutflow_perevt->Fill(4);
 
     /********************************************************************
      *
@@ -1702,13 +1680,7 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 
 
     // B Candidate Kinematic fit passed
-    if( doCutFlow_) {
-      nBranches_->cutflow_perevt->Fill(8);
-    }
-
-
-
-
+    nBranches_->cutflow_perevt->Fill(5);
 
     return true;
 

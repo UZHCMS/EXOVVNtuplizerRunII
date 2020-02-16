@@ -14,7 +14,7 @@ config["DZCUT"] = 0.25 # this is fixed !!
 config["FSIGCUT"] = 3
 config["VPROBCUT"] = 0.1
 config["DNNCUT"] = 0.1443
-config["DNNFILE"] = "data/DNN/BcJPsi"
+config["DNNFILE"] = "data/DNN/BcJPsi/DUMMY"
 #config["DNNFILE"] = "data/DNN/BJpsiX.root"
 
 
@@ -34,7 +34,6 @@ config["DOMISSINGET"] = False
 config["DOJPSIMU"] = False
 config["DOJPSITAU"] = True
 config["DOGENHIST"] = (True and config["RUNONMC"]);
-config["DOCUTFLOW"] = True;
 
 #--------- JEC ----------#
 

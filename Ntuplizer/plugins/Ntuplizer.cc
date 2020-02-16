@@ -68,7 +68,6 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
   /*=======================================================================================*/
   edm::Service<TFileService> fs;
   TTree* tree = fs->make<TTree>( "tree", "tree" );
-  // cutflow_perevt = fs->make<TH1F>("cutflow_perevt", "Per Event Ntuplizer Cutflow", 7, 0, 7);
  
   //std::map< std::string, bool > runFlags;
   runFlags["runOnMC"] = iConfig.getParameter<bool>("runOnMC");
@@ -81,7 +80,6 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
   runFlags["doJpsiMu"] = iConfig.getParameter<bool>("doJpsiMu");
   runFlags["doJpsiTau"] = iConfig.getParameter<bool>("doJpsiTau");
   runFlags["doGenHist"] = iConfig.getParameter<bool>("doGenHist");
-  runFlags["doCutFlow"] = iConfig.getParameter<bool>("doCutFlow");
 
   runValues["dzcut"] = iConfig.getParameter<double>("dzcut");
   runValues["fsigcut"] = iConfig.getParameter<double>("fsigcut");
@@ -97,16 +95,15 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
 
   std::string jecpath = iConfig.getParameter<std::string>("jecpath");
   jecpath = "EXOVVNtuplizerRunII/Ntuplizer/data/" + jecpath;
-  std::cout << "jecpath  "<< jecpath  <<std::endl;
+  //  std::cout << "jecpath  "<< jecpath  <<std::endl;
  
   nBranches_ = new NtupleBranches( runFlags, tree );
   
   /*=======================================================================================*/
   /* Histogram buildinng, definition in NtupleBrances */
   /* Histogram for cutflow */
-  if (runFlags["doCutFlow"]) {
-      nBranches_->cutflow_perevt = fs->make<TH1F>("cutflow_perevt", "Per Event Ntuplizer Cutflow", 10, 0, 10);
-  }
+
+  nBranches_->cutflow_perevt = fs->make<TH1F>("cutflow_perevt", "Per Event Ntuplizer Cutflow", 10, 0, 10);
   
   
   /* Histogram for genParticles */ 
@@ -131,9 +128,9 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
       nBranches_->genParticle_Bvis_phi =fs->make<TH1F>("genParticle_Bvis_phi", "Visible #phi of B in B->J/#psi+X", 64, -3.2, 3.2);
       nBranches_->genParticle_Bvis_mass =fs->make<TH1F>("genParticle_Bvis_mass", "Visible mass of B in B->J/#psi+X", 100, 0, 20);
   } 
-  if (runFlags["doCutFlow"] ||runFlags["doGenHist"]) {
-      nBranches_-> LabelHistograms( runFlags );
-  }
+  //  if (runFlags["doGenHist"]) {
+  nBranches_-> LabelHistograms( runFlags );
+      //  }
 
   /*=======================================================================================*/
 
