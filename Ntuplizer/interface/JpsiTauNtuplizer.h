@@ -222,7 +222,6 @@ private:
    
    std::string dnnfile_;
 
-   bool doCutFlow_;
    std::map<std::tuple<Int_t, Float_t, Float_t, Float_t>, std::vector<Int_t>> DNNidx;
    std::map<std::tuple<Int_t, Float_t, Float_t, Float_t>, std::vector<Float_t>> DNNval;
 };
