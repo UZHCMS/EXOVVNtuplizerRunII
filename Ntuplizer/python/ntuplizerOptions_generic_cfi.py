@@ -14,8 +14,6 @@ config["DZCUT"] = 0.25 # this is fixed !!
 config["FSIGCUT"] = 3
 config["VPROBCUT"] = 0.1
 config["DNNCUT"] = 0.1443
-config["DNNFILE"] = "data/DNN/BcJPsi/DUMMY"
-#config["DNNFILE"] = "data/DNN/BJpsiX.root"
 
 
 config["USEJSON"] = not (config["RUNONMC"])
@@ -26,14 +24,23 @@ config["USENOHF"] = False
 
 
 #--------- basic sequences ----------#
-config["DOGENPARTICLES"] = (False and config["RUNONMC"])
-config["DOGENEVENT"] = (False and config["RUNONMC"])
-config["DOPILEUP"] = (False and config["RUNONMC"])
+config["DOGENPARTICLES"] = (True and config["RUNONMC"])
+config["DOGENEVENT"] = (True and config["RUNONMC"])
+config["DOPILEUP"] = (True and config["RUNONMC"])
 config["DOVERTICES"] = True
-config["DOMISSINGET"] = False
+config["DOMISSINGET"] = True
+
 config["DOJPSIMU"] = False
 config["DOJPSITAU"] = True
+config["DOBSTAUTAU"] = False
+
 config["DOGENHIST"] = (True and config["RUNONMC"]);
+
+if config["DOJPSITAU"]:
+    config["DNNFILE"] = "data/DNN/BcJPsi/DUMMY"
+
+if config["DOBSTAUTAU"]:
+    config["DNNFILE"] = "data/DNN/BsTauTau/DUMMY"    
 
 #--------- JEC ----------#
 

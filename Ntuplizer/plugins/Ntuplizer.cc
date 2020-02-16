@@ -7,6 +7,7 @@
 #include "../interface/VerticesNtuplizer.h"
 #include "../interface/JpsiMuNtuplizer.h"
 #include "../interface/JpsiTauNtuplizer.h"
+#include "../interface/BsTauTauNtuplizer.h"
 
 #include "DataFormats/PatCandidates/interface/TriggerObjectStandAlone.h"
 #include "DataFormats/PatCandidates/interface/PackedTriggerPrescales.h"
@@ -79,6 +80,7 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
   runFlags["doMissingEt"] = iConfig.getParameter<bool>("doMissingEt");
   runFlags["doJpsiMu"] = iConfig.getParameter<bool>("doJpsiMu");
   runFlags["doJpsiTau"] = iConfig.getParameter<bool>("doJpsiTau");
+  runFlags["doBsTauTau"] = iConfig.getParameter<bool>("doBsTauTau");
   runFlags["doGenHist"] = iConfig.getParameter<bool>("doGenHist");
 
   runValues["dzcut"] = iConfig.getParameter<double>("dzcut");
@@ -211,6 +213,23 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
 						   runValues,
 						   runStrings,
 						   nBranches_ );
+  }
+
+  if (runFlags["doBsTauTau"]) {
+    std::cout<<"\n\n --->GETTING INSIDE doBsTauTau<---\n\n"<<std::endl;
+    nTuplizers_["BsTauTau"] = new BsTauTauNtuplizer( muonToken_   , 
+						     vtxToken_   , 
+						     beamToken_ ,
+						     packedpfcandidatesToken_,
+						     losttrackToken_,
+						     triggerToken_,
+						     triggerObjects_,
+						     genparticleToken_,
+						     gentauToken_,
+						     runFlags,
+						     runValues,
+						     runStrings,
+						     nBranches_ );
   }
 
 

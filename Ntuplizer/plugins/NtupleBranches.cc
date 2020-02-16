@@ -187,9 +187,6 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
 
   }
 
-  if (runFlags["doJpsiEle"]){
-    tree_->Branch("IsJpsiEle", &IsJpsiEle );
-  }
 
   if (runFlags["doJpsiMu"]){
     tree_->Branch("IsJpsiMu" , &IsJpsiMu  );
@@ -411,6 +408,25 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch("JpsiTau_tau_pi2_dnn", &JpsiTau_tau_pi2_dnn );
     tree_->Branch("JpsiTau_tau_pi3_dnn", &JpsiTau_tau_pi3_dnn );
 
+    tree_->Branch("JpsiTau_tau_rhomass1", &BsTauTau_tau_rhomass1 );
+    tree_->Branch("JpsiTau_tau_rhomass2", &BsTauTau_tau_rhomass2 );
+
+    tree_->Branch("JpsiTau_tau_pi1_pt", &JpsiTau_tau_pi1_pt );
+    tree_->Branch("JpsiTau_tau_pi1_eta", &JpsiTau_tau_pi1_eta );
+    tree_->Branch("JpsiTau_tau_pi1_phi", &JpsiTau_tau_pi1_phi );
+    tree_->Branch("JpsiTau_tau_pi1_mass", &JpsiTau_tau_pi1_mass );
+
+    tree_->Branch("JpsiTau_tau_pi2_pt", &JpsiTau_tau_pi2_pt );
+    tree_->Branch("JpsiTau_tau_pi2_eta", &JpsiTau_tau_pi2_eta );
+    tree_->Branch("JpsiTau_tau_pi2_phi", &JpsiTau_tau_pi2_phi );
+    tree_->Branch("JpsiTau_tau_pi2_mass", &JpsiTau_tau_pi2_mass );
+
+    tree_->Branch("JpsiTau_tau_pi3_pt", &JpsiTau_tau_pi3_pt );
+    tree_->Branch("JpsiTau_tau_pi3_eta", &JpsiTau_tau_pi3_eta );
+    tree_->Branch("JpsiTau_tau_pi3_phi", &JpsiTau_tau_pi3_phi );
+    tree_->Branch("JpsiTau_tau_pi3_mass", &JpsiTau_tau_pi3_mass );
+
+
     tree_->Branch("JpsiTau_PV_vx", &JpsiTau_PV_vx );
     tree_->Branch("JpsiTau_PV_vy", &JpsiTau_PV_vy );
     tree_->Branch("JpsiTau_PV_vz", &JpsiTau_PV_vz );
@@ -484,6 +500,125 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
 
   }
 
+
+
+  if (runFlags["doBsTauTau"]){
+    tree_->Branch("IsBsTauTau", &IsBsTauTau );
+
+    tree_->Branch("BsTauTau_nCandidates", &BsTauTau_nCandidates );
+
+    tree_->Branch("BsTauTau_mu1_pt", &BsTauTau_mu1_pt );
+    tree_->Branch("BsTauTau_mu1_eta", &BsTauTau_mu1_eta );
+    tree_->Branch("BsTauTau_mu1_phi", &BsTauTau_mu1_phi );
+    tree_->Branch("BsTauTau_mu1_mass", &BsTauTau_mu1_mass );
+    tree_->Branch("BsTauTau_mu1_q", &BsTauTau_mu1_q );
+    tree_->Branch("BsTauTau_mu1_isLoose"  , &BsTauTau_mu1_isLoose   );
+    tree_->Branch("BsTauTau_mu1_isTight"  , &BsTauTau_mu1_isTight   );
+    tree_->Branch("BsTauTau_mu1_isPF"     , &BsTauTau_mu1_isPF      );
+    tree_->Branch("BsTauTau_mu1_isGlobal" , &BsTauTau_mu1_isGlobal  );
+    tree_->Branch("BsTauTau_mu1_isTracker", &BsTauTau_mu1_isTracker );
+    tree_->Branch("BsTauTau_mu1_isSoft"   , &BsTauTau_mu1_isSoft    );
+    tree_->Branch("BsTauTau_mu1_vx"   , &BsTauTau_mu1_vx    );
+    tree_->Branch("BsTauTau_mu1_vy"   , &BsTauTau_mu1_vy    );
+    tree_->Branch("BsTauTau_mu1_vz"   , &BsTauTau_mu1_vz    );
+    tree_->Branch("BsTauTau_mu1_iso"   , &BsTauTau_mu1_iso    );
+    tree_->Branch("BsTauTau_mu1_dbiso"   , &BsTauTau_mu1_dbiso    );
+
+
+    tree_->Branch("BsTauTau_tau_pt", &BsTauTau_tau_pt );
+    tree_->Branch("BsTauTau_tau_eta", &BsTauTau_tau_eta );
+    tree_->Branch("BsTauTau_tau_phi", &BsTauTau_tau_phi );
+    tree_->Branch("BsTauTau_tau_mass", &BsTauTau_tau_mass );
+    tree_->Branch("BsTauTau_tau_rhomass1", &BsTauTau_tau_rhomass1 );
+    tree_->Branch("BsTauTau_tau_rhomass2", &BsTauTau_tau_rhomass2 );
+    tree_->Branch("BsTauTau_tau_q", &BsTauTau_tau_q );
+    tree_->Branch("BsTauTau_tau_vx"   , &BsTauTau_tau_vx    );
+    tree_->Branch("BsTauTau_tau_vy"   , &BsTauTau_tau_vy    );
+    tree_->Branch("BsTauTau_tau_vz"   , &BsTauTau_tau_vz    );
+
+    tree_->Branch("BsTauTau_tau_max_dr_3prong", &BsTauTau_tau_max_dr_3prong);
+    tree_->Branch("BsTauTau_tau_lip", &BsTauTau_tau_lip);
+    tree_->Branch("BsTauTau_tau_lips", &BsTauTau_tau_lips);
+    tree_->Branch("BsTauTau_tau_pvip", &BsTauTau_tau_pvip);
+    tree_->Branch("BsTauTau_tau_pvips", &BsTauTau_tau_pvips);
+    tree_->Branch("BsTauTau_tau_fl3d", &BsTauTau_tau_fl3d);
+    tree_->Branch("BsTauTau_tau_fls3d", &BsTauTau_tau_fls3d);
+    tree_->Branch("BsTauTau_tau_alpha", &BsTauTau_tau_alpha);
+    tree_->Branch("BsTauTau_tau_vprob", &BsTauTau_tau_vprob);
+    tree_->Branch("BsTauTau_tau_isRight", &BsTauTau_tau_isRight);
+    tree_->Branch("BsTauTau_tau_matched_ppdgId", &BsTauTau_tau_matched_ppdgId);
+    tree_->Branch("BsTauTau_tau_matched_gentaupt", &BsTauTau_tau_matched_gentaupt);
+    //    tree_->Branch("BsTauTau_tau_gentaupt", &BsTauTau_tau_gentaupt);
+    tree_->Branch("BsTauTau_tau_sumofdnn", &BsTauTau_tau_sumofdnn);
+    tree_->Branch("BsTauTau_tau_pfidx1", &BsTauTau_tau_pfidx1);
+    tree_->Branch("BsTauTau_tau_pfidx2", &BsTauTau_tau_pfidx2);
+    tree_->Branch("BsTauTau_tau_pfidx3", &BsTauTau_tau_pfidx3);
+    tree_->Branch("BsTauTau_tau_pi1_dnn", &BsTauTau_tau_pi1_dnn );
+    tree_->Branch("BsTauTau_tau_pi2_dnn", &BsTauTau_tau_pi2_dnn );
+    tree_->Branch("BsTauTau_tau_pi3_dnn", &BsTauTau_tau_pi3_dnn );
+
+    tree_->Branch("BsTauTau_tau_pi1_pt", &BsTauTau_tau_pi1_pt );
+    tree_->Branch("BsTauTau_tau_pi1_eta", &BsTauTau_tau_pi1_eta );
+    tree_->Branch("BsTauTau_tau_pi1_phi", &BsTauTau_tau_pi1_phi );
+    tree_->Branch("BsTauTau_tau_pi1_mass", &BsTauTau_tau_pi1_mass );
+
+    tree_->Branch("BsTauTau_tau_pi2_pt", &BsTauTau_tau_pi2_pt );
+    tree_->Branch("BsTauTau_tau_pi2_eta", &BsTauTau_tau_pi2_eta );
+    tree_->Branch("BsTauTau_tau_pi2_phi", &BsTauTau_tau_pi2_phi );
+    tree_->Branch("BsTauTau_tau_pi2_mass", &BsTauTau_tau_pi2_mass );
+
+    tree_->Branch("BsTauTau_tau_pi3_pt", &BsTauTau_tau_pi3_pt );
+    tree_->Branch("BsTauTau_tau_pi3_eta", &BsTauTau_tau_pi3_eta );
+    tree_->Branch("BsTauTau_tau_pi3_phi", &BsTauTau_tau_pi3_phi );
+    tree_->Branch("BsTauTau_tau_pi3_mass", &BsTauTau_tau_pi3_mass );
+
+
+    tree_->Branch("BsTauTau_PV_vx", &BsTauTau_PV_vx );
+    tree_->Branch("BsTauTau_PV_vy", &BsTauTau_PV_vy );
+    tree_->Branch("BsTauTau_PV_vz", &BsTauTau_PV_vz );
+
+    tree_->Branch("BsTauTau_bbPV_vx", &BsTauTau_bbPV_vx );
+    tree_->Branch("BsTauTau_bbPV_vy", &BsTauTau_bbPV_vy );
+    tree_->Branch("BsTauTau_bbPV_vz", &BsTauTau_bbPV_vz );
+
+    tree_->Branch("BsTauTau_bbPV_refit_vx", &BsTauTau_bbPV_vx );
+    tree_->Branch("BsTauTau_bbPV_refit_vy", &BsTauTau_bbPV_vy );
+    tree_->Branch("BsTauTau_bbPV_refit_vz", &BsTauTau_bbPV_vz );
+
+    tree_->Branch("BsTauTau_genPV_vx", &BsTauTau_genPV_vx );
+    tree_->Branch("BsTauTau_genPV_vy", &BsTauTau_genPV_vy );
+    tree_->Branch("BsTauTau_genPV_vz", &BsTauTau_genPV_vz );
+
+    tree_->Branch("BsTauTau_B_pt", &BsTauTau_B_pt );
+    tree_->Branch("BsTauTau_B_eta", &BsTauTau_B_eta );
+    tree_->Branch("BsTauTau_B_phi", &BsTauTau_B_phi );
+    tree_->Branch("BsTauTau_B_mass", &BsTauTau_B_mass );
+    tree_->Branch("BsTauTau_B_vprob", &BsTauTau_B_vprob );
+    tree_->Branch("BsTauTau_B_lip", &BsTauTau_B_lip);
+    tree_->Branch("BsTauTau_B_lips", &BsTauTau_B_lips);
+    tree_->Branch("BsTauTau_B_pvip", &BsTauTau_B_pvip);
+    tree_->Branch("BsTauTau_B_pvips", &BsTauTau_B_pvips);
+    tree_->Branch("BsTauTau_B_fl3d", &BsTauTau_B_fl3d);
+    tree_->Branch("BsTauTau_B_fls3d", &BsTauTau_B_fls3d);
+    tree_->Branch("BsTauTau_B_alpha", &BsTauTau_B_alpha);
+    tree_->Branch("BsTauTau_B_maxdoca", &BsTauTau_B_maxdoca);
+    tree_->Branch("BsTauTau_B_mindoca", &BsTauTau_B_mindoca);
+    tree_->Branch("BsTauTau_B_vx", &BsTauTau_B_vx );
+    tree_->Branch("BsTauTau_B_vy", &BsTauTau_B_vy );
+    tree_->Branch("BsTauTau_B_vz", &BsTauTau_B_vz );
+    tree_->Branch("BsTauTau_B_iso", &BsTauTau_B_iso);
+    tree_->Branch("BsTauTau_B_iso_ntracks", &BsTauTau_B_iso_ntracks );
+    tree_->Branch("BsTauTau_B_iso_mindoca", &BsTauTau_B_iso_mindoca );
+
+    tree_->Branch("BsTauTau_ngenmuons", &BsTauTau_ngenmuons);
+    tree_->Branch("BsTauTau_isgen3", &BsTauTau_isgen3);
+    tree_->Branch("BsTauTau_isgen3matched", &BsTauTau_isgen3matched);
+    tree_->Branch("BsTauTau_nch", &BsTauTau_nch);
+    tree_->Branch("BsTauTau_ngentau3", &BsTauTau_ngentau3); 
+    tree_->Branch("BsTauTau_ngentau", &BsTauTau_ngentau);
+    tree_->Branch("BsTauTau_gentaupt", &BsTauTau_gentaupt);
+
+  }
 
 
 
@@ -641,8 +776,8 @@ void NtupleBranches::reset( void ){
 
   /*-------------------------JPSI infos--------------------------*/ 
   IsJpsiMu.clear();
-  IsJpsiEle.clear();
   IsJpsiTau.clear();
+  IsBsTauTau.clear();
 
   JpsiMu_nCandidates.clear();
 
@@ -857,6 +992,22 @@ void NtupleBranches::reset( void ){
   JpsiTau_tau_pi2_dnn.clear();
   JpsiTau_tau_pi3_dnn.clear();
 
+  JpsiTau_tau_rhomass1.clear();
+  JpsiTau_tau_rhomass2.clear();
+
+  JpsiTau_tau_pi1_pt.clear();
+  JpsiTau_tau_pi1_eta.clear();
+  JpsiTau_tau_pi1_phi.clear();
+  JpsiTau_tau_pi1_mass.clear();
+  JpsiTau_tau_pi2_pt.clear();
+  JpsiTau_tau_pi2_eta.clear();
+  JpsiTau_tau_pi2_phi.clear();
+  JpsiTau_tau_pi2_mass.clear();
+  JpsiTau_tau_pi3_pt.clear();
+  JpsiTau_tau_pi3_eta.clear();
+  JpsiTau_tau_pi3_phi.clear();
+  JpsiTau_tau_pi3_mass.clear();
+
 
   JpsiTau_Jpsi_pt.clear();
   JpsiTau_Jpsi_eta.clear();
@@ -931,6 +1082,121 @@ void NtupleBranches::reset( void ){
 
 
 
+  /////////////////
+
+
+  BsTauTau_nCandidates.clear();
+
+  BsTauTau_mu1_pt.clear();
+  BsTauTau_mu1_eta.clear();
+  BsTauTau_mu1_phi.clear();
+  BsTauTau_mu1_mass.clear();
+  BsTauTau_mu1_q.clear();
+  BsTauTau_mu1_isLoose.clear();
+  BsTauTau_mu1_isTight.clear();
+  BsTauTau_mu1_isPF.clear();
+  BsTauTau_mu1_isGlobal.clear();
+  BsTauTau_mu1_isTracker.clear();
+  BsTauTau_mu1_isSoft.clear();
+  BsTauTau_mu1_vx.clear();
+  BsTauTau_mu1_vy.clear();
+  BsTauTau_mu1_vz.clear();
+  BsTauTau_mu1_iso.clear();
+  BsTauTau_mu1_dbiso.clear();
+
+  BsTauTau_tau_pt.clear();
+  BsTauTau_tau_eta.clear();
+  BsTauTau_tau_phi.clear();
+  BsTauTau_tau_mass.clear();
+  BsTauTau_tau_rhomass1.clear();
+  BsTauTau_tau_rhomass2.clear();
+  BsTauTau_tau_q.clear();
+  BsTauTau_tau_vx.clear();
+  BsTauTau_tau_vy.clear();
+  BsTauTau_tau_vz.clear();
+
+
+  BsTauTau_tau_max_dr_3prong.clear();
+  BsTauTau_tau_lip.clear();
+  BsTauTau_tau_lips.clear();
+  BsTauTau_tau_pvip.clear();
+  BsTauTau_tau_pvips.clear();
+  BsTauTau_tau_fl3d.clear();
+  BsTauTau_tau_fls3d.clear();
+  BsTauTau_tau_alpha.clear();
+  BsTauTau_tau_vprob.clear();
+  BsTauTau_tau_isRight.clear();
+  BsTauTau_tau_matched_ppdgId.clear();
+  BsTauTau_tau_matched_gentaupt.clear();
+  BsTauTau_tau_sumofdnn.clear();
+  BsTauTau_tau_pfidx1.clear();
+  BsTauTau_tau_pfidx2.clear();
+  BsTauTau_tau_pfidx3.clear();
+  BsTauTau_tau_pi1_dnn.clear();
+  BsTauTau_tau_pi2_dnn.clear();
+  BsTauTau_tau_pi3_dnn.clear();
+
+  BsTauTau_tau_pi1_pt.clear();
+  BsTauTau_tau_pi1_eta.clear();
+  BsTauTau_tau_pi1_phi.clear();
+  BsTauTau_tau_pi1_mass.clear();
+  BsTauTau_tau_pi2_pt.clear();
+  BsTauTau_tau_pi2_eta.clear();
+  BsTauTau_tau_pi2_phi.clear();
+  BsTauTau_tau_pi2_mass.clear();
+  BsTauTau_tau_pi3_pt.clear();
+  BsTauTau_tau_pi3_eta.clear();
+  BsTauTau_tau_pi3_phi.clear();
+  BsTauTau_tau_pi3_mass.clear();
+
+
+  BsTauTau_B_pt.clear();
+  BsTauTau_B_eta.clear();
+  BsTauTau_B_phi.clear();
+  BsTauTau_B_mass.clear();
+  BsTauTau_B_vprob.clear();
+  BsTauTau_B_lip.clear();
+  BsTauTau_B_lips.clear();
+  BsTauTau_B_pvip.clear();
+  BsTauTau_B_pvips.clear();
+  BsTauTau_B_fl3d.clear();
+  BsTauTau_B_fls3d.clear();
+  BsTauTau_B_alpha.clear();
+  BsTauTau_B_maxdoca.clear();
+  BsTauTau_B_mindoca.clear();
+  BsTauTau_B_vx.clear();
+  BsTauTau_B_vy.clear();
+  BsTauTau_B_vz.clear();
+  BsTauTau_B_iso.clear();
+  BsTauTau_B_iso_ntracks.clear();
+  BsTauTau_B_iso_mindoca.clear();
+
+  BsTauTau_PV_vx.clear();
+  BsTauTau_PV_vy.clear();
+  BsTauTau_PV_vz.clear();
+
+  BsTauTau_bbPV_vx.clear();
+  BsTauTau_bbPV_vy.clear();
+  BsTauTau_bbPV_vz.clear();
+
+  BsTauTau_bbPV_refit_vx.clear();
+  BsTauTau_bbPV_refit_vy.clear();
+  BsTauTau_bbPV_refit_vz.clear();
+
+  BsTauTau_genPV_vx.clear();
+  BsTauTau_genPV_vy.clear();
+  BsTauTau_genPV_vz.clear();
+
+  BsTauTau_ngenmuons.clear();
+
+  BsTauTau_isgen3.clear();
+  BsTauTau_isgen3matched.clear();
+  BsTauTau_nch.clear();
+  BsTauTau_ngentau3.clear();
+  BsTauTau_ngentau.clear();
+  BsTauTau_gentaupt.clear();
+
+
 
 
 
@@ -940,7 +1206,7 @@ void NtupleBranches::reset( void ){
 
 void NtupleBranches::LabelHistograms( std::map< std::string, bool >& runFlags ){
   //  if ( runFlags["doCutFlow"] ){
-    std::vector bins_string = {"Precut", "Trigger","2 muons", "J/#psi", "J/#psi fit","Tau  presence"};
+    std::vector bins_string = {"Precut", "Trigger","muons", "J/#psi", "J/#psi fit","Tau  presence"};
     for(size_t i=0; i< bins_string.size(); i++){
       cutflow_perevt->GetXaxis()->SetBinLabel(i+1, bins_string[i]);
     }

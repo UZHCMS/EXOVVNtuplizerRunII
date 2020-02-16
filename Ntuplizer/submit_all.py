@@ -112,8 +112,10 @@ def main():
         
     config.Data.ignoreLocality = True
     config.Data.publication = False
+
     #config.Data.outLFNDirBase = '/store/user/cgalloni/Ntuple_2017_94v2_preliminary'
 #    config.Data.outLFNDirBase = '/store/user/ytakahas/RJpsi_20191002_BJpsiX_020519'
+
 
 
     config.section_("Site")
