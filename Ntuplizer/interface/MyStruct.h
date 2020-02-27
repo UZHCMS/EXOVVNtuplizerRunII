@@ -50,6 +50,9 @@ struct taucand{
   Float_t cand_tau_max_dr_3prong;	
   Int_t cand_tau_charge;
   Bool_t cand_tau_isRight;
+  Bool_t cand_tau_isRight1;
+  Bool_t cand_tau_isRight2;
+  Bool_t cand_tau_isRight3;
   Int_t cand_tau_matched_ppdgId;
   Float_t cand_tau_matched_gentaupt;
   Float_t cand_tau_sumofdnn;

@@ -12,9 +12,6 @@ process = cms.Process("Ntuple")
 process.load("Configuration.StandardSequences.MagneticField_cff")
 process.load('Configuration.Geometry.GeometryRecoDB_cff')
 
-process.TFileService = cms.Service("TFileService",
-                                    fileName = cms.string('flatTuple.root')
-                                   )
 
 #from EXOVVNtuplizerRunII.Ntuplizer.ntuplizerOptions_data_cfi import config
 from EXOVVNtuplizerRunII.Ntuplizer.ntuplizerOptions_generic_cfi import config
@@ -25,31 +22,45 @@ from EXOVVNtuplizerRunII.Ntuplizer.ntuplizerOptions_generic_cfi import config
 #config["VPROBCUT"] = 0.1
 #config["DNNCUT"] = 0.2
 
-				   
+import sys
+args = sys.argv
+
+if len(args)!=4:
+  print 'input file name missing'
+  sys.exit(0)
+else:
+  inputFile = args[2]
+  outputFile = args[3]
+  
+RunPeriod='Autumn18'
+
+process.TFileService = cms.Service("TFileService",
+                                   fileName = cms.string(outputFile)
+                                   )
+
+
 ####### Config parser ##########
 
-import FWCore.ParameterSet.VarParsing as VarParsing
-
-options = VarParsing.VarParsing ('analysis')
-
-options.register( 'RunPeriod',
-                  '',
-                  VarParsing.VarParsing.multiplicity.singleton, # singleton or list
-                  VarParsing.VarParsing.varType.string,          # string, int, or float
-                  "RunNumber (Default Run2017B)")
-
-options.register( 'runUpToEarlyF',
-                  'false',
-                  VarParsing.VarParsing.multiplicity.singleton, # singleton or list                                                                                                                                 
-                  VarParsing.VarParsing.varType.bool,          # string, int, or float                                                                                                                        
-                  "false")# https://twiki.cern.ch/twiki/bin/view/CMSPublic/SWGuideAboutPythonConfigFile
-
-####
-
+#import FWCore.ParameterSet.VarParsing as VarParsing
+#
+#options = VarParsing.VarParsing ('analysis')
+#
+#options.register( 'RunPeriod',
+#                  '',
+#                  VarParsing.VarParsing.multiplicity.singleton, # singleton or list
+#                  VarParsing.VarParsing.varType.string,          # string, int, or float
+#                  "RunNumber (Default Run2017B)")
+#
+#options.register( 'runUpToEarlyF',
+#                  'false',
+#                  VarParsing.VarParsing.multiplicity.singleton, # singleton or list                                                                                                                                 
+#                  VarParsing.VarParsing.varType.bool,          # string, int, or float                                                                                                                        
+#                  "false")# https://twiki.cern.ch/twiki/bin/view/CMSPublic/SWGuideAboutPythonConfigFile
+#
 
 
-options.maxEvents = 1000
-#options.maxEvents = -1
+#options.maxEvents = 1000
+maxEvents = -1
 
 #data file
      
@@ -62,12 +73,17 @@ options.maxEvents = 1000
 #options.inputFiles = '/store/user/cgalloni/BcJpsiTauNu_020519/Fall18_10_2_9-MINIAODSIM_noDuplCheck_020519/190505_141436/0000/miniAOD_99.root'
 #options.inputFiles = '/BcToJPsiTauNu_TuneCP5_13TeV-bcvegpy2-pythia8-evtgen/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v1/MINIAODSIM'
 #options.inputFiles = '/store/mc/RunIIAutumn18MiniAOD/BcToJPsiTauNu_TuneCP5_13TeV-bcvegpy2-pythia8-evtgen/MINIAODSIM/102X_upgrade2018_realistic_v15-v1/260000/E342DC18-5142-1545-B077-D4405CE0BF05.root'
-options.inputFiles = '/store/mc/RunIIAutumn18MiniAOD/BsToTauTau_MuFilter_SoftQCDnonD_TuneCP5_13TeV-pythia8-evtgen/MINIAODSIM/PUPoissonAve20_BParking_102X_upgrade2018_realistic_v15-v1/280000/FD3C4F1A-A2ED-AE43-A68E-76E59838E891.root'
+#options.inputFiles = '/store/mc/RunIIAutumn18MiniAOD/BsToTauTau_MuFilter_SoftQCDnonD_TuneCP5_13TeV-pythia8-evtgen/MINIAODSIM/PUPoissonAve20_BParking_102X_upgrade2018_realistic_v15-v1/280000/FD3C4F1A-A2ED-AE43-A68E-76E59838E891.root'
 #options.inputFiles = 'file:/scratch/ytakahas/E342DC18-5142-1545-B077-D4405CE0BF05.root'
 #options.inputFiles = '/store/data/Run2018A/ParkingBPH1/MINIAOD/05May2019-v1/280001/1CE00F5E-9F52-4045-BC7C-C9178E71DB9E.root'
 #options.inputFiles = 'file:/work/ytakahas/work/NtuplizerProd/CMSSW_10_6_8/src/EXOVVNtuplizerRunII/Ntuplizer/E30B9F61-DB46-0446-9B6A-2E21B806D4CE.root'
 #options.inputFiles = 'dcap://t3se01.psi.ch:22125//pnfs/psi.ch/cms/trivcat/store/user/ytakahas/mc/ytakahas/BcToJPsiTauNu_TuneCP5_13TeV-bcvegpy2-pythia8-evtgen/USER/v1/A2581C35-B56A-5046-A02D-8C8C1562DEEE.root'
 #options.inputFiles = 'dcap://t3se01.psi.ch:22125//pnfs/psi.ch/cms/trivcat/store/user/ytakahas/mc/ytakahas/UpsilonToTauTau_inclusive_5f_Pythia_LO/USER/v1/UpsilonToTauTau_3prong_miniaod_part0.root'
+
+#print 'File =', options.Files
+
+#inputFiles = 'dcap://t3se01.psi.ch:22125//pnfs/psi.ch/cms/trivcat/store/user/ytakahas/mc/ytakahas/' + inputfilename
+
 #options.inputFiles = [
 #  'dcap://t3se01.psi.ch:22125//pnfs/psi.ch/cms/trivcat/store/user/ytakahas/mc/ytakahas/UpsilonToTauTau_inclusive_5f_Pythia_LO/USER/v1/UpsilonToTauTau_3prong_miniaod_part0.root',
 #  'dcap://t3se01.psi.ch:22125//pnfs/psi.ch/cms/trivcat/store/user/ytakahas/mc/ytakahas/UpsilonToTauTau_inclusive_5f_Pythia_LO/USER/v1/UpsilonToTauTau_3prong_miniaod_part1.root',
@@ -95,7 +111,7 @@ options.inputFiles = '/store/mc/RunIIAutumn18MiniAOD/BsToTauTau_MuFilter_SoftQCD
 #  'dcap://t3se01.psi.ch:22125//pnfs/psi.ch/cms/trivcat/store/user/ytakahas/mc/ytakahas/BcToJPsiTauNu_TuneCP5_13TeV-bcvegpy2-pythia8-evtgen/USER/v1/2377586D-0618-DB49-87EC-79FFF1DA2AC3.root'
 #]
 
-options.parseArguments()
+#options.parseArguments()
 
 process.options  = cms.untracked.PSet( 
                      wantSummary = cms.untracked.bool(True),
@@ -103,16 +119,16 @@ process.options  = cms.untracked.PSet(
                      allowUnscheduled = cms.untracked.bool(True)
                      )
 
-process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(options.maxEvents) )
+process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(maxEvents) )
 if config["RUNONMC"]:
   process.source = cms.Source("PoolSource",
-                              fileNames = cms.untracked.vstring(options.inputFiles),
+                              fileNames = cms.untracked.vstring(inputFile),
                               duplicateCheckMode = cms.untracked.string("noDuplicateCheck"),
                               
                               ) 
 else:                    
   process.source = cms.Source("PoolSource",
-                              fileNames = cms.untracked.vstring(options.inputFiles),
+                              fileNames = cms.untracked.vstring(inputFile),
                               ) 
 
 print " process source filenames %s" %(process.source) 
@@ -226,18 +242,20 @@ jecLevelsAK4 = []
 jecLevelsAK8Puppi = []
 jecLevelsForMET = []
 
-print "1. options.RunPeriod ", options.RunPeriod
-if options.RunPeriod=="" : options.RunPeriod=options.inputFiles[0]
+
+
+print "1. RunPeriod ", RunPeriod
+if RunPeriod=="" : RunPeriod=inputFile
 
 if  config["RUNONMC"] :
   JECprefix = ""
-  if ("Fall17" in options.RunPeriod):
+  if ("Fall17" in RunPeriod):
     JECprefix = "Fall17_17Nov2017_V32"
     GT ='94X_mcRun2_asymptotic_v3'
-  elif ("Summer16" in options.RunPeriod):
+  elif ("Summer16" in RunPeriod):
     JECprefix = "Summer16_07Aug2017_V11"
     GT = '94X_mc2017_realistic_v17'
-  elif (("Autumn18" in options.RunPeriod) or ("Fall18" in options.RunPeriod)):
+  elif (("Autumn18" in RunPeriod) or ("Fall18" in RunPeriod)):
     JECprefix = "Autumn18_V8"
     GT = '102X_upgrade2018_realistic_v18'
   else:
@@ -253,39 +271,39 @@ if  config["RUNONMC"] :
 else : #Data
 
    JEC_runDependent_suffix= ""
-   if ("2017" in options.RunPeriod):
-     if ("Run2017B" in  options.RunPeriod): JEC_runDependent_suffix= "B"
-     elif ("Run2017C" in  options.RunPeriod): JEC_runDependent_suffix= "C"
-     elif ("Run2017D" in  options.RunPeriod): JEC_runDependent_suffix= "D"
-     elif ("Run2017E" in  options.RunPeriod): JEC_runDependent_suffix= "E"
-     elif ("Run2017F" in  options.RunPeriod): JEC_runDependent_suffix= "F"
+   if ("2017" in RunPeriod):
+     if ("Run2017B" in  RunPeriod): JEC_runDependent_suffix= "B"
+     elif ("Run2017C" in  RunPeriod): JEC_runDependent_suffix= "C"
+     elif ("Run2017D" in  RunPeriod): JEC_runDependent_suffix= "D"
+     elif ("Run2017E" in  RunPeriod): JEC_runDependent_suffix= "E"
+     elif ("Run2017F" in  RunPeriod): JEC_runDependent_suffix= "F"
      
      JECprefix = "Fall17_17Nov2017"+JEC_runDependent_suffix+"_V32"
      GT = '94X_dataRun2_v11'
      
      
-   elif ("2016" in options.RunPeriod):
-     if ("Run2016D" in  options.RunPeriod or "Run2016B" in  options.RunPeriod  or "Run2016C" in  options.RunPeriod  ): JEC_runDependent_suffix= "ABC"
-     elif ("Run2016E" in  options.RunPeriod): JEC_runDependent_suffix= "EF"
-     elif ("Run2016G" in  options.RunPeriod): JEC_runDependent_suffix= "GH"
-     elif ("Run2016F" in  options.RunPeriod and  not options.runUpToEarlyF): JEC_runDependent_suffix= "GH"
-     elif ("Run2016F" in  options.RunPeriod and   options.runUpToEarlyF): JEC_runDependent_suffix= "EF"
+   elif ("2016" in RunPeriod):
+     if ("Run2016D" in  RunPeriod or "Run2016B" in  RunPeriod  or "Run2016C" in  RunPeriod  ): JEC_runDependent_suffix= "ABC"
+     elif ("Run2016E" in  RunPeriod): JEC_runDependent_suffix= "EF"
+     elif ("Run2016G" in  RunPeriod): JEC_runDependent_suffix= "GH"
+     elif ("Run2016F" in  RunPeriod): JEC_runDependent_suffix= "GH"
+#     elif ("Run2016F" in  RunPeriod and   options.runUpToEarlyF): JEC_runDependent_suffix= "EF"
 
 
      JECprefix = "Summer16_07Aug2017"+JEC_runDependent_suffix+"_V11"
      GT ='94X_dataRun2_v10'
 
-   elif ("2018" in options.RunPeriod):
-     if ("Run2018A" in  options.RunPeriod ): 
+   elif ("2018" in RunPeriod):
+     if ("Run2018A" in  RunPeriod ): 
        JEC_runDependent_suffix= "A"
        GT="102X_dataRun2_Sep2018ABC_v2" 
-     elif ("Run2018B" in  options.RunPeriod): 
+     elif ("Run2018B" in  RunPeriod): 
        JEC_runDependent_suffix= "B"
        GT="102X_dataRun2_Sep2018ABC_v2"
-     elif ("Run2018C" in  options.RunPeriod): 
+     elif ("Run2018C" in  RunPeriod): 
        JEC_runDependent_suffix= "C"
        GT="102X_dataRun2_Sep2018ABC_v2"
-     elif ("Run2018D" in  options.RunPeriod): 
+     elif ("Run2018D" in  RunPeriod): 
        JEC_runDependent_suffix= "D"
        GT = '102X_dataRun2_Prompt_v13' 
 
