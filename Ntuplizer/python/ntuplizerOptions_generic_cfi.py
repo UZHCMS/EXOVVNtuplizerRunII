@@ -12,7 +12,7 @@ config["RUNONMC"] = True
 config["USEDNN"] = True
 config["DZCUT"] = 0.25 # this is fixed !!
 config["FSIGCUT"] = 3
-config["VPROBCUT"] = 0.1
+config["VPROBCUT"] = 0.05
 config["DNNCUT"] = 0.1443
 
 

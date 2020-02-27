@@ -728,7 +728,7 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 	
 	if(TMath::Abs(pf.eta()) < 2.4 && 
 	   TMath::Abs(pf.charge())==1 &&
-	   TMath::Abs(pf.pdgId())==13 && 
+	   //	   TMath::Abs(pf.pdgId())==13 && 
 	   pf.pt() > 4. &&
    	   pf.isGlobalMuon() > 0.5 &&
 	   pf.hasTrackDetails() > 0.5
@@ -772,7 +772,7 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 	if(pf.pseudoTrack().normalizedChi2() > 100) continue;
 	
 	if(TMath::Abs(pf.pdgId())!=211) continue; 
-	if(TMath::Abs(pf.eta()) > 2.3) continue; 
+	if(TMath::Abs(pf.eta()) > 2.5) continue; 
 
 	//	pfcollection.push_back(pf);
 	//	reco::TransientTrack  tt_track = (*builder).build(pf.pseudoTrack());
@@ -1143,12 +1143,14 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
    std::cout << "Starts to build tau candidate out of " << numOfch << " pion candidates" << std::endl;
 
     std::vector<taucand> cands;
+    Int_t npf_after_dnn = 0;
     
     for(int iii = 0; iii < numOfch; iii ++){
       
       pat::PackedCandidate pf1 = pfcollection[iii];
 
       if(mydnn[iii] < c_dnn) continue;
+      npf_after_dnn++;
 
       for(int jjj = iii+1; jjj < numOfch; jjj ++){
 	
@@ -1241,6 +1243,8 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 
 	  math::PtEtaPhiMLorentzVector tlv_tau_fit = tt1_fit + tt2_fit + tt3_fit;
 
+	  if(tlv_tau_fit.Pt() < 2.) continue;
+	  //	  if(!(0.2 < tlv_tau_fit.M() && tlv_tau_fit.M() < 1.5)) continue;
 	  // calculation of the isolation 
 
 	  Float_t iso = 0;
@@ -1285,6 +1289,9 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 
 
 	Bool_t isRight = false; 
+	Bool_t isRight1 = false; 
+	Bool_t isRight2 = false; 
+	Bool_t isRight3 = false; 
 	Int_t pid = -999;
 	Float_t matched_gentaupt = -999;
 	
@@ -1316,7 +1323,10 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 	    }
 	    
 	    Bool_t isRight_ = isRight1_ && isRight2_ && isRight3_;
-	    
+	    if(isRight1_) isRight1 = true;
+	    if(isRight2_) isRight2 = true;
+	    if(isRight3_) isRight3 = true;
+
 	    if(isRight_){
 	      isRight = true;
 	      pid = ppdgId[mmm];
@@ -1359,6 +1369,9 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 	    (Float_t) max_dr_3prong, 
 	    (Int_t) tau_charge,
 	    (Bool_t) isRight,
+	    (Bool_t) isRight1,
+	    (Bool_t) isRight2,
+	    (Bool_t) isRight3,
 	    (Int_t) pid,
 	    (Float_t) matched_gentaupt, 
 	    (Float_t) sumofdnn,
@@ -1393,7 +1406,7 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
     sort(cands.begin(), cands.end());
 
 
-    if(cands.size()==0) return false;
+    //    if(cands.size()==0) return false;
 
     //    std::vector<Int_t> dict_idx;
     Int_t ncomb = 0;
@@ -1410,7 +1423,7 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
        ********************************************************************/
 
       // if the candidate has less than 2 GeV, remove it.
-      if(cands[ic].cand_tau_pt < 2.) continue;
+      //      if(cands[ic].cand_tau_pt < 2.) continue;
 
 
       nBranches_->JpsiTau_tau_pt.push_back(cands[ic].cand_tau_pt);
@@ -1436,6 +1449,9 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
       nBranches_->JpsiTau_tau_alpha.push_back(cands[ic].cand_tau_alpha);
       nBranches_->JpsiTau_tau_vprob.push_back(cands[ic].cand_tau_vprob);
       nBranches_->JpsiTau_tau_isRight.push_back(cands[ic].cand_tau_isRight);
+      nBranches_->JpsiTau_tau_isRight1.push_back(cands[ic].cand_tau_isRight1);
+      nBranches_->JpsiTau_tau_isRight2.push_back(cands[ic].cand_tau_isRight2);
+      nBranches_->JpsiTau_tau_isRight3.push_back(cands[ic].cand_tau_isRight3);
       nBranches_->JpsiTau_tau_matched_ppdgId.push_back(cands[ic].cand_tau_matched_ppdgId);
       nBranches_->JpsiTau_tau_matched_gentaupt.push_back(cands[ic].cand_tau_matched_gentaupt);
       nBranches_->JpsiTau_tau_sumofdnn.push_back(cands[ic].cand_tau_sumofdnn);
@@ -1714,6 +1730,7 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
     nBranches_->JpsiTau_isgen3.push_back(isgen3);
     nBranches_->JpsiTau_isgen3matched.push_back(isgen3matched);
     nBranches_->JpsiTau_nch.push_back(numOfch);
+    nBranches_->JpsiTau_nch_after_dnn.push_back(npf_after_dnn);
     nBranches_->JpsiTau_ngentau3.push_back(gps.size());
     nBranches_->JpsiTau_ngentau.push_back(vec_gentaudm.size());
 
