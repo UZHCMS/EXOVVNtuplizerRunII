@@ -532,6 +532,8 @@ bool BsTauTauNtuplizer::fillBranches( edm::Event const & event, const edm::Event
 //    }
 
 
+    Int_t npf_before_dnn = 0;
+    Int_t npf_qr = 0;
 
 
     if(useDNN_){
@@ -584,15 +586,19 @@ bool BsTauTauNtuplizer::fillBranches( edm::Event const & event, const edm::Event
 	}
 
 	
-	if(pf.pt() < 0.5) continue;
 	if(!pf.hasTrackDetails()) continue;
+	Float_t precut_dz = pf.vz() - closestVertex.position().z();
+	if(TMath::Abs(precut_dz) > c_dz) continue;
+
+	
+	npf_qr++;
+
+	if(pf.pt() < 0.5) continue;
 	
 	// use the PF candidates that come from closestVertex
 	//      if(pf.vertexRef()->z()!=closestVertex.position().z()) continue;
 	
 	//      Float_t precut_dz = pf.vertexRef()->z() - closestVertex.position().z();
-	Float_t precut_dz = pf.vz() - closestVertex.position().z();
-	if(TMath::Abs(precut_dz) > c_dz) continue;
 	
 	Bool_t hpflag = pf.trackHighPurity();
 	if(!hpflag) continue;
@@ -603,6 +609,8 @@ bool BsTauTauNtuplizer::fillBranches( edm::Event const & event, const edm::Event
 	if(TMath::Abs(pf.pdgId())!=211) continue; 
 	if(TMath::Abs(pf.eta()) > 2.5) continue; 
 
+	npf_before_dnn++;
+	  
 	//	pfcollection.push_back(pf);
 	//	reco::TransientTrack  tt_track = (*builder).build(pf.pseudoTrack());
 	//	mytracks.push_back(tt_track);
@@ -778,7 +786,7 @@ bool BsTauTauNtuplizer::fillBranches( edm::Event const & event, const edm::Event
 	if(pf.pseudoTrack().normalizedChi2() > 100) continue;
 	
 	if(TMath::Abs(pf.pdgId())!=211) continue; 
-	if(TMath::Abs(pf.eta()) > 2.3) continue; 
+	if(TMath::Abs(pf.eta()) > 2.5) continue; 
 
 
 //      Float_t _dR1 = reco::deltaR(pf.eta(), pf.phi(), 
@@ -1117,6 +1125,12 @@ bool BsTauTauNtuplizer::fillBranches( edm::Event const & event, const edm::Event
 	Bool_t isRight1 = false; 
 	Bool_t isRight2 = false; 
 	Bool_t isRight3 = false; 
+	Float_t dr1 = 999;
+	Float_t dr2 = 999;
+	Float_t dr3 = 999;
+	Float_t ptres1 = 999;
+	Float_t ptres2 = 999;
+	Float_t ptres3 = 999;
 	Int_t pid = -999;
 	Float_t matched_gentaupt = -999;
 	
@@ -1133,17 +1147,37 @@ bool BsTauTauNtuplizer::fillBranches( edm::Event const & event, const edm::Event
 	    for(unsigned int nnn=0; nnn < tlvs.size(); nnn++){
 
 	      if(
-		 reco::deltaR(tau1_fit.Eta(), tau1_fit.Phi(), tlvs[nnn].Eta(), tlvs[nnn].Phi()) < 0.1
-		 ) isRight1_ = true; 
+		 reco::deltaR(tau1_fit.Eta(), tau1_fit.Phi(), tlvs[nnn].Eta(), tlvs[nnn].Phi()) < 0.015 &&
+		 tau1_fit.Pt()/tlvs[nnn].Pt() > 0.85 && 
+		 tau1_fit.Pt()/tlvs[nnn].Pt() < 1.15
+		 ){
+
+		isRight1_ = true; 
+		dr1 = reco::deltaR(tau1_fit.Eta(), tau1_fit.Phi(), tlvs[nnn].Eta(), tlvs[nnn].Phi());
+		ptres1 = tau1_fit.Pt()/tlvs[nnn].Pt();
+
+	      }	      
+	      if(
+		 reco::deltaR(tau2_fit.Eta(), tau2_fit.Phi(), tlvs[nnn].Eta(), tlvs[nnn].Phi()) < 0.015 &&
+		 tau2_fit.Pt()/tlvs[nnn].Pt() > 0.85 && 
+		 tau2_fit.Pt()/tlvs[nnn].Pt() < 1.15
+		 ){ 
+		isRight2_ = true; 
+		dr2 = reco::deltaR(tau2_fit.Eta(), tau2_fit.Phi(), tlvs[nnn].Eta(), tlvs[nnn].Phi());
+		ptres2 = tau2_fit.Pt()/tlvs[nnn].Pt(); 
+	      }
 	      
 	      if(
-		 reco::deltaR(tau2_fit.Eta(), tau2_fit.Phi(), tlvs[nnn].Eta(), tlvs[nnn].Phi()) < 0.1
-		 ) isRight2_ = true; 
-	      
-	      if(
-		 reco::deltaR(tau3_fit.Eta(), tau3_fit.Phi(), tlvs[nnn].Eta(), tlvs[nnn].Phi()) < 0.1
-		 ) isRight3_ = true; 
-	      
+		 reco::deltaR(tau3_fit.Eta(), tau3_fit.Phi(), tlvs[nnn].Eta(), tlvs[nnn].Phi()) < 0.015 &&
+		 tau3_fit.Pt()/tlvs[nnn].Pt() > 0.85 && 
+		 tau3_fit.Pt()/tlvs[nnn].Pt() < 1.15
+		 ){
+
+		isRight3_ = true; 
+		dr3 = reco::deltaR(tau3_fit.Eta(), tau3_fit.Phi(), tlvs[nnn].Eta(), tlvs[nnn].Phi());
+		ptres3 = tau3_fit.Pt()/tlvs[nnn].Pt(); 
+
+	      }
 	      
 	    }
 	    
@@ -1198,6 +1232,12 @@ bool BsTauTauNtuplizer::fillBranches( edm::Event const & event, const edm::Event
 	    (Bool_t) isRight1,
 	    (Bool_t) isRight2,
 	    (Bool_t) isRight3,
+	    (Float_t) dr1,
+	    (Float_t) dr2,
+	    (Float_t) dr3,
+	    (Float_t) ptres1,
+	    (Float_t) ptres2,
+	    (Float_t) ptres3,
 	    (Int_t) pid,
 	    (Float_t) matched_gentaupt, 
 	    (Float_t) sumofdnn,
@@ -1468,6 +1508,12 @@ bool BsTauTauNtuplizer::fillBranches( edm::Event const & event, const edm::Event
       nBranches_->BsTauTau_tau_isRight1.push_back(cands[ic].cand_tau_isRight1);
       nBranches_->BsTauTau_tau_isRight2.push_back(cands[ic].cand_tau_isRight2);
       nBranches_->BsTauTau_tau_isRight3.push_back(cands[ic].cand_tau_isRight3);
+      nBranches_->BsTauTau_tau_dr1.push_back(cands[ic].cand_tau_dr1);
+      nBranches_->BsTauTau_tau_dr2.push_back(cands[ic].cand_tau_dr2);
+      nBranches_->BsTauTau_tau_dr3.push_back(cands[ic].cand_tau_dr3);
+      nBranches_->BsTauTau_tau_ptres1.push_back(cands[ic].cand_tau_ptres1);
+      nBranches_->BsTauTau_tau_ptres2.push_back(cands[ic].cand_tau_ptres2);
+      nBranches_->BsTauTau_tau_ptres3.push_back(cands[ic].cand_tau_ptres3);
       nBranches_->BsTauTau_tau_matched_ppdgId.push_back(cands[ic].cand_tau_matched_ppdgId);
       nBranches_->BsTauTau_tau_matched_gentaupt.push_back(cands[ic].cand_tau_matched_gentaupt);
       nBranches_->BsTauTau_tau_sumofdnn.push_back(cands[ic].cand_tau_sumofdnn);
@@ -1634,12 +1680,16 @@ bool BsTauTauNtuplizer::fillBranches( edm::Event const & event, const edm::Event
     nBranches_->BsTauTau_isgen3matched.push_back(isgen3matched);
     nBranches_->BsTauTau_nch.push_back(numOfch);
     nBranches_->BsTauTau_nch_after_dnn.push_back(npf_after_dnn);
+    nBranches_->BsTauTau_nch_before_dnn.push_back(npf_before_dnn);
+    nBranches_->BsTauTau_nch_qr.push_back(npf_qr);
     nBranches_->BsTauTau_ngentau3.push_back(gps.size());
     nBranches_->BsTauTau_ngentau.push_back(vec_gentaudm.size());
 
     if(vec_gentaudm.size() >=1){
       nBranches_->BsTauTau_gentaupt.push_back(vec_gentaup4[0].Pt());
+      nBranches_->BsTauTau_gentaupt.push_back(vec_gentaudm[0]);
     }else{
+      nBranches_->BsTauTau_gentaupt.push_back(-1);
       nBranches_->BsTauTau_gentaupt.push_back(-1);
     }
 

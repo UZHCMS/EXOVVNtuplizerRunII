@@ -97,6 +97,7 @@ print len(listoffiles), 'files are detected'
 
 print len(listoffiles), 'chunks are created'
 
+os.system('source ~/grid.sh')
 
 for ijob, filename in enumerate(listoffiles):
     print ijob, filename
