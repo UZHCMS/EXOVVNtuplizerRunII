@@ -20,15 +20,15 @@ process.TFileService = cms.Service("TFileService",
 from EXOVVNtuplizerRunII.Ntuplizer.ntuplizerOptions_generic_cfi import config
 
 # change from its original value
-config["DZCUT"] = VALDZ
-config["FSIGCUT"] = VALFSIG
-config["VPROBCUT"] = VALVPROB
-config["DNNCUT"] = VALDNN
+#config["DZCUT"] = VALDZ
+#config["FSIGCUT"] = VALFSIG
+#config["VPROBCUT"] = VALVPROB
+#config["DNNCUT"] = VALDNN
 
-#config["DZCUT"] = 0.25
-#config["FSIGCUT"] = 3
-#config["VPROBCUT"] = 0.1
-#config["DNNCUT"] = 0.1443
+config["DZCUT"] = 0.25
+config["FSIGCUT"] = 3
+config["VPROBCUT"] = 0.1
+config["DNNCUT"] = 0.1443
 
 				   
 ####### Config parser ##########
@@ -271,7 +271,7 @@ else : #Data
  
    print "jec JEC_runDependent_suffix %s ,  prefix %s " %(JEC_runDependent_suffix,JECprefix)
 
-print "jec prefix ", JECprefix
+#print "jec prefix ", JECprefix
 
 print "doing corrections  to met on the fly %s" ,config["CORRMETONTHEFLY"]
 
@@ -309,6 +309,7 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     doPileUp	      = cms.bool(config["DOPILEUP"]),
     doJpsiMu	      = cms.bool(config["DOJPSIMU"]),
     doJpsiTau	      = cms.bool(config["DOJPSITAU"]),
+    doBsTauTau	      = cms.bool(config["DOBSTAUTAU"]),
     doVertices	      = cms.bool(config["DOVERTICES"]),
     doMissingEt       = cms.bool(config["DOMISSINGET"]),
     doGenHist         = cms.bool(config["DOGENHIST"]),

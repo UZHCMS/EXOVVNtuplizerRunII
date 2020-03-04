@@ -400,6 +400,12 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch("JpsiTau_tau_isRight1", &JpsiTau_tau_isRight1);
     tree_->Branch("JpsiTau_tau_isRight2", &JpsiTau_tau_isRight2);
     tree_->Branch("JpsiTau_tau_isRight3", &JpsiTau_tau_isRight3);
+    tree_->Branch("JpsiTau_tau_dr1", &JpsiTau_tau_dr1);
+    tree_->Branch("JpsiTau_tau_dr2", &JpsiTau_tau_dr2);
+    tree_->Branch("JpsiTau_tau_dr3", &JpsiTau_tau_dr3);
+    tree_->Branch("JpsiTau_tau_ptres1", &JpsiTau_tau_ptres1);
+    tree_->Branch("JpsiTau_tau_ptres2", &JpsiTau_tau_ptres2);
+    tree_->Branch("JpsiTau_tau_ptres3", &JpsiTau_tau_ptres3);
     tree_->Branch("JpsiTau_tau_matched_ppdgId", &JpsiTau_tau_matched_ppdgId);
     tree_->Branch("JpsiTau_tau_matched_gentaupt", &JpsiTau_tau_matched_gentaupt);
     //    tree_->Branch("JpsiTau_tau_gentaupt", &JpsiTau_tau_gentaupt);
@@ -498,9 +504,12 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch("JpsiTau_isgen3matched", &JpsiTau_isgen3matched);
     tree_->Branch("JpsiTau_nch", &JpsiTau_nch);
     tree_->Branch("JpsiTau_nch_after_dnn", &JpsiTau_nch_after_dnn);
+    tree_->Branch("JpsiTau_nch_before_dnn", &JpsiTau_nch_before_dnn);
+    tree_->Branch("JpsiTau_nch_qr", &JpsiTau_nch_qr);
     tree_->Branch("JpsiTau_ngentau3", &JpsiTau_ngentau3); 
     tree_->Branch("JpsiTau_ngentau", &JpsiTau_ngentau);
     tree_->Branch("JpsiTau_gentaupt", &JpsiTau_gentaupt);
+    tree_->Branch("JpsiTau_gentaudm", &JpsiTau_gentaudm);
 
   }
 
@@ -553,6 +562,12 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch("BsTauTau_tau_isRight1", &BsTauTau_tau_isRight1);
     tree_->Branch("BsTauTau_tau_isRight2", &BsTauTau_tau_isRight2);
     tree_->Branch("BsTauTau_tau_isRight3", &BsTauTau_tau_isRight3);
+    tree_->Branch("BsTauTau_tau_dr1", &BsTauTau_tau_dr1);
+    tree_->Branch("BsTauTau_tau_dr2", &BsTauTau_tau_dr2);
+    tree_->Branch("BsTauTau_tau_dr3", &BsTauTau_tau_dr3);
+    tree_->Branch("BsTauTau_tau_ptres1", &BsTauTau_tau_ptres1);
+    tree_->Branch("BsTauTau_tau_ptres2", &BsTauTau_tau_ptres2);
+    tree_->Branch("BsTauTau_tau_ptres3", &BsTauTau_tau_ptres3);
     tree_->Branch("BsTauTau_tau_matched_ppdgId", &BsTauTau_tau_matched_ppdgId);
     tree_->Branch("BsTauTau_tau_matched_gentaupt", &BsTauTau_tau_matched_gentaupt);
     //    tree_->Branch("BsTauTau_tau_gentaupt", &BsTauTau_tau_gentaupt);
@@ -622,9 +637,12 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch("BsTauTau_isgen3matched", &BsTauTau_isgen3matched);
     tree_->Branch("BsTauTau_nch", &BsTauTau_nch);
     tree_->Branch("BsTauTau_nch_after_dnn", &BsTauTau_nch_after_dnn);
+    tree_->Branch("BsTauTau_nch_before_dnn", &BsTauTau_nch_before_dnn);
+    tree_->Branch("BsTauTau_nch_qr", &BsTauTau_nch_qr);
     tree_->Branch("BsTauTau_ngentau3", &BsTauTau_ngentau3); 
     tree_->Branch("BsTauTau_ngentau", &BsTauTau_ngentau);
     tree_->Branch("BsTauTau_gentaupt", &BsTauTau_gentaupt);
+    tree_->Branch("BsTauTau_gentaudm", &BsTauTau_gentaudm);
 
   }
 
@@ -993,6 +1011,12 @@ void NtupleBranches::reset( void ){
   JpsiTau_tau_isRight1.clear();
   JpsiTau_tau_isRight2.clear();
   JpsiTau_tau_isRight3.clear();
+  JpsiTau_tau_dr1.clear();
+  JpsiTau_tau_dr2.clear();
+  JpsiTau_tau_dr3.clear();
+  JpsiTau_tau_ptres1.clear();
+  JpsiTau_tau_ptres2.clear();
+  JpsiTau_tau_ptres3.clear();
   JpsiTau_tau_matched_ppdgId.clear();
   JpsiTau_tau_matched_gentaupt.clear();
   JpsiTau_tau_sumofdnn.clear();
@@ -1088,9 +1112,12 @@ void NtupleBranches::reset( void ){
   JpsiTau_isgen3matched.clear();
   JpsiTau_nch.clear();
   JpsiTau_nch_after_dnn.clear();
+  JpsiTau_nch_before_dnn.clear();
+  JpsiTau_nch_qr.clear();
   JpsiTau_ngentau3.clear();
   JpsiTau_ngentau.clear();
   JpsiTau_gentaupt.clear();
+  JpsiTau_gentaudm.clear();
 
 
 
@@ -1141,6 +1168,12 @@ void NtupleBranches::reset( void ){
   BsTauTau_tau_isRight1.clear();
   BsTauTau_tau_isRight2.clear();
   BsTauTau_tau_isRight3.clear();
+  BsTauTau_tau_dr1.clear();
+  BsTauTau_tau_dr2.clear();
+  BsTauTau_tau_dr3.clear();
+  BsTauTau_tau_ptres1.clear();
+  BsTauTau_tau_ptres2.clear();
+  BsTauTau_tau_ptres3.clear();
   BsTauTau_tau_matched_ppdgId.clear();
   BsTauTau_tau_matched_gentaupt.clear();
   BsTauTau_tau_sumofdnn.clear();
@@ -1208,9 +1241,12 @@ void NtupleBranches::reset( void ){
   BsTauTau_isgen3matched.clear();
   BsTauTau_nch.clear();
   BsTauTau_nch_after_dnn.clear();
+  BsTauTau_nch_before_dnn.clear();
+  BsTauTau_nch_qr.clear();
   BsTauTau_ngentau3.clear();
   BsTauTau_ngentau.clear();
   BsTauTau_gentaupt.clear();
+  BsTauTau_gentaudm.clear();
 
 
 

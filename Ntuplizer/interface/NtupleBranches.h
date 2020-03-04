@@ -421,6 +421,12 @@ public:
   std::vector<bool>        JpsiTau_tau_isRight1;
   std::vector<bool>        JpsiTau_tau_isRight2;
   std::vector<bool>        JpsiTau_tau_isRight3;
+  std::vector<float>        JpsiTau_tau_dr1;
+  std::vector<float>        JpsiTau_tau_dr2;
+  std::vector<float>        JpsiTau_tau_dr3;
+  std::vector<float>        JpsiTau_tau_ptres1;
+  std::vector<float>        JpsiTau_tau_ptres2;
+  std::vector<float>        JpsiTau_tau_ptres3;
   std::vector<int>         JpsiTau_tau_matched_ppdgId;
   std::vector<float>       JpsiTau_tau_matched_gentaupt;
   std::vector<float>       JpsiTau_tau_sumofdnn; 
@@ -524,9 +530,12 @@ public:
   std::vector<bool  >                JpsiTau_isgen3matched;
   std::vector<int> JpsiTau_nch;
   std::vector<int> JpsiTau_nch_after_dnn;
+  std::vector<int> JpsiTau_nch_before_dnn;
+  std::vector<int> JpsiTau_nch_qr;
   std::vector<int> JpsiTau_ngentau3;
   std::vector<int> JpsiTau_ngentau;
   std::vector<float> JpsiTau_gentaupt;
+  std::vector<int> JpsiTau_gentaudm;
 
   ////////////////////////
 
@@ -579,6 +588,12 @@ public:
   std::vector<bool>        BsTauTau_tau_isRight1;
   std::vector<bool>        BsTauTau_tau_isRight2;
   std::vector<bool>        BsTauTau_tau_isRight3;
+  std::vector<float>        BsTauTau_tau_dr1;
+  std::vector<float>        BsTauTau_tau_dr2;
+  std::vector<float>        BsTauTau_tau_dr3;
+  std::vector<float>        BsTauTau_tau_ptres1;
+  std::vector<float>        BsTauTau_tau_ptres2;
+  std::vector<float>        BsTauTau_tau_ptres3;
   std::vector<int>         BsTauTau_tau_matched_ppdgId;
   std::vector<float>       BsTauTau_tau_matched_gentaupt;
   std::vector<float>       BsTauTau_tau_sumofdnn; 
@@ -652,9 +667,12 @@ public:
   std::vector<bool  >                BsTauTau_isgen3matched;
   std::vector<int> BsTauTau_nch;
   std::vector<int> BsTauTau_nch_after_dnn;
+  std::vector<int> BsTauTau_nch_before_dnn;
+  std::vector<int> BsTauTau_nch_qr;
   std::vector<int> BsTauTau_ngentau3;
   std::vector<int> BsTauTau_ngentau;
   std::vector<float> BsTauTau_gentaupt;
+  std::vector<int> BsTauTau_gentaudm;
 
 
   //////////////////////

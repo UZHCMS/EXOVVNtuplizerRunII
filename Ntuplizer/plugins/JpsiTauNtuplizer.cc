@@ -704,6 +704,8 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 //      pfcollection_pre.push_back(pf);
 //    }
 
+    Int_t npf_before_dnn = 0;
+    Int_t npf_qr = 0;
 
     if(useDNN_){
 
@@ -755,15 +757,19 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 	}
 
 	
-	if(pf.pt() < 0.5) continue;
 	if(!pf.hasTrackDetails()) continue;
+	Float_t precut_dz = pf.vz() - closestVertex.position().z();
+	if(TMath::Abs(precut_dz) > c_dz) continue;
+	
+	npf_qr++;
+	
+
+	if(pf.pt() < 0.5) continue;
 	
 	// use the PF candidates that come from closestVertex
 	//      if(pf.vertexRef()->z()!=closestVertex.position().z()) continue;
 	
 	//      Float_t precut_dz = pf.vertexRef()->z() - closestVertex.position().z();
-	Float_t precut_dz = pf.vz() - closestVertex.position().z();
-	if(TMath::Abs(precut_dz) > c_dz) continue;
 	
 	Bool_t hpflag = pf.trackHighPurity();
 	if(!hpflag) continue;
@@ -778,7 +784,7 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 	//	reco::TransientTrack  tt_track = (*builder).build(pf.pseudoTrack());
 	//	mytracks.push_back(tt_track);
 	
-
+	npf_before_dnn++;	
 
 	pfcand _cand_ = {
 	  (Int_t)ii,
@@ -949,8 +955,7 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 	if(pf.pseudoTrack().normalizedChi2() > 100) continue;
 	
 	if(TMath::Abs(pf.pdgId())!=211) continue; 
-	if(TMath::Abs(pf.eta()) > 2.3) continue; 
-
+	if(TMath::Abs(pf.eta()) > 2.5) continue; 
 
 //      Float_t _dR1 = reco::deltaR(pf.eta(), pf.phi(), 
 //				  mu1_fit->eta(), mu1_fit->phi());
@@ -1037,7 +1042,8 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 	  
 	  // check matching to reco PF objects
 	  Float_t min_dr = 999;
-	  
+	  //	  Int_t min_index = 999;
+
 	  for(int kkk = 0; kkk < numOfch; kkk ++){
 	    
 	    pat::PackedCandidate _pf = pfcollection[kkk];
@@ -1048,36 +1054,41 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 				       _genvis_.Eta(), _genvis_.Phi(),
 				       _pf.eta(), _pf.phi()
 				       );
-	    if(_dR < min_dr && _dR < 0.1){
+
+	    //	    std::cout << "\t\t\t\t" << kkk  << ", (pt, eta, phi) = " << _pf.pt() << ", " << _pf.eta() << ", " << _pf.phi() << " with dR = " << _dR << " and reco/gen. pT = " << _pf.pt()/_genvis_.Pt() << std::endl;
+
+	    if(_dR < min_dr && _dR < 0.015 && _pf.pt()/_genvis_.Pt() < 1.15 && _pf.pt()/_genvis_.Pt() > 0.85){
 	      min_dr = _dR;
+	      //	      min_index = kkk; 
 	    }
 	  }
 	  
-	  Float_t min_dr2 = 999;
-	  for( size_t iii = 0; iii < packedpfcandidates_->size(); ++iii ){   
-      
-	    pat::PackedCandidate pf = (*packedpfcandidates_)[iii];
-	    
-	    if(pf.pdgId()!=(*genParticles_)[p].daughter(idd)->pdgId()) continue;
-	    
-	    Float_t _dR = reco::deltaR(
-				       _genvis_.Eta(), _genvis_.Phi(),
-				       pf.eta(), pf.phi()
-				       );
-	    if(_dR < min_dr2 && _dR < 0.1){
-	      min_dr2 = _dR;
-	    }
-	  }
+//	  Float_t min_dr2 = 999;
+//	  for( size_t iii = 0; iii < packedpfcandidates_->size(); ++iii ){   
+//      
+//	    pat::PackedCandidate pf = (*packedpfcandidates_)[iii];
+//	    
+//	    if(pf.pdgId()!=(*genParticles_)[p].daughter(idd)->pdgId()) continue;
+//	    
+//	    Float_t _dR = reco::deltaR(
+//				       _genvis_.Eta(), _genvis_.Phi(),
+//				       pf.eta(), pf.phi()
+//				       );
+//	    //	    if(_dR < min_dr2 && _dR < 0.1){
+//	    if(_dR < min_dr2 && _dR < 0.015 && _genvis_.Pt()/_pf.pt() < 1.15 && _genvis_.Pt()/_pf.pt() > 0.85){
+//	      min_dr2 = _dR;
+//	    }
+//	  }
 
 	  //	  if(min_dr2!=999) std::cout << "pf matched !!!" << std::endl;
 
 
 	  //////////////////////////////////////
 	  if(min_dr == 999) matched = false;
-	  //	  else std::cout << "matched!" << std::endl;
-	  //	  else{
+	  //	  else std::cout << "\t\t\t -----> PF index = " << min_index << " matched!" << std::endl;
+
 	  gp.push_back(_genvis_);
-	  //	  }
+
 	}
       }
 
@@ -1107,6 +1118,9 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 	if(dRgen < min_gendr && dRgen < 0.1){
 	  min_gendr = dRgen;
 	  taugendm = decaymode_id(JetMCTagUtils::genTauDecayMode(TauCand));
+	  
+	  std::cout << "\t\t\t matched gen decay mode = " << JetMCTagUtils::genTauDecayMode(TauCand) << " (" <<  taugendm << ")" << std::endl;
+
 	}
       }
       
@@ -1292,6 +1306,13 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 	Bool_t isRight1 = false; 
 	Bool_t isRight2 = false; 
 	Bool_t isRight3 = false; 
+	Float_t dr1 = 999;
+	Float_t dr2 = 999;
+	Float_t dr3 = 999;
+	Float_t ptres1 = 999;
+	Float_t ptres2 = 999;
+	Float_t ptres3 = 999;
+
 	Int_t pid = -999;
 	Float_t matched_gentaupt = -999;
 	
@@ -1308,17 +1329,48 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 	    for(unsigned int nnn=0; nnn < tlvs.size(); nnn++){
 
 	      if(
-		 reco::deltaR(tau1_fit.Eta(), tau1_fit.Phi(), tlvs[nnn].Eta(), tlvs[nnn].Phi()) < 0.1
-		 ) isRight1_ = true; 
+		 reco::deltaR(tau1_fit.Eta(), tau1_fit.Phi(), tlvs[nnn].Eta(), tlvs[nnn].Phi()) < 0.015 &&
+		 tau1_fit.Pt()/tlvs[nnn].Pt() > 0.85 && 
+		 tau1_fit.Pt()/tlvs[nnn].Pt() < 1.15
+		 ){
+		isRight1_ = true; 
+		dr1 = reco::deltaR(tau1_fit.Eta(), tau1_fit.Phi(), tlvs[nnn].Eta(), tlvs[nnn].Phi());
+		ptres1 = tau1_fit.Pt()/tlvs[nnn].Pt();
+		//		std::cout << "\t\t\t gen. Nr" << mmm << " (" << tlvs[nnn].Pt() << ", " << tlvs[nnn].Eta()  << ", " << tlvs[nnn].Phi() << ") is matched with PF index = " << iii << ", with (pt,eta,phi) = " << tau1_fit.Pt() << ", " << tau1_fit.Eta() << ", " << tau1_fit.Phi() <<  std::endl;
+		//		std::cout << "\t\t\t fitted pt respoinse = " << (tau1_fit.Pt()/tlvs[nnn].Pt()) << ", delta_R = " << reco::deltaR(tau1_fit.Eta(), tau1_fit.Phi(), tlvs[nnn].Eta(), tlvs[nnn].Phi())  << std::endl;
+		//		std::cout << "\t\t\t original pt respoinse = " << (pf1.pt()/tlvs[nnn].Pt()) << ", delta_R = " << reco::deltaR(pf1.eta(), pf1.phi(), tlvs[nnn].Eta(), tlvs[nnn].Phi())  << std::endl;
+	      }
 	      
 	      if(
-		 reco::deltaR(tau2_fit.Eta(), tau2_fit.Phi(), tlvs[nnn].Eta(), tlvs[nnn].Phi()) < 0.1
-		 ) isRight2_ = true; 
+		 reco::deltaR(tau2_fit.Eta(), tau2_fit.Phi(), tlvs[nnn].Eta(), tlvs[nnn].Phi()) < 0.015 &&
+		 tau2_fit.Pt()/tlvs[nnn].Pt() > 0.85 && 
+		 tau2_fit.Pt()/tlvs[nnn].Pt() < 1.15
+		 ){
+		isRight2_ = true; 
+		dr2 = reco::deltaR(tau2_fit.Eta(), tau2_fit.Phi(), tlvs[nnn].Eta(), tlvs[nnn].Phi());
+		ptres2 = tau2_fit.Pt()/tlvs[nnn].Pt(); 
+		//		std::cout << "\t\t\t gen. Nr" << mmm << " (" << tlvs[nnn].Pt() << ", " << tlvs[nnn].Eta()  << ", " << tlvs[nnn].Phi() << ") is matched with PF index = " << jjj << ", with (pt,eta,phi) = " << tau2_fit.Pt() << ", " << tau2_fit.Eta() << ", " << tau2_fit.Phi() <<  std::endl;
+		//		std::cout << "\t\t\t fitted pt respoinse = " << (tau2_fit.Pt()/tlvs[nnn].Pt()) << ", delta_R = " << reco::deltaR(tau2_fit.Eta(), tau2_fit.Phi(), tlvs[nnn].Eta(), tlvs[nnn].Phi())  << std::endl;
+		//		std::cout << "\t\t\t original pt respoinse = " << (pf2.pt()/tlvs[nnn].Pt()) << ", delta_R = " << reco::deltaR(pf2.eta(), pf2.phi(), tlvs[nnn].Eta(), tlvs[nnn].Phi())  << std::endl;
+	      }
+
 	      
 	      if(
-		 reco::deltaR(tau3_fit.Eta(), tau3_fit.Phi(), tlvs[nnn].Eta(), tlvs[nnn].Phi()) < 0.1
-		 ) isRight3_ = true; 
-	      
+		 reco::deltaR(tau3_fit.Eta(), tau3_fit.Phi(), tlvs[nnn].Eta(), tlvs[nnn].Phi()) < 0.015 &&
+		 tau3_fit.Pt()/tlvs[nnn].Pt() > 0.85 && 
+		 tau3_fit.Pt()/tlvs[nnn].Pt() < 1.15
+		 ){
+		isRight3_ = true; 
+		dr3 = reco::deltaR(tau3_fit.Eta(), tau3_fit.Phi(), tlvs[nnn].Eta(), tlvs[nnn].Phi());
+		ptres3 = tau3_fit.Pt()/tlvs[nnn].Pt(); 
+		//		std::cout << "bgen. Nr" << mmm << " is matched with PF index = " << kkk << std::endl;
+
+		//		std::cout << "\t\t\t gen. Nr" << mmm << " (" << tlvs[nnn].Pt() << ", " << tlvs[nnn].Eta()  << ", " << tlvs[nnn].Phi() << ") is matched with PF index = " << kkk << ", with (pt,eta,phi) = " << tau3_fit.Pt() << ", " << tau3_fit.Eta() << ", " << tau3_fit.Phi() <<  std::endl;
+		//		std::cout << "\t\t\t fitted pt respoinse = " << (tau3_fit.Pt()/tlvs[nnn].Pt()) << ", delta_R = " << reco::deltaR(tau3_fit.Eta(), tau3_fit.Phi(), tlvs[nnn].Eta(), tlvs[nnn].Phi())  << std::endl;
+		//		std::cout << "\t\t\t original pt respoinse = " << (pf3.pt()/tlvs[nnn].Pt()) << ", delta_R = " << reco::deltaR(pf3.eta(), pf3.phi(), tlvs[nnn].Eta(), tlvs[nnn].Phi())  << std::endl;
+
+	      }
+
 	      
 	    }
 	    
@@ -1372,6 +1424,12 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 	    (Bool_t) isRight1,
 	    (Bool_t) isRight2,
 	    (Bool_t) isRight3,
+	    (Float_t) dr1,
+	    (Float_t) dr2,
+	    (Float_t) dr3,
+	    (Float_t) ptres1,
+	    (Float_t) ptres2,
+	    (Float_t) ptres3,
 	    (Int_t) pid,
 	    (Float_t) matched_gentaupt, 
 	    (Float_t) sumofdnn,
@@ -1452,6 +1510,12 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
       nBranches_->JpsiTau_tau_isRight1.push_back(cands[ic].cand_tau_isRight1);
       nBranches_->JpsiTau_tau_isRight2.push_back(cands[ic].cand_tau_isRight2);
       nBranches_->JpsiTau_tau_isRight3.push_back(cands[ic].cand_tau_isRight3);
+      nBranches_->JpsiTau_tau_dr1.push_back(cands[ic].cand_tau_dr1);
+      nBranches_->JpsiTau_tau_dr2.push_back(cands[ic].cand_tau_dr2);
+      nBranches_->JpsiTau_tau_dr3.push_back(cands[ic].cand_tau_dr3);
+      nBranches_->JpsiTau_tau_ptres1.push_back(cands[ic].cand_tau_ptres1);
+      nBranches_->JpsiTau_tau_ptres2.push_back(cands[ic].cand_tau_ptres2);
+      nBranches_->JpsiTau_tau_ptres3.push_back(cands[ic].cand_tau_ptres3);
       nBranches_->JpsiTau_tau_matched_ppdgId.push_back(cands[ic].cand_tau_matched_ppdgId);
       nBranches_->JpsiTau_tau_matched_gentaupt.push_back(cands[ic].cand_tau_matched_gentaupt);
       nBranches_->JpsiTau_tau_sumofdnn.push_back(cands[ic].cand_tau_sumofdnn);
@@ -1727,17 +1791,23 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 
 
 
+      //      std::cout << "isgen3matched = " << isgen3matched << " " << isgen3 << " " << vec_gentaudm[0] << std::endl;
+
     nBranches_->JpsiTau_isgen3.push_back(isgen3);
     nBranches_->JpsiTau_isgen3matched.push_back(isgen3matched);
     nBranches_->JpsiTau_nch.push_back(numOfch);
     nBranches_->JpsiTau_nch_after_dnn.push_back(npf_after_dnn);
+    nBranches_->JpsiTau_nch_before_dnn.push_back(npf_before_dnn);
+    nBranches_->JpsiTau_nch_qr.push_back(npf_qr);
     nBranches_->JpsiTau_ngentau3.push_back(gps.size());
     nBranches_->JpsiTau_ngentau.push_back(vec_gentaudm.size());
 
     if(vec_gentaudm.size() >=1){
       nBranches_->JpsiTau_gentaupt.push_back(vec_gentaup4[0].Pt());
+      nBranches_->JpsiTau_gentaudm.push_back(vec_gentaudm[0]);
     }else{
       nBranches_->JpsiTau_gentaupt.push_back(-1);
+      nBranches_->JpsiTau_gentaudm.push_back(-1);
     }
 
     nBranches_->IsJpsiTau.push_back(1.);
