@@ -48,8 +48,8 @@ options.register( 'runUpToEarlyF',
 
 
 
-#options.maxEvents = 2000
-options.maxEvents = -1
+options.maxEvents = 1000
+#options.maxEvents = -1
 
 #data file
      
@@ -61,13 +61,15 @@ options.maxEvents = -1
 #options.inputFiles ='/store/user/cgalloni/BJpsiX_MuMu_270819/Autumn18_10_2_9_miniAOD/190827_143312/0005/miniAOD_5000.root'
 #options.inputFiles = '/store/user/cgalloni/BcJpsiTauNu_020519/Fall18_10_2_9-MINIAODSIM_noDuplCheck_020519/190505_141436/0000/miniAOD_99.root'
 #options.inputFiles = '/BcToJPsiTauNu_TuneCP5_13TeV-bcvegpy2-pythia8-evtgen/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v1/MINIAODSIM'
-#options.inputFiles = '/store/mc/RunIIAutumn18MiniAOD/BcToJPsiTauNu_TuneCP5_13TeV-bcvegpy2-pythia8-evtgen/MINIAODSIM/102X_upgrade2018_realistic_v15-v1/260000/E342DC18-5142-1545-B077-D4405CE0BF05.root'
 #options.inputFiles = '/store/mc/RunIIAutumn18MiniAOD/BsToTauTau_MuFilter_SoftQCDnonD_TuneCP5_13TeV-pythia8-evtgen/MINIAODSIM/PUPoissonAve20_BParking_102X_upgrade2018_realistic_v15-v1/280000/FD3C4F1A-A2ED-AE43-A68E-76E59838E891.root'
+#options.inputFiles = '/store/mc/RunIIAutumn18MiniAOD/BsToTauTau_MuFilter_SoftQCDnonD_TuneCP5_13TeV-pythia8-evtgen/MINIAODSIM/PUPoissonAve20_BParking_102X_upgrade2018_realistic_v15-v1/130000/8FBE3385-2FB7-D641-9E58-D9EA5C5D4224.root'
 #options.inputFiles = 'file:/scratch/ytakahas/E342DC18-5142-1545-B077-D4405CE0BF05.root'
-#options.inputFiles = '/store/data/Run2018A/ParkingBPH1/MINIAOD/05May2019-v1/280001/1CE00F5E-9F52-4045-BC7C-C9178E71DB9E.root'
+options.inputFiles = '/store/data/Run2018A/ParkingBPH1/MINIAOD/05May2019-v1/280001/1CE00F5E-9F52-4045-BC7C-C9178E71DB9E.root'
 #options.inputFiles = 'file:/work/ytakahas/work/NtuplizerProd/CMSSW_10_6_8/src/EXOVVNtuplizerRunII/Ntuplizer/E30B9F61-DB46-0446-9B6A-2E21B806D4CE.root'
 #options.inputFiles = 'dcap://t3se01.psi.ch:22125//pnfs/psi.ch/cms/trivcat/store/user/ytakahas/mc/ytakahas/BcToJPsiTauNu_TuneCP5_13TeV-bcvegpy2-pythia8-evtgen/USER/v1/A2581C35-B56A-5046-A02D-8C8C1562DEEE.root'
 #options.inputFiles = 'dcap://t3se01.psi.ch:22125//pnfs/psi.ch/cms/trivcat/store/user/ytakahas/mc/ytakahas/UpsilonToTauTau_inclusive_5f_Pythia_LO/USER/v1/UpsilonToTauTau_3prong_miniaod_part0.root'
+
+#options.inputFiles = 'dcap://t3se01.psi.ch:22125//pnfs/psi.ch/cms/trivcat/store/user/ytakahas/FD3C4F1A-A2ED-AE43-A68E-76E59838E891.root'
 #options.inputFiles = [
 #  'dcap://t3se01.psi.ch:22125//pnfs/psi.ch/cms/trivcat/store/user/ytakahas/mc/ytakahas/UpsilonToTauTau_inclusive_5f_Pythia_LO/USER/v1/UpsilonToTauTau_3prong_miniaod_part0.root',
 #  'dcap://t3se01.psi.ch:22125//pnfs/psi.ch/cms/trivcat/store/user/ytakahas/mc/ytakahas/UpsilonToTauTau_inclusive_5f_Pythia_LO/USER/v1/UpsilonToTauTau_3prong_miniaod_part1.root',
@@ -88,7 +90,7 @@ options.maxEvents = -1
 
 #options.inputFiles = 'dcap://t3se01.psi.ch:22125///pnfs/psi.ch/cms/trivcat/store/user/ytakahas/mc/ytakahas/BcToJPsiTauNu_TuneCP5_13TeV-bcvegpy2-pythia8-evtgen/USER/v1//7BF4CF93-B45C-7A4F-BBAF-D732781383EC.root'
 
-options.inputFiles = 'dcap://t3se01.psi.ch:22125///pnfs/psi.ch/cms/trivcat/store/user/ytakahas/mc/ytakahas/BcToJPsiTauNu_TuneCP5_13TeV-bcvegpy2-pythia8-evtgen/USER/v1//C7AA83E5-B4AC-2A41-AF7F-D5EBB5CFD8B0.root'
+#options.inputFiles = 'dcap://t3se01.psi.ch:22125///pnfs/psi.ch/cms/trivcat/store/user/ytakahas/mc/ytakahas/BcToJPsiTauNu_TuneCP5_13TeV-bcvegpy2-pythia8-evtgen/USER/v1//C7AA83E5-B4AC-2A41-AF7F-D5EBB5CFD8B0.root'
 
 #options.inputFiles = [
 #  'dcap://t3se01.psi.ch:22125//pnfs/psi.ch/cms/trivcat/store/user/ytakahas/mc/ytakahas/BcToJPsiTauNu_TuneCP5_13TeV-bcvegpy2-pythia8-evtgen/USER/v1/E342DC18-5142-1545-B077-D4405CE0BF05.root',
@@ -108,8 +110,10 @@ options.parseArguments()
 process.options  = cms.untracked.PSet( 
                      wantSummary = cms.untracked.bool(True),
                      SkipEvent = cms.untracked.vstring('ProductNotFound'),
-                     allowUnscheduled = cms.untracked.bool(True)
+                     allowUnscheduled = cms.untracked.bool(True),
                      )
+
+process.options.numberOfThreads=cms.untracked.uint32(2)
 
 process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(options.maxEvents) )
 
@@ -263,8 +267,9 @@ if  config["RUNONMC"] :
 
 
 else : #Data
-
+   JECprefix = ""
    JEC_runDependent_suffix= ""
+
    if ("2017" in options.RunPeriod):
      if ("Run2017B" in  options.RunPeriod): JEC_runDependent_suffix= "B"
      elif ("Run2017C" in  options.RunPeriod): JEC_runDependent_suffix= "C"
@@ -347,6 +352,9 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     doJpsiMu	      = cms.bool(config["DOJPSIMU"]),
     doJpsiTau	      = cms.bool(config["DOJPSITAU"]),
     doBsTauTau	      = cms.bool(config["DOBSTAUTAU"]),
+    doBsTauTauFH      = cms.bool(config["DOBSTAUTAUFH"]),
+    doBsDstarTauNu    = cms.bool(config["DOBSDSTARTAUNU"]),
+    isTruth           = cms.bool(config["ISTRUTH"]),
     doVertices	      = cms.bool(config["DOVERTICES"]),
     doMissingEt       = cms.bool(config["DOMISSINGET"]),
     doGenHist         = cms.bool(config["DOGENHIST"]),

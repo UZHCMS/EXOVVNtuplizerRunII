@@ -91,6 +91,18 @@ struct taucand{
 
 
 
+struct taucandsimple{
+  
+  Int_t cand_tau_id1;
+  Int_t cand_tau_id2;
+  Int_t cand_tau_id3;
+  Float_t cand_tau_pt;
+  Int_t cand_tau_charge;
+
+  bool operator<(const taucandsimple& another) const { 
+    return cand_tau_pt > another.cand_tau_pt;
+  }
+};
 
 
 
