@@ -8,6 +8,8 @@
 #include "../interface/JpsiMuNtuplizer.h"
 #include "../interface/JpsiTauNtuplizer.h"
 #include "../interface/BsTauTauNtuplizer.h"
+#include "../interface/BsTauTauFHNtuplizer.h"
+#include "../interface/BsDstarTauNuNtuplizer.h"
 
 #include "DataFormats/PatCandidates/interface/TriggerObjectStandAlone.h"
 #include "DataFormats/PatCandidates/interface/PackedTriggerPrescales.h"
@@ -81,8 +83,10 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
   runFlags["doJpsiMu"] = iConfig.getParameter<bool>("doJpsiMu");
   runFlags["doJpsiTau"] = iConfig.getParameter<bool>("doJpsiTau");
   runFlags["doBsTauTau"] = iConfig.getParameter<bool>("doBsTauTau");
+  runFlags["doBsTauTauFH"] = iConfig.getParameter<bool>("doBsTauTauFH");
+  runFlags["doBsDstarTauNu"] = iConfig.getParameter<bool>("doBsDstarTauNu");
   runFlags["doGenHist"] = iConfig.getParameter<bool>("doGenHist");
-
+  runFlags["isTruth"] = iConfig.getParameter<bool>("isTruth");
   runValues["dzcut"] = iConfig.getParameter<double>("dzcut");
   runValues["fsigcut"] = iConfig.getParameter<double>("fsigcut");
   runValues["vprobcut"] = iConfig.getParameter<double>("vprobcut");
@@ -232,6 +236,40 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
 						     nBranches_ );
   }
 
+  if (runFlags["doBsTauTauFH"]) {
+    std::cout<<"\n\n --->GETTING INSIDE doBsTauTauFH<---\n\n"<<std::endl;
+    nTuplizers_["BsTauTauFH"] = new BsTauTauFHNtuplizer( muonToken_   , 
+							 vtxToken_   , 
+							 beamToken_ ,
+							 packedpfcandidatesToken_,
+							 losttrackToken_,
+							 triggerToken_,
+							 triggerObjects_,
+							 genparticleToken_,
+							 gentauToken_,
+							 runFlags,
+							 runValues,
+							 runStrings,
+							 nBranches_ );
+  }
+
+  if (runFlags["doBsDstarTauNu"]) {
+    std::cout<<"\n\n --->GETTING INSIDE doBsDstarTauNu<---\n\n"<<std::endl;
+    nTuplizers_["BsDstarTauNu"] = new BsDstarTauNuNtuplizer( muonToken_   , 
+							 vtxToken_   , 
+							 beamToken_ ,
+							 packedpfcandidatesToken_,
+							 losttrackToken_,
+							 triggerToken_,
+							 triggerObjects_,
+							 genparticleToken_,
+							 gentauToken_,
+							 runFlags,
+							 runValues,
+							 runStrings,
+							 nBranches_ );
+  }
+  
 
  
   /*=======================================================================================*/    

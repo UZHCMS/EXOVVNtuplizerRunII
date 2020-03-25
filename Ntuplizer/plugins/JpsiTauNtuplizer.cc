@@ -27,6 +27,7 @@ JpsiTauNtuplizer::JpsiTauNtuplizer( edm::EDGetTokenT<pat::MuonCollection>    muo
     , genTauToken_( genttoken )
     , runOnMC_   (runFlags["runOnMC"])
     , useDNN_   (runFlags["useDNN"])
+    , isTruth_   (runFlags["isTruth"])
     , c_dz (runValues["dzcut"])
     , c_fsig (runValues["fsigcut"])
     , c_vprob (runValues["vprobcut"])
@@ -988,8 +989,8 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
   std::vector<Int_t> vec_ppdgId;
   std::vector<TLorentzVector> vec_gentaup4;
   std::vector<TLorentzVector> vec_gentau3pp4;
-  Bool_t isgen3 = false;
-  Bool_t isgen3matched = true;
+  Int_t isgen3 = 0;
+  Int_t isgen3matched = 0;
 
   bool isMC = runOnMC_;
 
@@ -1093,7 +1094,7 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
       }
 
 
-      if(nprong==3) isgen3 = true;
+      if(nprong==3) isgen3 += 1;
 
       //////////////////////////
       // check decay mod. To do this, take matching with tau-genjet. 
@@ -1139,12 +1140,12 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 	vec_gentau3pp4.push_back(genvis);
 	
 	//	if(TMath::Abs((*genParticles_)[p].mother(0)->pdgId())==541){
-	isgen3matched = matched;
+	if(matched) isgen3matched += 1;
 
-          //	}
-      }else{
-          isgen3matched = false;
-      }
+	//	}
+      }//else{
+      //          isgen3matched = false;
+      //      }
     }
 
     //    std::cout << "\t # of gen. taus with 3prong = " << gps.size() << std::endl;
@@ -1387,6 +1388,11 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 	  }	
 	}
 
+	if(isTruth_ && isMC){
+	  if(!isRight) continue;
+	}
+
+
 
 	Float_t sumofdnn = -1;
 	if(useDNN_){
@@ -1555,7 +1561,8 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 	rhomass.push_back(tlv_rho.M());
       }
       
-	//	std::cout << "rho masses size = " << rhomass.size() << std::endl;
+      std::cout << "rho masses size = " << rhomass.size() << std::endl;
+      std::cout << "pf1,2,3 charge  = "  << pf1.charge() << " " << pf2.charge() << " " << pf3.charge() << std::endl;
 
       nBranches_->JpsiTau_tau_rhomass1.push_back(rhomass.at(0));
       nBranches_->JpsiTau_tau_rhomass2.push_back(rhomass.at(1));
@@ -1564,17 +1571,19 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
       nBranches_->JpsiTau_tau_pi1_eta.push_back(tlv_pion1.Eta());
       nBranches_->JpsiTau_tau_pi1_phi.push_back(tlv_pion1.Phi());
       nBranches_->JpsiTau_tau_pi1_mass.push_back(tlv_pion1.M());
+      nBranches_->JpsiTau_tau_pi1_q.push_back(pf1.charge());
       
       nBranches_->JpsiTau_tau_pi2_pt.push_back(tlv_pion2.Pt());
       nBranches_->JpsiTau_tau_pi2_eta.push_back(tlv_pion2.Eta());
       nBranches_->JpsiTau_tau_pi2_phi.push_back(tlv_pion2.Phi());
       nBranches_->JpsiTau_tau_pi2_mass.push_back(tlv_pion2.M());
-      
+      nBranches_->JpsiTau_tau_pi2_q.push_back(pf2.charge());
+
       nBranches_->JpsiTau_tau_pi3_pt.push_back(tlv_pion3.Pt());
       nBranches_->JpsiTau_tau_pi3_eta.push_back(tlv_pion3.Eta());
       nBranches_->JpsiTau_tau_pi3_phi.push_back(tlv_pion3.Phi());
       nBranches_->JpsiTau_tau_pi3_mass.push_back(tlv_pion3.M());
-
+      nBranches_->JpsiTau_tau_pi3_q.push_back(pf3.charge());
 
       nBranches_->JpsiTau_B_pt.push_back(cands[ic].cand_b_pt);
       nBranches_->JpsiTau_B_eta.push_back(cands[ic].cand_b_eta);

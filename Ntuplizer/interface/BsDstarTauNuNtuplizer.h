@@ -1,5 +1,5 @@
-#ifndef JpsiTauNtuplizer_H
-#define JpsiTauNtuplizer_H
+#ifndef BsDstarTauNuNtuplizer_H
+#define BsDstarTauNuNtuplizer_H
 
 #include "../interface/CandidateNtuplizer.h"
 #include "../interface/MyStruct.h"
@@ -85,7 +85,6 @@
 #include "FWCore/ParameterSet/interface/FileInPath.h"
 #include "PhysicsTools/TensorFlow/interface/TensorFlow.h"
 
-
 #include <tuple>
 #include <sstream>
 #include <iostream>
@@ -120,11 +119,11 @@
 
 
 
-class JpsiTauNtuplizer : public CandidateNtuplizer {
+class BsDstarTauNuNtuplizer : public CandidateNtuplizer {
 
 
  public:
-  JpsiTauNtuplizer( edm::EDGetTokenT<pat::MuonCollection>    muonToken   , 
+  BsDstarTauNuNtuplizer( edm::EDGetTokenT<pat::MuonCollection>    muonToken   , 
 		   edm::EDGetTokenT<reco::VertexCollection> verticeToken, 
 		   edm::EDGetTokenT<reco::BeamSpot> bsToken, 
 		   edm::EDGetTokenT<pat::PackedCandidateCollection> packedpfcandidatesToken,
@@ -138,7 +137,7 @@ class JpsiTauNtuplizer : public CandidateNtuplizer {
 		    std::map< std::string, std::string >& runStrings,
 		   NtupleBranches* nBranches );
 
-  ~JpsiTauNtuplizer( void );
+  ~BsDstarTauNuNtuplizer( void );
 
   std::tuple<Float_t, TransientVertex> vertexProb( const std::vector<reco::TransientTrack>& tracks);
 
@@ -195,23 +194,36 @@ private:
    ParticleMass jpsi_mass = 3.09687;
    ParticleMass pion_mass = 0.139571;
    ParticleMass kaon_mass = 0.493677;
+   ParticleMass phi_mass = 1.019461;
+   ParticleMass ds_mass = 2.01026;
+   ParticleMass d0_mass = 1.86483;
    
    float muon_sigma = 0.0000001;
    float jp_m_sigma = 0.00004;
    float pion_sigma = 0.000016;
    float kaon_sigma = 0.000016;
+   float phi_sigma = 0.000016;
+   float ds_sigma = 0.00005;
+   float d0_sigma = 0.00005;
+
    float chi = 0.;
    float ndf = 0.;
 
+   Float_t mass_kaon = 0.493677;
+   Float_t mass_pion = 0.139571;
+   Float_t mass_D0 = 1.86483;
+   Float_t mass_Dstar = 2.01026;
+   Float_t mass_B0 = 5.27963;
+
+
    bool runOnMC_;   
    bool useDNN_;
-   bool isTruth_;
 
    float c_dz;
    float c_fsig;
    float c_vprob;
    float c_dnn;
-
+   
    tensorflow::MetaGraphDef* graphDef;
    tensorflow::Session* session;
    tensorflow::Tensor data; // (tensorflow::DT_FLOAT, { 1, 50, 8 }); // single batch of dimension 10
@@ -225,10 +237,11 @@ private:
 
    std::map<std::tuple<Int_t, Float_t, Float_t, Float_t>, std::vector<Int_t>> DNNidx;
    std::map<std::tuple<Int_t, Float_t, Float_t, Float_t>, std::vector<Float_t>> DNNval;
+
 };
 
 
 
 
-#endif // JpsiTauNtuplizer_H
+#endif // BsDstarTauNuNtuplizer_H
 

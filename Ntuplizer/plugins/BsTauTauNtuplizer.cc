@@ -821,8 +821,8 @@ bool BsTauTauNtuplizer::fillBranches( edm::Event const & event, const edm::Event
   std::vector<Int_t> vec_ppdgId;
   std::vector<TLorentzVector> vec_gentaup4;
   std::vector<TLorentzVector> vec_gentau3pp4;
-  Bool_t isgen3 = false;
-  Bool_t isgen3matched = true;
+  Int_t isgen3 = 0;
+  Int_t isgen3matched = 0;
 
   bool isMC = runOnMC_;
 
@@ -886,26 +886,26 @@ bool BsTauTauNtuplizer::fillBranches( edm::Event const & event, const edm::Event
 				       _genvis_.Eta(), _genvis_.Phi(),
 				       _pf.eta(), _pf.phi()
 				       );
-	    if(_dR < min_dr && _dR < 0.1){
+	    if(_dR < min_dr && _dR < 0.015 && _pf.pt()/_genvis_.Pt() < 1.15 && _pf.pt()/_genvis_.Pt() > 0.85){
 	      min_dr = _dR;
 	    }
 	  }
 	  
-	  Float_t min_dr2 = 999;
-	  for( size_t iii = 0; iii < packedpfcandidates_->size(); ++iii ){   
-      
-	    pat::PackedCandidate pf = (*packedpfcandidates_)[iii];
-	    
-	    if(pf.pdgId()!=(*genParticles_)[p].daughter(idd)->pdgId()) continue;
-	    
-	    Float_t _dR = reco::deltaR(
-				       _genvis_.Eta(), _genvis_.Phi(),
-				       pf.eta(), pf.phi()
-				       );
-	    if(_dR < min_dr2 && _dR < 0.1){
-	      min_dr2 = _dR;
-	    }
-	  }
+//	  Float_t min_dr2 = 999;
+//	  for( size_t iii = 0; iii < packedpfcandidates_->size(); ++iii ){   
+//      
+//	    pat::PackedCandidate pf = (*packedpfcandidates_)[iii];
+//	    
+//	    if(pf.pdgId()!=(*genParticles_)[p].daughter(idd)->pdgId()) continue;
+//	    
+//	    Float_t _dR = reco::deltaR(
+//				       _genvis_.Eta(), _genvis_.Phi(),
+//				       pf.eta(), pf.phi()
+//				       );
+//	    if(_dR < min_dr2 && _dR < 0.1){
+//	      min_dr2 = _dR;
+//	    }
+//	  }
 
 	  //	  if(min_dr2!=999) std::cout << "pf matched !!!" << std::endl;
 
@@ -920,7 +920,7 @@ bool BsTauTauNtuplizer::fillBranches( edm::Event const & event, const edm::Event
       }
 
 
-      if(nprong==3) isgen3 = true;
+      if(nprong==3) isgen3 += 1;
 
       //////////////////////////
       // check decay mod. To do this, take matching with tau-genjet. 
@@ -963,12 +963,12 @@ bool BsTauTauNtuplizer::fillBranches( edm::Event const & event, const edm::Event
 	vec_gentau3pp4.push_back(genvis);
 	
 	//	if(TMath::Abs((*genParticles_)[p].mother(0)->pdgId())==541){
-	isgen3matched = matched;
+	if(matched) isgen3matched += 1;
 
           //	}
-      }else{
-          isgen3matched = false;
-      }
+      }//else{
+      //          isgen3matched = false;
+      //      }
     }
 
     //    std::cout << "\t # of gen. taus with 3prong = " << gps.size() << std::endl;
@@ -1687,10 +1687,10 @@ bool BsTauTauNtuplizer::fillBranches( edm::Event const & event, const edm::Event
 
     if(vec_gentaudm.size() >=1){
       nBranches_->BsTauTau_gentaupt.push_back(vec_gentaup4[0].Pt());
-      nBranches_->BsTauTau_gentaupt.push_back(vec_gentaudm[0]);
+      nBranches_->BsTauTau_gentaudm.push_back(vec_gentaudm[0]);
     }else{
       nBranches_->BsTauTau_gentaupt.push_back(-1);
-      nBranches_->BsTauTau_gentaupt.push_back(-1);
+      nBranches_->BsTauTau_gentaudm.push_back(-1);
     }
 
     nBranches_->IsBsTauTau.push_back(1.);

@@ -1,5 +1,5 @@
-#ifndef JpsiTauNtuplizer_H
-#define JpsiTauNtuplizer_H
+#ifndef BsTauTauFHNtuplizer_H
+#define BsTauTauFHNtuplizer_H
 
 #include "../interface/CandidateNtuplizer.h"
 #include "../interface/MyStruct.h"
@@ -85,7 +85,6 @@
 #include "FWCore/ParameterSet/interface/FileInPath.h"
 #include "PhysicsTools/TensorFlow/interface/TensorFlow.h"
 
-
 #include <tuple>
 #include <sstream>
 #include <iostream>
@@ -120,11 +119,11 @@
 
 
 
-class JpsiTauNtuplizer : public CandidateNtuplizer {
+class BsTauTauFHNtuplizer : public CandidateNtuplizer {
 
 
  public:
-  JpsiTauNtuplizer( edm::EDGetTokenT<pat::MuonCollection>    muonToken   , 
+  BsTauTauFHNtuplizer( edm::EDGetTokenT<pat::MuonCollection>    muonToken   , 
 		   edm::EDGetTokenT<reco::VertexCollection> verticeToken, 
 		   edm::EDGetTokenT<reco::BeamSpot> bsToken, 
 		   edm::EDGetTokenT<pat::PackedCandidateCollection> packedpfcandidatesToken,
@@ -138,7 +137,7 @@ class JpsiTauNtuplizer : public CandidateNtuplizer {
 		    std::map< std::string, std::string >& runStrings,
 		   NtupleBranches* nBranches );
 
-  ~JpsiTauNtuplizer( void );
+  ~BsTauTauFHNtuplizer( void );
 
   std::tuple<Float_t, TransientVertex> vertexProb( const std::vector<reco::TransientTrack>& tracks);
 
@@ -219,10 +218,10 @@ private:
    tensorflow::Tensor add_global; //(tensorflow::DT_FLOAT, { 1, 2 }); 
    tensorflow::Tensor isTraining; //(tensorflow::DT_FLOAT, { 1, 2 }); 
    tensorflow::Tensor norm; //(tensorflow::DT_FLOAT, { 1, 2 }); 
-
    
    std::string dnnfile_;
 
+   bool doCutFlow_;
    std::map<std::tuple<Int_t, Float_t, Float_t, Float_t>, std::vector<Int_t>> DNNidx;
    std::map<std::tuple<Int_t, Float_t, Float_t, Float_t>, std::vector<Float_t>> DNNval;
 };
@@ -230,5 +229,5 @@ private:
 
 
 
-#endif // JpsiTauNtuplizer_H
+#endif // BsTauTauFHNtuplizer_H
 
