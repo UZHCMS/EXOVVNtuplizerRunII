@@ -101,7 +101,7 @@ def main():
 
     config.Data.publication = False
     #config.Data.outLFNDirBase = '/store/user/cgalloni/Ntuple_2017_94v2_preliminary'
-    config.Data.outLFNDirBase = '/store/user/cgalloni/Ntuple_BPH_v0'
+    config.Data.outLFNDirBase = '/store/user/wvetens/Ntuple_BPH_v6'
     #config.Data.outLFNDirBase = '/pnfs/psi.ch/cms/trivcat/store/t3groups/uniz-higgs/Fall17'
 
     config.section_("Site")
