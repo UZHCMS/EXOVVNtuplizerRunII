@@ -1,6 +1,8 @@
 #cmsRun  config_generic_opt_skimmed.py  RunPeriod="Fall17" # for MC
-#cmsRun  config_generic_opt_skimmed.py  RunPeriod="Run2017B" # for Data
+#cmsRun  config_generic_opt_skimmed.py  RunPeriod="Run2017B" # for Data from 2017
+#cmsRun  config_generic_opt_skimmed.py  RunPeriod="Run2018B" # for Data from 2018
 #cmsRun  config_generic_opt_skimmed.py  RunPeriod="Autumn18" # for MC from 2018
+#cmsRun  config_generic_opt_skimmed.py  RunPeriod="Summer16" # for MC from 2016
 
 
 ###### Process initialization ##########
@@ -48,8 +50,8 @@ options.register( 'runUpToEarlyF',
 
 
 
-options.maxEvents = 1000
-#options.maxEvents = -1
+#options.maxEvents = 1000
+options.maxEvents = -1
 
 #data file
      
@@ -57,14 +59,17 @@ options.maxEvents = 1000
 #options.inputFiles = '/store/user/cgalloni/BJpsiX_MuMu_230819/Autumn18_10_2_9_miniAOD/190823_131752/0000/miniAOD_57.root'
 #options.inputFiles = '/store/user/cgalloni/BcJpsiMuNu_020519/Fall18_10_2_9-MINIAODSIM_noDuplCheck/190506_100026/0000/miniAOD_99.root'
 #options.inputFiles = '/store/mc/RunIIAutumn18MiniAOD/BuToKJpsi_ToMuMu_probefilter_SoftQCDnonD_TuneCP5_13TeV-pythia8-evtgen/MINIAODSIM/PUPoissonAve20_BParking_102X_upgrade2018_realistic_v15-v2/120000/FDD42175-87DC-D648-860B-F240C5E2CB91.root'
-#options.inputFiles ='/store/data/Run2018B/Charmonium/MINIAOD/17Sep2018-v1/10000/02CFE87F-7C17-1340-8300-FDA86C16D58C.root'
 #options.inputFiles ='/store/user/cgalloni/BJpsiX_MuMu_270819/Autumn18_10_2_9_miniAOD/190827_143312/0005/miniAOD_5000.root'
 #options.inputFiles = '/store/user/cgalloni/BcJpsiTauNu_020519/Fall18_10_2_9-MINIAODSIM_noDuplCheck_020519/190505_141436/0000/miniAOD_99.root'
 #options.inputFiles = '/BcToJPsiTauNu_TuneCP5_13TeV-bcvegpy2-pythia8-evtgen/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v1/MINIAODSIM'
 #options.inputFiles = '/store/mc/RunIIAutumn18MiniAOD/BsToTauTau_MuFilter_SoftQCDnonD_TuneCP5_13TeV-pythia8-evtgen/MINIAODSIM/PUPoissonAve20_BParking_102X_upgrade2018_realistic_v15-v1/280000/FD3C4F1A-A2ED-AE43-A68E-76E59838E891.root'
 #options.inputFiles = '/store/mc/RunIIAutumn18MiniAOD/BsToTauTau_MuFilter_SoftQCDnonD_TuneCP5_13TeV-pythia8-evtgen/MINIAODSIM/PUPoissonAve20_BParking_102X_upgrade2018_realistic_v15-v1/130000/8FBE3385-2FB7-D641-9E58-D9EA5C5D4224.root'
 #options.inputFiles = 'file:/scratch/ytakahas/E342DC18-5142-1545-B077-D4405CE0BF05.root'
-options.inputFiles = '/store/data/Run2018A/ParkingBPH1/MINIAOD/05May2019-v1/280001/1CE00F5E-9F52-4045-BC7C-C9178E71DB9E.root'
+
+options.inputFiles ='/store/data/Run2018B/Charmonium/MINIAOD/17Sep2018-v1/10000/02CFE87F-7C17-1340-8300-FDA86C16D58C.root'
+#options.inputFiles = '/store/mc/RunIISummer16MiniAODv3/BcToJPsiMuNu_TuneCUEP8M1_13TeV-bcvegpy2-pythia8-evtgen/MINIAODSIM/PUMoriond17_94X_mcRun2_asymptotic_v3-v1/240000/E8EC0256-2F7F-EA11-8146-0CC47A6C06C6.root'
+#options.inputFiles = '/store/mc/RunIIAutumn18MiniAOD/OniaAndX_ToMuMu_MuFilter_SoftQCDnonD_TuneCP5_13TeV-pythia8-evtgen/MINIAODSIM/102X_upgrade2018_realistic_v15-v1/260000/1B2AF16F-83A2-5442-83EB-CB34B26D35CF.root'
+
 #options.inputFiles = 'file:/work/ytakahas/work/NtuplizerProd/CMSSW_10_6_8/src/EXOVVNtuplizerRunII/Ntuplizer/E30B9F61-DB46-0446-9B6A-2E21B806D4CE.root'
 #options.inputFiles = 'dcap://t3se01.psi.ch:22125//pnfs/psi.ch/cms/trivcat/store/user/ytakahas/mc/ytakahas/BcToJPsiTauNu_TuneCP5_13TeV-bcvegpy2-pythia8-evtgen/USER/v1/A2581C35-B56A-5046-A02D-8C8C1562DEEE.root'
 #options.inputFiles = 'dcap://t3se01.psi.ch:22125//pnfs/psi.ch/cms/trivcat/store/user/ytakahas/mc/ytakahas/UpsilonToTauTau_inclusive_5f_Pythia_LO/USER/v1/UpsilonToTauTau_3prong_miniaod_part0.root'
@@ -113,7 +118,7 @@ process.options  = cms.untracked.PSet(
                      allowUnscheduled = cms.untracked.bool(True),
                      )
 
-process.options.numberOfThreads=cms.untracked.uint32(2)
+#process.options.numberOfThreads=cms.untracked.uint32(2)
 
 process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(options.maxEvents) )
 
@@ -313,7 +318,7 @@ else : #Data
  
    print "jec JEC_runDependent_suffix %s ,  prefix %s " %(JEC_runDependent_suffix,JECprefix)
 
-#print "jec prefix ", JECprefix
+print "jec prefix ", JECprefix
 
 print "doing corrections  to met on the fly %s" ,config["CORRMETONTHEFLY"]
 

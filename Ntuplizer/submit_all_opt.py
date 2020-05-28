@@ -96,12 +96,12 @@ def main():
         #config.Data.unitsPerJob = #10000#25
     else:
         config.Data.splitting = 'FileBased'
-        config.Data.unitsPerJob = 100
+        config.Data.unitsPerJob = 10
     
 
     config.Data.publication = False
     #config.Data.outLFNDirBase = '/store/user/cgalloni/Ntuple_2017_94v2_preliminary'
-    config.Data.outLFNDirBase = '/store/user/cgalloni/Ntuple_BPH_v0'
+    config.Data.outLFNDirBase = '/store/user/wvetens/Ntuple_BPH_v7'
     #config.Data.outLFNDirBase = '/pnfs/psi.ch/cms/trivcat/store/t3groups/uniz-higgs/Fall17'
 
     config.section_("Site")
