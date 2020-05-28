@@ -92,11 +92,13 @@ def main():
     print "1)options.luminosity ", options.luminosity
 
     if options.luminosity :
-        config.Data.splitting = 'Automatic' #'EventAwareLumiBased' #LumiBased'
+        #config.Data.splitting = 'Automatic' #'EventAwareLumiBased' #LumiBased'
+        config.Data.splitting = 'FileBased'
+        config.Data.unitsPerJob = 10
         #config.Data.unitsPerJob = #10000#25
     else:
         config.Data.splitting = 'FileBased'
-        config.Data.unitsPerJob = 100
+        config.Data.unitsPerJob = 10
     
 
     config.Data.publication = False

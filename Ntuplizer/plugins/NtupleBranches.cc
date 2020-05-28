@@ -190,6 +190,7 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
 
   if (runFlags["doJpsiMu"]){
     tree_->Branch("IsJpsiMu" , &IsJpsiMu  );
+    tree_->Branch("HLT_BPH_isFired", &HLT_BPH_isFired );
 
     tree_->Branch("JpsiMu_nCandidates", &JpsiMu_nCandidates );
 
@@ -336,6 +337,7 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
 
   if (runFlags["doJpsiTau"]){
     tree_->Branch("IsJpsiTau", &IsJpsiTau );
+    tree_->Branch("HLT_BPH_isFired", &HLT_BPH_isFired );
 
     tree_->Branch("JpsiTau_nCandidates", &JpsiTau_nCandidates );
 
@@ -1041,6 +1043,7 @@ void NtupleBranches::reset( void ){
 
   /** HLT trigger decisions */
   HLT_isFired.clear();
+  HLT_BPH_isFired.clear();
   
   /** HLT trigger objects */
   triggerObject_pt.clear();
