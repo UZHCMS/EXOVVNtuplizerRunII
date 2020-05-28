@@ -136,7 +136,7 @@ else:
                               fileNames = cms.untracked.vstring(options.inputFiles),
                               ) 
 
-#print " process source filenames %s" %(process.source) 
+print " process source filenames %s" %(process.source) 
 ######## Sequence settings ##########
 
 hltFiltersProcessName = 'RECO'
@@ -247,7 +247,7 @@ jecLevelsAK4 = []
 jecLevelsAK8Puppi = []
 jecLevelsForMET = []
 
-#print "1. options.RunPeriod ", options.RunPeriod
+print "1. options.RunPeriod ", options.RunPeriod
 if options.RunPeriod=="" : options.RunPeriod=options.inputFiles[0]
 
 if  config["RUNONMC"] :
@@ -316,15 +316,15 @@ else : #Data
    #jecAK8chsUncFile = "JEC/%s_DATA_Uncertainty_AK8PFchs.txt"%(JECprefix)
    jecAK4chsUncFile = "JEC/%s_DATA_Uncertainty_AK4PFchs.txt"%(JECprefix)
  
-   #print "jec JEC_runDependent_suffix %s ,  prefix %s " %(JEC_runDependent_suffix,JECprefix)
+   print "jec JEC_runDependent_suffix %s ,  prefix %s " %(JEC_runDependent_suffix,JECprefix)
 
-#print "jec prefix ", JECprefix
+print "jec prefix ", JECprefix
 
-#print "doing corrections  to met on the fly %s" ,config["CORRMETONTHEFLY"]
-#
-#print "*************************************** GLOBAL TAG *************************************************" 
-#print GT
-#print "****************************************************************************************************" 
+print "doing corrections  to met on the fly %s" ,config["CORRMETONTHEFLY"]
+
+print "*************************************** GLOBAL TAG *************************************************" 
+print GT
+print "****************************************************************************************************" 
 process.GlobalTag = GlobalTag(process.GlobalTag, GT)
 
 
@@ -506,6 +506,6 @@ if config["RUNONMC"]:
 process.p += process.ntuplizer
 process.p.associate(pattask)
 
-#print pattask
+print pattask
 
 #  LocalWords:  tauIdMVAIsoDBoldDMwLT

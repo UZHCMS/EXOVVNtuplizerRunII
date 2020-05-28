@@ -92,9 +92,7 @@ def main():
     print "1)options.luminosity ", options.luminosity
 
     if options.luminosity :
-        #config.Data.splitting = 'Automatic' #'EventAwareLumiBased' #LumiBased'
-        config.Data.splitting = 'FileBased'
-        config.Data.unitsPerJob = 10
+        config.Data.splitting = 'Automatic' #'EventAwareLumiBased' #LumiBased'
         #config.Data.unitsPerJob = #10000#25
     else:
         config.Data.splitting = 'FileBased'
@@ -103,7 +101,7 @@ def main():
 
     config.Data.publication = False
     #config.Data.outLFNDirBase = '/store/user/cgalloni/Ntuple_2017_94v2_preliminary'
-    config.Data.outLFNDirBase = '/store/user/wvetens/Ntuple_BPH_v6'
+    config.Data.outLFNDirBase = '/store/user/wvetens/Ntuple_BPH_v7'
     #config.Data.outLFNDirBase = '/pnfs/psi.ch/cms/trivcat/store/t3groups/uniz-higgs/Fall17'
 
     config.section_("Site")
