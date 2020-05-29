@@ -85,6 +85,7 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
   runFlags["doBsTauTau"] = iConfig.getParameter<bool>("doBsTauTau");
   runFlags["doBsTauTauFH"] = iConfig.getParameter<bool>("doBsTauTauFH");
   runFlags["doBsDstarTauNu"] = iConfig.getParameter<bool>("doBsDstarTauNu");
+  runFlags["doCutFlow"] = iConfig.getParameter<bool>("doCutFlow");
   runFlags["doGenHist"] = iConfig.getParameter<bool>("doGenHist");
   runFlags["isTruth"] = iConfig.getParameter<bool>("isTruth");
   runValues["dzcut"] = iConfig.getParameter<double>("dzcut");

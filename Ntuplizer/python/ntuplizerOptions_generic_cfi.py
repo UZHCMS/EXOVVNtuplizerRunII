@@ -30,6 +30,7 @@ config["DOGENEVENT"] = (True and config["RUNONMC"])
 config["DOPILEUP"] = (True and config["RUNONMC"])
 config["DOVERTICES"] = True
 config["DOMISSINGET"] = True
+config["DOCUTFLOW"] = True
 
 config["DOJPSIMU"] = True
 config["DOJPSITAU"] = False
