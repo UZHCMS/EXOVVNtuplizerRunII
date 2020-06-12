@@ -32,13 +32,14 @@ JpsiTauNtuplizer::JpsiTauNtuplizer( edm::EDGetTokenT<pat::MuonCollection>    muo
     , c_fsig (runValues["fsigcut"])
     , c_vprob (runValues["vprobcut"])
     , c_dnn (runValues["dnncut"])
+    , c_charge (runValues["tau_charge"])
     , dnnfile_ (runStrings["dnnfile"])      
    
 {
 
   std::cout << "UseDNN = " << useDNN_ << std::endl;
   std::cout << "DNN file =" << dnnfile_ << std::endl;
-  std::cout << "-- (dzcut, fsigcut, vprobcut) = " << c_dz << " " << c_fsig << " " << c_vprob << " " << c_dnn<< std::endl;
+  std::cout << "-- (dzcut, fsigcut, vprobcut, tau_charge) = " << c_dz << " " << c_fsig << " " << c_vprob << " " << c_dnn<< " " << c_charge << std::endl;
   
   if(useDNN_){
 
@@ -124,8 +125,24 @@ JpsiTauNtuplizer::JpsiTauNtuplizer( edm::EDGetTokenT<pat::MuonCollection>    muo
 
 
   }
-
   
+
+  if(runOnMC_){
+    std::cout << "Setup Hammer ...";
+    hammer.setUnits("GeV");
+    hammer.includeDecay("BcJpsiMuNu");
+    hammer.includeDecay("BcJpsiTauNu");
+    //    ham.setFFInputScheme({{"BD", "ISGW2"}, {"BD*", "ISGW2"}});    
+    hammer.setFFInputScheme({{"BcJpsi", "EFG"}});
+    hammer.addFFScheme("Scheme1", {
+                       // {"BD", "ISGW2"},
+	{"BcJpsi", "BGLVar"}
+      });
+    hammer.initRun();
+
+    std::cout << "finishes ..." << std::endl;
+
+  }
 
   
 }
@@ -832,6 +849,8 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 	  reco::TransientTrack  tt_track = (*builder).build(pf.pseudoTrack());
 	  mytracks.push_back(tt_track);
 
+
+
 	}
 
 
@@ -988,6 +1007,7 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
   std::vector<Int_t> vec_gentaudm;
   std::vector<Int_t> vec_ppdgId;
   std::vector<TLorentzVector> vec_gentaup4;
+  std::vector<TLorentzVector> vec_gentaup4_vis;
   std::vector<TLorentzVector> vec_gentau3pp4;
   Int_t isgen3 = 0;
   Int_t isgen3matched = 0;
@@ -997,7 +1017,7 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
   if(isMC){
     event.getByToken(genParticlesToken_ , genParticles_); 
     event.getByToken(genTauToken_, genTaus_);
-
+    
     for( unsigned p=0; p < genParticles_->size(); ++p){
       
       if(TMath::Abs((*genParticles_)[p].pdgId())!=15) continue;
@@ -1009,6 +1029,8 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
       // calculate visible pt ... 
 
       TLorentzVector genvis;
+      TLorentzVector genvis_full;
+      //      TLorentzVector genvis_miss;
       std::vector<TLorentzVector> gp;
       Bool_t matched = true;
       Int_t nprong = 0;
@@ -1021,11 +1043,25 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 		  << (*genParticles_)[p].daughter(idd)->phi() << std::endl;
 
 
+
+	TLorentzVector _genvis_full;
+	_genvis_full.SetPtEtaPhiM((*genParticles_)[p].daughter(idd)->pt(),
+			      (*genParticles_)[p].daughter(idd)->eta(),
+			      (*genParticles_)[p].daughter(idd)->phi(),
+			      (*genParticles_)[p].daughter(idd)->mass()
+			      );
+	
+	genvis_full += _genvis_full;
+
 	if(
 	   TMath::Abs((*genParticles_)[p].daughter(idd)->pdgId())==12 ||
 	   TMath::Abs((*genParticles_)[p].daughter(idd)->pdgId())==14 || 
 	   TMath::Abs((*genParticles_)[p].daughter(idd)->pdgId())==16
-	   ) continue;
+	   ){
+
+	  //	  genvis_miss += _genvis_full;
+	  continue;
+	}
 
 
 	TLorentzVector _genvis_;
@@ -1127,9 +1163,13 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
       
       vec_ppdgId.push_back((*genParticles_)[p].mother(0)->pdgId());
       vec_gentaudm.push_back(taugendm);
-      vec_gentaup4.push_back(genvis);
+      vec_gentaup4_vis.push_back(genvis);
 
-
+      vec_gentaup4.push_back(genvis_full);
+      
+      //      std::cout << "CHECK !!!!" << (*genParticles_)[p].pt() << " " << genvis_full.Pt() << std::endl;
+      //      TLorentzVector diff = genvis_full - genvis;
+      //      std::cout << "CHECK2 !!!!" << genvis_miss.Pt() << " " << genvis_miss.M() << " " << diff.Pt() << " " << diff.M() << std::endl;
   
 
       
@@ -1154,6 +1194,52 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 
 
 
+  ///////////////////////////////
+  // Event display 
+  ///////////////////////////////
+  
+  std::cout <<"----------------------------------------------------------" << std::endl;
+
+  if(isMC && vec_gentaudm.size()==1 && isgen3matched==1){
+
+    for(int iii = 0; iii < numOfch; iii ++){
+    
+      pat::PackedCandidate pf = pfcollection[iii];
+      //    std::cout << pf.pt() << " " << pf.eta() << " " << pf.phi() << std::endl;
+      
+      Bool_t isRight_ = false;
+      
+      
+      for(unsigned int mmm=0; mmm < gps.size(); mmm++){
+	
+	std::vector<TLorentzVector> tlvs = gps[mmm];
+	
+	for(unsigned int nnn=0; nnn < tlvs.size(); nnn++){
+	  
+	  if(
+	     reco::deltaR(pf.eta(), pf.phi(), tlvs[nnn].Eta(), tlvs[nnn].Phi()) < 0.015 &&
+	     pf.pt()/tlvs[nnn].Pt() > 0.85 && 
+	     pf.pt()/tlvs[nnn].Pt() < 1.15
+	     ){
+	    isRight_ = true; 
+	    
+	  }
+	}
+      }
+      
+      //      std::cout << "PF id = " << iii << ", (pt,eta,phi) = " << pf.pt() << " " << pf.eta() << " " << pf.phi() << ", isRight = " << isRight_ << ", dnn score = " << mydnn[iii] << ",  gen tau pt = " << vec_gentaup4_vis[0].Pt() << std::endl;
+
+      nBranches_->JpsiTau_ed_pfeta.push_back(pf.eta());
+      nBranches_->JpsiTau_ed_pfphi.push_back(pf.phi());
+      nBranches_->JpsiTau_ed_isRight.push_back(isRight_);
+      nBranches_->JpsiTau_ed_pfdnn.push_back(mydnn[iii]);
+      nBranches_->JpsiTau_ed_genpt.push_back(vec_gentaup4_vis[0].Pt());
+      nBranches_->JpsiTau_ed_id.push_back(event.id().event());
+
+    }
+  }
+
+
   //////////////////////////////
    std::cout << "Starts to build tau candidate out of " << numOfch << " pion candidates" << std::endl;
 
@@ -1164,24 +1250,25 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
       
       pat::PackedCandidate pf1 = pfcollection[iii];
 
-      if(mydnn[iii] < c_dnn) continue;
+      if(useDNN_==true && mydnn[iii] < c_dnn) continue;
       npf_after_dnn++;
 
       for(int jjj = iii+1; jjj < numOfch; jjj ++){
 	
 	pat::PackedCandidate pf2 = pfcollection[jjj];
 
-	if(mydnn[jjj] < c_dnn) continue;
+	if(useDNN_==true && mydnn[jjj] < c_dnn) continue;
 
 	for(int kkk = jjj+1; kkk < numOfch; kkk ++){
 
 	  pat::PackedCandidate pf3 = pfcollection[kkk];
 
-	  if(mydnn[kkk] < c_dnn) continue;
+	  if(useDNN_==true && mydnn[kkk] < c_dnn) continue;
 
 	  Int_t tau_charge = pf1.charge() + pf2.charge() + pf3.charge(); 
 
-	  if(TMath::Abs(tau_charge)!=1) continue; 
+	  //	  if(TMath::Abs(tau_charge)!=3) continue; 
+	  if(TMath::Abs(tau_charge)!=(int)c_charge) continue; 
 
 	  //	  std::cout << iii << " " << jjj << " " << kkk << std::endl;
 
@@ -1258,7 +1345,7 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 
 	  math::PtEtaPhiMLorentzVector tlv_tau_fit = tt1_fit + tt2_fit + tt3_fit;
 
-	  if(tlv_tau_fit.Pt() < 2.) continue;
+	  if(tlv_tau_fit.Pt() < 3.) continue;
 	  //	  if(!(0.2 < tlv_tau_fit.M() && tlv_tau_fit.M() < 1.5)) continue;
 	  // calculation of the isolation 
 
@@ -1470,8 +1557,8 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
     sort(cands.begin(), cands.end());
 
 
-    //    if(cands.size()==0) return false;
-
+    if(cands.size()==0) return false;
+    nBranches_->cutflow_perevt->Fill(5);
     //    std::vector<Int_t> dict_idx;
     Int_t ncomb = 0;
 
@@ -1561,11 +1648,17 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 	rhomass.push_back(tlv_rho.M());
       }
       
-      std::cout << "rho masses size = " << rhomass.size() << std::endl;
-      std::cout << "pf1,2,3 charge  = "  << pf1.charge() << " " << pf2.charge() << " " << pf3.charge() << std::endl;
+      //      std::cout << "rho masses size = " << rhomass.size() << std::endl;
+      //      std::cout << "pf1,2,3 charge  = "  << pf1.charge() << " " << pf2.charge() << " " << pf3.charge() << std::endl;
 
-      nBranches_->JpsiTau_tau_rhomass1.push_back(rhomass.at(0));
-      nBranches_->JpsiTau_tau_rhomass2.push_back(rhomass.at(1));
+      if(rhomass.size()==2){
+	nBranches_->JpsiTau_tau_rhomass1.push_back(rhomass.at(0));
+	nBranches_->JpsiTau_tau_rhomass2.push_back(rhomass.at(1));
+      }else{
+	nBranches_->JpsiTau_tau_rhomass1.push_back(-1);
+	nBranches_->JpsiTau_tau_rhomass2.push_back(-1);
+      }
+
 
       nBranches_->JpsiTau_tau_pi1_pt.push_back(tlv_pion1.Pt());
       nBranches_->JpsiTau_tau_pi1_eta.push_back(tlv_pion1.Eta());
@@ -1726,13 +1819,71 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
   
 
       if(isMC){
-    
-	for( unsigned p=0; p < genParticles_->size(); ++p){
 
+	
+	// for Hammer
+	std::cout << "step1" << std::endl;
+	hammer.initEvent();
+	Hammer::Process Bc2JpsiLNu;
+
+	int idxB = -1;
+	std::vector<size_t> Bvtx_idxs;
+	int idxTau = -1;
+	std::vector<size_t> Tauvtx_idxs;
+	int idxJpsi = -1;
+	std::vector<size_t> Jpsivtx_idxs;
+	
+	for( unsigned p=0; p < genParticles_->size(); ++p){
+	  
 	  //      std::cout << "gen: " << (*genParticles_)[p].pdgId() << " " << (*genParticles_)[p].status() << std::endl;
 
+	  auto _part_ = (*genParticles_)[p];
+	  
 	  // Bc daughters loop
 	  if(TMath::Abs((*genParticles_)[p].pdgId())==541 && (*genParticles_)[p].status()==2){
+
+	    Hammer::Particle pB(
+				{
+				  _part_.energy(),
+				    _part_.px(), 
+				    _part_.py(), 
+				    _part_.pz()
+				    }, 
+				_part_.pdgId()
+				);
+	    idxB = Bc2JpsiLNu.addParticle(pB);
+
+	    for(auto d : _part_.daughterRefVector()) {
+
+	      Hammer::Particle B_dau({d->energy(), d->px(), d->py(), d->pz()}, d->pdgId());
+
+	      auto idx_d = Bc2JpsiLNu.addParticle(B_dau);
+	      Bvtx_idxs.push_back(idx_d);
+
+	      if(TMath::Abs(d->pdgId()) == 15) {
+
+		idxTau = idx_d;
+
+		for (auto dd : d->daughterRefVector()) {
+		  Hammer::Particle Tau_dau({dd->energy(), dd->px(), dd->py(), dd->pz()}, dd->pdgId());
+		  auto idx_dd = Bc2JpsiLNu.addParticle(Tau_dau);
+		  Tauvtx_idxs.push_back(idx_dd);
+		}
+	      }
+
+	      else if(TMath::Abs(d->pdgId()) == 443) {
+		idxJpsi = idx_d;
+		for (auto dd : d->daughterRefVector()) {
+
+		  Hammer::Particle Jpsi_dau({dd->energy(), dd->px(), dd->py(), dd->pz()}, dd->pdgId());
+		  auto idx_dd = Bc2JpsiLNu.addParticle(Jpsi_dau);
+		  Jpsivtx_idxs.push_back(idx_dd);
+		}
+	      }
+	    }
+	  
+	    	    
+	    //	    std::cout << "B mass =======> " << (*genParticles_)[p].mass() << std::endl;
 
 	    // retrieve production vertex
 	    genvertex = getVertex((*genParticles_)[p]);
@@ -1761,6 +1912,42 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 
       
 	}
+	
+	std::cout << "step2" << std::endl;
+	Bc2JpsiLNu.addVertex(idxB, Bvtx_idxs);
+	
+	if(idxTau != -1) {
+	  Bc2JpsiLNu.addVertex(idxTau, Tauvtx_idxs);
+	}
+	if(idxJpsi != -1) {
+	  Bc2JpsiLNu.addVertex(idxJpsi, Jpsivtx_idxs);
+	}
+	
+	std::cout << "step3" << std::endl;
+	hammer.addProcess(Bc2JpsiLNu);
+	std::cout << "step4" << std::endl;
+	hammer.processEvent();
+	
+	std::cout << "step5" << std::endl; 
+	
+	auto weights = hammer.getWeights("Scheme1");
+	std::cout << "step6" << std::endl; 	
+	if(!weights.empty()){
+	//	else N_evets_weights_produced++;
+
+	  for(auto elem: weights) {
+	    if(isnan(elem.second)) {
+	      std::cout << "[ERROR]: CLNCentral nan weight: " << elem.second << std::endl;
+	      //	      cerr << "[ERROR]: CLNCentral nan weight: " << elem.second << endl;
+	      //	      assert(false);
+	    }else{
+	    //	    (*outputNtuplizer)["wh_CLNCentral"] = elem.second;
+	      std::cout << "Hammer weight = "<< elem.second << std::endl;
+	    }
+	  }
+	}
+
+	
       }
 
   
@@ -1802,6 +1989,7 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 
       //      std::cout << "isgen3matched = " << isgen3matched << " " << isgen3 << " " << vec_gentaudm[0] << std::endl;
 
+
     nBranches_->JpsiTau_isgen3.push_back(isgen3);
     nBranches_->JpsiTau_isgen3matched.push_back(isgen3matched);
     nBranches_->JpsiTau_nch.push_back(numOfch);
@@ -1811,11 +1999,26 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
     nBranches_->JpsiTau_ngentau3.push_back(gps.size());
     nBranches_->JpsiTau_ngentau.push_back(vec_gentaudm.size());
 
+
     if(vec_gentaudm.size() >=1){
-      nBranches_->JpsiTau_gentaupt.push_back(vec_gentaup4[0].Pt());
+      nBranches_->JpsiTau_gentaupt.push_back(vec_gentaup4_vis[0].Pt());
+      nBranches_->JpsiTau_gentaueta.push_back(vec_gentaup4_vis[0].Eta());
+      nBranches_->JpsiTau_gentauphi.push_back(vec_gentaup4_vis[0].Phi());
+      nBranches_->JpsiTau_gentaumass.push_back(vec_gentaup4_vis[0].M());
+      nBranches_->JpsiTau_gentaupt_bd.push_back(vec_gentaup4[0].Pt());
+      nBranches_->JpsiTau_gentaueta_bd.push_back(vec_gentaup4[0].Eta());
+      nBranches_->JpsiTau_gentauphi_bd.push_back(vec_gentaup4[0].Phi());
+      nBranches_->JpsiTau_gentaumass_bd.push_back(vec_gentaup4[0].M());
       nBranches_->JpsiTau_gentaudm.push_back(vec_gentaudm[0]);
     }else{
       nBranches_->JpsiTau_gentaupt.push_back(-1);
+      nBranches_->JpsiTau_gentaueta.push_back(-1);
+      nBranches_->JpsiTau_gentauphi.push_back(-1);
+      nBranches_->JpsiTau_gentaumass.push_back(-1);
+      nBranches_->JpsiTau_gentaupt_bd.push_back(-1);
+      nBranches_->JpsiTau_gentaueta_bd.push_back(-1);
+      nBranches_->JpsiTau_gentauphi_bd.push_back(-1);
+      nBranches_->JpsiTau_gentaumass_bd.push_back(-1);
       nBranches_->JpsiTau_gentaudm.push_back(-1);
     }
 
@@ -1826,7 +2029,7 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 
 
     // B Candidate Kinematic fit passed
-    nBranches_->cutflow_perevt->Fill(5);
+    nBranches_->cutflow_perevt->Fill(6);
 
     return true;
 
