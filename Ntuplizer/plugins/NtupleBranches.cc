@@ -1947,12 +1947,12 @@ void NtupleBranches::reset( void ){
 
 
 void NtupleBranches::LabelHistograms( std::map< std::string, bool >& runFlags ){
-  //  if ( runFlags["doCutFlow"] ){
+    if ( runFlags["doCutFlow"] ){
     std::vector bins_string = {"Precut", "Trigger","muons", "J/#psi", "J/#psi fit","Tau  presence"};
     for(size_t i=0; i< bins_string.size(); i++){
       cutflow_perevt->GetXaxis()->SetBinLabel(i+1, bins_string[i]);
     }
-    //  }
+      }
 
 
   if ( runFlags["doGenHist"] ){
