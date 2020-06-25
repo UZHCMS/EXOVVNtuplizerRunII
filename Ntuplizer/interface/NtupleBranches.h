@@ -93,6 +93,7 @@ public:
   std::vector<int  >              genParticle_nDau     ;
   std::vector<int  >              genParticle_nMoth    ;
   std::vector<std::vector<int> >  genParticle_mother   ; 
+  std::vector<std::vector<float>> genParticle_mother_pt; 
   std::vector<std::vector<int> >  genParticle_dau      ;
 
   /** generator info */

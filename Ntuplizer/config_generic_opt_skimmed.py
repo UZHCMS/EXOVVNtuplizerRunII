@@ -50,8 +50,8 @@ options.register( 'runUpToEarlyF',
 
 
 
-#options.maxEvents = 1000
-options.maxEvents = -1
+options.maxEvents = 1000
+#options.maxEvents = -1
 
 #data file
      
@@ -359,6 +359,7 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     doBsTauTau	      = cms.bool(config["DOBSTAUTAU"]),
     doBsTauTauFH      = cms.bool(config["DOBSTAUTAUFH"]),
     doBsDstarTauNu    = cms.bool(config["DOBSDSTARTAUNU"]),
+    doCutFlow         = cms.bool(config["DOCUTFLOW"]),
     isTruth           = cms.bool(config["ISTRUTH"]),
     doVertices	      = cms.bool(config["DOVERTICES"]),
     doMissingEt       = cms.bool(config["DOMISSINGET"]),
