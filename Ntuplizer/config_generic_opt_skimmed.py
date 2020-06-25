@@ -1,6 +1,8 @@
 #cmsRun  config_generic_opt_skimmed.py  RunPeriod="Fall17" # for MC
-#cmsRun  config_generic_opt_skimmed.py  RunPeriod="Run2017B" # for Data
+#cmsRun  config_generic_opt_skimmed.py  RunPeriod="Run2017B" # for Data from 2017
+#cmsRun  config_generic_opt_skimmed.py  RunPeriod="Run2018B" # for Data from 2018
 #cmsRun  config_generic_opt_skimmed.py  RunPeriod="Autumn18" # for MC from 2018
+#cmsRun  config_generic_opt_skimmed.py  RunPeriod="Summer16" # for MC from 2016
 
 
 ###### Process initialization ##########
@@ -18,6 +20,12 @@ process.TFileService = cms.Service("TFileService",
 
 #from EXOVVNtuplizerRunII.Ntuplizer.ntuplizerOptions_data_cfi import config
 from EXOVVNtuplizerRunII.Ntuplizer.ntuplizerOptions_generic_cfi import config
+
+# change from its original value
+#config["DZCUT"] = 0.25
+#config["FSIGCUT"] = 3
+#config["VPROBCUT"] = 0.1
+#config["DNNCUT"] = 0.2
 
 				   
 ####### Config parser ##########
@@ -42,30 +50,86 @@ options.register( 'runUpToEarlyF',
 
 
 
-options.maxEvents = -1
+options.maxEvents = 1000
+#options.maxEvents = -1
 
 #data file
      
 #options.inputFiles ='file:/work/pmatorra/JpsiAnalysis/2018/CMSSW_10_2_10/src/EXOVVNtuplizerRunII/Ntuplizer/miniAOD_99.root'
 #options.inputFiles = '/store/user/cgalloni/BJpsiX_MuMu_230819/Autumn18_10_2_9_miniAOD/190823_131752/0000/miniAOD_57.root'
-options.inputFiles = '/store/user/cgalloni/BcJpsiMuNu_020519/Fall18_10_2_9-MINIAODSIM_noDuplCheck/190506_100026/0000/miniAOD_99.root'
-#options.inputFiles ='/store/data/Run2018B/Charmonium/MINIAOD/17Sep2018-v1/10000/02CFE87F-7C17-1340-8300-FDA86C16D58C.root'
+#options.inputFiles = '/store/user/cgalloni/BcJpsiMuNu_020519/Fall18_10_2_9-MINIAODSIM_noDuplCheck/190506_100026/0000/miniAOD_99.root'
+#options.inputFiles = '/store/mc/RunIIAutumn18MiniAOD/BuToKJpsi_ToMuMu_probefilter_SoftQCDnonD_TuneCP5_13TeV-pythia8-evtgen/MINIAODSIM/PUPoissonAve20_BParking_102X_upgrade2018_realistic_v15-v2/120000/FDD42175-87DC-D648-860B-F240C5E2CB91.root'
 #options.inputFiles ='/store/user/cgalloni/BJpsiX_MuMu_270819/Autumn18_10_2_9_miniAOD/190827_143312/0005/miniAOD_5000.root'
+#options.inputFiles = '/store/user/cgalloni/BcJpsiTauNu_020519/Fall18_10_2_9-MINIAODSIM_noDuplCheck_020519/190505_141436/0000/miniAOD_99.root'
+#options.inputFiles = '/BcToJPsiTauNu_TuneCP5_13TeV-bcvegpy2-pythia8-evtgen/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v1/MINIAODSIM'
+#options.inputFiles = '/store/mc/RunIIAutumn18MiniAOD/BsToTauTau_MuFilter_SoftQCDnonD_TuneCP5_13TeV-pythia8-evtgen/MINIAODSIM/PUPoissonAve20_BParking_102X_upgrade2018_realistic_v15-v1/280000/FD3C4F1A-A2ED-AE43-A68E-76E59838E891.root'
+#options.inputFiles = '/store/mc/RunIIAutumn18MiniAOD/BsToTauTau_MuFilter_SoftQCDnonD_TuneCP5_13TeV-pythia8-evtgen/MINIAODSIM/PUPoissonAve20_BParking_102X_upgrade2018_realistic_v15-v1/130000/8FBE3385-2FB7-D641-9E58-D9EA5C5D4224.root'
+#options.inputFiles = 'file:/scratch/ytakahas/E342DC18-5142-1545-B077-D4405CE0BF05.root'
+
+options.inputFiles ='/store/data/Run2018B/Charmonium/MINIAOD/17Sep2018-v1/10000/02CFE87F-7C17-1340-8300-FDA86C16D58C.root'
+#options.inputFiles = '/store/mc/RunIISummer16MiniAODv3/BcToJPsiMuNu_TuneCUEP8M1_13TeV-bcvegpy2-pythia8-evtgen/MINIAODSIM/PUMoriond17_94X_mcRun2_asymptotic_v3-v1/240000/E8EC0256-2F7F-EA11-8146-0CC47A6C06C6.root'
+#options.inputFiles = '/store/mc/RunIIAutumn18MiniAOD/OniaAndX_ToMuMu_MuFilter_SoftQCDnonD_TuneCP5_13TeV-pythia8-evtgen/MINIAODSIM/102X_upgrade2018_realistic_v15-v1/260000/1B2AF16F-83A2-5442-83EB-CB34B26D35CF.root'
+
+#options.inputFiles = 'file:/work/ytakahas/work/NtuplizerProd/CMSSW_10_6_8/src/EXOVVNtuplizerRunII/Ntuplizer/E30B9F61-DB46-0446-9B6A-2E21B806D4CE.root'
+#options.inputFiles = 'dcap://t3se01.psi.ch:22125//pnfs/psi.ch/cms/trivcat/store/user/ytakahas/mc/ytakahas/BcToJPsiTauNu_TuneCP5_13TeV-bcvegpy2-pythia8-evtgen/USER/v1/A2581C35-B56A-5046-A02D-8C8C1562DEEE.root'
+#options.inputFiles = 'dcap://t3se01.psi.ch:22125//pnfs/psi.ch/cms/trivcat/store/user/ytakahas/mc/ytakahas/UpsilonToTauTau_inclusive_5f_Pythia_LO/USER/v1/UpsilonToTauTau_3prong_miniaod_part0.root'
+
+#options.inputFiles = 'dcap://t3se01.psi.ch:22125//pnfs/psi.ch/cms/trivcat/store/user/ytakahas/FD3C4F1A-A2ED-AE43-A68E-76E59838E891.root'
+#options.inputFiles = [
+#  'dcap://t3se01.psi.ch:22125//pnfs/psi.ch/cms/trivcat/store/user/ytakahas/mc/ytakahas/UpsilonToTauTau_inclusive_5f_Pythia_LO/USER/v1/UpsilonToTauTau_3prong_miniaod_part0.root',
+#  'dcap://t3se01.psi.ch:22125//pnfs/psi.ch/cms/trivcat/store/user/ytakahas/mc/ytakahas/UpsilonToTauTau_inclusive_5f_Pythia_LO/USER/v1/UpsilonToTauTau_3prong_miniaod_part1.root',
+#  'dcap://t3se01.psi.ch:22125//pnfs/psi.ch/cms/trivcat/store/user/ytakahas/mc/ytakahas/UpsilonToTauTau_inclusive_5f_Pythia_LO/USER/v1/UpsilonToTauTau_3prong_miniaod_part2.root',
+#  'dcap://t3se01.psi.ch:22125//pnfs/psi.ch/cms/trivcat/store/user/ytakahas/mc/ytakahas/UpsilonToTauTau_inclusive_5f_Pythia_LO/USER/v1/UpsilonToTauTau_3prong_miniaod_part3.root',
+#  'dcap://t3se01.psi.ch:22125//pnfs/psi.ch/cms/trivcat/store/user/ytakahas/mc/ytakahas/UpsilonToTauTau_inclusive_5f_Pythia_LO/USER/v1/UpsilonToTauTau_3prong_miniaod_part4.root',
+#  'dcap://t3se01.psi.ch:22125//pnfs/psi.ch/cms/trivcat/store/user/ytakahas/mc/ytakahas/UpsilonToTauTau_inclusive_5f_Pythia_LO/USER/v1/UpsilonToTauTau_3prong_miniaod_part5.root',
+#  'dcap://t3se01.psi.ch:22125//pnfs/psi.ch/cms/trivcat/store/user/ytakahas/mc/ytakahas/UpsilonToTauTau_inclusive_5f_Pythia_LO/USER/v1/UpsilonToTauTau_3prong_miniaod_part6.root',
+#  'dcap://t3se01.psi.ch:22125//pnfs/psi.ch/cms/trivcat/store/user/ytakahas/mc/ytakahas/UpsilonToTauTau_inclusive_5f_Pythia_LO/USER/v1/UpsilonToTauTau_3prong_miniaod_part7.root',
+#  'dcap://t3se01.psi.ch:22125//pnfs/psi.ch/cms/trivcat/store/user/ytakahas/mc/ytakahas/UpsilonToTauTau_inclusive_5f_Pythia_LO/USER/v1/UpsilonToTauTau_3prong_miniaod_part8.root',
+#  'dcap://t3se01.psi.ch:22125//pnfs/psi.ch/cms/trivcat/store/user/ytakahas/mc/ytakahas/UpsilonToTauTau_inclusive_5f_Pythia_LO/USER/v1/UpsilonToTauTau_3prong_miniaod_part9.root',
+#]
+
+
+#options.inputFiles = 'dcap://t3se01.psi.ch:22125//pnfs/psi.ch/cms/trivcat/store/user/ytakahas/mc/ytakahas/BcToJPsiTauNu_TuneCP5_13TeV-bcvegpy2-pythia8-evtgen/USER/v1/E342DC18-5142-1545-B077-D4405CE0BF05.root'
+
+#options.inputFiles = 'dcap://t3se01.psi.ch:22125///pnfs/psi.ch/cms/trivcat/store/user/ytakahas/mc/ytakahas/BcToJPsiTauNu_TuneCP5_13TeV-bcvegpy2-pythia8-evtgen/USER/v1//58EB9039-F398-A64A-AD21-A6CC073C841B.root'
+
+#options.inputFiles = 'dcap://t3se01.psi.ch:22125///pnfs/psi.ch/cms/trivcat/store/user/ytakahas/mc/ytakahas/BcToJPsiTauNu_TuneCP5_13TeV-bcvegpy2-pythia8-evtgen/USER/v1//7BF4CF93-B45C-7A4F-BBAF-D732781383EC.root'
+
+#options.inputFiles = 'dcap://t3se01.psi.ch:22125///pnfs/psi.ch/cms/trivcat/store/user/ytakahas/mc/ytakahas/BcToJPsiTauNu_TuneCP5_13TeV-bcvegpy2-pythia8-evtgen/USER/v1//C7AA83E5-B4AC-2A41-AF7F-D5EBB5CFD8B0.root'
+
+#options.inputFiles = [
+#  'dcap://t3se01.psi.ch:22125//pnfs/psi.ch/cms/trivcat/store/user/ytakahas/mc/ytakahas/BcToJPsiTauNu_TuneCP5_13TeV-bcvegpy2-pythia8-evtgen/USER/v1/E342DC18-5142-1545-B077-D4405CE0BF05.root',
+#  'dcap://t3se01.psi.ch:22125//pnfs/psi.ch/cms/trivcat/store/user/ytakahas/mc/ytakahas/BcToJPsiTauNu_TuneCP5_13TeV-bcvegpy2-pythia8-evtgen/USER/v1/E30B9F61-DB46-0446-9B6A-2E21B806D4CE.root',
+#  'dcap://t3se01.psi.ch:22125//pnfs/psi.ch/cms/trivcat/store/user/ytakahas/mc/ytakahas/BcToJPsiTauNu_TuneCP5_13TeV-bcvegpy2-pythia8-evtgen/USER/v1/C7AA83E5-B4AC-2A41-AF7F-D5EBB5CFD8B0.root',
+#  'dcap://t3se01.psi.ch:22125//pnfs/psi.ch/cms/trivcat/store/user/ytakahas/mc/ytakahas/BcToJPsiTauNu_TuneCP5_13TeV-bcvegpy2-pythia8-evtgen/USER/v1/A2581C35-B56A-5046-A02D-8C8C1562DEEE.root',
+#  'dcap://t3se01.psi.ch:22125//pnfs/psi.ch/cms/trivcat/store/user/ytakahas/mc/ytakahas/BcToJPsiTauNu_TuneCP5_13TeV-bcvegpy2-pythia8-evtgen/USER/v1/7BF4CF93-B45C-7A4F-BBAF-D732781383EC.root',
+#  'dcap://t3se01.psi.ch:22125//pnfs/psi.ch/cms/trivcat/store/user/ytakahas/mc/ytakahas/BcToJPsiTauNu_TuneCP5_13TeV-bcvegpy2-pythia8-evtgen/USER/v1/770EA2B8-56DC-DE4B-9D93-31827AF593F8.root',
+#  'dcap://t3se01.psi.ch:22125//pnfs/psi.ch/cms/trivcat/store/user/ytakahas/mc/ytakahas/BcToJPsiTauNu_TuneCP5_13TeV-bcvegpy2-pythia8-evtgen/USER/v1/759D2273-789E-7949-B52E-AAE06B8D04FF.root',
+#  'dcap://t3se01.psi.ch:22125//pnfs/psi.ch/cms/trivcat/store/user/ytakahas/mc/ytakahas/BcToJPsiTauNu_TuneCP5_13TeV-bcvegpy2-pythia8-evtgen/USER/v1/58EB9039-F398-A64A-AD21-A6CC073C841B.root',
+#  'dcap://t3se01.psi.ch:22125//pnfs/psi.ch/cms/trivcat/store/user/ytakahas/mc/ytakahas/BcToJPsiTauNu_TuneCP5_13TeV-bcvegpy2-pythia8-evtgen/USER/v1/4808A71A-BA10-CD4E-B519-11A3468B6A93.root',
+#  'dcap://t3se01.psi.ch:22125//pnfs/psi.ch/cms/trivcat/store/user/ytakahas/mc/ytakahas/BcToJPsiTauNu_TuneCP5_13TeV-bcvegpy2-pythia8-evtgen/USER/v1/2377586D-0618-DB49-87EC-79FFF1DA2AC3.root'
+#]
 
 options.parseArguments()
 
 process.options  = cms.untracked.PSet( 
                      wantSummary = cms.untracked.bool(True),
                      SkipEvent = cms.untracked.vstring('ProductNotFound'),
-                     allowUnscheduled = cms.untracked.bool(True)
+                     allowUnscheduled = cms.untracked.bool(True),
                      )
 
+#process.options.numberOfThreads=cms.untracked.uint32(2)
+
 process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(options.maxEvents) )
+
+# run, lumi, event ID
+#                              eventsToProcess = cms.untracked.VEventRange('1:94:182460'),
+
 if config["RUNONMC"]:
   process.source = cms.Source("PoolSource",
                               fileNames = cms.untracked.vstring(options.inputFiles),
-                              duplicateCheckMode = cms.untracked.string("noDuplicateCheck"),
-                              
+#                              eventsToProcess = cms.untracked.VEventRange('1:417:334860'),
+                              duplicateCheckMode = cms.untracked.string("noDuplicateCheck"),                              
                               ) 
 else:                    
   process.source = cms.Source("PoolSource",
@@ -139,47 +203,6 @@ process.ak4PFJetsCHS = ak4PFJetsCHS.clone( src = 'chs' )
 process.ak4PFJetsCHS.doAreaFastjet = True
 
 
-
-
-
-
-# ###### Recluster MET ##########
-if config["DOMETRECLUSTERING"]:
-
-  from PhysicsTools.PatAlgos.tools.jetTools import switchJetCollection
-		  
-  switchJetCollection(process,
-                      jetSource = cms.InputTag('ak4PFJetsCHS'),
-                      jetCorrections = ('AK4PFchs', jet_corr_levels, ''),
-                      genParticles = cms.InputTag('prunedGenParticles'),
-                      pvSource = cms.InputTag('offlineSlimmedPrimaryVertices')
-                      )
-		  		
-  process.patJets.addGenJetMatch = cms.bool(False) 
-  process.patJets.addGenPartonMatch = cms.bool(False) 
-  process.patJets.addPartonJetMatch = cms.bool(False) 
-  
-  from PhysicsTools.PatUtils.tools.runMETCorrectionsAndUncertainties import runMetCorAndUncFromMiniAOD
-
-  #default configuration for miniAOD reprocessing, change the isData flag to run on data
-  #for a full met computation, remove the pfCandColl input
-  runMetCorAndUncFromMiniAOD(process,
-                           isData=not(config["RUNONMC"]),
-                           )
-  process.patPFMetT1T2Corr.type1JetPtThreshold = cms.double(15.0)
-  process.patPFMetT2Corr.type1JetPtThreshold = cms.double(15.0)
-  process.slimmedMETs.t01Variation = cms.InputTag("slimmedMETs","","RECO")
-  
-  if config["RUNONMC"]:
-    process.patPFMetT1T2Corr.jetCorrLabelRes = cms.InputTag("L3Absolute")
-    process.patPFMetT1T2SmearCorr.jetCorrLabelRes = cms.InputTag("L3Absolute")
-    process.patPFMetT2Corr.jetCorrLabelRes = cms.InputTag("L3Absolute")
-    process.patPFMetT2SmearCorr.jetCorrLabelRes = cms.InputTag("L3Absolute")
-    process.shiftedPatJetEnDown.jetCorrLabelUpToL3Res = cms.InputTag("ak4PFCHSL1FastL2L3Corrector")
-    process.shiftedPatJetEnUp.jetCorrLabelUpToL3Res = cms.InputTag("ak4PFCHSL1FastL2L3Corrector")
-			           
-####### Adding HEEP id ##########
-
 from PhysicsTools.SelectorUtils.tools.vid_id_tools import *
 
 #dataFormat=DataFormat.MiniAOD
@@ -198,23 +221,6 @@ from PhysicsTools.SelectorUtils.tools.vid_id_tools import *
 #for idmod in my_id_modules:
 #    setupAllVIDIdsInModule(process,idmod,setupVIDElectronSelection,task=pattask)
 
-####### Event filters ###########
-
-##___________________________HCAL_Noise_Filter________________________________||
-if config["DOHLTFILTERS"]:
- process.load('CommonTools.RecoAlgos.HBHENoiseFilterResultProducer_cfi')
- process.HBHENoiseFilterResultProducer.minZeros = cms.int32(99999)
- process.HBHENoiseFilterResultProducer.IgnoreTS4TS5ifJetInLowBVRegion=cms.bool(False) 
- ##___________________________BadChargedCandidate_Noise_Filter________________________________|| 
- process.load('Configuration.StandardSequences.Services_cff')
- process.load('RecoMET.METFilters.BadChargedCandidateFilter_cfi')
- # process.load('EXOVVNtuplizerRunII.Ntuplizer.BadChargedCandidateFilter_cfi')
- process.BadChargedCandidateFilter.muons = cms.InputTag("slimmedMuons")
- process.BadChargedCandidateFilter.PFCandidates = cms.InputTag("packedPFCandidates")
- process.BadChargedCandidateFilter.debug = cms.bool(False)
- process.BadChargedCandidateSequence = cms.Sequence (process.BadChargedCandidateFilter)
- 
-
 ####### Ntuplizer initialization ##########
 jetsAK4 = "slimmedJets"
 
@@ -224,26 +230,9 @@ METS_EGclean = "slimmedMETsEGClean"
 METS_MEGclean = "slimmedMETsMuEGClean"
 METS_uncorr = "slimmedMETsUncorrected"
 
-if config["DOMETRECLUSTERING"]: jetsAK4 = "selectedPatJets"
 if config["USENOHF"]: METS = "slimmedMETsNoHF"  
 
 ##___________________ MET significance and covariance matrix ______________________##
-
-if config["DOMETSVFIT"]:
-  print "Using event pfMET covariance for SVfit"
-  process.load("RecoMET.METProducers.METSignificance_cfi")
-  process.load("RecoMET.METProducers.METSignificanceParams_cfi")
-  pattask.add(process.METSignificance)
-
-if config["DOMVAMET"]:
-  from RecoMET.METPUSubtraction.jet_recorrections import recorrectJets
-  recorrectJets(process, isData=True)
-  
-  from RecoMET.METPUSubtraction.MVAMETConfiguration_cff import runMVAMET
-  runMVAMET( process, jetCollectionPF="patJetsReapplyJEC")
-  process.MVAMET.srcLeptons  = cms.VInputTag("slimmedMuons", "slimmedElectrons", "slimmedTaus")
-  process.MVAMET.requireOS = cms.bool(False)
-
 
 
 ##___________________ Jets ______________________##
@@ -272,6 +261,10 @@ if  config["RUNONMC"] :
   elif (("Autumn18" in options.RunPeriod) or ("Fall18" in options.RunPeriod)):
     JECprefix = "Autumn18_V8"
     GT = '102X_upgrade2018_realistic_v18'
+  else:
+    JECprefix = "Autumn18_V8"
+    GT = '102X_upgrade2018_realistic_v18'
+
   #jecAK8chsUncFile = "JEC/%s_MC_Uncertainty_AK8PFchs.txt"%(JECprefix)
   jecAK4chsUncFile = "JEC/%s_MC_Uncertainty_AK4PFchs.txt"%(JECprefix)
  
@@ -279,8 +272,9 @@ if  config["RUNONMC"] :
 
 
 else : #Data
-
+   JECprefix = ""
    JEC_runDependent_suffix= ""
+
    if ("2017" in options.RunPeriod):
      if ("Run2017B" in  options.RunPeriod): JEC_runDependent_suffix= "B"
      elif ("Run2017C" in  options.RunPeriod): JEC_runDependent_suffix= "C"
@@ -356,21 +350,25 @@ if config["CORRMETONTHEFLY"]:
 ################## Ntuplizer ###################
 process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     runOnMC	      = cms.bool(config["RUNONMC"]),
+    useDNN	      = cms.bool(config["USEDNN"]),
     doGenParticles    = cms.bool(config["DOGENPARTICLES"]),
     doGenEvent	      = cms.bool(config["DOGENEVENT"]),
     doPileUp	      = cms.bool(config["DOPILEUP"]),
     doJpsiMu	      = cms.bool(config["DOJPSIMU"]),
-    doJpsiEle	      = cms.bool(config["DOJPSIELE"]),
-    doVertices	      = cms.bool(config["DOVERTICES"]),
-    doTriggerDecisions= cms.bool(config["DOTRIGGERDECISIONS"]),
-    doTriggerObjects  = cms.bool(config["DOTRIGGEROBJECTS"]),
-    doHltFilters      = cms.bool(config["DOHLTFILTERS"]),
-    doMissingEt       = cms.bool(config["DOMISSINGET"]),
-    doMETSVFIT        = cms.bool(config["DOMETSVFIT"]),
-    doMVAMET          = cms.bool(config["DOMVAMET"]),
-    doGenHist         = cms.bool(config["DOGENHIST"]),
+    doJpsiTau	      = cms.bool(config["DOJPSITAU"]),
+    doBsTauTau	      = cms.bool(config["DOBSTAUTAU"]),
+    doBsTauTauFH      = cms.bool(config["DOBSTAUTAUFH"]),
+    doBsDstarTauNu    = cms.bool(config["DOBSDSTARTAUNU"]),
     doCutFlow         = cms.bool(config["DOCUTFLOW"]),
-
+    isTruth           = cms.bool(config["ISTRUTH"]),
+    doVertices	      = cms.bool(config["DOVERTICES"]),
+    doMissingEt       = cms.bool(config["DOMISSINGET"]),
+    doGenHist         = cms.bool(config["DOGENHIST"]),
+    dzcut             = cms.double(config['DZCUT']),
+    fsigcut           = cms.double(config['FSIGCUT']),
+    vprobcut          = cms.double(config['VPROBCUT']),
+    dnncut            = cms.double(config['DNNCUT']),
+    dnnfile           = cms.string(config['DNNFILE']),                        
     vertices = cms.InputTag("offlineSlimmedPrimaryVertices"),
     beamSpot = cms.InputTag("offlineBeamSpot"),
     taus = cms.InputTag("slimmedTaus"),
@@ -411,6 +409,7 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     jetsForMetCorr = cms.InputTag(jetsAK4),
     rho = cms.InputTag("fixedGridRhoFastjetAll"),
     genparticles = cms.InputTag("prunedGenParticles"),
+    gentaus = cms.InputTag("tauGenJets"),
     PUInfo = cms.InputTag("slimmedAddPileupInfo"),
     genEventInfo = cms.InputTag("generator"),
     externallheProducer = cms.InputTag("externalLHEProducer"),
@@ -459,6 +458,7 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     noiseFilterSelection_metFilters = cms.string('Flag_METFilters'),
 
     packedpfcandidates = cms.InputTag('packedPFCandidates'),
+    SecondaryVertices = cms.InputTag('slimmedSecondaryVertices'),
     losttrack = cms.InputTag('lostTracks')
 )
 
@@ -495,11 +495,15 @@ process.TransientTrackBuilderESProducer = cms.ESProducer("TransientTrackBuilderE
 
 ####### Final path ##########
 process.p = cms.Path()
-if config["DOHLTFILTERS"]:
- process.p += process.HBHENoiseFilterResultProducer
- process.p += process.BadChargedCandidateSequence
 
 process.p += process.ecalBadCalibReducedMINIAODFilter
+
+if config["RUNONMC"]:
+  process.load("PhysicsTools.JetMCAlgos.TauGenJets_cfi")
+  process.tauGenJets.GenParticles = cms.InputTag('prunedGenParticles')
+  process.p += process.tauGenJets
+
+
 process.p += process.ntuplizer
 process.p.associate(pattask)
 

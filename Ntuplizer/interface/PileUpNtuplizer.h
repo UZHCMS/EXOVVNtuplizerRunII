@@ -9,7 +9,7 @@ public:
   PileUpNtuplizer( std::vector< edm::EDGetTokenT< std::vector<PileupSummaryInfo> > > tokens, NtupleBranches* nBranches, std::map< std::string, bool >&  runFlags );
   ~PileUpNtuplizer( void );
   
-  void fillBranches( edm::Event const & event, const edm::EventSetup& iSetup );
+  bool fillBranches( edm::Event const & event, const edm::EventSetup& iSetup );
   
 private:
    edm::EDGetTokenT< std::vector<PileupSummaryInfo> > pileUpToken_; 
@@ -17,6 +17,7 @@ private:
    edm::Handle< std::vector<PileupSummaryInfo> >  pileUpInfo_;
    bool isJpsiMu_;
    bool isJpsiEle_;
+   bool isJpsiTau_;
 
 
 };

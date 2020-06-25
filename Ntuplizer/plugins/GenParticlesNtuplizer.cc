@@ -7,6 +7,7 @@ GenParticlesNtuplizer::GenParticlesNtuplizer( std::vector<edm::EDGetTokenT<reco:
    , genParticlesToken_( tokens[0] )
    , isJpsiMu_( runFlags["doJpsiMu"])
    , isJpsiEle_( runFlags["doJpsiEle"]  )
+   , isJpsiTau_( runFlags["doJpsiTau"]  )
    , doGenHist_( runFlags["doGenHist"]  )
 {
 
@@ -18,7 +19,7 @@ GenParticlesNtuplizer::~GenParticlesNtuplizer( void )
 }
 
 //===================================================================================================================        
-void GenParticlesNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetup& iSetup ){
+bool GenParticlesNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetup& iSetup ){
   
 
     event.getByToken(genParticlesToken_ , genParticles_); 
@@ -110,20 +111,30 @@ void GenParticlesNtuplizer::fillBranches( edm::Event const & event, const edm::E
   
     //Skip events with no jspi if that analysis is chosen
    
-    if(isJpsiEle_ || isJpsiMu_){
-        if ( nBranches_->Jpsi_trimu_pt.size() <1)  return;
-    }
+//    bool rflag = false;
+//    
+//    if(isJpsiEle_ || isJpsiMu_){
+//      if ( nBranches_->JpsiMu_B_pt.size() >=1) rflag = true;
+//    }
+//    
+//    if(isJpsiTau_){
+//      if ( nBranches_->JpsiTau_B_pt.size() >=1)  rflag = true;
+//    }
+//
+//    if(rflag==false) return;
+    
   
     /* here we want to save  gen particles info*/
    
     std::vector<int> vDau ;
     std::vector<int> vMoth;
+    std::vector<float> ptMoth;
     int nMoth = 0;
     int nDau  = 0;  
     //nBranches_->genParticle_N = genParticles_->size(); // the genParticles are filtered below
     for( unsigned p=0; p<genParticles_->size(); ++p ){
       
-        vDau.clear(); vMoth.clear();
+        vDau.clear(); vMoth.clear(); ptMoth.clear();
         nDau = 0; nMoth = 0;
       
         bool isPrompt( (*genParticles_)[p].statusFlags().isPrompt() );
@@ -172,17 +183,21 @@ void GenParticlesNtuplizer::fillBranches( edm::Event const & event, const edm::E
 
         for( unsigned int m=0; m<(*genParticles_)[p].numberOfMothers(); ++m ){
             vMoth.push_back( (*genParticles_)[p].mother(m)->pdgId() );
+            ptMoth.push_back( (*genParticles_)[p].mother(m)->pt() );
             nMoth++;
         }
 
         nBranches_->genParticle_nDau  .push_back( nDau  );
         nBranches_->genParticle_nMoth .push_back( nMoth );      
         nBranches_->genParticle_mother.push_back( vMoth );
+        nBranches_->genParticle_mother_pt.push_back( ptMoth );
         nBranches_->genParticle_dau   .push_back( vDau  );      
 
     }
 
     nBranches_->genParticle_N = nBranches_->genParticle_pt.size(); // save number of save genParticles
     
+
+    return true;
 }
 

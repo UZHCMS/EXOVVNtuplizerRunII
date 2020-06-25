@@ -2,6 +2,8 @@
 #define JpsiMuNtuplizer_H
 
 #include "../interface/CandidateNtuplizer.h"
+#include "../interface/MyStruct.h"
+//#include "../interface/common.h"
 //#include "SimDataFormats/JetMatching/interface/JetFlavourMatching.h"
 //#include "SimDataFormats/JetMatching/interface/JetFlavour.h"
 
@@ -73,10 +75,9 @@
 #include "DataFormats/TrackReco/interface/TrackFwd.h"
 #include "FWCore/Framework/interface/MakerMacros.h"
 
-#include "RecoVertex/KinematicFitPrimitives/interface/ParticleMass.h"
 #include "RecoVertex/KinematicFitPrimitives/interface/MultiTrackKinematicConstraint.h"
 #include "RecoVertex/KinematicFit/interface/TwoTrackMassKinematicConstraint.h"
-
+#include "RecoVertex/KinematicFitPrimitives/interface/ParticleMass.h"
 
 #include "CommonTools/Statistics/interface/ChiSquaredProbability.h"
 
@@ -94,25 +95,25 @@
 #include <vector>
 #include <map>
 
-struct particle_cand 
-{
-
-  // Longitudinal impact parameter and its significance
-  Float_t lip;
-  Float_t lips;
-  
-  // Impact parameter for the PV and its significance
-  Float_t pvip;
-  Float_t pvips;
-
-  // Flight length and its significance
-  Float_t fl3d;
-  Float_t fls3d;
-  
-  // opening angle
-  Float_t alpha;
-
-};
+//struct particle_cand 
+//{
+//
+//  // Longitudinal impact parameter and its significance
+//  Float_t lip;
+//  Float_t lips;
+//  
+//  // Impact parameter for the PV and its significance
+//  Float_t pvip;
+//  Float_t pvips;
+//
+//  // Flight length and its significance
+//  Float_t fl3d;
+//  Float_t fls3d;
+//  
+//  // opening angle
+//  Float_t alpha;
+//
+//};
 
 
 
@@ -148,8 +149,7 @@ class JpsiMuNtuplizer : public CandidateNtuplizer {
   math::PtEtaPhiMLorentzVector daughter_p4(std::vector< RefCountedKinematicParticle > fitted_children, size_t i);
 
   float MuonPFIso(pat::Muon muon);
-  double isoTrack(double docaCut, double r, double pmin);
-  void fillBranches( edm::Event const & event, const edm::EventSetup& iSetup );
+  bool fillBranches( edm::Event const & event, const edm::EventSetup& iSetup );
   Float_t getMaxDoca(std::vector<RefCountedKinematicParticle> &kinParticles);
   Float_t getMinDoca(std::vector<RefCountedKinematicParticle> &kinParticles);
   TVector3 getVertex(const reco::GenParticle& part);
@@ -183,10 +183,16 @@ private:
 
    ParticleMass muon_mass = 0.1056583;
    ParticleMass jpsi_mass = 3.09687;
+   ParticleMass pion_mass = 0.139571;
+   ParticleMass kaon_mass = 0.493677;
+   
    float muon_sigma = 0.0000001;
    float jp_m_sigma = 0.00004;
+   float pion_sigma = 0.000016;
+   float kaon_sigma = 0.000016;
    float chi = 0.;
    float ndf = 0.;
+
 
    bool runOnMC_;   
    bool doCutFlow_;

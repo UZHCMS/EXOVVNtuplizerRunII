@@ -31,4 +31,7 @@
 <use name="root"/>
 <use name="DataFormats/Math"/>
 <use name="DataFormats/TrackReco"/>
+<use   name="DataFormats/HepMCCandidate"/>
+<use   name="PhysicsTools/JetMCUtils"/>
+<use name="PhysicsTools/TensorFlow" />
 <flags EDM_PLUGIN="1"/>

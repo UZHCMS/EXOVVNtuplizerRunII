@@ -6,6 +6,7 @@ PileUpNtuplizer::PileUpNtuplizer( std::vector< edm::EDGetTokenT< std::vector<Pil
    , pileUpToken_( tokens[0] )
    , isJpsiMu_( runFlags["doJpsiMu"]  )
    , isJpsiEle_( runFlags["doJpsiEle"]  )
+   , isJpsiTau_( runFlags["doJpsiTau"]  )
 {
 
 }
@@ -17,13 +18,22 @@ PileUpNtuplizer::~PileUpNtuplizer( void )
 }
 
 //===================================================================================================================
-void PileUpNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetup& iSetup ){
+bool PileUpNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetup& iSetup ){
  
     //Skip events with no jspi if that analysis is chosen
    
-    if(isJpsiEle_ || isJpsiMu_){
-        if ( nBranches_->Jpsi_trimu_pt.size() <1)  return;
-    }
+//    bool rflag = false;
+//    
+//    if(isJpsiEle_ || isJpsiMu_){
+//      if ( nBranches_->JpsiMu_B_pt.size() >=1) rflag = true;
+//    }
+//    
+//    if(isJpsiTau_){
+//      if ( nBranches_->JpsiTau_B_pt.size() >=1)  rflag = true;
+//    }
+//
+//    if(rflag==false) return;
+
 
     event.getByToken(pileUpToken_, pileUpInfo_);  
 
@@ -36,5 +46,7 @@ void PileUpNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
         nBranches_->nPuVtx.push_back(PVI->getPU_NumInteractions());
         nBranches_->bX.push_back(PVI->getBunchCrossing());
     }
+
+    return true;
 
 }

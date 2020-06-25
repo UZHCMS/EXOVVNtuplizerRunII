@@ -14,13 +14,14 @@ public:
 
   ~GenParticlesNtuplizer( void ); 
 
-  void fillBranches( edm::Event const & event, const edm::EventSetup& iSetup  );
+  bool fillBranches( edm::Event const & event, const edm::EventSetup& iSetup  );
 
 private:
    edm::EDGetTokenT<reco::GenParticleCollection> genParticlesToken_;
    edm::Handle< reco::GenParticleCollection >  genParticles_;
    bool isJpsiMu_;
    bool isJpsiEle_;
+   bool isJpsiTau_;
    bool doGenHist_;
 };
 

@@ -33,6 +33,8 @@ public:
   static void fillDescriptions(edm::ConfigurationDescriptions& descriptions);
  public:
   std::map< std::string, bool > runFlags;
+  std::map< std::string, double > runValues;
+  std::map< std::string, std::string > runStrings;
  
 private:
   virtual void beginJob()                                                                   override;
@@ -45,15 +47,18 @@ private:
   virtual void endLuminosityBlock(edm::LuminosityBlock const  &, edm::EventSetup const&)    override;
   
   // ----------member data ---------------------------
-  
+
+  Int_t nevents;
+  Int_t nevents_all;
   NtupleBranches* nBranches_;
 
-  std::map<std::string,CandidateNtuplizer*>                 nTuplizers_         ;
+  std::unordered_map<std::string,CandidateNtuplizer*>                 nTuplizers_         ;
   
   edm::EDGetTokenT<reco::BeamSpot>                          beamToken_          ;
   edm::EDGetTokenT<reco::VertexCollection>                  vtxToken_           ;
   edm::EDGetTokenT<double>                                  rhoToken_           ;
   edm::EDGetTokenT<pat::PackedCandidateCollection>          packedpfcandidatesToken_;
+  edm::EDGetTokenT<std::vector<reco::VertexCompositePtrCandidate>>          svToken_;
 
   edm::EDGetTokenT<pat::PackedCandidateCollection>          losttrackToken_;
 
@@ -62,9 +67,11 @@ private:
   edm::EDGetTokenT<LHEEventProduct>	                    lheEventProductToken_;
   
   edm::EDGetTokenT<reco::GenParticleCollection>             genparticleToken_   ;
+  edm::EDGetTokenT<std::vector<reco::GenJet>>               gentauToken_   ;
  
   edm::EDGetTokenT<pat::MuonCollection>     		    muonToken_  	;	
-  edm::EDGetTokenT<edm::View<pat::Electron> >		    electronToken_	;
+  edm::EDGetTokenT<pat::ElectronCollection>     		    electronToken_  	;	
+  //  edm::EDGetTokenT<edm::View<pat::Electron> >		    electronToken_	;
   /* edm::EDGetTokenT<edm::ValueMap<bool> >                    eleVetoIdMapToken_  ; */
   /* edm::EDGetTokenT<edm::ValueMap<bool> >                    eleLooseIdMapToken_ ; */
   /* edm::EDGetTokenT<edm::ValueMap<bool> >                    eleMediumIdMapToken_; */
