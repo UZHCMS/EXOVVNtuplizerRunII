@@ -128,12 +128,13 @@ bool GenParticlesNtuplizer::fillBranches( edm::Event const & event, const edm::E
    
     std::vector<int> vDau ;
     std::vector<int> vMoth;
+    std::vector<float> ptMoth;
     int nMoth = 0;
     int nDau  = 0;  
     //nBranches_->genParticle_N = genParticles_->size(); // the genParticles are filtered below
     for( unsigned p=0; p<genParticles_->size(); ++p ){
       
-        vDau.clear(); vMoth.clear();
+        vDau.clear(); vMoth.clear(); ptMoth.clear();
         nDau = 0; nMoth = 0;
       
         bool isPrompt( (*genParticles_)[p].statusFlags().isPrompt() );
@@ -182,12 +183,14 @@ bool GenParticlesNtuplizer::fillBranches( edm::Event const & event, const edm::E
 
         for( unsigned int m=0; m<(*genParticles_)[p].numberOfMothers(); ++m ){
             vMoth.push_back( (*genParticles_)[p].mother(m)->pdgId() );
+            ptMoth.push_back( (*genParticles_)[p].mother(m)->pt() );
             nMoth++;
         }
 
         nBranches_->genParticle_nDau  .push_back( nDau  );
         nBranches_->genParticle_nMoth .push_back( nMoth );      
         nBranches_->genParticle_mother.push_back( vMoth );
+        nBranches_->genParticle_mother_pt.push_back( ptMoth );
         nBranches_->genParticle_dau   .push_back( vDau  );      
 
     }

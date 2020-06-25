@@ -35,6 +35,7 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
       tree_->Branch( "genParticle_isDirectHardProcessTauDecayProductFinalState"  , &genParticle_isDirectHardProcessTauDecayProductFinalState);
       tree_->Branch( "genParticle_fromHardProcessFinalState"  , &genParticle_fromHardProcessFinalState   );
       tree_->Branch( "genParticle_mother"    , &genParticle_mother     );
+      tree_->Branch( "genParticle_mother_pt" , &genParticle_mother_pt  );
       tree_->Branch( "genParticle_nMoth"     , &genParticle_nMoth      );
       tree_->Branch( "genParticle_nDau"	     , &genParticle_nDau       ); 
       tree_->Branch( "genParticle_dau"	     , &genParticle_dau        );
@@ -1016,6 +1017,7 @@ void NtupleBranches::reset( void ){
   genParticle_isDirectHardProcessTauDecayProductFinalState.clear();
   genParticle_status.clear();
   genParticle_mother.clear();
+  genParticle_mother_pt.clear();
   genParticle_nMoth.clear();
   genParticle_nDau.clear();
   genParticle_dau.clear();

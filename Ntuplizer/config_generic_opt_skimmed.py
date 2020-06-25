@@ -50,8 +50,8 @@ options.register( 'runUpToEarlyF',
 
 
 
-#options.maxEvents = 1000
-options.maxEvents = -1
+options.maxEvents = 1000
+#options.maxEvents = -1
 
 #data file
      
