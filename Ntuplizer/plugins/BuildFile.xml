@@ -35,3 +35,5 @@
 <use   name="PhysicsTools/JetMCUtils"/>
 <use name="PhysicsTools/TensorFlow" />
 <flags EDM_PLUGIN="1"/>
+
+<flags CXXFLAGS="-Wno-unknown-pragmas -I$(CMSSW_BASE)/src/Hammer/Hammer-1.0.0-dev/include -l:libHammerCore.so.1.0.0 -l:libHammerBase.so.1.0.0 -l:libHammerTools.so.1.0.0 -l:libAmplitudes.so.1.0.0 -l:libRates.so.1.0.0 -l:libFormFactors.so.1.0.0 -l:libyaml-cpp.so.0.6"/>

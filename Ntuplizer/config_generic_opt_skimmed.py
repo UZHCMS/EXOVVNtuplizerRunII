@@ -316,6 +316,7 @@ else : #Data
    #jecAK8chsUncFile = "JEC/%s_DATA_Uncertainty_AK8PFchs.txt"%(JECprefix)
    jecAK4chsUncFile = "JEC/%s_DATA_Uncertainty_AK4PFchs.txt"%(JECprefix)
  
+   GT = '106X_dataRun2_v27' 
    print "jec JEC_runDependent_suffix %s ,  prefix %s " %(JEC_runDependent_suffix,JECprefix)
 
 print "jec prefix ", JECprefix
@@ -358,6 +359,7 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     doJpsiTau	      = cms.bool(config["DOJPSITAU"]),
     doBsTauTau	      = cms.bool(config["DOBSTAUTAU"]),
     doBsTauTauFH      = cms.bool(config["DOBSTAUTAUFH"]),
+    doBsTauTauFH_mr   = cms.bool(config["DOBSTAUTAUFH_mr"]),
     doBsDstarTauNu    = cms.bool(config["DOBSDSTARTAUNU"]),
     doCutFlow         = cms.bool(config["DOCUTFLOW"]),
     isTruth           = cms.bool(config["ISTRUTH"]),
@@ -368,6 +370,7 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     fsigcut           = cms.double(config['FSIGCUT']),
     vprobcut          = cms.double(config['VPROBCUT']),
     dnncut            = cms.double(config['DNNCUT']),
+    tau_charge        = cms.uint32(config['TAU_CHARGE']),
     dnnfile           = cms.string(config['DNNFILE']),                        
     vertices = cms.InputTag("offlineSlimmedPrimaryVertices"),
     beamSpot = cms.InputTag("offlineBeamSpot"),

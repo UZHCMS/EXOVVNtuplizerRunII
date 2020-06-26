@@ -1250,7 +1250,7 @@ bool BsDstarTauNuNtuplizer::fillBranches( edm::Event const & event, const edm::E
     
     pat::PackedCandidate pf1 = pfcollection[iii];
 
-    if(mydnn[iii] < c_dnn) continue;
+    if(useDNN_==true && mydnn[iii] < c_dnn) continue;
     npf_after_dnn++;
 
     //      const reco::Track pf1_track = pf1.pseudoTrack();
@@ -1260,7 +1260,7 @@ bool BsDstarTauNuNtuplizer::fillBranches( edm::Event const & event, const edm::E
       if(jjj==kidx || jjj==pidx || jjj==sidx) continue;
 	
       pat::PackedCandidate pf2 = pfcollection[jjj];
-      if(mydnn[jjj] < c_dnn) continue;
+      if(useDNN_==true && mydnn[jjj] < c_dnn) continue;
       //	const reco::Track pf2_track = pf2.pseudoTrack();
 
       for(int kkk = jjj+1; kkk < numOfch; kkk ++){
@@ -1268,7 +1268,7 @@ bool BsDstarTauNuNtuplizer::fillBranches( edm::Event const & event, const edm::E
 	if(kkk==kidx || kkk==pidx || kkk==sidx) continue;
 
 	pat::PackedCandidate pf3 = pfcollection[kkk];
-	if(mydnn[kkk] < c_dnn) continue;
+	if(useDNN_==true && mydnn[kkk] < c_dnn) continue;
 
 	//	  const reco::Track pf3_track = pf3.pseudoTrack();
 

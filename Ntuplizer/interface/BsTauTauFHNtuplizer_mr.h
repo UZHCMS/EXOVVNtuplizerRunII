@@ -1,5 +1,5 @@
-#ifndef JpsiTauNtuplizer_H
-#define JpsiTauNtuplizer_H
+#ifndef BsTauTauFHNtuplizer_mr_H
+#define BsTauTauFHNtuplizer_mr_H
 
 #include "../interface/CandidateNtuplizer.h"
 #include "../interface/MyStruct.h"
@@ -85,7 +85,6 @@
 #include "FWCore/ParameterSet/interface/FileInPath.h"
 #include "PhysicsTools/TensorFlow/interface/TensorFlow.h"
 
-
 #include <tuple>
 #include <sstream>
 #include <iostream>
@@ -97,11 +96,6 @@
 #include <stdlib.h>
 #include <vector>
 #include <map>
-
-#include "Hammer/Hammer.hh"
-#include "Hammer/Process.hh"
-#include "Hammer/Particle.hh"
-
 
 //struct particle_cand 
 //{
@@ -125,11 +119,11 @@
 
 
 
-class JpsiTauNtuplizer : public CandidateNtuplizer {
+class BsTauTauFHNtuplizer_mr : public CandidateNtuplizer {
 
 
  public:
-  JpsiTauNtuplizer( edm::EDGetTokenT<pat::MuonCollection>    muonToken   , 
+  BsTauTauFHNtuplizer_mr( edm::EDGetTokenT<pat::MuonCollection>    muonToken   , 
 		   edm::EDGetTokenT<reco::VertexCollection> verticeToken, 
 		   edm::EDGetTokenT<reco::BeamSpot> bsToken, 
 		   edm::EDGetTokenT<pat::PackedCandidateCollection> packedpfcandidatesToken,
@@ -143,7 +137,7 @@ class JpsiTauNtuplizer : public CandidateNtuplizer {
 		    std::map< std::string, std::string >& runStrings,
 		   NtupleBranches* nBranches );
 
-  ~JpsiTauNtuplizer( void );
+  ~BsTauTauFHNtuplizer_mr( void );
 
   std::tuple<Float_t, TransientVertex> vertexProb( const std::vector<reco::TransientTrack>& tracks);
 
@@ -208,8 +202,6 @@ private:
    float chi = 0.;
    float ndf = 0.;
 
-   Float_t mass_B0 = 5.27963;
-
    bool runOnMC_;   
    bool useDNN_;
    bool isTruth_;
@@ -218,7 +210,6 @@ private:
    float c_fsig;
    float c_vprob;
    float c_dnn;
-   unsigned int c_charge;
 
    tensorflow::MetaGraphDef* graphDef;
    tensorflow::Session* session;
@@ -227,25 +218,16 @@ private:
    tensorflow::Tensor add_global; //(tensorflow::DT_FLOAT, { 1, 2 }); 
    tensorflow::Tensor isTraining; //(tensorflow::DT_FLOAT, { 1, 2 }); 
    tensorflow::Tensor norm; //(tensorflow::DT_FLOAT, { 1, 2 }); 
-
    
    std::string dnnfile_;
 
+   bool doCutFlow_;
    std::map<std::tuple<Int_t, Float_t, Float_t, Float_t>, std::vector<Int_t>> DNNidx;
    std::map<std::tuple<Int_t, Float_t, Float_t, Float_t>, std::vector<Float_t>> DNNval;
-
-
-   //
-   Hammer::Hammer hammer;
-
-   std::vector<std::string> _FFErrNames = {"delta_a0","delta_a1","delta_a2","delta_b0","delta_b1","delta_b2","delta_c1","delta_c2","delta_d0","delta_d1","delta_d2"};
-
-   std::vector<double> _FFErr = {0.0009, 0.03, 0.6, 0.0005, 0.02, 0.6, 0.003, 0.08, 0.1, 0.16, 0.009};
-
 };
 
 
 
 
-#endif // JpsiTauNtuplizer_H
+#endif // BsTauTauFHNtuplizer_mr_H
 

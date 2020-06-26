@@ -38,7 +38,7 @@ BsTauTauFHNtuplizer::BsTauTauFHNtuplizer( edm::EDGetTokenT<pat::MuonCollection> 
 
   std::cout << "UseDNN = " << useDNN_ << std::endl;
   std::cout << "DNN file =" << dnnfile_ << std::endl;
-  std::cout << "Confirm (dzcut, fsigcut, vprobcut) = " << c_dz << " " << c_fsig << " " << c_vprob << " " << c_dnn<< std::endl;
+  std::cout << "Confirm (dzcut, fsigcut, vprobcut, dnn cut) = " << c_dz << " " << c_fsig << " " << c_vprob << " " << c_dnn<< std::endl;
   
   if(useDNN_){
   //    std::string dnnfilepath = "EXOVVNtuplizerRunII/Ntuplizer/" +  dnnfile_;
@@ -560,7 +560,7 @@ bool BsTauTauFHNtuplizer::fillBranches( edm::Event const & event, const edm::Eve
 	 pf.hasTrackDetails() > 0.5
 	 ){
 
-	//	  std::cout << "CHECK1: " <<count_dnn<< std::endl;	  
+	//	std::cout << "CHECK1_muon: " <<count_dnn<< std::endl;	  
 
 	if(count_dnn < 50){
 	  data.tensor<float, 3>()(0, count_dnn, 0) = pf.eta();
@@ -570,7 +570,8 @@ bool BsTauTauFHNtuplizer::fillBranches( edm::Event const & event, const edm::Eve
 	  data.tensor<float, 3>()(0, count_dnn, 4) = pf.charge();
 	  data.tensor<float, 3>()(0, count_dnn, 5) = TMath::Abs(closestVertex.position().z() - pf.pseudoTrack().vz());
 	  data.tensor<float, 3>()(0, count_dnn, 6) = TMath::Sqrt( TMath::Power((closestVertex.position().x() - pf.pseudoTrack().vx()), 2) + TMath::Power((closestVertex.position().y() - pf.pseudoTrack().vy()), 2));
-	  data.tensor<float, 3>()(0, count_dnn, 7) = pf.isGlobalMuon();
+	  //	  data.tensor<float, 3>()(0, count_dnn, 7) = pf.isGlobalMuon();
+	  data.tensor<float, 3>()(0, count_dnn, 7) = (TMath::Abs(pf.pdgId())==13);
 	  label.matrix<int>()(0, count_dnn) = 0;
 	  norm.matrix<float>()(0, count_dnn) = float(1);
 	  count_dnn_muon++;
@@ -632,6 +633,7 @@ bool BsTauTauFHNtuplizer::fillBranches( edm::Event const & event, const edm::Eve
       pat::PackedCandidate pf = (*packedpfcandidates_)[idx];
 
       //	std::cout << "CHECK2: " <<count_dnn<< " " << pfcands[ic].cand_absdz <<std::endl;
+      //      std::cout << "CHECK1_pf: " <<count_dnn<< std::endl;	  
 
       if(count_dnn < 50){
 	data.tensor<float, 3>()(0, count_dnn, 0) = pf.eta();
@@ -641,7 +643,8 @@ bool BsTauTauFHNtuplizer::fillBranches( edm::Event const & event, const edm::Eve
 	data.tensor<float, 3>()(0, count_dnn, 4) = pf.charge();
 	data.tensor<float, 3>()(0, count_dnn, 5) = TMath::Abs(closestVertex.position().z() - pf.pseudoTrack().vz());
 	data.tensor<float, 3>()(0, count_dnn, 6) = TMath::Sqrt( TMath::Power((closestVertex.position().x() - pf.pseudoTrack().vx()), 2) + TMath::Power((closestVertex.position().y() - pf.pseudoTrack().vy()), 2));
-	data.tensor<float, 3>()(0, count_dnn, 7) = pf.isGlobalMuon();
+	//	data.tensor<float, 3>()(0, count_dnn, 7) = pf.isGlobalMuon();
+	data.tensor<float, 3>()(0, count_dnn, 7) = (TMath::Abs(pf.pdgId())==13);
 	  
 	label.matrix<int>()(0, count_dnn) = 0;
 	norm.matrix<float>()(0, count_dnn) = float(1);
@@ -687,7 +690,7 @@ bool BsTauTauFHNtuplizer::fillBranches( edm::Event const & event, const edm::Eve
     //      std::cout << "count_muon, count_dnn = " << count_dnn_muon << " " << count_dnn << std::endl;
 
     for(int ic=count_dnn_muon; ic<count_dnn; ic++){
-      //	std::cout << "pf dnn = " << ic << " " << finalOutputTensor(0, ic, 0) << " " << finalOutputTensor(0, ic, 1) << std::endl;
+      //      std::cout << "pf dnn = " << ic << " " << finalOutputTensor(0, ic, 0) << " " << finalOutputTensor(0, ic, 1) << std::endl;
       mydnn.push_back(finalOutputTensor(0, ic, 1));
     }
 
@@ -818,7 +821,7 @@ bool BsTauTauFHNtuplizer::fillBranches( edm::Event const & event, const edm::Eve
       if(TMath::Abs((*genParticles_)[p].pdgId())!=15) continue;
       if(TMath::Abs((*genParticles_)[p].status())!=2) continue;
       
-      std::cout << "\t Tau found with # of daughters = " << (*genParticles_)[p].numberOfDaughters() << " with mother = " << (*genParticles_)[p].mother(0)->pdgId() << std::endl;
+      //      std::cout << "\t Tau found with # of daughters = " << (*genParticles_)[p].numberOfDaughters() << " with mother = " << (*genParticles_)[p].mother(0)->pdgId() << std::endl;
       
       
       // calculate visible pt ... 
@@ -830,10 +833,10 @@ bool BsTauTauFHNtuplizer::fillBranches( edm::Event const & event, const edm::Eve
       
       for(int idd = 0; idd < (int)(*genParticles_)[p].numberOfDaughters(); idd++){
 	
-	std::cout << "\t\t -> " << (*genParticles_)[p].daughter(idd)->pdgId() << " (pT, eta, phi) = " 
-		  << (*genParticles_)[p].daughter(idd)->pt() << " " 
-		  << (*genParticles_)[p].daughter(idd)->eta() << " " 
-		  << (*genParticles_)[p].daughter(idd)->phi() << std::endl;
+//	std::cout << "\t\t -> " << (*genParticles_)[p].daughter(idd)->pdgId() << " (pT, eta, phi) = " 
+//		  << (*genParticles_)[p].daughter(idd)->pt() << " " 
+//		  << (*genParticles_)[p].daughter(idd)->eta() << " " 
+//		  << (*genParticles_)[p].daughter(idd)->phi() << std::endl;
 
 
 	if(
@@ -858,7 +861,7 @@ bool BsTauTauFHNtuplizer::fillBranches( edm::Event const & event, const edm::Eve
 	  
 	  // check matching to reco PF objects
 	  Float_t min_dr = 999;
-	  Int_t min_index = 999;
+	  //	  Int_t min_index = 999;
 	  
 	  for(int kkk = 0; kkk < numOfch; kkk ++){
 	    
@@ -875,7 +878,7 @@ bool BsTauTauFHNtuplizer::fillBranches( edm::Event const & event, const edm::Eve
 
 	    if(_dR < min_dr && _dR < 0.015 && _pf.pt()/_genvis_.Pt() < 1.15 && _pf.pt()/_genvis_.Pt() > 0.85){
 	      min_dr = _dR;
-	      min_index = kkk; 
+	      //	      min_index = kkk; 
 	    }
 	  }
 	  
@@ -900,7 +903,7 @@ bool BsTauTauFHNtuplizer::fillBranches( edm::Event const & event, const edm::Eve
 
 	  //////////////////////////////////////
 	  if(min_dr == 999) matched = false;
-	  else std::cout << "\t\t\t -----> PF index = " << min_index << " matched!" << std::endl;
+	  //	  else std::cout << "\t\t\t -----> PF index = " << min_index << " matched!" << std::endl;
 
 	  //	  else std::cout << "matched!" << std::endl;
 	  //	  else{
@@ -947,7 +950,7 @@ bool BsTauTauFHNtuplizer::fillBranches( edm::Event const & event, const edm::Eve
 
       
       if(gp.size()==3){
-	std::cout << "\t -----> This has been registered with mother = " << (*genParticles_)[p].mother(0)->pdgId() << std::endl;
+	//	std::cout << "\t -----> This has been registered with mother = " << (*genParticles_)[p].mother(0)->pdgId() << std::endl;
 	gps.push_back(gp);
 	ppdgId.push_back((*genParticles_)[p].mother(0)->pdgId());
 	vec_gentau3pp4.push_back(genvis);
@@ -975,20 +978,21 @@ bool BsTauTauFHNtuplizer::fillBranches( edm::Event const & event, const edm::Eve
   for(int iii = 0; iii < numOfch; iii ++){
       
     pat::PackedCandidate pf1 = pfcollection[iii];
-    if(mydnn[iii] < c_dnn) continue;
+    if(useDNN_==true && mydnn[iii] < c_dnn) continue;
     npf_after_dnn++;
 
     for(int jjj = iii+1; jjj < numOfch; jjj ++){
 	
       pat::PackedCandidate pf2 = pfcollection[jjj];
-      if(mydnn[jjj] < c_dnn) continue;
+      if(useDNN_==true && mydnn[jjj] < c_dnn) continue;
 
       for(int kkk = jjj+1; kkk < numOfch; kkk ++){
 
 	pat::PackedCandidate pf3 = pfcollection[kkk];
-	if(mydnn[kkk] < c_dnn) continue;
+	if(useDNN_==true && mydnn[kkk] < c_dnn) continue;
 
 
+	//	std::cout << iii << " " << jjj << " " << kkk << std::endl;
 
 	Int_t tau_charge = pf1.charge() + pf2.charge() + pf3.charge(); 
 
@@ -1018,7 +1022,7 @@ bool BsTauTauFHNtuplizer::fillBranches( edm::Event const & event, const edm::Eve
 	if(!tau_vertex->vertexIsValid()) continue; 
 
 	// 6.1.2020 commented out
-	//	if(TMath::Prob(tau_vertex->chiSquared(), tau_vertex->degreesOfFreedom()) <= c_vprob) continue;
+	if(TMath::Prob(tau_vertex->chiSquared(), tau_vertex->degreesOfFreedom()) <= c_vprob) continue;
 
 	  
 	//	std::vector< RefCountedKinematicParticle > tau_children = tauTree->finalStateParticles();
@@ -1029,12 +1033,12 @@ bool BsTauTauFHNtuplizer::fillBranches( edm::Event const & event, const edm::Eve
 
 	//	math::PtEtaPhiMLorentzVector tlv_tau = tau1_fit + tau2_fit + tau3_fit;
 
-	//	particle_cand Taucand; 
-	//	Taucand = calculateIPvariables(extrapolator, tau_part, tau_vertex, closestVertex);
+	particle_cand Taucand; 
+	Taucand = calculateIPvariables(extrapolator, tau_part, tau_vertex, closestVertex);
 
 
 	// 6.1.2020 commented out
-	//	if(Taucand.fls3d < c_fsig) continue;
+	if(Taucand.fls3d < c_fsig) continue;
 
 	//	Float_t taumass = tau_part->currentState().mass();
 	//	if(!(0.2 < taumass && taumass < 1.5)) continue;
@@ -1067,7 +1071,7 @@ bool BsTauTauFHNtuplizer::fillBranches( edm::Event const & event, const edm::Eve
   //    int isRight_bS_n = 0;
   //    int isRight_aS_n = 0;
 
-  //  if(cands.size()<=1) return false;
+  if(cands.size()<=1) return false;
   nBranches_->cutflow_perevt->Fill(3);
   //    for(int ic=0; ic < (int)cands.size(); ic++){
   //
@@ -1142,6 +1146,7 @@ bool BsTauTauFHNtuplizer::fillBranches( edm::Event const & event, const edm::Eve
 	if(tau1_idx1==tau2_idx1 || tau1_idx1==tau2_idx2 || tau1_idx1==tau2_idx3) continue;
 	if(tau1_idx2==tau2_idx1 || tau1_idx2==tau2_idx2 || tau1_idx2==tau2_idx3) continue;
 	if(tau1_idx3==tau2_idx1 || tau1_idx3==tau2_idx2 || tau1_idx3==tau2_idx3) continue;
+	//	std::cout << "This is to remove overlap" << std::endl;
       }
 
 
@@ -1352,7 +1357,7 @@ bool BsTauTauFHNtuplizer::fillBranches( edm::Event const & event, const edm::Eve
 	
       if(isMC){
 
-	std::cout << "# of taus =" << gps.size() << std::endl;
+	//	std::cout << "# of taus =" << gps.size() << std::endl;
 	  
 	for(unsigned int mmm=0; mmm < gps.size(); mmm++){
 	    
@@ -1363,19 +1368,19 @@ bool BsTauTauFHNtuplizer::fillBranches( edm::Event const & event, const edm::Eve
 	  std::vector<TLorentzVector> tlvs = gps[mmm];
 
 
-	  std::cout << "\t # of CHs = " << tlvs.size() << std::endl;
+	  //	  std::cout << "\t # of CHs = " << tlvs.size() << std::endl;
 	    
 	  for(unsigned int nnn=0; nnn < tlvs.size(); nnn++){
 	      
 
-	    std::cout << "\t\t gen. Nr" << mmm << " (pT, eta, phi) = " << tlvs[nnn].Pt() << ", " << tlvs[nnn].Eta()  << ", " << tlvs[nnn].Phi() << std::endl;
-	    std::cout << "\t\t pi1 index = " << tau1_idx1 << ", with (pt,eta,phi) = " << tau1_pi1.Pt() << ", " << tau1_pi1.Eta() << ", " << tau1_pi1.Phi() <<  std::endl;
-	    std::cout << "\t\t pi2 index = " << tau1_idx2 << ", with (pt,eta,phi) = " << tau1_pi2.Pt() << ", " << tau1_pi2.Eta() << ", " << tau1_pi2.Phi() <<  std::endl;
-	    std::cout << "\t\t pi3 index = " << tau1_idx3 << ", with (pt,eta,phi) = " << tau1_pi3.Pt() << ", " << tau1_pi3.Eta() << ", " << tau1_pi3.Phi() <<  std::endl;
-
-	    std::cout << "\t\t pt response = " << (tau1_pi1.Pt()/tlvs[nnn].Pt()) << ", delta_R = " << reco::deltaR(tau1_pi1.Eta(), tau1_pi1.Phi(), tlvs[nnn].Eta(), tlvs[nnn].Phi())  << std::endl;
-	    std::cout << "\t\t pt response = " << (tau1_pi2.Pt()/tlvs[nnn].Pt()) << ", delta_R = " << reco::deltaR(tau1_pi2.Eta(), tau1_pi2.Phi(), tlvs[nnn].Eta(), tlvs[nnn].Phi())  << std::endl;
-	    std::cout << "\t\t pt response = " << (tau1_pi3.Pt()/tlvs[nnn].Pt()) << ", delta_R = " << reco::deltaR(tau1_pi3.Eta(), tau1_pi3.Phi(), tlvs[nnn].Eta(), tlvs[nnn].Phi())  << std::endl;
+//	    std::cout << "\t\t gen. Nr" << mmm << " (pT, eta, phi) = " << tlvs[nnn].Pt() << ", " << tlvs[nnn].Eta()  << ", " << tlvs[nnn].Phi() << std::endl;
+//	    std::cout << "\t\t pi1 index = " << tau1_idx1 << ", with (pt,eta,phi) = " << tau1_pi1.Pt() << ", " << tau1_pi1.Eta() << ", " << tau1_pi1.Phi() <<  std::endl;
+//	    std::cout << "\t\t pi2 index = " << tau1_idx2 << ", with (pt,eta,phi) = " << tau1_pi2.Pt() << ", " << tau1_pi2.Eta() << ", " << tau1_pi2.Phi() <<  std::endl;
+//	    std::cout << "\t\t pi3 index = " << tau1_idx3 << ", with (pt,eta,phi) = " << tau1_pi3.Pt() << ", " << tau1_pi3.Eta() << ", " << tau1_pi3.Phi() <<  std::endl;
+//
+//	    std::cout << "\t\t pt response = " << (tau1_pi1.Pt()/tlvs[nnn].Pt()) << ", delta_R = " << reco::deltaR(tau1_pi1.Eta(), tau1_pi1.Phi(), tlvs[nnn].Eta(), tlvs[nnn].Phi())  << std::endl;
+//	    std::cout << "\t\t pt response = " << (tau1_pi2.Pt()/tlvs[nnn].Pt()) << ", delta_R = " << reco::deltaR(tau1_pi2.Eta(), tau1_pi2.Phi(), tlvs[nnn].Eta(), tlvs[nnn].Phi())  << std::endl;
+//	    std::cout << "\t\t pt response = " << (tau1_pi3.Pt()/tlvs[nnn].Pt()) << ", delta_R = " << reco::deltaR(tau1_pi3.Eta(), tau1_pi3.Phi(), tlvs[nnn].Eta(), tlvs[nnn].Phi())  << std::endl;
 
 	    if(
 	       //	       reco::deltaR(tau1_pi1.Eta(), tau1_pi1.Phi(), tlvs[nnn].Eta(), tlvs[nnn].Phi()) < 0.1
@@ -1411,7 +1416,7 @@ bool BsTauTauFHNtuplizer::fillBranches( edm::Event const & event, const edm::Eve
 	    
 	  Bool_t isRight_ = isRight1_ && isRight2_ && isRight3_;
 
-	  std::cout << "\t\t check1:" << isRight1_ << " " << isRight2_ << " " << isRight3_ << std::endl;
+	  //	  std::cout << "\t\t check1:" << isRight1_ << " " << isRight2_ << " " << isRight3_ << std::endl;
 	    
 	  if(isRight_){
 	    isRight1 = true;
@@ -1433,13 +1438,13 @@ bool BsTauTauFHNtuplizer::fillBranches( edm::Event const & event, const edm::Eve
 	    
 	  for(unsigned int nnn=0; nnn < tlvs.size(); nnn++){
 
-	    std::cout << "\t\t gen. Nr" << mmm << " (pT, eta, phi) = " << tlvs[nnn].Pt() << ", " << tlvs[nnn].Eta()  << ", " << tlvs[nnn].Phi() << std::endl;
-	    std::cout << "\t\t pi1 index = " << tau2_idx1 << ", with (pt,eta,phi) = " << tau2_pi1.Pt() << ", " << tau2_pi1.Eta() << ", " << tau2_pi1.Phi() <<  std::endl;
-	    std::cout << "\t\t pi2 index = " << tau2_idx2 << ", with (pt,eta,phi) = " << tau2_pi2.Pt() << ", " << tau2_pi2.Eta() << ", " << tau2_pi2.Phi() <<  std::endl;
-	    std::cout << "\t\t pi3 index = " << tau2_idx3 << ", with (pt,eta,phi) = " << tau2_pi3.Pt() << ", " << tau2_pi3.Eta() << ", " << tau2_pi3.Phi() <<  std::endl;
-	    std::cout << "\t\t pt response = " << (tau2_pi1.Pt()/tlvs[nnn].Pt()) << ", delta_R = " << reco::deltaR(tau2_pi1.Eta(), tau2_pi1.Phi(), tlvs[nnn].Eta(), tlvs[nnn].Phi())  << std::endl;
-	    std::cout << "\t\t pt response = " << (tau2_pi2.Pt()/tlvs[nnn].Pt()) << ", delta_R = " << reco::deltaR(tau2_pi2.Eta(), tau2_pi2.Phi(), tlvs[nnn].Eta(), tlvs[nnn].Phi())  << std::endl;
-	    std::cout << "\t\t pt response = " << (tau2_pi3.Pt()/tlvs[nnn].Pt()) << ", delta_R = " << reco::deltaR(tau2_pi3.Eta(), tau2_pi3.Phi(), tlvs[nnn].Eta(), tlvs[nnn].Phi())  << std::endl;
+//	    std::cout << "\t\t gen. Nr" << mmm << " (pT, eta, phi) = " << tlvs[nnn].Pt() << ", " << tlvs[nnn].Eta()  << ", " << tlvs[nnn].Phi() << std::endl;
+//	    std::cout << "\t\t pi1 index = " << tau2_idx1 << ", with (pt,eta,phi) = " << tau2_pi1.Pt() << ", " << tau2_pi1.Eta() << ", " << tau2_pi1.Phi() <<  std::endl;
+//	    std::cout << "\t\t pi2 index = " << tau2_idx2 << ", with (pt,eta,phi) = " << tau2_pi2.Pt() << ", " << tau2_pi2.Eta() << ", " << tau2_pi2.Phi() <<  std::endl;
+//	    std::cout << "\t\t pi3 index = " << tau2_idx3 << ", with (pt,eta,phi) = " << tau2_pi3.Pt() << ", " << tau2_pi3.Eta() << ", " << tau2_pi3.Phi() <<  std::endl;
+//	    std::cout << "\t\t pt response = " << (tau2_pi1.Pt()/tlvs[nnn].Pt()) << ", delta_R = " << reco::deltaR(tau2_pi1.Eta(), tau2_pi1.Phi(), tlvs[nnn].Eta(), tlvs[nnn].Phi())  << std::endl;
+//	    std::cout << "\t\t pt response = " << (tau2_pi2.Pt()/tlvs[nnn].Pt()) << ", delta_R = " << reco::deltaR(tau2_pi2.Eta(), tau2_pi2.Phi(), tlvs[nnn].Eta(), tlvs[nnn].Phi())  << std::endl;
+//	    std::cout << "\t\t pt response = " << (tau2_pi3.Pt()/tlvs[nnn].Pt()) << ", delta_R = " << reco::deltaR(tau2_pi3.Eta(), tau2_pi3.Phi(), tlvs[nnn].Eta(), tlvs[nnn].Phi())  << std::endl;
 
 	    if(
 	       //	       reco::deltaR(tau2_pi1.Eta(), tau2_pi1.Phi(), tlvs[nnn].Eta(), tlvs[nnn].Phi()) < 0.1
@@ -1468,7 +1473,7 @@ bool BsTauTauFHNtuplizer::fillBranches( edm::Event const & event, const edm::Eve
 	    
 	  Bool_t isRight_ = isRight1_ && isRight2_ && isRight3_;
 
-	  std::cout << "\t\t check2:" << isRight1_ << " " << isRight2_ << " " << isRight3_ << std::endl;
+	  //	  std::cout << "\t\t check2:" << isRight1_ << " " << isRight2_ << " " << isRight3_ << std::endl;
 	    
 	  if(isRight_){
 	    isRight2 = true;
@@ -1481,7 +1486,7 @@ bool BsTauTauFHNtuplizer::fillBranches( edm::Event const & event, const edm::Eve
 
 
       if(isTruth_ && isMC){
-	std::cout << "\t\t isRight1, isRigh2 = " << isRight1 << " " << isRight2 << std::endl;
+	//	std::cout << "\t\t isRight1, isRigh2 = " << isRight1 << " " << isRight2 << std::endl;
 	if(!(isRight1 && isRight2)) continue;
       }
 
@@ -1533,10 +1538,14 @@ bool BsTauTauFHNtuplizer::fillBranches( edm::Event const & event, const edm::Eve
 
       //      std::cout << "check15" << std::endl;     		
       //	std::cout << "rho masses size = " << rhomass.size() << std::endl;
-    
-      nBranches_->BsTauTauFH_tau1_rhomass1.push_back(rhomass1.at(0));
-      nBranches_->BsTauTauFH_tau1_rhomass2.push_back(rhomass1.at(1));
-    
+      if(rhomass1.size()==2){    
+	nBranches_->BsTauTauFH_tau1_rhomass1.push_back(rhomass1.at(0));
+	nBranches_->BsTauTauFH_tau1_rhomass2.push_back(rhomass1.at(1));
+      }else{
+	nBranches_->BsTauTauFH_tau1_rhomass1.push_back(rhomass1.at(-1));
+	nBranches_->BsTauTauFH_tau1_rhomass2.push_back(rhomass1.at(-1));
+      }
+
       nBranches_->BsTauTauFH_tau1_q.push_back(cands[leg1].cand_tau_charge);
       nBranches_->BsTauTauFH_tau1_vx.push_back(tau_vertex1->vertexState().position().x());
       nBranches_->BsTauTauFH_tau1_vy.push_back(tau_vertex1->vertexState().position().y());
@@ -1616,10 +1625,16 @@ bool BsTauTauFHNtuplizer::fillBranches( edm::Event const & event, const edm::Eve
       }
     
       //	std::cout << "rho masses size = " << rhomass.size() << std::endl;
-    
-      nBranches_->BsTauTauFH_tau2_rhomass1.push_back(rhomass2.at(0));
-      nBranches_->BsTauTauFH_tau2_rhomass2.push_back(rhomass2.at(1));
-    
+
+
+      if(rhomass1.size()==2){    
+	nBranches_->BsTauTauFH_tau2_rhomass1.push_back(rhomass2.at(0));
+	nBranches_->BsTauTauFH_tau2_rhomass2.push_back(rhomass2.at(1));
+      }else{
+	nBranches_->BsTauTauFH_tau2_rhomass1.push_back(rhomass2.at(-1));
+	nBranches_->BsTauTauFH_tau2_rhomass2.push_back(rhomass2.at(-1));
+      }
+
       nBranches_->BsTauTauFH_tau2_q.push_back(cands[leg2].cand_tau_charge);
       nBranches_->BsTauTauFH_tau2_vx.push_back(tau_vertex2->vertexState().position().x());
       nBranches_->BsTauTauFH_tau2_vy.push_back(tau_vertex2->vertexState().position().y());

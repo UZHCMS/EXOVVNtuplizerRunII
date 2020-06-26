@@ -105,6 +105,26 @@ struct taucandsimple{
 };
 
 
+struct taucandgen{
+  
+  Int_t cand_tau_id1;
+  Int_t cand_tau_id2;
+  Int_t cand_tau_id3;
+  Float_t cand_gentau_pt;
+  Float_t cand_gentau_eta;
+  Float_t cand_gentau_phi;
+  Float_t cand_gentau_mass;
+  Float_t cand_gentau_pt_bd;
+  Float_t cand_gentau_eta_bd;
+  Float_t cand_gentau_phi_bd;
+  Float_t cand_gentau_mass_bd;
+
+  bool operator<(const taucandgen& another) const { 
+    return cand_gentau_pt > another.cand_gentau_pt;
+  }
+};
+
+
 
 struct pfcand{
   

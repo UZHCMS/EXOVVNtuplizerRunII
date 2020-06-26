@@ -25,11 +25,148 @@ JpsiMuNtuplizer::JpsiMuNtuplizer( edm::EDGetTokenT<pat::MuonCollection>    muonT
     , doCutFlow_ (runFlags["doCutFlow"])
    
 {
+
+  if(runOnMC_){
+    std::cout << "Setup Hammer ...";
+    hammer.setUnits("GeV");
+    hammer.includeDecay("BcJpsiMuNu");
+    hammer.includeDecay("BcJpsiTauNu");
+    //    ham.setFFInputScheme({{"BD", "ISGW2"}, {"BD*", "ISGW2"}});    
+    hammer.setFFInputScheme({{"BcJpsi", "Kiselev"}, {"TauPiPiPi","RCT"}});
+    //    hammer.setFFInputScheme({{"BcJpsi", "EFG"}});
+    //    hammer.addPurePSVertices({"TauPiPiPiNu"});
+    //    hammer.addPurePSVertices({"TauPiPiPiNu"});
+    hammer.addFFScheme("Scheme1", {
+                       // {"BD", "ISGW2"},
+	{"BcJpsi", "BGLVar"}, 
+	  {"TauPiPiPi", "RCT"}
+      });
+
+
+    hammer.addPurePSVertices({"TauPiPiPiNu"}, Hammer::WTerm::DENOMINATOR);
+    hammer.addPurePSVertices({"TauPiPiPiNu"}, Hammer::WTerm::NUMERATOR);
+    hammer.initRun();
+    std::cout << "finish setting up Hammer" << std::endl;
+  }
+
 }
 
 //===================================================================================================================
 JpsiMuNtuplizer::~JpsiMuNtuplizer( void )
 {
+
+
+  //////////////// normalization
+  
+  std::cout <<"Evaluating overall rate .............." << std::endl;
+  
+  //  std::vector<std::string> processes = {"BcJpsiTau+Nu", "BcJpsiTau-Nu", "BcJpsiMu+Nu"};
+  std::vector<std::string> processes = {"BcJpsiTau+Nu", "BcJpsiMu+Nu"};
+  // Getting overall rates
+
+  
+  //  std::vector<std::string> _FFErrNames = {"delta_a0","delta_a1","delta_a2","delta_b0","delta_b1","delta_b2","delta_c1","delta_c2","delta_d0","delta_d1","delta_d2"};
+  
+  //  std::vector<double> _FFErr = {0.0009, 0.03, 0.6, 0.0005, 0.02, 0.6, 0.003, 0.08, 0.1, 0.16, 0.009};
+
+  
+  for(auto proc : processes) {
+    std::map<std::string, double> outRate;
+    std::cout << "Process: " << proc << std::endl;
+    
+    outRate["den"] = hammer.getDenominatorRate(proc);
+    
+    if(outRate["den"] == 0) {
+      std::cout << "!!!!!!!!!!!!! Not evaluated, skipping" << std::endl;
+      continue;
+    }else{
+      std::cout << Form("Default rate: %1.3e", outRate["den"]) << std::endl;
+    }
+    
+    std::map<std::string, double> settings;
+    
+    for(auto pars: _FFErrNames) {
+      settings[pars] = 0;
+    }
+    
+    hammer.setFFEigenvectors("BctoJpsi", "BGLVar", settings);
+
+    outRate["Central"] = hammer.getRate(proc, "Scheme1");
+    std::cout << Form("Central rate: %1.3e (ratio = %.3f)", outRate["Central"], outRate["Central"]/outRate["den"]) << std::endl;
+    
+    
+
+    nBranches_->hammer_width->SetBinContent(1, outRate["den"]);
+    nBranches_->hammer_width->SetBinContent(2, outRate["Central"]);
+
+
+    int idx1 = 0;
+    
+    for(auto pars1: _FFErrNames) {
+      
+      for(int isUp=0; isUp < 2; isUp++) { // up, down variation    
+	
+	std::map<std::string, double> settings;
+	
+	int idx2 = 0;
+	
+	for(auto pars2: _FFErrNames) {
+
+	  if(idx1 == idx2){
+	    if(isUp==1) settings[pars2] = _FFErr[idx2];
+	    else settings[pars2] = -_FFErr[idx2];
+	  }else{
+	    settings[pars2] = 0;
+	  }
+	  idx2 += 1;
+	}
+	
+	
+	hammer.setFFEigenvectors("BctoJpsi", "BGLVar", settings);
+	
+	auto rate = hammer.getRate(proc, "Scheme1");
+	
+	std::string var_name = pars1;
+	var_name += isUp==1? "_Up" : "_Down";
+	outRate[var_name] = rate;
+
+	std::cout << var_name << Form(": %1.3e", rate) << std::endl;
+
+	if(var_name==std::string("delta_a0_Up")) nBranches_->hammer_width->SetBinContent(3, rate);
+	else if(var_name==std::string("delta_a0_Down")) nBranches_->hammer_width->SetBinContent(4, rate);
+	else if(var_name==std::string("delta_a1_Up")) nBranches_->hammer_width->SetBinContent(5, rate);
+	else if(var_name==std::string("delta_a1_Down")) nBranches_->hammer_width->SetBinContent(6, rate);
+	else if(var_name==std::string("delta_a2_Up")) nBranches_->hammer_width->SetBinContent(7, rate);
+	else if(var_name==std::string("delta_a2_Down")) nBranches_->hammer_width->SetBinContent(8, rate);
+
+	else if(var_name==std::string("delta_b0_Up")) nBranches_->hammer_width->SetBinContent(9, rate);
+	else if(var_name==std::string("delta_b0_Down")) nBranches_->hammer_width->SetBinContent(10, rate);
+	else if(var_name==std::string("delta_b1_Up")) nBranches_->hammer_width->SetBinContent(11, rate);
+	else if(var_name==std::string("delta_b1_Down")) nBranches_->hammer_width->SetBinContent(12, rate);
+	else if(var_name==std::string("delta_b2_Up")) nBranches_->hammer_width->SetBinContent(13, rate);
+	else if(var_name==std::string("delta_b2_Down")) nBranches_->hammer_width->SetBinContent(14, rate);
+
+	else if(var_name==std::string("delta_c1_Up")) nBranches_->hammer_width->SetBinContent(15, rate);
+	else if(var_name==std::string("delta_c1_Down")) nBranches_->hammer_width->SetBinContent(16, rate);
+	else if(var_name==std::string("delta_c2_Up")) nBranches_->hammer_width->SetBinContent(17, rate);
+	else if(var_name==std::string("delta_c2_Down")) nBranches_->hammer_width->SetBinContent(18, rate);
+
+	else if(var_name==std::string("delta_d0_Up")) nBranches_->hammer_width->SetBinContent(19, rate);
+	else if(var_name==std::string("delta_d0_Down")) nBranches_->hammer_width->SetBinContent(20, rate);
+	else if(var_name==std::string("delta_d1_Up")) nBranches_->hammer_width->SetBinContent(21, rate);
+	else if(var_name==std::string("delta_d1_Down")) nBranches_->hammer_width->SetBinContent(22, rate);
+	else if(var_name==std::string("delta_d2_Up")) nBranches_->hammer_width->SetBinContent(23, rate);
+	else if(var_name==std::string("delta_d2_Down")) nBranches_->hammer_width->SetBinContent(24, rate);
+
+	
+      }
+      idx1 += 1;
+      
+    }
+  }
+	
+
+
 
 }
 
@@ -262,21 +399,21 @@ bool JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
 
     }
     // Second trigger if fist one didn't fire
-    if (!isTriggered){
-        for (unsigned int i = 0, n = HLTtriggers_->size(); i < n; ++i) {
-            if(trigNames.triggerName(i).find("HLT_Dimuon0_Jpsi3p5_Muon2_v")!= std::string::npos){
-                nBranches_->HLT_BPH_isFired[trigNames.triggerName(i)] = HLTtriggers_->accept(i);
-                if(HLTtriggers_->accept(i)){
-                    isTriggered = true;
-                    finalTriggerName=trigNames.triggerName(i);  
-                    finalTriggerFilterObjName="hltVertexmumuFilterJpsiMuon3p5";
-                    // std::cout << "finalTriggerName = "  << finalTriggerName << std::endl;
-                    
-                }
-            }
-
-        }
-    }
+//    if (!isTriggered){
+//        for (unsigned int i = 0, n = HLTtriggers_->size(); i < n; ++i) {
+//            if(trigNames.triggerName(i).find("HLT_Dimuon0_Jpsi3p5_Muon2_v")!= std::string::npos){
+//                nBranches_->HLT_BPH_isFired[trigNames.triggerName(i)] = HLTtriggers_->accept(i);
+//                if(HLTtriggers_->accept(i)){
+//                    isTriggered = true;
+//                    finalTriggerName=trigNames.triggerName(i);  
+//                    finalTriggerFilterObjName="hltVertexmumuFilterJpsiMuon3p5";
+//                    // std::cout << "finalTriggerName = "  << finalTriggerName << std::endl;
+//                    
+//                }
+//            }
+//
+//        }
+//    }
 
 
 
@@ -522,6 +659,8 @@ bool JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
     math::PtEtaPhiMLorentzVector mu2_fit = daughter_p4(jpsi_children, 1);
 
 
+
+
 //    std::cout << "before fit1: " << muoncollection[mcidx_mu1].pt() << " " << muoncollection[mcidx_mu1].eta() << " " << muoncollection[mcidx_mu1].phi() << " " << muoncollection[mcidx_mu1].mass() << " " << muoncollection[mcidx_mu1].charge()  << std::endl;
 //    std::cout << "before fit2: " << muoncollection[mcidx_mu2].pt() << " " << muoncollection[mcidx_mu2].eta() << " " << muoncollection[mcidx_mu2].phi() << " " << muoncollection[mcidx_mu2].mass() << " " << muoncollection[mcidx_mu2].charge() << std::endl;
 //
@@ -587,6 +726,10 @@ bool JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
         counter += 1;
     }
 
+    if(!(muoncollection[mcidx_mu1].isSoftMuon(closestVertex) > 0.5 && muoncollection[mcidx_mu2].isSoftMuon(closestVertex) > 0.5)) return false;
+
+    
+    //    if(!(muoncollection[mcidx_mu1].isSoftMuon(closestVertex) > 0.5 && muoncollection[mcidx_mu2].isSoftMuon(closestVertex) > 0.5)) return false;
 
   
     /********************************************************************
@@ -906,7 +1049,7 @@ bool JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
         nBranches_->JpsiMu_mu1_vz.push_back(muoncollection[mcidx_mu1].vz());
         nBranches_->JpsiMu_mu1_iso.push_back(iso_mu1);
         nBranches_->JpsiMu_mu1_dbiso.push_back(MuonPFIso(muoncollection[mcidx_mu1]));
-  
+
         nBranches_->JpsiMu_mu2_pt.push_back(mu2_fit.pt());
         nBranches_->JpsiMu_mu2_eta.push_back(mu2_fit.eta());
         nBranches_->JpsiMu_mu2_phi.push_back(mu2_fit.phi());
@@ -1062,47 +1205,299 @@ bool JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
   
         std::vector<const reco::Candidate*> gen_nr_mu;
         std::vector<const reco::Candidate*> gen_jpsi_mu;
+
+	TLorentzVector pB_gen;
+	TLorentzVector pJpsi_gen;
   
 
         if(isMC){
-            event.getByToken(genParticlesToken_ , genParticles_); 
-    
-            for( unsigned p=0; p < genParticles_->size(); ++p){
 
-                //      std::cout << "gen: " << (*genParticles_)[p].pdgId() << " " << (*genParticles_)[p].status() << std::endl;
+	  // for Hammer
+    std::cout << "step 1" << std::endl;
+	  hammer.initEvent();
+	  Hammer::Process Bc2JpsiLNu;
+	  
+	  int idxB = -1;
+	  std::vector<size_t> Bvtx_idxs;
+	  int idxTau = -1;
+	  std::vector<size_t> Tauvtx_idxs;
+	  int idxJpsi = -1;
+	  std::vector<size_t> Jpsivtx_idxs;
+	  
 
-                // Bc daughters loop
-                if(TMath::Abs((*genParticles_)[p].pdgId())==541 && (*genParticles_)[p].status()==2){
+	  event.getByToken(genParticlesToken_ , genParticles_); 
+	  
+	  for( unsigned p=0; p < genParticles_->size(); ++p){
 
-                    // retrieve production vertex
-                    genvertex = getVertex((*genParticles_)[p]);
 
-                    for(int idd = 0; idd < (int)(*genParticles_)[p].numberOfDaughters(); idd++){
-                        Int_t dpid = (*genParticles_)[p].daughter(idd)->pdgId();
-                        //	  std::cout << "\t -> " <<  << " " << (*genParticles_)[p].daughter(idd)->status()<< std::endl;
-                        if(TMath::Abs(dpid)==13) gen_nr_mu.push_back((*genParticles_)[p].daughter(idd));
-                    }
-                }
+	    auto _part_ = (*genParticles_)[p];
+	    
+	    //      std::cout << "gen: " << (*genParticles_)[p].pdgId() << " " << (*genParticles_)[p].status() << std::endl;
+	    
+	    // Bc daughters loop
+	    if(TMath::Abs((*genParticles_)[p].pdgId())==541 && (*genParticles_)[p].status()==2){
+		
+	      bool isJpsi = false;
 
+	      std::cout << "step 2" << std::endl;	      
+	      Hammer::Particle pB(
+				  {
+				    _part_.energy(),
+				      _part_.px(), 
+				      _part_.py(), 
+				      _part_.pz()
+				      }, 
+				  _part_.pdgId()
+				  );
+
+	      idxB = Bc2JpsiLNu.addParticle(pB);
+
+	      std::cout << "step 3" << std::endl;		
+	      for(auto d : _part_.daughterRefVector()) {
+
+		Hammer::Particle B_dau({d->energy(), d->px(), d->py(), d->pz()}, d->pdgId());
+		
+		auto idx_d = Bc2JpsiLNu.addParticle(B_dau);
+		Bvtx_idxs.push_back(idx_d);
+		
+		  if(TMath::Abs(d->pdgId()) == 15) {
+		    
+		    idxTau = idx_d;
+		    
+		    for (auto dd : d->daughterRefVector()) {
+		      Hammer::Particle Tau_dau({dd->energy(), dd->px(), dd->py(), dd->pz()}, dd->pdgId());
+		      auto idx_dd = Bc2JpsiLNu.addParticle(Tau_dau);
+		      Tauvtx_idxs.push_back(idx_dd);
+		    }
+		  }
+
+		  else if(TMath::Abs(d->pdgId()) == 443) {
+		    idxJpsi = idx_d;
+		    for (auto dd : d->daughterRefVector()) {
+		      
+		      Hammer::Particle Jpsi_dau({dd->energy(), dd->px(), dd->py(), dd->pz()}, dd->pdgId());
+		      auto idx_dd = Bc2JpsiLNu.addParticle(Jpsi_dau);
+		      Jpsivtx_idxs.push_back(idx_dd);
+		    }
+		    
+		    isJpsi = true;
+		  }
+
+		  
+		  //		  if(TMath::Abs(d->pdgId()) == 443) {
+		  //		    isJpsi = true;
+		  //		  }
+		}
+		
+		if(isJpsi){
+		  pB_gen.SetPtEtaPhiM(_part_.pt(),
+				      _part_.eta(),
+				      _part_.phi(),
+				      _part_.mass()
+				      );
+		}
+		
+		
+		
+		
+		
+		// retrieve production vertex
+		genvertex = getVertex((*genParticles_)[p]);
+		
+		for(int idd = 0; idd < (int)(*genParticles_)[p].numberOfDaughters(); idd++){
+		  Int_t dpid = (*genParticles_)[p].daughter(idd)->pdgId();
+		  //	  std::cout << "\t -> " <<  << " " << (*genParticles_)[p].daughter(idd)->status()<< std::endl;
+		  if(TMath::Abs(dpid)==13) gen_nr_mu.push_back((*genParticles_)[p].daughter(idd));
+		}
+	    }
+	      
                 // J/psi loop
-                if(TMath::Abs((*genParticles_)[p].pdgId())==443 && 
-                   (*genParticles_)[p].status()==2 && 
-                   TMath::Abs((*genParticles_)[p].mother(0)->pdgId())==541){
-
-                    //	std::cout << "nMon = " << (*genParticles_)[p].numberOfMothers() << std::endl;
-                    //	std::cout << "mother pdgId = " <<  << std::endl;
-
-                    for(int idd = 0; idd < (int)(*genParticles_)[p].numberOfDaughters(); idd++){
-                        Int_t dpid = (*genParticles_)[p].daughter(idd)->pdgId();
-                        if(TMath::Abs(dpid)==13) gen_jpsi_mu.push_back((*genParticles_)[p].daughter(idd));
-                        //	  std::cout << "\t -> " << (*genParticles_)[p].daughter(idd)->pdgId() << " " << (*genParticles_)[p].daughter(idd)->status()<< std::endl;
-                    }
-                }
-
-      
+	      if(TMath::Abs((*genParticles_)[p].pdgId())==443 && 
+		 (*genParticles_)[p].status()==2 && 
+		 TMath::Abs((*genParticles_)[p].mother(0)->pdgId())==541){
+		
+		//	std::cout << "nMon = " << (*genParticles_)[p].numberOfMothers() << std::endl;
+		//	std::cout << "mother pdgId = " <<  << std::endl;
+		
+		pJpsi_gen.SetPtEtaPhiM(_part_.pt(),
+				       _part_.eta(),
+				       _part_.phi(),
+				       _part_.mass()
+				       );
+		
+		for(int idd = 0; idd < (int)(*genParticles_)[p].numberOfDaughters(); idd++){
+		  Int_t dpid = (*genParticles_)[p].daughter(idd)->pdgId();
+		  if(TMath::Abs(dpid)==13) gen_jpsi_mu.push_back((*genParticles_)[p].daughter(idd));
+		  //	  std::cout << "\t -> " << (*genParticles_)[p].daughter(idd)->pdgId() << " " << (*genParticles_)[p].daughter(idd)->status()<< std::endl;
+		}
+	      }
             }
-        }
 
+	  Bc2JpsiLNu.addVertex(idxB, Bvtx_idxs);
+	  
+	if(idxTau != -1) {
+	  Bc2JpsiLNu.addVertex(idxTau, Tauvtx_idxs);
+	}
+	if(idxJpsi != -1) {
+	  Bc2JpsiLNu.addVertex(idxJpsi, Jpsivtx_idxs);
+	}
+
+	std::cout << "step 4" << std::endl;			
+	hammer.addProcess(Bc2JpsiLNu);
+	std::cout << "step 4-1" << std::endl;			
+	hammer.processEvent();
+	std::cout << "step 5" << std::endl;			
+
+	std::map<std::string, double> settings;
+
+	//	std::vector<std::string> _FFErrNames = {"delta_a0","delta_a1","delta_a2","delta_b0","delta_b1","delta_b2","delta_c1","delta_c2","delta_d0","delta_d1","delta_d2"};
+
+	//    std::map<std::string, std::vector<double>> paramsBGLerr {
+	//      {"avec", {0.0009, 0.03, 0.6}},
+	//      {"bvec", {0.0005, 0.02, 0.6}},
+	//      {"cvec", {0.003, 0.08}},
+	//      {"dvec", {0.1, 0.16, 0.009}}
+	//    };
+
+	//	std::vector<double> _FFErr = {0.0009, 0.03, 0.6, 0.0005, 0.02, 0.6, 0.003, 0.08, 0.1, 0.16, 0.009};
+
+	//	for(int check=0; check < 11; check++){
+	//	  std::cout << "CHECK: " << _FFErrNames[check] << " " << _FFErr[check] << std::endl;
+	//	}
+
+	for(auto pars: _FFErrNames) {
+	  //	  string name = "delta_" + pars;
+	  //	  std::cout << name << std::endl;
+	  settings[pars] = 0;
+	}
+
+	hammer.setFFEigenvectors("BctoJpsi", "BGLVar", settings);
+	std::cout << "step 6" << std::endl;				
+	auto weights = hammer.getWeights("Scheme1");
+
+	Float_t weight = -1;
+
+	if(!weights.empty()){
+	  //	else N_evets_weights_produced++;
+
+	  for(auto elem: weights) {
+	    if(isnan(elem.second)) {
+	      std::cout << "[ERROR]: BGL Central nan weight: " << elem.second << std::endl;
+	      //	      cerr << "[ERROR]: CLNCentral nan weight: " << elem.second << endl;
+	      //	      assert(false);
+	    }else{
+	      //	    (*outputNtuplizer)["wh_CLNCentral"] = elem.second;
+	      //	      std::cout << "Hammer weight = "<< elem.second << std::endl;
+	      weight = elem.second;
+	    }
+	  }
+	}
+
+	nBranches_->JpsiMu_hammer_ebe.push_back(weight);
+
+	std::cout << "step 7" << std::endl;					
+	//	std::cout << "Central weight = " << weight << std::endl;
+
+
+	int idx1 = 0;
+	
+	for(auto pars1: _FFErrNames) {
+	  
+	  for(int isUp=0; isUp < 2; isUp++) { // up, down variation    
+	    
+	    std::map<std::string, double> settings;
+	    
+	    int idx2 = 0;
+	    
+	    for(auto pars2: _FFErrNames) {
+	      //	  string name = "delta_" + pars;
+	      //	    std::cout << pars << " " << upvar[ii] << std::endl;
+	      
+	      if(idx1 == idx2){
+		if(isUp==1) settings[pars2] = _FFErr[idx2];
+		else settings[pars2] = -_FFErr[idx2];
+	      }else{
+		settings[pars2] = 0;
+	      }
+	      idx2 += 1;
+	    }
+
+ 
+	    hammer.setFFEigenvectors("BctoJpsi", "BGLVar", settings);
+	    auto weights = hammer.getWeights("Scheme1");
+	    std::string var_name = pars1;
+	    var_name += isUp==1? "_Up" : "_Down";
+
+	    Float_t weight_sys = -1;
+
+	    if(!weights.empty()){
+	      for(auto elem: weights) {
+		if(isnan(elem.second)) {
+		  std::cout << "[ERROR]: BGL nan weight: " << elem.second << std::endl;
+		  //	      cerr << "[ERROR]: CLNCentral nan weight: " << elem.second << endl;
+		  //	      assert(false);
+		}else{
+		  //	    (*outputNtuplizer)["wh_CLNCentral"] = elem.second;
+		  //		  std::cout << var_name << ": Hammer weight = "<< elem.second << std::endl;
+		  weight_sys = elem.second;
+		}
+	      }
+	    }
+
+
+	    //	    std::cout << _FFErrNames[idx1] << ", " << var_name << " " << weight_sys << std::endl;
+
+	    if(var_name==std::string("delta_a0_Up")) nBranches_->JpsiMu_hammer_ebe_a0_up.push_back(weight_sys);
+	    else if(var_name==std::string("delta_a0_Down")) nBranches_->JpsiMu_hammer_ebe_a0_down.push_back(weight_sys);
+	    else if(var_name==std::string("delta_a1_Up")) nBranches_->JpsiMu_hammer_ebe_a1_up.push_back(weight_sys);
+	    else if(var_name==std::string("delta_a1_Down")) nBranches_->JpsiMu_hammer_ebe_a1_down.push_back(weight_sys);
+	    else if(var_name==std::string("delta_a2_Up")) nBranches_->JpsiMu_hammer_ebe_a2_up.push_back(weight_sys);
+	    else if(var_name==std::string("delta_a2_Down")) nBranches_->JpsiMu_hammer_ebe_a2_down.push_back(weight_sys);
+
+	    else if(var_name==std::string("delta_b0_Up")) nBranches_->JpsiMu_hammer_ebe_b0_up.push_back(weight_sys);
+	    else if(var_name==std::string("delta_b0_Down")) nBranches_->JpsiMu_hammer_ebe_b0_down.push_back(weight_sys);
+	    else if(var_name==std::string("delta_b1_Up")) nBranches_->JpsiMu_hammer_ebe_b1_up.push_back(weight_sys);
+	    else if(var_name==std::string("delta_b1_Down")) nBranches_->JpsiMu_hammer_ebe_b1_down.push_back(weight_sys);
+	    else if(var_name==std::string("delta_b2_Up")) nBranches_->JpsiMu_hammer_ebe_b2_up.push_back(weight_sys);
+	    else if(var_name==std::string("delta_b2_Down")) nBranches_->JpsiMu_hammer_ebe_b2_down.push_back(weight_sys);
+
+	    else if(var_name==std::string("delta_c1_Up")) nBranches_->JpsiMu_hammer_ebe_c1_up.push_back(weight_sys);
+	    else if(var_name==std::string("delta_c1_Down")) nBranches_->JpsiMu_hammer_ebe_c1_down.push_back(weight_sys);
+	    else if(var_name==std::string("delta_c2_Up")) nBranches_->JpsiMu_hammer_ebe_c2_up.push_back(weight_sys);
+	    else if(var_name==std::string("delta_c2_Down")) nBranches_->JpsiMu_hammer_ebe_c2_down.push_back(weight_sys);
+
+	    else if(var_name==std::string("delta_d0_Up")) nBranches_->JpsiMu_hammer_ebe_d0_up.push_back(weight_sys);
+	    else if(var_name==std::string("delta_d0_Down")) nBranches_->JpsiMu_hammer_ebe_d0_down.push_back(weight_sys);
+	    else if(var_name==std::string("delta_d1_Up")) nBranches_->JpsiMu_hammer_ebe_d1_up.push_back(weight_sys);
+	    else if(var_name==std::string("delta_d1_Down")) nBranches_->JpsiMu_hammer_ebe_d1_down.push_back(weight_sys);
+	    else if(var_name==std::string("delta_d2_Up")) nBranches_->JpsiMu_hammer_ebe_d2_up.push_back(weight_sys);
+	    else if(var_name==std::string("delta_d2_Down")) nBranches_->JpsiMu_hammer_ebe_d2_down.push_back(weight_sys);
+	   
+	  }
+	  idx1 += 1;
+	  
+	}
+
+	std::cout << "step 8" << std::endl;					
+	TLorentzVector q2_gen; 
+	q2_gen = pB_gen - pJpsi_gen;
+	
+	//	std::cout << "truth q2 =" << q2_gen.M2() << std::endl;
+
+	nBranches_->JpsiMu_q2_gen.push_back(q2_gen.M2());
+	nBranches_->JpsiMu_B_pt_gen.push_back(pB_gen.Pt());
+	nBranches_->JpsiMu_B_eta_gen.push_back(pB_gen.Eta());
+	nBranches_->JpsiMu_B_phi_gen.push_back(pB_gen.Phi());
+	nBranches_->JpsiMu_B_mass_gen.push_back(pB_gen.M());
+
+
+
+
+
+
+
+        }
+	
   
         bool flag_nr_match = false;
         if(gen_nr_mu.size()==1){
@@ -1145,7 +1540,61 @@ bool JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
         nBranches_->JpsiMu_isgenmatched.push_back((int)flag_jpsi_match);
         nBranches_->JpsiMu_mu3_isgenmatched.push_back((int)flag_nr_match);
 
+
+
+      TLorentzVector Tlv_B;
+      TLorentzVector Tlv_Jpsi;
+      TLorentzVector Tlv_mu3;
+      
+
+
+      Tlv_B.SetPtEtaPhiM(bc_part->currentState().globalMomentum().perp(),
+			 bc_part->currentState().globalMomentum().eta(),
+			 bc_part->currentState().globalMomentum().phi(),
+			 bc_part->currentState().mass()
+			 );
+
+      Tlv_B *= mass_B0/bc_part->currentState().mass();
+	
+      Tlv_Jpsi.SetPtEtaPhiM(jpsi_part->currentState().globalMomentum().perp(),
+			    jpsi_part->currentState().globalMomentum().eta(),
+			    jpsi_part->currentState().globalMomentum().phi(),
+			    jpsi_part->currentState().mass());
+      
+      Tlv_mu3.SetPtEtaPhiM(mu3_fit.pt(),
+			   mu3_fit.eta(),
+			   mu3_fit.phi(),
+			   mu3_fit.mass());
+
+      Float_t q2 = (Tlv_B - Tlv_Jpsi).M2();
+
+
+      nBranches_->JpsiMu_B_q2.push_back(q2);
+
+
+      Float_t mm2 = (Tlv_B - Tlv_Jpsi - Tlv_mu3).M2();
+      Float_t ptmiss = (Tlv_B - Tlv_Jpsi - Tlv_mu3).Pt();
+
+      nBranches_->JpsiMu_B_mm2.push_back(mm2);
+      nBranches_->JpsiMu_B_ptmiss.push_back(ptmiss);
+
+      Tlv_mu3.Boost( -Tlv_B.BoostVector() );
+
+      nBranches_->JpsiMu_B_Es.push_back(Tlv_mu3.E()); 
+
+      //      Float_t ptback = cands[ic].cand_b_pt*mass_B0/cands[ic].cand_b_mass;
+      nBranches_->JpsiMu_B_ptback.push_back(Tlv_B.Pt()); 
+
+
+	
+
+
     }
+
+
+
+
+
 
 
     nBranches_->IsJpsiMu.push_back(1.);

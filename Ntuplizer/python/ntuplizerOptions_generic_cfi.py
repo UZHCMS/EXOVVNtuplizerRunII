@@ -14,7 +14,7 @@ config["DZCUT"] = 0.25 # this is fixed !!
 config["FSIGCUT"] = 3
 config["VPROBCUT"] = 0.05
 config["DNNCUT"] = 0.1443
-
+config["TAU_CHARGE"] = 1
 
 config["USEJSON"] = not (config["RUNONMC"])
 #config["USEJSON"] = False
@@ -36,6 +36,7 @@ config["DOJPSIMU"] = True
 config["DOJPSITAU"] = False
 config["DOBSTAUTAU"] = False
 config["DOBSTAUTAUFH"] = False
+config["DOBSTAUTAUFH_mr"] = False # mass regression
 config["DOBSDSTARTAUNU"] = False
 config["ISTRUTH"] = False
 
@@ -44,11 +45,17 @@ config["DOGENHIST"] = (True and config["RUNONMC"]);
 if config["DOJPSITAU"]:
     config["DNNFILE"] = "data/DNN/BcJPsi/DUMMY"
 
-if config["DOBSTAUTAU"] or config["DOBSTAUTAUFH"] or config["DOBSDSTARTAUNU"]:
-    config["DNNFILE"] = "data/DNN/BsTauTau/DUMMY"    
+elif config["DOBSTAUTAU"] or config["DOBSDSTARTAUNU"]:
+    config["DNNFILE"] = "data/DNN/BsTauTau_semilep/DUMMY"    
 
-if config["DOJPSIMU"]:
-    config["DNNFILE"] = "data/DNN/DUMMY"
+elif config["DOBSTAUTAUFH"] or config["DOBSTAUTAUFH_mr"]:
+    config["DNNFILE"] = "data/DNN/BsTauTau_fullhad/DUMMY"
+    config["DNNCUT"] = 0.47
+    config["FSIGCUT"] = 2
+    config["VPROBCUT"] = 0.05
+else:
+    config["DNNFILE"] = "data/DNN/BcJPsi/DUMMY"
+
 
 #--------- JEC ----------#
 

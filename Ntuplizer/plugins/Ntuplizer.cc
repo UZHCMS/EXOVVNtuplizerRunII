@@ -9,6 +9,7 @@
 #include "../interface/JpsiTauNtuplizer.h"
 #include "../interface/BsTauTauNtuplizer.h"
 #include "../interface/BsTauTauFHNtuplizer.h"
+#include "../interface/BsTauTauFHNtuplizer_mr.h"
 #include "../interface/BsDstarTauNuNtuplizer.h"
 
 #include "DataFormats/PatCandidates/interface/TriggerObjectStandAlone.h"
@@ -84,6 +85,7 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
   runFlags["doJpsiTau"] = iConfig.getParameter<bool>("doJpsiTau");
   runFlags["doBsTauTau"] = iConfig.getParameter<bool>("doBsTauTau");
   runFlags["doBsTauTauFH"] = iConfig.getParameter<bool>("doBsTauTauFH");
+  runFlags["doBsTauTauFH_mr"] = iConfig.getParameter<bool>("doBsTauTauFH_mr");
   runFlags["doBsDstarTauNu"] = iConfig.getParameter<bool>("doBsDstarTauNu");
   runFlags["doCutFlow"] = iConfig.getParameter<bool>("doCutFlow");
   runFlags["doGenHist"] = iConfig.getParameter<bool>("doGenHist");
@@ -92,12 +94,13 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
   runValues["fsigcut"] = iConfig.getParameter<double>("fsigcut");
   runValues["vprobcut"] = iConfig.getParameter<double>("vprobcut");
   runValues["dnncut"] = iConfig.getParameter<double>("dnncut");
+  runValues["tau_charge"] = iConfig.getParameter<unsigned int>("tau_charge");
 
   runStrings["dnnfile"] = iConfig.getParameter<std::string>("dnnfile");  
 
 
-  std::cout << "dnn file: " << runStrings["dnnfile"] << std::endl;
-  std::cout << "(dzcut, fsigcut, vprobcut) = " << runValues["dzcut"] << " " << runValues["fsigcut"] << " " << runValues["vprobcut"] << " " << runValues["dnncut"] << std::endl;
+  std::cout << "Ntuplizer: dnn file: " << runStrings["dnnfile"] << std::endl;
+  std::cout << "Ntuplizer: (dzcut, fsigcut, vprobcut, dnn cut, tau_charge) = " << runValues["dzcut"] << " " << runValues["fsigcut"] << " " << runValues["vprobcut"] << " " << runValues["dnncut"] << " " << runValues["tau_charge"] << std::endl;
   
 
   std::string jecpath = iConfig.getParameter<std::string>("jecpath");
@@ -111,7 +114,8 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
   /* Histogram for cutflow */
 
   nBranches_->cutflow_perevt = fs->make<TH1F>("cutflow_perevt", "Per Event Ntuplizer Cutflow", 10, 0, 10);
-  
+
+  nBranches_->hammer_width = fs->make<TH1F>("hammer_width", "Hammer width", 24, 0, 24);  
   
   /* Histogram for genParticles */ 
   if (runFlags["doGenHist"]){
@@ -240,6 +244,23 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
   if (runFlags["doBsTauTauFH"]) {
     std::cout<<"\n\n --->GETTING INSIDE doBsTauTauFH<---\n\n"<<std::endl;
     nTuplizers_["BsTauTauFH"] = new BsTauTauFHNtuplizer( muonToken_   , 
+							 vtxToken_   , 
+							 beamToken_ ,
+							 packedpfcandidatesToken_,
+							 losttrackToken_,
+							 triggerToken_,
+							 triggerObjects_,
+							 genparticleToken_,
+							 gentauToken_,
+							 runFlags,
+							 runValues,
+							 runStrings,
+							 nBranches_ );
+  }
+
+  if (runFlags["doBsTauTauFH_mr"]) {
+    std::cout<<"\n\n --->GETTING INSIDE doBsTauTauFH_mr<---\n\n"<<std::endl;
+    nTuplizers_["BsTauTauFH_mr"] = new BsTauTauFHNtuplizer_mr( muonToken_   , 
 							 vtxToken_   , 
 							 beamToken_ ,
 							 packedpfcandidatesToken_,
