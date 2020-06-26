@@ -327,10 +327,49 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch("JpsiMu_B_unfit_vx", &JpsiMu_B_unfit_vx );
     tree_->Branch("JpsiMu_B_unfit_vy", &JpsiMu_B_unfit_vy );
     tree_->Branch("JpsiMu_B_unfit_vz", &JpsiMu_B_unfit_vz );
+    tree_->Branch("JpsiMu_B_q2", &JpsiMu_B_q2 );
+    tree_->Branch("JpsiMu_B_mm2", &JpsiMu_B_mm2 );
+    tree_->Branch("JpsiMu_B_ptmiss", &JpsiMu_B_ptmiss );
+    tree_->Branch("JpsiMu_B_Es", &JpsiMu_B_Es );
+    tree_->Branch("JpsiMu_B_ptback", &JpsiMu_B_ptback );
 
     tree_->Branch("JpsiMu_ngenmuons", &JpsiMu_ngenmuons);
     tree_->Branch("JpsiMu_isgenmatched", &JpsiMu_isgenmatched);
     tree_->Branch("JpsiMu_mu3_isgenmatched", &JpsiMu_mu3_isgenmatched);
+    tree_->Branch("JpsiMu_q2_gen", &JpsiMu_q2_gen);
+    tree_->Branch("JpsiMu_B_pt_gen", &JpsiMu_B_pt_gen);
+    tree_->Branch("JpsiMu_B_eta_gen", &JpsiMu_B_eta_gen);
+    tree_->Branch("JpsiMu_B_phi_gen", &JpsiMu_B_phi_gen);
+    tree_->Branch("JpsiMu_B_mass_gen", &JpsiMu_B_mass_gen);
+
+
+    tree_->Branch("JpsiMu_hammer_ebe", &JpsiMu_hammer_ebe);
+    tree_->Branch("JpsiMu_hammer_ebe_a0_up", &JpsiMu_hammer_ebe_a0_up);
+    tree_->Branch("JpsiMu_hammer_ebe_a0_down", &JpsiMu_hammer_ebe_a0_down);
+    tree_->Branch("JpsiMu_hammer_ebe_a1_up", &JpsiMu_hammer_ebe_a1_up);
+    tree_->Branch("JpsiMu_hammer_ebe_a1_down", &JpsiMu_hammer_ebe_a1_down);
+    tree_->Branch("JpsiMu_hammer_ebe_a2_up", &JpsiMu_hammer_ebe_a2_up);
+    tree_->Branch("JpsiMu_hammer_ebe_a2_down", &JpsiMu_hammer_ebe_a2_down);
+
+    tree_->Branch("JpsiMu_hammer_ebe_b0_up", &JpsiMu_hammer_ebe_b0_up);
+    tree_->Branch("JpsiMu_hammer_ebe_b0_down", &JpsiMu_hammer_ebe_b0_down);
+    tree_->Branch("JpsiMu_hammer_ebe_b1_up", &JpsiMu_hammer_ebe_b1_up);
+    tree_->Branch("JpsiMu_hammer_ebe_b1_down", &JpsiMu_hammer_ebe_b1_down);
+    tree_->Branch("JpsiMu_hammer_ebe_b2_up", &JpsiMu_hammer_ebe_b2_up);
+    tree_->Branch("JpsiMu_hammer_ebe_b2_down", &JpsiMu_hammer_ebe_b2_down);
+
+    tree_->Branch("JpsiMu_hammer_ebe_c1_up", &JpsiMu_hammer_ebe_c1_up);
+    tree_->Branch("JpsiMu_hammer_ebe_c1_down", &JpsiMu_hammer_ebe_c1_down);
+    tree_->Branch("JpsiMu_hammer_ebe_c2_up", &JpsiMu_hammer_ebe_c2_up);
+    tree_->Branch("JpsiMu_hammer_ebe_c2_down", &JpsiMu_hammer_ebe_c2_down);
+
+    tree_->Branch("JpsiMu_hammer_ebe_d0_up", &JpsiMu_hammer_ebe_d0_up);
+    tree_->Branch("JpsiMu_hammer_ebe_d0_down", &JpsiMu_hammer_ebe_d0_down);
+    tree_->Branch("JpsiMu_hammer_ebe_d1_up", &JpsiMu_hammer_ebe_d1_up);
+    tree_->Branch("JpsiMu_hammer_ebe_d1_down", &JpsiMu_hammer_ebe_d1_down);
+    tree_->Branch("JpsiMu_hammer_ebe_d2_up", &JpsiMu_hammer_ebe_d2_up);
+    tree_->Branch("JpsiMu_hammer_ebe_d2_down", &JpsiMu_hammer_ebe_d2_down);
+
 
   }
 
@@ -503,6 +542,11 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch("JpsiTau_B_iso", &JpsiTau_B_iso);
     tree_->Branch("JpsiTau_B_iso_ntracks", &JpsiTau_B_iso_ntracks );
     tree_->Branch("JpsiTau_B_iso_mindoca", &JpsiTau_B_iso_mindoca );
+    tree_->Branch("JpsiTau_B_q2", &JpsiTau_B_q2 );
+    tree_->Branch("JpsiTau_B_mm2", &JpsiTau_B_mm2 );
+    tree_->Branch("JpsiTau_B_ptmiss", &JpsiTau_B_ptmiss );
+    tree_->Branch("JpsiTau_B_Es", &JpsiTau_B_Es );
+    tree_->Branch("JpsiTau_B_ptback", &JpsiTau_B_ptback );
 
     tree_->Branch("JpsiTau_ngenmuons", &JpsiTau_ngenmuons);
     tree_->Branch("JpsiTau_isgenmatched", &JpsiTau_isgenmatched);
@@ -515,7 +559,54 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch("JpsiTau_ngentau3", &JpsiTau_ngentau3); 
     tree_->Branch("JpsiTau_ngentau", &JpsiTau_ngentau);
     tree_->Branch("JpsiTau_gentaupt", &JpsiTau_gentaupt);
+    tree_->Branch("JpsiTau_gentaueta", &JpsiTau_gentaueta);
+    tree_->Branch("JpsiTau_gentauphi", &JpsiTau_gentauphi);
+    tree_->Branch("JpsiTau_gentaumass", &JpsiTau_gentaumass);
+    tree_->Branch("JpsiTau_gentaupt_bd", &JpsiTau_gentaupt_bd);
+    tree_->Branch("JpsiTau_gentaueta_bd", &JpsiTau_gentaueta_bd);
+    tree_->Branch("JpsiTau_gentauphi_bd", &JpsiTau_gentauphi_bd);
+    tree_->Branch("JpsiTau_gentaumass_bd", &JpsiTau_gentaumass_bd);
     tree_->Branch("JpsiTau_gentaudm", &JpsiTau_gentaudm);
+    tree_->Branch("JpsiTau_q2_gen", &JpsiTau_q2_gen);
+    tree_->Branch("JpsiTau_B_pt_gen", &JpsiTau_B_pt_gen);
+    tree_->Branch("JpsiTau_B_eta_gen", &JpsiTau_B_eta_gen);
+    tree_->Branch("JpsiTau_B_phi_gen", &JpsiTau_B_phi_gen);
+    tree_->Branch("JpsiTau_B_mass_gen", &JpsiTau_B_mass_gen);
+
+
+//    tree_->Branch("JpsiTau_ed_pfeta", &JpsiTau_ed_pfeta);
+//    tree_->Branch("JpsiTau_ed_pfphi", &JpsiTau_ed_pfphi);
+//    tree_->Branch("JpsiTau_ed_isRight", &JpsiTau_ed_isRight);
+//    tree_->Branch("JpsiTau_ed_id", &JpsiTau_ed_id);
+//    tree_->Branch("JpsiTau_ed_pfdnn", &JpsiTau_ed_pfdnn);
+//    tree_->Branch("JpsiTau_ed_genpt", &JpsiTau_ed_genpt);
+
+    tree_->Branch("JpsiTau_hammer_ebe", &JpsiTau_hammer_ebe);
+    tree_->Branch("JpsiTau_hammer_ebe_a0_up", &JpsiTau_hammer_ebe_a0_up);
+    tree_->Branch("JpsiTau_hammer_ebe_a0_down", &JpsiTau_hammer_ebe_a0_down);
+    tree_->Branch("JpsiTau_hammer_ebe_a1_up", &JpsiTau_hammer_ebe_a1_up);
+    tree_->Branch("JpsiTau_hammer_ebe_a1_down", &JpsiTau_hammer_ebe_a1_down);
+    tree_->Branch("JpsiTau_hammer_ebe_a2_up", &JpsiTau_hammer_ebe_a2_up);
+    tree_->Branch("JpsiTau_hammer_ebe_a2_down", &JpsiTau_hammer_ebe_a2_down);
+
+    tree_->Branch("JpsiTau_hammer_ebe_b0_up", &JpsiTau_hammer_ebe_b0_up);
+    tree_->Branch("JpsiTau_hammer_ebe_b0_down", &JpsiTau_hammer_ebe_b0_down);
+    tree_->Branch("JpsiTau_hammer_ebe_b1_up", &JpsiTau_hammer_ebe_b1_up);
+    tree_->Branch("JpsiTau_hammer_ebe_b1_down", &JpsiTau_hammer_ebe_b1_down);
+    tree_->Branch("JpsiTau_hammer_ebe_b2_up", &JpsiTau_hammer_ebe_b2_up);
+    tree_->Branch("JpsiTau_hammer_ebe_b2_down", &JpsiTau_hammer_ebe_b2_down);
+
+    tree_->Branch("JpsiTau_hammer_ebe_c1_up", &JpsiTau_hammer_ebe_c1_up);
+    tree_->Branch("JpsiTau_hammer_ebe_c1_down", &JpsiTau_hammer_ebe_c1_down);
+    tree_->Branch("JpsiTau_hammer_ebe_c2_up", &JpsiTau_hammer_ebe_c2_up);
+    tree_->Branch("JpsiTau_hammer_ebe_c2_down", &JpsiTau_hammer_ebe_c2_down);
+
+    tree_->Branch("JpsiTau_hammer_ebe_d0_up", &JpsiTau_hammer_ebe_d0_up);
+    tree_->Branch("JpsiTau_hammer_ebe_d0_down", &JpsiTau_hammer_ebe_d0_down);
+    tree_->Branch("JpsiTau_hammer_ebe_d1_up", &JpsiTau_hammer_ebe_d1_up);
+    tree_->Branch("JpsiTau_hammer_ebe_d1_down", &JpsiTau_hammer_ebe_d1_down);
+    tree_->Branch("JpsiTau_hammer_ebe_d2_up", &JpsiTau_hammer_ebe_d2_up);
+    tree_->Branch("JpsiTau_hammer_ebe_d2_down", &JpsiTau_hammer_ebe_d2_down);
 
   }
 
@@ -825,6 +916,32 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
 
   }
 
+  if (runFlags["doBsTauTauFH_mr"]){
+    tree_->Branch("BsTauTauFH_mr_tau_pi1_pt", &BsTauTauFH_mr_tau_pi1_pt );
+    tree_->Branch("BsTauTauFH_mr_tau_pi1_eta", &BsTauTauFH_mr_tau_pi1_eta );
+    tree_->Branch("BsTauTauFH_mr_tau_pi1_phi", &BsTauTauFH_mr_tau_pi1_phi );
+    tree_->Branch("BsTauTauFH_mr_tau_pi1_mass", &BsTauTauFH_mr_tau_pi1_mass );
+    tree_->Branch("BsTauTauFH_mr_tau_pi2_pt", &BsTauTauFH_mr_tau_pi2_pt );
+    tree_->Branch("BsTauTauFH_mr_tau_pi2_eta", &BsTauTauFH_mr_tau_pi2_eta );
+    tree_->Branch("BsTauTauFH_mr_tau_pi2_phi", &BsTauTauFH_mr_tau_pi2_phi );
+    tree_->Branch("BsTauTauFH_mr_tau_pi2_mass", &BsTauTauFH_mr_tau_pi2_mass );
+    tree_->Branch("BsTauTauFH_mr_tau_pi3_pt", &BsTauTauFH_mr_tau_pi3_pt );
+    tree_->Branch("BsTauTauFH_mr_tau_pi3_eta", &BsTauTauFH_mr_tau_pi3_eta );
+    tree_->Branch("BsTauTauFH_mr_tau_pi3_phi", &BsTauTauFH_mr_tau_pi3_phi );
+    tree_->Branch("BsTauTauFH_mr_tau_pi3_mass", &BsTauTauFH_mr_tau_pi3_mass );
+
+    tree_->Branch("BsTauTauFH_mr_tau_genpt", &BsTauTauFH_mr_tau_genpt );
+    tree_->Branch("BsTauTauFH_mr_tau_geneta", &BsTauTauFH_mr_tau_geneta );
+    tree_->Branch("BsTauTauFH_mr_tau_genphi", &BsTauTauFH_mr_tau_genphi );
+    tree_->Branch("BsTauTauFH_mr_tau_genmass", &BsTauTauFH_mr_tau_genmass );
+
+    tree_->Branch("BsTauTauFH_mr_tau_genpt_bd", &BsTauTauFH_mr_tau_genpt_bd );
+    tree_->Branch("BsTauTauFH_mr_tau_geneta_bd", &BsTauTauFH_mr_tau_geneta_bd );
+    tree_->Branch("BsTauTauFH_mr_tau_genphi_bd", &BsTauTauFH_mr_tau_genphi_bd );
+    tree_->Branch("BsTauTauFH_mr_tau_genmass_bd", &BsTauTauFH_mr_tau_genmass_bd );
+    
+  }
+
   if (runFlags["doBsDstarTauNu"]){
 
     tree_->Branch("IsBsDstarTauNu", &IsBsDstarTauNu );
@@ -1046,7 +1163,7 @@ void NtupleBranches::reset( void ){
   /** HLT trigger decisions */
   HLT_isFired.clear();
   HLT_BPH_isFired.clear();
-  
+
   /** HLT trigger objects */
   triggerObject_pt.clear();
   triggerObject_eta.clear();
@@ -1271,6 +1388,11 @@ void NtupleBranches::reset( void ){
   JpsiMu_B_unfit_vx.clear();
   JpsiMu_B_unfit_vy.clear();
   JpsiMu_B_unfit_vz.clear();
+  JpsiMu_B_q2.clear();
+  JpsiMu_B_mm2.clear();
+  JpsiMu_B_ptmiss.clear();
+  JpsiMu_B_Es.clear();
+  JpsiMu_B_ptback.clear();
 
   JpsiMu_PV_vx.clear();
   JpsiMu_PV_vy.clear();
@@ -1291,8 +1413,38 @@ void NtupleBranches::reset( void ){
   JpsiMu_ngenmuons.clear();
   JpsiMu_isgenmatched.clear();
   JpsiMu_mu3_isgenmatched.clear();
+  JpsiMu_q2_gen.clear();
+  JpsiMu_B_pt_gen.clear();
+  JpsiMu_B_eta_gen.clear();
+  JpsiMu_B_phi_gen.clear();
+  JpsiMu_B_mass_gen.clear();
 
-
+  JpsiMu_hammer_ebe.clear();
+  JpsiMu_hammer_ebe_a0_up.clear();
+  JpsiMu_hammer_ebe_a0_down.clear();
+  JpsiMu_hammer_ebe_a1_up.clear();
+  JpsiMu_hammer_ebe_a1_down.clear();
+  JpsiMu_hammer_ebe_a2_up.clear();
+  JpsiMu_hammer_ebe_a2_down.clear();
+  
+  JpsiMu_hammer_ebe_b0_up.clear();
+  JpsiMu_hammer_ebe_b0_down.clear();
+  JpsiMu_hammer_ebe_b1_up.clear();
+  JpsiMu_hammer_ebe_b1_down.clear();
+  JpsiMu_hammer_ebe_b2_up.clear();
+  JpsiMu_hammer_ebe_b2_down.clear();
+  
+  JpsiMu_hammer_ebe_c1_up.clear();
+  JpsiMu_hammer_ebe_c1_down.clear();
+  JpsiMu_hammer_ebe_c2_up.clear();
+  JpsiMu_hammer_ebe_c2_down.clear();
+  
+  JpsiMu_hammer_ebe_d0_up.clear();
+  JpsiMu_hammer_ebe_d0_down.clear();
+  JpsiMu_hammer_ebe_d1_up.clear();
+  JpsiMu_hammer_ebe_d1_down.clear();
+  JpsiMu_hammer_ebe_d2_up.clear();
+  JpsiMu_hammer_ebe_d2_down.clear();
 
 
 
@@ -1439,6 +1591,12 @@ void NtupleBranches::reset( void ){
   JpsiTau_B_iso.clear();
   JpsiTau_B_iso_ntracks.clear();
   JpsiTau_B_iso_mindoca.clear();
+  JpsiTau_B_q2.clear();
+  JpsiTau_B_mm2.clear();
+  JpsiTau_B_ptmiss.clear();
+  JpsiTau_B_Es.clear();
+  JpsiTau_B_ptback.clear();
+
 
   JpsiTau_PV_vx.clear();
   JpsiTau_PV_vy.clear();
@@ -1468,8 +1626,53 @@ void NtupleBranches::reset( void ){
   JpsiTau_ngentau3.clear();
   JpsiTau_ngentau.clear();
   JpsiTau_gentaupt.clear();
+  JpsiTau_gentaueta.clear();
+  JpsiTau_gentauphi.clear();
+  JpsiTau_gentaumass.clear();
+  JpsiTau_gentaupt_bd.clear();
+  JpsiTau_gentaueta_bd.clear();
+  JpsiTau_gentauphi_bd.clear();
+  JpsiTau_gentaumass_bd.clear();
   JpsiTau_gentaudm.clear();
+  JpsiTau_q2_gen.clear();
+  JpsiTau_B_pt_gen.clear();
+  JpsiTau_B_eta_gen.clear();
+  JpsiTau_B_phi_gen.clear();
+  JpsiTau_B_mass_gen.clear();
 
+//  JpsiTau_ed_pfeta.clear();
+//  JpsiTau_ed_pfphi.clear();
+//  JpsiTau_ed_isRight.clear();
+//  JpsiTau_ed_id.clear();
+//  JpsiTau_ed_pfdnn.clear();
+//  JpsiTau_ed_genpt.clear();
+
+  JpsiTau_hammer_ebe.clear();
+  JpsiTau_hammer_ebe_a0_up.clear();
+  JpsiTau_hammer_ebe_a0_down.clear();
+  JpsiTau_hammer_ebe_a1_up.clear();
+  JpsiTau_hammer_ebe_a1_down.clear();
+  JpsiTau_hammer_ebe_a2_up.clear();
+  JpsiTau_hammer_ebe_a2_down.clear();
+  
+  JpsiTau_hammer_ebe_b0_up.clear();
+  JpsiTau_hammer_ebe_b0_down.clear();
+  JpsiTau_hammer_ebe_b1_up.clear();
+  JpsiTau_hammer_ebe_b1_down.clear();
+  JpsiTau_hammer_ebe_b2_up.clear();
+  JpsiTau_hammer_ebe_b2_down.clear();
+  
+  JpsiTau_hammer_ebe_c1_up.clear();
+  JpsiTau_hammer_ebe_c1_down.clear();
+  JpsiTau_hammer_ebe_c2_up.clear();
+  JpsiTau_hammer_ebe_c2_down.clear();
+  
+  JpsiTau_hammer_ebe_d0_up.clear();
+  JpsiTau_hammer_ebe_d0_down.clear();
+  JpsiTau_hammer_ebe_d1_up.clear();
+  JpsiTau_hammer_ebe_d1_down.clear();
+  JpsiTau_hammer_ebe_d2_up.clear();
+  JpsiTau_hammer_ebe_d2_down.clear();
 
 
   /////////////////
@@ -1775,6 +1978,31 @@ void NtupleBranches::reset( void ){
   //////////////////////////////
 
 
+  BsTauTauFH_mr_tau_pi1_pt.clear();
+  BsTauTauFH_mr_tau_pi1_eta.clear();
+  BsTauTauFH_mr_tau_pi1_phi.clear();
+  BsTauTauFH_mr_tau_pi1_mass.clear();
+  BsTauTauFH_mr_tau_pi2_pt.clear();
+  BsTauTauFH_mr_tau_pi2_eta.clear();
+  BsTauTauFH_mr_tau_pi2_phi.clear();
+  BsTauTauFH_mr_tau_pi2_mass.clear();
+  BsTauTauFH_mr_tau_pi3_pt.clear();
+  BsTauTauFH_mr_tau_pi3_eta.clear();
+  BsTauTauFH_mr_tau_pi3_phi.clear();
+  BsTauTauFH_mr_tau_pi3_mass.clear();
+  
+  BsTauTauFH_mr_tau_genpt.clear();
+  BsTauTauFH_mr_tau_geneta.clear();
+  BsTauTauFH_mr_tau_genphi.clear();
+  BsTauTauFH_mr_tau_genmass.clear();
+
+  BsTauTauFH_mr_tau_genpt_bd.clear();
+  BsTauTauFH_mr_tau_geneta_bd.clear();
+  BsTauTauFH_mr_tau_genphi_bd.clear();
+  BsTauTauFH_mr_tau_genmass_bd.clear();
+  
+
+
   BsDstarTauNu_nCandidates.clear();
 
 
@@ -1947,12 +2175,20 @@ void NtupleBranches::reset( void ){
 
 
 void NtupleBranches::LabelHistograms( std::map< std::string, bool >& runFlags ){
-    if ( runFlags["doCutFlow"] ){
+  if ( runFlags["doCutFlow"] ){
     std::vector bins_string = {"Precut", "Trigger","muons", "J/#psi", "J/#psi fit","Tau  presence"};
     for(size_t i=0; i< bins_string.size(); i++){
       cutflow_perevt->GetXaxis()->SetBinLabel(i+1, bins_string[i]);
     }
-      }
+  }
+
+
+    std::vector bins_hammer = {"den", "num", "num_a0_up", "num_a0_down", "num_a1_up", "num_a1_down","num_a2_up", "num_a2_down", "num_b0_up", "num_b0_down", "num_b1_up", "num_b1_down","num_b2_up", "num_b2_down", "num_c1_up", "num_c1_down", "num_c2_up", "num_c2_down", "num_d0_up", "num_d0_down", "num_d1_up", "num_d1_down","num_d2_up", "num_d2_down"};
+
+    for(size_t i=0; i< bins_hammer.size(); i++){
+      hammer_width->GetXaxis()->SetBinLabel(i+1, bins_hammer[i]);
+    }
+
 
 
   if ( runFlags["doGenHist"] ){

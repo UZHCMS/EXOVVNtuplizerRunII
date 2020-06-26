@@ -378,6 +378,7 @@ bool BsTauTauNtuplizer::fillBranches( edm::Event const & event, const edm::Event
       }
     }
 
+
     if(!isTriggered) return false;
     nBranches_->cutflow_perevt->Fill(1);
 
@@ -397,7 +398,7 @@ bool BsTauTauNtuplizer::fillBranches( edm::Event const & event, const edm::Event
     muoncollection.clear();
 
 
-
+    std::cout << "#muons" << muons_->size() << std::endl;
     // evt Triggered
 
     for(size_t imuon = 0; imuon < muons_->size(); ++ imuon){
@@ -419,7 +420,7 @@ bool BsTauTauNtuplizer::fillBranches( edm::Event const & event, const edm::Event
     
         // Trigger matching
 
-        bool trigMatch = false;
+	bool trigMatch = false;
 
         for (pat::TriggerObjectStandAlone obj : *triggerObjects) {
     
@@ -453,10 +454,10 @@ bool BsTauTauNtuplizer::fillBranches( edm::Event const & event, const edm::Event
             Float_t trigger_dR = reco::deltaR(obj.eta(), obj.phi(),
                                               muon.eta(), muon.phi());
       
-            if(trigger_dR < 0.1) trigMatch = true;
+	    if(trigger_dR < 0.1) trigMatch = true;
         }
 
-        if(!trigMatch) continue;
+	if(!trigMatch) continue;
 
 	//	std::cout << "imuon = " << imuon << " "  << muon.pt() << std::endl;
 
@@ -985,18 +986,18 @@ bool BsTauTauNtuplizer::fillBranches( edm::Event const & event, const edm::Event
     for(int iii = 0; iii < numOfch; iii ++){
       
       pat::PackedCandidate pf1 = pfcollection[iii];
-      if(mydnn[iii] < c_dnn) continue;
+      if(useDNN_==true && mydnn[iii] < c_dnn) continue;
       npf_after_dnn++;
 
       for(int jjj = iii+1; jjj < numOfch; jjj ++){
 	
 	pat::PackedCandidate pf2 = pfcollection[jjj];
-	if(mydnn[jjj] < c_dnn) continue;
+	if(useDNN_==true && mydnn[jjj] < c_dnn) continue;
 
 	for(int kkk = jjj+1; kkk < numOfch; kkk ++){
 
 	  pat::PackedCandidate pf3 = pfcollection[kkk];
-	  if(mydnn[kkk] < c_dnn) continue;
+	  if(useDNN_==true && mydnn[kkk] < c_dnn) continue;
 
 	  Int_t tau_charge = pf1.charge() + pf2.charge() + pf3.charge(); 
 

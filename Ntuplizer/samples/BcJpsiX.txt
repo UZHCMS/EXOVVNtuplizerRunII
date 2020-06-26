@@ -1,1 +1,2 @@
-/BJpsiX_MuMu_031019/cgalloni-Autumn18_10_2_9_miniAOD-39a089a8e7301f392b8b059e430f83ef/USER
+#/BJpsiX_MuMu_031019/cgalloni-Autumn18_10_2_9_miniAOD-39a089a8e7301f392b8b059e430f83ef/USER
+/OniaAndX_ToMuMu_MuFilter_SoftQCDnonD_TuneCP5_13TeV-pythia8-evtgen/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v1/MINIAODSIM

@@ -95,6 +95,10 @@
 #include <vector>
 #include <map>
 
+#include "Hammer/Hammer.hh"
+#include "Hammer/Process.hh"
+#include "Hammer/Particle.hh"
+
 //struct particle_cand 
 //{
 //
@@ -193,9 +197,18 @@ private:
    float chi = 0.;
    float ndf = 0.;
 
+   Float_t mass_B0 = 5.27963;
 
    bool runOnMC_;   
    bool doCutFlow_;
+
+
+   Hammer::Hammer hammer;
+
+
+   std::vector<std::string> _FFErrNames = {"delta_a0","delta_a1","delta_a2","delta_b0","delta_b1","delta_b2","delta_c1","delta_c2","delta_d0","delta_d1","delta_d2"};
+
+   std::vector<double> _FFErr = {0.0009, 0.03, 0.6, 0.0005, 0.02, 0.6, 0.003, 0.08, 0.1, 0.16, 0.009};
    
 };
 

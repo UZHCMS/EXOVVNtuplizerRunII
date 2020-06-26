@@ -50,6 +50,7 @@ public:
   /* output histogram */
   /* Cutflow */
   TH1F* cutflow_perevt ;
+  TH1F* hammer_width;
   
   /* Histogram for genParticles */
    TH1F* genParticle_Bdau_X_id;
@@ -93,7 +94,7 @@ public:
   std::vector<int  >              genParticle_nDau     ;
   std::vector<int  >              genParticle_nMoth    ;
   std::vector<std::vector<int> >  genParticle_mother   ; 
-  std::vector<std::vector<float>> genParticle_mother_pt; 
+  std::vector<std::vector<float>> genParticle_mother_pt;
   std::vector<std::vector<int> >  genParticle_dau      ;
 
   /** generator info */
@@ -335,6 +336,11 @@ public:
   std::vector<float>                JpsiMu_B_unfit_vx;
   std::vector<float>                JpsiMu_B_unfit_vy;
   std::vector<float>                JpsiMu_B_unfit_vz;
+  std::vector<float>                JpsiMu_B_q2;
+  std::vector<float>                JpsiMu_B_mm2;
+  std::vector<float>                JpsiMu_B_ptmiss;
+  std::vector<float>                JpsiMu_B_Es;
+  std::vector<float>                JpsiMu_B_ptback;
 
   std::vector<float>                JpsiMu_PV_vx       ;
   std::vector<float>                JpsiMu_PV_vy       ;
@@ -355,6 +361,40 @@ public:
   std::vector<int  >                JpsiMu_ngenmuons      ;
   std::vector<int  >                JpsiMu_isgenmatched;
   std::vector<int  >                JpsiMu_mu3_isgenmatched;
+  std::vector<float> JpsiMu_q2_gen;
+  std::vector<float> JpsiMu_B_pt_gen;
+  std::vector<float> JpsiMu_B_eta_gen;
+  std::vector<float> JpsiMu_B_phi_gen;
+  std::vector<float> JpsiMu_B_mass_gen;
+
+  std::vector<float> JpsiMu_hammer_ebe;
+
+  std::vector<float> JpsiMu_hammer_ebe_a0_up;
+  std::vector<float> JpsiMu_hammer_ebe_a0_down;
+  std::vector<float> JpsiMu_hammer_ebe_a1_up;
+  std::vector<float> JpsiMu_hammer_ebe_a1_down;
+  std::vector<float> JpsiMu_hammer_ebe_a2_up;
+  std::vector<float> JpsiMu_hammer_ebe_a2_down;
+
+  std::vector<float> JpsiMu_hammer_ebe_b0_up;
+  std::vector<float> JpsiMu_hammer_ebe_b0_down;
+  std::vector<float> JpsiMu_hammer_ebe_b1_up;
+  std::vector<float> JpsiMu_hammer_ebe_b1_down;
+  std::vector<float> JpsiMu_hammer_ebe_b2_up;
+  std::vector<float> JpsiMu_hammer_ebe_b2_down;
+
+  std::vector<float> JpsiMu_hammer_ebe_c1_up;
+  std::vector<float> JpsiMu_hammer_ebe_c1_down;
+  std::vector<float> JpsiMu_hammer_ebe_c2_up;
+  std::vector<float> JpsiMu_hammer_ebe_c2_down;
+
+  std::vector<float> JpsiMu_hammer_ebe_d0_up;
+  std::vector<float> JpsiMu_hammer_ebe_d0_down;
+  std::vector<float> JpsiMu_hammer_ebe_d1_up;
+  std::vector<float> JpsiMu_hammer_ebe_d1_down;
+  std::vector<float> JpsiMu_hammer_ebe_d2_up;
+  std::vector<float> JpsiMu_hammer_ebe_d2_down;
+
 
 
   /** HLT trigger decisions for Jpsi */
@@ -512,6 +552,11 @@ public:
   std::vector<float>                JpsiTau_B_unfit_vx;
   std::vector<float>                JpsiTau_B_unfit_vy;
   std::vector<float>                JpsiTau_B_unfit_vz;
+  std::vector<float>                JpsiTau_B_q2;
+  std::vector<float>                JpsiTau_B_mm2;
+  std::vector<float>                JpsiTau_B_ptmiss;
+  std::vector<float>                JpsiTau_B_Es;
+  std::vector<float>                JpsiTau_B_ptback;
 
   std::vector<float>                JpsiTau_PV_vx       ;
   std::vector<float>                JpsiTau_PV_vy       ;
@@ -540,7 +585,54 @@ public:
   std::vector<int> JpsiTau_ngentau3;
   std::vector<int> JpsiTau_ngentau;
   std::vector<float> JpsiTau_gentaupt;
+  std::vector<float> JpsiTau_gentaueta;
+  std::vector<float> JpsiTau_gentauphi;
+  std::vector<float> JpsiTau_gentaumass;
+  std::vector<float> JpsiTau_gentaupt_bd;
+  std::vector<float> JpsiTau_gentaueta_bd;
+  std::vector<float> JpsiTau_gentauphi_bd;
+  std::vector<float> JpsiTau_gentaumass_bd;
   std::vector<int> JpsiTau_gentaudm;
+  std::vector<float> JpsiTau_q2_gen;
+  std::vector<float> JpsiTau_B_pt_gen;
+  std::vector<float> JpsiTau_B_eta_gen;
+  std::vector<float> JpsiTau_B_phi_gen;
+  std::vector<float> JpsiTau_B_mass_gen;
+
+//  std::vector<float> JpsiTau_ed_pfeta;
+//  std::vector<float> JpsiTau_ed_pfphi;
+//  std::vector<int> JpsiTau_ed_isRight;
+//  std::vector<int> JpsiTau_ed_id;
+//  std::vector<float> JpsiTau_ed_pfdnn;
+//  std::vector<float> JpsiTau_ed_genpt;
+    
+  std::vector<float> JpsiTau_hammer_ebe;
+
+  std::vector<float> JpsiTau_hammer_ebe_a0_up;
+  std::vector<float> JpsiTau_hammer_ebe_a0_down;
+  std::vector<float> JpsiTau_hammer_ebe_a1_up;
+  std::vector<float> JpsiTau_hammer_ebe_a1_down;
+  std::vector<float> JpsiTau_hammer_ebe_a2_up;
+  std::vector<float> JpsiTau_hammer_ebe_a2_down;
+
+  std::vector<float> JpsiTau_hammer_ebe_b0_up;
+  std::vector<float> JpsiTau_hammer_ebe_b0_down;
+  std::vector<float> JpsiTau_hammer_ebe_b1_up;
+  std::vector<float> JpsiTau_hammer_ebe_b1_down;
+  std::vector<float> JpsiTau_hammer_ebe_b2_up;
+  std::vector<float> JpsiTau_hammer_ebe_b2_down;
+
+  std::vector<float> JpsiTau_hammer_ebe_c1_up;
+  std::vector<float> JpsiTau_hammer_ebe_c1_down;
+  std::vector<float> JpsiTau_hammer_ebe_c2_up;
+  std::vector<float> JpsiTau_hammer_ebe_c2_down;
+
+  std::vector<float> JpsiTau_hammer_ebe_d0_up;
+  std::vector<float> JpsiTau_hammer_ebe_d0_down;
+  std::vector<float> JpsiTau_hammer_ebe_d1_up;
+  std::vector<float> JpsiTau_hammer_ebe_d1_down;
+  std::vector<float> JpsiTau_hammer_ebe_d2_up;
+  std::vector<float> JpsiTau_hammer_ebe_d2_down;
 
   ////////////////////////
 
@@ -853,6 +945,29 @@ public:
 
 
   //////////////////////
+
+  std::vector<float>       BsTauTauFH_mr_tau_pi1_pt;
+  std::vector<float>       BsTauTauFH_mr_tau_pi1_eta;
+  std::vector<float>       BsTauTauFH_mr_tau_pi1_phi;
+  std::vector<float>       BsTauTauFH_mr_tau_pi1_mass;
+  std::vector<float>       BsTauTauFH_mr_tau_pi2_pt;
+  std::vector<float>       BsTauTauFH_mr_tau_pi2_eta;
+  std::vector<float>       BsTauTauFH_mr_tau_pi2_phi;
+  std::vector<float>       BsTauTauFH_mr_tau_pi2_mass;
+  std::vector<float>       BsTauTauFH_mr_tau_pi3_pt;
+  std::vector<float>       BsTauTauFH_mr_tau_pi3_eta;
+  std::vector<float>       BsTauTauFH_mr_tau_pi3_phi;
+  std::vector<float>       BsTauTauFH_mr_tau_pi3_mass;
+  std::vector<float>       BsTauTauFH_mr_tau_genpt;
+  std::vector<float>       BsTauTauFH_mr_tau_geneta;
+  std::vector<float>       BsTauTauFH_mr_tau_genphi;
+  std::vector<float>       BsTauTauFH_mr_tau_genmass;
+  std::vector<float>       BsTauTauFH_mr_tau_genpt_bd;
+  std::vector<float>       BsTauTauFH_mr_tau_geneta_bd;
+  std::vector<float>       BsTauTauFH_mr_tau_genphi_bd;
+  std::vector<float>       BsTauTauFH_mr_tau_genmass_bd;
+
+
 
   std::vector<int  >                BsDstarTauNu_nCandidates ;
 
