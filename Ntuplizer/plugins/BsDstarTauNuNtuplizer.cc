@@ -4,7 +4,6 @@
 //===================================================================================================================
 BsDstarTauNuNtuplizer::BsDstarTauNuNtuplizer( edm::EDGetTokenT<pat::MuonCollection>    muonToken   ,
 					      edm::EDGetTokenT<reco::VertexCollection> verticeToken, 
-					      edm::EDGetTokenT<reco::BeamSpot> bsToken,
 					      edm::EDGetTokenT<pat::PackedCandidateCollection> packedpfcandidatesToken,
 					      edm::EDGetTokenT<pat::PackedCandidateCollection> losttrackToken,
 					      edm::EDGetTokenT<edm::TriggerResults> triggertoken,
@@ -18,7 +17,6 @@ BsDstarTauNuNtuplizer::BsDstarTauNuNtuplizer( edm::EDGetTokenT<pat::MuonCollecti
 : CandidateNtuplizer ( nBranches )
   , muonToken_	        ( muonToken )
   , verticeToken_          ( verticeToken )
-  , bsToken_          ( bsToken )
   , packedpfcandidatesToken_(packedpfcandidatesToken) 
   , losttrackToken_(losttrackToken) 
   , HLTtriggersToken_	( triggertoken )
@@ -123,211 +121,211 @@ BsDstarTauNuNtuplizer::~BsDstarTauNuNtuplizer( void )
 }
 
 
-Int_t BsDstarTauNuNtuplizer::decaymode_id(std::string str){
-  if(str=="electron") return -2;
-  else if(str=="muon") return -1;
-  else if(str=="oneProng0Pi0") return 0;
-  else if(str=="oneProng1Pi0") return 1;
-  else if(str=="oneProng2Pi0") return 2;
-  else if(str=="oneProng3Pi0") return 3;
-  else if(str=="oneProngOther") return 4;  
-  else if(str=="threeProng0Pi0") return 10;
-  else if(str=="threeProng1Pi0") return 11;
-  else if(str=="threeProngOther") return 14;
-  else if(str=="rare") return 15;
-  else return -9;
-}
-
-
-TVector3 BsDstarTauNuNtuplizer::getVertex(const reco::GenParticle& part){
-  return TVector3(part.vx(),part.vy(),part.vz());
-}
-
-float BsDstarTauNuNtuplizer::MuonPFIso(pat::Muon muon){
-
-  float sumChargedHadronPt = muon.pfIsolationR04().sumChargedHadronPt;
-  float sumNeutralHadronEt = muon.pfIsolationR04().sumNeutralHadronEt;
-  float sumPhotonEt = muon.pfIsolationR04().sumPhotonEt;
-  float sumPUPt = muon.pfIsolationR04().sumPUPt;
-  float iso = (sumChargedHadronPt + std::max( 0. ,sumNeutralHadronEt + sumPhotonEt - 0.5 * sumPUPt));// / muon.pt()
- 
-  return iso;
-}
-
-
-
-
-Float_t BsDstarTauNuNtuplizer::getMaxDoca(std::vector<RefCountedKinematicParticle> &kinParticles){
-
-  double maxDoca = -1.0;
-
-  TwoTrackMinimumDistance md;
-  std::vector<RefCountedKinematicParticle>::iterator in_it, out_it;
-
-  for (out_it = kinParticles.begin(); out_it != kinParticles.end(); ++out_it) {
-    for (in_it = out_it + 1; in_it != kinParticles.end(); ++in_it) {
-      md.calculate((*out_it)->currentState().freeTrajectoryState(),(*in_it)->currentState().freeTrajectoryState());
-      if (md.distance() > maxDoca)
-	maxDoca = md.distance();
-    }
-  }
-
-  return maxDoca;
-}
-
-
-
-Float_t BsDstarTauNuNtuplizer::getMinDoca(std::vector<RefCountedKinematicParticle> &kinParticles) {
-
-  double minDoca = 99999.9;
-
-  TwoTrackMinimumDistance md;
-  unsigned j,k,n;
-
-  n = kinParticles.size();
-  for (j = 0; j < n; j++) {
-    for (k = j+1; k < n; k++) {
-      md.calculate(kinParticles[j]->currentState().freeTrajectoryState(),kinParticles[k]->currentState().freeTrajectoryState());
-      if (md.distance() < minDoca)
-	minDoca = md.distance();
-    }
-  }
-
-  return minDoca;
-}
-
-
-
-
-std::tuple<Float_t, TransientVertex> BsDstarTauNuNtuplizer::vertexProb( const std::vector<reco::TransientTrack>& tracks){
-
-  Float_t vprob = -1;
-  
-  KalmanVertexFitter kalman_fitter;
-  TransientVertex vertex;
-
-  try{
-    vertex = kalman_fitter.vertex(tracks);
-  }catch(std::exception e){
-    std::cout << "No vertex found ... return" << std::endl;
-    return std::forward_as_tuple(-9, vertex);
-  }
-
-  if(vertex.isValid()){
-
-    vprob =  TMath::Prob(vertex.totalChiSquared(), vertex.degreesOfFreedom());
-
-    //    vx = vertex.position().x();
-    //    vy = vertex.position().y();
-    //    vz = vertex.position().z();
-    
-    return std::forward_as_tuple(vprob, vertex);
-
-  }else{
-
-    return std::forward_as_tuple(-9, vertex);
-
-  }
-}
-
-
-//adapt absoluteImpactParameter functionality for RefCountedKinematicVertex
-std::pair<bool, Measurement1D> BsDstarTauNuNtuplizer::absoluteImpactParameter(const TrajectoryStateOnSurface& tsos,
-									      RefCountedKinematicVertex vertex,
-									      VertexDistance& distanceComputer){
-  if (!tsos.isValid()) {
-    return std::pair<bool, Measurement1D>(false, Measurement1D(0., 0.));
-  }
-  GlobalPoint refPoint = tsos.globalPosition();
-  GlobalError refPointErr = tsos.cartesianError().position();
-  GlobalPoint vertexPosition = vertex->vertexState().position();
-  GlobalError vertexPositionErr = RecoVertex::convertError(vertex->vertexState().error());
-  return std::pair<bool, Measurement1D>(
-					true,
-					distanceComputer.distance(VertexState(vertexPosition, vertexPositionErr), VertexState(refPoint, refPointErr)));
-}
-
-
-
-
-particle_cand BsDstarTauNuNtuplizer::calculateIPvariables(
-							  AnalyticalImpactPointExtrapolator extrapolator,
-							  RefCountedKinematicParticle particle,
-							  RefCountedKinematicVertex vertex,
-							  reco::Vertex wrtVertex
-							  ){
-
-  TrajectoryStateOnSurface tsos = extrapolator.extrapolate(particle->currentState().freeTrajectoryState(),
-							   RecoVertex::convertPos(wrtVertex.position()));
-
-
-  VertexDistance3D a3d;  
-
-  std::pair<bool,Measurement1D> currentIp = IPTools::signedDecayLength3D(tsos, GlobalVector(0,0,1), wrtVertex);
-  std::pair<bool,Measurement1D> cur3DIP = IPTools::absoluteImpactParameter(tsos, wrtVertex, a3d);
-  
-  // flight length
-  Float_t fl3d = a3d.distance(wrtVertex, vertex->vertexState()).value();
-  Float_t fl3de = a3d.distance(wrtVertex, vertex->vertexState()).error();
-  Float_t fls3d = -1;
-
-  if(fl3de!=0) fls3d = fl3d/fl3de;
-
-  // longitudinal impact parameters
-  Float_t lip = currentIp.second.value();
-  Float_t lipe = currentIp.second.error();
-  Float_t lips = -1;
-  
-  if(lipe!=0) lips = lip/lipe;
-
-  // impact parameter to the PV
-  Float_t pvip = cur3DIP.second.value();
-  Float_t pvipe = cur3DIP.second.error();
-  Float_t pvips = -1;
-  
-  if(pvipe!=0) pvips = pvip/pvipe;
-
-  // opening angle
-  TVector3 plab = TVector3(particle->currentState().globalMomentum().x(),
-			   particle->currentState().globalMomentum().y(),
-			   particle->currentState().globalMomentum().z());
-
-  const TVector3 tv3diff = TVector3(vertex->vertexState().position().x() - wrtVertex.position().x(),
-				    vertex->vertexState().position().y() - wrtVertex.position().y(),
-				    vertex->vertexState().position().z() - wrtVertex.position().z()
-				    );
-
-  Float_t alpha = -1;
-
-  if(plab.Mag() != 0. && tv3diff.Mag()!=0){
-    alpha = plab.Dot(tv3diff) / (plab.Mag() * tv3diff.Mag());
-  }
-
-  particle_cand cand = {
-    lip,
-    lips,
-    pvip, 
-    pvips,
-    fl3d,
-    fls3d,
-    alpha
-  };
-
-
-  return cand;
-}
-
-
-math::PtEtaPhiMLorentzVector BsDstarTauNuNtuplizer::daughter_p4(std::vector< RefCountedKinematicParticle > fitted_children, size_t i){
-  const auto& state = fitted_children.at(i)->currentState();
-
-  return math::PtEtaPhiMLorentzVector(
-				      state.globalMomentum().perp(), 
-				      state.globalMomentum().eta() ,
-				      state.globalMomentum().phi() ,
-				      state.mass()
-				      );
-}
+//Int_t BsDstarTauNuNtuplizer::decaymode_id(std::string str){
+//  if(str=="electron") return -2;
+//  else if(str=="muon") return -1;
+//  else if(str=="oneProng0Pi0") return 0;
+//  else if(str=="oneProng1Pi0") return 1;
+//  else if(str=="oneProng2Pi0") return 2;
+//  else if(str=="oneProng3Pi0") return 3;
+//  else if(str=="oneProngOther") return 4;  
+//  else if(str=="threeProng0Pi0") return 10;
+//  else if(str=="threeProng1Pi0") return 11;
+//  else if(str=="threeProngOther") return 14;
+//  else if(str=="rare") return 15;
+//  else return -9;
+//}
+//
+//
+//TVector3 BsDstarTauNuNtuplizer::getVertex(const reco::GenParticle& part){
+//  return TVector3(part.vx(),part.vy(),part.vz());
+//}
+//
+//float BsDstarTauNuNtuplizer::MuonPFIso(pat::Muon muon){
+//
+//  float sumChargedHadronPt = muon.pfIsolationR04().sumChargedHadronPt;
+//  float sumNeutralHadronEt = muon.pfIsolationR04().sumNeutralHadronEt;
+//  float sumPhotonEt = muon.pfIsolationR04().sumPhotonEt;
+//  float sumPUPt = muon.pfIsolationR04().sumPUPt;
+//  float iso = (sumChargedHadronPt + std::max( 0. ,sumNeutralHadronEt + sumPhotonEt - 0.5 * sumPUPt));// / muon.pt()
+// 
+//  return iso;
+//}
+//
+//
+//
+//
+//Float_t BsDstarTauNuNtuplizer::getMaxDoca(std::vector<RefCountedKinematicParticle> &kinParticles){
+//
+//  double maxDoca = -1.0;
+//
+//  TwoTrackMinimumDistance md;
+//  std::vector<RefCountedKinematicParticle>::iterator in_it, out_it;
+//
+//  for (out_it = kinParticles.begin(); out_it != kinParticles.end(); ++out_it) {
+//    for (in_it = out_it + 1; in_it != kinParticles.end(); ++in_it) {
+//      md.calculate((*out_it)->currentState().freeTrajectoryState(),(*in_it)->currentState().freeTrajectoryState());
+//      if (md.distance() > maxDoca)
+//	maxDoca = md.distance();
+//    }
+//  }
+//
+//  return maxDoca;
+//}
+//
+//
+//
+//Float_t BsDstarTauNuNtuplizer::getMinDoca(std::vector<RefCountedKinematicParticle> &kinParticles) {
+//
+//  double minDoca = 99999.9;
+//
+//  TwoTrackMinimumDistance md;
+//  unsigned j,k,n;
+//
+//  n = kinParticles.size();
+//  for (j = 0; j < n; j++) {
+//    for (k = j+1; k < n; k++) {
+//      md.calculate(kinParticles[j]->currentState().freeTrajectoryState(),kinParticles[k]->currentState().freeTrajectoryState());
+//      if (md.distance() < minDoca)
+//	minDoca = md.distance();
+//    }
+//  }
+//
+//  return minDoca;
+//}
+//
+//
+//
+//
+//std::tuple<Float_t, TransientVertex> BsDstarTauNuNtuplizer::vertexProb( const std::vector<reco::TransientTrack>& tracks){
+//
+//  Float_t vprob = -1;
+//  
+//  KalmanVertexFitter kalman_fitter;
+//  TransientVertex vertex;
+//
+//  try{
+//    vertex = kalman_fitter.vertex(tracks);
+//  }catch(std::exception e){
+//    std::cout << "No vertex found ... return" << std::endl;
+//    return std::forward_as_tuple(-9, vertex);
+//  }
+//
+//  if(vertex.isValid()){
+//
+//    vprob =  TMath::Prob(vertex.totalChiSquared(), vertex.degreesOfFreedom());
+//
+//    //    vx = vertex.position().x();
+//    //    vy = vertex.position().y();
+//    //    vz = vertex.position().z();
+//    
+//    return std::forward_as_tuple(vprob, vertex);
+//
+//  }else{
+//
+//    return std::forward_as_tuple(-9, vertex);
+//
+//  }
+//}
+//
+//
+////adapt absoluteImpactParameter functionality for RefCountedKinematicVertex
+//std::pair<bool, Measurement1D> BsDstarTauNuNtuplizer::absoluteImpactParameter(const TrajectoryStateOnSurface& tsos,
+//									      RefCountedKinematicVertex vertex,
+//									      VertexDistance& distanceComputer){
+//  if (!tsos.isValid()) {
+//    return std::pair<bool, Measurement1D>(false, Measurement1D(0., 0.));
+//  }
+//  GlobalPoint refPoint = tsos.globalPosition();
+//  GlobalError refPointErr = tsos.cartesianError().position();
+//  GlobalPoint vertexPosition = vertex->vertexState().position();
+//  GlobalError vertexPositionErr = RecoVertex::convertError(vertex->vertexState().error());
+//  return std::pair<bool, Measurement1D>(
+//					true,
+//					distanceComputer.distance(VertexState(vertexPosition, vertexPositionErr), VertexState(refPoint, refPointErr)));
+//}
+//
+//
+//
+//
+//particle_cand BsDstarTauNuNtuplizer::calculateIPvariables(
+//							  AnalyticalImpactPointExtrapolator extrapolator,
+//							  RefCountedKinematicParticle particle,
+//							  RefCountedKinematicVertex vertex,
+//							  reco::Vertex wrtVertex
+//							  ){
+//
+//  TrajectoryStateOnSurface tsos = extrapolator.extrapolate(particle->currentState().freeTrajectoryState(),
+//							   RecoVertex::convertPos(wrtVertex.position()));
+//
+//
+//  VertexDistance3D a3d;  
+//
+//  std::pair<bool,Measurement1D> currentIp = IPTools::signedDecayLength3D(tsos, GlobalVector(0,0,1), wrtVertex);
+//  std::pair<bool,Measurement1D> cur3DIP = IPTools::absoluteImpactParameter(tsos, wrtVertex, a3d);
+//  
+//  // flight length
+//  Float_t fl3d = a3d.distance(wrtVertex, vertex->vertexState()).value();
+//  Float_t fl3de = a3d.distance(wrtVertex, vertex->vertexState()).error();
+//  Float_t fls3d = -1;
+//
+//  if(fl3de!=0) fls3d = fl3d/fl3de;
+//
+//  // longitudinal impact parameters
+//  Float_t lip = currentIp.second.value();
+//  Float_t lipe = currentIp.second.error();
+//  Float_t lips = -1;
+//  
+//  if(lipe!=0) lips = lip/lipe;
+//
+//  // impact parameter to the PV
+//  Float_t pvip = cur3DIP.second.value();
+//  Float_t pvipe = cur3DIP.second.error();
+//  Float_t pvips = -1;
+//  
+//  if(pvipe!=0) pvips = pvip/pvipe;
+//
+//  // opening angle
+//  TVector3 plab = TVector3(particle->currentState().globalMomentum().x(),
+//			   particle->currentState().globalMomentum().y(),
+//			   particle->currentState().globalMomentum().z());
+//
+//  const TVector3 tv3diff = TVector3(vertex->vertexState().position().x() - wrtVertex.position().x(),
+//				    vertex->vertexState().position().y() - wrtVertex.position().y(),
+//				    vertex->vertexState().position().z() - wrtVertex.position().z()
+//				    );
+//
+//  Float_t alpha = -1;
+//
+//  if(plab.Mag() != 0. && tv3diff.Mag()!=0){
+//    alpha = plab.Dot(tv3diff) / (plab.Mag() * tv3diff.Mag());
+//  }
+//
+//  particle_cand cand = {
+//    lip,
+//    lips,
+//    pvip, 
+//    pvips,
+//    fl3d,
+//    fls3d,
+//    alpha
+//  };
+//
+//
+//  return cand;
+//}
+//
+//
+//math::PtEtaPhiMLorentzVector BsDstarTauNuNtuplizer::daughter_p4(std::vector< RefCountedKinematicParticle > fitted_children, size_t i){
+//  const auto& state = fitted_children.at(i)->currentState();
+//
+//  return math::PtEtaPhiMLorentzVector(
+//				      state.globalMomentum().perp(), 
+//				      state.globalMomentum().eta() ,
+//				      state.globalMomentum().phi() ,
+//				      state.mass()
+//				      );
+//}
 
 
 bool BsDstarTauNuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetup& iSetup ){
@@ -387,7 +385,6 @@ bool BsDstarTauNuNtuplizer::fillBranches( edm::Event const & event, const edm::E
    ********************************************************************/
 
   event.getByToken(verticeToken_   , vertices_     );
-  event.getByToken(bsToken_   , beamspot_     );
   event.getByToken(muonToken_	, muons_    );
   event.getByToken(triggerObjects_  , triggerObjects);
 
@@ -972,7 +969,7 @@ bool BsDstarTauNuNtuplizer::fillBranches( edm::Event const & event, const edm::E
 	
 	if(dRgen < min_gendr && dRgen < 0.1){
 	  min_gendr = dRgen;
-	  taugendm = decaymode_id(JetMCTagUtils::genTauDecayMode(TauCand));
+	  taugendm = aux.decaymode_id(JetMCTagUtils::genTauDecayMode(TauCand));
 	}
       }
       
@@ -1091,7 +1088,7 @@ bool BsDstarTauNuNtuplizer::fillBranches( edm::Event const & event, const edm::E
 	if(TMath::Prob(D0_vertex->chiSquared(), D0_vertex->degreesOfFreedom()) <= 0.1) continue;
 	
 	particle_cand D0cand; 
-	D0cand = calculateIPvariables(extrapolator, D0_part, D0_vertex, closestVertex);
+	D0cand = aux.calculateIPvariables(extrapolator, D0_part, D0_vertex, closestVertex);
 	
 	//	  if(Taucand.fls3d < 3) continue;
 	
@@ -1204,7 +1201,7 @@ bool BsDstarTauNuNtuplizer::fillBranches( edm::Event const & event, const edm::E
     if(TMath::Prob(Ds_vertex->chiSquared(), Ds_vertex->degreesOfFreedom()) <= 0.1) continue;
     
     particle_cand Dscand; 
-    Dscand = calculateIPvariables(extrapolator, Ds_part, Ds_vertex, closestVertex);
+    Dscand = aux.calculateIPvariables(extrapolator, Ds_part, Ds_vertex, closestVertex);
     
     //	  if(Taucand.fls3d < 3) continue;
     
@@ -1332,14 +1329,14 @@ bool BsDstarTauNuNtuplizer::fillBranches( edm::Event const & event, const edm::E
 	  
 	std::vector< RefCountedKinematicParticle > tau_children = tauTree->finalStateParticles();
 	  
-	math::PtEtaPhiMLorentzVector tau1_fit = daughter_p4(tau_children, 0);
-	math::PtEtaPhiMLorentzVector tau2_fit = daughter_p4(tau_children, 1);
-	math::PtEtaPhiMLorentzVector tau3_fit = daughter_p4(tau_children, 2);
+	math::PtEtaPhiMLorentzVector tau1_fit = aux.daughter_p4(tau_children, 0);
+	math::PtEtaPhiMLorentzVector tau2_fit = aux.daughter_p4(tau_children, 1);
+	math::PtEtaPhiMLorentzVector tau3_fit = aux.daughter_p4(tau_children, 2);
 	//
 	//	  math::PtEtaPhiMLorentzVector tlv_tau = tau1_fit + tau2_fit + tau3_fit;
 
 	particle_cand Taucand; 
-	Taucand = calculateIPvariables(extrapolator, tau_part, tau_vertex, closestVertex);
+	Taucand = aux.calculateIPvariables(extrapolator, tau_part, tau_vertex, closestVertex);
 
 	//	  if(Taucand.fls3d < 3) continue;
 
@@ -1388,16 +1385,16 @@ bool BsDstarTauNuNtuplizer::fillBranches( edm::Event const & event, const edm::E
 	//	  const auto& JPcand = bc_children.at(1); 
 
 	particle_cand Bcand; 
-	Bcand = calculateIPvariables(extrapolator, bc_part, bc_vertex, closestVertex);
+	Bcand = aux.calculateIPvariables(extrapolator, bc_part, bc_vertex, closestVertex);
 
 	  
 	std::vector< RefCountedKinematicParticle > bc_children = bcTree->finalStateParticles();
 
 	//	  const auto& state = fitted_children.at(i)->currentState();
 
-	math::PtEtaPhiMLorentzVector tt1_fit = daughter_p4(bc_children, 0);
-	math::PtEtaPhiMLorentzVector tt2_fit = daughter_p4(bc_children, 1);
-	math::PtEtaPhiMLorentzVector tt3_fit = daughter_p4(bc_children, 2);
+	math::PtEtaPhiMLorentzVector tt1_fit = aux.daughter_p4(bc_children, 0);
+	math::PtEtaPhiMLorentzVector tt2_fit = aux.daughter_p4(bc_children, 1);
+	math::PtEtaPhiMLorentzVector tt3_fit = aux.daughter_p4(bc_children, 2);
 
 	math::PtEtaPhiMLorentzVector tlv_tau_fit = tt1_fit + tt2_fit + tt3_fit;
 
@@ -1423,7 +1420,7 @@ bool BsDstarTauNuNtuplizer::fillBranches( edm::Event const & event, const edm::E
     
 	  VertexDistance3D a3d_pf;  
 
-	  std::pair<bool,Measurement1D> cur3DIP_pf = BsDstarTauNuNtuplizer::absoluteImpactParameter(tsos_pf, bc_vertex, a3d_pf);
+	  std::pair<bool,Measurement1D> cur3DIP_pf = aux.absoluteImpactParameter(tsos_pf, bc_vertex, a3d_pf);
 
 	  Float_t pvip_pf = cur3DIP_pf.second.value();
 
@@ -1457,12 +1454,12 @@ bool BsDstarTauNuNtuplizer::fillBranches( edm::Event const & event, const edm::E
 	Bool_t isRight1 = false; 
 	Bool_t isRight2 = false; 
 	Bool_t isRight3 = false; 
-	Float_t dr1 = 999;
-	Float_t dr2 = 999;
-	Float_t dr3 = 999;
-	Float_t ptres1 = 999;
-	Float_t ptres2 = 999;
-	Float_t ptres3 = 999;
+//	Float_t dr1 = 999;
+//	Float_t dr2 = 999;
+//	Float_t dr3 = 999;
+//	Float_t ptres1 = 999;
+//	Float_t ptres2 = 999;
+//	Float_t ptres3 = 999;
 
 	Int_t pid = -999;
 	Float_t matched_gentaupt = -999;
@@ -1486,8 +1483,8 @@ bool BsDstarTauNuNtuplizer::fillBranches( edm::Event const & event, const edm::E
 		 tau1_fit.Pt()/tlvs[nnn].Pt() < 1.15
 		 ){
 		isRight1_ = true; 
-		dr1 = reco::deltaR(tau1_fit.Eta(), tau1_fit.Phi(), tlvs[nnn].Eta(), tlvs[nnn].Phi());
-		ptres1 = tau1_fit.Pt()/tlvs[nnn].Pt();
+		//		dr1 = reco::deltaR(tau1_fit.Eta(), tau1_fit.Phi(), tlvs[nnn].Eta(), tlvs[nnn].Phi());
+		//		ptres1 = tau1_fit.Pt()/tlvs[nnn].Pt();
 		//		std::cout << "\t\t\t gen. Nr" << mmm << " (" << tlvs[nnn].Pt() << ", " << tlvs[nnn].Eta()  << ", " << tlvs[nnn].Phi() << ") is matched with PF index = " << iii << ", with (pt,eta,phi) = " << tau1_fit.Pt() << ", " << tau1_fit.Eta() << ", " << tau1_fit.Phi() <<  std::endl;
 		//		std::cout << "\t\t\t fitted pt respoinse = " << (tau1_fit.Pt()/tlvs[nnn].Pt()) << ", delta_R = " << reco::deltaR(tau1_fit.Eta(), tau1_fit.Phi(), tlvs[nnn].Eta(), tlvs[nnn].Phi())  << std::endl;
 		//		std::cout << "\t\t\t original pt respoinse = " << (pf1.pt()/tlvs[nnn].Pt()) << ", delta_R = " << reco::deltaR(pf1.eta(), pf1.phi(), tlvs[nnn].Eta(), tlvs[nnn].Phi())  << std::endl;
@@ -1499,8 +1496,8 @@ bool BsDstarTauNuNtuplizer::fillBranches( edm::Event const & event, const edm::E
 		 tau2_fit.Pt()/tlvs[nnn].Pt() < 1.15
 		 ){
 		isRight2_ = true; 
-		dr2 = reco::deltaR(tau2_fit.Eta(), tau2_fit.Phi(), tlvs[nnn].Eta(), tlvs[nnn].Phi());
-		ptres2 = tau2_fit.Pt()/tlvs[nnn].Pt(); 
+		//		dr2 = reco::deltaR(tau2_fit.Eta(), tau2_fit.Phi(), tlvs[nnn].Eta(), tlvs[nnn].Phi());
+		//		ptres2 = tau2_fit.Pt()/tlvs[nnn].Pt(); 
 		//		std::cout << "\t\t\t gen. Nr" << mmm << " (" << tlvs[nnn].Pt() << ", " << tlvs[nnn].Eta()  << ", " << tlvs[nnn].Phi() << ") is matched with PF index = " << jjj << ", with (pt,eta,phi) = " << tau2_fit.Pt() << ", " << tau2_fit.Eta() << ", " << tau2_fit.Phi() <<  std::endl;
 		//		std::cout << "\t\t\t fitted pt respoinse = " << (tau2_fit.Pt()/tlvs[nnn].Pt()) << ", delta_R = " << reco::deltaR(tau2_fit.Eta(), tau2_fit.Phi(), tlvs[nnn].Eta(), tlvs[nnn].Phi())  << std::endl;
 		//		std::cout << "\t\t\t original pt respoinse = " << (pf2.pt()/tlvs[nnn].Pt()) << ", delta_R = " << reco::deltaR(pf2.eta(), pf2.phi(), tlvs[nnn].Eta(), tlvs[nnn].Phi())  << std::endl;
@@ -1513,8 +1510,8 @@ bool BsDstarTauNuNtuplizer::fillBranches( edm::Event const & event, const edm::E
 		 tau3_fit.Pt()/tlvs[nnn].Pt() < 1.15
 		 ){
 		isRight3_ = true; 
-		dr3 = reco::deltaR(tau3_fit.Eta(), tau3_fit.Phi(), tlvs[nnn].Eta(), tlvs[nnn].Phi());
-		ptres3 = tau3_fit.Pt()/tlvs[nnn].Pt(); 
+		//		dr3 = reco::deltaR(tau3_fit.Eta(), tau3_fit.Phi(), tlvs[nnn].Eta(), tlvs[nnn].Phi());
+		//		ptres3 = tau3_fit.Pt()/tlvs[nnn].Pt(); 
 		//		std::cout << "bgen. Nr" << mmm << " is matched with PF index = " << kkk << std::endl;
 
 		//		std::cout << "\t\t\t gen. Nr" << mmm << " (" << tlvs[nnn].Pt() << ", " << tlvs[nnn].Eta()  << ", " << tlvs[nnn].Phi() << ") is matched with PF index = " << kkk << ", with (pt,eta,phi) = " << tau3_fit.Pt() << ", " << tau3_fit.Eta() << ", " << tau3_fit.Phi() <<  std::endl;
@@ -1556,13 +1553,14 @@ bool BsDstarTauNuNtuplizer::fillBranches( edm::Event const & event, const edm::E
 	  (Float_t) tlv_tau_fit.Eta(),
 	  (Float_t) tlv_tau_fit.Phi(),
 	  (Float_t) tlv_tau_fit.M(),
-	  (Float_t) Taucand.lip, 
-	  (Float_t) Taucand.lips, 
-	  (Float_t) Taucand.pvip, 
-	  (Float_t) Taucand.pvips, 
-	  (Float_t) Taucand.fl3d,
-	  (Float_t) Taucand.fls3d, 
-	  (Float_t) Taucand.alpha,
+//	  (Float_t) Taucand.lip, 
+//	  (Float_t) Taucand.lips, 
+//	  (Float_t) Taucand.pvip, 
+//	  (Float_t) Taucand.pvips, 
+//	  (Float_t) Taucand.fl3d,
+//	  (Float_t) Taucand.fls3d, 
+//	  (Float_t) Taucand.alpha,
+	  Taucand,
 	  (Float_t) TMath::Prob(tau_vertex->chiSquared(), tau_vertex->degreesOfFreedom()),
 	  (Float_t) tau_vertex->vertexState().position().x(), 
 	  (Float_t) tau_vertex->vertexState().position().y(), 
@@ -1573,12 +1571,12 @@ bool BsDstarTauNuNtuplizer::fillBranches( edm::Event const & event, const edm::E
 	  (Bool_t) isRight1,
 	  (Bool_t) isRight2,
 	  (Bool_t) isRight3,
-	  (Float_t) dr1,
-	  (Float_t) dr2,
-	  (Float_t) dr3,
-	  (Float_t) ptres1,
-	  (Float_t) ptres2,
-	  (Float_t) ptres3,
+//	  (Float_t) dr1,
+//	  (Float_t) dr2,
+//	  (Float_t) dr3,
+//	  (Float_t) ptres1,
+//	  (Float_t) ptres2,
+//	  (Float_t) ptres3,
 	  (Int_t) pid,
 	  (Float_t) matched_gentaupt, 
 	  (Float_t) sumofdnn,
@@ -1593,13 +1591,14 @@ bool BsDstarTauNuNtuplizer::fillBranches( edm::Event const & event, const edm::E
 	  (Float_t) bc_part->currentState().globalMomentum().eta(),
 	  (Float_t) bc_part->currentState().globalMomentum().phi(),
 	  (Float_t) bc_part->currentState().mass(),
-	  (Float_t) Bcand.lip, 
-	  (Float_t) Bcand.lips, 
-	  (Float_t) Bcand.pvip, 
-	  (Float_t) Bcand.pvips, 
-	  (Float_t) Bcand.fl3d,
-	  (Float_t) Bcand.fls3d, 
-	  (Float_t) Bcand.alpha,
+	  Bcand,
+//	  (Float_t) Bcand.lip, 
+//	  (Float_t) Bcand.lips, 
+//	  (Float_t) Bcand.pvip, 
+//	  (Float_t) Bcand.pvips, 
+//	  (Float_t) Bcand.fl3d,
+//	  (Float_t) Bcand.fls3d, 
+//	  (Float_t) Bcand.alpha,
 	  (Float_t) iso,
 	  (Float_t) ntracks,
 	  (Float_t) iso_mindoca,
@@ -1729,13 +1728,13 @@ bool BsDstarTauNuNtuplizer::fillBranches( edm::Event const & event, const edm::E
     nBranches_->BsDstarTauNu_tau_vz.push_back(cands[ic].cand_tau_vz);
 
     nBranches_->BsDstarTauNu_tau_max_dr_3prong.push_back(cands[ic].cand_tau_max_dr_3prong);
-    nBranches_->BsDstarTauNu_tau_lip.push_back(cands[ic].cand_tau_lip);
-    nBranches_->BsDstarTauNu_tau_lips.push_back(cands[ic].cand_tau_lips);
-    nBranches_->BsDstarTauNu_tau_pvip.push_back(cands[ic].cand_tau_pvip);
-    nBranches_->BsDstarTauNu_tau_pvips.push_back(cands[ic].cand_tau_pvips);
-    nBranches_->BsDstarTauNu_tau_fl3d.push_back(cands[ic].cand_tau_fl3d);
-    nBranches_->BsDstarTauNu_tau_fls3d.push_back(cands[ic].cand_tau_fls3d);
-    nBranches_->BsDstarTauNu_tau_alpha.push_back(cands[ic].cand_tau_alpha);
+    nBranches_->BsDstarTauNu_tau_lip.push_back(cands[ic].cand_tau.lip);
+    nBranches_->BsDstarTauNu_tau_lips.push_back(cands[ic].cand_tau.lips);
+    nBranches_->BsDstarTauNu_tau_pvip.push_back(cands[ic].cand_tau.pvip);
+    nBranches_->BsDstarTauNu_tau_pvips.push_back(cands[ic].cand_tau.pvips);
+    nBranches_->BsDstarTauNu_tau_fl3d.push_back(cands[ic].cand_tau.fl3d);
+    nBranches_->BsDstarTauNu_tau_fls3d.push_back(cands[ic].cand_tau.fls3d);
+    nBranches_->BsDstarTauNu_tau_alpha.push_back(cands[ic].cand_tau.alpha);
     nBranches_->BsDstarTauNu_tau_vprob.push_back(cands[ic].cand_tau_vprob);
     nBranches_->BsDstarTauNu_tau_isRight.push_back(cands[ic].cand_tau_isRight);
     nBranches_->BsDstarTauNu_tau_matched_ppdgId.push_back(cands[ic].cand_tau_matched_ppdgId);
@@ -1767,13 +1766,13 @@ bool BsDstarTauNuNtuplizer::fillBranches( edm::Event const & event, const edm::E
     nBranches_->BsDstarTauNu_B_phi.push_back(cands[ic].cand_b_phi);
     nBranches_->BsDstarTauNu_B_mass.push_back(cands[ic].cand_b_mass);
     nBranches_->BsDstarTauNu_B_vprob.push_back(cands[ic].cand_b_vprob);
-    nBranches_->BsDstarTauNu_B_lip.push_back(cands[ic].cand_b_lip);
-    nBranches_->BsDstarTauNu_B_lips.push_back(cands[ic].cand_b_lips);
-    nBranches_->BsDstarTauNu_B_pvip.push_back(cands[ic].cand_b_pvip);
-    nBranches_->BsDstarTauNu_B_pvips.push_back(cands[ic].cand_b_pvips);
-    nBranches_->BsDstarTauNu_B_fls3d.push_back(cands[ic].cand_b_fls3d);
-    nBranches_->BsDstarTauNu_B_fl3d.push_back(cands[ic].cand_b_fl3d);
-    nBranches_->BsDstarTauNu_B_alpha.push_back(cands[ic].cand_b_alpha);
+    nBranches_->BsDstarTauNu_B_lip.push_back(cands[ic].cand_b.lip);
+    nBranches_->BsDstarTauNu_B_lips.push_back(cands[ic].cand_b.lips);
+    nBranches_->BsDstarTauNu_B_pvip.push_back(cands[ic].cand_b.pvip);
+    nBranches_->BsDstarTauNu_B_pvips.push_back(cands[ic].cand_b.pvips);
+    nBranches_->BsDstarTauNu_B_fls3d.push_back(cands[ic].cand_b.fls3d);
+    nBranches_->BsDstarTauNu_B_fl3d.push_back(cands[ic].cand_b.fl3d);
+    nBranches_->BsDstarTauNu_B_alpha.push_back(cands[ic].cand_b.alpha);
 
     std::vector<RefCountedKinematicParticle> allParticles4doc;
       
@@ -1783,8 +1782,8 @@ bool BsDstarTauNuNtuplizer::fillBranches( edm::Event const & event, const edm::E
     allParticles4doc.push_back(pFactory.particle(mytracks[cands[ic].cand_tau_id3], pion_mass, chi, ndf, pion_sigma));
 
 
-    nBranches_->BsDstarTauNu_B_maxdoca.push_back(getMaxDoca(allParticles4doc));
-    nBranches_->BsDstarTauNu_B_mindoca.push_back(getMinDoca(allParticles4doc));
+    nBranches_->BsDstarTauNu_B_maxdoca.push_back(aux.getMaxDoca(allParticles4doc));
+    nBranches_->BsDstarTauNu_B_mindoca.push_back(aux.getMinDoca(allParticles4doc));
     nBranches_->BsDstarTauNu_B_vx.push_back(cands[ic].cand_b_vx);
     nBranches_->BsDstarTauNu_B_vy.push_back(cands[ic].cand_b_vy);
     nBranches_->BsDstarTauNu_B_vz.push_back(cands[ic].cand_b_vz);
@@ -1859,7 +1858,7 @@ bool BsDstarTauNuNtuplizer::fillBranches( edm::Event const & event, const edm::E
   nBranches_->BsDstarTauNu_mu1_vy.push_back(muoncollection[0].vy());
   nBranches_->BsDstarTauNu_mu1_vz.push_back(muoncollection[0].vz());
   nBranches_->BsDstarTauNu_mu1_iso.push_back(1.);
-  nBranches_->BsDstarTauNu_mu1_dbiso.push_back(MuonPFIso(muoncollection[0]));
+  nBranches_->BsDstarTauNu_mu1_dbiso.push_back(aux.MuonPFIso(muoncollection[0]));
   
   nBranches_->BsDstarTauNu_PV_vx.push_back(vertices_->begin()->position().x());
   nBranches_->BsDstarTauNu_PV_vy.push_back(vertices_->begin()->position().y());
@@ -1945,7 +1944,7 @@ bool BsDstarTauNuNtuplizer::fillBranches( edm::Event const & event, const edm::E
       if(TMath::Abs((*genParticles_)[p].pdgId())==511 && (*genParticles_)[p].status()==2){
 
 	// retrieve production vertex
-	genvertex = getVertex((*genParticles_)[p]);
+	genvertex = aux.getVertex((*genParticles_)[p]);
 	    
 	for(int idd = 0; idd < (int)(*genParticles_)[p].numberOfDaughters(); idd++){
 	  Int_t dpid = (*genParticles_)[p].daughter(idd)->pdgId();
@@ -2005,59 +2004,59 @@ bool BsDstarTauNuNtuplizer::fillBranches( edm::Event const & event, const edm::E
 }
 
 
-void BsDstarTauNuNtuplizer::printout(const RefCountedKinematicVertex& myVertex){
-  std::cout << "Vertex:" << std::endl;
-  if (myVertex->vertexIsValid()) {
-    std::cout << "\t Decay vertex: " << myVertex->position() << myVertex->chiSquared() << " " << myVertex->degreesOfFreedom()
-	      << std::endl;
-  } else
-    std::cout << "\t Decay vertex Not valid\n";
-}
-
-void BsDstarTauNuNtuplizer::printout(const RefCountedKinematicParticle& myParticle){
-  std::cout << "Particle:" << std::endl;
-  //accessing the reconstructed Bs meson parameters:
-  //SK: uncomment if needed  AlgebraicVector7 bs_par = myParticle->currentState().kinematicParameters().vector();
-
-  //and their joint covariance matrix:
-  //SK:uncomment if needed  AlgebraicSymMatrix77 bs_er = myParticle->currentState().kinematicParametersError().matrix();
-  std::cout << "\t Momentum at vertex: " << myParticle->currentState().globalMomentum() << std::endl;
-  std::cout << "\t Parameters at vertex: " << myParticle->currentState().kinematicParameters().vector() << std::endl;
-}
-
-void BsDstarTauNuNtuplizer::printout(const RefCountedKinematicTree& myTree){
-  if (!myTree->isValid()) {
-    std::cout << "Tree is invalid. Fit failed.\n";
-    return;
-  }
-
-  //accessing the tree components, move pointer to top
-  myTree->movePointerToTheTop();
-
-  //We are now at the top of the decay tree getting the B_s reconstructed KinematicPartlcle
-  RefCountedKinematicParticle b_s = myTree->currentParticle();
-  printout(b_s);
-
-  // The B_s decay vertex
-  RefCountedKinematicVertex b_dec_vertex = myTree->currentDecayVertex();
-  printout(b_dec_vertex);
-
-  // Get all the children of Bs:
-  //In this way, the pointer is not moved
-  std::vector<RefCountedKinematicParticle> bs_children = myTree->finalStateParticles();
-
-  for (unsigned int i = 0; i < bs_children.size(); ++i) {
-    printout(bs_children[i]);
-  }
-
-  std::cout << "\t ------------------------------------------" << std::endl;
-
-  //Now navigating down the tree , pointer is moved:
-  bool child = myTree->movePointerToTheFirstChild();
-
-  if (child)
-    while (myTree->movePointerToTheNextChild()) {
-      RefCountedKinematicParticle aChild = myTree->currentParticle();
-      printout(aChild);
-    }
-}
+//void BsDstarTauNuNtuplizer::printout(const RefCountedKinematicVertex& myVertex){
+//  std::cout << "Vertex:" << std::endl;
+//  if (myVertex->vertexIsValid()) {
+//    std::cout << "\t Decay vertex: " << myVertex->position() << myVertex->chiSquared() << " " << myVertex->degreesOfFreedom()
+//	      << std::endl;
+//  } else
+//    std::cout << "\t Decay vertex Not valid\n";
+//}
+//
+//void BsDstarTauNuNtuplizer::printout(const RefCountedKinematicParticle& myParticle){
+//  std::cout << "Particle:" << std::endl;
+//  //accessing the reconstructed Bs meson parameters:
+//  //SK: uncomment if needed  AlgebraicVector7 bs_par = myParticle->currentState().kinematicParameters().vector();
+//
+//  //and their joint covariance matrix:
+//  //SK:uncomment if needed  AlgebraicSymMatrix77 bs_er = myParticle->currentState().kinematicParametersError().matrix();
+//  std::cout << "\t Momentum at vertex: " << myParticle->currentState().globalMomentum() << std::endl;
+//  std::cout << "\t Parameters at vertex: " << myParticle->currentState().kinematicParameters().vector() << std::endl;
+//}
+//
+//void BsDstarTauNuNtuplizer::printout(const RefCountedKinematicTree& myTree){
+//  if (!myTree->isValid()) {
+//    std::cout << "Tree is invalid. Fit failed.\n";
+//    return;
+//  }
+//
+//  //accessing the tree components, move pointer to top
+//  myTree->movePointerToTheTop();
+//
+//  //We are now at the top of the decay tree getting the B_s reconstructed KinematicPartlcle
+//  RefCountedKinematicParticle b_s = myTree->currentParticle();
+//  printout(b_s);
+//
+//  // The B_s decay vertex
+//  RefCountedKinematicVertex b_dec_vertex = myTree->currentDecayVertex();
+//  printout(b_dec_vertex);
+//
+//  // Get all the children of Bs:
+//  //In this way, the pointer is not moved
+//  std::vector<RefCountedKinematicParticle> bs_children = myTree->finalStateParticles();
+//
+//  for (unsigned int i = 0; i < bs_children.size(); ++i) {
+//    printout(bs_children[i]);
+//  }
+//
+//  std::cout << "\t ------------------------------------------" << std::endl;
+//
+//  //Now navigating down the tree , pointer is moved:
+//  bool child = myTree->movePointerToTheFirstChild();
+//
+//  if (child)
+//    while (myTree->movePointerToTheNextChild()) {
+//      RefCountedKinematicParticle aChild = myTree->currentParticle();
+//      printout(aChild);
+//    }
+//}

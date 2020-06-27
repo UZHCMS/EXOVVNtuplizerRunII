@@ -4,9 +4,7 @@
 //===================================================================================================================
 JpsiMuNtuplizer::JpsiMuNtuplizer( edm::EDGetTokenT<pat::MuonCollection>    muonToken   ,
                                   edm::EDGetTokenT<reco::VertexCollection> verticeToken, 
-                                  edm::EDGetTokenT<reco::BeamSpot> bsToken,
                                   edm::EDGetTokenT<pat::PackedCandidateCollection> packedpfcandidatesToken,
-                                  edm::EDGetTokenT<pat::PackedCandidateCollection> losttrackToken,
                                   edm::EDGetTokenT<edm::TriggerResults> triggertoken,
                                   edm::EDGetTokenT<pat::TriggerObjectStandAloneCollection> triggerobject,
                                   edm::EDGetTokenT<reco::GenParticleCollection> genptoken,
@@ -15,29 +13,34 @@ JpsiMuNtuplizer::JpsiMuNtuplizer( edm::EDGetTokenT<pat::MuonCollection>    muonT
     : CandidateNtuplizer ( nBranches )
     , muonToken_	        ( muonToken )
     , verticeToken_          ( verticeToken )
-    , bsToken_          ( bsToken )
     , packedpfcandidatesToken_(packedpfcandidatesToken) 
-    , losttrackToken_(losttrackToken) 
     , HLTtriggersToken_	( triggertoken )
     , triggerObjects_	( triggerobject )
     , genParticlesToken_( genptoken )
     , runOnMC_   (runFlags["runOnMC"])
-    , doCutFlow_ (runFlags["doCutFlow"])
+    , useHammer_  (runFlags["useHammer"])
+    , verbose_   (runFlags["verbose"])
    
 {
 
-  if(runOnMC_){
-    std::cout << "Setup Hammer ...";
+  std::cout << "UseHammer = " << useHammer_ << std::endl;
+
+  if(runOnMC_ && useHammer_){
+
+    if(verbose_) std::cout << "[JpsiMuNtuplizer] Setting up Hammer" << std::endl;
+
     hammer.setUnits("GeV");
-    hammer.includeDecay("BcJpsiMuNu");
-    hammer.includeDecay("BcJpsiTauNu");
-    //    ham.setFFInputScheme({{"BD", "ISGW2"}, {"BD*", "ISGW2"}});    
+
+    std::vector<std::string> processes = {"BcJpsiMuNu", "BcJpsiTauNu"};
+  
+    for(auto proc : processes) {
+      if(verbose_) std::cout << "[Hammer] \t added: " << proc << std::endl;
+      hammer.includeDecay(proc);
+    }
+
     hammer.setFFInputScheme({{"BcJpsi", "Kiselev"}, {"TauPiPiPi","RCT"}});
-    //    hammer.setFFInputScheme({{"BcJpsi", "EFG"}});
-    //    hammer.addPurePSVertices({"TauPiPiPiNu"});
-    //    hammer.addPurePSVertices({"TauPiPiPiNu"});
+
     hammer.addFFScheme("Scheme1", {
-                       // {"BD", "ISGW2"},
 	{"BcJpsi", "BGLVar"}, 
 	  {"TauPiPiPi", "RCT"}
       });
@@ -46,7 +49,8 @@ JpsiMuNtuplizer::JpsiMuNtuplizer( edm::EDGetTokenT<pat::MuonCollection>    muonT
     hammer.addPurePSVertices({"TauPiPiPiNu"}, Hammer::WTerm::DENOMINATOR);
     hammer.addPurePSVertices({"TauPiPiPiNu"}, Hammer::WTerm::NUMERATOR);
     hammer.initRun();
-    std::cout << "finish setting up Hammer" << std::endl;
+
+    if(verbose_) std::cout << "[JpsiMuNtuplizer] Finish setting up Hammer" << std::endl;
   }
 
 }
@@ -171,195 +175,195 @@ JpsiMuNtuplizer::~JpsiMuNtuplizer( void )
 }
 
 
-TVector3 JpsiMuNtuplizer::getVertex(const reco::GenParticle& part){
-    return TVector3(part.vx(),part.vy(),part.vz());
-}
-
-float JpsiMuNtuplizer::MuonPFIso(pat::Muon muon){
-
-    float sumChargedHadronPt = muon.pfIsolationR04().sumChargedHadronPt;
-    float sumNeutralHadronEt = muon.pfIsolationR04().sumNeutralHadronEt;
-    float sumPhotonEt = muon.pfIsolationR04().sumPhotonEt;
-    float sumPUPt = muon.pfIsolationR04().sumPUPt;
-    float iso = (sumChargedHadronPt + std::max( 0. ,sumNeutralHadronEt + sumPhotonEt - 0.5 * sumPUPt));// / muon.pt()
- 
-    return iso;
-}
-
-
-
-
-Float_t JpsiMuNtuplizer::getMaxDoca(std::vector<RefCountedKinematicParticle> &kinParticles){
-
-    double maxDoca = -1.0;
-
-    TwoTrackMinimumDistance md;
-    std::vector<RefCountedKinematicParticle>::iterator in_it, out_it;
-
-    for (out_it = kinParticles.begin(); out_it != kinParticles.end(); ++out_it) {
-        for (in_it = out_it + 1; in_it != kinParticles.end(); ++in_it) {
-            md.calculate((*out_it)->currentState().freeTrajectoryState(),(*in_it)->currentState().freeTrajectoryState());
-            if (md.distance() > maxDoca)
-                maxDoca = md.distance();
-        }
-    }
-
-    return maxDoca;
-}
-
-
-
-Float_t JpsiMuNtuplizer::getMinDoca(std::vector<RefCountedKinematicParticle> &kinParticles) {
-
-    double minDoca = 99999.9;
-
-    TwoTrackMinimumDistance md;
-    unsigned j,k,n;
-
-    n = kinParticles.size();
-    for (j = 0; j < n; j++) {
-        for (k = j+1; k < n; k++) {
-            md.calculate(kinParticles[j]->currentState().freeTrajectoryState(),kinParticles[k]->currentState().freeTrajectoryState());
-            if (md.distance() < minDoca)
-                minDoca = md.distance();
-        }
-    }
-
-    return minDoca;
-}
-
-
-
-
-std::tuple<Float_t, TransientVertex> JpsiMuNtuplizer::vertexProb( const std::vector<reco::TransientTrack>& tracks){
-
-    Float_t vprob = -1;
-  
-    KalmanVertexFitter kalman_fitter;
-    TransientVertex vertex;
-
-    try{
-        vertex = kalman_fitter.vertex(tracks);
-    }catch(std::exception e){
-        std::cout << "No vertex found ... return" << std::endl;
-        return std::forward_as_tuple(-9, vertex);
-    }
-
-    if(vertex.isValid()){
-
-        vprob =  TMath::Prob(vertex.totalChiSquared(), vertex.degreesOfFreedom());
-
-        //    vx = vertex.position().x();
-        //    vy = vertex.position().y();
-        //    vz = vertex.position().z();
-    
-        return std::forward_as_tuple(vprob, vertex);
-
-    }else{
-
-        return std::forward_as_tuple(-9, vertex);
-
-    }
-}
-
-
-//adapt absoluteImpactParameter functionality for RefCountedKinematicVertex
-std::pair<bool, Measurement1D> JpsiMuNtuplizer::absoluteImpactParameter(const TrajectoryStateOnSurface& tsos,
-                                                                        RefCountedKinematicVertex vertex,
-                                                                        VertexDistance& distanceComputer){
-    if (!tsos.isValid()) {
-        return std::pair<bool, Measurement1D>(false, Measurement1D(0., 0.));
-    }
-    GlobalPoint refPoint = tsos.globalPosition();
-    GlobalError refPointErr = tsos.cartesianError().position();
-    GlobalPoint vertexPosition = vertex->vertexState().position();
-    GlobalError vertexPositionErr = RecoVertex::convertError(vertex->vertexState().error());
-    return std::pair<bool, Measurement1D>(
-                                          true,
-                                          distanceComputer.distance(VertexState(vertexPosition, vertexPositionErr), VertexState(refPoint, refPointErr)));
-}
-
-
-
-
-particle_cand JpsiMuNtuplizer::calculateIPvariables(
-                                                    AnalyticalImpactPointExtrapolator extrapolator,
-                                                    RefCountedKinematicParticle particle,
-                                                    RefCountedKinematicVertex vertex,
-                                                    reco::Vertex wrtVertex
-                                                    ){
-
-    TrajectoryStateOnSurface tsos = extrapolator.extrapolate(particle->currentState().freeTrajectoryState(),
-                                                             RecoVertex::convertPos(wrtVertex.position()));
-
-
-    VertexDistance3D a3d;  
-
-    std::pair<bool,Measurement1D> currentIp = IPTools::signedDecayLength3D(tsos, GlobalVector(0,0,1), wrtVertex);
-    std::pair<bool,Measurement1D> cur3DIP = IPTools::absoluteImpactParameter(tsos, wrtVertex, a3d);
-  
-    // flight length
-    Float_t fl3d = a3d.distance(wrtVertex, vertex->vertexState()).value();
-    Float_t fl3de = a3d.distance(wrtVertex, vertex->vertexState()).error();
-    Float_t fls3d = -1;
-
-    if(fl3de!=0) fls3d = fl3d/fl3de;
-
-    // longitudinal impact parameters
-    Float_t lip = currentIp.second.value();
-    Float_t lipe = currentIp.second.error();
-    Float_t lips = -1;
-  
-    if(lipe!=0) lips = lip/lipe;
-
-    // impact parameter to the PV
-    Float_t pvip = cur3DIP.second.value();
-    Float_t pvipe = cur3DIP.second.error();
-    Float_t pvips = -1;
-  
-    if(pvipe!=0) pvips = pvip/pvipe;
-
-    // opening angle
-    TVector3 plab = TVector3(particle->currentState().globalMomentum().x(),
-                             particle->currentState().globalMomentum().y(),
-                             particle->currentState().globalMomentum().z());
-
-    const TVector3 tv3diff = TVector3(vertex->vertexState().position().x() - wrtVertex.position().x(),
-                                      vertex->vertexState().position().y() - wrtVertex.position().y(),
-                                      vertex->vertexState().position().z() - wrtVertex.position().z()
-                                      );
-
-    Float_t alpha = -1;
-
-    if(plab.Mag() != 0. && tv3diff.Mag()!=0){
-        alpha = plab.Dot(tv3diff) / (plab.Mag() * tv3diff.Mag());
-    }
-
-    particle_cand cand = {
-        lip,
-        lips,
-        pvip, 
-        pvips,
-        fl3d,
-        fls3d,
-        alpha
-    };
-
-
-    return cand;
-}
-
-
-math::PtEtaPhiMLorentzVector JpsiMuNtuplizer::daughter_p4(std::vector< RefCountedKinematicParticle > fitted_children, size_t i){
-  const auto& state = fitted_children.at(i)->currentState();
-
-  return math::PtEtaPhiMLorentzVector(
-				      state.globalMomentum().perp(), 
-				      state.globalMomentum().eta() ,
-				      state.globalMomentum().phi() ,
-				      state.mass()
-				      );
-}
+//TVector3 JpsiMuNtuplizer::getVertex(const reco::GenParticle& part){
+//    return TVector3(part.vx(),part.vy(),part.vz());
+//}
+//
+//float JpsiMuNtuplizer::MuonPFIso(pat::Muon muon){
+//
+//    float sumChargedHadronPt = muon.pfIsolationR04().sumChargedHadronPt;
+//    float sumNeutralHadronEt = muon.pfIsolationR04().sumNeutralHadronEt;
+//    float sumPhotonEt = muon.pfIsolationR04().sumPhotonEt;
+//    float sumPUPt = muon.pfIsolationR04().sumPUPt;
+//    float iso = (sumChargedHadronPt + std::max( 0. ,sumNeutralHadronEt + sumPhotonEt - 0.5 * sumPUPt));// / muon.pt()
+// 
+//    return iso;
+//}
+//
+//
+//
+//
+//Float_t JpsiMuNtuplizer::getMaxDoca(std::vector<RefCountedKinematicParticle> &kinParticles){
+//
+//    double maxDoca = -1.0;
+//
+//    TwoTrackMinimumDistance md;
+//    std::vector<RefCountedKinematicParticle>::iterator in_it, out_it;
+//
+//    for (out_it = kinParticles.begin(); out_it != kinParticles.end(); ++out_it) {
+//        for (in_it = out_it + 1; in_it != kinParticles.end(); ++in_it) {
+//            md.calculate((*out_it)->currentState().freeTrajectoryState(),(*in_it)->currentState().freeTrajectoryState());
+//            if (md.distance() > maxDoca)
+//                maxDoca = md.distance();
+//        }
+//    }
+//
+//    return maxDoca;
+//}
+//
+//
+//
+//Float_t JpsiMuNtuplizer::getMinDoca(std::vector<RefCountedKinematicParticle> &kinParticles) {
+//
+//    double minDoca = 99999.9;
+//
+//    TwoTrackMinimumDistance md;
+//    unsigned j,k,n;
+//
+//    n = kinParticles.size();
+//    for (j = 0; j < n; j++) {
+//        for (k = j+1; k < n; k++) {
+//            md.calculate(kinParticles[j]->currentState().freeTrajectoryState(),kinParticles[k]->currentState().freeTrajectoryState());
+//            if (md.distance() < minDoca)
+//                minDoca = md.distance();
+//        }
+//    }
+//
+//    return minDoca;
+//}
+//
+//
+//
+//
+//std::tuple<Float_t, TransientVertex> JpsiMuNtuplizer::vertexProb( const std::vector<reco::TransientTrack>& tracks){
+//
+//    Float_t vprob = -1;
+//  
+//    KalmanVertexFitter kalman_fitter;
+//    TransientVertex vertex;
+//
+//    try{
+//        vertex = kalman_fitter.vertex(tracks);
+//    }catch(std::exception e){
+//        std::cout << "No vertex found ... return" << std::endl;
+//        return std::forward_as_tuple(-9, vertex);
+//    }
+//
+//    if(vertex.isValid()){
+//
+//        vprob =  TMath::Prob(vertex.totalChiSquared(), vertex.degreesOfFreedom());
+//
+//        //    vx = vertex.position().x();
+//        //    vy = vertex.position().y();
+//        //    vz = vertex.position().z();
+//    
+//        return std::forward_as_tuple(vprob, vertex);
+//
+//    }else{
+//
+//        return std::forward_as_tuple(-9, vertex);
+//
+//    }
+//}
+//
+//
+////adapt absoluteImpactParameter functionality for RefCountedKinematicVertex
+//std::pair<bool, Measurement1D> JpsiMuNtuplizer::absoluteImpactParameter(const TrajectoryStateOnSurface& tsos,
+//                                                                        RefCountedKinematicVertex vertex,
+//                                                                        VertexDistance& distanceComputer){
+//    if (!tsos.isValid()) {
+//        return std::pair<bool, Measurement1D>(false, Measurement1D(0., 0.));
+//    }
+//    GlobalPoint refPoint = tsos.globalPosition();
+//    GlobalError refPointErr = tsos.cartesianError().position();
+//    GlobalPoint vertexPosition = vertex->vertexState().position();
+//    GlobalError vertexPositionErr = RecoVertex::convertError(vertex->vertexState().error());
+//    return std::pair<bool, Measurement1D>(
+//                                          true,
+//                                          distanceComputer.distance(VertexState(vertexPosition, vertexPositionErr), VertexState(refPoint, refPointErr)));
+//}
+//
+//
+//
+//
+//particle_cand JpsiMuNtuplizer::calculateIPvariables(
+//                                                    AnalyticalImpactPointExtrapolator extrapolator,
+//                                                    RefCountedKinematicParticle particle,
+//                                                    RefCountedKinematicVertex vertex,
+//                                                    reco::Vertex wrtVertex
+//                                                    ){
+//
+//    TrajectoryStateOnSurface tsos = extrapolator.extrapolate(particle->currentState().freeTrajectoryState(),
+//                                                             RecoVertex::convertPos(wrtVertex.position()));
+//
+//
+//    VertexDistance3D a3d;  
+//
+//    std::pair<bool,Measurement1D> currentIp = IPTools::signedDecayLength3D(tsos, GlobalVector(0,0,1), wrtVertex);
+//    std::pair<bool,Measurement1D> cur3DIP = IPTools::absoluteImpactParameter(tsos, wrtVertex, a3d);
+//  
+//    // flight length
+//    Float_t fl3d = a3d.distance(wrtVertex, vertex->vertexState()).value();
+//    Float_t fl3de = a3d.distance(wrtVertex, vertex->vertexState()).error();
+//    Float_t fls3d = -1;
+//
+//    if(fl3de!=0) fls3d = fl3d/fl3de;
+//
+//    // longitudinal impact parameters
+//    Float_t lip = currentIp.second.value();
+//    Float_t lipe = currentIp.second.error();
+//    Float_t lips = -1;
+//  
+//    if(lipe!=0) lips = lip/lipe;
+//
+//    // impact parameter to the PV
+//    Float_t pvip = cur3DIP.second.value();
+//    Float_t pvipe = cur3DIP.second.error();
+//    Float_t pvips = -1;
+//  
+//    if(pvipe!=0) pvips = pvip/pvipe;
+//
+//    // opening angle
+//    TVector3 plab = TVector3(particle->currentState().globalMomentum().x(),
+//                             particle->currentState().globalMomentum().y(),
+//                             particle->currentState().globalMomentum().z());
+//
+//    const TVector3 tv3diff = TVector3(vertex->vertexState().position().x() - wrtVertex.position().x(),
+//                                      vertex->vertexState().position().y() - wrtVertex.position().y(),
+//                                      vertex->vertexState().position().z() - wrtVertex.position().z()
+//                                      );
+//
+//    Float_t alpha = -1;
+//
+//    if(plab.Mag() != 0. && tv3diff.Mag()!=0){
+//        alpha = plab.Dot(tv3diff) / (plab.Mag() * tv3diff.Mag());
+//    }
+//
+//    particle_cand cand = {
+//        lip,
+//        lips,
+//        pvip, 
+//        pvips,
+//        fl3d,
+//        fls3d,
+//        alpha
+//    };
+//
+//
+//    return cand;
+//}
+//
+//
+//math::PtEtaPhiMLorentzVector JpsiMuNtuplizer::daughter_p4(std::vector< RefCountedKinematicParticle > fitted_children, size_t i){
+//  const auto& state = fitted_children.at(i)->currentState();
+//
+//  return math::PtEtaPhiMLorentzVector(
+//				      state.globalMomentum().perp(), 
+//				      state.globalMomentum().eta() ,
+//				      state.globalMomentum().phi() ,
+//				      state.mass()
+//				      );
+//}
 
 
 bool JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetup& iSetup ){
@@ -373,6 +377,7 @@ bool JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
      * Namely, HLT_DoubleMu4_JpsiTrk_Displaced_v
      * and  HLT_Dimuon0_Jpsi3p5_Muon2_v
      ********************************************************************/
+
 
     event.getByToken(HLTtriggersToken_, HLTtriggers_);
 
@@ -425,7 +430,6 @@ bool JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
      ********************************************************************/
 
     event.getByToken(verticeToken_   , vertices_     );
-    event.getByToken(bsToken_   , beamspot_     );
     event.getByToken(muonToken_	, muons_    );
     event.getByToken(triggerObjects_  , triggerObjects);
 
@@ -437,11 +441,11 @@ bool JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
     // bools keeping track of muon 1 or 2 for cutflow purposes
     bool mu1passpteta = false;
     bool mu2passpteta = false;
-    bool mu3passpteta = false;
+    //    bool mu3passpteta = false;
     bool mu1passtrigmatch = false;
     bool mu2passtrigmatch = false;
  // Precut
-    if( doCutFlow_) {
+    //    if( doCutFlow_) {
        nBranches_->cutflow_perevt->Fill(0);
       
        for(size_t imuon = 0; imuon < muons_->size(); ++ imuon){
@@ -461,12 +465,12 @@ bool JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
 
        if (mu1passpteta) {nBranches_->cutflow_perevt->Fill(1);}
        if (mu2passpteta) {nBranches_->cutflow_perevt->Fill(2);}
-    }
+       //    }
     if(!isTriggered) return false;
  // evt Triggered
-    if( doCutFlow_) {
+    //    if( doCutFlow_) {
        nBranches_->cutflow_perevt->Fill(3);
-      }
+       //      }
 //Now time to begin the cutflow in earnest
     for(size_t imuon = 0; imuon < muons_->size(); ++ imuon){
 
@@ -529,13 +533,12 @@ bool JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
         muoncollection.push_back(muon);
         muoncollection_id.push_back(imuon);
     }
-  if( doCutFlow_) {
+    //  if( doCutFlow_) {
     if (mu1passtrigmatch) {nBranches_->cutflow_perevt->Fill(4);}
     if (mu2passtrigmatch) {nBranches_->cutflow_perevt->Fill(5);}
-    }
+    //    }
 
     if(!( muoncollection.size() >= 2)) return false;
-
 
 
 
@@ -585,7 +588,7 @@ bool JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
       
             Float_t vprob_jpsi = -9;
             TransientVertex vertex_jpsi;
-            std::tie(vprob_jpsi, vertex_jpsi) = vertexProb(transient_tracks_dimuon);
+            std::tie(vprob_jpsi, vertex_jpsi) = aux.vertexProb(transient_tracks_dimuon);
             //      if(!(vprob_jpsi > 0)) continue;
 
             if(jpsi_max_pt < jpsi_pt){
@@ -603,9 +606,9 @@ bool JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
 
     if(jpsi_max_pt == -1) return false;
 
-    if ( doCutFlow_) {
+    //    if ( doCutFlow_) {
        nBranches_->cutflow_perevt->Fill(6);
-       }
+       //       }
 
 
     /********************************************************************
@@ -655,9 +658,8 @@ bool JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
 
     std::vector< RefCountedKinematicParticle > jpsi_children = jpTree->finalStateParticles();
 
-    math::PtEtaPhiMLorentzVector mu1_fit = daughter_p4(jpsi_children, 0);
-    math::PtEtaPhiMLorentzVector mu2_fit = daughter_p4(jpsi_children, 1);
-
+    math::PtEtaPhiMLorentzVector mu1_fit = aux.daughter_p4(jpsi_children, 0);
+    math::PtEtaPhiMLorentzVector mu2_fit = aux.daughter_p4(jpsi_children, 1);
 
 
 
@@ -668,9 +670,9 @@ bool JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
 //    std::cout << "after fit2: " << mu2_fit.pt() << " " << mu2_fit.eta() << " " << mu2_fit.phi() << " " << mu2_fit.mass() << std::endl;
 
     // Jpsi kinematic fit passed
-    if( doCutFlow_) {
+    //    if( doCutFlow_) {
       nBranches_->cutflow_perevt->Fill(7);
-      }
+      //      }
 
     /********************************************************************
      *
@@ -713,7 +715,7 @@ bool JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
     
 
     
-        particle_cand cand = calculateIPvariables(extrapolator, jpsi_part, jpsi_vertex, *vtx);
+        particle_cand cand = aux.calculateIPvariables(extrapolator, jpsi_part, jpsi_vertex, *vtx);
 
     
         if(TMath::Abs(cand.lip) < max_criteria){
@@ -727,7 +729,6 @@ bool JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
     }
 
     if(!(muoncollection[mcidx_mu1].isSoftMuon(closestVertex) > 0.5 && muoncollection[mcidx_mu2].isSoftMuon(closestVertex) > 0.5)) return false;
-
     
     //    if(!(muoncollection[mcidx_mu1].isSoftMuon(closestVertex) > 0.5 && muoncollection[mcidx_mu2].isSoftMuon(closestVertex) > 0.5)) return false;
 
@@ -751,7 +752,7 @@ bool JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
         if(TMath::Abs(muon.eta()) > 2.4) continue;
         if(!(muon.track().isNonnull())) continue;
         if(imuon==idx_mu1 || imuon==idx_mu2) continue;
-        mu3passpteta = true;
+	//        mu3passpteta = true;
         // shall we put delta z cut here maybe? 
 
 	
@@ -768,17 +769,17 @@ bool JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
 
     if(max_pt3==-1) return false;
     //mu3 passed pT and eta cut
-    if( doCutFlow_ && mu3passpteta ) {
+    //    if( doCutFlow_ && mu3passpteta ) {
       nBranches_->cutflow_perevt->Fill(8);
-      }
+      //      }
+
 
     //    int nmuo =0;
     for( auto mu3: mu3_vec){
       //        nmuo++;
-     
+
         const reco::TrackRef track3_muon = mu3.muonBestTrack();
         reco::TransientTrack tt3_muon = (*builder).build(track3_muon);
-
         /********************************************************************
          *
          * Step7: bbPV vertex refit by excluding 3 muon candidates
@@ -786,7 +787,6 @@ bool JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
          ********************************************************************/
 
         event.getByToken( packedpfcandidatesToken_               , packedpfcandidates_      ); 
-        event.getByToken( losttrackToken_               , losttrack_      ); 
 
         std::vector<pat::PackedCandidate> mypfcollection; 
         std::vector<reco::TransientTrack> mytracks;
@@ -847,19 +847,17 @@ bool JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
         }
 
 
-
-        TransientVertex myVertex; 
+//        TransientVertex myVertex; 
+//  
+//        if( mytracks.size()>1 ){
+//            AdaptiveVertexFitter  theFitter;
+//    
+//            myVertex = theFitter.vertex(mytracks);  // if you don't want the beam constraint
+//            //    TransientVertex myVertex = theFitter.vertex(mytracks, beamspot_);  // if you don't want the beam constraint
+//            //    std::cout << "TEST   " << closestVertex.position().z() << " " << myVertex.position().z() << std::endl;
+//
+//        }
   
-        if( mytracks.size()>1 ){
-            AdaptiveVertexFitter  theFitter;
-    
-            myVertex = theFitter.vertex(mytracks);  // if you don't want the beam constraint
-            //    TransientVertex myVertex = theFitter.vertex(mytracks, beamspot_);  // if you don't want the beam constraint
-            //    std::cout << "TEST   " << closestVertex.position().z() << " " << myVertex.position().z() << std::endl;
-
-        }
-  
-
 
 
 
@@ -907,21 +905,19 @@ bool JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
         particle_cand JPcand;
         particle_cand Bcand;
 
-        if(myVertex.isValid()){
+	//        if(myVertex.isValid()){
             //    std::cout << "refittex vertex available" << std::endl;
-            JPcand = calculateIPvariables(extrapolator, jpsi_part, jpsi_vertex, myVertex);
-            Bcand = calculateIPvariables(extrapolator, bc_part, bc_vertex, myVertex);
-        }else{
+	//            JPcand = calculateIPvariables(extrapolator, jpsi_part, jpsi_vertex, myVertex);
+	//            Bcand = calculateIPvariables(extrapolator, bc_part, bc_vertex, myVertex);
+	//        }else{
             //    std::cout << "no refittex vertex available" << std::endl;
-            JPcand = calculateIPvariables(extrapolator, jpsi_part, jpsi_vertex, closestVertex);
-            Bcand = calculateIPvariables(extrapolator, bc_part, bc_vertex, closestVertex);
-        }
-
+            JPcand = aux.calculateIPvariables(extrapolator, jpsi_part, jpsi_vertex, closestVertex);
+            Bcand = aux.calculateIPvariables(extrapolator, bc_part, bc_vertex, closestVertex);
+	    //        }
 
 
 	std::vector< RefCountedKinematicParticle > bc_children = bcTree->finalStateParticles();
-	math::PtEtaPhiMLorentzVector mu3_fit = daughter_p4(bc_children, 0);
-
+	math::PtEtaPhiMLorentzVector mu3_fit = aux.daughter_p4(bc_children, 0);
 
 	//	std::cout << "before fit3: " << mu3.pt() << " " << mu3.eta() << " " << mu3.phi() << " " << mu3.mass() << std::endl;
 	//	std::cout << "after fit3: " << mu3_fit.pt() << " " << mu3_fit.eta() << " " << mu3_fit.phi() << " " << mu3_fit.mass() << std::endl;
@@ -953,8 +949,7 @@ bool JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
 
         Float_t vprob_bc = -9;
         TransientVertex vertex_bc;
-        std::tie(vprob_bc, vertex_bc) = vertexProb(transient_tracks_trimuon);
-
+        std::tie(vprob_bc, vertex_bc) = aux.vertexProb(transient_tracks_trimuon);
 
         Float_t iso = 0;
         Float_t iso_mu1 = 0;
@@ -1000,7 +995,7 @@ bool JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
 
             VertexDistance3D a3d_pf;  
             // use own function here ... 
-            std::pair<bool,Measurement1D> cur3DIP_pf = JpsiMuNtuplizer::absoluteImpactParameter(tsos_pf, bc_vertex, a3d_pf);
+            std::pair<bool,Measurement1D> cur3DIP_pf = aux.absoluteImpactParameter(tsos_pf, bc_vertex, a3d_pf);
     
             Float_t pvip_pf = cur3DIP_pf.second.value();
 
@@ -1010,7 +1005,6 @@ bool JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
 
             if(iso_mindoca > pvip_pf) iso_mindoca = pvip_pf;
         }
-
         //	nBranches_->Jpsi_mu3_isopt03.push_back(iso_pt03);
         //	nBranches_->Jpsi_mu3_isopt04.push_back(iso_pt04);
         //	nBranches_->Jpsi_mu3_isopt05.push_back(iso_pt05);
@@ -1048,7 +1042,7 @@ bool JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
         nBranches_->JpsiMu_mu1_vy.push_back(muoncollection[mcidx_mu1].vy());
         nBranches_->JpsiMu_mu1_vz.push_back(muoncollection[mcidx_mu1].vz());
         nBranches_->JpsiMu_mu1_iso.push_back(iso_mu1);
-        nBranches_->JpsiMu_mu1_dbiso.push_back(MuonPFIso(muoncollection[mcidx_mu1]));
+        nBranches_->JpsiMu_mu1_dbiso.push_back(aux.MuonPFIso(muoncollection[mcidx_mu1]));
 
         nBranches_->JpsiMu_mu2_pt.push_back(mu2_fit.pt());
         nBranches_->JpsiMu_mu2_eta.push_back(mu2_fit.eta());
@@ -1069,7 +1063,7 @@ bool JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
         nBranches_->JpsiMu_mu2_vy.push_back(muoncollection[mcidx_mu2].vy());
         nBranches_->JpsiMu_mu2_vz.push_back(muoncollection[mcidx_mu2].vz());
         nBranches_->JpsiMu_mu2_iso.push_back(iso_mu2);
-        nBranches_->JpsiMu_mu2_dbiso.push_back(MuonPFIso(muoncollection[mcidx_mu2]));
+        nBranches_->JpsiMu_mu2_dbiso.push_back(aux.MuonPFIso(muoncollection[mcidx_mu2]));
 
         nBranches_->JpsiMu_mu3_unfit_pt.push_back(mu3.pt());
         nBranches_->JpsiMu_mu3_unfit_eta.push_back(mu3.eta());
@@ -1090,7 +1084,7 @@ bool JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
         nBranches_->JpsiMu_mu3_vy.push_back(mu3.vy());
         nBranches_->JpsiMu_mu3_vz.push_back(mu3.vz());
         nBranches_->JpsiMu_mu3_iso.push_back(iso_mu3);
-        nBranches_->JpsiMu_mu3_dbiso.push_back(MuonPFIso(mu3));
+        nBranches_->JpsiMu_mu3_dbiso.push_back(aux.MuonPFIso(mu3));
 
 	std::vector<RefCountedKinematicParticle> mu13;
 	mu13.push_back(pFactory.particle(tt1_muon, muon_mass, chi, ndf, muon_sigma));
@@ -1100,23 +1094,23 @@ bool JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
 	mu23.push_back(pFactory.particle(tt2_muon, muon_mass, chi, ndf, muon_sigma));
 	mu23.push_back(pFactory.particle(tt3_muon, muon_mass, chi, ndf, muon_sigma));
 
-        nBranches_->JpsiMu_mu3_doca2mu1.push_back(getMaxDoca(mu13));
-        nBranches_->JpsiMu_mu3_doca2mu2.push_back(getMaxDoca(mu23));
+        nBranches_->JpsiMu_mu3_doca2mu1.push_back(aux.getMaxDoca(mu13));
+        nBranches_->JpsiMu_mu3_doca2mu2.push_back(aux.getMaxDoca(mu23));
 	
 
         nBranches_->JpsiMu_PV_vx.push_back(vertices_->begin()->position().x());
         nBranches_->JpsiMu_PV_vy.push_back(vertices_->begin()->position().y());
         nBranches_->JpsiMu_PV_vz.push_back(vertices_->begin()->position().z());
 
-        if(myVertex.isValid()){
-            nBranches_->JpsiMu_bbPV_refit_vx.push_back(myVertex.position().x());
-            nBranches_->JpsiMu_bbPV_refit_vy.push_back(myVertex.position().y());
-            nBranches_->JpsiMu_bbPV_refit_vz.push_back(myVertex.position().z());
-        }else{
-            nBranches_->JpsiMu_bbPV_refit_vx.push_back(-1);
-            nBranches_->JpsiMu_bbPV_refit_vy.push_back(-1);
-            nBranches_->JpsiMu_bbPV_refit_vz.push_back(-1);
-        }
+	//        if(myVertex.isValid()){
+	//            nBranches_->JpsiMu_bbPV_refit_vx.push_back(myVertex.position().x());
+	//            nBranches_->JpsiMu_bbPV_refit_vy.push_back(myVertex.position().y());
+	//            nBranches_->JpsiMu_bbPV_refit_vz.push_back(myVertex.position().z());
+//        }else{
+//            nBranches_->JpsiMu_bbPV_refit_vx.push_back(-1);
+//            nBranches_->JpsiMu_bbPV_refit_vy.push_back(-1);
+//            nBranches_->JpsiMu_bbPV_refit_vz.push_back(-1);
+//        }
 
         nBranches_->JpsiMu_bbPV_vx.push_back(closestVertex.position().x());
         nBranches_->JpsiMu_bbPV_vy.push_back(closestVertex.position().y());
@@ -1134,8 +1128,8 @@ bool JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
         nBranches_->JpsiMu_Jpsi_fl3d.push_back(JPcand.fl3d);
         nBranches_->JpsiMu_Jpsi_fls3d.push_back(JPcand.fls3d);
         nBranches_->JpsiMu_Jpsi_alpha.push_back(JPcand.alpha);
-        nBranches_->JpsiMu_Jpsi_maxdoca.push_back(getMaxDoca(muonParticles));
-        nBranches_->JpsiMu_Jpsi_mindoca.push_back(getMinDoca(muonParticles));
+        nBranches_->JpsiMu_Jpsi_maxdoca.push_back(aux.getMaxDoca(muonParticles));
+        nBranches_->JpsiMu_Jpsi_mindoca.push_back(aux.getMinDoca(muonParticles));
         nBranches_->JpsiMu_Jpsi_vx.push_back(jpsi_vertex->vertexState().position().x());
         nBranches_->JpsiMu_Jpsi_vy.push_back(jpsi_vertex->vertexState().position().y());
         nBranches_->JpsiMu_Jpsi_vz.push_back(jpsi_vertex->vertexState().position().z());  
@@ -1169,8 +1163,8 @@ bool JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
         allParticles4doc.push_back(pFactory.particle(tt2_muon, muon_mass, chi, ndf, muon_sigma));
         allParticles4doc.push_back(pFactory.particle(tt3_muon, muon_mass, chi, ndf, muon_sigma));
 
-        nBranches_->JpsiMu_B_maxdoca.push_back(getMaxDoca(allParticles4doc));
-        nBranches_->JpsiMu_B_mindoca.push_back(getMinDoca(allParticles4doc));
+        nBranches_->JpsiMu_B_maxdoca.push_back(aux.getMaxDoca(allParticles4doc));
+        nBranches_->JpsiMu_B_mindoca.push_back(aux.getMinDoca(allParticles4doc));
         nBranches_->JpsiMu_B_vx.push_back(bc_vertex->vertexState().position().x());
         nBranches_->JpsiMu_B_vy.push_back(bc_vertex->vertexState().position().y());
         nBranches_->JpsiMu_B_vz.push_back(bc_vertex->vertexState().position().z());  
@@ -1189,7 +1183,6 @@ bool JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
             nBranches_->JpsiMu_B_unfit_vy.push_back(vertex_bc.position().y());
             nBranches_->JpsiMu_B_unfit_vz.push_back(vertex_bc.position().z());
         }
-
 
 
 
@@ -1232,10 +1225,10 @@ bool JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
 
 	    auto _part_ = (*genParticles_)[p];
 	    
-	    //      std::cout << "gen: " << (*genParticles_)[p].pdgId() << " " << (*genParticles_)[p].status() << std::endl;
 	    
 	    // Bc daughters loop
-	    if(TMath::Abs((*genParticles_)[p].pdgId())==541 && (*genParticles_)[p].status()==2){
+	    //	    if(TMath::Abs((*genParticles_)[p].pdgId())==541 && (*genParticles_)[p].status()==2){
+	    if((*genParticles_)[p].pdgId()==541 && (*genParticles_)[p].status()==2){
 		
 	      bool isJpsi = false;
 
@@ -1252,10 +1245,13 @@ bool JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
 
 	      idxB = Bc2JpsiLNu.addParticle(pB);
 
-	      std::cout << "step 3" << std::endl;		
+	      std::cout << "gen: " << (*genParticles_)[p].pdgId() << " " << (*genParticles_)[p].status() << std::endl;
+
+	      //	      std::cout << "step 3" << std::endl;		
 	      for(auto d : _part_.daughterRefVector()) {
 
 		Hammer::Particle B_dau({d->energy(), d->px(), d->py(), d->pz()}, d->pdgId());
+
 		
 		auto idx_d = Bc2JpsiLNu.addParticle(B_dau);
 		Bvtx_idxs.push_back(idx_d);
@@ -1263,21 +1259,29 @@ bool JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
 		  if(TMath::Abs(d->pdgId()) == 15) {
 		    
 		    idxTau = idx_d;
+
+
+		    std::cout << "\t gen: " << d->pdgId() << " " << d->status() << std::endl;
 		    
 		    for (auto dd : d->daughterRefVector()) {
 		      Hammer::Particle Tau_dau({dd->energy(), dd->px(), dd->py(), dd->pz()}, dd->pdgId());
 		      auto idx_dd = Bc2JpsiLNu.addParticle(Tau_dau);
 		      Tauvtx_idxs.push_back(idx_dd);
+		      std::cout << "\t\t gen: " << dd->pdgId() << " " << dd->status() << std::endl;
 		    }
 		  }
 
 		  else if(TMath::Abs(d->pdgId()) == 443) {
 		    idxJpsi = idx_d;
+
+		    std::cout << "\t gen: " << d->pdgId() << " " << d->status() << std::endl;
+
 		    for (auto dd : d->daughterRefVector()) {
 		      
 		      Hammer::Particle Jpsi_dau({dd->energy(), dd->px(), dd->py(), dd->pz()}, dd->pdgId());
 		      auto idx_dd = Bc2JpsiLNu.addParticle(Jpsi_dau);
 		      Jpsivtx_idxs.push_back(idx_dd);
+		      std::cout << "\t\t gen: " << dd->pdgId() << " " << dd->status() << std::endl;
 		    }
 		    
 		    isJpsi = true;
@@ -1302,7 +1306,7 @@ bool JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
 		
 		
 		// retrieve production vertex
-		genvertex = getVertex((*genParticles_)[p]);
+		genvertex = aux.getVertex((*genParticles_)[p]);
 		
 		for(int idd = 0; idd < (int)(*genParticles_)[p].numberOfDaughters(); idd++){
 		  Int_t dpid = (*genParticles_)[p].daughter(idd)->pdgId();
@@ -1333,6 +1337,8 @@ bool JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
 	      }
             }
 
+
+	  std::cout << "summary: " << idxB << " " << idxTau << " " << idxJpsi << std::endl;
 	  Bc2JpsiLNu.addVertex(idxB, Bvtx_idxs);
 	  
 	if(idxTau != -1) {
@@ -1593,7 +1599,7 @@ bool JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
 
 
 
-
+  std::cout << "step7" << std::endl;
 
 
 
@@ -1601,67 +1607,67 @@ bool JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
     nBranches_->JpsiMu_nCandidates.push_back(nBranches_->JpsiMu_mu1_pt.size());
 
     // B Candidate Kinematic fit passed
-    if( doCutFlow_) {
+    //    if( doCutFlow_) {
       nBranches_->cutflow_perevt->Fill(9);
-      }
+      //      }
 
     return true;
 }
 
 
-void JpsiMuNtuplizer::printout(const RefCountedKinematicVertex& myVertex){
-    std::cout << "Vertex:" << std::endl;
-    if (myVertex->vertexIsValid()) {
-        std::cout << "\t Decay vertex: " << myVertex->position() << myVertex->chiSquared() << " " << myVertex->degreesOfFreedom()
-                  << std::endl;
-    } else
-        std::cout << "\t Decay vertex Not valid\n";
-}
-
-void JpsiMuNtuplizer::printout(const RefCountedKinematicParticle& myParticle){
-    std::cout << "Particle:" << std::endl;
-    //accessing the reconstructed Bs meson parameters:
-    //SK: uncomment if needed  AlgebraicVector7 bs_par = myParticle->currentState().kinematicParameters().vector();
-
-    //and their joint covariance matrix:
-    //SK:uncomment if needed  AlgebraicSymMatrix77 bs_er = myParticle->currentState().kinematicParametersError().matrix();
-    std::cout << "\t Momentum at vertex: " << myParticle->currentState().globalMomentum() << std::endl;
-    std::cout << "\t Parameters at vertex: " << myParticle->currentState().kinematicParameters().vector() << std::endl;
-}
-
-void JpsiMuNtuplizer::printout(const RefCountedKinematicTree& myTree){
-    if (!myTree->isValid()) {
-        std::cout << "Tree is invalid. Fit failed.\n";
-        return;
-    }
-
-    //accessing the tree components, move pointer to top
-    myTree->movePointerToTheTop();
-
-    //We are now at the top of the decay tree getting the B_s reconstructed KinematicPartlcle
-    RefCountedKinematicParticle b_s = myTree->currentParticle();
-    printout(b_s);
-
-    // The B_s decay vertex
-    RefCountedKinematicVertex b_dec_vertex = myTree->currentDecayVertex();
-    printout(b_dec_vertex);
-
-    // Get all the children of Bs:
-    //In this way, the pointer is not moved
-    std::vector<RefCountedKinematicParticle> bs_children = myTree->finalStateParticles();
-
-    for (unsigned int i = 0; i < bs_children.size(); ++i) {
-        printout(bs_children[i]);
-    }
-
-    std::cout << "\t ------------------------------------------" << std::endl;
-
-    //Now navigating down the tree , pointer is moved:
-    bool child = myTree->movePointerToTheFirstChild();
-
-    if (child)
-        while (myTree->movePointerToTheNextChild()) {
-            RefCountedKinematicParticle aChild = myTree->currentParticle();
-            printout(aChild);
-        }
-}
+//void JpsiMuNtuplizer::printout(const RefCountedKinematicVertex& myVertex){
+//    std::cout << "Vertex:" << std::endl;
+//    if (myVertex->vertexIsValid()) {
+//        std::cout << "\t Decay vertex: " << myVertex->position() << myVertex->chiSquared() << " " << myVertex->degreesOfFreedom()
+//                  << std::endl;
+//    } else
+//        std::cout << "\t Decay vertex Not valid\n";
+//}
+//
+//void JpsiMuNtuplizer::printout(const RefCountedKinematicParticle& myParticle){
+//    std::cout << "Particle:" << std::endl;
+//    //accessing the reconstructed Bs meson parameters:
+//    //SK: uncomment if needed  AlgebraicVector7 bs_par = myParticle->currentState().kinematicParameters().vector();
+//
+//    //and their joint covariance matrix:
+//    //SK:uncomment if needed  AlgebraicSymMatrix77 bs_er = myParticle->currentState().kinematicParametersError().matrix();
+//    std::cout << "\t Momentum at vertex: " << myParticle->currentState().globalMomentum() << std::endl;
+//    std::cout << "\t Parameters at vertex: " << myParticle->currentState().kinematicParameters().vector() << std::endl;
+//}
+//
+//void JpsiMuNtuplizer::printout(const RefCountedKinematicTree& myTree){
+//    if (!myTree->isValid()) {
+//        std::cout << "Tree is invalid. Fit failed.\n";
+//        return;
+//    }
+//
+//    //accessing the tree components, move pointer to top
+//    myTree->movePointerToTheTop();
+//
+//    //We are now at the top of the decay tree getting the B_s reconstructed KinematicPartlcle
+//    RefCountedKinematicParticle b_s = myTree->currentParticle();
+//    printout(b_s);
+//
+//    // The B_s decay vertex
+//    RefCountedKinematicVertex b_dec_vertex = myTree->currentDecayVertex();
+//    printout(b_dec_vertex);
+//
+//    // Get all the children of Bs:
+//    //In this way, the pointer is not moved
+//    std::vector<RefCountedKinematicParticle> bs_children = myTree->finalStateParticles();
+//
+//    for (unsigned int i = 0; i < bs_children.size(); ++i) {
+//        printout(bs_children[i]);
+//    }
+//
+//    std::cout << "\t ------------------------------------------" << std::endl;
+//
+//    //Now navigating down the tree , pointer is moved:
+//    bool child = myTree->movePointerToTheFirstChild();
+//
+//    if (child)
+//        while (myTree->movePointerToTheNextChild()) {
+//            RefCountedKinematicParticle aChild = myTree->currentParticle();
+//            printout(aChild);
+//        }
+//}

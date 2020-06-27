@@ -2,9 +2,9 @@
 
 //===================================================================================================================        
 NtupleBranches::NtupleBranches( std::map< std::string, bool >& runFlags, TTree* tree )
-   : tree_( tree )
+  : tree_( tree )
 {
-   branch( runFlags );
+  branch( runFlags );
 }
 
 //===================================================================================================================
@@ -16,15 +16,15 @@ NtupleBranches::~NtupleBranches( void )
 void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
 
 
-    if ( runFlags["runOnMC"] ){
+  if ( runFlags["runOnMC"] ){
     if ( runFlags["doGenParticles"] ){
       /** genParticles */
       tree_->Branch( "genParticle_N"	     , &genParticle_N	       );
       tree_->Branch( "genParticle_pt"	     , &genParticle_pt	       ); 
-//      tree_->Branch( "genParticle_px"	     , &genParticle_px	       ); 
-//      tree_->Branch( "genParticle_py"	     , &genParticle_py	       ); 
-//      tree_->Branch( "genParticle_pz"	     , &genParticle_pz	       ); 
-//      tree_->Branch( "genParticle_e" 	     , &genParticle_e	       ); 
+      //      tree_->Branch( "genParticle_px"	     , &genParticle_px	       ); 
+      //      tree_->Branch( "genParticle_py"	     , &genParticle_py	       ); 
+      //      tree_->Branch( "genParticle_pz"	     , &genParticle_pz	       ); 
+      //      tree_->Branch( "genParticle_e" 	     , &genParticle_e	       ); 
       tree_->Branch( "genParticle_eta"	     , &genParticle_eta        ); 
       tree_->Branch( "genParticle_phi"	     , &genParticle_phi        ); 
       tree_->Branch( "genParticle_mass"	     , &genParticle_mass       ); 
@@ -39,11 +39,11 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
       tree_->Branch( "genParticle_nMoth"     , &genParticle_nMoth      );
       tree_->Branch( "genParticle_nDau"	     , &genParticle_nDau       ); 
       tree_->Branch( "genParticle_dau"	     , &genParticle_dau        );
-    
-      
- 
+	
+	
+	
     } //doGenParticles
-    
+      
     if ( runFlags["doGenEvent"] ){
       /** generator info */
       tree_->Branch( "lheV_pt"	             , &lheV_pt                ); 
@@ -108,7 +108,7 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch("passFilter_TrkPOG_logError"      ,&passFilter_TrkPOG_logError_     ,"passFilter_TrkPOG_logError_/O");
     tree_->Branch("passFilter_METFilters"           ,&passFilter_METFilters_          ,"passFilter_METFilters_/O");
     
-     //NEW FOR ICHEP
+    //NEW FOR ICHEP
     tree_->Branch("passFilter_CSCTightHaloTrkMuUnvetoFilter", &passFilter_CSCTightHaloTrkMuUnvetoFilter_   ,"passFilter_CSCTightHaloTrkMuUnvetoFilter_/O");
     tree_->Branch("passFilter_globalTightHalo2016"          , &passFilter_globalTightHalo2016_             ,"passFilter_globalTightHalo2016_/O");
     tree_->Branch("passFilter_globalSuperTightHalo2016"          , &passFilter_globalSuperTightHalo2016_             ,"passFilter_globalSuperTightHalo2016_/O");
@@ -268,9 +268,9 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch("JpsiMu_bbPV_vy", &JpsiMu_bbPV_vy );
     tree_->Branch("JpsiMu_bbPV_vz", &JpsiMu_bbPV_vz );
 
-    tree_->Branch("JpsiMu_bbPV_refit_vx", &JpsiMu_bbPV_vx );
-    tree_->Branch("JpsiMu_bbPV_refit_vy", &JpsiMu_bbPV_vy );
-    tree_->Branch("JpsiMu_bbPV_refit_vz", &JpsiMu_bbPV_vz );
+    //    tree_->Branch("JpsiMu_bbPV_refit_vx", &JpsiMu_bbPV_vx );
+    //    tree_->Branch("JpsiMu_bbPV_refit_vy", &JpsiMu_bbPV_vy );
+    //    tree_->Branch("JpsiMu_bbPV_refit_vz", &JpsiMu_bbPV_vz );
 
     tree_->Branch("JpsiMu_genPV_vx", &JpsiMu_genPV_vx );
     tree_->Branch("JpsiMu_genPV_vy", &JpsiMu_genPV_vy );
@@ -442,12 +442,12 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch("JpsiTau_tau_isRight1", &JpsiTau_tau_isRight1);
     tree_->Branch("JpsiTau_tau_isRight2", &JpsiTau_tau_isRight2);
     tree_->Branch("JpsiTau_tau_isRight3", &JpsiTau_tau_isRight3);
-    tree_->Branch("JpsiTau_tau_dr1", &JpsiTau_tau_dr1);
-    tree_->Branch("JpsiTau_tau_dr2", &JpsiTau_tau_dr2);
-    tree_->Branch("JpsiTau_tau_dr3", &JpsiTau_tau_dr3);
-    tree_->Branch("JpsiTau_tau_ptres1", &JpsiTau_tau_ptres1);
-    tree_->Branch("JpsiTau_tau_ptres2", &JpsiTau_tau_ptres2);
-    tree_->Branch("JpsiTau_tau_ptres3", &JpsiTau_tau_ptres3);
+//    tree_->Branch("JpsiTau_tau_dr1", &JpsiTau_tau_dr1);
+//    tree_->Branch("JpsiTau_tau_dr2", &JpsiTau_tau_dr2);
+//    tree_->Branch("JpsiTau_tau_dr3", &JpsiTau_tau_dr3);
+//    tree_->Branch("JpsiTau_tau_ptres1", &JpsiTau_tau_ptres1);
+//    tree_->Branch("JpsiTau_tau_ptres2", &JpsiTau_tau_ptres2);
+//    tree_->Branch("JpsiTau_tau_ptres3", &JpsiTau_tau_ptres3);
     tree_->Branch("JpsiTau_tau_matched_ppdgId", &JpsiTau_tau_matched_ppdgId);
     tree_->Branch("JpsiTau_tau_matched_gentaupt", &JpsiTau_tau_matched_gentaupt);
     //    tree_->Branch("JpsiTau_tau_gentaupt", &JpsiTau_tau_gentaupt);
@@ -489,9 +489,9 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch("JpsiTau_bbPV_vy", &JpsiTau_bbPV_vy );
     tree_->Branch("JpsiTau_bbPV_vz", &JpsiTau_bbPV_vz );
 
-    tree_->Branch("JpsiTau_bbPV_refit_vx", &JpsiTau_bbPV_vx );
-    tree_->Branch("JpsiTau_bbPV_refit_vy", &JpsiTau_bbPV_vy );
-    tree_->Branch("JpsiTau_bbPV_refit_vz", &JpsiTau_bbPV_vz );
+    //    tree_->Branch("JpsiTau_bbPV_refit_vx", &JpsiTau_bbPV_vx );
+    //    tree_->Branch("JpsiTau_bbPV_refit_vy", &JpsiTau_bbPV_vy );
+    //    tree_->Branch("JpsiTau_bbPV_refit_vz", &JpsiTau_bbPV_vz );
 
     tree_->Branch("JpsiTau_genPV_vx", &JpsiTau_genPV_vx );
     tree_->Branch("JpsiTau_genPV_vy", &JpsiTau_genPV_vy );
@@ -574,12 +574,12 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch("JpsiTau_B_mass_gen", &JpsiTau_B_mass_gen);
 
 
-//    tree_->Branch("JpsiTau_ed_pfeta", &JpsiTau_ed_pfeta);
-//    tree_->Branch("JpsiTau_ed_pfphi", &JpsiTau_ed_pfphi);
-//    tree_->Branch("JpsiTau_ed_isRight", &JpsiTau_ed_isRight);
-//    tree_->Branch("JpsiTau_ed_id", &JpsiTau_ed_id);
-//    tree_->Branch("JpsiTau_ed_pfdnn", &JpsiTau_ed_pfdnn);
-//    tree_->Branch("JpsiTau_ed_genpt", &JpsiTau_ed_genpt);
+    //    tree_->Branch("JpsiTau_ed_pfeta", &JpsiTau_ed_pfeta);
+    //    tree_->Branch("JpsiTau_ed_pfphi", &JpsiTau_ed_pfphi);
+    //    tree_->Branch("JpsiTau_ed_isRight", &JpsiTau_ed_isRight);
+    //    tree_->Branch("JpsiTau_ed_id", &JpsiTau_ed_id);
+    //    tree_->Branch("JpsiTau_ed_pfdnn", &JpsiTau_ed_pfdnn);
+    //    tree_->Branch("JpsiTau_ed_genpt", &JpsiTau_ed_genpt);
 
     tree_->Branch("JpsiTau_hammer_ebe", &JpsiTau_hammer_ebe);
     tree_->Branch("JpsiTau_hammer_ebe_a0_up", &JpsiTau_hammer_ebe_a0_up);
@@ -659,12 +659,12 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch("BsTauTau_tau_isRight1", &BsTauTau_tau_isRight1);
     tree_->Branch("BsTauTau_tau_isRight2", &BsTauTau_tau_isRight2);
     tree_->Branch("BsTauTau_tau_isRight3", &BsTauTau_tau_isRight3);
-    tree_->Branch("BsTauTau_tau_dr1", &BsTauTau_tau_dr1);
-    tree_->Branch("BsTauTau_tau_dr2", &BsTauTau_tau_dr2);
-    tree_->Branch("BsTauTau_tau_dr3", &BsTauTau_tau_dr3);
-    tree_->Branch("BsTauTau_tau_ptres1", &BsTauTau_tau_ptres1);
-    tree_->Branch("BsTauTau_tau_ptres2", &BsTauTau_tau_ptres2);
-    tree_->Branch("BsTauTau_tau_ptres3", &BsTauTau_tau_ptres3);
+//    tree_->Branch("BsTauTau_tau_dr1", &BsTauTau_tau_dr1);
+//    tree_->Branch("BsTauTau_tau_dr2", &BsTauTau_tau_dr2);
+//    tree_->Branch("BsTauTau_tau_dr3", &BsTauTau_tau_dr3);
+//    tree_->Branch("BsTauTau_tau_ptres1", &BsTauTau_tau_ptres1);
+//    tree_->Branch("BsTauTau_tau_ptres2", &BsTauTau_tau_ptres2);
+//    tree_->Branch("BsTauTau_tau_ptres3", &BsTauTau_tau_ptres3);
     tree_->Branch("BsTauTau_tau_matched_ppdgId", &BsTauTau_tau_matched_ppdgId);
     tree_->Branch("BsTauTau_tau_matched_gentaupt", &BsTauTau_tau_matched_gentaupt);
     //    tree_->Branch("BsTauTau_tau_gentaupt", &BsTauTau_tau_gentaupt);
@@ -1120,10 +1120,10 @@ void NtupleBranches::reset( void ){
   /** genParticle */
   genParticle_N = 0;
   genParticle_pt.clear();
-//  genParticle_px.clear();
-//  genParticle_py.clear();
-//  genParticle_pz.clear();
-//  genParticle_e.clear();
+  //  genParticle_px.clear();
+  //  genParticle_py.clear();
+  //  genParticle_pz.clear();
+  //  genParticle_e.clear();
   genParticle_eta.clear();
   genParticle_phi.clear();
   genParticle_mass.clear();
@@ -1192,7 +1192,7 @@ void NtupleBranches::reset( void ){
   passFilter_TrkPOG_toomanystrip_   = false;
   passFilter_TrkPOG_logError_       = false;
   passFilter_METFilters_            = false;
-   //NEW FOR ICHEP
+  //NEW FOR ICHEP
   passFilter_CSCTightHaloTrkMuUnvetoFilter_   = false;
   passFilter_globalTightHalo2016_             = false;
   passFilter_globalSuperTightHalo2016_             = false;
@@ -1402,9 +1402,9 @@ void NtupleBranches::reset( void ){
   JpsiMu_bbPV_vy.clear();
   JpsiMu_bbPV_vz.clear();
 
-  JpsiMu_bbPV_refit_vx.clear();
-  JpsiMu_bbPV_refit_vy.clear();
-  JpsiMu_bbPV_refit_vz.clear();
+  //  JpsiMu_bbPV_refit_vx.clear();
+  //  JpsiMu_bbPV_refit_vy.clear();
+  //  JpsiMu_bbPV_refit_vz.clear();
 
   JpsiMu_genPV_vx.clear();
   JpsiMu_genPV_vy.clear();
@@ -1512,12 +1512,12 @@ void NtupleBranches::reset( void ){
   JpsiTau_tau_isRight1.clear();
   JpsiTau_tau_isRight2.clear();
   JpsiTau_tau_isRight3.clear();
-  JpsiTau_tau_dr1.clear();
-  JpsiTau_tau_dr2.clear();
-  JpsiTau_tau_dr3.clear();
-  JpsiTau_tau_ptres1.clear();
-  JpsiTau_tau_ptres2.clear();
-  JpsiTau_tau_ptres3.clear();
+//  JpsiTau_tau_dr1.clear();
+//  JpsiTau_tau_dr2.clear();
+//  JpsiTau_tau_dr3.clear();
+//  JpsiTau_tau_ptres1.clear();
+//  JpsiTau_tau_ptres2.clear();
+//  JpsiTau_tau_ptres3.clear();
   JpsiTau_tau_matched_ppdgId.clear();
   JpsiTau_tau_matched_gentaupt.clear();
   JpsiTau_tau_sumofdnn.clear();
@@ -1606,9 +1606,9 @@ void NtupleBranches::reset( void ){
   JpsiTau_bbPV_vy.clear();
   JpsiTau_bbPV_vz.clear();
 
-  JpsiTau_bbPV_refit_vx.clear();
-  JpsiTau_bbPV_refit_vy.clear();
-  JpsiTau_bbPV_refit_vz.clear();
+  //  JpsiTau_bbPV_refit_vx.clear();
+  //  JpsiTau_bbPV_refit_vy.clear();
+  //  JpsiTau_bbPV_refit_vz.clear();
 
   JpsiTau_genPV_vx.clear();
   JpsiTau_genPV_vy.clear();
@@ -1640,12 +1640,12 @@ void NtupleBranches::reset( void ){
   JpsiTau_B_phi_gen.clear();
   JpsiTau_B_mass_gen.clear();
 
-//  JpsiTau_ed_pfeta.clear();
-//  JpsiTau_ed_pfphi.clear();
-//  JpsiTau_ed_isRight.clear();
-//  JpsiTau_ed_id.clear();
-//  JpsiTau_ed_pfdnn.clear();
-//  JpsiTau_ed_genpt.clear();
+  //  JpsiTau_ed_pfeta.clear();
+  //  JpsiTau_ed_pfphi.clear();
+  //  JpsiTau_ed_isRight.clear();
+  //  JpsiTau_ed_id.clear();
+  //  JpsiTau_ed_pfdnn.clear();
+  //  JpsiTau_ed_genpt.clear();
 
   JpsiTau_hammer_ebe.clear();
   JpsiTau_hammer_ebe_a0_up.clear();
@@ -1722,12 +1722,12 @@ void NtupleBranches::reset( void ){
   BsTauTau_tau_isRight1.clear();
   BsTauTau_tau_isRight2.clear();
   BsTauTau_tau_isRight3.clear();
-  BsTauTau_tau_dr1.clear();
-  BsTauTau_tau_dr2.clear();
-  BsTauTau_tau_dr3.clear();
-  BsTauTau_tau_ptres1.clear();
-  BsTauTau_tau_ptres2.clear();
-  BsTauTau_tau_ptres3.clear();
+//  BsTauTau_tau_dr1.clear();
+//  BsTauTau_tau_dr2.clear();
+//  BsTauTau_tau_dr3.clear();
+//  BsTauTau_tau_ptres1.clear();
+//  BsTauTau_tau_ptres2.clear();
+//  BsTauTau_tau_ptres3.clear();
   BsTauTau_tau_matched_ppdgId.clear();
   BsTauTau_tau_matched_gentaupt.clear();
   BsTauTau_tau_sumofdnn.clear();
@@ -2175,20 +2175,19 @@ void NtupleBranches::reset( void ){
 
 
 void NtupleBranches::LabelHistograms( std::map< std::string, bool >& runFlags ){
-  if ( runFlags["doCutFlow"] ){
-    std::vector bins_string = {"Precut", "Trigger","muons", "J/#psi", "J/#psi fit","Tau  presence"};
-    for(size_t i=0; i< bins_string.size(); i++){
-      cutflow_perevt->GetXaxis()->SetBinLabel(i+1, bins_string[i]);
-    }
+  std::vector bins_string = {"Precut", "Trigger","muons", "J/#psi", "J/#psi fit","Tau  presence"};
+  for(size_t i=0; i< bins_string.size(); i++){
+    cutflow_perevt->GetXaxis()->SetBinLabel(i+1, bins_string[i]);
   }
 
 
+  if ( runFlags["useHammer"] ){
     std::vector bins_hammer = {"den", "num", "num_a0_up", "num_a0_down", "num_a1_up", "num_a1_down","num_a2_up", "num_a2_down", "num_b0_up", "num_b0_down", "num_b1_up", "num_b1_down","num_b2_up", "num_b2_down", "num_c1_up", "num_c1_down", "num_c2_up", "num_c2_down", "num_d0_up", "num_d0_down", "num_d1_up", "num_d1_down","num_d2_up", "num_d2_down"};
-
+    
     for(size_t i=0; i< bins_hammer.size(); i++){
       hammer_width->GetXaxis()->SetBinLabel(i+1, bins_hammer[i]);
     }
-
+  }
 
 
   if ( runFlags["doGenHist"] ){
