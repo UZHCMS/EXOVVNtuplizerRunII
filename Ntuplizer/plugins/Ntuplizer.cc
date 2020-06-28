@@ -29,7 +29,6 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
 	rhoToken_             	    (consumes<double>(iConfig.getParameter<edm::InputTag>("rho"))),
 	packedpfcandidatesToken_    (consumes<std::vector<pat::PackedCandidate>>(iConfig.getParameter<edm::InputTag>("packedpfcandidates"))), 
         svToken_                    (consumes<std::vector<reco::VertexCompositePtrCandidate>>(iConfig.getParameter<edm::InputTag>("SecondaryVertices"))), 
-    losttrackToken_    (consumes<std::vector<pat::PackedCandidate>>(iConfig.getParameter<edm::InputTag>("losttrack"))),
 	puinfoToken_          	    (consumes<std::vector<PileupSummaryInfo> >(iConfig.getParameter<edm::InputTag>("PUInfo"))),
 	geneventToken_        	    (consumes<GenEventInfoProduct>(iConfig.getParameter<edm::InputTag>("genEventInfo"))),     
 	lheEventProductToken_       (consumes<LHEEventProduct>(iConfig.getParameter<edm::InputTag>("externallheProducer"))),     
@@ -76,6 +75,7 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
   //std::map< std::string, bool > runFlags;
   runFlags["runOnMC"] = iConfig.getParameter<bool>("runOnMC");
   runFlags["useDNN"] = iConfig.getParameter<bool>("useDNN");
+  runFlags["useHammer"] = iConfig.getParameter<bool>("useHammer");
   runFlags["doGenParticles"] = iConfig.getParameter<bool>("doGenParticles");
   runFlags["doGenEvent"] = iConfig.getParameter<bool>("doGenEvent");
   runFlags["doPileUp"] = iConfig.getParameter<bool>("doPileUp");
@@ -87,9 +87,9 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
   runFlags["doBsTauTauFH"] = iConfig.getParameter<bool>("doBsTauTauFH");
   runFlags["doBsTauTauFH_mr"] = iConfig.getParameter<bool>("doBsTauTauFH_mr");
   runFlags["doBsDstarTauNu"] = iConfig.getParameter<bool>("doBsDstarTauNu");
-  runFlags["doCutFlow"] = iConfig.getParameter<bool>("doCutFlow");
   runFlags["doGenHist"] = iConfig.getParameter<bool>("doGenHist");
   runFlags["isTruth"] = iConfig.getParameter<bool>("isTruth");
+  runFlags["verbose"] = iConfig.getParameter<bool>("verbose");
   runValues["dzcut"] = iConfig.getParameter<double>("dzcut");
   runValues["fsigcut"] = iConfig.getParameter<double>("fsigcut");
   runValues["vprobcut"] = iConfig.getParameter<double>("vprobcut");
@@ -102,6 +102,7 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
   std::cout << "Ntuplizer: dnn file: " << runStrings["dnnfile"] << std::endl;
   std::cout << "Ntuplizer: (dzcut, fsigcut, vprobcut, dnn cut, tau_charge) = " << runValues["dzcut"] << " " << runValues["fsigcut"] << " " << runValues["vprobcut"] << " " << runValues["dnncut"] << " " << runValues["tau_charge"] << std::endl;
   
+  std::cout << "useammer" << runFlags["useHammer"] << std::endl;
 
   std::string jecpath = iConfig.getParameter<std::string>("jecpath");
   jecpath = "EXOVVNtuplizerRunII/Ntuplizer/data/" + jecpath;
@@ -115,8 +116,12 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
 
   nBranches_->cutflow_perevt = fs->make<TH1F>("cutflow_perevt", "Per Event Ntuplizer Cutflow", 10, 0, 10);
 
-  nBranches_->hammer_width = fs->make<TH1F>("hammer_width", "Hammer width", 24, 0, 24);  
-  
+  std::cout << "test"<< std::endl;
+  if(runFlags["useHammer"]){
+    nBranches_->hammer_width = fs->make<TH1F>("hammer_width", "Hammer width", 24, 0, 24);  
+  }
+  std::cout << "test2"<< std::endl;
+
   /* Histogram for genParticles */ 
   if (runFlags["doGenHist"]){
       nBranches_->genParticle_Bdau_X_id=fs->make<TH1F>("genParticle_Bdau_X_id", "Identity of X in B->J/#psi+X;id;Events;", 18, 0, 18);
@@ -198,9 +203,7 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
     std::cout<<"\n\n --->GETTING INSIDE doJpsiMu<---\n\n"<<std::endl;
     nTuplizers_["JpsiMu"] = new JpsiMuNtuplizer( muonToken_   , 
 						 vtxToken_   , 
-						 beamToken_ ,
 						 packedpfcandidatesToken_,
-						 losttrackToken_,
 						 triggerToken_,
 						 triggerObjects_,
 						 genparticleToken_,
@@ -211,9 +214,7 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
     std::cout<<"\n\n --->GETTING INSIDE doJpsiTau<---\n\n"<<std::endl;
     nTuplizers_["JpsiTau"] = new JpsiTauNtuplizer( muonToken_   , 
 						   vtxToken_   , 
-						   beamToken_ ,
 						   packedpfcandidatesToken_,
-						   losttrackToken_,
 						   triggerToken_,
 						   triggerObjects_,
 						   genparticleToken_,
@@ -228,7 +229,6 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
     std::cout<<"\n\n --->GETTING INSIDE doBsTauTau<---\n\n"<<std::endl;
     nTuplizers_["BsTauTau"] = new BsTauTauNtuplizer( muonToken_   , 
 						     vtxToken_   , 
-						     beamToken_ ,
 						     packedpfcandidatesToken_,
 						     losttrackToken_,
 						     triggerToken_,
@@ -245,7 +245,6 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
     std::cout<<"\n\n --->GETTING INSIDE doBsTauTauFH<---\n\n"<<std::endl;
     nTuplizers_["BsTauTauFH"] = new BsTauTauFHNtuplizer( muonToken_   , 
 							 vtxToken_   , 
-							 beamToken_ ,
 							 packedpfcandidatesToken_,
 							 losttrackToken_,
 							 triggerToken_,
@@ -262,7 +261,6 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
     std::cout<<"\n\n --->GETTING INSIDE doBsTauTauFH_mr<---\n\n"<<std::endl;
     nTuplizers_["BsTauTauFH_mr"] = new BsTauTauFHNtuplizer_mr( muonToken_   , 
 							 vtxToken_   , 
-							 beamToken_ ,
 							 packedpfcandidatesToken_,
 							 losttrackToken_,
 							 triggerToken_,
@@ -279,7 +277,6 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
     std::cout<<"\n\n --->GETTING INSIDE doBsDstarTauNu<---\n\n"<<std::endl;
     nTuplizers_["BsDstarTauNu"] = new BsDstarTauNuNtuplizer( muonToken_   , 
 							 vtxToken_   , 
-							 beamToken_ ,
 							 packedpfcandidatesToken_,
 							 losttrackToken_,
 							 triggerToken_,

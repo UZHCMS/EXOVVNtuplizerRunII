@@ -350,9 +350,9 @@ public:
   std::vector<float>                JpsiMu_bbPV_vy       ;
   std::vector<float>                JpsiMu_bbPV_vz       ;
 
-  std::vector<float>                JpsiMu_bbPV_refit_vx       ;
-  std::vector<float>                JpsiMu_bbPV_refit_vy       ;
-  std::vector<float>                JpsiMu_bbPV_refit_vz       ;
+  //  std::vector<float>                JpsiMu_bbPV_refit_vx       ;
+  //  std::vector<float>                JpsiMu_bbPV_refit_vy       ;
+  //  std::vector<float>                JpsiMu_bbPV_refit_vz       ;
 
   std::vector<float>                JpsiMu_genPV_vx       ;
   std::vector<float>                JpsiMu_genPV_vy       ;
@@ -464,12 +464,12 @@ public:
   std::vector<bool>        JpsiTau_tau_isRight1;
   std::vector<bool>        JpsiTau_tau_isRight2;
   std::vector<bool>        JpsiTau_tau_isRight3;
-  std::vector<float>        JpsiTau_tau_dr1;
-  std::vector<float>        JpsiTau_tau_dr2;
-  std::vector<float>        JpsiTau_tau_dr3;
-  std::vector<float>        JpsiTau_tau_ptres1;
-  std::vector<float>        JpsiTau_tau_ptres2;
-  std::vector<float>        JpsiTau_tau_ptres3;
+//  std::vector<float>        JpsiTau_tau_dr1;
+//  std::vector<float>        JpsiTau_tau_dr2;
+//  std::vector<float>        JpsiTau_tau_dr3;
+//  std::vector<float>        JpsiTau_tau_ptres1;
+//  std::vector<float>        JpsiTau_tau_ptres2;
+//  std::vector<float>        JpsiTau_tau_ptres3;
   std::vector<int>         JpsiTau_tau_matched_ppdgId;
   std::vector<float>       JpsiTau_tau_matched_gentaupt;
   std::vector<float>       JpsiTau_tau_sumofdnn; 
@@ -566,9 +566,9 @@ public:
   std::vector<float>                JpsiTau_bbPV_vy       ;
   std::vector<float>                JpsiTau_bbPV_vz       ;
 
-  std::vector<float>                JpsiTau_bbPV_refit_vx       ;
-  std::vector<float>                JpsiTau_bbPV_refit_vy       ;
-  std::vector<float>                JpsiTau_bbPV_refit_vz       ;
+  //  std::vector<float>                JpsiTau_bbPV_refit_vx       ;
+  //  std::vector<float>                JpsiTau_bbPV_refit_vy       ;
+  //  std::vector<float>                JpsiTau_bbPV_refit_vz       ;
 
   std::vector<float>                JpsiTau_genPV_vx       ;
   std::vector<float>                JpsiTau_genPV_vy       ;
@@ -685,12 +685,12 @@ public:
   std::vector<bool>        BsTauTau_tau_isRight1;
   std::vector<bool>        BsTauTau_tau_isRight2;
   std::vector<bool>        BsTauTau_tau_isRight3;
-  std::vector<float>        BsTauTau_tau_dr1;
-  std::vector<float>        BsTauTau_tau_dr2;
-  std::vector<float>        BsTauTau_tau_dr3;
-  std::vector<float>        BsTauTau_tau_ptres1;
-  std::vector<float>        BsTauTau_tau_ptres2;
-  std::vector<float>        BsTauTau_tau_ptres3;
+//  std::vector<float>        BsTauTau_tau_dr1;
+//  std::vector<float>        BsTauTau_tau_dr2;
+//  std::vector<float>        BsTauTau_tau_dr3;
+//  std::vector<float>        BsTauTau_tau_ptres1;
+//  std::vector<float>        BsTauTau_tau_ptres2;
+//  std::vector<float>        BsTauTau_tau_ptres3;
   std::vector<int>         BsTauTau_tau_matched_ppdgId;
   std::vector<float>       BsTauTau_tau_matched_gentaupt;
   std::vector<float>       BsTauTau_tau_sumofdnn; 

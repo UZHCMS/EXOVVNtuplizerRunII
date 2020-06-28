@@ -5,14 +5,16 @@ config = dict()
 #--------- general ----------#
 
 #--------- Set Just one to true ----------#
-config["RUNONMC"] = False
+config["RUNONMC"] = True
 #-----------------------------------------#
+config["USEHAMMER"] = (True and config["RUNONMC"])
+config["VERBOSE"] = True
 
 #--------- For taus ----------#
-config["USEDNN"] = False
+config["USEDNN"] = True
 config["DZCUT"] = 0.25 # this is fixed !!
 config["FSIGCUT"] = 3
-config["VPROBCUT"] = 0.05
+config["VPROBCUT"] = 0.1
 config["DNNCUT"] = 0.1443
 config["TAU_CHARGE"] = 1
 
@@ -30,10 +32,9 @@ config["DOGENEVENT"] = (True and config["RUNONMC"])
 config["DOPILEUP"] = (True and config["RUNONMC"])
 config["DOVERTICES"] = True
 config["DOMISSINGET"] = True
-config["DOCUTFLOW"] = True
 
-config["DOJPSIMU"] = True
-config["DOJPSITAU"] = False
+config["DOJPSIMU"] = False
+config["DOJPSITAU"] = True
 config["DOBSTAUTAU"] = False
 config["DOBSTAUTAUFH"] = False
 config["DOBSTAUTAUFH_mr"] = False # mass regression
@@ -41,6 +42,9 @@ config["DOBSDSTARTAUNU"] = False
 config["ISTRUTH"] = False
 
 config["DOGENHIST"] = (True and config["RUNONMC"]);
+
+if config["DOJPSIMU"]:
+    config["USEDNN"] = False
 
 if config["DOJPSITAU"]:
     config["DNNFILE"] = "data/DNN/BcJPsi/DUMMY"
