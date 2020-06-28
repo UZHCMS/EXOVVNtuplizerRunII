@@ -43,6 +43,9 @@ config["ISTRUTH"] = False
 
 config["DOGENHIST"] = (True and config["RUNONMC"]);
 
+if config["DOJPSIMU"]:
+    config["USEDNN"] = False
+
 if config["DOJPSITAU"]:
     config["DNNFILE"] = "data/DNN/BcJPsi/DUMMY"
 

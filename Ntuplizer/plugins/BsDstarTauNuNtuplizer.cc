@@ -1043,25 +1043,25 @@ bool BsDstarTauNuNtuplizer::fillBranches( edm::Event const & event, const edm::E
 	std::vector<RefCountedKinematicParticle> D0Particles;
 	
 	if(kp==0){
-	  D0Particles.push_back(pFactory.particle(mytracks_pre[iii], kaon_mass, chi, ndf, kaon_sigma));
-	  D0Particles.push_back(pFactory.particle(mytracks_pre[jjj], pion_mass, chi, ndf, pion_sigma));
+	  D0Particles.push_back(pFactory.particle(mytracks_pre[iii], aux.kaon_mass, chi, ndf, aux.kaon_sigma));
+	  D0Particles.push_back(pFactory.particle(mytracks_pre[jjj], aux.pion_mass, chi, ndf, aux.pion_sigma));
 
-	  tlv_kaon.SetPtEtaPhiM(pf1.pt(), pf1.eta(), pf1.phi(), mass_kaon);
-	  tlv_pion.SetPtEtaPhiM(pf2.pt(), pf2.eta(), pf2.phi(), mass_pion);
+	  tlv_kaon.SetPtEtaPhiM(pf1.pt(), pf1.eta(), pf1.phi(), aux.mass_kaon);
+	  tlv_pion.SetPtEtaPhiM(pf2.pt(), pf2.eta(), pf2.phi(), aux.mass_pion);
 
 	}else{
-	  D0Particles.push_back(pFactory.particle(mytracks_pre[jjj], kaon_mass, chi, ndf, kaon_sigma));
-	  D0Particles.push_back(pFactory.particle(mytracks_pre[iii], pion_mass, chi, ndf, pion_sigma));
+	  D0Particles.push_back(pFactory.particle(mytracks_pre[jjj], aux.kaon_mass, chi, ndf, aux.kaon_sigma));
+	  D0Particles.push_back(pFactory.particle(mytracks_pre[iii], aux.pion_mass, chi, ndf, aux.pion_sigma));
 
-	  tlv_pion.SetPtEtaPhiM(pf1.pt(), pf1.eta(), pf1.phi(), mass_pion);
-	  tlv_kaon.SetPtEtaPhiM(pf2.pt(), pf2.eta(), pf2.phi(), mass_kaon);
+	  tlv_pion.SetPtEtaPhiM(pf1.pt(), pf1.eta(), pf1.phi(), aux.mass_pion);
+	  tlv_kaon.SetPtEtaPhiM(pf2.pt(), pf2.eta(), pf2.phi(), aux.mass_kaon);
 	}
 
 	TLorentzVector tlv_D0 = tlv_kaon + tlv_pion;
 	//	Float_t D0_mass = D0_part->currentState().mass();
 	Float_t D0_mass = tlv_D0.M();
 	//	std::cout << "D0 mass = "<< D0_mass << std::endl;
-	if(!(D0_mass < (mass_D0 + 0.04) && D0_mass > (mass_D0 - 0.04))) continue;
+	if(!(D0_mass < (aux.mass_D0 + 0.04) && D0_mass > (aux.mass_D0 - 0.04))) continue;
 
 	
 	//reconstructing a J/Psi decay
@@ -1073,7 +1073,7 @@ bool BsDstarTauNuNtuplizer::fillBranches( edm::Event const & event, const edm::E
 	KinematicParticleFitter csFitter;
 	
 	// creating the constraint
-	KinematicConstraint* D0_constraint = new MassKinematicConstraint(d0_mass, d0_sigma);
+	KinematicConstraint* D0_constraint = new MassKinematicConstraint(aux.d0_mass, aux.d0_sigma);
 	//the constrained fit
 	D0Tree = csFitter.fit(D0_constraint, D0Tree);
 	
@@ -1156,7 +1156,7 @@ bool BsDstarTauNuNtuplizer::fillBranches( edm::Event const & event, const edm::E
     
     //    DstarParticles.push_back(pFactory.particle(mytracks_pre[kidx], kaon_mass, chi, ndf, kaon_sigma));
     //    DstarParticles.push_back(pFactory.particle(mytracks_pre[pidx], pion_mass, chi, ndf, pion_sigma));
-    DstarParticles.push_back(pFactory.particle(mytracks_pre[kkk], pion_mass, chi, ndf, pion_sigma));
+    DstarParticles.push_back(pFactory.particle(mytracks_pre[kkk], aux.pion_mass, chi, ndf, aux.pion_sigma));
     DstarParticles.push_back(D0_part_rec);
 
 
@@ -1168,14 +1168,14 @@ bool BsDstarTauNuNtuplizer::fillBranches( edm::Event const & event, const edm::E
 //			D0_part_rec->currentState().mass());
 			
     
-    tlv_spion.SetPtEtaPhiM(pf.pt(), pf.eta(), pf.phi(), pion_mass);
+    tlv_spion.SetPtEtaPhiM(pf.pt(), pf.eta(), pf.phi(), aux.pion_mass);
     //    TLorentzVector tlv_Ds = tlv_D0 + tlv_spion;
     TLorentzVector tlv_Ds = D0_tlv_highest + tlv_spion;
     Float_t Ds_mass = tlv_Ds.M();
 
     //    Float_t Dsmass = Ds_part->currentState().mass();
     //    std::cout << "Ds mass = " << Ds_mass << std::endl;
-    if(!(Ds_mass < (mass_Dstar + 0.03) && Ds_mass > (mass_Dstar - 0.03))) continue;
+    if(!(Ds_mass < (aux.mass_Dstar + 0.03) && Ds_mass > (aux.mass_Dstar - 0.03))) continue;
 
     //reconstructing a J/Psi decay
     RefCountedKinematicTree DsTree = kpvFitter.fit(DstarParticles);
@@ -1186,7 +1186,7 @@ bool BsDstarTauNuNtuplizer::fillBranches( edm::Event const & event, const edm::E
     KinematicParticleFitter csFitter;
     
     // creating the constraint
-    KinematicConstraint* Ds_constraint = new MassKinematicConstraint(ds_mass, ds_sigma);
+    KinematicConstraint* Ds_constraint = new MassKinematicConstraint(aux.ds_mass, aux.ds_sigma);
     //the constrained fit
     DsTree = csFitter.fit(Ds_constraint, DsTree);
     
@@ -1294,9 +1294,9 @@ bool BsDstarTauNuNtuplizer::fillBranches( edm::Event const & event, const edm::E
 
 	std::vector<RefCountedKinematicParticle> tauParticles;
 
-	tauParticles.push_back(pFactory.particle(mytracks[iii], pion_mass, chi, ndf, pion_sigma));
-	tauParticles.push_back(pFactory.particle(mytracks[jjj], pion_mass, chi, ndf, pion_sigma));
-	tauParticles.push_back(pFactory.particle(mytracks[kkk], pion_mass, chi, ndf, pion_sigma));
+	tauParticles.push_back(pFactory.particle(mytracks[iii], aux.pion_mass, chi, ndf, aux.pion_sigma));
+	tauParticles.push_back(pFactory.particle(mytracks[jjj], aux.pion_mass, chi, ndf, aux.pion_sigma));
+	tauParticles.push_back(pFactory.particle(mytracks[kkk], aux.pion_mass, chi, ndf, aux.pion_sigma));
 
   
 	//reconstructing a tau decay
@@ -1361,9 +1361,9 @@ bool BsDstarTauNuNtuplizer::fillBranches( edm::Event const & event, const edm::E
 
 
 	std::vector<RefCountedKinematicParticle> allParticles;
-	allParticles.push_back(pFactory.particle(mytracks[iii], pion_mass, chi, ndf, pion_sigma));
-	allParticles.push_back(pFactory.particle(mytracks[jjj], pion_mass, chi, ndf, pion_sigma));
-	allParticles.push_back(pFactory.particle(mytracks[kkk], pion_mass, chi, ndf, pion_sigma));
+	allParticles.push_back(pFactory.particle(mytracks[iii], aux.pion_mass, chi, ndf, aux.pion_sigma));
+	allParticles.push_back(pFactory.particle(mytracks[jjj], aux.pion_mass, chi, ndf, aux.pion_sigma));
+	allParticles.push_back(pFactory.particle(mytracks[kkk], aux.pion_mass, chi, ndf, aux.pion_sigma));
 
 	allParticles.push_back(Ds_part_rec);
 
@@ -1776,10 +1776,10 @@ bool BsDstarTauNuNtuplizer::fillBranches( edm::Event const & event, const edm::E
 
     std::vector<RefCountedKinematicParticle> allParticles4doc;
       
-    allParticles4doc.push_back(pFactory.particle(tt_muon, muon_mass, chi, ndf, muon_sigma));
-    allParticles4doc.push_back(pFactory.particle(mytracks[cands[ic].cand_tau_id1], pion_mass, chi, ndf, pion_sigma));
-    allParticles4doc.push_back(pFactory.particle(mytracks[cands[ic].cand_tau_id2], pion_mass, chi, ndf, pion_sigma));
-    allParticles4doc.push_back(pFactory.particle(mytracks[cands[ic].cand_tau_id3], pion_mass, chi, ndf, pion_sigma));
+    allParticles4doc.push_back(pFactory.particle(tt_muon, aux.muon_mass, chi, ndf, aux.muon_sigma));
+    allParticles4doc.push_back(pFactory.particle(mytracks[cands[ic].cand_tau_id1], aux.pion_mass, chi, ndf, aux.pion_sigma));
+    allParticles4doc.push_back(pFactory.particle(mytracks[cands[ic].cand_tau_id2], aux.pion_mass, chi, ndf, aux.pion_sigma));
+    allParticles4doc.push_back(pFactory.particle(mytracks[cands[ic].cand_tau_id3], aux.pion_mass, chi, ndf, aux.pion_sigma));
 
 
     nBranches_->BsDstarTauNu_B_maxdoca.push_back(aux.getMaxDoca(allParticles4doc));
@@ -1832,7 +1832,7 @@ bool BsDstarTauNuNtuplizer::fillBranches( edm::Event const & event, const edm::E
 
     nBranches_->BsDstarTauNu_B_Es.push_back(Tlv_tau.E()); 
 
-    Float_t ptback = cands[ic].cand_b_pt*mass_B0/cands[ic].cand_b_mass;
+    Float_t ptback = cands[ic].cand_b_pt*aux.mass_B0/cands[ic].cand_b_mass;
     nBranches_->BsDstarTauNu_B_ptback.push_back(ptback); 
 
   

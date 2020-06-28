@@ -999,9 +999,9 @@ bool BsTauTauFHNtuplizer::fillBranches( edm::Event const & event, const edm::Eve
 
 	std::vector<RefCountedKinematicParticle> tauParticles;
 
-	tauParticles.push_back(pFactory.particle(mytracks[iii], pion_mass, chi, ndf, pion_sigma));
-	tauParticles.push_back(pFactory.particle(mytracks[jjj], pion_mass, chi, ndf, pion_sigma));
-	tauParticles.push_back(pFactory.particle(mytracks[kkk], pion_mass, chi, ndf, pion_sigma));
+	tauParticles.push_back(pFactory.particle(mytracks[iii], aux.pion_mass, chi, ndf, aux.pion_sigma));
+	tauParticles.push_back(pFactory.particle(mytracks[jjj], aux.pion_mass, chi, ndf, aux.pion_sigma));
+	tauParticles.push_back(pFactory.particle(mytracks[kkk], aux.pion_mass, chi, ndf, aux.pion_sigma));
 
   
 	//reconstructing a tau decay
@@ -1148,14 +1148,14 @@ bool BsTauTauFHNtuplizer::fillBranches( edm::Event const & event, const edm::Eve
 
 
       std::vector<RefCountedKinematicParticle> tauParticles1;
-      tauParticles1.push_back(pFactory.particle(mytracks[tau1_idx1], pion_mass, chi, ndf, pion_sigma));
-      tauParticles1.push_back(pFactory.particle(mytracks[tau1_idx2], pion_mass, chi, ndf, pion_sigma));
-      tauParticles1.push_back(pFactory.particle(mytracks[tau1_idx3], pion_mass, chi, ndf, pion_sigma));
+      tauParticles1.push_back(pFactory.particle(mytracks[tau1_idx1], aux.pion_mass, chi, ndf, aux.pion_sigma));
+      tauParticles1.push_back(pFactory.particle(mytracks[tau1_idx2], aux.pion_mass, chi, ndf, aux.pion_sigma));
+      tauParticles1.push_back(pFactory.particle(mytracks[tau1_idx3], aux.pion_mass, chi, ndf, aux.pion_sigma));
 
       std::vector<RefCountedKinematicParticle> tauParticles2;          
-      tauParticles2.push_back(pFactory.particle(mytracks[tau2_idx1], pion_mass, chi, ndf, pion_sigma));
-      tauParticles2.push_back(pFactory.particle(mytracks[tau2_idx2], pion_mass, chi, ndf, pion_sigma));
-      tauParticles2.push_back(pFactory.particle(mytracks[tau2_idx3], pion_mass, chi, ndf, pion_sigma));
+      tauParticles2.push_back(pFactory.particle(mytracks[tau2_idx1], aux.pion_mass, chi, ndf, aux.pion_sigma));
+      tauParticles2.push_back(pFactory.particle(mytracks[tau2_idx2], aux.pion_mass, chi, ndf, aux.pion_sigma));
+      tauParticles2.push_back(pFactory.particle(mytracks[tau2_idx3], aux.pion_mass, chi, ndf, aux.pion_sigma));
 
 
       //      std::cout << "check4" << std::endl;    

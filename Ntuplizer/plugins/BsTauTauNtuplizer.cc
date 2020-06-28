@@ -1004,9 +1004,9 @@ bool BsTauTauNtuplizer::fillBranches( edm::Event const & event, const edm::Event
 
 	  std::vector<RefCountedKinematicParticle> tauParticles;
 
-	  tauParticles.push_back(pFactory.particle(mytracks[iii], pion_mass, chi, ndf, pion_sigma));
-	  tauParticles.push_back(pFactory.particle(mytracks[jjj], pion_mass, chi, ndf, pion_sigma));
-	  tauParticles.push_back(pFactory.particle(mytracks[kkk], pion_mass, chi, ndf, pion_sigma));
+	  tauParticles.push_back(pFactory.particle(mytracks[iii], aux.pion_mass, chi, ndf, aux.pion_sigma));
+	  tauParticles.push_back(pFactory.particle(mytracks[jjj], aux.pion_mass, chi, ndf, aux.pion_sigma));
+	  tauParticles.push_back(pFactory.particle(mytracks[kkk], aux.pion_mass, chi, ndf, aux.pion_sigma));
 
   
 	  //reconstructing a tau decay
@@ -1046,10 +1046,10 @@ bool BsTauTauNtuplizer::fillBranches( edm::Event const & event, const edm::Event
 
 	  std::vector<RefCountedKinematicParticle> allParticles;
 
-	  allParticles.push_back(pFactory.particle(mytracks[iii], pion_mass, chi, ndf, pion_sigma));
-	  allParticles.push_back(pFactory.particle(mytracks[jjj], pion_mass, chi, ndf, pion_sigma));
-	  allParticles.push_back(pFactory.particle(mytracks[kkk], pion_mass, chi, ndf, pion_sigma));
-	  allParticles.push_back(pFactory.particle(tt_muon, muon_mass, chi, ndf, muon_sigma));
+	  allParticles.push_back(pFactory.particle(mytracks[iii], aux.pion_mass, chi, ndf, aux.pion_sigma));
+	  allParticles.push_back(pFactory.particle(mytracks[jjj], aux.pion_mass, chi, ndf, aux.pion_sigma));
+	  allParticles.push_back(pFactory.particle(mytracks[kkk], aux.pion_mass, chi, ndf, aux.pion_sigma));
+	  allParticles.push_back(pFactory.particle(tt_muon, aux.muon_mass, chi, ndf, aux.muon_sigma));
 
 	  RefCountedKinematicTree bcTree = kpvFitter.fit(allParticles);
 
@@ -1558,10 +1558,10 @@ bool BsTauTauNtuplizer::fillBranches( edm::Event const & event, const edm::Event
 	
       std::vector<RefCountedKinematicParticle> allParticles4doc;
       
-      allParticles4doc.push_back(pFactory.particle(tt_muon, muon_mass, chi, ndf, muon_sigma));
-      allParticles4doc.push_back(pFactory.particle(mytracks[cands[ic].cand_tau_id1], pion_mass, chi, ndf, pion_sigma));
-      allParticles4doc.push_back(pFactory.particle(mytracks[cands[ic].cand_tau_id2], pion_mass, chi, ndf, pion_sigma));
-      allParticles4doc.push_back(pFactory.particle(mytracks[cands[ic].cand_tau_id3], pion_mass, chi, ndf, pion_sigma));
+      allParticles4doc.push_back(pFactory.particle(tt_muon, aux.muon_mass, chi, ndf, aux.muon_sigma));
+      allParticles4doc.push_back(pFactory.particle(mytracks[cands[ic].cand_tau_id1], aux.pion_mass, chi, ndf, aux.pion_sigma));
+      allParticles4doc.push_back(pFactory.particle(mytracks[cands[ic].cand_tau_id2], aux.pion_mass, chi, ndf, aux.pion_sigma));
+      allParticles4doc.push_back(pFactory.particle(mytracks[cands[ic].cand_tau_id3], aux.pion_mass, chi, ndf, aux.pion_sigma));
 
       nBranches_->BsTauTau_B_maxdoca.push_back(aux.getMaxDoca(allParticles4doc));
       nBranches_->BsTauTau_B_mindoca.push_back(aux.getMinDoca(allParticles4doc));

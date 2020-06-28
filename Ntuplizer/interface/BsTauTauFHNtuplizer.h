@@ -192,15 +192,15 @@ private:
 
    const MagneticField                 *fMagneticField;
 
-   ParticleMass muon_mass = 0.1056583;
-   ParticleMass jpsi_mass = 3.09687;
-   ParticleMass pion_mass = 0.139571;
-   ParticleMass kaon_mass = 0.493677;
-   
-   float muon_sigma = 0.0000001;
-   float jp_m_sigma = 0.00004;
-   float pion_sigma = 0.000016;
-   float kaon_sigma = 0.000016;
+//   ParticleMass muon_mass = 0.1056583;
+//   ParticleMass jpsi_mass = 3.09687;
+//   ParticleMass pion_mass = 0.139571;
+//   ParticleMass kaon_mass = 0.493677;
+//   
+//   float muon_sigma = 0.0000001;
+//   float jp_m_sigma = 0.00004;
+//   float pion_sigma = 0.000016;
+//   float kaon_sigma = 0.000016;
    float chi = 0.;
    float ndf = 0.;
 

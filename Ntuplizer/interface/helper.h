@@ -108,9 +108,36 @@
 
 using namespace std;
 
+// mass
+
+
 class helper{
   
  public:
+
+
+  ParticleMass muon_mass = 0.1056583;
+  ParticleMass jpsi_mass = 3.09687;
+  ParticleMass pion_mass = 0.139571;
+  ParticleMass kaon_mass = 0.493677;
+  ParticleMass ds_mass = 2.01026;
+  ParticleMass d0_mass = 1.86483;
+  
+  float muon_sigma = 0.0000001;
+  float jp_m_sigma = 0.00004;
+  float pion_sigma = 0.000016;
+  float kaon_sigma = 0.000016;
+  float phi_sigma = 0.000016;
+  float ds_sigma = 0.00005;
+  float d0_sigma = 0.00005;
+  
+  Float_t mass_kaon = 0.493677;
+  Float_t mass_pion = 0.139571;
+  Float_t mass_D0 = 1.86483;
+  Float_t mass_Dstar = 2.01026;
+  Float_t mass_B0 = 5.27963;
+  
+
 
   // return vertex x, y, and z
   TVector3 getVertex(const reco::GenParticle& part);

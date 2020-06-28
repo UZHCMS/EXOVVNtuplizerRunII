@@ -284,9 +284,7 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
   if(!isTriggered) return false;
   nBranches_->cutflow_perevt->Fill(1);
 
-
   if(verbose_) std::cout << "[JpsiTauNtuplizer] Trigger fired" << std::endl;
-
 
   /********************************************************************
    *
@@ -419,7 +417,6 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
   }
 
   if(jpsi_max_pt == -1) return false;
-
   nBranches_->cutflow_perevt->Fill(3);
 
   if(verbose_) std::cout << "[JpsiTauNtuplizer] J/psi found" << std::endl;
@@ -439,8 +436,8 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
   KinematicParticleFactoryFromTransientTrack pFactory;
   std::vector<RefCountedKinematicParticle> muonParticles;
 
-  muonParticles.push_back(pFactory.particle(tt1_muon, muon_mass, chi, ndf, muon_sigma));
-  muonParticles.push_back(pFactory.particle(tt2_muon, muon_mass, chi, ndf, muon_sigma));
+  muonParticles.push_back(pFactory.particle(tt1_muon, aux.muon_mass, chi, ndf, aux.muon_sigma));
+  muonParticles.push_back(pFactory.particle(tt2_muon, aux.muon_mass, chi, ndf, aux.muon_sigma));
   
   //creating the vertex fitter
   KinematicParticleVertexFitter kpvFitter;
@@ -456,7 +453,7 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
   KinematicParticleFitter csFitter;
 
   // creating the constraint
-  KinematicConstraint* jpsi_constraint = new MassKinematicConstraint(jpsi_mass, jp_m_sigma);
+  KinematicConstraint* jpsi_constraint = new MassKinematicConstraint(aux.jpsi_mass, aux.jp_m_sigma);
   //the constrained fit
   jpTree = csFitter.fit(jpsi_constraint, jpTree);
 
@@ -532,16 +529,15 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 
     counter += 1;
   }
-
-
-  particle_cand JPcand;
-  JPcand = aux.calculateIPvariables(extrapolator, jpsi_part, jpsi_vertex, closestVertex);
   
 
   if(!(muoncollection[mcidx_mu1].isSoftMuon(closestVertex) > 0.5 && muoncollection[mcidx_mu2].isSoftMuon(closestVertex) > 0.5)) return false;
   nBranches_->cutflow_perevt->Fill(8);
 
   if(verbose_) std::cout << "[JpsiTauNtuplizer] J/psi soft muon ID passed" << std::endl;
+
+  particle_cand JPcand;
+  JPcand = aux.calculateIPvariables(extrapolator, jpsi_part, jpsi_vertex, closestVertex);
 
   /********************************************************************
    *
@@ -907,9 +903,9 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 
 	std::vector<RefCountedKinematicParticle> tauParticles;
 
-	tauParticles.push_back(pFactory.particle(mytracks[iii], pion_mass, chi, ndf, pion_sigma));
-	tauParticles.push_back(pFactory.particle(mytracks[jjj], pion_mass, chi, ndf, pion_sigma));
-	tauParticles.push_back(pFactory.particle(mytracks[kkk], pion_mass, chi, ndf, pion_sigma));
+	tauParticles.push_back(pFactory.particle(mytracks[iii], aux.pion_mass, chi, ndf, aux.pion_sigma));
+	tauParticles.push_back(pFactory.particle(mytracks[jjj], aux.pion_mass, chi, ndf, aux.pion_sigma));
+	tauParticles.push_back(pFactory.particle(mytracks[kkk], aux.pion_mass, chi, ndf, aux.pion_sigma));
 
   
 	//reconstructing a tau decay
@@ -945,9 +941,9 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 
 	std::vector<RefCountedKinematicParticle> allParticles;
 
-	allParticles.push_back(pFactory.particle(mytracks[iii], pion_mass, chi, ndf, pion_sigma));
-	allParticles.push_back(pFactory.particle(mytracks[jjj], pion_mass, chi, ndf, pion_sigma));
-	allParticles.push_back(pFactory.particle(mytracks[kkk], pion_mass, chi, ndf, pion_sigma));
+	allParticles.push_back(pFactory.particle(mytracks[iii], aux.pion_mass, chi, ndf, aux.pion_sigma));
+	allParticles.push_back(pFactory.particle(mytracks[jjj], aux.pion_mass, chi, ndf, aux.pion_sigma));
+	allParticles.push_back(pFactory.particle(mytracks[kkk], aux.pion_mass, chi, ndf, aux.pion_sigma));
 	allParticles.push_back(jpsi_part);
 
 	RefCountedKinematicTree bcTree = kpvFitter.fit(allParticles);
@@ -1263,11 +1259,11 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 
     std::vector<RefCountedKinematicParticle> allParticles4doc;
       
-    allParticles4doc.push_back(pFactory.particle(tt1_muon, muon_mass, chi, ndf, muon_sigma));
-    allParticles4doc.push_back(pFactory.particle(tt2_muon, muon_mass, chi, ndf, muon_sigma));
-    allParticles4doc.push_back(pFactory.particle(mytracks[cands[ic].cand_tau_id1], pion_mass, chi, ndf, pion_sigma));
-    allParticles4doc.push_back(pFactory.particle(mytracks[cands[ic].cand_tau_id2], pion_mass, chi, ndf, pion_sigma));
-    allParticles4doc.push_back(pFactory.particle(mytracks[cands[ic].cand_tau_id3], pion_mass, chi, ndf, pion_sigma));
+    allParticles4doc.push_back(pFactory.particle(tt1_muon, aux.muon_mass, chi, ndf, aux.muon_sigma));
+    allParticles4doc.push_back(pFactory.particle(tt2_muon, aux.muon_mass, chi, ndf, aux.muon_sigma));
+    allParticles4doc.push_back(pFactory.particle(mytracks[cands[ic].cand_tau_id1], aux.pion_mass, chi, ndf, aux.pion_sigma));
+    allParticles4doc.push_back(pFactory.particle(mytracks[cands[ic].cand_tau_id2], aux.pion_mass, chi, ndf, aux.pion_sigma));
+    allParticles4doc.push_back(pFactory.particle(mytracks[cands[ic].cand_tau_id3], aux.pion_mass, chi, ndf, aux.pion_sigma));
 
 
     nBranches_->JpsiTau_B_maxdoca.push_back(aux.getMaxDoca(allParticles4doc));
@@ -1291,7 +1287,7 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 		       cands[ic].cand_b_phi,
 		       cands[ic].cand_b_mass);
 
-    Tlv_B *= mass_B0/cands[ic].cand_b_mass;
+    Tlv_B *= aux.mass_B0/cands[ic].cand_b_mass;
       
     Tlv_Jpsi.SetPtEtaPhiM(jpsi_part->currentState().globalMomentum().perp(),
 			  jpsi_part->currentState().globalMomentum().eta(),
@@ -1415,33 +1411,44 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
   if(useHammer_){
     hammer.initEvent();
 
-    for( unsigned p=0; p < genParticles_->size(); ++p){
-	  
 
-      if(!(TMath::Abs((*genParticles_)[p].pdgId())==541 && (*genParticles_)[p].status()==2)) continue;
+    Hammer::Process Bc2JpsiLNu;
+    
+    int idxB = -1;
+    std::vector<size_t> Bvtx_idxs;
+    int idxTau = -1;
+    std::vector<size_t> Tauvtx_idxs;
+    int idxJpsi = -1;
+    std::vector<size_t> Jpsivtx_idxs;
+   
 
-      auto _part_ = (*genParticles_)[p];
-      std::cout << "[JpsiTauNtuplizer] Hammer: " << _part_.pdgId() << " (" << _part_.status() << ")" << std::endl;
-
-      bool isJpsi = false;
-      bool isTau = false;
-      
-
-      for(auto d : _part_.daughterRefVector()) {	
-	if(TMath::Abs(d->pdgId()) == 443) isJpsi = true;
-	if(TMath::Abs(d->pdgId()) == 15) isTau = true;
-	
-	std::cout << "[JpsiTauNtuplizer] Hammer: ---> " << d->pdgId() << " (" << d->status() << ")" << std::endl;
-
-	for (auto dd : d->daughterRefVector()) {
-	  std::cout << "[JpsiTauNtuplizer] Hammer: -----> " << dd->pdgId() << " (" << dd->status()  << ")" << std::endl;
-	}
-      }
-      std::cout << isJpsi << " " << isTau  << " " << (isJpsi==true && isTau==true) << std::endl;
-      if(!(isJpsi==true && isTau==true)){
-	std::cout << "[JpsiTauNtuplizer] Hammer: This B is rejected !!!!" << std::endl;
-      }      
-    }
+//    for( unsigned p=0; p < genParticles_->size(); ++p){
+//	  
+//
+//      if(!(TMath::Abs((*genParticles_)[p].pdgId())==541 && (*genParticles_)[p].status()==2)) continue;
+//
+//      auto _part_ = (*genParticles_)[p];
+//      std::cout << "[JpsiTauNtuplizer] Hammer: " << _part_.pdgId() << " (" << _part_.status() << ")" << std::endl;
+//
+//      bool isJpsi = false;
+//      bool isTau = false;
+//      
+//
+//      for(auto d : _part_.daughterRefVector()) {	
+//	if(TMath::Abs(d->pdgId()) == 443) isJpsi = true;
+//	if(TMath::Abs(d->pdgId()) == 15) isTau = true;
+//	
+//	std::cout << "[JpsiTauNtuplizer] Hammer: ---> " << d->pdgId() << " (" << d->status() << ")" << std::endl;
+//
+//	for (auto dd : d->daughterRefVector()) {
+//	  std::cout << "[JpsiTauNtuplizer] Hammer: -----> " << dd->pdgId() << " (" << dd->status()  << ")" << std::endl;
+//	}
+//      }
+//      std::cout << isJpsi << " " << isTau  << " " << (isJpsi==true && isTau==true) << std::endl;
+//      if(!(isJpsi==true && isTau==true)){
+//	std::cout << "[JpsiTauNtuplizer] Hammer: This B is rejected !!!!" << std::endl;
+//      }      
+//    }
 
 
     for( unsigned p=0; p < genParticles_->size(); ++p){
@@ -1455,7 +1462,7 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
       if(!(TMath::Abs((*genParticles_)[p].pdgId())==541 && (*genParticles_)[p].status()==2)) continue;
 	
       auto _part_ = (*genParticles_)[p];
-      if(verbose_) std::cout << "[JpsiTauNtuplizer] Hammer2: " << _part_.pdgId() << " (" << _part_.status() << ")" << std::endl;
+      //      if(verbose_) std::cout << "[JpsiTauNtuplizer] Hammer2: " << _part_.pdgId() << " (" << _part_.status() << ")" << std::endl;
       
       bool isJpsi = false;
       bool isTau = false;
@@ -1467,9 +1474,9 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 	if(TMath::Abs(d->pdgId()) == 15) isTau = true;
       }
 
-      std::cout << isJpsi << " " << isTau  << " " << (isJpsi==true && isTau==true) << std::endl;
+      //      std::cout << isJpsi << " " << isTau  << " " << (isJpsi==true && isTau==true) << std::endl;
       if(!(isJpsi==true && isTau==true)){
-	if(verbose_) std::cout << "[JpsiTauNtuplizer] Hammer: This B is rejected !!!!" << std::endl;
+	//	if(verbose_) std::cout << "[JpsiTauNtuplizer] Hammer: This B is rejected !!!!" << std::endl;
 	continue;
       }
       
@@ -1487,14 +1494,14 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 	
 	auto idx_d = Bc2JpsiLNu.addParticle(B_dau);
 	Bvtx_idxs.push_back(idx_d);
+
+	std::cout << "[JpsiTauNtuplizer] Hammer: \t gen: " << d->pdgId() << " " << d->status() << std::endl;	  
 	
 	
 	if(TMath::Abs(d->pdgId()) == 15) {
 	  
 	  idxTau = idx_d;
 	  
-	  std::cout << "[JpsiTauNtuplizer] Hammer: \t gen: " << d->pdgId() << " " << d->status() << std::endl;	  
-		    
 	  for (auto dd : d->daughterRefVector()) {
 	    Hammer::Particle Tau_dau({dd->energy(), dd->px(), dd->py(), dd->pz()}, dd->pdgId());
 	    auto idx_dd = Bc2JpsiLNu.addParticle(Tau_dau);
@@ -1506,7 +1513,6 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 	else if(TMath::Abs(d->pdgId()) == 443) {
 	  
 	  idxJpsi = idx_d;
-	  std::cout << "[JpsiTauNtuplizer] Hammer: \t gen: " << d->pdgId() << " " << d->status() << std::endl;	  
 	  
 	  for (auto dd : d->daughterRefVector()) {
 	    Hammer::Particle Jpsi_dau({dd->energy(), dd->px(), dd->py(), dd->pz()}, dd->pdgId());
