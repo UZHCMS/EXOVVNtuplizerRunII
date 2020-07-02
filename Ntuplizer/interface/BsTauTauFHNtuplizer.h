@@ -130,7 +130,6 @@ class BsTauTauFHNtuplizer : public CandidateNtuplizer {
   BsTauTauFHNtuplizer( edm::EDGetTokenT<pat::MuonCollection>    muonToken   , 
 		   edm::EDGetTokenT<reco::VertexCollection> verticeToken, 
 		   edm::EDGetTokenT<pat::PackedCandidateCollection> packedpfcandidatesToken,
-		   edm::EDGetTokenT<pat::PackedCandidateCollection> losttrackToken,
 		   edm::EDGetTokenT<edm::TriggerResults> triggertoken,
 		   edm::EDGetTokenT<pat::TriggerObjectStandAloneCollection> triggerobject,
 		   edm::EDGetTokenT<reco::GenParticleCollection> genptoken, 
@@ -172,7 +171,6 @@ private:
    edm::EDGetTokenT<pat::MuonCollection>    muonToken_   ;
    edm::EDGetTokenT<reco::VertexCollection> verticeToken_   ;
    edm::EDGetTokenT<pat::PackedCandidateCollection>   		packedpfcandidatesToken_;
-   edm::EDGetTokenT<pat::PackedCandidateCollection>   		losttrackToken_;
    edm::EDGetTokenT<edm::TriggerResults> 		     HLTtriggersToken_;
    edm::EDGetTokenT<pat::TriggerObjectStandAloneCollection>  triggerObjects_;
    edm::EDGetTokenT<reco::GenParticleCollection> genParticlesToken_;
@@ -182,7 +180,6 @@ private:
    edm::Handle< reco::VertexCollection >  vertices_;
    edm::Handle< reco::BeamSpot >  beamspot_;
    edm::Handle< std::vector<pat::PackedCandidate> > packedpfcandidates_   ;
-   edm::Handle< std::vector<pat::PackedCandidate> > losttrack_   ;
    edm::Handle< edm::TriggerResults> 			     HLTtriggers_;
    edm::Handle<pat::TriggerObjectStandAloneCollection>	     triggerObjects;
    edm::Handle< reco::GenParticleCollection >  genParticles_;

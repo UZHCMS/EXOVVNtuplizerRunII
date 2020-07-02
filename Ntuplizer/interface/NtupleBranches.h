@@ -50,6 +50,7 @@ public:
   /* output histogram */
   /* Cutflow */
   TH1F* cutflow_perevt ;
+  TH1F* q2_nocut;
   TH1F* hammer_width;
   
   /* Histogram for genParticles */
@@ -314,6 +315,7 @@ public:
   std::vector<float>                JpsiMu_B_eta     ;
   std::vector<float>                JpsiMu_B_phi     ;
   std::vector<float>                JpsiMu_B_mass    ;
+  std::vector<float>                JpsiMu_B_mcorr    ;
   std::vector<float>                JpsiMu_B_vprob ;
   std::vector<float>                JpsiMu_B_lip;
   std::vector<float>                JpsiMu_B_lips;
@@ -530,6 +532,7 @@ public:
   std::vector<float>                JpsiTau_B_eta     ;
   std::vector<float>                JpsiTau_B_phi     ;
   std::vector<float>                JpsiTau_B_mass    ;
+  std::vector<float>                JpsiTau_B_mcorr    ;
   std::vector<float>                JpsiTau_B_vprob ;
   std::vector<float>                JpsiTau_B_lip;
   std::vector<float>                JpsiTau_B_lips;

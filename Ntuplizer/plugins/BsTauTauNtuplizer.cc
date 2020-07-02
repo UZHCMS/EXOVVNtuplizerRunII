@@ -3,22 +3,20 @@
 
 //===================================================================================================================
 BsTauTauNtuplizer::BsTauTauNtuplizer( edm::EDGetTokenT<pat::MuonCollection>    muonToken   ,
-                                  edm::EDGetTokenT<reco::VertexCollection> verticeToken, 
-                                  edm::EDGetTokenT<pat::PackedCandidateCollection> packedpfcandidatesToken,
-                                  edm::EDGetTokenT<pat::PackedCandidateCollection> losttrackToken,
-                                  edm::EDGetTokenT<edm::TriggerResults> triggertoken,
-                                  edm::EDGetTokenT<pat::TriggerObjectStandAloneCollection> triggerobject,
-                                  edm::EDGetTokenT<reco::GenParticleCollection> genptoken,
-				    edm::EDGetTokenT<std::vector<reco::GenJet>> genttoken,
-				    std::map< std::string, bool >& runFlags,
-				    std::map< std::string, double >& runValues,
-				    std::map< std::string, std::string >& runStrings,
-                                  NtupleBranches* nBranches )
+				      edm::EDGetTokenT<reco::VertexCollection> verticeToken, 
+				      edm::EDGetTokenT<pat::PackedCandidateCollection> packedpfcandidatesToken,
+				      edm::EDGetTokenT<edm::TriggerResults> triggertoken,
+				      edm::EDGetTokenT<pat::TriggerObjectStandAloneCollection> triggerobject,
+				      edm::EDGetTokenT<reco::GenParticleCollection> genptoken,
+				      edm::EDGetTokenT<std::vector<reco::GenJet>> genttoken,
+				      std::map< std::string, bool >& runFlags,
+				      std::map< std::string, double >& runValues,
+				      std::map< std::string, std::string >& runStrings,
+				      NtupleBranches* nBranches )
     : CandidateNtuplizer ( nBranches )
     , muonToken_	        ( muonToken )
     , verticeToken_          ( verticeToken )
     , packedpfcandidatesToken_(packedpfcandidatesToken) 
-    , losttrackToken_(losttrackToken) 
     , HLTtriggersToken_	( triggertoken )
     , triggerObjects_	( triggerobject )
     , genParticlesToken_( genptoken )
@@ -343,7 +341,7 @@ bool BsTauTauNtuplizer::fillBranches( edm::Event const & event, const edm::Event
     event.getByToken(HLTtriggersToken_, HLTtriggers_);
     nBranches_->cutflow_perevt->Fill(0);
 
-    bool isTriggered = false;
+    //    bool isTriggered = false;
     const edm::TriggerNames& trigNames = event.triggerNames(*HLTtriggers_);
     std::vector<std::string> finalTriggerName;
     //    std::string finalTriggerFilterObjName="";
@@ -366,7 +364,7 @@ bool BsTauTauNtuplizer::fillBranches( edm::Event const & event, const edm::Event
 	 ){
 	nBranches_->HLT_BPH_isFired[trigNames.triggerName(i)] = HLTtriggers_->accept(i);
 	if(HLTtriggers_->accept(i)){
-	  isTriggered = true;
+	  //	  isTriggered = true;
 	  //	  std::cout << "This trigger is fired:" << trigNames.triggerName(i) << std::endl;
 	  finalTriggerName.push_back(trigNames.triggerName(i));
 	  //                finalTriggerFilterObjName="hltJpsiTkVertexFilter";
@@ -377,7 +375,7 @@ bool BsTauTauNtuplizer::fillBranches( edm::Event const & event, const edm::Event
     }
 
 
-    if(!isTriggered) return false;
+    //    if(!isTriggered) return false;
     nBranches_->cutflow_perevt->Fill(1);
 
     /********************************************************************
@@ -395,7 +393,7 @@ bool BsTauTauNtuplizer::fillBranches( edm::Event const & event, const edm::Event
     muoncollection.clear();
 
 
-    std::cout << "#muons" << muons_->size() << std::endl;
+    //    std::cout << "#muons" << muons_->size() << std::endl;
     // evt Triggered
 
     for(size_t imuon = 0; imuon < muons_->size(); ++ imuon){
@@ -417,7 +415,7 @@ bool BsTauTauNtuplizer::fillBranches( edm::Event const & event, const edm::Event
     
         // Trigger matching
 
-	bool trigMatch = false;
+	//	bool trigMatch = false;
 
         for (pat::TriggerObjectStandAlone obj : *triggerObjects) {
     
@@ -451,10 +449,10 @@ bool BsTauTauNtuplizer::fillBranches( edm::Event const & event, const edm::Event
             Float_t trigger_dR = reco::deltaR(obj.eta(), obj.phi(),
                                               muon.eta(), muon.phi());
       
-	    if(trigger_dR < 0.1) trigMatch = true;
+	    //	    if(trigger_dR < 0.1) trigMatch = true;
         }
 
-	if(!trigMatch) continue;
+	//	if(!trigMatch) continue;
 
 	//	std::cout << "imuon = " << imuon << " "  << muon.pt() << std::endl;
 
@@ -515,7 +513,6 @@ bool BsTauTauNtuplizer::fillBranches( edm::Event const & event, const edm::Event
      ********************************************************************/
     
     event.getByToken( packedpfcandidatesToken_               , packedpfcandidates_      ); 
-    event.getByToken( losttrackToken_               , losttrack_      ); 
     
     std::vector<pat::PackedCandidate> pfcollection; 
     //    std::vector<pat::PackedCandidate> pfcollection_pre; 

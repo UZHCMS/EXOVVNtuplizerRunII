@@ -136,6 +136,7 @@ class helper{
   Float_t mass_D0 = 1.86483;
   Float_t mass_Dstar = 2.01026;
   Float_t mass_B0 = 5.27963;
+  Float_t mass_Bc = 6.2749;
   
 
 
