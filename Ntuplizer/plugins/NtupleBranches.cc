@@ -305,6 +305,7 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch("JpsiMu_B_eta", &JpsiMu_B_eta );
     tree_->Branch("JpsiMu_B_phi", &JpsiMu_B_phi );
     tree_->Branch("JpsiMu_B_mass", &JpsiMu_B_mass );
+    tree_->Branch("JpsiMu_B_mcorr", &JpsiMu_B_mcorr );
     tree_->Branch("JpsiMu_B_vprob", &JpsiMu_B_vprob );
     tree_->Branch("JpsiMu_B_lip", &JpsiMu_B_lip);
     tree_->Branch("JpsiMu_B_lips", &JpsiMu_B_lips);
@@ -526,6 +527,7 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch("JpsiTau_B_eta", &JpsiTau_B_eta );
     tree_->Branch("JpsiTau_B_phi", &JpsiTau_B_phi );
     tree_->Branch("JpsiTau_B_mass", &JpsiTau_B_mass );
+    tree_->Branch("JpsiTau_B_mcorr", &JpsiTau_B_mcorr );
     tree_->Branch("JpsiTau_B_vprob", &JpsiTau_B_vprob );
     tree_->Branch("JpsiTau_B_lip", &JpsiTau_B_lip);
     tree_->Branch("JpsiTau_B_lips", &JpsiTau_B_lips);
@@ -1366,6 +1368,7 @@ void NtupleBranches::reset( void ){
   JpsiMu_B_eta.clear();
   JpsiMu_B_phi.clear();
   JpsiMu_B_mass.clear();
+  JpsiMu_B_mcorr.clear();
   JpsiMu_B_vprob.clear();
   JpsiMu_B_lip.clear();
   JpsiMu_B_lips.clear();
@@ -1575,6 +1578,7 @@ void NtupleBranches::reset( void ){
   JpsiTau_B_eta.clear();
   JpsiTau_B_phi.clear();
   JpsiTau_B_mass.clear();
+  JpsiTau_B_mcorr.clear();
   JpsiTau_B_vprob.clear();
   JpsiTau_B_lip.clear();
   JpsiTau_B_lips.clear();

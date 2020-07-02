@@ -5,7 +5,6 @@
 BsDstarTauNuNtuplizer::BsDstarTauNuNtuplizer( edm::EDGetTokenT<pat::MuonCollection>    muonToken   ,
 					      edm::EDGetTokenT<reco::VertexCollection> verticeToken, 
 					      edm::EDGetTokenT<pat::PackedCandidateCollection> packedpfcandidatesToken,
-					      edm::EDGetTokenT<pat::PackedCandidateCollection> losttrackToken,
 					      edm::EDGetTokenT<edm::TriggerResults> triggertoken,
 					      edm::EDGetTokenT<pat::TriggerObjectStandAloneCollection> triggerobject,
 					      edm::EDGetTokenT<reco::GenParticleCollection> genptoken,
@@ -18,7 +17,6 @@ BsDstarTauNuNtuplizer::BsDstarTauNuNtuplizer( edm::EDGetTokenT<pat::MuonCollecti
   , muonToken_	        ( muonToken )
   , verticeToken_          ( verticeToken )
   , packedpfcandidatesToken_(packedpfcandidatesToken) 
-  , losttrackToken_(losttrackToken) 
   , HLTtriggersToken_	( triggertoken )
   , triggerObjects_	( triggerobject )
   , genParticlesToken_( genptoken )
@@ -511,7 +509,6 @@ bool BsDstarTauNuNtuplizer::fillBranches( edm::Event const & event, const edm::E
    ********************************************************************/
     
   event.getByToken( packedpfcandidatesToken_               , packedpfcandidates_      ); 
-  event.getByToken( losttrackToken_               , losttrack_      ); 
 
   // This is for constructing D* meson
   std::vector<pat::PackedCandidate> pfcollection_pre; 

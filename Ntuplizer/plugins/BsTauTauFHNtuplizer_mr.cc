@@ -5,7 +5,6 @@
 BsTauTauFHNtuplizer_mr::BsTauTauFHNtuplizer_mr( edm::EDGetTokenT<pat::MuonCollection>    muonToken   ,
 					  edm::EDGetTokenT<reco::VertexCollection> verticeToken, 
 					  edm::EDGetTokenT<pat::PackedCandidateCollection> packedpfcandidatesToken,
-					  edm::EDGetTokenT<pat::PackedCandidateCollection> losttrackToken,
 					  edm::EDGetTokenT<edm::TriggerResults> triggertoken,
 					  edm::EDGetTokenT<pat::TriggerObjectStandAloneCollection> triggerobject,
 					  edm::EDGetTokenT<reco::GenParticleCollection> genptoken,
@@ -18,7 +17,6 @@ BsTauTauFHNtuplizer_mr::BsTauTauFHNtuplizer_mr( edm::EDGetTokenT<pat::MuonCollec
   , muonToken_	        ( muonToken )
   , verticeToken_          ( verticeToken )
   , packedpfcandidatesToken_(packedpfcandidatesToken) 
-  , losttrackToken_(losttrackToken) 
   , HLTtriggersToken_	( triggertoken )
   , triggerObjects_	( triggerobject )
   , genParticlesToken_( genptoken )
@@ -512,7 +510,6 @@ bool BsTauTauFHNtuplizer_mr::fillBranches( edm::Event const & event, const edm::
    ********************************************************************/
     
   event.getByToken( packedpfcandidatesToken_               , packedpfcandidates_      ); 
-  event.getByToken( losttrackToken_               , losttrack_      ); 
     
   std::vector<pat::PackedCandidate> pfcollection; 
   //    std::vector<pat::PackedCandidate> pfcollection_pre; 

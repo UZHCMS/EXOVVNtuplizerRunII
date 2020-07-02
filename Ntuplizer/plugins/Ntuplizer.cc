@@ -115,12 +115,11 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
   /* Histogram for cutflow */
 
   nBranches_->cutflow_perevt = fs->make<TH1F>("cutflow_perevt", "Per Event Ntuplizer Cutflow", 10, 0, 10);
+  nBranches_->q2_nocut = fs->make<TH1F>("q2_nocut", "q2 before any cut", 40, 0, 15);
 
-  std::cout << "test"<< std::endl;
   if(runFlags["useHammer"]){
     nBranches_->hammer_width = fs->make<TH1F>("hammer_width", "Hammer width", 24, 0, 24);  
   }
-  std::cout << "test2"<< std::endl;
 
   /* Histogram for genParticles */ 
   if (runFlags["doGenHist"]){
@@ -230,7 +229,6 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
     nTuplizers_["BsTauTau"] = new BsTauTauNtuplizer( muonToken_   , 
 						     vtxToken_   , 
 						     packedpfcandidatesToken_,
-						     losttrackToken_,
 						     triggerToken_,
 						     triggerObjects_,
 						     genparticleToken_,
@@ -246,7 +244,6 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
     nTuplizers_["BsTauTauFH"] = new BsTauTauFHNtuplizer( muonToken_   , 
 							 vtxToken_   , 
 							 packedpfcandidatesToken_,
-							 losttrackToken_,
 							 triggerToken_,
 							 triggerObjects_,
 							 genparticleToken_,
@@ -262,7 +259,6 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
     nTuplizers_["BsTauTauFH_mr"] = new BsTauTauFHNtuplizer_mr( muonToken_   , 
 							 vtxToken_   , 
 							 packedpfcandidatesToken_,
-							 losttrackToken_,
 							 triggerToken_,
 							 triggerObjects_,
 							 genparticleToken_,
@@ -278,7 +274,6 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
     nTuplizers_["BsDstarTauNu"] = new BsDstarTauNuNtuplizer( muonToken_   , 
 							 vtxToken_   , 
 							 packedpfcandidatesToken_,
-							 losttrackToken_,
 							 triggerToken_,
 							 triggerObjects_,
 							 genparticleToken_,

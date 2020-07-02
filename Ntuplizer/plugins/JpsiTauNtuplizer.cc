@@ -252,6 +252,76 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 
   if(verbose_) std::cout << "[JpsiTauNtuplizer] ---------------- event, run, lumi = " << event.id().event() << " " << event.id().run() << " " << event.id().luminosityBlock() << "----------------" << std::endl;
   
+
+  TVector3 genvertex(-9.,-9.,-9.);
+
+  std::vector<TLorentzVector> gen_nr_mu;
+  std::vector<TLorentzVector> gen_jpsi_mu;
+
+  TLorentzVector pB_gen;
+  TLorentzVector pJpsi_gen;
+   
+  if(runOnMC_){ 
+    
+    event.getByToken(genParticlesToken_ , genParticles_);   
+
+    for( unsigned p=0; p < genParticles_->size(); ++p){
+      
+      if(!(TMath::Abs((*genParticles_)[p].pdgId())==541 && (*genParticles_)[p].status()==2)) continue;
+      
+      auto _part_ = (*genParticles_)[p];
+      
+      bool isJpsi = false;
+      bool isTau = false;
+      
+      for(auto d : _part_.daughterRefVector()) {
+	if(TMath::Abs(d->pdgId()) == 443){
+	  //	  std::cout << "J/psi status = " << d->status() << std::endl;
+	  isJpsi = true;
+	}
+	if(TMath::Abs(d->pdgId()) == 15){
+	  //	  std::cout << "Tau status = " << d->status() << std::endl;
+	  isTau = true;
+	}
+      }
+      
+      if(!(isJpsi && isTau)) continue;
+      
+      pB_gen.SetPtEtaPhiM(_part_.pt(), _part_.eta(), _part_.phi(), _part_.mass());
+      
+      genvertex = aux.getVertex((*genParticles_)[p]);
+      
+      for(auto d : _part_.daughterRefVector()) {
+	if(TMath::Abs(d->pdgId()) == 443){
+	  
+	  pJpsi_gen.SetPtEtaPhiM(d->pt(), d->eta(), d->phi(), d->mass());
+	  
+	  for (auto dd : d->daughterRefVector()) {
+	    if(TMath::Abs(dd->pdgId())==13){
+	      TLorentzVector jpsi_muon_tlv;
+	      jpsi_muon_tlv.SetPtEtaPhiM(dd->pt(), dd->eta(), dd->phi(), dd->mass());
+	      gen_jpsi_mu.push_back(jpsi_muon_tlv);
+	    }
+	  }
+	  
+	}
+	if(TMath::Abs(d->pdgId())==13){
+	  TLorentzVector nojpsi_muon_tlv;
+	  nojpsi_muon_tlv.SetPtEtaPhiM(d->pt(), d->eta(), d->phi(), d->mass());
+	  
+	  gen_nr_mu.push_back(nojpsi_muon_tlv);
+	}
+      }
+    }
+  }
+
+  TLorentzVector q2_gen; 
+  q2_gen = pB_gen - pJpsi_gen;
+
+  //std::cout << "test:" << q2_gen.Pt() << " " << q2_gen.M2() << " " << pB_gen.Pt() << " " << pJpsi_gen.Pt() << std::endl;
+  nBranches_->q2_nocut->Fill(q2_gen.M2());
+  
+
   
   /********************************************************************
    *
@@ -731,7 +801,6 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
   Int_t isgen3matched = 0;
 
   if(runOnMC_){
-    event.getByToken(genParticlesToken_ , genParticles_); 
     event.getByToken(genTauToken_, genTaus_);
     
     for( unsigned p=0; p < genParticles_->size(); ++p){
@@ -751,11 +820,11 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
       
       for(int idd = 0; idd < (int)(*genParticles_)[p].numberOfDaughters(); idd++){
 	
-	std::cout << "[JpsiTauNtuplizer] \t -> " << (*genParticles_)[p].daughter(idd)->pdgId() << " (pT, eta, phi) = " 
-		  << (*genParticles_)[p].daughter(idd)->pt() << " " 
-		  << (*genParticles_)[p].daughter(idd)->eta() << " " 
-		  << (*genParticles_)[p].daughter(idd)->phi() << std::endl;
-
+	if(verbose_){ std::cout << "[JpsiTauNtuplizer] \t -> " << (*genParticles_)[p].daughter(idd)->pdgId() << " (pT, eta, phi) = " 
+			       << (*genParticles_)[p].daughter(idd)->pt() << " " 
+			       << (*genParticles_)[p].daughter(idd)->eta() << " " 
+			       << (*genParticles_)[p].daughter(idd)->phi() << std::endl;
+	}
 
 
 	TLorentzVector _genvis_full;
@@ -1287,7 +1356,17 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 		       cands[ic].cand_b_phi,
 		       cands[ic].cand_b_mass);
 
-    Tlv_B *= aux.mass_B0/cands[ic].cand_b_mass;
+    // calculation of the corrected mass
+    TVector3 *bvector = new TVector3(Tlv_B.Px(), Tlv_B.Py(), Tlv_B.Pz());
+      
+    Float_t pperp = bvector->Mag()*TMath::Sin(TMath::ACos(cands[ic].cand_b.alpha));
+    
+    Float_t mcorr = pperp + TMath::Sqrt(pperp*pperp + Tlv_B.M()*Tlv_B.M());
+    
+    nBranches_->JpsiTau_B_mcorr.push_back(mcorr);
+
+
+    Tlv_B *= aux.mass_Bc/cands[ic].cand_b_mass;
       
     Tlv_Jpsi.SetPtEtaPhiM(jpsi_part->currentState().globalMomentum().perp(),
 			  jpsi_part->currentState().globalMomentum().eta(),
@@ -1495,7 +1574,7 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 	auto idx_d = Bc2JpsiLNu.addParticle(B_dau);
 	Bvtx_idxs.push_back(idx_d);
 
-	std::cout << "[JpsiTauNtuplizer] Hammer: \t gen: " << d->pdgId() << " " << d->status() << std::endl;	  
+	if(verbose_) std::cout << "[JpsiTauNtuplizer] Hammer: \t gen: " << d->pdgId() << " " << d->status() << std::endl;	  
 	
 	
 	if(TMath::Abs(d->pdgId()) == 15) {
@@ -1506,7 +1585,7 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 	    Hammer::Particle Tau_dau({dd->energy(), dd->px(), dd->py(), dd->pz()}, dd->pdgId());
 	    auto idx_dd = Bc2JpsiLNu.addParticle(Tau_dau);
 	    Tauvtx_idxs.push_back(idx_dd);
-	    std::cout << "[JpsiTauNtuplizer] Hammer: \t\t gen: " << dd->pdgId() << " " << dd->status() << std::endl;
+	    if(verbose_) std::cout << "[JpsiTauNtuplizer] Hammer: \t\t gen: " << dd->pdgId() << " " << dd->status() << std::endl;
 	  }
 	}
 	
@@ -1518,14 +1597,14 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 	    Hammer::Particle Jpsi_dau({dd->energy(), dd->px(), dd->py(), dd->pz()}, dd->pdgId());
 	    auto idx_dd = Bc2JpsiLNu.addParticle(Jpsi_dau);
 	    Jpsivtx_idxs.push_back(idx_dd);
-	    std::cout << "[JpsiTauNtuplizer] Hammer: \t\t gen: " << dd->pdgId() << " " << dd->status() << std::endl;
+	    if(verbose_) std::cout << "[JpsiTauNtuplizer] Hammer: \t\t gen: " << dd->pdgId() << " " << dd->status() << std::endl;
 	  }
 
 	}
       }
     }
 
-    std::cout << "[JpsiTauNtuplizer] Hammer idx (B, tau, Jpsi) = " << idxB << " " << idxTau << " " << idxJpsi << std::endl;
+    if(verbose_) std::cout << "[JpsiTauNtuplizer] Hammer idx (B, tau, Jpsi) = " << idxB << " " << idxTau << " " << idxJpsi << std::endl;
       
     Bc2JpsiLNu.addVertex(idxB, Bvtx_idxs);
     
@@ -1639,76 +1718,9 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 
 
 
-  TVector3 genvertex(-9.,-9.,-9.);
-  
-
-  std::vector<TLorentzVector> gen_nr_mu;
-  std::vector<TLorentzVector> gen_jpsi_mu;
-
-  //  std::vector<const reco::Candidate*> gen_nr_mu;
-  //  std::vector<const reco::Candidate*> gen_jpsi_mu;
-  //  std::vector<edm::Ref<std::vector<reco::GenParticle> >*> gen_nr_mu;
-  //std::vector<edm::Ref<std::vector<reco::GenParticle> >*> gen_jpsi_mu;
-  //  std::vector<const reco::Candidate*> gen_jpsi_mu;
-  
-  
-  TLorentzVector pB_gen;
-  TLorentzVector pJpsi_gen;
-
-  
-  for( unsigned p=0; p < genParticles_->size(); ++p){
-	  
-    if(!(TMath::Abs((*genParticles_)[p].pdgId())==541 && (*genParticles_)[p].status()==2)) continue;
-    
-    auto _part_ = (*genParticles_)[p];
-    
-    bool isJpsi = false;
-    bool isTau = false;
-    
-    for(auto d : _part_.daughterRefVector()) {
-      if(TMath::Abs(d->pdgId()) == 443){
-	std::cout << "J/psi status = " << d->status() << std::endl;
-	isJpsi = true;
-      }
-      if(TMath::Abs(d->pdgId()) == 15){
-	std::cout << "Tau status = " << d->status() << std::endl;
-	isTau = true;
-      }
-    }
-      
-    if(!(isJpsi && isTau)) continue;
-    
-    pB_gen.SetPtEtaPhiM(_part_.pt(), _part_.eta(), _part_.phi(), _part_.mass());
-    
-    genvertex = aux.getVertex((*genParticles_)[p]);
-    
-    for(auto d : _part_.daughterRefVector()) {
-      if(TMath::Abs(d->pdgId()) == 443){
-	
-	pJpsi_gen.SetPtEtaPhiM(_part_.pt(), _part_.eta(), _part_.phi(), _part_.mass());
-	
-	for (auto dd : d->daughterRefVector()) {
-	  if(TMath::Abs(dd->pdgId())==13){
-	    TLorentzVector jpsi_muon_tlv;
-	    jpsi_muon_tlv.SetPtEtaPhiM(dd->pt(), dd->eta(), dd->phi(), dd->mass());
-	    gen_jpsi_mu.push_back(jpsi_muon_tlv);
-	  }
-	}
-	
-      }
-      if(TMath::Abs(d->pdgId())==13){
-	TLorentzVector nojpsi_muon_tlv;
-	nojpsi_muon_tlv.SetPtEtaPhiM(d->pt(), d->eta(), d->phi(), d->mass());
-	
-	gen_nr_mu.push_back(nojpsi_muon_tlv);
-      }
-    }
-  }
 
 
-  TLorentzVector q2_gen; 
-  q2_gen = pB_gen - pJpsi_gen;
-	
+
   nBranches_->JpsiTau_q2_gen.push_back(q2_gen.M2());
   nBranches_->JpsiTau_B_pt_gen.push_back(pB_gen.Pt());
   nBranches_->JpsiTau_B_eta_gen.push_back(pB_gen.Eta());
