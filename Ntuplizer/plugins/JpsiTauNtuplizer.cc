@@ -101,36 +101,67 @@ JpsiTauNtuplizer::JpsiTauNtuplizer( edm::EDGetTokenT<pat::MuonCollection>    muo
 
     if(verbose_) std::cout << "[JpsiTauNtuplizer] Finish setting up Hammer" << std::endl;
 
-    // add central setting, if needed. 
+    // add abcdmatrix to be the principal components
 
-    //// from https://arxiv.org/pdf/1909.10691.pdf
-    //    std::map<std::string, std::vector<double>> paramsBGL {
-    //      {"avec", {0.004698, -0.02218, 0.1503}},
-    //      {"bvec", {0.003424, -0.02595, 0.3897}},
-    //      {"cvec", {-0.003164, 0.08731}},
-    //      {"dvec", {0.04011, -0.2132, 0.008157}}
-    //    };
-    //    std::string centralValuesOpt = "\"BctoJpsiBGL: {";
-    //    
-    //    for(auto elem: paramsBGL) {
-    //      centralValuesOpt += Form("%s: {", elem.first.c_str());
-    //      
-    //      for(size_t ii=0; ii < elem.second.size(); ii++){
-    //	if(ii==elem.second.size()-1){
-    //	  centralValuesOpt += Form("%f ", elem.second[ii]);
-    //	}else{
-    //	  centralValuesOpt += Form("%f, ", elem.second[ii]);
-    //	}
-    //
-    //      }
-    //      if(elem.first.c_str()==std::string("dvec")) centralValuesOpt += "}";
-    //      else centralValuesOpt += "}, ";
-    //    }
-    //    centralValuesOpt += "}\"";
-    //    std::cout << "[Hammer]: Central values\n\t" << centralValuesOpt << std::endl;
-    //    hammer.setOptions(centralValuesOpt);
-    //    std::cout << "... finishes " << std::endl;
+    // from https://arxiv.org/pdf/1909.10691.pdf
     
+    vector<vector<double>> abcdmat{ 
+      {-0.0168285, -0.346957, -0.561914, -0.200744, -0.0357712, 0.488216, -0.490298, -0.112359, 0.172, -0.032536, 0},
+      {-0.273517, 0.260029, 0.424574, 0.223675, 0.150618, 0.445983, -0.455354, -0.0707909, -0.438665, -0.0301344, 0},
+      {0.32971, 0.294397, 0.343693, 0.137184, -0.0550957, 0.12977, -0.237882, -0.142826, 0.755413, -0.0128438, 0.},
+      {-0.117461, 0.394041, -0.424535, 0.3952, -0.222928, -0.418512, -0.37727, 0.126589, -0.0227784, -0.154801, -0.294672},
+      {-0.381043, -0.199939, 0.184817, -0.198149, 0.210655, -0.413679, -0.424446, 0.30485, 0.213187, 0.391218, 0.233061},
+      {0.370329, -0.173951, 0.200939, -0.341875, 0.038249, -0.416914, -0.364073, -0.451958, -0.253803, -0.290139, -0.121033},
+      {-0.37948, 0.252966, -0.0779388, -0.294611, 0.294091, 0.00507043, 0.161783, -0.42904, 0.150762, 0.255879, -0.560504},
+      {0.295611, 0.345131, -0.0289752, -0.497994, 0.248978, 0.129983, -0.0623405, 0.619602, -0.0690973, -0.149173, -0.225734},
+      {0.173793, 0.527999, -0.299466, -0.180232, 0.0603336, -0.0444077, -0.0241702, -0.274265, -0.154552, 0.325246, 0.598131},
+      {-0.433734, 0.131009, -0.0426141, -0.14, 0.213242, -0.0533621, 0.0997566, -0.0717846, 0.213096, -0.736981, 0.348311},
+      {0.265219, -0.144152, -0.180805, 0.437778, 0.824543, -0.0637481, 0.00642872, -0.0196135, 0.0125086, -0.00453039, 0.000634603}};
+
+
+//    std::map<std::string, std::vector<double>> paramsBGL {
+//      {"avec", {0.004698, -0.02218, 0.1503}},
+//	{"bvec", {0.003424, -0.02595, 0.3897}},
+//          {"cvec", {-0.003164, 0.08731}},
+//	    {"dvec", {0.04011, -0.2132, 0.008157}}
+//    };
+    std::string centralValuesOpt = "\"BctoJpsiBGL: {abcdmatrix: [";
+    centralValuesOpt += "[-0.0168285, -0.346957, -0.561914, -0.200744, -0.0357712, 0.488216, -0.490298, -0.112359, 0.172, -0.032536, 0],";
+    centralValuesOpt += "[-0.273517, 0.260029, 0.424574, 0.223675, 0.150618, 0.445983, -0.455354, -0.0707909, -0.438665, -0.0301344, 0],";
+    centralValuesOpt += "[0.32971, 0.294397, 0.343693, 0.137184, -0.0550957, 0.12977, -0.237882, -0.142826, 0.755413, -0.0128438, 0.],";
+    centralValuesOpt += "[-0.117461, 0.394041, -0.424535, 0.3952, -0.222928, -0.418512, -0.37727, 0.126589, -0.0227784, -0.154801, -0.294672],";
+    centralValuesOpt += "[-0.381043, -0.199939, 0.184817, -0.198149, 0.210655, -0.413679, -0.424446, 0.30485, 0.213187, 0.391218, 0.233061],";
+    centralValuesOpt += "[0.370329, -0.173951, 0.200939, -0.341875, 0.038249, -0.416914, -0.364073, -0.451958, -0.253803, -0.290139, -0.121033],";
+    centralValuesOpt += "[-0.37948, 0.252966, -0.0779388, -0.294611, 0.294091, 0.00507043, 0.161783, -0.42904, 0.150762, 0.255879, -0.560504],";
+    centralValuesOpt += "[0.295611, 0.345131, -0.0289752, -0.497994, 0.248978, 0.129983, -0.0623405, 0.619602, -0.0690973, -0.149173, -0.225734],";
+    centralValuesOpt += "[0.173793, 0.527999, -0.299466, -0.180232, 0.0603336, -0.0444077, -0.0241702, -0.274265, -0.154552, 0.325246, 0.598131],";
+    centralValuesOpt += "[-0.433734, 0.131009, -0.0426141, -0.14, 0.213242, -0.0533621, 0.0997566, -0.0717846, 0.213096, -0.736981, 0.348311],";
+    centralValuesOpt += "[0.265219, -0.144152, -0.180805, 0.437778, 0.824543, -0.0637481, 0.00642872, -0.0196135, 0.0125086, -0.00453039, 0.000634603]]}\"";
+    
+	  
+	
+//        for(auto elem: paramsBGL) {
+//          centralValuesOpt += Form("%s: {", elem.first.c_str());
+//          
+//          for(size_t ii=0; ii < elem.second.size(); ii++){
+//    	if(ii==elem.second.size()-1){
+//    	  centralValuesOpt += Form("%f ", elem.second[ii]);
+//    	}else{
+//    	  centralValuesOpt += Form("%f, ", elem.second[ii]);
+//    	}
+//    
+//          }
+//          if(elem.first.c_str()==std::string("dvec")) centralValuesOpt += "}";
+//          else centralValuesOpt += "}, ";
+//        }
+//        centralValuesOpt += "}\"";
+        std::cout << "[Hammer]: Central values\n\t" << centralValuesOpt << std::endl;
+        hammer.setOptions(centralValuesOpt);
+        std::cout << "... finishes " << std::endl;
+    
+
+
+
   }
 }
 
@@ -938,6 +969,91 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
   }
 
 
+  ///////////////////////////////
+  // Event display 
+  ///////////////////////////////
+  
+  //  std::cout <<"----------------------------------------------------------" << std::endl;
+
+//  if(runOnMC_ > 0.5 && vec_gentaudm.size()==1 && isgen3matched==1){
+//
+//    Int_t counter_npf = 0;
+//    for( size_t ii = 0; ii < packedpfcandidates_->size(); ++ii ){   
+//      
+//      pat::PackedCandidate pf = (*packedpfcandidates_)[ii];
+//      
+//      if(pf.pt() < 0.5) continue;
+//      if(!pf.hasTrackDetails()) continue;
+//	
+//      // use the PF candidates that come from closestVertex
+//      //      if(pf.vertexRef()->z()!=closestVertex.position().z()) continue;
+//	
+//      //      Float_t precut_dz = pf.vz() - closestVertex.position().z();
+//      //      if(TMath::Abs(precut_dz) > c_dz) continue;
+//	
+//      Bool_t hpflag = pf.trackHighPurity();
+//      if(!hpflag) continue;
+//      if(pf.pseudoTrack().hitPattern().numberOfValidPixelHits() < 0) continue;
+//      if(pf.pseudoTrack().hitPattern().numberOfValidHits() < 3) continue;
+//      if(pf.pseudoTrack().normalizedChi2() > 100) continue;
+//	
+//      if(TMath::Abs(pf.pdgId())!=211) continue; 
+//      if(TMath::Abs(pf.eta()) > 2.5) continue; 
+//
+//      counter_npf ++;
+//      nBranches_->JpsiTau_ed_pfeta.push_back(pf.eta());
+//      nBranches_->JpsiTau_ed_pfphi.push_back(pf.phi());
+//      nBranches_->JpsiTau_ed_isRight.push_back(-9);
+//      nBranches_->JpsiTau_ed_pfdnn.push_back(-9);
+//      nBranches_->JpsiTau_ed_genpt.push_back(vec_gentaup4_vis[0].Pt());
+//      nBranches_->JpsiTau_ed_id.push_back(event.id().event());
+//	
+//    }
+//
+//    std::cout << "total_pf = " << counter_npf << std::endl;
+//
+//
+//    for(int iii = 0; iii < numOfch; iii ++){
+//    
+//      pat::PackedCandidate pf = pfcollection[iii];
+//      //    std::cout << pf.pt() << " " << pf.eta() << " " << pf.phi() << std::endl;
+//      
+//      Bool_t isRight_ = false;
+//      
+//      
+//      for(unsigned int mmm=0; mmm < gps.size(); mmm++){
+//	
+//	std::vector<TLorentzVector> tlvs = gps[mmm];
+//	
+//	for(unsigned int nnn=0; nnn < tlvs.size(); nnn++){
+//	  
+//	  if(
+//	     reco::deltaR(pf.eta(), pf.phi(), tlvs[nnn].Eta(), tlvs[nnn].Phi()) < 0.015 &&
+//	     pf.pt()/tlvs[nnn].Pt() > 0.85 && 
+//	     pf.pt()/tlvs[nnn].Pt() < 1.15
+//	     ){
+//	    isRight_ = true; 
+//	    
+//	  }
+//	}
+//      }
+//      
+//      //      std::cout << "PF id = " << iii << ", (pt,eta,phi) = " << pf.pt() << " " << pf.eta() << " " << pf.phi() << ", isRight = " << isRight_ << ", dnn score = " << mydnn[iii] << ",  gen tau pt = " << vec_gentaup4_vis[0].Pt() << std::endl;
+//
+//      //      if(isRight_) std::cout << "matched! " << iii << std::endl;
+//
+//      nBranches_->JpsiTau_ed_pfeta.push_back(pf.eta());
+//      nBranches_->JpsiTau_ed_pfphi.push_back(pf.phi());
+//      nBranches_->JpsiTau_ed_isRight.push_back(isRight_);
+//      nBranches_->JpsiTau_ed_pfdnn.push_back(mydnn[iii]);
+//      nBranches_->JpsiTau_ed_genpt.push_back(vec_gentaup4_vis[0].Pt());
+//      nBranches_->JpsiTau_ed_id.push_back(event.id().event());
+//
+//    }
+//  }
+
+
+
 
   if(verbose_) std::cout << "[JpsiTauNtuplizer] Starts to build tau candidate out of " << numOfch << " pion candidates" << std::endl;
 
@@ -1005,8 +1121,12 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 	particle_cand Taucand; 
 	Taucand = aux.calculateIPvariables(extrapolator, tau_part, tau_vertex, closestVertex);
 
+	//	std::cout << iii << " " << jjj << " " << kkk << std::endl;
 
-	if(Taucand.fls3d < c_fsig) continue;
+	if(Taucand.fls3d < c_fsig){
+	  //	  std::cout <<"remove" << std::endl;
+	  continue;
+	}
 
 	std::vector<RefCountedKinematicParticle> allParticles;
 
@@ -1037,7 +1157,10 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 
 	math::PtEtaPhiMLorentzVector tlv_tau_fit = tt1_fit + tt2_fit + tt3_fit;
 
-	if(tlv_tau_fit.Pt() < 3.) continue;
+	if(tlv_tau_fit.Pt() < 3.){
+	  //	  std::cout <<"remove pt" << std::endl;
+	  continue;
+	}
 
 	
 	// isolation calculation w.r.t SV
