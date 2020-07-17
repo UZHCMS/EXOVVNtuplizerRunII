@@ -83,7 +83,10 @@ private:
 
    std::vector<std::string> _FFErrNames = {"delta_a0","delta_a1","delta_a2","delta_b0","delta_b1","delta_b2","delta_c1","delta_c2","delta_d0","delta_d1","delta_d2"};
 
-   std::vector<double> _FFErr = {0.0009, 0.03, 0.6, 0.0005, 0.02, 0.6, 0.003, 0.08, 0.1, 0.16, 0.009};
+   //   std::vector<double> _FFErr = {0.0009, 0.03, 0.6, 0.0005, 0.02, 0.6, 0.003, 0.08, 0.1, 0.16, 0.009};
+   std::vector<double> _FFErr = {0.6850051095, 0.3674778905, 0.08740600666, 0.05468939568, 0.01128871118, 0.006722573912, 0.006537973692, 0.003156718233, 0.0004988336396, 0.0004454548237, 0.};
+   //   std::vector<double> _FFErr = {1, 1,1,1,1,1,1,1,1,1,1};
+
 
 };
 
