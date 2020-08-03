@@ -58,6 +58,26 @@ JpsiMuNtuplizer::JpsiMuNtuplizer( edm::EDGetTokenT<pat::MuonCollection>    muonT
 
     if(verbose_) std::cout << "[JpsiMuNtuplizer] Finish setting up Hammer" << std::endl;
 
+    std::string centralValuesOpt = "BctoJpsiBGLVar: {abcdmatrix: [";
+    centralValuesOpt += "[-0.000435761, -0.00128207, 0.00367311, 0.00449467, -0.0063562, 0.0021275, 0.00271668, 0.00210176, 0.299812, -0.95395, 0.],"; 
+    centralValuesOpt += "[-0.00875884, 0.0361598, -0.11538, -0.152852, 0.817625, 0.530242, -0.0934758, 0.058003, -0.00971328, -0.0086655, 0.],"; 
+    centralValuesOpt += "[0.701822, 0.703935, -0.0695183, -0.0742765, -0.0323615, -0.0215506, 0.00727573, -0.00202158, 0.000970731, -0.00139538, 0.],"; 
+    centralValuesOpt += "[-0.000281186, 0.000638864, 0.000796885, 0.00243559, -0.0146715, 0.00715778, -0.00127426, 0.0820568, -0.302581, -0.094792, -0.944696],"; 
+    centralValuesOpt += "[-0.0178757, -0.0131949, -0.117564, -0.146799, 0.436528, -0.745198, 0.225176, 0.408729, 0.0127131, -0.000151653, 0.018235],"; 
+    centralValuesOpt += "[0.684286, -0.705427, -0.172203, -0.0603275, -0.0136353, 0.024984, -0.00418088, -0.00158171, -0.000972362, -0.000486225, -0.000351983],"; 
+    centralValuesOpt += "[-0.00288391, 0.00160327, -0.0201438, 0.00736481, -0.0154784, 0.0332032, -0.0122592, 0.0665072, 0.90324, 0.28412, -0.311523],"; 
+    centralValuesOpt += "[0.066627, 0.022617, -0.187896, 0.954851, 0.200779, -0.0664202, 0.0196037, -0.0534551, -0.00372263, 0.000996768, -0.00489996],"; 
+    centralValuesOpt += "[0.00379569, 0.00957017, -0.0101066, 0.123275, -0.248312, 0.299884, -0.0916655, 0.901238, -0.0462642, -0.00996493, 0.100667],"; 
+    centralValuesOpt += "[-0.185266, 0.0689267, -0.949214, -0.136689, -0.187331, 0.0447062, 0.0210228, -0.0576221, -0.0172231, -0.00843905, 0.00352652],"; 
+    centralValuesOpt += "[0.00400356, -0.0028094, 0.0393078, 0.0151223, -0.0462619, 0.254824, 0.964935, -0.000850206, 0.00236844, 0.00459156, 0.00012354]]}";
+
+
+    std::cout << "[Hammer]: Central values\n\t" << centralValuesOpt << std::endl;
+    hammer.setOptions(centralValuesOpt);
+    hammer.saveOptionCard("Opts.yml", false);
+
+    std::cout << "... finishes " << std::endl;
+
     // add central setting, if needed. 
 
     //// from https://arxiv.org/pdf/1909.10691.pdf
@@ -1150,6 +1170,9 @@ bool JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
 
 	
     int idx1 = 0;
+
+    Float_t hammer_up = 0;
+    Float_t hammer_down = 0;
 	
     for(auto pars1: _FFErrNames) {
 	  
@@ -1188,37 +1211,43 @@ bool JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
 	  }
 	}
 
-	if(var_name==std::string("delta_a0_Up")) nBranches_->JpsiMu_hammer_ebe_a0_up.push_back(weight_sys);
-	else if(var_name==std::string("delta_a0_Down")) nBranches_->JpsiMu_hammer_ebe_a0_down.push_back(weight_sys);
-	else if(var_name==std::string("delta_a1_Up")) nBranches_->JpsiMu_hammer_ebe_a1_up.push_back(weight_sys);
-	else if(var_name==std::string("delta_a1_Down")) nBranches_->JpsiMu_hammer_ebe_a1_down.push_back(weight_sys);
-	else if(var_name==std::string("delta_a2_Up")) nBranches_->JpsiMu_hammer_ebe_a2_up.push_back(weight_sys);
-	else if(var_name==std::string("delta_a2_Down")) nBranches_->JpsiMu_hammer_ebe_a2_down.push_back(weight_sys);
+	if(isUp==0) hammer_up += TMath::Power(weight_sys, 2);
+	else if(isUp==1) hammer_down += TMath::Power(weight_sys, 2);
 
-	else if(var_name==std::string("delta_b0_Up")) nBranches_->JpsiMu_hammer_ebe_b0_up.push_back(weight_sys);
-	else if(var_name==std::string("delta_b0_Down")) nBranches_->JpsiMu_hammer_ebe_b0_down.push_back(weight_sys);
-	else if(var_name==std::string("delta_b1_Up")) nBranches_->JpsiMu_hammer_ebe_b1_up.push_back(weight_sys);
-	else if(var_name==std::string("delta_b1_Down")) nBranches_->JpsiMu_hammer_ebe_b1_down.push_back(weight_sys);
-	else if(var_name==std::string("delta_b2_Up")) nBranches_->JpsiMu_hammer_ebe_b2_up.push_back(weight_sys);
-	else if(var_name==std::string("delta_b2_Down")) nBranches_->JpsiMu_hammer_ebe_b2_down.push_back(weight_sys);
-
-	else if(var_name==std::string("delta_c1_Up")) nBranches_->JpsiMu_hammer_ebe_c1_up.push_back(weight_sys);
-	else if(var_name==std::string("delta_c1_Down")) nBranches_->JpsiMu_hammer_ebe_c1_down.push_back(weight_sys);
-	else if(var_name==std::string("delta_c2_Up")) nBranches_->JpsiMu_hammer_ebe_c2_up.push_back(weight_sys);
-	else if(var_name==std::string("delta_c2_Down")) nBranches_->JpsiMu_hammer_ebe_c2_down.push_back(weight_sys);
-
-	else if(var_name==std::string("delta_d0_Up")) nBranches_->JpsiMu_hammer_ebe_d0_up.push_back(weight_sys);
-	else if(var_name==std::string("delta_d0_Down")) nBranches_->JpsiMu_hammer_ebe_d0_down.push_back(weight_sys);
-	else if(var_name==std::string("delta_d1_Up")) nBranches_->JpsiMu_hammer_ebe_d1_up.push_back(weight_sys);
-	else if(var_name==std::string("delta_d1_Down")) nBranches_->JpsiMu_hammer_ebe_d1_down.push_back(weight_sys);
-	else if(var_name==std::string("delta_d2_Up")) nBranches_->JpsiMu_hammer_ebe_d2_up.push_back(weight_sys);
-	else if(var_name==std::string("delta_d2_Down")) nBranches_->JpsiMu_hammer_ebe_d2_down.push_back(weight_sys);
+//	if(var_name==std::string("delta_a0_Up")) nBranches_->JpsiMu_hammer_ebe_a0_up.push_back(weight_sys);
+//	else if(var_name==std::string("delta_a0_Down")) nBranches_->JpsiMu_hammer_ebe_a0_down.push_back(weight_sys);
+//	else if(var_name==std::string("delta_a1_Up")) nBranches_->JpsiMu_hammer_ebe_a1_up.push_back(weight_sys);
+//	else if(var_name==std::string("delta_a1_Down")) nBranches_->JpsiMu_hammer_ebe_a1_down.push_back(weight_sys);
+//	else if(var_name==std::string("delta_a2_Up")) nBranches_->JpsiMu_hammer_ebe_a2_up.push_back(weight_sys);
+//	else if(var_name==std::string("delta_a2_Down")) nBranches_->JpsiMu_hammer_ebe_a2_down.push_back(weight_sys);
+//
+//	else if(var_name==std::string("delta_b0_Up")) nBranches_->JpsiMu_hammer_ebe_b0_up.push_back(weight_sys);
+//	else if(var_name==std::string("delta_b0_Down")) nBranches_->JpsiMu_hammer_ebe_b0_down.push_back(weight_sys);
+//	else if(var_name==std::string("delta_b1_Up")) nBranches_->JpsiMu_hammer_ebe_b1_up.push_back(weight_sys);
+//	else if(var_name==std::string("delta_b1_Down")) nBranches_->JpsiMu_hammer_ebe_b1_down.push_back(weight_sys);
+//	else if(var_name==std::string("delta_b2_Up")) nBranches_->JpsiMu_hammer_ebe_b2_up.push_back(weight_sys);
+//	else if(var_name==std::string("delta_b2_Down")) nBranches_->JpsiMu_hammer_ebe_b2_down.push_back(weight_sys);
+//
+//	else if(var_name==std::string("delta_c1_Up")) nBranches_->JpsiMu_hammer_ebe_c1_up.push_back(weight_sys);
+//	else if(var_name==std::string("delta_c1_Down")) nBranches_->JpsiMu_hammer_ebe_c1_down.push_back(weight_sys);
+//	else if(var_name==std::string("delta_c2_Up")) nBranches_->JpsiMu_hammer_ebe_c2_up.push_back(weight_sys);
+//	else if(var_name==std::string("delta_c2_Down")) nBranches_->JpsiMu_hammer_ebe_c2_down.push_back(weight_sys);
+//
+//	else if(var_name==std::string("delta_d0_Up")) nBranches_->JpsiMu_hammer_ebe_d0_up.push_back(weight_sys);
+//	else if(var_name==std::string("delta_d0_Down")) nBranches_->JpsiMu_hammer_ebe_d0_down.push_back(weight_sys);
+//	else if(var_name==std::string("delta_d1_Up")) nBranches_->JpsiMu_hammer_ebe_d1_up.push_back(weight_sys);
+//	else if(var_name==std::string("delta_d1_Down")) nBranches_->JpsiMu_hammer_ebe_d1_down.push_back(weight_sys);
+//	else if(var_name==std::string("delta_d2_Up")) nBranches_->JpsiMu_hammer_ebe_d2_up.push_back(weight_sys);
+//	else if(var_name==std::string("delta_d2_Down")) nBranches_->JpsiMu_hammer_ebe_d2_down.push_back(weight_sys);
 	   
       }
       
       idx1 += 1;
       
     }
+    nBranches_->JpsiTau_hammer_ebe_up.push_back(TMath::Sqrt(hammer_up));
+    nBranches_->JpsiTau_hammer_ebe_down.push_back(TMath::Sqrt(hammer_down));
+
   }
 
 

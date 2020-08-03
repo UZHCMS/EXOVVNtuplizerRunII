@@ -5,6 +5,7 @@
 #ifndef JpsiTauNtuplizer_H
 #define JpsiTauNtuplizer_H
 
+#include <TRandom3.h>
 
 class JpsiTauNtuplizer : public CandidateNtuplizer {
 
@@ -83,8 +84,50 @@ private:
 
    std::vector<std::string> _FFErrNames = {"delta_a0","delta_a1","delta_a2","delta_b0","delta_b1","delta_b2","delta_c1","delta_c2","delta_d0","delta_d1","delta_d2"};
 
-   //   std::vector<double> _FFErr = {0.0009, 0.03, 0.6, 0.0005, 0.02, 0.6, 0.003, 0.08, 0.1, 0.16, 0.009};
    std::vector<double> _FFErr = {0.6850051095, 0.3674778905, 0.08740600666, 0.05468939568, 0.01128871118, 0.006722573912, 0.006537973692, 0.003156718233, 0.0004988336396, 0.0004454548237, 0.};
+
+//   std::vector<double> _FFmean = {0.217179,
+//				  0.173516,
+//				  -0.0304393,
+//				  0.0108183,
+//				  -0.284005,
+//				  0.00280893,
+//				  -0.0107516,
+//				  -0.0613763,
+//				  0.202081,
+//				  -0.127171,
+//				  0.102528};
+   std::vector<double> _FFmean = {
+     0.418268,
+     -0.181944,
+     0.114036,
+     0.090122,
+     0.00745944,
+     0.0127816,
+     -0.00283544,
+     0.0310275,
+     -0.00132216,
+     -0.00438412,
+     0.
+   };
+
+
+   std::vector<double> Inv = {2.13114,
+			      7.40517,
+			      130.878,
+			      334.174,
+			      7846.72,
+			      21999.4,
+			      23177.8,
+			      37494.1,
+			      101982,
+			      4217630,
+			      10000000000};
+			      
+   TRandom3 *ran;			      
+
+
+
    //   std::vector<double> _FFErr = {1, 1,1,1,1,1,1,1,1,1,1};
 
 
