@@ -345,6 +345,8 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
 
 
     tree_->Branch("JpsiMu_hammer_ebe", &JpsiMu_hammer_ebe);
+    //    tree_->Branch("JpsiMu_hammer_ebe_up", &JpsiMu_hammer_ebe_up);
+    //    tree_->Branch("JpsiMu_hammer_ebe_down", &JpsiMu_hammer_ebe_down);
     tree_->Branch("JpsiMu_hammer_ebe_a0_up", &JpsiMu_hammer_ebe_a0_up);
     tree_->Branch("JpsiMu_hammer_ebe_a0_down", &JpsiMu_hammer_ebe_a0_down);
     tree_->Branch("JpsiMu_hammer_ebe_a1_up", &JpsiMu_hammer_ebe_a1_up);
@@ -576,14 +578,16 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch("JpsiTau_B_mass_gen", &JpsiTau_B_mass_gen);
 
 
-    //    tree_->Branch("JpsiTau_ed_pfeta", &JpsiTau_ed_pfeta);
-    //    tree_->Branch("JpsiTau_ed_pfphi", &JpsiTau_ed_pfphi);
-    //    tree_->Branch("JpsiTau_ed_isRight", &JpsiTau_ed_isRight);
-    //    tree_->Branch("JpsiTau_ed_id", &JpsiTau_ed_id);
-    //    tree_->Branch("JpsiTau_ed_pfdnn", &JpsiTau_ed_pfdnn);
-    //    tree_->Branch("JpsiTau_ed_genpt", &JpsiTau_ed_genpt);
+//    tree_->Branch("JpsiTau_ed_pfeta", &JpsiTau_ed_pfeta);
+//    tree_->Branch("JpsiTau_ed_pfphi", &JpsiTau_ed_pfphi);
+//    tree_->Branch("JpsiTau_ed_isRight", &JpsiTau_ed_isRight);
+//    tree_->Branch("JpsiTau_ed_id", &JpsiTau_ed_id);
+//    tree_->Branch("JpsiTau_ed_pfdnn", &JpsiTau_ed_pfdnn);
+//    tree_->Branch("JpsiTau_ed_genpt", &JpsiTau_ed_genpt);
 
     tree_->Branch("JpsiTau_hammer_ebe", &JpsiTau_hammer_ebe);
+    //    tree_->Branch("JpsiTau_hammer_ebe_up", &JpsiTau_hammer_ebe_up);
+    //    tree_->Branch("JpsiTau_hammer_ebe_down", &JpsiTau_hammer_ebe_down);
     tree_->Branch("JpsiTau_hammer_ebe_a0_up", &JpsiTau_hammer_ebe_a0_up);
     tree_->Branch("JpsiTau_hammer_ebe_a0_down", &JpsiTau_hammer_ebe_a0_down);
     tree_->Branch("JpsiTau_hammer_ebe_a1_up", &JpsiTau_hammer_ebe_a1_up);
@@ -1423,6 +1427,8 @@ void NtupleBranches::reset( void ){
   JpsiMu_B_mass_gen.clear();
 
   JpsiMu_hammer_ebe.clear();
+  //  JpsiMu_hammer_ebe_up.clear();
+  //  JpsiMu_hammer_ebe_down.clear();
   JpsiMu_hammer_ebe_a0_up.clear();
   JpsiMu_hammer_ebe_a0_down.clear();
   JpsiMu_hammer_ebe_a1_up.clear();
@@ -1644,14 +1650,16 @@ void NtupleBranches::reset( void ){
   JpsiTau_B_phi_gen.clear();
   JpsiTau_B_mass_gen.clear();
 
-  //  JpsiTau_ed_pfeta.clear();
-  //  JpsiTau_ed_pfphi.clear();
-  //  JpsiTau_ed_isRight.clear();
-  //  JpsiTau_ed_id.clear();
-  //  JpsiTau_ed_pfdnn.clear();
-  //  JpsiTau_ed_genpt.clear();
+//  JpsiTau_ed_pfeta.clear();
+//  JpsiTau_ed_pfphi.clear();
+//  JpsiTau_ed_isRight.clear();
+//  JpsiTau_ed_id.clear();
+//  JpsiTau_ed_pfdnn.clear();
+//  JpsiTau_ed_genpt.clear();
 
   JpsiTau_hammer_ebe.clear();
+  //  JpsiTau_hammer_ebe_up.clear();
+  //  JpsiTau_hammer_ebe_down.clear();
   JpsiTau_hammer_ebe_a0_up.clear();
   JpsiTau_hammer_ebe_a0_down.clear();
   JpsiTau_hammer_ebe_a1_up.clear();

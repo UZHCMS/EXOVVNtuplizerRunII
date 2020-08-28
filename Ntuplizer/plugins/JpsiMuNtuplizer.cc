@@ -58,22 +58,22 @@ JpsiMuNtuplizer::JpsiMuNtuplizer( edm::EDGetTokenT<pat::MuonCollection>    muonT
 
     if(verbose_) std::cout << "[JpsiMuNtuplizer] Finish setting up Hammer" << std::endl;
 
-    std::string centralValuesOpt = "BctoJpsiBGLVar: {abcdmatrix: [";
-    centralValuesOpt += "[-0.000435761, -0.00128207, 0.00367311, 0.00449467, -0.0063562, 0.0021275, 0.00271668, 0.00210176, 0.299812, -0.95395, 0.],"; 
-    centralValuesOpt += "[-0.00875884, 0.0361598, -0.11538, -0.152852, 0.817625, 0.530242, -0.0934758, 0.058003, -0.00971328, -0.0086655, 0.],"; 
-    centralValuesOpt += "[0.701822, 0.703935, -0.0695183, -0.0742765, -0.0323615, -0.0215506, 0.00727573, -0.00202158, 0.000970731, -0.00139538, 0.],"; 
-    centralValuesOpt += "[-0.000281186, 0.000638864, 0.000796885, 0.00243559, -0.0146715, 0.00715778, -0.00127426, 0.0820568, -0.302581, -0.094792, -0.944696],"; 
-    centralValuesOpt += "[-0.0178757, -0.0131949, -0.117564, -0.146799, 0.436528, -0.745198, 0.225176, 0.408729, 0.0127131, -0.000151653, 0.018235],"; 
-    centralValuesOpt += "[0.684286, -0.705427, -0.172203, -0.0603275, -0.0136353, 0.024984, -0.00418088, -0.00158171, -0.000972362, -0.000486225, -0.000351983],"; 
-    centralValuesOpt += "[-0.00288391, 0.00160327, -0.0201438, 0.00736481, -0.0154784, 0.0332032, -0.0122592, 0.0665072, 0.90324, 0.28412, -0.311523],"; 
-    centralValuesOpt += "[0.066627, 0.022617, -0.187896, 0.954851, 0.200779, -0.0664202, 0.0196037, -0.0534551, -0.00372263, 0.000996768, -0.00489996],"; 
-    centralValuesOpt += "[0.00379569, 0.00957017, -0.0101066, 0.123275, -0.248312, 0.299884, -0.0916655, 0.901238, -0.0462642, -0.00996493, 0.100667],"; 
-    centralValuesOpt += "[-0.185266, 0.0689267, -0.949214, -0.136689, -0.187331, 0.0447062, 0.0210228, -0.0576221, -0.0172231, -0.00843905, 0.00352652],"; 
-    centralValuesOpt += "[0.00400356, -0.0028094, 0.0393078, 0.0151223, -0.0462619, 0.254824, 0.964935, -0.000850206, 0.00236844, 0.00459156, 0.00012354]]}";
-
-
-    std::cout << "[Hammer]: Central values\n\t" << centralValuesOpt << std::endl;
-    hammer.setOptions(centralValuesOpt);
+//    std::string centralValuesOpt = "BctoJpsiBGLVar: {abcdmatrix: [";
+//    centralValuesOpt += "[-0.000435761, -0.00128207, 0.00367311, 0.00449467, -0.0063562, 0.0021275, 0.00271668, 0.00210176, 0.299812, -0.95395, 0.],"; 
+//    centralValuesOpt += "[-0.00875884, 0.0361598, -0.11538, -0.152852, 0.817625, 0.530242, -0.0934758, 0.058003, -0.00971328, -0.0086655, 0.],"; 
+//    centralValuesOpt += "[0.701822, 0.703935, -0.0695183, -0.0742765, -0.0323615, -0.0215506, 0.00727573, -0.00202158, 0.000970731, -0.00139538, 0.],"; 
+//    centralValuesOpt += "[-0.000281186, 0.000638864, 0.000796885, 0.00243559, -0.0146715, 0.00715778, -0.00127426, 0.0820568, -0.302581, -0.094792, -0.944696],"; 
+//    centralValuesOpt += "[-0.0178757, -0.0131949, -0.117564, -0.146799, 0.436528, -0.745198, 0.225176, 0.408729, 0.0127131, -0.000151653, 0.018235],"; 
+//    centralValuesOpt += "[0.684286, -0.705427, -0.172203, -0.0603275, -0.0136353, 0.024984, -0.00418088, -0.00158171, -0.000972362, -0.000486225, -0.000351983],"; 
+//    centralValuesOpt += "[-0.00288391, 0.00160327, -0.0201438, 0.00736481, -0.0154784, 0.0332032, -0.0122592, 0.0665072, 0.90324, 0.28412, -0.311523],"; 
+//    centralValuesOpt += "[0.066627, 0.022617, -0.187896, 0.954851, 0.200779, -0.0664202, 0.0196037, -0.0534551, -0.00372263, 0.000996768, -0.00489996],"; 
+//    centralValuesOpt += "[0.00379569, 0.00957017, -0.0101066, 0.123275, -0.248312, 0.299884, -0.0916655, 0.901238, -0.0462642, -0.00996493, 0.100667],"; 
+//    centralValuesOpt += "[-0.185266, 0.0689267, -0.949214, -0.136689, -0.187331, 0.0447062, 0.0210228, -0.0576221, -0.0172231, -0.00843905, 0.00352652],"; 
+//    centralValuesOpt += "[0.00400356, -0.0028094, 0.0393078, 0.0151223, -0.0462619, 0.254824, 0.964935, -0.000850206, 0.00236844, 0.00459156, 0.00012354]]}";
+//
+//
+//    std::cout << "[Hammer]: Central values\n\t" << centralValuesOpt << std::endl;
+//    hammer.setOptions(centralValuesOpt);
     hammer.saveOptionCard("Opts.yml", false);
 
     std::cout << "... finishes " << std::endl;
@@ -136,10 +136,10 @@ JpsiMuNtuplizer::~JpsiMuNtuplizer( void )
       }
       
       std::map<std::string, double> settings;
-      
-      for(auto pars: _FFErrNames) {
-	settings[pars] = 0;
-      }
+      for(auto n: parName) settings["delta_" + n] = 0;      
+      //      for(auto pars: _FFErrNames) {
+      //	settings[pars] = 0;
+      //      }
       
       hammer.setFFEigenvectors("BctoJpsi", "BGLVar", settings);
       
@@ -150,76 +150,61 @@ JpsiMuNtuplizer::~JpsiMuNtuplizer( void )
       nBranches_->hammer_width->SetBinContent(2, outRate["Central"]);
     
     
-      int idx1 = 0;
-      
-      for(auto pars1: _FFErrNames) {
-	
-	for(int isUp=0; isUp < 2; isUp++) { // up, down variation    
-	  
-	  std::map<std::string, double> settings;
-	  
-	  int idx2 = 0;
-	  
-	  for(auto pars2: _FFErrNames) {
-	    
-	    if(idx1 == idx2){
-	      if(isUp==1) settings[pars2] = _FFErr[idx2];
-	      else settings[pars2] = -_FFErr[idx2];
-	    }else{
-	      settings[pars2] = 0;
-	    }
-	    idx2 += 1;
+      for(int i=0; i<11; i++) { //Loop over eigenVar
+	for (int j=0; j<2; j++) { //Loop over pos/neg direction
+	  map<string, double> settings;
+	  for (int k=0; k<11; k++) { //Loop over parameters
+	    settings["delta_" + parName[k]] = eigVar[i][k][j];
 	  }
-	  
-	  
+
 	  hammer.setFFEigenvectors("BctoJpsi", "BGLVar", settings);
-	  
 	  auto rate = hammer.getRate(proc, "Scheme1");
 	  
-	  std::string var_name = pars1;
-	  var_name += isUp==1? "_Up" : "_Down";
+	  std::string var_name = "eig";
+	  var_name += std::to_string(i);
+	  var_name += j==0? "_Up" : "_Down";
 	  
-	  if(verbose_) std::cout << "[JpsiMuNtuplizer] " << var_name << " --> " << Form(": %1.3e", rate) << std::endl;
+	  if(verbose_) std::cout << "test0 [JpsiMuNtuplizer] " << var_name << " --> " << Form(": %1.3e", rate) << std::endl;
 	  
-	  if(var_name==std::string("delta_a0_Up")) nBranches_->hammer_width->SetBinContent(3, rate);
-	  else if(var_name==std::string("delta_a0_Down")) nBranches_->hammer_width->SetBinContent(4, rate);
-	  else if(var_name==std::string("delta_a1_Up")) nBranches_->hammer_width->SetBinContent(5, rate);
-	  else if(var_name==std::string("delta_a1_Down")) nBranches_->hammer_width->SetBinContent(6, rate);
-	  else if(var_name==std::string("delta_a2_Up")) nBranches_->hammer_width->SetBinContent(7, rate);
-	  else if(var_name==std::string("delta_a2_Down")) nBranches_->hammer_width->SetBinContent(8, rate);
+	  if(var_name==std::string("eig0_Up")) nBranches_->hammer_width->SetBinContent(3, rate);
+	  else if(var_name==std::string("eig0_Down")) nBranches_->hammer_width->SetBinContent(4, rate);
+	  else if(var_name==std::string("eig1_Up")) nBranches_->hammer_width->SetBinContent(5, rate);
+	  else if(var_name==std::string("eig1_Down")) nBranches_->hammer_width->SetBinContent(6, rate);
+	  else if(var_name==std::string("eig2_Up")) nBranches_->hammer_width->SetBinContent(7, rate);
+	  else if(var_name==std::string("eig2_Down")) nBranches_->hammer_width->SetBinContent(8, rate);
 	  
-	  else if(var_name==std::string("delta_b0_Up")) nBranches_->hammer_width->SetBinContent(9, rate);
-	  else if(var_name==std::string("delta_b0_Down")) nBranches_->hammer_width->SetBinContent(10, rate);
-	  else if(var_name==std::string("delta_b1_Up")) nBranches_->hammer_width->SetBinContent(11, rate);
-	  else if(var_name==std::string("delta_b1_Down")) nBranches_->hammer_width->SetBinContent(12, rate);
-	  else if(var_name==std::string("delta_b2_Up")) nBranches_->hammer_width->SetBinContent(13, rate);
-	  else if(var_name==std::string("delta_b2_Down")) nBranches_->hammer_width->SetBinContent(14, rate);
+	  else if(var_name==std::string("eig3_Up")) nBranches_->hammer_width->SetBinContent(9, rate);
+	  else if(var_name==std::string("eig3_Down")) nBranches_->hammer_width->SetBinContent(10, rate);
+	  else if(var_name==std::string("eig4_Up")) nBranches_->hammer_width->SetBinContent(11, rate);
+	  else if(var_name==std::string("eig4_Down")) nBranches_->hammer_width->SetBinContent(12, rate);
+	  else if(var_name==std::string("eig5_Up")) nBranches_->hammer_width->SetBinContent(13, rate);
+	  else if(var_name==std::string("eig5_Down")) nBranches_->hammer_width->SetBinContent(14, rate);
 	  
-	  else if(var_name==std::string("delta_c1_Up")) nBranches_->hammer_width->SetBinContent(15, rate);
-	  else if(var_name==std::string("delta_c1_Down")) nBranches_->hammer_width->SetBinContent(16, rate);
-	  else if(var_name==std::string("delta_c2_Up")) nBranches_->hammer_width->SetBinContent(17, rate);
-	  else if(var_name==std::string("delta_c2_Down")) nBranches_->hammer_width->SetBinContent(18, rate);
+	  else if(var_name==std::string("eig6_Up")) nBranches_->hammer_width->SetBinContent(15, rate);
+	  else if(var_name==std::string("eig6_Down")) nBranches_->hammer_width->SetBinContent(16, rate);
+	  else if(var_name==std::string("eig7_Up")) nBranches_->hammer_width->SetBinContent(17, rate);
+	  else if(var_name==std::string("eig7_Down")) nBranches_->hammer_width->SetBinContent(18, rate);
 	  
-	  else if(var_name==std::string("delta_d0_Up")) nBranches_->hammer_width->SetBinContent(19, rate);
-	  else if(var_name==std::string("delta_d0_Down")) nBranches_->hammer_width->SetBinContent(20, rate);
-	  else if(var_name==std::string("delta_d1_Up")) nBranches_->hammer_width->SetBinContent(21, rate);
-	  else if(var_name==std::string("delta_d1_Down")) nBranches_->hammer_width->SetBinContent(22, rate);
-	  else if(var_name==std::string("delta_d2_Up")) nBranches_->hammer_width->SetBinContent(23, rate);
-	  else if(var_name==std::string("delta_d2_Down")) nBranches_->hammer_width->SetBinContent(24, rate);
+	  else if(var_name==std::string("eig8_Up")) nBranches_->hammer_width->SetBinContent(19, rate);
+	  else if(var_name==std::string("eig8_Down")) nBranches_->hammer_width->SetBinContent(20, rate);
+	  else if(var_name==std::string("eig9_Up")) nBranches_->hammer_width->SetBinContent(21, rate);
+	  else if(var_name==std::string("eig9_Down")) nBranches_->hammer_width->SetBinContent(22, rate);
+	  else if(var_name==std::string("eig10_Up")) nBranches_->hammer_width->SetBinContent(23, rate);
+	  else if(var_name==std::string("eig10_Down")) nBranches_->hammer_width->SetBinContent(24, rate);
 	  
-	  
+
+
+
+//	  string var_name = "BGL" + varName[i];
+//	  var_name += j==0? "Up" : "Down";
+//	  outRate[var_name] = rate;
+//	  if(verbose) {cout << var_name << Form(": %1.3e", rate) << endl;}
 	}
-	idx1 += 1;
-	
       }
+
+
     }
   }
-
-
-
-
-
-
 }
 
 
@@ -1145,10 +1130,10 @@ bool JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
     hammer.processEvent();
 
     std::map<std::string, double> settings;
-
-    for(auto pars: _FFErrNames) {
-      settings[pars] = 0;
-    }
+    for(auto n: parName) settings["delta_" + n] = 0;
+    //    for(auto pars: _FFErrNames) {
+    //      settings[pars] = 0;
+    //    }
 
     hammer.setFFEigenvectors("BctoJpsi", "BGLVar", settings);
 	
@@ -1168,36 +1153,26 @@ bool JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
 
     nBranches_->JpsiMu_hammer_ebe.push_back(weight);
 
-	
-    int idx1 = 0;
+    std::cout << "-----------------------" << std::endl;
+    std::cout << "base weight = " << weight << std::endl;
 
-    Float_t hammer_up = 0;
-    Float_t hammer_down = 0;
-	
-    for(auto pars1: _FFErrNames) {
-	  
-      for(int isUp=0; isUp < 2; isUp++) { // up, down variation    
-	    
-	std::map<std::string, double> settings;
-	    
-	int idx2 = 0;
-	    
-	for(auto pars2: _FFErrNames) {
-	      
-	  if(idx1 == idx2){
-	    if(isUp==1) settings[pars2] = _FFErr[idx2];
-	    else settings[pars2] = -_FFErr[idx2];
-	  }else{
-	    settings[pars2] = 0;
-	  }
-	  idx2 += 1;
-	}
 
- 
-	hammer.setFFEigenvectors("BctoJpsi", "BGLVar", settings);
-	auto weights = hammer.getWeights("Scheme1");
-	std::string var_name = pars1;
-	var_name += isUp==1? "_Up" : "_Down";
+    for(int i=0; i<11; i++) { //Loop over eigenVar
+      for (int j=0; j<2; j++) { //Loop over pos/neg direction
+
+        map<string, double> settings;
+
+        for (int k=0; k<11; k++) { //Loop over parameters
+          settings["delta_" + parName[k]] = eigVar[i][k][j];
+        }
+
+        hammer.setFFEigenvectors("BctoJpsi", "BGLVar", settings);
+        auto weights = hammer.getWeights("Scheme1");
+        string var_name = "eig";
+	var_name += std::to_string(i);
+        var_name += j==0? "_Up" : "_Down";
+
+
 
 	Float_t weight_sys = -1;
 
@@ -1211,42 +1186,38 @@ bool JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
 	  }
 	}
 
-	if(isUp==0) hammer_up += TMath::Power(weight_sys, 2);
-	else if(isUp==1) hammer_down += TMath::Power(weight_sys, 2);
+	if(var_name==std::string("eig0_Up")) nBranches_->JpsiMu_hammer_ebe_a0_up.push_back(weight_sys);
+	else if(var_name==std::string("eig0_Down")) nBranches_->JpsiMu_hammer_ebe_a0_down.push_back(weight_sys);
+	else if(var_name==std::string("eig1_Up")) nBranches_->JpsiMu_hammer_ebe_a1_up.push_back(weight_sys);
+	else if(var_name==std::string("eig1_Down")) nBranches_->JpsiMu_hammer_ebe_a1_down.push_back(weight_sys);
+	else if(var_name==std::string("eig2_Up")) nBranches_->JpsiMu_hammer_ebe_a2_up.push_back(weight_sys);
+	else if(var_name==std::string("eig2_Down")) nBranches_->JpsiMu_hammer_ebe_a2_down.push_back(weight_sys);
 
-//	if(var_name==std::string("delta_a0_Up")) nBranches_->JpsiMu_hammer_ebe_a0_up.push_back(weight_sys);
-//	else if(var_name==std::string("delta_a0_Down")) nBranches_->JpsiMu_hammer_ebe_a0_down.push_back(weight_sys);
-//	else if(var_name==std::string("delta_a1_Up")) nBranches_->JpsiMu_hammer_ebe_a1_up.push_back(weight_sys);
-//	else if(var_name==std::string("delta_a1_Down")) nBranches_->JpsiMu_hammer_ebe_a1_down.push_back(weight_sys);
-//	else if(var_name==std::string("delta_a2_Up")) nBranches_->JpsiMu_hammer_ebe_a2_up.push_back(weight_sys);
-//	else if(var_name==std::string("delta_a2_Down")) nBranches_->JpsiMu_hammer_ebe_a2_down.push_back(weight_sys);
-//
-//	else if(var_name==std::string("delta_b0_Up")) nBranches_->JpsiMu_hammer_ebe_b0_up.push_back(weight_sys);
-//	else if(var_name==std::string("delta_b0_Down")) nBranches_->JpsiMu_hammer_ebe_b0_down.push_back(weight_sys);
-//	else if(var_name==std::string("delta_b1_Up")) nBranches_->JpsiMu_hammer_ebe_b1_up.push_back(weight_sys);
-//	else if(var_name==std::string("delta_b1_Down")) nBranches_->JpsiMu_hammer_ebe_b1_down.push_back(weight_sys);
-//	else if(var_name==std::string("delta_b2_Up")) nBranches_->JpsiMu_hammer_ebe_b2_up.push_back(weight_sys);
-//	else if(var_name==std::string("delta_b2_Down")) nBranches_->JpsiMu_hammer_ebe_b2_down.push_back(weight_sys);
-//
-//	else if(var_name==std::string("delta_c1_Up")) nBranches_->JpsiMu_hammer_ebe_c1_up.push_back(weight_sys);
-//	else if(var_name==std::string("delta_c1_Down")) nBranches_->JpsiMu_hammer_ebe_c1_down.push_back(weight_sys);
-//	else if(var_name==std::string("delta_c2_Up")) nBranches_->JpsiMu_hammer_ebe_c2_up.push_back(weight_sys);
-//	else if(var_name==std::string("delta_c2_Down")) nBranches_->JpsiMu_hammer_ebe_c2_down.push_back(weight_sys);
-//
-//	else if(var_name==std::string("delta_d0_Up")) nBranches_->JpsiMu_hammer_ebe_d0_up.push_back(weight_sys);
-//	else if(var_name==std::string("delta_d0_Down")) nBranches_->JpsiMu_hammer_ebe_d0_down.push_back(weight_sys);
-//	else if(var_name==std::string("delta_d1_Up")) nBranches_->JpsiMu_hammer_ebe_d1_up.push_back(weight_sys);
-//	else if(var_name==std::string("delta_d1_Down")) nBranches_->JpsiMu_hammer_ebe_d1_down.push_back(weight_sys);
-//	else if(var_name==std::string("delta_d2_Up")) nBranches_->JpsiMu_hammer_ebe_d2_up.push_back(weight_sys);
-//	else if(var_name==std::string("delta_d2_Down")) nBranches_->JpsiMu_hammer_ebe_d2_down.push_back(weight_sys);
-	   
+	else if(var_name==std::string("eig3_Up")) nBranches_->JpsiMu_hammer_ebe_b0_up.push_back(weight_sys);
+	else if(var_name==std::string("eig3_Down")) nBranches_->JpsiMu_hammer_ebe_b0_down.push_back(weight_sys);
+	else if(var_name==std::string("eig4_Up")) nBranches_->JpsiMu_hammer_ebe_b1_up.push_back(weight_sys);
+	else if(var_name==std::string("eig4_Down")) nBranches_->JpsiMu_hammer_ebe_b1_down.push_back(weight_sys);
+	else if(var_name==std::string("eig5_Up")) nBranches_->JpsiMu_hammer_ebe_b2_up.push_back(weight_sys);
+	else if(var_name==std::string("eig5_Down")) nBranches_->JpsiMu_hammer_ebe_b2_down.push_back(weight_sys);
+
+	else if(var_name==std::string("eig6_Up")) nBranches_->JpsiMu_hammer_ebe_c1_up.push_back(weight_sys);
+	else if(var_name==std::string("eig6_Down")) nBranches_->JpsiMu_hammer_ebe_c1_down.push_back(weight_sys);
+	else if(var_name==std::string("eig7_Up")) nBranches_->JpsiMu_hammer_ebe_c2_up.push_back(weight_sys);
+	else if(var_name==std::string("eig7_Down")) nBranches_->JpsiMu_hammer_ebe_c2_down.push_back(weight_sys);
+
+	else if(var_name==std::string("eig8_Up")) nBranches_->JpsiMu_hammer_ebe_d0_up.push_back(weight_sys);
+	else if(var_name==std::string("eig8_Down")) nBranches_->JpsiMu_hammer_ebe_d0_down.push_back(weight_sys);
+	else if(var_name==std::string("eig9_Up")) nBranches_->JpsiMu_hammer_ebe_d1_up.push_back(weight_sys);
+	else if(var_name==std::string("eig9_Down")) nBranches_->JpsiMu_hammer_ebe_d1_down.push_back(weight_sys);
+	else if(var_name==std::string("eig10_Up")) nBranches_->JpsiMu_hammer_ebe_d2_up.push_back(weight_sys);
+	else if(var_name==std::string("eig10_Down")) nBranches_->JpsiMu_hammer_ebe_d2_down.push_back(weight_sys);
+	
+	std::cout << "test1 \t " << var_name << " " << weight_sys << std::endl;
       }
-      
-      idx1 += 1;
-      
     }
-    nBranches_->JpsiTau_hammer_ebe_up.push_back(TMath::Sqrt(hammer_up));
-    nBranches_->JpsiTau_hammer_ebe_down.push_back(TMath::Sqrt(hammer_down));
+
+    //    nBranches_->JpsiTau_hammer_ebe_up.push_back(TMath::Sqrt(hammer_up));
+    //    nBranches_->JpsiTau_hammer_ebe_down.push_back(TMath::Sqrt(hammer_down));
 
   }
 

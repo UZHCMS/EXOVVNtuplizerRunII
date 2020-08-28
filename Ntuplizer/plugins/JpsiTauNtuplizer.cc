@@ -107,20 +107,6 @@ JpsiTauNtuplizer::JpsiTauNtuplizer( edm::EDGetTokenT<pat::MuonCollection>    muo
 
     // from https://arxiv.org/pdf/1909.10691.pdf
     
-    std::string centralValuesOpt = "BctoJpsiBGLVar: {abcdmatrix: [";
-    centralValuesOpt += "[-0.000435761, -0.00128207, 0.00367311, 0.00449467, -0.0063562, 0.0021275, 0.00271668, 0.00210176, 0.299812, -0.95395, 0.],"; 
-    centralValuesOpt += "[-0.00875884, 0.0361598, -0.11538, -0.152852, 0.817625, 0.530242, -0.0934758, 0.058003, -0.00971328, -0.0086655, 0.],"; 
-    centralValuesOpt += "[0.701822, 0.703935, -0.0695183, -0.0742765, -0.0323615, -0.0215506, 0.00727573, -0.00202158, 0.000970731, -0.00139538, 0.],"; 
-    centralValuesOpt += "[-0.000281186, 0.000638864, 0.000796885, 0.00243559, -0.0146715, 0.00715778, -0.00127426, 0.0820568, -0.302581, -0.094792, -0.944696],"; 
-    centralValuesOpt += "[-0.0178757, -0.0131949, -0.117564, -0.146799, 0.436528, -0.745198, 0.225176, 0.408729, 0.0127131, -0.000151653, 0.018235],"; 
-    centralValuesOpt += "[0.684286, -0.705427, -0.172203, -0.0603275, -0.0136353, 0.024984, -0.00418088, -0.00158171, -0.000972362, -0.000486225, -0.000351983],"; 
-    centralValuesOpt += "[-0.00288391, 0.00160327, -0.0201438, 0.00736481, -0.0154784, 0.0332032, -0.0122592, 0.0665072, 0.90324, 0.28412, -0.311523],"; 
-    centralValuesOpt += "[0.066627, 0.022617, -0.187896, 0.954851, 0.200779, -0.0664202, 0.0196037, -0.0534551, -0.00372263, 0.000996768, -0.00489996],"; 
-    centralValuesOpt += "[0.00379569, 0.00957017, -0.0101066, 0.123275, -0.248312, 0.299884, -0.0916655, 0.901238, -0.0462642, -0.00996493, 0.100667],"; 
-    centralValuesOpt += "[-0.185266, 0.0689267, -0.949214, -0.136689, -0.187331, 0.0447062, 0.0210228, -0.0576221, -0.0172231, -0.00843905, 0.00352652],"; 
-    centralValuesOpt += "[0.00400356, -0.0028094, 0.0393078, 0.0151223, -0.0462619, 0.254824, 0.964935, -0.000850206, 0.00236844, 0.00459156, 0.00012354]]}";
-
-
 //    std::string centralValuesOpt = "BctoJpsiBGLVar: {abcdmatrix: [";
 //    centralValuesOpt += "[-0.000435761, -0.00128207, 0.00367311, 0.00449467, -0.0063562, 0.0021275, 0.00271668, 0.00210176, 0.299812, -0.95395, 0.],"; 
 //    centralValuesOpt += "[-0.00875884, 0.0361598, -0.11538, -0.152852, 0.817625, 0.530242, -0.0934758, 0.058003, -0.00971328, -0.0086655, 0.],"; 
@@ -133,42 +119,31 @@ JpsiTauNtuplizer::JpsiTauNtuplizer( edm::EDGetTokenT<pat::MuonCollection>    muo
 //    centralValuesOpt += "[0.00379569, 0.00957017, -0.0101066, 0.123275, -0.248312, 0.299884, -0.0916655, 0.901238, -0.0462642, -0.00996493, 0.100667],"; 
 //    centralValuesOpt += "[-0.185266, 0.0689267, -0.949214, -0.136689, -0.187331, 0.0447062, 0.0210228, -0.0576221, -0.0172231, -0.00843905, 0.00352652],"; 
 //    centralValuesOpt += "[0.00400356, -0.0028094, 0.0393078, 0.0151223, -0.0462619, 0.254824, 0.964935, -0.000850206, 0.00236844, 0.00459156, 0.00012354]]}";
+//
+//
+//    std::cout << "[Hammer]: ABCD matrix:\n\t" << centralValuesOpt << std::endl;
+//    hammer.setOptions(centralValuesOpt);
+
+    
+    // central values ... 
+    //    std::string centralValues = "BctoJpsiBGLVar: {avec: [-0.4182681183, -0.1819441298, 0.1140362192], bvec: [-0.0901217995, 0.0074593144, -0.0127818946], cvec: [0.0028349558, 0.0310274035], dvec: [0.0013219585, -0.0043841356, -0.0000000258]}";
+
+    //    std::cout << "[Hammer]: Central values:\n\t" << centralValues << std::endl;
+    //    hammer.setOptions(centralValues);
 
 
 
-//    hammer.setOptions("BctoJpsiBGLVar: {abcdmatrix: "   
-//                   "[[-0.00043576,-0.0012821,0.003673,0.0044947,-0.0063573,0.0021291,0.0027168,0.0020966,0.30001,-0.95389,1.1304e-6],"
-//                   "[-0.0087588,0.03616,-0.11538,-0.15285,0.81764,0.53019,-0.093616,0.058003,-0.0097153,-0.0086698,1.7821e-6],"
-//                   "[0.70182,0.70394,-0.069516,-0.074276,-0.032362,-0.021547,0.0072811,-0.0020215,0.00097121,-0.0013951,-7.9443e-8],"
-//                   "[-0.00028119,0.00063887,0.00079695,0.0024356,-0.01467,0.0071562,-0.0012779,0.082052,-0.30261,-0.094873,-0.94468],"
-//                   "[-0.017876,-0.013195,-0.11757,-0.1468,0.43651,-0.74515,0.22541,0.40871,0.012725,-0.00014817,0.018228],"
-//                   "[0.68429,-0.70543,-0.1722,-0.060328,-0.013635,0.024984,-0.004189,-0.0015809,-0.00097259,-0.00048649,-0.0003518],"
-//                   "[-0.0028839,0.0016033,-0.020144,0.0073651,-0.015477,0.033209,-0.012273,0.066499,0.90316,0.2843,-0.31158],"
-//                   "[0.066627,0.022617,-0.1879,0.95485,0.20078,-0.06642,0.019632,-0.053459,-0.0037228,0.00099603,-0.0048996],"
-//                   "[0.0037957,0.0095703,-0.010105,0.12328,-0.24829,0.29984,-0.091781,0.90125,-0.046253,-0.0099762,0.10066],"
-//                   "[-0.18527,0.068929,-0.94921,-0.13669,-0.18733,0.044721,0.021004,-0.057618,-0.017222,-0.0084423,0.0035284],"
-//                   "[0.0040036,-0.0028093,0.039308,0.015121,-0.046283,0.25512,0.96486,-0.00082539,0.0023663,0.0045929,0.00012422]]}");
-
-
-//    centralValuesOpt += "[1,1,1,1,1,1,1,1,1,1,1],"; 
-//    centralValuesOpt += "[1,1,1,1,1,1,1,1,1,1,1],"; 
-//    centralValuesOpt += "[1,1,1,1,1,1,1,1,1,1,1],"; 
-//    centralValuesOpt += "[1,1,1,1,1,1,1,1,1,1,1],"; 
-//    centralValuesOpt += "[1,1,1,1,1,1,1,1,1,1,1],"; 
-//    centralValuesOpt += "[1,1,1,1,1,1,1,1,1,1,1],"; 
-//    centralValuesOpt += "[1,1,1,1,1,1,1,1,1,1,1],"; 
-//    centralValuesOpt += "[1,1,1,1,1,1,1,1,1,1,1],"; 
-//    centralValuesOpt += "[1,1,1,1,1,1,1,1,1,1,1],"; 
-//    centralValuesOpt += "[1,1,1,1,1,1,1,1,1,1,1],"; 
-//    centralValuesOpt += "[1,1,1,1,1,1,1,1,1,1,1]]}\""; 
-
-
-
-    std::cout << "[Hammer]: Central values\n\t" << centralValuesOpt << std::endl;
-    hammer.setOptions(centralValuesOpt);
     hammer.saveOptionCard("Opts.yml", false);
     
     std::cout << "... finishes " << std::endl;
+
+
+    //    string centralValuesOpt = "BctoJpsiBGLVar: {";
+
+    //    for(auto i=0; i<4; i++) {
+    //    centralValuesOpt += Form("avec: %f, ", avec_cent);
+      //}
+
 
      
 	
@@ -226,10 +201,7 @@ JpsiTauNtuplizer::~JpsiTauNtuplizer( void )
       }
       
       std::map<std::string, double> settings;
-      
-      for(auto pars: _FFErrNames) {
-	settings[pars] = 0;
-      }
+      for(auto n: parName) settings["delta_" + n] = 0;
       
       hammer.setFFEigenvectors("BctoJpsi", "BGLVar", settings);
       
@@ -239,69 +211,125 @@ JpsiTauNtuplizer::~JpsiTauNtuplizer( void )
       nBranches_->hammer_width->SetBinContent(1, outRate["den"]);
       nBranches_->hammer_width->SetBinContent(2, outRate["Central"]);
     
-    
-      int idx1 = 0;
-      
-      for(auto pars1: _FFErrNames) {
-	
-	for(int isUp=0; isUp < 2; isUp++) { // up, down variation    
-	  
-	  std::map<std::string, double> settings;
-	  
-	  int idx2 = 0;
-	  
-	  for(auto pars2: _FFErrNames) {
-	    
-	    if(idx1 == idx2){
-	      if(isUp==1) settings[pars2] = _FFErr[idx2];
-	      else settings[pars2] = -_FFErr[idx2];
-	    }else{
-	      settings[pars2] = 0;
-	    }
-	    idx2 += 1;
+
+
+
+      for(int i=0; i<11; i++) { //Loop over eigenVar
+	for (int j=0; j<2; j++) { //Loop over pos/neg direction
+	  map<string, double> settings;
+	  for (int k=0; k<11; k++) { //Loop over parameters
+	    settings["delta_" + parName[k]] = eigVar[i][k][j];
 	  }
-	  
-	  
+
 	  hammer.setFFEigenvectors("BctoJpsi", "BGLVar", settings);
-	  
 	  auto rate = hammer.getRate(proc, "Scheme1");
 	  
-	  std::string var_name = pars1;
-	  var_name += isUp==1? "_Up" : "_Down";
+	  std::string var_name = "eig";
+	  var_name += std::to_string(i);
+	  var_name += j==0? "_Up" : "_Down";	
+  
+	  if(verbose_) std::cout << "test0 [JpsiTauNtuplizer] " << var_name << " --> " << Form(": %1.3e", rate) << std::endl;
 	  
-	  if(verbose_) std::cout << "[JpsiTauNtuplizer] " << var_name << " --> " << Form(": %1.3e", rate) << std::endl;
+	  if(var_name==std::string("eig0_Up")) nBranches_->hammer_width->SetBinContent(3, rate);
+	  else if(var_name==std::string("eig0_Down")) nBranches_->hammer_width->SetBinContent(4, rate);
+	  else if(var_name==std::string("eig1_Up")) nBranches_->hammer_width->SetBinContent(5, rate);
+	  else if(var_name==std::string("eig1_Down")) nBranches_->hammer_width->SetBinContent(6, rate);
+	  else if(var_name==std::string("eig2_Up")) nBranches_->hammer_width->SetBinContent(7, rate);
+	  else if(var_name==std::string("eig2_Down")) nBranches_->hammer_width->SetBinContent(8, rate);
 	  
-	  if(var_name==std::string("delta_a0_Up")) nBranches_->hammer_width->SetBinContent(3, rate);
-	  else if(var_name==std::string("delta_a0_Down")) nBranches_->hammer_width->SetBinContent(4, rate);
-	  else if(var_name==std::string("delta_a1_Up")) nBranches_->hammer_width->SetBinContent(5, rate);
-	  else if(var_name==std::string("delta_a1_Down")) nBranches_->hammer_width->SetBinContent(6, rate);
-	  else if(var_name==std::string("delta_a2_Up")) nBranches_->hammer_width->SetBinContent(7, rate);
-	  else if(var_name==std::string("delta_a2_Down")) nBranches_->hammer_width->SetBinContent(8, rate);
+	  else if(var_name==std::string("eig3_Up")) nBranches_->hammer_width->SetBinContent(9, rate);
+	  else if(var_name==std::string("eig3_Down")) nBranches_->hammer_width->SetBinContent(10, rate);
+	  else if(var_name==std::string("eig4_Up")) nBranches_->hammer_width->SetBinContent(11, rate);
+	  else if(var_name==std::string("eig4_Down")) nBranches_->hammer_width->SetBinContent(12, rate);
+	  else if(var_name==std::string("eig5_Up")) nBranches_->hammer_width->SetBinContent(13, rate);
+	  else if(var_name==std::string("eig5_Down")) nBranches_->hammer_width->SetBinContent(14, rate);
 	  
-	  else if(var_name==std::string("delta_b0_Up")) nBranches_->hammer_width->SetBinContent(9, rate);
-	  else if(var_name==std::string("delta_b0_Down")) nBranches_->hammer_width->SetBinContent(10, rate);
-	  else if(var_name==std::string("delta_b1_Up")) nBranches_->hammer_width->SetBinContent(11, rate);
-	  else if(var_name==std::string("delta_b1_Down")) nBranches_->hammer_width->SetBinContent(12, rate);
-	  else if(var_name==std::string("delta_b2_Up")) nBranches_->hammer_width->SetBinContent(13, rate);
-	  else if(var_name==std::string("delta_b2_Down")) nBranches_->hammer_width->SetBinContent(14, rate);
+	  else if(var_name==std::string("eig6_Up")) nBranches_->hammer_width->SetBinContent(15, rate);
+	  else if(var_name==std::string("eig6_Down")) nBranches_->hammer_width->SetBinContent(16, rate);
+	  else if(var_name==std::string("eig7_Up")) nBranches_->hammer_width->SetBinContent(17, rate);
+	  else if(var_name==std::string("eig7_Down")) nBranches_->hammer_width->SetBinContent(18, rate);
 	  
-	  else if(var_name==std::string("delta_c1_Up")) nBranches_->hammer_width->SetBinContent(15, rate);
-	  else if(var_name==std::string("delta_c1_Down")) nBranches_->hammer_width->SetBinContent(16, rate);
-	  else if(var_name==std::string("delta_c2_Up")) nBranches_->hammer_width->SetBinContent(17, rate);
-	  else if(var_name==std::string("delta_c2_Down")) nBranches_->hammer_width->SetBinContent(18, rate);
+	  else if(var_name==std::string("eig8_Up")) nBranches_->hammer_width->SetBinContent(19, rate);
+	  else if(var_name==std::string("eig8_Down")) nBranches_->hammer_width->SetBinContent(20, rate);
+	  else if(var_name==std::string("eig9_Up")) nBranches_->hammer_width->SetBinContent(21, rate);
+	  else if(var_name==std::string("eig9_Down")) nBranches_->hammer_width->SetBinContent(22, rate);
+	  else if(var_name==std::string("eig10_Up")) nBranches_->hammer_width->SetBinContent(23, rate);
+	  else if(var_name==std::string("eig10_Down")) nBranches_->hammer_width->SetBinContent(24, rate);
 	  
-	  else if(var_name==std::string("delta_d0_Up")) nBranches_->hammer_width->SetBinContent(19, rate);
-	  else if(var_name==std::string("delta_d0_Down")) nBranches_->hammer_width->SetBinContent(20, rate);
-	  else if(var_name==std::string("delta_d1_Up")) nBranches_->hammer_width->SetBinContent(21, rate);
-	  else if(var_name==std::string("delta_d1_Down")) nBranches_->hammer_width->SetBinContent(22, rate);
-	  else if(var_name==std::string("delta_d2_Up")) nBranches_->hammer_width->SetBinContent(23, rate);
-	  else if(var_name==std::string("delta_d2_Down")) nBranches_->hammer_width->SetBinContent(24, rate);
-	  
-	  
+
+
+
+//	  string var_name = "BGL" + varName[i];
+//	  var_name += j==0? "Up" : "Down";
+//	  outRate[var_name] = rate;
+//	  if(verbose) {cout << var_name << Form(": %1.3e", rate) << endl;}
 	}
-	idx1 += 1;
-	
       }
+
+
+    
+//      int idx1 = 0;
+//      
+//      for(auto pars1: _FFErrNames) {
+//	
+//	for(int isUp=0; isUp < 2; isUp++) { // up, down variation    
+//	  
+//	  std::map<std::string, double> settings;
+//	  
+//	  int idx2 = 0;
+//	  
+//	  for(auto pars2: _FFErrNames) {
+//	    
+//	    if(idx1 == idx2){
+//	      if(isUp==1) settings[pars2] = _FFErr[idx2];
+//	      else settings[pars2] = -_FFErr[idx2];
+//	    }else{
+//	      settings[pars2] = 0;
+//	    }
+//	    idx2 += 1;
+//	  }
+//	  
+//	  
+//	  hammer.setFFEigenvectors("BctoJpsi", "BGLVar", settings);
+//	  
+//	  auto rate = hammer.getRate(proc, "Scheme1");
+//	  
+//	  std::string var_name = pars1;
+//	  var_name += isUp==1? "_Up" : "_Down";
+//	  
+//	  if(verbose_) std::cout << "[JpsiTauNtuplizer] " << var_name << " --> " << Form(": %1.3e", rate) << std::endl;
+//	  
+//	  if(var_name==std::string("delta_a0_Up")) nBranches_->hammer_width->SetBinContent(3, rate);
+//	  else if(var_name==std::string("delta_a0_Down")) nBranches_->hammer_width->SetBinContent(4, rate);
+//	  else if(var_name==std::string("delta_a1_Up")) nBranches_->hammer_width->SetBinContent(5, rate);
+//	  else if(var_name==std::string("delta_a1_Down")) nBranches_->hammer_width->SetBinContent(6, rate);
+//	  else if(var_name==std::string("delta_a2_Up")) nBranches_->hammer_width->SetBinContent(7, rate);
+//	  else if(var_name==std::string("delta_a2_Down")) nBranches_->hammer_width->SetBinContent(8, rate);
+//	  
+//	  else if(var_name==std::string("delta_b0_Up")) nBranches_->hammer_width->SetBinContent(9, rate);
+//	  else if(var_name==std::string("delta_b0_Down")) nBranches_->hammer_width->SetBinContent(10, rate);
+//	  else if(var_name==std::string("delta_b1_Up")) nBranches_->hammer_width->SetBinContent(11, rate);
+//	  else if(var_name==std::string("delta_b1_Down")) nBranches_->hammer_width->SetBinContent(12, rate);
+//	  else if(var_name==std::string("delta_b2_Up")) nBranches_->hammer_width->SetBinContent(13, rate);
+//	  else if(var_name==std::string("delta_b2_Down")) nBranches_->hammer_width->SetBinContent(14, rate);
+//	  
+//	  else if(var_name==std::string("delta_c1_Up")) nBranches_->hammer_width->SetBinContent(15, rate);
+//	  else if(var_name==std::string("delta_c1_Down")) nBranches_->hammer_width->SetBinContent(16, rate);
+//	  else if(var_name==std::string("delta_c2_Up")) nBranches_->hammer_width->SetBinContent(17, rate);
+//	  else if(var_name==std::string("delta_c2_Down")) nBranches_->hammer_width->SetBinContent(18, rate);
+//	  
+//	  else if(var_name==std::string("delta_d0_Up")) nBranches_->hammer_width->SetBinContent(19, rate);
+//	  else if(var_name==std::string("delta_d0_Down")) nBranches_->hammer_width->SetBinContent(20, rate);
+//	  else if(var_name==std::string("delta_d1_Up")) nBranches_->hammer_width->SetBinContent(21, rate);
+//	  else if(var_name==std::string("delta_d1_Down")) nBranches_->hammer_width->SetBinContent(22, rate);
+//	  else if(var_name==std::string("delta_d2_Up")) nBranches_->hammer_width->SetBinContent(23, rate);
+//	  else if(var_name==std::string("delta_d2_Down")) nBranches_->hammer_width->SetBinContent(24, rate);
+//	  
+//	  
+//	}
+//	idx1 += 1;
+//	
+//      }
     }
   }
 }
@@ -1771,10 +1799,11 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
     hammer.processEvent();
 
     std::map<std::string, double> settings;
-
-    for(auto pars: _FFErrNames) {
-      settings[pars] = 0;
-    }
+    for(auto n: parName) settings["delta_" + n] = 0;
+    
+    //    for(auto pars: _FFErrNames) {
+    //      settings[pars] = 0;
+    //    }
 
     hammer.setFFEigenvectors("BctoJpsi", "BGLVar", settings);
 	
@@ -1798,41 +1827,75 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
     std::cout << "base weight = " << weight << std::endl;
     
 
+    ///////////////////////////////////////////////////////////////////////
+    // MC 
+    ///////////////////////////////////////////////////////////////////////
+
     Float_t hammer_up = 0;
     Float_t hammer_down = 999;
-	
-    int ntrial = 50;
+    int ntrial = 500;
     int npass = 0;
-    // throw random numbers to get +/-1 sigma uncertainty ... 
 
-    for(int ii=0; ii<ntrial;ii++){
+    for(int imc=0; imc<ntrial;imc++){
 
-      Float_t chi2 = 0;
-      std::map<std::string, double> settings;
+      vector<double> deltas; 
       int idx1 = 0;
+      Float_t chi2 = 0;
       
       for(auto pars1: _FFErrNames) {
 	Float_t mean = ran->Gaus(_FFmean[idx1], _FFErr[idx1]);
 	
+	std::cout << "random: " << _FFmean[idx1] << " " << _FFErr[idx1] << " " << mean << std::endl;
 	Float_t _chi2 = (mean - _FFmean[idx1])*Inv[idx1]*(mean - _FFmean[idx1]);
 	chi2 += _chi2;
+	//	std::cout << "test2-2: " << pars1 << std::endl;
+	deltas.push_back(mean - _FFmean[idx1]);
 
-	settings[pars1] = (mean - _FFmean[idx1]);
-
-	std::cout << "\t " << idx1 << "th variation, (mean, err, random) = " << _FFmean[idx1] << " " << _FFErr[idx1] << " " << mean << " " << _chi2 << " " << settings[pars1] << std::endl;
-
+	std::cout << "\t " << idx1 << "th variation, delta = " << deltas[idx1] << std::endl;
+	
 	idx1+=1; 
       }
-      
-      std::cout << "\t chi2 = " << chi2 << std::endl;
+
+      //      std::cout << "deltas size = " << deltas.size() << std::endl;
+      // calculate chi2
+
+      //      int idx1_chi2 = 0;
+      //      int idx2_chi2 = 0;
+
+      //      std::cout << "\t chi2 = " << chi2 << std::endl;
       
       
       if(chi2 < 12.6428){
+      //      if(chi2 < 3.53){
 	std::cout << "\t\t --> This variation corresponds to within 1 sigma band ..." << std::endl;
-	
+//	
+
+
+	map<string, double> settings;
+	int idx_err = 0;
+
+	for(auto pars1: _FFErrNames) {
+
+	  Float_t newerr = 0;
+	  
+	  for(int j=0; j<11; j++) {
+	    newerr += deltas[j]*eigVec[idx_err][j];
+	    //	    std::cout << "j= " << j << " " << deltas[j] << " " << eigVec[idx_err][j] << std::endl;
+	  //	    newerr += deltas[idx_err]*eigVec[idx_err][j];
+	  //	  }
+	  }
+
+
+	  settings[pars1] = newerr;
+	  std::cout << "settings of " << pars1 << ": " << newerr << std::endl;
+	  idx_err += 1;
+	}
+
+
 	hammer.setFFEigenvectors("BctoJpsi", "BGLVar", settings);
 	auto weights = hammer.getWeights("Scheme1");
 	Float_t weight_sys = -1;
+	
 	
 	if(!weights.empty()){
 	  for(auto elem: weights) {
@@ -1843,20 +1906,178 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 	    }
 	  }
 	}
+
+	auto denrate = hammer.getDenominatorRate("BcJpsiTau+Nu");
+	auto rate = hammer.getRate("BcJpsiTau+Nu", "Scheme1");
 	
-      //	if(isUp==0) hammer_up += TMath::Power(weight_sys, 2);
-      //	else if(isUp==1) hammer_down += TMath::Power(weight_sys, 2);
+	std::cout << "\t\t --> new weight: " << weight_sys*rate/denrate << std::endl;
 
-      	std::cout << "\t\t --> new weight: " << weight_sys << std::endl;
-
-	if(hammer_up < weight_sys) hammer_up = weight_sys;
-	if(hammer_down > weight_sys) hammer_down = weight_sys;
+	if(hammer_up < weight_sys) hammer_up = weight_sys*rate;
+	if(hammer_down > weight_sys) hammer_down = weight_sys*rate;
 	npass += 1;
       }
     }
 
+    //    std::cout << "test2-3" << std::endl;
     std::cout << (Float_t) npass/ntrial << " has been accepted ... (central, max, min) = " << weight << " " << hammer_up << " " << hammer_down <<  std::endl;
+    //    std::cout << (Float_t) npass/ntrial << " has been accepted" << std::endl;
 
+
+
+
+
+
+
+
+
+
+
+////    Float_t hammer_up = 0;
+////    Float_t hammer_down = 999;
+////    int ntrial = 10;
+////    int npass = 0;
+////
+////    for(int imc=0; imc<ntrial;imc++){
+////
+////      vector<double> deltas; 
+////      map<string, double> settings;
+////      int idx1 = 0;
+////      
+////      for(auto pars1: parName) {
+////	Float_t mean = ran->Gaus(centralLebed[idx1], sigmasLebed[idx1]);
+////	
+////	//	std::cout << "test2-1: " << pars1 << std::endl;
+////	//	Float_t _chi2 = (mean - centralLebed[idx1])*Inv[idx1]*(mean - _FFmean[idx1]);
+////	//	chi2 += _chi2;
+////	//	std::cout << "test2-2: " << pars1 << std::endl;
+////	settings[pars1] = (mean - centralLebed[idx1]);
+////	deltas.push_back(mean - centralLebed[idx1]);
+////
+////	std::cout << "\t " << idx1 << "th variation, (mean, err, random) = " << mean << " " << centralLebed[idx1] << " " << sigmasLebed[idx1] << " " << deltas[idx1] << std::endl;
+////	
+////	idx1+=1; 
+////      }
+////      
+////      //      std::cout << "deltas size = " << deltas.size() << std::endl;
+////      // calculate chi2
+////
+////      Float_t chi2 = 0;
+////      //      int idx1_chi2 = 0;
+////      //      int idx2_chi2 = 0;
+////
+////      for(int i=0; i<11; i++) { //column ...
+////	
+////	Float_t row1 = 0;
+////	for(int j=0; j<11; j++) { //row ...
+////	  std::cout << i << " " << j << " " << deltas[j] << " " << inverseCovarianceMatrix[j][i] << " " << deltas[i]  << " " <<  deltas[j]*inverseCovarianceMatrix[j][i]*deltas[i] << std::endl;
+////	  row1 += deltas[j]*inverseCovarianceMatrix[j][i];
+////	}
+////
+////	chi2 += row1*deltas[i];
+////      }
+////      
+////      std::cout << "\t chi2 = " << chi2 << std::endl;
+////      
+////      
+////      if(chi2 < 12.6428){
+////      //      if(chi2 < 3.53){
+//////	std::cout << "\t\t --> This variation corresponds to within 1 sigma band ..." << std::endl;
+//////	
+////	hammer.setFFEigenvectors("BctoJpsi", "BGLVar", settings);
+////	auto weights = hammer.getWeights("Scheme1");
+////	Float_t weight_sys = -1;
+////	
+////	if(!weights.empty()){
+////	  for(auto elem: weights) {
+////	    if(isnan(elem.second)) {
+////	      std::cout << "[ERROR]: BGL nan weight: " << elem.second << std::endl;
+////	    }else{
+////	      weight_sys = elem.second;
+////	    }
+////	  }
+////	}
+////	
+////      //	if(isUp==0) hammer_up += TMath::Power(weight_sys, 2);
+////      //	else if(isUp==1) hammer_down += TMath::Power(weight_sys, 2);
+////
+////      	std::cout << "\t\t --> new weight: " << weight_sys << std::endl;
+////
+////	if(hammer_up < weight_sys) hammer_up = weight_sys;
+////	if(hammer_down > weight_sys) hammer_down = weight_sys;
+////	npass += 1;
+////      }
+////    }
+////
+////    //    std::cout << "test2-3" << std::endl;
+////    std::cout << (Float_t) npass/ntrial << " has been accepted ... (central, max, min) = " << weight << " " << hammer_up << " " << hammer_down <<  std::endl;
+    //    std::cout << (Float_t) npass/ntrial << " has been accepted" << std::endl;
+
+
+
+    ///////////////////////////////////////////////////////////////////////
+    // MC 
+    ///////////////////////////////////////////////////////////////////////
+
+
+
+    for(int i=0; i<11; i++) { //Loop over eigenVar
+      for (int j=0; j<2; j++) { //Loop over pos/neg direction
+
+        map<string, double> settings;
+
+        for (int k=0; k<11; k++) { //Loop over parameters
+          settings["delta_" + parName[k]] = eigVar[i][k][j];
+        }
+
+        hammer.setFFEigenvectors("BctoJpsi", "BGLVar", settings);
+        auto weights = hammer.getWeights("Scheme1");
+        string var_name = "eig";
+	var_name += std::to_string(i);
+        var_name += j==0? "_Up" : "_Down";
+
+
+
+	Float_t weight_sys = -1;
+
+	if(!weights.empty()){
+	  for(auto elem: weights) {
+	    if(isnan(elem.second)) {
+	      std::cout << "[ERROR]: BGL nan weight: " << elem.second << std::endl;
+	    }else{
+	      weight_sys = elem.second;
+	    }
+	  }
+	}
+
+	if(var_name==std::string("eig0_Up")) nBranches_->JpsiTau_hammer_ebe_a0_up.push_back(weight_sys);
+	else if(var_name==std::string("eig0_Down")) nBranches_->JpsiTau_hammer_ebe_a0_down.push_back(weight_sys);
+	else if(var_name==std::string("eig1_Up")) nBranches_->JpsiTau_hammer_ebe_a1_up.push_back(weight_sys);
+	else if(var_name==std::string("eig1_Down")) nBranches_->JpsiTau_hammer_ebe_a1_down.push_back(weight_sys);
+	else if(var_name==std::string("eig2_Up")) nBranches_->JpsiTau_hammer_ebe_a2_up.push_back(weight_sys);
+	else if(var_name==std::string("eig2_Down")) nBranches_->JpsiTau_hammer_ebe_a2_down.push_back(weight_sys);
+
+	else if(var_name==std::string("eig3_Up")) nBranches_->JpsiTau_hammer_ebe_b0_up.push_back(weight_sys);
+	else if(var_name==std::string("eig3_Down")) nBranches_->JpsiTau_hammer_ebe_b0_down.push_back(weight_sys);
+	else if(var_name==std::string("eig4_Up")) nBranches_->JpsiTau_hammer_ebe_b1_up.push_back(weight_sys);
+	else if(var_name==std::string("eig4_Down")) nBranches_->JpsiTau_hammer_ebe_b1_down.push_back(weight_sys);
+	else if(var_name==std::string("eig5_Up")) nBranches_->JpsiTau_hammer_ebe_b2_up.push_back(weight_sys);
+	else if(var_name==std::string("eig5_Down")) nBranches_->JpsiTau_hammer_ebe_b2_down.push_back(weight_sys);
+
+	else if(var_name==std::string("eig6_Up")) nBranches_->JpsiTau_hammer_ebe_c1_up.push_back(weight_sys);
+	else if(var_name==std::string("eig6_Down")) nBranches_->JpsiTau_hammer_ebe_c1_down.push_back(weight_sys);
+	else if(var_name==std::string("eig7_Up")) nBranches_->JpsiTau_hammer_ebe_c2_up.push_back(weight_sys);
+	else if(var_name==std::string("eig7_Down")) nBranches_->JpsiTau_hammer_ebe_c2_down.push_back(weight_sys);
+
+	else if(var_name==std::string("eig8_Up")) nBranches_->JpsiTau_hammer_ebe_d0_up.push_back(weight_sys);
+	else if(var_name==std::string("eig8_Down")) nBranches_->JpsiTau_hammer_ebe_d0_down.push_back(weight_sys);
+	else if(var_name==std::string("eig9_Up")) nBranches_->JpsiTau_hammer_ebe_d1_up.push_back(weight_sys);
+	else if(var_name==std::string("eig9_Down")) nBranches_->JpsiTau_hammer_ebe_d1_down.push_back(weight_sys);
+	else if(var_name==std::string("eig10_Up")) nBranches_->JpsiTau_hammer_ebe_d2_up.push_back(weight_sys);
+	else if(var_name==std::string("eig10_Down")) nBranches_->JpsiTau_hammer_ebe_d2_down.push_back(weight_sys);
+	
+	std::cout << "test1 \t " << var_name << " " << weight_sys << std::endl;
+      }
+    }
 
 
 
@@ -1913,8 +2134,8 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 
 
 //    std::cout << "Up, down variation = " << TMath::Sqrt(hammer_up) << " " << TMath::Sqrt(hammer_down) << std::endl;
-    nBranches_->JpsiTau_hammer_ebe_up.push_back(hammer_up);
-    nBranches_->JpsiTau_hammer_ebe_down.push_back(hammer_down);
+//    nBranches_->JpsiTau_hammer_ebe_up.push_back(hammer_up);
+//    nBranches_->JpsiTau_hammer_ebe_down.push_back(hammer_down);
 
   }
 

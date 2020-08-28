@@ -370,6 +370,8 @@ public:
   std::vector<float> JpsiMu_B_mass_gen;
 
   std::vector<float> JpsiMu_hammer_ebe;
+  //  std::vector<float> JpsiMu_hammer_ebe_up;
+  //  std::vector<float> JpsiMu_hammer_ebe_down;
 
   std::vector<float> JpsiMu_hammer_ebe_a0_up;
   std::vector<float> JpsiMu_hammer_ebe_a0_down;
@@ -610,6 +612,8 @@ public:
 //  std::vector<float> JpsiTau_ed_genpt;
     
   std::vector<float> JpsiTau_hammer_ebe;
+  //  std::vector<float> JpsiTau_hammer_ebe_up;
+  //  std::vector<float> JpsiTau_hammer_ebe_down;
 
   std::vector<float> JpsiTau_hammer_ebe_a0_up;
   std::vector<float> JpsiTau_hammer_ebe_a0_down;
