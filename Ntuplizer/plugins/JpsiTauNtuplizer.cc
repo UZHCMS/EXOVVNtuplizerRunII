@@ -1843,79 +1843,71 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
       Float_t chi2 = 0;
       
       for(auto pars1: _FFErrNames) {
+
+	if(idx1==10) break;
 	Float_t mean = ran->Gaus(_FFmean[idx1], _FFErr[idx1]);
 	
-	std::cout << "random: " << _FFmean[idx1] << " " << _FFErr[idx1] << " " << mean << std::endl;
 	Float_t _chi2 = (mean - _FFmean[idx1])*Inv[idx1]*(mean - _FFmean[idx1]);
 	chi2 += _chi2;
-	//	std::cout << "test2-2: " << pars1 << std::endl;
+
 	deltas.push_back(mean - _FFmean[idx1]);
 
-	std::cout << "\t " << idx1 << "th variation, delta = " << deltas[idx1] << std::endl;
+	std::cout <<  pars1 << ": produced random number = " << mean << " (mean = " << _FFmean[idx1] << ", sigma = " << _FFErr[idx1] << "), delta = " << mean - _FFmean[idx1] << std::endl;
 	
 	idx1+=1; 
       }
 
-      //      std::cout << "deltas size = " << deltas.size() << std::endl;
-      // calculate chi2
-
-      //      int idx1_chi2 = 0;
-      //      int idx2_chi2 = 0;
-
-      //      std::cout << "\t chi2 = " << chi2 << std::endl;
+      // accept only 1 sigma with 10 d.o.f 
+      if(chi2 > 11.536) continue;
       
+      std::cout << "---> satisfies chi2 = " << chi2 << std::endl;
+
+      map<string, double> settings;
+      int idx_err = 0;
       
-      if(chi2 < 12.6428){
-      //      if(chi2 < 3.53){
-	std::cout << "\t\t --> This variation corresponds to within 1 sigma band ..." << std::endl;
-//	
+      for(auto pars1: _FFErrNames) {
+	
+	Float_t newerr = 0;
+	
+	for(int j=0; j<10; j++) {
+	  newerr += deltas[j]*eigVec[idx_err][j];
+	  //	  std::cout << "j= " << j << " " << deltas[j] << " " << eigVec[idx_err][j] << std::endl;
+	}
+	
 
-
-	map<string, double> settings;
-	int idx_err = 0;
-
-	for(auto pars1: _FFErrNames) {
-
-	  Float_t newerr = 0;
-	  
-	  for(int j=0; j<11; j++) {
-	    newerr += deltas[j]*eigVec[idx_err][j];
-	    //	    std::cout << "j= " << j << " " << deltas[j] << " " << eigVec[idx_err][j] << std::endl;
-	  //	    newerr += deltas[idx_err]*eigVec[idx_err][j];
-	  //	  }
-	  }
-
-
+	if(idx_err==10){
+	  settings[pars1] = 0;
+	}else{
 	  settings[pars1] = newerr;
-	  std::cout << "settings of " << pars1 << ": " << newerr << std::endl;
-	  idx_err += 1;
 	}
+	std::cout << "settings of " << pars1 << ": " << settings[pars1] << std::endl;
+	idx_err += 1;
+      }
+      
 
-
-	hammer.setFFEigenvectors("BctoJpsi", "BGLVar", settings);
-	auto weights = hammer.getWeights("Scheme1");
-	Float_t weight_sys = -1;
-	
-	
-	if(!weights.empty()){
-	  for(auto elem: weights) {
-	    if(isnan(elem.second)) {
-	      std::cout << "[ERROR]: BGL nan weight: " << elem.second << std::endl;
-	    }else{
-	      weight_sys = elem.second;
-	    }
+      hammer.setFFEigenvectors("BctoJpsi", "BGLVar", settings);
+      auto weights = hammer.getWeights("Scheme1");
+      Float_t weight_sys = -1;
+      
+      
+      if(!weights.empty()){
+	for(auto elem: weights) {
+	  if(isnan(elem.second)) {
+	    std::cout << "[ERROR]: BGL nan weight: " << elem.second << std::endl;
+	  }else{
+	    weight_sys = elem.second;
 	  }
 	}
-
-	auto denrate = hammer.getDenominatorRate("BcJpsiTau+Nu");
-	auto rate = hammer.getRate("BcJpsiTau+Nu", "Scheme1");
-	
-	std::cout << "\t\t --> new weight: " << weight_sys*rate/denrate << std::endl;
-
-	if(hammer_up < weight_sys) hammer_up = weight_sys*rate;
-	if(hammer_down > weight_sys) hammer_down = weight_sys*rate;
-	npass += 1;
       }
+      
+      auto denrate = hammer.getDenominatorRate("BcJpsiTau+Nu");
+      auto rate = hammer.getRate("BcJpsiTau+Nu", "Scheme1");
+      
+      std::cout << "\t\t --> new weight: " << weight_sys << ", width ratio = " << rate/denrate << ", total = " << weight_sys*rate/denrate << std::endl;
+      
+      if(hammer_up < weight_sys) hammer_up = weight_sys*rate/denrate;
+      if(hammer_down > weight_sys) hammer_down = weight_sys*rate/denrate;
+      npass += 1;
     }
 
     //    std::cout << "test2-3" << std::endl;
