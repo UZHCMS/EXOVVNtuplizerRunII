@@ -1165,7 +1165,7 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 	if(!tau_vertex->vertexIsValid()) continue; 
 
 
-	if(TMath::Prob(tau_vertex->chiSquared(), tau_vertex->degreesOfFreedom()) <= c_vprob) continue;
+	//	if(TMath::Prob(tau_vertex->chiSquared(), tau_vertex->degreesOfFreedom()) <= c_vprob) continue;
 
 	  
 	std::vector< RefCountedKinematicParticle > tau_children = tauTree->finalStateParticles();
@@ -1180,10 +1180,10 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 
 	//	std::cout << iii << " " << jjj << " " << kkk << std::endl;
 
-	if(Taucand.fls3d < c_fsig){
-	  //	  std::cout <<"remove" << std::endl;
-	  continue;
-	}
+//	if(Taucand.fls3d < c_fsig){
+//	  //	  std::cout <<"remove" << std::endl;
+//	  continue;
+//	}
 
 	std::vector<RefCountedKinematicParticle> allParticles;
 
@@ -1338,6 +1338,11 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 	  dnn3 = mydnn[kkk];
 	}
 
+	Float_t sumofdnn_others = 0;
+	for(int lll = 0; lll < numOfch; lll ++){
+	  if(lll==iii || lll==jjj || lll==kkk) continue;
+	  sumofdnn_others += mydnn[lll];
+	}
 
 	taucand _cand_ = {
 	  iii,
@@ -1361,6 +1366,7 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 	  (Int_t) pid,
 	  (Float_t) matched_gentaupt, 
 	  (Float_t) sumofdnn,
+	  (Float_t) sumofdnn_others,
 	  (Float_t) dnn1,
 	  (Float_t) dnn2,
 	  (Float_t) dnn3,
@@ -1430,6 +1436,7 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
     nBranches_->JpsiTau_tau_matched_ppdgId.push_back(cands[ic].cand_tau_matched_ppdgId);
     nBranches_->JpsiTau_tau_matched_gentaupt.push_back(cands[ic].cand_tau_matched_gentaupt);
     nBranches_->JpsiTau_tau_sumofdnn.push_back(cands[ic].cand_tau_sumofdnn);
+    nBranches_->JpsiTau_tau_sumofdnn_others.push_back(cands[ic].cand_tau_sumofdnn_others);
     nBranches_->JpsiTau_tau_pfidx1.push_back(cands[ic].cand_tau_id1);
     nBranches_->JpsiTau_tau_pfidx2.push_back(cands[ic].cand_tau_id2);
     nBranches_->JpsiTau_tau_pfidx3.push_back(cands[ic].cand_tau_id3);
@@ -1808,6 +1815,7 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
     hammer.setFFEigenvectors("BctoJpsi", "BGLVar", settings);
 	
     auto weights = hammer.getWeights("Scheme1");
+    //    auto rate_orig = hammer.getRate("BcJpsiTau+Nu", "Scheme1");
 
     Float_t weight = -1;
 
@@ -1851,7 +1859,7 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 	chi2 += _chi2;
 
 	deltas.push_back(mean - _FFmean[idx1]);
-
+	
 	std::cout <<  pars1 << ": produced random number = " << mean << " (mean = " << _FFmean[idx1] << ", sigma = " << _FFErr[idx1] << "), delta = " << mean - _FFmean[idx1] << std::endl;
 	
 	idx1+=1; 
@@ -1870,7 +1878,9 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 	Float_t newerr = 0;
 	
 	for(int j=0; j<10; j++) {
-	  newerr += deltas[j]*eigVec[idx_err][j];
+	  newerr += deltas[j]*eigVecInv[j][idx_err];
+	  //	  newerr += deltas[j]*eigVec[idx_err][j];
+	  //newerr += deltas[j]*eigVec[j][idx_err];
 	  //	  std::cout << "j= " << j << " " << deltas[j] << " " << eigVec[idx_err][j] << std::endl;
 	}
 	
@@ -1903,10 +1913,14 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
       auto denrate = hammer.getDenominatorRate("BcJpsiTau+Nu");
       auto rate = hammer.getRate("BcJpsiTau+Nu", "Scheme1");
       
-      std::cout << "\t\t --> new weight: " << weight_sys << ", width ratio = " << rate/denrate << ", total = " << weight_sys*rate/denrate << std::endl;
+      //      Float_t newweight = weight_sys*(rate/denrate);
+      Float_t newweight = weight_sys;
+      std::cout << "\t\t --> new weight: " << newweight << std::endl;
       
-      if(hammer_up < weight_sys) hammer_up = weight_sys*rate/denrate;
-      if(hammer_down > weight_sys) hammer_down = weight_sys*rate/denrate;
+      //      if(hammer_up < weight_sys) hammer_up = weight_sys*rate/denrate;
+      //      if(hammer_down > weight_sys) hammer_down = weight_sys*rate/denrate;
+      if(hammer_up < newweight) hammer_up = newweight;
+      if(hammer_down > newweight) hammer_down = newweight;
       npass += 1;
     }
 
@@ -1914,7 +1928,8 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
     std::cout << (Float_t) npass/ntrial << " has been accepted ... (central, max, min) = " << weight << " " << hammer_up << " " << hammer_down <<  std::endl;
     //    std::cout << (Float_t) npass/ntrial << " has been accepted" << std::endl;
 
-
+    nBranches_->JpsiTau_hammer_ebe_up.push_back(hammer_up);
+    nBranches_->JpsiTau_hammer_ebe_down.push_back(hammer_down);
 
 
 
@@ -2005,12 +2020,9 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
     //    std::cout << (Float_t) npass/ntrial << " has been accepted" << std::endl;
 
 
-
-    ///////////////////////////////////////////////////////////////////////
-    // MC 
-    ///////////////////////////////////////////////////////////////////////
-
-
+    //////////////////////////
+    // ordinary method 
+    //////////////////////////
 
     for(int i=0; i<11; i++) { //Loop over eigenVar
       for (int j=0; j<2; j++) { //Loop over pos/neg direction
@@ -2067,7 +2079,7 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 	else if(var_name==std::string("eig10_Up")) nBranches_->JpsiTau_hammer_ebe_d2_up.push_back(weight_sys);
 	else if(var_name==std::string("eig10_Down")) nBranches_->JpsiTau_hammer_ebe_d2_down.push_back(weight_sys);
 	
-	std::cout << "test1 \t " << var_name << " " << weight_sys << std::endl;
+	//	std::cout << "test1 \t " << var_name << " " << weight_sys << std::endl;
       }
     }
 
