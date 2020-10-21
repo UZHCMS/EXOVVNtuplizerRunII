@@ -76,6 +76,7 @@ JpsiTauNtuplizer::JpsiTauNtuplizer( edm::EDGetTokenT<pat::MuonCollection>    muo
   if(runOnMC_ && useHammer_){
 
     ran = new TRandom3();
+    ran->SetSeed(1);
 
     if(verbose_) std::cout << "[JpsiTauNtuplizer] Setting up Hammer" << std::endl;
 
@@ -135,7 +136,7 @@ JpsiTauNtuplizer::JpsiTauNtuplizer( edm::EDGetTokenT<pat::MuonCollection>    muo
 
     hammer.saveOptionCard("Opts.yml", false);
     
-    std::cout << "... finishes " << std::endl;
+    //    std::cout << "... finishes " << std::endl;
 
 
     //    string centralValuesOpt = "BctoJpsiBGLVar: {";
@@ -163,6 +164,69 @@ JpsiTauNtuplizer::JpsiTauNtuplizer( edm::EDGetTokenT<pat::MuonCollection>    muo
 //        }
 //        centralValuesOpt += "}\"";
     
+
+
+    // Generate FF toys ... 
+
+    for(int imc=0; imc < numberofToys;imc++){
+
+      vector<double> deltas; 
+      int idx1 = 0;
+      Float_t chi2 = 0;
+      
+      for(auto pars1: _FFErrNames) {
+
+	if(idx1==10) break;
+	Float_t mean = ran->Gaus(_FFmean[idx1], _FFErr[idx1]);
+	
+	Float_t _chi2 = (mean - _FFmean[idx1])*Inv[idx1]*(mean - _FFmean[idx1]);
+	chi2 += _chi2;
+
+	deltas.push_back(mean - _FFmean[idx1]);
+	
+	//	if(imc<=1) std::cout << imc << " "  << pars1 << " " << mean << std::endl;
+
+	idx1+=1; 
+      }
+
+      //      if(chi2 > 11.536) continue;
+      
+      map<string, double> settings;
+      //      std::vector<float> settings_ff;
+
+      int idx_err = 0;
+      
+      for(auto pars1: _FFErrNames) {
+	
+	Float_t newerr = 0;
+	
+	for(int j=0; j<10; j++) {
+	  newerr += deltas[j]*eigVec[idx_err][j];
+	}
+	
+
+	if(idx_err==10){
+	  settings[pars1] = 0;
+	}else{
+	  settings[pars1] = newerr;
+	}
+
+	//	settings_ff.push_back(settings[pars1]);
+
+	idx_err += 1;
+      }
+
+
+      //      if(imc <= 1) std::cout << imc << " settings of " << "delta_a0" << ": " << settings["delta_a0"] << std::endl;
+
+      FFdict.push_back(settings);
+      
+      //      nBranches_->JpsiTau_hammer_ff.push_back(settings_ff);
+
+    }
+
+    
+    if(verbose_) std::cout << "Saved " << FFdict.size() << " FF variations" << std::endl;
 
 
 
@@ -407,8 +471,10 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
   q2_gen = pB_gen - pJpsi_gen;
 
   //std::cout << "test:" << q2_gen.Pt() << " " << q2_gen.M2() << " " << pB_gen.Pt() << " " << pJpsi_gen.Pt() << std::endl;
-  nBranches_->q2_nocut->Fill(q2_gen.M2());
   
+  if(runOnMC_){ 
+    nBranches_->q2_nocut->Fill(q2_gen.M2());
+  }
 
   
   /********************************************************************
@@ -1165,7 +1231,7 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 	if(!tau_vertex->vertexIsValid()) continue; 
 
 
-	//	if(TMath::Prob(tau_vertex->chiSquared(), tau_vertex->degreesOfFreedom()) <= c_vprob) continue;
+	if(TMath::Prob(tau_vertex->chiSquared(), tau_vertex->degreesOfFreedom()) <= c_vprob) continue;
 
 	  
 	std::vector< RefCountedKinematicParticle > tau_children = tauTree->finalStateParticles();
@@ -1180,10 +1246,7 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 
 	//	std::cout << iii << " " << jjj << " " << kkk << std::endl;
 
-//	if(Taucand.fls3d < c_fsig){
-//	  //	  std::cout <<"remove" << std::endl;
-//	  continue;
-//	}
+	if(Taucand.fls3d < c_fsig) continue;
 
 	std::vector<RefCountedKinematicParticle> allParticles;
 
@@ -1831,75 +1894,28 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 
     nBranches_->JpsiTau_hammer_ebe.push_back(weight);
 
-    std::cout << "-----------------------" << std::endl;
-    std::cout << "base weight = " << weight << std::endl;
+    //    std::cout << "-----------------------" << std::endl;
+    //    std::cout << "base weight = " << weight << std::endl;
     
 
     ///////////////////////////////////////////////////////////////////////
     // MC 
     ///////////////////////////////////////////////////////////////////////
 
-    Float_t hammer_up = 0;
-    Float_t hammer_down = 999;
-    int ntrial = 500;
-    int npass = 0;
+    //    Float_t hammer_up = 0;
+    //    Float_t hammer_down = 999;
+    //    int ntrial = 2000;
+    //    int ntrial = 500;
+    //    int npass = 0;
 
-    for(int imc=0; imc<ntrial;imc++){
+    std::vector<float> hweights; 
 
-      vector<double> deltas; 
-      int idx1 = 0;
-      Float_t chi2 = 0;
-      
-      for(auto pars1: _FFErrNames) {
+    for(int imc=0; imc < numberofToys; imc++){
 
-	if(idx1==10) break;
-	Float_t mean = ran->Gaus(_FFmean[idx1], _FFErr[idx1]);
-	
-	Float_t _chi2 = (mean - _FFmean[idx1])*Inv[idx1]*(mean - _FFmean[idx1]);
-	chi2 += _chi2;
-
-	deltas.push_back(mean - _FFmean[idx1]);
-	
-	std::cout <<  pars1 << ": produced random number = " << mean << " (mean = " << _FFmean[idx1] << ", sigma = " << _FFErr[idx1] << "), delta = " << mean - _FFmean[idx1] << std::endl;
-	
-	idx1+=1; 
-      }
-
-      // accept only 1 sigma with 10 d.o.f 
-      if(chi2 > 11.536) continue;
-      
-      std::cout << "---> satisfies chi2 = " << chi2 << std::endl;
-
-      map<string, double> settings;
-      int idx_err = 0;
-      
-      for(auto pars1: _FFErrNames) {
-	
-	Float_t newerr = 0;
-	
-	for(int j=0; j<10; j++) {
-	  newerr += deltas[j]*eigVecInv[j][idx_err];
-	  //	  newerr += deltas[j]*eigVec[idx_err][j];
-	  //newerr += deltas[j]*eigVec[j][idx_err];
-	  //	  std::cout << "j= " << j << " " << deltas[j] << " " << eigVec[idx_err][j] << std::endl;
-	}
-	
-
-	if(idx_err==10){
-	  settings[pars1] = 0;
-	}else{
-	  settings[pars1] = newerr;
-	}
-	std::cout << "settings of " << pars1 << ": " << settings[pars1] << std::endl;
-	idx_err += 1;
-      }
-      
-
-      hammer.setFFEigenvectors("BctoJpsi", "BGLVar", settings);
+      hammer.setFFEigenvectors("BctoJpsi", "BGLVar", FFdict[imc]);
       auto weights = hammer.getWeights("Scheme1");
       Float_t weight_sys = -1;
-      
-      
+
       if(!weights.empty()){
 	for(auto elem: weights) {
 	  if(isnan(elem.second)) {
@@ -1910,114 +1926,23 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 	}
       }
       
-      auto denrate = hammer.getDenominatorRate("BcJpsiTau+Nu");
-      auto rate = hammer.getRate("BcJpsiTau+Nu", "Scheme1");
-      
-      //      Float_t newweight = weight_sys*(rate/denrate);
-      Float_t newweight = weight_sys;
-      std::cout << "\t\t --> new weight: " << newweight << std::endl;
-      
-      //      if(hammer_up < weight_sys) hammer_up = weight_sys*rate/denrate;
-      //      if(hammer_down > weight_sys) hammer_down = weight_sys*rate/denrate;
-      if(hammer_up < newweight) hammer_up = newweight;
-      if(hammer_down > newweight) hammer_down = newweight;
-      npass += 1;
+
+      if(flag_fill==false){
+	std::vector<float> settings_ff;
+	for(auto pars: _FFErrNames) {
+	  settings_ff.push_back(FFdict[imc][pars]);
+	}
+	
+	nBranches_->JpsiTau_hammer_ff.push_back(settings_ff);      
+      }
+
+      hweights.push_back(weight_sys);
+
     }
 
-    //    std::cout << "test2-3" << std::endl;
-    std::cout << (Float_t) npass/ntrial << " has been accepted ... (central, max, min) = " << weight << " " << hammer_up << " " << hammer_down <<  std::endl;
-    //    std::cout << (Float_t) npass/ntrial << " has been accepted" << std::endl;
+    flag_fill = true;
 
-    nBranches_->JpsiTau_hammer_ebe_up.push_back(hammer_up);
-    nBranches_->JpsiTau_hammer_ebe_down.push_back(hammer_down);
-
-
-
-
-
-
-
-
-
-////    Float_t hammer_up = 0;
-////    Float_t hammer_down = 999;
-////    int ntrial = 10;
-////    int npass = 0;
-////
-////    for(int imc=0; imc<ntrial;imc++){
-////
-////      vector<double> deltas; 
-////      map<string, double> settings;
-////      int idx1 = 0;
-////      
-////      for(auto pars1: parName) {
-////	Float_t mean = ran->Gaus(centralLebed[idx1], sigmasLebed[idx1]);
-////	
-////	//	std::cout << "test2-1: " << pars1 << std::endl;
-////	//	Float_t _chi2 = (mean - centralLebed[idx1])*Inv[idx1]*(mean - _FFmean[idx1]);
-////	//	chi2 += _chi2;
-////	//	std::cout << "test2-2: " << pars1 << std::endl;
-////	settings[pars1] = (mean - centralLebed[idx1]);
-////	deltas.push_back(mean - centralLebed[idx1]);
-////
-////	std::cout << "\t " << idx1 << "th variation, (mean, err, random) = " << mean << " " << centralLebed[idx1] << " " << sigmasLebed[idx1] << " " << deltas[idx1] << std::endl;
-////	
-////	idx1+=1; 
-////      }
-////      
-////      //      std::cout << "deltas size = " << deltas.size() << std::endl;
-////      // calculate chi2
-////
-////      Float_t chi2 = 0;
-////      //      int idx1_chi2 = 0;
-////      //      int idx2_chi2 = 0;
-////
-////      for(int i=0; i<11; i++) { //column ...
-////	
-////	Float_t row1 = 0;
-////	for(int j=0; j<11; j++) { //row ...
-////	  std::cout << i << " " << j << " " << deltas[j] << " " << inverseCovarianceMatrix[j][i] << " " << deltas[i]  << " " <<  deltas[j]*inverseCovarianceMatrix[j][i]*deltas[i] << std::endl;
-////	  row1 += deltas[j]*inverseCovarianceMatrix[j][i];
-////	}
-////
-////	chi2 += row1*deltas[i];
-////      }
-////      
-////      std::cout << "\t chi2 = " << chi2 << std::endl;
-////      
-////      
-////      if(chi2 < 12.6428){
-////      //      if(chi2 < 3.53){
-//////	std::cout << "\t\t --> This variation corresponds to within 1 sigma band ..." << std::endl;
-//////	
-////	hammer.setFFEigenvectors("BctoJpsi", "BGLVar", settings);
-////	auto weights = hammer.getWeights("Scheme1");
-////	Float_t weight_sys = -1;
-////	
-////	if(!weights.empty()){
-////	  for(auto elem: weights) {
-////	    if(isnan(elem.second)) {
-////	      std::cout << "[ERROR]: BGL nan weight: " << elem.second << std::endl;
-////	    }else{
-////	      weight_sys = elem.second;
-////	    }
-////	  }
-////	}
-////	
-////      //	if(isUp==0) hammer_up += TMath::Power(weight_sys, 2);
-////      //	else if(isUp==1) hammer_down += TMath::Power(weight_sys, 2);
-////
-////      	std::cout << "\t\t --> new weight: " << weight_sys << std::endl;
-////
-////	if(hammer_up < weight_sys) hammer_up = weight_sys;
-////	if(hammer_down > weight_sys) hammer_down = weight_sys;
-////	npass += 1;
-////      }
-////    }
-////
-////    //    std::cout << "test2-3" << std::endl;
-////    std::cout << (Float_t) npass/ntrial << " has been accepted ... (central, max, min) = " << weight << " " << hammer_up << " " << hammer_down <<  std::endl;
-    //    std::cout << (Float_t) npass/ntrial << " has been accepted" << std::endl;
+    nBranches_->JpsiTau_hammer_ebe_toy.push_back(hweights);
 
 
     //////////////////////////

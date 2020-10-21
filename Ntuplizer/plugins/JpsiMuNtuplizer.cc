@@ -32,6 +32,9 @@ JpsiMuNtuplizer::JpsiMuNtuplizer( edm::EDGetTokenT<pat::MuonCollection>    muonT
 
   if(runOnMC_ && useHammer_){
 
+    ran = new TRandom3();
+    ran->SetSeed(1);
+
     if(verbose_) std::cout << "[JpsiMuNtuplizer] Setting up Hammer" << std::endl;
 
     hammer.setUnits("GeV");
@@ -76,7 +79,7 @@ JpsiMuNtuplizer::JpsiMuNtuplizer( edm::EDGetTokenT<pat::MuonCollection>    muonT
 //    hammer.setOptions(centralValuesOpt);
     hammer.saveOptionCard("Opts.yml", false);
 
-    std::cout << "... finishes " << std::endl;
+    //    std::cout << "... finishes " << std::endl;
 
     // add central setting, if needed. 
 
@@ -107,9 +110,70 @@ JpsiMuNtuplizer::JpsiMuNtuplizer( edm::EDGetTokenT<pat::MuonCollection>    muonT
     //    std::cout << "[Hammer]: Central values\n\t" << centralValuesOpt << std::endl;
     //    hammer.setOptions(centralValuesOpt);
     //    std::cout << "... finishes " << std::endl;
-    
-  }
+   
 
+    // Generate FF toys ... 
+
+    for(int imc=0; imc < numberofToys;imc++){
+
+      vector<double> deltas; 
+      int idx1 = 0;
+      Float_t chi2 = 0;
+      
+      for(auto pars1: _FFErrNames) {
+
+	if(idx1==10) break;
+	Float_t mean = ran->Gaus(_FFmean[idx1], _FFErr[idx1]);
+	
+	Float_t _chi2 = (mean - _FFmean[idx1])*Inv[idx1]*(mean - _FFmean[idx1]);
+	chi2 += _chi2;
+
+	deltas.push_back(mean - _FFmean[idx1]);
+	
+	//	if(imc<=1) std::cout << imc << " "  << pars1 << " " << mean << std::endl;
+
+	idx1+=1; 
+      }
+
+      //      if(chi2 > 11.536) continue;
+      
+      map<string, double> settings;
+      int idx_err = 0;
+      
+      for(auto pars1: _FFErrNames) {
+	
+	Float_t newerr = 0;
+	
+	for(int j=0; j<10; j++) {
+	  newerr += deltas[j]*eigVec[idx_err][j];
+	}
+	
+
+	if(idx_err==10){
+	  settings[pars1] = 0;
+	}else{
+	  settings[pars1] = newerr;
+	}
+
+	idx_err += 1;
+      }
+
+
+      //      if(imc <= 1) std::cout << imc << " settings of " << "delta_a0" << ": " << settings["delta_a0"] << std::endl;
+
+      FFdict.push_back(settings);
+
+
+
+    }
+    
+    
+    if(verbose_) std::cout << "Saved " << FFdict.size() << " FF variations" << std::endl;
+
+
+
+ 
+  }
 }
 
 //===================================================================================================================
@@ -164,7 +228,7 @@ JpsiMuNtuplizer::~JpsiMuNtuplizer( void )
 	  var_name += std::to_string(i);
 	  var_name += j==0? "_Up" : "_Down";
 	  
-	  if(verbose_) std::cout << "test0 [JpsiMuNtuplizer] " << var_name << " --> " << Form(": %1.3e", rate) << std::endl;
+	  if(verbose_) std::cout << "[JpsiMuNtuplizer] " << var_name << " --> " << Form(": %1.3e", rate) << std::endl;
 	  
 	  if(var_name==std::string("eig0_Up")) nBranches_->hammer_width->SetBinContent(3, rate);
 	  else if(var_name==std::string("eig0_Down")) nBranches_->hammer_width->SetBinContent(4, rate);
@@ -274,9 +338,9 @@ bool JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
 
 	if(TMath::Abs(d->pdgId())==15){
 
-	  std::cout << "gen:" << d->pdgId() << std::endl;
+	  //	  std::cout << "gen:" << d->pdgId() << std::endl;
 	  for (auto dd : d->daughterRefVector()) {
-	    std::cout << "\t --> " << dd->pdgId() << std::endl;
+	    //	    std::cout << "\t --> " << dd->pdgId() << std::endl;
 	    if(TMath::Abs(dd->pdgId())==13){
 
 	      TLorentzVector nojpsi_muon_tlv;
@@ -297,8 +361,9 @@ bool JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
   TLorentzVector q2_gen; 
   q2_gen = pB_gen - pJpsi_gen;
 
-  nBranches_->q2_nocut->Fill(q2_gen.M2());
-  
+  if(runOnMC_){ 
+    nBranches_->q2_nocut->Fill(q2_gen.M2());
+  }
   /********************************************************************
    *
    * Step1: check if the J/psi trigger is fired.
@@ -1153,9 +1218,52 @@ bool JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
 
     nBranches_->JpsiMu_hammer_ebe.push_back(weight);
 
-    std::cout << "-----------------------" << std::endl;
-    std::cout << "base weight = " << weight << std::endl;
+    //    std::cout << "-----------------------" << std::endl;
+    //    std::cout << "base weight = " << weight << std::endl;
 
+
+    ///////////////////////////////////////////////////////////////////////
+    // MC 
+    ///////////////////////////////////////////////////////////////////////
+
+    std::vector<float> hweights; 
+
+    for(int imc=0; imc < numberofToys; imc++){
+      hammer.setFFEigenvectors("BctoJpsi", "BGLVar", FFdict[imc]);
+      auto weights = hammer.getWeights("Scheme1");
+      Float_t weight_sys = -1;
+
+      if(!weights.empty()){
+	for(auto elem: weights) {
+	  if(isnan(elem.second)) {
+	    std::cout << "[ERROR]: BGL nan weight: " << elem.second << std::endl;
+	  }else{
+	    weight_sys = elem.second;
+	  }
+	}
+      }
+
+      if(flag_fill==false){
+	std::vector<float> settings_ff;
+	for(auto pars: _FFErrNames) {
+	  settings_ff.push_back(FFdict[imc][pars]);
+	}
+      
+	nBranches_->JpsiMu_hammer_ff.push_back(settings_ff);      
+      }
+
+      hweights.push_back(weight_sys);
+    }
+
+    flag_fill = true;
+
+
+    nBranches_->JpsiMu_hammer_ebe_toy.push_back(hweights);
+
+
+    //////////////////////////
+    // ordinary method 
+    //////////////////////////
 
     for(int i=0; i<11; i++) { //Loop over eigenVar
       for (int j=0; j<2; j++) { //Loop over pos/neg direction
@@ -1212,7 +1320,7 @@ bool JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
 	else if(var_name==std::string("eig10_Up")) nBranches_->JpsiMu_hammer_ebe_d2_up.push_back(weight_sys);
 	else if(var_name==std::string("eig10_Down")) nBranches_->JpsiMu_hammer_ebe_d2_down.push_back(weight_sys);
 	
-	std::cout << "test1 \t " << var_name << " " << weight_sys << std::endl;
+	//	std::cout << "test1 \t " << var_name << " " << weight_sys << std::endl;
       }
     }
 

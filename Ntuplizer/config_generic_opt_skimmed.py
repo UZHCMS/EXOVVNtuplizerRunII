@@ -50,17 +50,21 @@ options.register( 'runUpToEarlyF',
 
 
 
-options.maxEvents = 2000
+options.maxEvents = 500
 #options.maxEvents = -1
 
 #data file
-     
-options.inputFiles = '/store/mc/RunIIAutumn18MiniAOD/BcToJPsiTauNu_TuneCP5_13TeV-bcvegpy2-pythia8-evtgen/MINIAODSIM/102X_upgrade2018_realistic_v15-v4/230000/FFA34911-83EB-7543-BA07-29AC5ABB57D9.root'
-#options.inputFiles = '/store/mc/RunIISummer16MiniAODv3/BcToJPsiMuNu_TuneCUEP8M1_13TeV-bcvegpy2-pythia8-evtgen/MINIAODSIM/PUMoriond17_94X_mcRun2_asymptotic_v3-v1/240000/0672B497-2F7F-EA11-969E-484D7E8DF107.root'
-#options.inputFiles = '/store/mc/RunIIAutumn18MiniAOD/OniaAndX_ToMuMu_MuFilter_SoftQCDnonD_TuneCP5_13TeV-pythia8-evtgen/MINIAODSIM/102X_upgrade2018_realistic_v15-v1/260000/1B2AF16F-83A2-5442-83EB-CB34B26D35CF.root'
-#options.inputFiles ='/store/data/Run2018B/Charmonium/MINIAOD/17Sep2018-v1/10000/02CFE87F-7C17-1340-8300-FDA86C16D58C.root'
+
+options.inputFiles = '/store/mc/RunIIAutumn18MiniAOD/BcToJPsiTauNu_TuneCP5_13TeV-bcvegpy2-pythia8-evtgen/MINIAODSIM/102X_upgrade2018_realistic_v15-v4/230000/322CC3C2-921E-7448-902A-8FCB1F0A2F72.root'
+
+#options.inputFiles = '/store/mc/RunIIAutumn18MiniAOD/BcToJPsiMuNu_TuneCP5_13TeV-bcvegpy2-pythia8-evtgen/MINIAODSIM/102X_upgrade2018_realistic_v15-v3/100000/78A9DF86-EAC5-D242-8E7B-171AFD012CC7.root'
+
+#options.inputFiles = '/store/mc/RunIIAutumn18MiniAOD/OniaAndX_ToMuMu_MuFilter_SoftQCDnonD_TuneCP5_13TeV-pythia8-evtgen/MINIAODSIM/102X_upgrade2018_realistic_v15-v1/00000/01325465-A815-E24E-ABB3-DAB8D4880BDE.root'
+
 #options.inputFiles = '/store/data/Run2018D/Charmonium/MINIAOD/12Nov2019_UL2018-v1/280000/D7FD376D-30CD-AA48-8D03-E0220043BBDE.root'
-#options.inputFiles = 'file:reMiniAOD_ggtautau_NoTauola_PAT.root'
+#options.inputFiles = '/store/data/Run2017F/Charmonium/MINIAOD/09Aug2019_UL2017-v1/20000/00BACB48-9B0F-8F48-A68B-2F08A3E9E681.root'
+#options.inputFiles = '/store/data/Run2016B/Charmonium/MINIAOD/21Feb2020_ver1_UL2016_HIPM-v1/100000/00CD0529-7C95-E544-81A9-74E81E537ECF.root'
+#options.inputFiles = '/store/data/Run2016B/Charmonium/MINIAOD/21Feb2020_ver2_UL2016_HIPM-v1/240000/0333D5C7-28C0-7641-994A-ADE29A1EBAAD.root'
 
 options.parseArguments()
 
@@ -80,7 +84,8 @@ process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(options.maxE
 if config["RUNONMC"]:
   process.source = cms.Source("PoolSource",
                               fileNames = cms.untracked.vstring(options.inputFiles),
-#                              eventsToProcess = cms.untracked.VEventRange('1:417:334860'),
+                              # Run, lumi, Event
+#                              eventsToProcess = cms.untracked.VEventRange('1:35137:14345'),
                               duplicateCheckMode = cms.untracked.string("noDuplicateCheck"),                              
                               ) 
 else:                    
