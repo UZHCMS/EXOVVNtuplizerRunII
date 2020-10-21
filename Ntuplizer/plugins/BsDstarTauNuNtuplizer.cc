@@ -1577,6 +1577,7 @@ bool BsDstarTauNuNtuplizer::fillBranches( edm::Event const & event, const edm::E
 	  (Int_t) pid,
 	  (Float_t) matched_gentaupt, 
 	  (Float_t) sumofdnn,
+	  (Float_t) -1,
 	  (Float_t) mydnn[iii],
 	  (Float_t) mydnn[jjj],
 	  (Float_t) mydnn[kkk],

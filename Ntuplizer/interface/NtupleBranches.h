@@ -369,7 +369,13 @@ public:
   std::vector<float> JpsiMu_B_phi_gen;
   std::vector<float> JpsiMu_B_mass_gen;
 
+  std::vector<std::vector<float>> JpsiMu_hammer_ff;
   std::vector<float> JpsiMu_hammer_ebe;
+  std::vector<std::vector<float>> JpsiMu_hammer_ebe_toy;
+  //  std::vector<float> JpsiMu_hammer_ebe_up;
+  //  std::vector<float> JpsiMu_hammer_ebe_down;
+//  std::vector<float> JpsiMu_hammer_ebe_rate_up;
+  //  std::vector<float> JpsiMu_hammer_ebe_rate_down;
 
   std::vector<float> JpsiMu_hammer_ebe_a0_up;
   std::vector<float> JpsiMu_hammer_ebe_a0_down;
@@ -475,6 +481,7 @@ public:
   std::vector<int>         JpsiTau_tau_matched_ppdgId;
   std::vector<float>       JpsiTau_tau_matched_gentaupt;
   std::vector<float>       JpsiTau_tau_sumofdnn; 
+  std::vector<float>       JpsiTau_tau_sumofdnn_others; 
   std::vector<int>       JpsiTau_tau_pfidx1;
   std::vector<int>       JpsiTau_tau_pfidx2;
   std::vector<int>       JpsiTau_tau_pfidx3;
@@ -609,7 +616,13 @@ public:
 //  std::vector<float> JpsiTau_ed_pfdnn;
 //  std::vector<float> JpsiTau_ed_genpt;
     
+  std::vector<std::vector<float>> JpsiTau_hammer_ff;
   std::vector<float> JpsiTau_hammer_ebe;
+  std::vector<std::vector<float>> JpsiTau_hammer_ebe_toy;
+  //  std::vector<float> JpsiTau_hammer_ebe_up;
+  //  std::vector<float> JpsiTau_hammer_ebe_down;
+  //  std::vector<float> JpsiTau_hammer_ebe_rate_up;
+//  std::vector<float> JpsiTau_hammer_ebe_rate_down;
 
   std::vector<float> JpsiTau_hammer_ebe_a0_up;
   std::vector<float> JpsiTau_hammer_ebe_a0_down;

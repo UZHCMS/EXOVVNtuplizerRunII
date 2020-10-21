@@ -7,14 +7,14 @@ from optparse import OptionParser
 
 import datetime
 
-d_today = datetime.datetime.now()
-
-#d_today = datetime.date.today() 
-
-d_today = str(d_today).split('.')[0]
-d_today = d_today.replace(' ', '-').replace(':','')
-
-print d_today
+#d_today = datetime.datetime.now()
+#
+##d_today = datetime.date.today() 
+#
+#d_today = str(d_today).split('.')[0]
+#d_today = d_today.replace(' ', '-').replace(':','')
+#
+#print d_today
 
 username = os.environ['USER']
 
@@ -83,6 +83,13 @@ def main():
     config.JobType.pluginName = 'Analysis'
     config.JobType.psetName = options.config
 
+    if options.isData:
+        config.JobType.maxMemoryMB = 5000
+        config.JobType.numCores = 2
+    else:
+        config.JobType.maxMemoryMB = 4000
+#        config.JobType.numCores = 2
+
     config.JobType.allowUndistributedCMSSW = True
     config.JobType.sendExternalFolder = True
     # config.JobType.pyCfgParams = ['DataProcessing=MC25ns_MiniAODv2','lheLabel=externalLHEProducer']
@@ -100,9 +107,10 @@ def main():
     if not options.isGlobal:
         config.Data.inputDBS = 'phys03' #to be commented in case of global#
     if options.luminosity == True :
-        config.Data.splitting = 'Automatic'
+#        config.Data.splitting = 'Automatic'
 #        config.Data.splitting = 'LumiBased'
-#        config.Data.unitsPerJob = 5
+        config.Data.splitting = 'FileBased'
+        config.Data.unitsPerJob = 2
     else:
         config.Data.splitting = 'FileBased'
         config.Data.unitsPerJob = 10
@@ -110,7 +118,7 @@ def main():
     if options.numOfFiles!=None:
         config.Data.unitsPerJob = int(options.numOfFiles)
         
-    config.Data.ignoreLocality = True
+#    config.Data.ignoreLocality = True
     config.Data.publication = False
 
     #config.Data.outLFNDirBase = '/store/user/cgalloni/Ntuple_2017_94v2_preliminary'
@@ -121,10 +129,15 @@ def main():
     config.section_("Site")
     config.Site.storageSite = 'T2_CH_CSCS'
 #    config.Site.storageSite = 'T3_CH_PSI'
-    #config.Site.blacklist=['T1_US_FNAL','T2_US_Wisconsin','T2_FR_IPHC','T2_EE_Estonia','T2_DE_RWTH','T2_KR_KNU','T2_KR_KISTI','T2_BR_SPRACE']
-    config.Site.whitelist=['T2_US_Nebraska','T2_US_Purdue','T2_CH_CSCS', 'T2_CH_CERN']
+    config.Site.blacklist=['T2_US_Florida', 'T2_UA_KIPT']
+#    config.Site.whitelist=['T2_US_Nebraska','T2_FR_GRIF_IRFU', 'T2_IT_Legnaro', 'T2_US_Purdue','T2_CH_CSCS', 'T2_CH_CERN', 'T2_US_Florida', 'T2_ES_CIEMAT', 'T2_US_Wisconsin']
     print 'Using config ' + options.config
     print 'Writing to directory ' + options.dir
+
+
+    config.section_('Debug')
+    config.Debug.extraJDL = ['+CMS_ALLOW_OVERFLOW=False']
+
 
 
     def submit(config):
@@ -143,13 +156,14 @@ def main():
     jobs = []
     for ijob in jobsLines :
         s = ijob.rstrip()
+        if s.find('#')!=-1: continue
         jobs.append( s )
         print '  --> added ' + s
 
 
     for ijob, job in enumerate(jobs) :
 
-        if job.find('#')!=-1: continue
+#        if job.find('#')!=-1: continue
 
         ptbin = job.split('/')[1]
         cond = job.split('/')[2]
@@ -159,8 +173,9 @@ def main():
 #        print '3rd = ', options.string_to_add
         config.General.requestName =  ptbin + (("_"+cond) if options.isData else "")  + "_" + options.string_to_add
         config.Data.inputDataset = job
-        config.Data.outputDatasetTag = ptbin  + (("_"+cond) if options.isData else "") + "_" + options.string_to_add
-        config.Data.outLFNDirBase = '/store/user/' + username + '/' + ptbin + '_' + str(d_today) + '_' + options.string_to_add
+#        config.Data.outputDatasetTag = ptbin  + (("_"+cond) if options.isData else "") + "_" + options.string_to_add
+        config.Data.outputDatasetTag = cond #.split('-')[0] + "_" + options.string_to_add
+        config.Data.outLFNDirBase = '/store/user/' + username + '/' + ptbin.split('_')[0] + '_' + options.string_to_add #+ '/' + cond + '/' + options.string_to_add
         config.General.workArea = options.dir + '_' + ptbin + '_' + cond
         print "ptbin :%s and cond: %s " %(ptbin, cond)
         print 'Submitting ' + config.General.requestName + ', dataset = ' + job

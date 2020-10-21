@@ -102,7 +102,7 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
   std::cout << "Ntuplizer: dnn file: " << runStrings["dnnfile"] << std::endl;
   std::cout << "Ntuplizer: (dzcut, fsigcut, vprobcut, dnn cut, tau_charge) = " << runValues["dzcut"] << " " << runValues["fsigcut"] << " " << runValues["vprobcut"] << " " << runValues["dnncut"] << " " << runValues["tau_charge"] << std::endl;
   
-  std::cout << "useammer" << runFlags["useHammer"] << std::endl;
+  std::cout << "useHammer" << runFlags["useHammer"] << std::endl;
 
   std::string jecpath = iConfig.getParameter<std::string>("jecpath");
   jecpath = "EXOVVNtuplizerRunII/Ntuplizer/data/" + jecpath;
@@ -115,7 +115,10 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
   /* Histogram for cutflow */
 
   nBranches_->cutflow_perevt = fs->make<TH1F>("cutflow_perevt", "Per Event Ntuplizer Cutflow", 10, 0, 10);
-  nBranches_->q2_nocut = fs->make<TH1F>("q2_nocut", "q2 before any cut", 40, 0, 15);
+
+  if(runFlags["runOnMC"]){
+    nBranches_->q2_nocut = fs->make<TH1F>("q2_nocut", "q2 before any cut", 40, 0, 15);
+  }
 
   if(runFlags["useHammer"]){
     nBranches_->hammer_width = fs->make<TH1F>("hammer_width", "Hammer width", 24, 0, 24);  

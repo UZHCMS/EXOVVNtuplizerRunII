@@ -59,6 +59,7 @@ struct taucand{
   Int_t cand_tau_matched_ppdgId;
   Float_t cand_tau_matched_gentaupt;
   Float_t cand_tau_sumofdnn;
+  Float_t cand_tau_sumofdnn_others;
   Float_t cand_tau_pi1_dnn;
   Float_t cand_tau_pi2_dnn;
   Float_t cand_tau_pi3_dnn;
