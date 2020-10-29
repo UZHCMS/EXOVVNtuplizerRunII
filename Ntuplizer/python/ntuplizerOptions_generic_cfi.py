@@ -7,15 +7,15 @@ config = dict()
 #--------- Set Just one to true ----------#
 config["RUNONMC"] = True
 #-----------------------------------------#
-config["USEHAMMER"] = (True and config["RUNONMC"])
-#config["USEHAMMER"] = False
+#config["USEHAMMER"] = (True and config["RUNONMC"])
+config["USEHAMMER"] = False
 config["VERBOSE"] = False
 
 #--------- For taus ----------#
 config["USEDNN"] = True
 config["DZCUT"] = 0.25 # this is fixed !!
 config["FSIGCUT"] = 3
-config["VPROBCUT"] = 0.1
+config["VPROBCUT"] = 0.05
 config["DNNCUT"] = 0.1443
 #config["DNNCUT"] = 0.0012
 config["TAU_CHARGE"] = 1

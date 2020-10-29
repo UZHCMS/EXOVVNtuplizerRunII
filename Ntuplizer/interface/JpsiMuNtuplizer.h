@@ -49,7 +49,7 @@ private:
    float chi = 0.;
    float ndf = 0.;
 
-   const int numberofToys = 3000;
+   const int numberofToys = 1000;
    std::vector<map<string, double>> FFdict;
 
    helper aux;
