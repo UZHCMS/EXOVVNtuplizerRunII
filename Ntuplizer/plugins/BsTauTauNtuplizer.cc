@@ -446,8 +446,8 @@ bool BsTauTauNtuplizer::fillBranches( edm::Event const & event, const edm::Event
 //      
 //            if(!isFilterExist) continue;
       
-            Float_t trigger_dR = reco::deltaR(obj.eta(), obj.phi(),
-                                              muon.eta(), muon.phi());
+//            Float_t trigger_dR = reco::deltaR(obj.eta(), obj.phi(),
+//                                              muon.eta(), muon.phi());
       
 	    //	    if(trigger_dR < 0.1) trigMatch = true;
         }

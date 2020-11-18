@@ -18,6 +18,76 @@ GenParticlesNtuplizer::~GenParticlesNtuplizer( void )
 {
 }
 
+
+
+
+// Hints from https://github.com/cms-sw/cmssw/blob/00d3c78393965c7352859b8df14ed7d052dfff8c/PhysicsTools/HepMCCandAlgos/plugins/GenParticlePruner.cc
+
+void GenParticlesNtuplizer::recursiveDaughters(size_t index,
+					       int rank, 
+					       const reco::GenParticleCollection &src,
+					       std::vector<size_t> &allIndices,
+					       std::vector<int> &pdgs,
+					       std::vector<int> &layers,
+					       std::vector<float> &ppt,
+					       std::vector<float> &peta,
+					       std::vector<float> &pphi
+					       ) {
+
+  reco::GenParticleRefVector daughters = src[index].daughterRefVector();
+  // avoid infinite recursion if the daughters are set to "this" particle.
+  size_t cachedIndex = index;
+
+  for (reco::GenParticleRefVector::const_iterator i = daughters.begin(); i != daughters.end(); ++i) {
+
+    index = i->key();
+
+    // To also avoid infinite recursion if a "loop" is found in the daughter list,
+    // check to make sure the index hasn't already been added.
+    if (find(allIndices.begin(), allIndices.end(), index) == allIndices.end()) {
+
+      allIndices.push_back(index);
+      pdgs.push_back(src[index].pdgId());
+      layers.push_back(rank);
+      ppt.push_back(src[index].pt());
+      peta.push_back(src[index].eta());
+      pphi.push_back(src[index].phi());
+
+//      for(int ii=0; ii<rank; ii++){
+//	std::cout << "  "; 
+//      }
+//      std::cout << " +->" << src[index].pdgId() << std::endl;
+
+      //      allIndices.push_back(src[index].pdgId());
+
+      if (cachedIndex != index) {
+        recursiveDaughters(index, rank+1, src, allIndices, pdgs, layers, ppt, peta, pphi);
+      }
+    }
+  }
+}
+
+
+
+
+
+
+
+//void GenParticlesNtuplizer::allDaughters(reco::Candidate particle){
+//
+//  //	    rank += 1 ;
+//  for(int i = 0; i < (int)particle.numberOfDaughters(); i++){
+//    reco::GenParticle dau = GenParticle(particle.daughter(i));
+//    std::cout << "-->" << dau.pdgId() << std::endl;
+//    //	      dau.rank = rank
+//    //		  daughters.append( dau )
+//    allDaughters( dau );
+//  }
+//
+//}
+
+
+
 //===================================================================================================================        
 bool GenParticlesNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetup& iSetup ){
   
@@ -165,6 +235,77 @@ bool GenParticlesNtuplizer::fillBranches( edm::Event const & event, const edm::E
         nBranches_->genParticle_mass  .push_back((*genParticles_)[p].mass()   );
         nBranches_->genParticle_status.push_back((*genParticles_)[p].status() );
         nBranches_->genParticle_pdgId .push_back((*genParticles_)[p].pdgId()  );
+	
+	///////////////////////////////
+	// Yuta 
+	
+	if(isB){
+	  
+	  //	  std::cout << "------------------------------------------------------" << std::endl;
+//	  std::cout << (*genParticles_)[p].pdgId() << "... from ... ";
+//
+//	    
+//	  for( unsigned int m=0; m<(*genParticles_)[p].numberOfMothers(); ++m ){
+//	    std::cout << (*genParticles_)[p].mother(m)->pdgId() << " ";
+//	  }
+//
+//	  std::cout << std::endl;
+//	  std::cout << "... decays into ... " << std::endl;
+
+	 	  
+
+	  if(! ( (*genParticles_)[p].numberOfDaughters()==1 && (*genParticles_)[p].daughter(0)->pdgId()==(*genParticles_)[p].pdgId() )){
+	    //	    for( unsigned int d=0; d<(*genParticles_)[p].numberOfDaughters(); ++d ){
+	      //	      std::cout << " -> " << (*genParticles_)[p].daughter(d)->pdgId() << std::endl;
+	    //	    }
+
+	    int _rank = 1;
+	    std::vector<size_t> allIndices;
+	    std::vector<int> pdgs;
+	    std::vector<int> layers;
+	    std::vector<float> ppt;
+	    std::vector<float> peta;
+	    std::vector<float> pphi;
+	    
+	    pdgs.push_back((*genParticles_)[p].pdgId());
+	    layers.push_back(0);
+	    ppt.push_back((*genParticles_)[p].pt());
+	    peta.push_back((*genParticles_)[p].eta());
+	    pphi.push_back((*genParticles_)[p].phi());
+
+	    recursiveDaughters(p, _rank, *genParticles_, allIndices, pdgs, layers, ppt, peta, pphi);
+
+
+//	  else{
+//	    for( unsigned int d=0; d<(*genParticles_)[p].numberOfDaughters(); ++d ){
+//	      std::cout << "... -> " << (*genParticles_)[p].daughter(d)->pdgId() << std::endl;
+//	    }
+//
+//	  }
+
+//	    std::cout << "check--------------" << std::endl;
+//	    for(int ivec = 0; ivec < (int)pdgs.size(); ivec++){
+//	      std::cout << ivec << " " << pdgs[ivec] << " " << layers[ivec] << std::endl;
+//	    }
+//	    std::cout << "check end--------------" << std::endl;
+
+//	  for(int ivec = 0; ivec < (int)pdgs.size(); ivec++){
+//	    nBranches_->genParticle_pmother.push_back( (*genParticles_)[p].pdgId() );
+	    nBranches_->genParticle_pdgs.push_back( pdgs );
+	    nBranches_->genParticle_layers.push_back( layers);
+	    nBranches_->genParticle_ppt.push_back( ppt);
+	    nBranches_->genParticle_peta.push_back( peta);
+	    nBranches_->genParticle_pphi.push_back( pphi);
+	    //	  }
+	  }
+	  
+
+	  
+	}
+	
+
+	///////////////////////////////
+
 
 
         // needed for the gen matching

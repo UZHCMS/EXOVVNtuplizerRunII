@@ -773,6 +773,7 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
   event.getByToken( packedpfcandidatesToken_               , packedpfcandidates_      ); 
     
   std::vector<pat::PackedCandidate> pfcollection; 
+  std::vector<Int_t> pfcollection_id; 
   std::vector<reco::TransientTrack> mytracks;
   std::vector<Float_t> mydnn;
     
@@ -819,8 +820,9 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 	
       if(!pf.hasTrackDetails()) continue;
       Float_t precut_dz = pf.vz() - closestVertex.position().z();
-      if(TMath::Abs(precut_dz) > c_dz) continue;
-	
+      //      if(TMath::Abs(precut_dz) > c_dz) continue;
+      //      if(pf.vertexRef()->z()!=closestVertex.position().z()) continue;
+
       npf_qr++;
 	
       if(pf.pt() < 0.5) continue;
@@ -834,7 +836,29 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
       if(TMath::Abs(pf.pdgId())!=211) continue; 
       if(TMath::Abs(pf.eta()) > 2.5) continue; 
 
+
+
+
+      ////////// prefiltering by the distance between J/psi and the tau candidate
+
+
+      reco::TransientTrack  _track = (*builder).build(pf.pseudoTrack());
+      TrajectoryStateOnSurface _tsos_pf = extrapolator.extrapolate(_track.impactPointState(), jpsi_vertex->position());
+    
+      VertexDistance3D _a3d_pf;  
+      
+      std::pair<bool,Measurement1D> _cur3DIP_pf = aux.absoluteImpactParameter(_tsos_pf, jpsi_vertex, _a3d_pf);
+      
+      Float_t _pvip_pf = _cur3DIP_pf.second.value();
+    
+      
+      if(_pvip_pf > 0.03) continue;
+
+
       npf_before_dnn++;	
+
+      ////////// prefiltering ////////////////////////////////////////////////////////
+
 
       pfcand _cand_ = {
 	(Int_t)ii,
@@ -843,6 +867,9 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 	  
       pfcands.push_back(_cand_);
     }
+
+    if(pfcands.size()>30) return false;
+
 
     //sorting by distance to the vertex
     sort(pfcands.begin(), pfcands.end());
@@ -868,6 +895,7 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 	count_dnn++;
 
 	pfcollection.push_back(pf);
+	pfcollection_id.push_back(idx);
 	reco::TransientTrack  tt_track = (*builder).build(pf.pseudoTrack());
 	mytracks.push_back(tt_track);
 
@@ -920,8 +948,8 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
       // use the PF candidates that come from closestVertex
       //      if(pf.vertexRef()->z()!=closestVertex.position().z()) continue;
 	
-      Float_t precut_dz = pf.vz() - closestVertex.position().z();
-      if(TMath::Abs(precut_dz) > c_dz) continue;
+      //      Float_t precut_dz = pf.vz() - closestVertex.position().z();
+      //      if(TMath::Abs(precut_dz) > c_dz) continue;
 	
       Bool_t hpflag = pf.trackHighPurity();
       if(!hpflag) continue;
@@ -932,7 +960,26 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
       if(TMath::Abs(pf.pdgId())!=211) continue; 
       if(TMath::Abs(pf.eta()) > 2.5) continue; 
 
+
+      ////////// prefiltering by the distance between J/psi and the tau candidate
+
+      reco::TransientTrack  _track = (*builder).build(pf.pseudoTrack());
+      TrajectoryStateOnSurface _tsos_pf = extrapolator.extrapolate(_track.impactPointState(), jpsi_vertex->position());
+    
+      VertexDistance3D _a3d_pf;  
+      
+      std::pair<bool,Measurement1D> _cur3DIP_pf = aux.absoluteImpactParameter(_tsos_pf, jpsi_vertex, _a3d_pf);
+      
+      Float_t _pvip_pf = _cur3DIP_pf.second.value();
+    
+      
+      if(_pvip_pf > 0.03) continue;
+      
+      /////////////////////////////////////
+
+
       pfcollection.push_back(pf);
+      pfcollection_id.push_back(ii);
       reco::TransientTrack  tt_track = (*builder).build(pf.pseudoTrack());
       mytracks.push_back(tt_track);
 	
@@ -940,8 +987,13 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
   }
 
 
+  
 
   Int_t numOfch = (size_t)pfcollection.size();
+
+  nBranches_->cutflow_perevt->Fill(9);
+  if(numOfch<3) return false;
+  nBranches_->cutflow_perevt->Fill(10);
 
 
   std::vector<std::vector<TLorentzVector>> gps;
@@ -1090,6 +1142,95 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
       }
     }
   }
+
+
+
+  //////////////////// test PVIP w.r.t J/psi ///////////////////////
+
+//  Int_t npf_pvip = 0;
+//  Int_t npf_pvip_dz0 = 0;
+//  Int_t npf_pvip_dz2p5 = 0;
+//  
+//  for( size_t ii = 0; ii < packedpfcandidates_->size(); ++ii ){   
+//      
+//    pat::PackedCandidate pf = (*packedpfcandidates_)[ii];
+//    
+//    if(pf.pt() < 0.5) continue;
+//    if(!pf.hasTrackDetails()) continue;
+//    
+//    // use the PF candidates that come from closestVertex
+//    
+//    //      Float_t precut_dz = pf.vz() - closestVertex.position().z();
+//    //      if(TMath::Abs(precut_dz) > c_dz) continue;
+//    
+//    Bool_t hpflag = pf.trackHighPurity();
+//    if(!hpflag) continue;
+//    if(pf.pseudoTrack().hitPattern().numberOfValidPixelHits() < 0) continue;
+//    if(pf.pseudoTrack().hitPattern().numberOfValidHits() < 3) continue;
+//    if(pf.pseudoTrack().normalizedChi2() > 100) continue;
+//    
+//    if(TMath::Abs(pf.pdgId())!=211) continue; 
+//    if(TMath::Abs(pf.eta()) > 2.5) continue; 
+//    
+//    //      pfcollection.push_back(pf);
+//    //      reco::TransientTrack  tt_track = (*builder).build(pf.pseudoTrack());
+//    //      mytracks.push_back(tt_track);
+//    
+//    reco::TransientTrack  _track = (*builder).build(pf.pseudoTrack());
+//    TrajectoryStateOnSurface _tsos_pf = extrapolator.extrapolate(_track.impactPointState(), jpsi_vertex->position());
+//    
+//    VertexDistance3D _a3d_pf;  
+//    
+//    std::pair<bool,Measurement1D> _cur3DIP_pf = aux.absoluteImpactParameter(_tsos_pf, jpsi_vertex, _a3d_pf);
+//    
+//    Float_t _pvip_pf = _cur3DIP_pf.second.value();
+//    
+//
+//    Bool_t _isRight = false;
+//
+//    if(runOnMC_){
+//      
+//      for(unsigned int mmm=0; mmm < gps.size(); mmm++){       
+//
+//	std::vector<TLorentzVector> tlvs = gps[mmm];
+//	    
+//	for(unsigned int nnn=0; nnn < tlvs.size(); nnn++){
+//
+//	  if(
+//	     reco::deltaR(pf.eta(), pf.phi(), tlvs[nnn].Eta(), tlvs[nnn].Phi()) < 0.015 &&
+//	     pf.pt()/tlvs[nnn].Pt() > 0.85 && 
+//	     pf.pt()/tlvs[nnn].Pt() < 1.15
+//	     ){
+//	    _isRight = true; 
+//	  }
+//	}
+//      }
+//    }
+//
+//    
+//    nBranches_->JpsiTau_st_isRight.push_back(_isRight);
+//    nBranches_->JpsiTau_st_pvip.push_back(_pvip_pf);
+//
+//    if(_pvip_pf < 0.03){
+//      npf_pvip++;
+//      if(pf.vertexRef()->z()==closestVertex.position().z()) npf_pvip_dz0 ++;
+//
+//      Float_t precut_dz = pf.vz() - closestVertex.position().z();
+//      if(TMath::Abs(precut_dz) < c_dz){
+//	npf_pvip_dz2p5 ++;
+//      }
+//
+//    }
+//
+//
+//  }
+
+
+  
+  //////////////////// test PVIP w.r.t J/psi ///////////////////////
+
+
+
 
 
   ///////////////////////////////
@@ -1294,12 +1435,12 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 
 	  iso += pfcollection[itrk].pt();
 
-	  TrajectoryStateOnSurface tsos_pf = extrapolator.extrapolate(mytracks[itrk].impactPointState(), bc_vertex->position());
+	  TrajectoryStateOnSurface tsos_pf = extrapolator.extrapolate(mytracks[itrk].impactPointState(), jpsi_vertex->position());
     
     
 	  VertexDistance3D a3d_pf;  
 
-	  std::pair<bool,Measurement1D> cur3DIP_pf = aux.absoluteImpactParameter(tsos_pf, bc_vertex, a3d_pf);
+	  std::pair<bool,Measurement1D> cur3DIP_pf = aux.absoluteImpactParameter(tsos_pf, jpsi_vertex, a3d_pf);
 
 	  Float_t pvip_pf = cur3DIP_pf.second.value();
     
@@ -1307,6 +1448,56 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 
 	  if(iso_mindoca > pvip_pf) iso_mindoca = pvip_pf;
         }
+
+
+
+
+	Float_t iso_nocut = 0;
+	Int_t ntracks_nocut = 0;
+	Float_t iso_mindoca_nocut = 999; 
+
+	
+	for( int ii = 0; ii < (int)packedpfcandidates_->size(); ++ii ){   
+	  
+	  pat::PackedCandidate pf = (*packedpfcandidates_)[ii];
+	  
+	  //if(pf.pt() < 0.5) continue;
+	  if(!pf.hasTrackDetails()) continue;
+	  
+	  Bool_t hpflag = pf.trackHighPurity();
+	  if(!hpflag) continue;
+	  if(pf.pseudoTrack().hitPattern().numberOfValidPixelHits() < 0) continue;
+	  if(pf.pseudoTrack().hitPattern().numberOfValidHits() < 3) continue;
+	  if(pf.pseudoTrack().normalizedChi2() > 100) continue;
+	
+	  if(TMath::Abs(pf.pdgId())!=211) continue; 
+	  //	  if(TMath::Abs(pf.eta()) > 2.5) continue; 
+
+
+	  if(pfcollection_id[iii]==ii || 
+	     pfcollection_id[jjj]==ii || 
+	     pfcollection_id[kkk]==ii) continue;
+
+
+	  iso_nocut += pf.pt();
+	  
+	  ////////// prefiltering by the distance between J/psi and the tau candidate
+	  
+	  reco::TransientTrack  _track = (*builder).build(pf.pseudoTrack());
+	  TrajectoryStateOnSurface _tsos_pf = extrapolator.extrapolate(_track.impactPointState(), jpsi_vertex->position());
+    
+	  VertexDistance3D _a3d_pf;  
+      
+	  std::pair<bool,Measurement1D> _cur3DIP_pf = aux.absoluteImpactParameter(_tsos_pf, jpsi_vertex, _a3d_pf);
+	  
+	  Float_t _pvip_pf = _cur3DIP_pf.second.value();
+	  
+	  if(_pvip_pf < 0.03) ntracks_nocut+=1;
+	  if(iso_mindoca_nocut > _pvip_pf) iso_mindoca_nocut = _pvip_pf;
+
+	}
+
+
 
 
 
@@ -1445,6 +1636,9 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 	  (Float_t) iso,
 	  (Float_t) ntracks,
 	  (Float_t) iso_mindoca,
+	  (Float_t) iso_nocut,
+	  (Float_t) ntracks_nocut,
+	  (Float_t) iso_mindoca_nocut,
 	};
 	  
 	cands.push_back(_cand_);
@@ -1459,11 +1653,13 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 
   if(verbose_) std::cout << "[JpsiTauNtuplizer] " << cands.size() << " tau candidates were found" << std::endl;
 
-  nBranches_->cutflow_perevt->Fill(9);
+  nBranches_->cutflow_perevt->Fill(11);
 
   Int_t ncomb = 0;
 
   for(int ic=0; ic < (int)cands.size(); ic++){
+  // store the highest in pT
+    //  for(int ic=0; ic < 1; ic++){
       
     ncomb += 1;
 
@@ -1595,6 +1791,10 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
     nBranches_->JpsiTau_B_iso_ntracks.push_back(cands[ic].cand_b_iso_ntracks);
     nBranches_->JpsiTau_B_iso_mindoca.push_back(cands[ic].cand_b_iso_mindoca);
 
+    nBranches_->JpsiTau_B_iso_nocut.push_back(cands[ic].cand_b_iso_nocut);
+    nBranches_->JpsiTau_B_iso_ntracks_nocut.push_back(cands[ic].cand_b_iso_ntracks_nocut);
+    nBranches_->JpsiTau_B_iso_mindoca_nocut.push_back(cands[ic].cand_b_iso_mindoca_nocut);
+
 
       
     TLorentzVector Tlv_B;
@@ -1628,7 +1828,41 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 			 cands[ic].cand_tau_phi, 
 			 cands[ic].cand_tau_mass);
 
-      
+
+
+    
+    // calculate cross products 
+
+    TVector3 pvsv = TVector3( jpsi_vertex->vertexState().position().x() - closestVertex.position().x(), 
+			      jpsi_vertex->vertexState().position().y() - closestVertex.position().y(), 
+			      jpsi_vertex->vertexState().position().z() - closestVertex.position().z());
+
+
+    TVector3 jpsi_vec = TVector3(Tlv_Jpsi.Px(), Tlv_Jpsi.Py(), Tlv_Jpsi.Pz());
+    TVector3 tau_vec = TVector3(Tlv_tau.Px(), Tlv_tau.Py(), Tlv_tau.Pz());
+
+    Float_t ptbal_jpsi = jpsi_vec.Cross(pvsv).Mag();
+    Float_t ptbal_tau = tau_vec.Cross(pvsv).Mag();
+    
+    Float_t ptbal = -1;
+
+    if(ptbal_jpsi!=0){
+      ptbal = ptbal_tau/ptbal_jpsi;
+    }
+
+
+    nBranches_->JpsiTau_ptbal.push_back(ptbal);
+
+    Float_t jpsi_tau_alpha = -1;
+
+    if(jpsi_vec.Mag()!=0 && tau_vec.Mag()!=0){
+      jpsi_tau_alpha = jpsi_vec.Dot(tau_vec)/(jpsi_vec.Mag()*tau_vec.Mag());
+    }
+
+    nBranches_->JpsiTau_jpsi_tau_alpha.push_back(jpsi_tau_alpha);
+
+
+    //////////////////////////////////////////      
 
     Float_t q2 = (Tlv_B - Tlv_Jpsi).M2();
 
@@ -1647,6 +1881,7 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
     nBranches_->JpsiTau_B_Es.push_back(Tlv_tau.E()); 
 
     nBranches_->JpsiTau_B_ptback.push_back(Tlv_B.Pt()); 
+        
 
   }
 
@@ -1730,6 +1965,9 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
   nBranches_->JpsiTau_nch.push_back(numOfch);
   nBranches_->JpsiTau_nch_after_dnn.push_back(npf_after_dnn);
   nBranches_->JpsiTau_nch_before_dnn.push_back(npf_before_dnn);
+  //  nBranches_->JpsiTau_nch_pvipcut.push_back(npf_pvip);
+  //  nBranches_->JpsiTau_nch_pvipcut_dz0.push_back(npf_pvip_dz0);
+  //  nBranches_->JpsiTau_nch_pvipcut_dz2p5.push_back(npf_pvip_dz2p5);
   nBranches_->JpsiTau_nch_qr.push_back(npf_qr);
   nBranches_->IsJpsiTau.push_back(1.);
   nBranches_->JpsiTau_nCandidates.push_back(ncomb);

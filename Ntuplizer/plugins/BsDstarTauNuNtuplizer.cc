@@ -1600,6 +1600,9 @@ bool BsDstarTauNuNtuplizer::fillBranches( edm::Event const & event, const edm::E
 	  (Float_t) iso,
 	  (Float_t) ntracks,
 	  (Float_t) iso_mindoca,
+	  -1.,
+	  -1.,
+	  -1.
 	};
 	  
 	//	std::cout << cands.size() << std::endl;
