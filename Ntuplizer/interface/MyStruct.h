@@ -82,6 +82,9 @@ struct taucand{
   Float_t cand_b_iso;
   Float_t cand_b_iso_ntracks;
   Float_t cand_b_iso_mindoca;
+  Float_t cand_b_iso_nocut;
+  Float_t cand_b_iso_ntracks_nocut;
+  Float_t cand_b_iso_mindoca_nocut;
     
   bool operator<(const taucand& another) const { 
     return cand_tau_pt > another.cand_tau_pt;

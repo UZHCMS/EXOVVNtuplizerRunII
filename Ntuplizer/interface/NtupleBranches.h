@@ -98,6 +98,13 @@ public:
   std::vector<std::vector<float>> genParticle_mother_pt;
   std::vector<std::vector<int> >  genParticle_dau      ;
 
+  //  std::vector<int>  genParticle_pmother   ; 
+  std::vector<std::vector<int>>  genParticle_pdgs   ; 
+  std::vector<std::vector<int>>  genParticle_layers   ; 
+  std::vector<std::vector<float>>  genParticle_ppt   ; 
+  std::vector<std::vector<float>>  genParticle_peta   ; 
+  std::vector<std::vector<float>>  genParticle_pphi   ; 
+
   /** generator info */
   float                           lheV_pt              ;
   float                           lheHT                ;
@@ -509,6 +516,8 @@ public:
   std::vector<float>       JpsiTau_tau_pi3_phi;
   std::vector<float>       JpsiTau_tau_pi3_mass;
   std::vector<int>       JpsiTau_tau_pi3_q;
+  std::vector<float>       JpsiTau_ptbal;
+  std::vector<float>       JpsiTau_jpsi_tau_alpha;
 
   std::vector<float>                JpsiTau_Jpsi_pt      ;
   std::vector<float>                JpsiTau_Jpsi_eta     ;
@@ -556,6 +565,11 @@ public:
   std::vector<float>                JpsiTau_B_iso;
   std::vector<int  >                JpsiTau_B_iso_ntracks;
   std::vector<float>                JpsiTau_B_iso_mindoca;
+
+  std::vector<float>                JpsiTau_B_iso_nocut;
+  std::vector<int  >                JpsiTau_B_iso_ntracks_nocut;
+  std::vector<float>                JpsiTau_B_iso_mindoca_nocut;
+
   std::vector<float>                JpsiTau_B_unfit_pt      ;
   std::vector<float>                JpsiTau_B_unfit_mass       ;
   std::vector<float>                JpsiTau_B_unfit_vprob    ;
@@ -591,6 +605,9 @@ public:
   std::vector<int> JpsiTau_nch;
   std::vector<int> JpsiTau_nch_after_dnn;
   std::vector<int> JpsiTau_nch_before_dnn;
+  //  std::vector<int> JpsiTau_nch_pvipcut;
+  //  std::vector<int> JpsiTau_nch_pvipcut_dz0;
+  //  std::vector<int> JpsiTau_nch_pvipcut_dz2p5;
   std::vector<int> JpsiTau_nch_qr;
   std::vector<int> JpsiTau_ngentau3;
   std::vector<int> JpsiTau_ngentau;
@@ -608,6 +625,9 @@ public:
   std::vector<float> JpsiTau_B_eta_gen;
   std::vector<float> JpsiTau_B_phi_gen;
   std::vector<float> JpsiTau_B_mass_gen;
+
+  std::vector<float> JpsiTau_st_pvip;
+  std::vector<bool> JpsiTau_st_isRight;
 
 //  std::vector<float> JpsiTau_ed_pfeta;
 //  std::vector<float> JpsiTau_ed_pfphi;

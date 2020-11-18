@@ -39,7 +39,13 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
       tree_->Branch( "genParticle_nMoth"     , &genParticle_nMoth      );
       tree_->Branch( "genParticle_nDau"	     , &genParticle_nDau       ); 
       tree_->Branch( "genParticle_dau"	     , &genParticle_dau        );
-	
+
+      //      tree_->Branch( "genParticle_pmother"	     , &genParticle_pmother        );
+      tree_->Branch( "genParticle_pdgs"	     , &genParticle_pdgs        );
+      tree_->Branch( "genParticle_layers"	     , &genParticle_layers        );
+      tree_->Branch( "genParticle_ppt"	     , &genParticle_ppt        );
+      tree_->Branch( "genParticle_peta"	     , &genParticle_peta        );
+      tree_->Branch( "genParticle_pphi"	     , &genParticle_pphi        );
 	
 	
     } //doGenParticles
@@ -490,6 +496,9 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch("JpsiTau_tau_pi3_mass", &JpsiTau_tau_pi3_mass );
     tree_->Branch("JpsiTau_tau_pi3_q", &JpsiTau_tau_pi3_q );
 
+    tree_->Branch("JpsiTau_ptbal", &JpsiTau_ptbal );
+    tree_->Branch("JpsiTau_jpsi_tau_alpha", &JpsiTau_jpsi_tau_alpha );
+
 
     tree_->Branch("JpsiTau_PV_vx", &JpsiTau_PV_vx );
     tree_->Branch("JpsiTau_PV_vy", &JpsiTau_PV_vy );
@@ -551,6 +560,11 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch("JpsiTau_B_iso", &JpsiTau_B_iso);
     tree_->Branch("JpsiTau_B_iso_ntracks", &JpsiTau_B_iso_ntracks );
     tree_->Branch("JpsiTau_B_iso_mindoca", &JpsiTau_B_iso_mindoca );
+
+    tree_->Branch("JpsiTau_B_iso_nocut", &JpsiTau_B_iso_nocut);
+    tree_->Branch("JpsiTau_B_iso_ntracks_nocut", &JpsiTau_B_iso_ntracks_nocut );
+    tree_->Branch("JpsiTau_B_iso_mindoca_nocut", &JpsiTau_B_iso_mindoca_nocut );
+
     tree_->Branch("JpsiTau_B_q2", &JpsiTau_B_q2 );
     tree_->Branch("JpsiTau_B_mm2", &JpsiTau_B_mm2 );
     tree_->Branch("JpsiTau_B_ptmiss", &JpsiTau_B_ptmiss );
@@ -621,7 +635,14 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
   tree_->Branch("JpsiTau_nch", &JpsiTau_nch);
   tree_->Branch("JpsiTau_nch_after_dnn", &JpsiTau_nch_after_dnn);
   tree_->Branch("JpsiTau_nch_before_dnn", &JpsiTau_nch_before_dnn);
+  //  tree_->Branch("JpsiTau_nch_pvipcut", &JpsiTau_nch_pvipcut);
+  //  tree_->Branch("JpsiTau_nch_pvipcut_dz0", &JpsiTau_nch_pvipcut_dz0);
+  //  tree_->Branch("JpsiTau_nch_pvipcut_dz2p5", &JpsiTau_nch_pvipcut_dz2p5);
+
   tree_->Branch("JpsiTau_nch_qr", &JpsiTau_nch_qr);
+
+  tree_->Branch("JpsiTau_st_pvip", &JpsiTau_st_pvip);
+  tree_->Branch("JpsiTau_st_isRight", &JpsiTau_st_isRight);
 
 
 //    tree_->Branch("JpsiTau_ed_pfeta", &JpsiTau_ed_pfeta);
@@ -1163,6 +1184,13 @@ void NtupleBranches::reset( void ){
   genParticle_nDau.clear();
   genParticle_dau.clear();
   
+  //  genParticle_pmother.clear();
+  genParticle_pdgs.clear();
+  genParticle_layers.clear();
+  genParticle_ppt.clear();
+  genParticle_peta.clear();
+  genParticle_pphi.clear();
+
   /** generator info */
   genWeight   = 0;
   qScale      = 0;
@@ -1579,6 +1607,9 @@ void NtupleBranches::reset( void ){
   JpsiTau_tau_pi3_mass.clear();
   JpsiTau_tau_pi3_q.clear();
 
+  JpsiTau_ptbal.clear();
+  JpsiTau_jpsi_tau_alpha.clear();
+
   JpsiTau_Jpsi_pt.clear();
   JpsiTau_Jpsi_eta.clear();
   JpsiTau_Jpsi_phi.clear();
@@ -1624,6 +1655,11 @@ void NtupleBranches::reset( void ){
   JpsiTau_B_iso.clear();
   JpsiTau_B_iso_ntracks.clear();
   JpsiTau_B_iso_mindoca.clear();
+
+  JpsiTau_B_iso_nocut.clear();
+  JpsiTau_B_iso_ntracks_nocut.clear();
+  JpsiTau_B_iso_mindoca_nocut.clear();
+
   JpsiTau_B_q2.clear();
   JpsiTau_B_mm2.clear();
   JpsiTau_B_ptmiss.clear();
@@ -1655,6 +1691,9 @@ void NtupleBranches::reset( void ){
   JpsiTau_nch.clear();
   JpsiTau_nch_after_dnn.clear();
   JpsiTau_nch_before_dnn.clear();
+  //  JpsiTau_nch_pvipcut.clear();
+  //  JpsiTau_nch_pvipcut_dz0.clear();
+  //  JpsiTau_nch_pvipcut_dz2p5.clear();
   JpsiTau_nch_qr.clear();
   JpsiTau_ngentau3.clear();
   JpsiTau_ngentau.clear();
@@ -1672,6 +1711,9 @@ void NtupleBranches::reset( void ){
   JpsiTau_B_eta_gen.clear();
   JpsiTau_B_phi_gen.clear();
   JpsiTau_B_mass_gen.clear();
+
+  JpsiTau_st_pvip.clear();
+  JpsiTau_st_isRight.clear();
 
 //  JpsiTau_ed_pfeta.clear();
 //  JpsiTau_ed_pfphi.clear();

@@ -15,9 +15,12 @@ config["VERBOSE"] = False
 config["USEDNN"] = True
 config["DZCUT"] = 0.25 # this is fixed !!
 config["FSIGCUT"] = 3
-config["VPROBCUT"] = 0.05
-config["DNNCUT"] = 0.1443
+config["VPROBCUT"] = 0.1
+#config["DNNCUT"] = 0.1443 80% eff.
+#config["DNNCUT"] = 0.0131 90% eff. 
+#config["DNNCUT"] = 0.0012 95% eff.
 #config["DNNCUT"] = 0.0012
+config["DNNCUT"] = -1
 config["TAU_CHARGE"] = 1
 
 config["USEJSON"] = not (config["RUNONMC"])

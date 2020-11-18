@@ -114,7 +114,7 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
   /* Histogram buildinng, definition in NtupleBrances */
   /* Histogram for cutflow */
 
-  nBranches_->cutflow_perevt = fs->make<TH1F>("cutflow_perevt", "Per Event Ntuplizer Cutflow", 10, 0, 10);
+  nBranches_->cutflow_perevt = fs->make<TH1F>("cutflow_perevt", "Per Event Ntuplizer Cutflow", 15, 0, 15);
 
   if(runFlags["runOnMC"]){
     nBranches_->q2_nocut = fs->make<TH1F>("q2_nocut", "q2 before any cut", 40, 0, 15);
