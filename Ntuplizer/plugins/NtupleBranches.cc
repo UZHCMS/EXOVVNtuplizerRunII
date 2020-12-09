@@ -659,6 +659,7 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
   tree_->Branch("JpsiTau_st_doca1ds_max", &JpsiTau_st_doca1ds_max);
 
   tree_->Branch("JpsiTau_st_dz_max", &JpsiTau_st_dz_max);
+  tree_->Branch("JpsiTau_st_nch", &JpsiTau_st_nch);
 
   tree_->Branch("JpsiTau_st_isRight", &JpsiTau_st_isRight);
   tree_->Branch("JpsiTau_st_isBdecay", &JpsiTau_st_isBdecay);
@@ -679,11 +680,13 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
 
   tree_->Branch("JpsiTau_st_dz", &JpsiTau_st_dz);
   tree_->Branch("JpsiTau_st_isAssociate", &JpsiTau_st_isAssociate);
-  tree_->Branch("JpsiTau_st_isBelong", &JpsiTau_st_isBelong);
+  tree_->Branch("JpsiTau_st_near_dz", &JpsiTau_st_near_dz);
   tree_->Branch("JpsiTau_st_pvAssociationQuality", &JpsiTau_st_pvAssociationQuality);
   tree_->Branch("JpsiTau_st_pt", &JpsiTau_st_pt);
   tree_->Branch("JpsiTau_st_eta", &JpsiTau_st_eta);
   tree_->Branch("JpsiTau_st_phi", &JpsiTau_st_phi);
+  tree_->Branch("JpsiTau_st_charge", &JpsiTau_st_charge);
+  tree_->Branch("JpsiTau_st_mass", &JpsiTau_st_mass);
 
   //  tree_->Branch("JpsiTau_st_isOtherPV", &JpsiTau_st_isOtherPV);
 
@@ -1785,11 +1788,13 @@ void NtupleBranches::reset( void ){
 
   JpsiTau_st_dz.clear();
   JpsiTau_st_isAssociate.clear();
-  JpsiTau_st_isBelong.clear();
+  JpsiTau_st_near_dz.clear();
   JpsiTau_st_pvAssociationQuality.clear();
   JpsiTau_st_pt.clear();
   JpsiTau_st_eta.clear();
   JpsiTau_st_phi.clear();
+  JpsiTau_st_charge.clear();
+  JpsiTau_st_mass.clear();
 
   JpsiTau_st_doca3d_max.clear();
   JpsiTau_st_doca2d_max.clear();
@@ -1798,6 +1803,7 @@ void NtupleBranches::reset( void ){
   JpsiTau_st_doca2ds_max.clear();
   JpsiTau_st_doca1ds_max.clear();
   JpsiTau_st_dz_max.clear();
+  JpsiTau_st_nch = 0;
 
 
 

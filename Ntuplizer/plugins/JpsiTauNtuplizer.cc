@@ -1335,7 +1335,7 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
   std::vector<float> doca2ds_vec;
   std::vector<float> doca1ds_vec;
   std::vector<float> dz_vec;  
-
+  Int_t st_nch = 0;
   
   for( size_t ii = 0; ii < packedpfcandidates_->size(); ++ii ){   
       
@@ -1346,8 +1346,8 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
     
     // use the PF candidates that come from closestVertex
     
-    //      Float_t precut_dz = pf.vz() - closestVertex.position().z();
-    //      if(TMath::Abs(precut_dz) > c_dz) continue;
+    Float_t precut_dz = pf.vz() - closestVertex.position().z();
+    if(TMath::Abs(precut_dz) > c_dz) continue;
     
     Bool_t hpflag = pf.trackHighPurity();
     if(!hpflag) continue;
@@ -1358,6 +1358,8 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
     if(TMath::Abs(pf.pdgId())!=211) continue; 
     if(TMath::Abs(pf.eta()) > 2.5) continue; 
     
+
+    st_nch++;
     //      pfcollection.push_back(pf);
     //      reco::TransientTrack  tt_track = (*builder).build(pf.pseudoTrack());
     //      mytracks.push_back(tt_track);
@@ -1425,6 +1427,8 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
     nBranches_->JpsiTau_st_pt.push_back(pf.pt());
     nBranches_->JpsiTau_st_eta.push_back(pf.eta());
     nBranches_->JpsiTau_st_phi.push_back(pf.phi());
+    nBranches_->JpsiTau_st_charge.push_back(pf.charge());
+    nBranches_->JpsiTau_st_mass.push_back(pf.mass());
 
     bool flag_match = false;
     bool flag_signal = false;
@@ -1432,20 +1436,22 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
     int matched_ppdg = -999;
     int matched_nprong = -999;
 
-    for(int imatch = 0; imatch < (int)match_eta.size(); imatch++){
-      float _dr_ = reco::deltaR(pf.eta(), pf.phi(), match_eta[imatch], match_phi[imatch]);
-      if(_dr_ < 0.015 && 
-	 pf.pt()/match_pt[imatch] > 0.85 &&
-	 pf.pt()/match_pt[imatch] < 1.15
-	 ){
-	flag_match = true;
-	matched_pdg = match_pdg[imatch];
-	matched_ppdg = match_ppdg[imatch];
-	flag_signal = match_isSignal[imatch];
-	matched_nprong = match_nprong[imatch];
+    if(runOnMC_){
+      for(int imatch = 0; imatch < (int)match_eta.size(); imatch++){
+	float _dr_ = reco::deltaR(pf.eta(), pf.phi(), match_eta[imatch], match_phi[imatch]);
+	if(_dr_ < 0.015 && 
+	   pf.pt()/match_pt[imatch] > 0.85 &&
+	   pf.pt()/match_pt[imatch] < 1.15
+	   ){
+	  flag_match = true;
+	  matched_pdg = match_pdg[imatch];
+	  matched_ppdg = match_ppdg[imatch];
+	  flag_signal = match_isSignal[imatch];
+	  matched_nprong = match_nprong[imatch];
+	}
       }
     }
-    
+
     nBranches_->JpsiTau_st_isBdecay.push_back(flag_match);
     nBranches_->JpsiTau_st_isBdecaypdg.push_back(matched_pdg);
     nBranches_->JpsiTau_st_isBdecayppdg.push_back(matched_ppdg);
@@ -1453,13 +1459,16 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
     nBranches_->JpsiTau_st_nprong.push_back(matched_nprong);
 
 
-    bool isbelong = false;
+    Float_t near_dz = -999;
     for( reco::VertexCollection::const_iterator vtx = vertices_->begin(); vtx != vertices_->end(); ++vtx){
       
-      if(pf.vertexRef()->z()==vtx->position().z()) isbelong = true;
+      if(pf.vertexRef()->z()==vtx->position().z()){
+	near_dz = closestVertex.position().z() - vtx->position().z();
+      }
     }
 
-    nBranches_->JpsiTau_st_isBelong.push_back((bool)isbelong);
+
+    nBranches_->JpsiTau_st_near_dz.push_back(near_dz);
 
 
     
@@ -1559,6 +1568,8 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
     nBranches_->JpsiTau_st_doca1ds_max.push_back(max_doca1ds);
     nBranches_->JpsiTau_st_dz_max.push_back(max_dz_sign);
   }
+
+  nBranches_->JpsiTau_st_nch = st_nch;
 
   
   //////////////////// test PVIP w.r.t J/psi ///////////////////////

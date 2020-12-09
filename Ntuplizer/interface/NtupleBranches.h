@@ -651,6 +651,7 @@ public:
   std::vector<float> JpsiTau_st_doca2ds_max;
   std::vector<float> JpsiTau_st_doca1ds_max;
   std::vector<float> JpsiTau_st_dz_max;
+  Int_t JpsiTau_st_nch;
 
   std::vector<bool> JpsiTau_st_isRight;
   std::vector<bool> JpsiTau_st_isBdecay;
@@ -660,11 +661,13 @@ public:
   std::vector<int> JpsiTau_st_nprong;
   std::vector<float> JpsiTau_st_dz;
   std::vector<bool> JpsiTau_st_isAssociate;
-  std::vector<bool> JpsiTau_st_isBelong;
+  std::vector<float> JpsiTau_st_near_dz;
   std::vector<int> JpsiTau_st_pvAssociationQuality;
   std::vector<float> JpsiTau_st_pt;
   std::vector<float> JpsiTau_st_eta;
   std::vector<float> JpsiTau_st_phi;
+  std::vector<int> JpsiTau_st_charge;
+  std::vector<float> JpsiTau_st_mass;
 
 //  std::vector<float> JpsiTau_ed_pfeta;
 //  std::vector<float> JpsiTau_ed_pfphi;
