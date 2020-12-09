@@ -23,7 +23,6 @@
 ///////////////////////////////////////////////////////////////////////////////////
 Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
  
-
   beamToken_                  (consumes<reco::BeamSpot>(iConfig.getParameter<edm::InputTag>("beamSpot"))),
 	vtxToken_             	    (consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("vertices"))),
 	rhoToken_             	    (consumes<double>(iConfig.getParameter<edm::InputTag>("rho"))),
@@ -33,7 +32,8 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
 	geneventToken_        	    (consumes<GenEventInfoProduct>(iConfig.getParameter<edm::InputTag>("genEventInfo"))),     
 	lheEventProductToken_       (consumes<LHEEventProduct>(iConfig.getParameter<edm::InputTag>("externallheProducer"))),     
 	genparticleToken_     	    (consumes<reco::GenParticleCollection>(iConfig.getParameter<edm::InputTag>("genparticles"))),
-    gentauToken_     	    (consumes<std::vector<reco::GenJet>>(iConfig.getParameter<edm::InputTag>("gentaus"))),
+  packedgenparticleToken_     (consumes<pat::PackedGenParticleCollection>(iConfig.getParameter<edm::InputTag>("packedgenparticles"))),
+  gentauToken_     	    (consumes<std::vector<reco::GenJet>>(iConfig.getParameter<edm::InputTag>("gentaus"))),
 
 	muonToken_	      	    (consumes<pat::MuonCollection>(iConfig.getParameter<edm::InputTag>("muons"))),
 	electronToken_	      	    (consumes<pat::ElectronCollection>(iConfig.getParameter<edm::InputTag>("electrons"))),
@@ -220,6 +220,7 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
 						   triggerToken_,
 						   triggerObjects_,
 						   genparticleToken_,
+						   packedgenparticleToken_,
 						   gentauToken_,
 						   runFlags,
 						   runValues,

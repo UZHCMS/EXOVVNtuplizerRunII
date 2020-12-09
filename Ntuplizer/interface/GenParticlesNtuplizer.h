@@ -1,3 +1,7 @@
+#ifndef HELPER_H
+#include "../interface/helper.h"
+#endif
+
 #ifndef GenParticlesNtuplizer_H
 #define GenParticlesNtuplizer_H
 
@@ -29,6 +33,10 @@ private:
    bool isJpsiEle_;
    bool isJpsiTau_;
    bool doGenHist_;
+   bool verbose_;
+
+   helper aux;
+
 };
 
 #endif // GenParticlesNtuplizer_H

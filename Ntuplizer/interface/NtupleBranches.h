@@ -497,6 +497,14 @@ public:
   std::vector<float>       JpsiTau_tau_pi2_dnn;
   std::vector<float>       JpsiTau_tau_pi3_dnn;
 
+  std::vector<float>       JpsiTau_tau_pi1_doca;
+  std::vector<float>       JpsiTau_tau_pi2_doca;
+  std::vector<float>       JpsiTau_tau_pi3_doca;
+
+  std::vector<int>       JpsiTau_tau_pi1_pv;
+  std::vector<int>       JpsiTau_tau_pi2_pv;
+  std::vector<int>       JpsiTau_tau_pi3_pv;
+
 
   std::vector<float>                JpsiTau_tau_rhomass1     ;
   std::vector<float>                JpsiTau_tau_rhomass2     ;
@@ -626,8 +634,37 @@ public:
   std::vector<float> JpsiTau_B_phi_gen;
   std::vector<float> JpsiTau_B_mass_gen;
 
-  std::vector<float> JpsiTau_st_pvip;
+  std::vector<float> JpsiTau_st_doca3d;
+  std::vector<float> JpsiTau_st_doca2d;
+  std::vector<float> JpsiTau_st_doca1d;
+  std::vector<float> JpsiTau_st_doca3ds;
+  std::vector<float> JpsiTau_st_doca2ds;
+  std::vector<float> JpsiTau_st_doca1ds;
+  std::vector<float> JpsiTau_st_doca3de;
+  std::vector<float> JpsiTau_st_doca2de;
+  std::vector<float> JpsiTau_st_doca1de;
+
+  std::vector<float> JpsiTau_st_doca3d_max;
+  std::vector<float> JpsiTau_st_doca2d_max;
+  std::vector<float> JpsiTau_st_doca1d_max;
+  std::vector<float> JpsiTau_st_doca3ds_max;
+  std::vector<float> JpsiTau_st_doca2ds_max;
+  std::vector<float> JpsiTau_st_doca1ds_max;
+  std::vector<float> JpsiTau_st_dz_max;
+
   std::vector<bool> JpsiTau_st_isRight;
+  std::vector<bool> JpsiTau_st_isBdecay;
+  std::vector<bool> JpsiTau_st_isSignal;
+  std::vector<int> JpsiTau_st_isBdecaypdg;
+  std::vector<int> JpsiTau_st_isBdecayppdg;
+  std::vector<int> JpsiTau_st_nprong;
+  std::vector<float> JpsiTau_st_dz;
+  std::vector<bool> JpsiTau_st_isAssociate;
+  std::vector<bool> JpsiTau_st_isBelong;
+  std::vector<int> JpsiTau_st_pvAssociationQuality;
+  std::vector<float> JpsiTau_st_pt;
+  std::vector<float> JpsiTau_st_eta;
+  std::vector<float> JpsiTau_st_phi;
 
 //  std::vector<float> JpsiTau_ed_pfeta;
 //  std::vector<float> JpsiTau_ed_pfphi;

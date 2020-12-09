@@ -9,11 +9,11 @@ config["RUNONMC"] = True
 #-----------------------------------------#
 #config["USEHAMMER"] = (True and config["RUNONMC"])
 config["USEHAMMER"] = False
-config["VERBOSE"] = False
+config["VERBOSE"] = True
 
 #--------- For taus ----------#
 config["USEDNN"] = True
-config["DZCUT"] = 0.25 # this is fixed !!
+config["DZCUT"] = 0.12 # this is fixed !!
 config["FSIGCUT"] = 3
 config["VPROBCUT"] = 0.1
 #config["DNNCUT"] = 0.1443 80% eff.

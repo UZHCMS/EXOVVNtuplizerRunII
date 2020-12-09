@@ -217,8 +217,6 @@ std::pair<bool, Measurement1D> helper::absoluteImpactParameter(const TrajectoryS
 
 
 
-
-
 math::PtEtaPhiMLorentzVector helper::daughter_p4(std::vector< RefCountedKinematicParticle > fitted_children, size_t i){
   const auto& state = fitted_children.at(i)->currentState();
 
@@ -260,4 +258,84 @@ std::tuple<Float_t, TransientVertex> helper::vertexProb( const std::vector<reco:
         return std::forward_as_tuple(-9, vertex);
 
     }
+}
+
+
+
+bool helper::isAncestor(const reco::Candidate* ancestor, const reco::Candidate * particle)
+{
+  //particle is already the ancestor
+  //  std::cout << "isA 1" << std::endl;
+  if(ancestor == particle ) return true;
+  //  std::cout << "isA 2" << std::endl;
+  //otherwise loop on mothers, if any and return true if the ancestor is found
+  for(size_t i=0;i< particle->numberOfMothers();i++)
+    {
+      //      std::cout << "isA 3" << i << std::endl;
+      if(isAncestor(ancestor,particle->mother(i))) return true;
+      //      std::cout << "isA 4" << std::endl;
+    }
+  //if we did not return yet, then particle and ancestor are not relatives
+  return false;
+}
+
+
+
+void helper::recursiveDaughters(size_t index,
+				int rank, 
+				const reco::GenParticleCollection &src,
+				std::vector<size_t> &allIndices,
+				std::vector<int> &pdgs,
+				std::vector<int> &layers,
+				std::vector<float> &ppt,
+				std::vector<float> &peta,
+				std::vector<float> &pphi,
+				bool verbose
+				) {
+  
+  reco::GenParticleRefVector daughters = src[index].daughterRefVector();
+  // avoid infinite recursion if the daughters are set to "this" particle.
+  size_t cachedIndex = index;
+
+  for (reco::GenParticleRefVector::const_iterator i = daughters.begin(); i != daughters.end(); ++i) {
+
+    index = i->key();
+
+    // To also avoid infinite recursion if a "loop" is found in the daughter list,
+    // check to make sure the index hasn't already been added.
+    if (find(allIndices.begin(), allIndices.end(), index) == allIndices.end()) {
+
+      allIndices.push_back(index);
+      pdgs.push_back(src[index].pdgId());
+      layers.push_back(rank);
+      ppt.push_back(src[index].pt());
+      peta.push_back(src[index].eta());
+      pphi.push_back(src[index].phi());
+
+      int _layer = -1;
+
+      if(src[index].numberOfDaughters()!=0){
+	_layer = rank;
+      }
+
+      layers.push_back(_layer);
+
+
+      if(verbose){
+	for(int ii=0; ii<rank-1; ii++){
+	  std::cout << "  "; 
+	}
+	std::cout << " +->" << src[index].pdgId() << " (" << _layer << ")" << std::endl;
+	
+	if (cachedIndex == index) {
+	  std::cout << "WARNING !!! This is already there ... " << cachedIndex << " " << index << " " << std::endl;
+	}
+      }
+
+
+      if (cachedIndex != index) {
+	recursiveDaughters(index, rank+1, src, allIndices, pdgs, layers, ppt, peta, pphi, verbose);
+      }
+    }
+  }
 }

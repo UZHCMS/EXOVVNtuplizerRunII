@@ -475,6 +475,15 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch("JpsiTau_tau_pi2_dnn", &JpsiTau_tau_pi2_dnn );
     tree_->Branch("JpsiTau_tau_pi3_dnn", &JpsiTau_tau_pi3_dnn );
 
+    tree_->Branch("JpsiTau_tau_pi1_doca", &JpsiTau_tau_pi1_doca );
+    tree_->Branch("JpsiTau_tau_pi2_doca", &JpsiTau_tau_pi2_doca );
+    tree_->Branch("JpsiTau_tau_pi3_doca", &JpsiTau_tau_pi3_doca );
+
+    tree_->Branch("JpsiTau_tau_pi1_pv", &JpsiTau_tau_pi1_pv );
+    tree_->Branch("JpsiTau_tau_pi2_pv", &JpsiTau_tau_pi2_pv );
+    tree_->Branch("JpsiTau_tau_pi3_pv", &JpsiTau_tau_pi3_pv );
+
+
     tree_->Branch("JpsiTau_tau_rhomass1", &JpsiTau_tau_rhomass1 );
     tree_->Branch("JpsiTau_tau_rhomass2", &JpsiTau_tau_rhomass2 );
 
@@ -641,8 +650,43 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
 
   tree_->Branch("JpsiTau_nch_qr", &JpsiTau_nch_qr);
 
-  tree_->Branch("JpsiTau_st_pvip", &JpsiTau_st_pvip);
+
+  tree_->Branch("JpsiTau_st_doca3d_max", &JpsiTau_st_doca3d_max);
+  tree_->Branch("JpsiTau_st_doca2d_max", &JpsiTau_st_doca2d_max);
+  tree_->Branch("JpsiTau_st_doca1d_max", &JpsiTau_st_doca1d_max);
+  tree_->Branch("JpsiTau_st_doca3ds_max", &JpsiTau_st_doca3ds_max);
+  tree_->Branch("JpsiTau_st_doca2ds_max", &JpsiTau_st_doca2ds_max);
+  tree_->Branch("JpsiTau_st_doca1ds_max", &JpsiTau_st_doca1ds_max);
+
+  tree_->Branch("JpsiTau_st_dz_max", &JpsiTau_st_dz_max);
+
   tree_->Branch("JpsiTau_st_isRight", &JpsiTau_st_isRight);
+  tree_->Branch("JpsiTau_st_isBdecay", &JpsiTau_st_isBdecay);
+  tree_->Branch("JpsiTau_st_isBdecaypdg", &JpsiTau_st_isBdecaypdg);
+  tree_->Branch("JpsiTau_st_isBdecayppdg", &JpsiTau_st_isBdecayppdg);
+  tree_->Branch("JpsiTau_st_isSignal", &JpsiTau_st_isSignal);
+  tree_->Branch("JpsiTau_st_nprong", &JpsiTau_st_nprong);
+
+  tree_->Branch("JpsiTau_st_doca3d", &JpsiTau_st_doca3d);
+  tree_->Branch("JpsiTau_st_doca2d", &JpsiTau_st_doca2d);
+  tree_->Branch("JpsiTau_st_doca1d", &JpsiTau_st_doca1d);
+  tree_->Branch("JpsiTau_st_doca3ds", &JpsiTau_st_doca3ds);
+  tree_->Branch("JpsiTau_st_doca2ds", &JpsiTau_st_doca2ds);
+  tree_->Branch("JpsiTau_st_doca1ds", &JpsiTau_st_doca1ds);
+  tree_->Branch("JpsiTau_st_doca3de", &JpsiTau_st_doca3de);
+  tree_->Branch("JpsiTau_st_doca2de", &JpsiTau_st_doca2de);
+  tree_->Branch("JpsiTau_st_doca1de", &JpsiTau_st_doca1de);
+
+  tree_->Branch("JpsiTau_st_dz", &JpsiTau_st_dz);
+  tree_->Branch("JpsiTau_st_isAssociate", &JpsiTau_st_isAssociate);
+  tree_->Branch("JpsiTau_st_isBelong", &JpsiTau_st_isBelong);
+  tree_->Branch("JpsiTau_st_pvAssociationQuality", &JpsiTau_st_pvAssociationQuality);
+  tree_->Branch("JpsiTau_st_pt", &JpsiTau_st_pt);
+  tree_->Branch("JpsiTau_st_eta", &JpsiTau_st_eta);
+  tree_->Branch("JpsiTau_st_phi", &JpsiTau_st_phi);
+
+  //  tree_->Branch("JpsiTau_st_isOtherPV", &JpsiTau_st_isOtherPV);
+
 
 
 //    tree_->Branch("JpsiTau_ed_pfeta", &JpsiTau_ed_pfeta);
@@ -1588,6 +1632,14 @@ void NtupleBranches::reset( void ){
   JpsiTau_tau_pi2_dnn.clear();
   JpsiTau_tau_pi3_dnn.clear();
 
+  JpsiTau_tau_pi1_doca.clear();
+  JpsiTau_tau_pi2_doca.clear();
+  JpsiTau_tau_pi3_doca.clear();
+
+  JpsiTau_tau_pi1_pv.clear();
+  JpsiTau_tau_pi2_pv.clear();
+  JpsiTau_tau_pi3_pv.clear();
+
   JpsiTau_tau_rhomass1.clear();
   JpsiTau_tau_rhomass2.clear();
 
@@ -1712,8 +1764,43 @@ void NtupleBranches::reset( void ){
   JpsiTau_B_phi_gen.clear();
   JpsiTau_B_mass_gen.clear();
 
-  JpsiTau_st_pvip.clear();
+  JpsiTau_st_doca3d.clear();
+  JpsiTau_st_doca2d.clear();
+  JpsiTau_st_doca1d.clear();
+
+  JpsiTau_st_doca3ds.clear();
+  JpsiTau_st_doca2ds.clear();
+  JpsiTau_st_doca1ds.clear();
+
+  JpsiTau_st_doca3de.clear();
+  JpsiTau_st_doca2de.clear();
+  JpsiTau_st_doca1de.clear();
+
   JpsiTau_st_isRight.clear();
+  JpsiTau_st_isBdecay.clear();
+  JpsiTau_st_isBdecaypdg.clear();
+  JpsiTau_st_isBdecayppdg.clear();
+  JpsiTau_st_isSignal.clear();
+  JpsiTau_st_nprong.clear();
+
+  JpsiTau_st_dz.clear();
+  JpsiTau_st_isAssociate.clear();
+  JpsiTau_st_isBelong.clear();
+  JpsiTau_st_pvAssociationQuality.clear();
+  JpsiTau_st_pt.clear();
+  JpsiTau_st_eta.clear();
+  JpsiTau_st_phi.clear();
+
+  JpsiTau_st_doca3d_max.clear();
+  JpsiTau_st_doca2d_max.clear();
+  JpsiTau_st_doca1d_max.clear();
+  JpsiTau_st_doca3ds_max.clear();
+  JpsiTau_st_doca2ds_max.clear();
+  JpsiTau_st_doca1ds_max.clear();
+  JpsiTau_st_dz_max.clear();
+
+
+
 
 //  JpsiTau_ed_pfeta.clear();
 //  JpsiTau_ed_pfphi.clear();

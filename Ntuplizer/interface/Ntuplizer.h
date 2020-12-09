@@ -22,10 +22,17 @@
 #include "SimDataFormats/GeneratorProducts/interface/LHEEventProduct.h"
 #include "SimDataFormats/GeneratorProducts/interface/LHERunInfoProduct.h"
 #include "GeneratorInterface/LHEInterface/interface/LHEEvent.h"
+#include "DataFormats/PatCandidates/interface/PackedGenParticle.h"
+#include "DataFormats/Candidate/interface/Candidate.h"
+#include "DataFormats/HepMCCandidate/interface/GenParticle.h"
+
+
+
 class NtupleBranches;
 class CandidateNtuplizer;
 
 class Ntuplizer : public edm::EDAnalyzer {
+
 public:
   explicit Ntuplizer(const edm::ParameterSet&);
   ~Ntuplizer();
@@ -65,6 +72,8 @@ private:
   edm::EDGetTokenT<LHEEventProduct>	                    lheEventProductToken_;
   
   edm::EDGetTokenT<reco::GenParticleCollection>             genparticleToken_   ;
+  edm::EDGetTokenT<pat::PackedGenParticleCollection>             packedgenparticleToken_   ;
+
   edm::EDGetTokenT<std::vector<reco::GenJet>>               gentauToken_   ;
  
   edm::EDGetTokenT<pat::MuonCollection>     		    muonToken_  	;	

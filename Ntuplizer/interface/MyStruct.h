@@ -63,6 +63,12 @@ struct taucand{
   Float_t cand_tau_pi1_dnn;
   Float_t cand_tau_pi2_dnn;
   Float_t cand_tau_pi3_dnn;
+  Float_t cand_tau_pi1_doca;
+  Float_t cand_tau_pi2_doca;
+  Float_t cand_tau_pi3_doca;
+  Int_t cand_tau_pi1_pv;
+  Int_t cand_tau_pi2_pv;
+  Int_t cand_tau_pi3_pv;
   Float_t cand_b_vprob;
   Float_t cand_b_vx;
   Float_t cand_b_vy;
@@ -131,6 +137,7 @@ struct taucandgen{
 struct pfcand{
   
   Int_t cand_idx;
+  Float_t doca;
   Float_t cand_absdz;
     
   bool operator<(const pfcand& another) const { 
