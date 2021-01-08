@@ -73,20 +73,29 @@ private:
    float chi = 0.;
    float ndf = 0.;
 
+   const int numberofDNN = 80;
+
    const int numberofToys = 1000;
    std::vector<map<string, double>> FFdict;
 
    helper aux;
    
-   tensorflow::MetaGraphDef* graphDef;
-   tensorflow::Session* session;
-   tensorflow::Tensor data; // (tensorflow::DT_FLOAT, { 1, 50, 8 }); // single batch of dimension 10
-   tensorflow::Tensor label; // (tensorflow::DT_FLOAT, { 1,50}); 
-   tensorflow::Tensor add_global; //(tensorflow::DT_FLOAT, { 1, 2 }); 
-   tensorflow::Tensor isTraining; //(tensorflow::DT_FLOAT, { 1, 2 }); 
-   tensorflow::Tensor norm; //(tensorflow::DT_FLOAT, { 1, 2 }); 
+   tensorflow::MetaGraphDef* graphDef_perPF;
+   tensorflow::MetaGraphDef* graphDef_perEVT;
 
-   std::string dnnfile_;
+   tensorflow::Session* session_perPF;
+   tensorflow::Session* session_perEVT;
+
+   tensorflow::Tensor data; // (tensorflow::DT_FLOAT, { 1, 50, 8 }); // single batch of dimension 10
+
+   tensorflow::Tensor label_perPF; // (tensorflow::DT_FLOAT, { 1,50}); 
+   tensorflow::Tensor label_perEVT; // (tensorflow::DT_FLOAT, { 1,50}); 
+   //   tensorflow::Tensor add_global; //(tensorflow::DT_FLOAT, { 1, 2 }); 
+   tensorflow::Tensor isTraining; //(tensorflow::DT_FLOAT, { 1, 2 }); 
+   //   tensorflow::Tensor norm; //(tensorflow::DT_FLOAT, { 1, 2 }); 
+
+   std::string dnnfile_perPF_;
+   std::string dnnfile_perEVT_;
 
    Hammer::Hammer hammer;
 

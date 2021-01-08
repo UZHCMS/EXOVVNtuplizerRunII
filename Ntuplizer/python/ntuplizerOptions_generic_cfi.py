@@ -9,7 +9,7 @@ config["RUNONMC"] = True
 #-----------------------------------------#
 #config["USEHAMMER"] = (True and config["RUNONMC"])
 config["USEHAMMER"] = False
-config["VERBOSE"] = True
+config["VERBOSE"] = False
 
 #--------- For taus ----------#
 config["USEDNN"] = True
@@ -58,7 +58,8 @@ if config["DOJPSIMU"]:
     config["USEDNN"] = False
 
 if config["DOJPSITAU"]:
-    config["DNNFILE"] = "data/DNN/BcJPsi/DUMMY"
+    config["DNNFILE_PERPF"] = "data/DNN/BcJPsi/TAU/DUMMY"
+    config["DNNFILE_PEREVT"] = "data/DNN/BcJPsi/TAU_class/DUMMY"
 
 elif config["DOBSTAUTAU"] or config["DOBSDSTARTAUNU"]:
     config["DNNFILE"] = "data/DNN/BsTauTau_semilep/DUMMY"    

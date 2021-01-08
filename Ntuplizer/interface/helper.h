@@ -170,8 +170,25 @@ class helper{
 
   // absolute impact parameter
   std::pair<bool, Measurement1D> absoluteImpactParameter(const TrajectoryStateOnSurface& tsos,
-							   RefCountedKinematicVertex vertex,
-							   VertexDistance& distanceComputer);
+							 RefCountedKinematicVertex vertex,
+							 VertexDistance& distanceComputer);
+
+  std::pair<bool, Measurement1D> absoluteImpactParameter3D(const TrajectoryStateOnSurface& tsos,
+							   RefCountedKinematicVertex vertex);
+
+
+  std::pair<bool, Measurement1D> absoluteTransverseImpactParameter(const TrajectoryStateOnSurface& tsos,
+								   RefCountedKinematicVertex vertex);
+  
+
+  std::pair<bool, Measurement1D> signedTransverseImpactParameter(const TrajectoryStateOnSurface& tsos,
+								 RefCountedKinematicVertex vertex,
+								 reco::Vertex wrtVertex);
+
+  std::pair<bool, Measurement1D> signedImpactParameter3D(const TrajectoryStateOnSurface& tsos,
+							 RefCountedKinematicVertex vertex,
+							 reco::Vertex wrtVertex);
+
 
   math::PtEtaPhiMLorentzVector daughter_p4(std::vector< RefCountedKinematicParticle > fitted_children, size_t i);
   
@@ -193,6 +210,10 @@ class helper{
 
 
   bool isAncestor(const reco::Candidate* ancestor, const reco::Candidate * particle);
+  
+  std::tuple<Bool_t, RefCountedKinematicParticle, RefCountedKinematicVertex, RefCountedKinematicTree> KinematicFit(std::vector<RefCountedKinematicParticle> particles, Float_t constrain_mass, Float_t constrain_error);
+
+  bool basicPFcut(pat::PackedCandidate pf);
 
 };
 

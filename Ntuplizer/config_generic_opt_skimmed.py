@@ -50,12 +50,13 @@ options.register( 'runUpToEarlyF',
 
 
 
-options.maxEvents = 500
+options.maxEvents = 1000
 #options.maxEvents = -1
 
 #data file
 
-#options.inputFiles = '/store/mc/RunIIAutumn18MiniAOD/BcToJPsiTauNu_TuneCP5_13TeV-bcvegpy2-pythia8-evtgen/MINIAODSIM/102X_upgrade2018_realistic_v15-v4/230000/322CC3C2-921E-7448-902A-8FCB1F0A2F72.root'
+options.inputFiles = '/store/mc/RunIIAutumn18MiniAOD/BcToJPsiTauNu_TuneCP5_13TeV-bcvegpy2-pythia8-evtgen/MINIAODSIM/102X_upgrade2018_realistic_v15-v4/230000/322CC3C2-921E-7448-902A-8FCB1F0A2F72.root'
+#options.inputFiles = '/store/user/manzoni/BcToJpsiX_TuneCP5_13TeV-pythia8/RunIISummer19UL18_MINIAODSIM_v1/201112_133556/0000/RJpsi-BcToXToJpsiMuMuSelected-RunIISummer19UL18MiniAOD_7.root'
 
 #options.inputFiles = '/store/mc/RunIIAutumn18MiniAOD/BcToJPsiMuNu_TuneCP5_13TeV-bcvegpy2-pythia8-evtgen/MINIAODSIM/102X_upgrade2018_realistic_v15-v3/100000/78A9DF86-EAC5-D242-8E7B-171AFD012CC7.root'
 
@@ -64,7 +65,7 @@ options.maxEvents = 500
 #options.inputFiles = '/store/data/Run2018D/Charmonium/MINIAOD/12Nov2019_UL2018-v1/280000/D7FD376D-30CD-AA48-8D03-E0220043BBDE.root'
 #options.inputFiles = '/store/data/Run2017F/Charmonium/MINIAOD/09Aug2019_UL2017-v1/20000/00BACB48-9B0F-8F48-A68B-2F08A3E9E681.root'
 #options.inputFiles = '/store/data/Run2016B/Charmonium/MINIAOD/21Feb2020_ver2_UL2016_HIPM-v1/240000/0333D5C7-28C0-7641-994A-ADE29A1EBAAD.root'
-options.inputFiles = '/store/data/Run2016B/Charmonium/MINIAOD/21Feb2020_ver2_UL2016_HIPM-v1/240000/00251310-7FD5-BE47-B127-8CFC5B8DFE6E.root'
+#options.inputFiles = '/store/data/Run2016B/Charmonium/MINIAOD/21Feb2020_ver2_UL2016_HIPM-v1/240000/00251310-7FD5-BE47-B127-8CFC5B8DFE6E.root'
 
 options.parseArguments()
 
@@ -330,7 +331,8 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     vprobcut          = cms.double(config['VPROBCUT']),
     dnncut            = cms.double(config['DNNCUT']),
     tau_charge        = cms.uint32(config['TAU_CHARGE']),
-    dnnfile           = cms.string(config['DNNFILE']),                        
+    dnnfile_perPF     = cms.string(config['DNNFILE_PERPF']),                        
+    dnnfile_perEVT    = cms.string(config['DNNFILE_PEREVT']),                        
     vertices = cms.InputTag("offlineSlimmedPrimaryVertices"),
     beamSpot = cms.InputTag("offlineBeamSpot"),
     taus = cms.InputTag("slimmedTaus"),
@@ -371,6 +373,7 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     jetsForMetCorr = cms.InputTag(jetsAK4),
     rho = cms.InputTag("fixedGridRhoFastjetAll"),
     genparticles = cms.InputTag("prunedGenParticles"),
+    packedgenparticles = cms.InputTag("packedGenParticles"),
     gentaus = cms.InputTag("tauGenJets"),
     PUInfo = cms.InputTag("slimmedAddPileupInfo"),
     genEventInfo = cms.InputTag("generator"),

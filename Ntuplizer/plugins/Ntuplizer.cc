@@ -7,10 +7,10 @@
 #include "../interface/VerticesNtuplizer.h"
 #include "../interface/JpsiMuNtuplizer.h"
 #include "../interface/JpsiTauNtuplizer.h"
-#include "../interface/BsTauTauNtuplizer.h"
-#include "../interface/BsTauTauFHNtuplizer.h"
-#include "../interface/BsTauTauFHNtuplizer_mr.h"
-#include "../interface/BsDstarTauNuNtuplizer.h"
+//#include "../interface/BsTauTauNtuplizer.h"
+//#include "../interface/BsTauTauFHNtuplizer.h"
+//#include "../interface/BsTauTauFHNtuplizer_mr.h"
+//#include "../interface/BsDstarTauNuNtuplizer.h"
 
 #include "DataFormats/PatCandidates/interface/TriggerObjectStandAlone.h"
 #include "DataFormats/PatCandidates/interface/PackedTriggerPrescales.h"
@@ -83,10 +83,10 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
   runFlags["doMissingEt"] = iConfig.getParameter<bool>("doMissingEt");
   runFlags["doJpsiMu"] = iConfig.getParameter<bool>("doJpsiMu");
   runFlags["doJpsiTau"] = iConfig.getParameter<bool>("doJpsiTau");
-  runFlags["doBsTauTau"] = iConfig.getParameter<bool>("doBsTauTau");
-  runFlags["doBsTauTauFH"] = iConfig.getParameter<bool>("doBsTauTauFH");
-  runFlags["doBsTauTauFH_mr"] = iConfig.getParameter<bool>("doBsTauTauFH_mr");
-  runFlags["doBsDstarTauNu"] = iConfig.getParameter<bool>("doBsDstarTauNu");
+  //  runFlags["doBsTauTau"] = iConfig.getParameter<bool>("doBsTauTau");
+  //  runFlags["doBsTauTauFH"] = iConfig.getParameter<bool>("doBsTauTauFH");
+  //  runFlags["doBsTauTauFH_mr"] = iConfig.getParameter<bool>("doBsTauTauFH_mr");
+  //  runFlags["doBsDstarTauNu"] = iConfig.getParameter<bool>("doBsDstarTauNu");
   runFlags["doGenHist"] = iConfig.getParameter<bool>("doGenHist");
   runFlags["isTruth"] = iConfig.getParameter<bool>("isTruth");
   runFlags["verbose"] = iConfig.getParameter<bool>("verbose");
@@ -96,10 +96,13 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
   runValues["dnncut"] = iConfig.getParameter<double>("dnncut");
   runValues["tau_charge"] = iConfig.getParameter<unsigned int>("tau_charge");
 
-  runStrings["dnnfile"] = iConfig.getParameter<std::string>("dnnfile");  
+  runStrings["dnnfile_perPF"] = iConfig.getParameter<std::string>("dnnfile_perPF");  
+  runStrings["dnnfile_perEVT"] = iConfig.getParameter<std::string>("dnnfile_perEVT");  
+
+  std::cout << "Ntuplizer: dnn_perPF file: " << runStrings["dnnfile_perPF"] << std::endl;
+  std::cout << "Ntuplizer: dnn_perEVT file: " << runStrings["dnnfile_perEVT"] << std::endl;
 
 
-  std::cout << "Ntuplizer: dnn file: " << runStrings["dnnfile"] << std::endl;
   std::cout << "Ntuplizer: (dzcut, fsigcut, vprobcut, dnn cut, tau_charge) = " << runValues["dzcut"] << " " << runValues["fsigcut"] << " " << runValues["vprobcut"] << " " << runValues["dnncut"] << " " << runValues["tau_charge"] << std::endl;
   
   std::cout << "useHammer" << runFlags["useHammer"] << std::endl;
@@ -115,6 +118,9 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
   /* Histogram for cutflow */
 
   nBranches_->cutflow_perevt = fs->make<TH1F>("cutflow_perevt", "Per Event Ntuplizer Cutflow", 15, 0, 15);
+
+  nBranches_->nmuon = fs->make<TH1F>("nmuon", "number of muon", 10, 0, 10);
+
 
   if(runFlags["runOnMC"]){
     nBranches_->q2_nocut = fs->make<TH1F>("q2_nocut", "q2 before any cut", 40, 0, 15);
@@ -228,65 +234,65 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
 						   nBranches_ );
   }
 
-  if (runFlags["doBsTauTau"]) {
-    std::cout<<"\n\n --->GETTING INSIDE doBsTauTau<---\n\n"<<std::endl;
-    nTuplizers_["BsTauTau"] = new BsTauTauNtuplizer( muonToken_   , 
-						     vtxToken_   , 
-						     packedpfcandidatesToken_,
-						     triggerToken_,
-						     triggerObjects_,
-						     genparticleToken_,
-						     gentauToken_,
-						     runFlags,
-						     runValues,
-						     runStrings,
-						     nBranches_ );
-  }
-
-  if (runFlags["doBsTauTauFH"]) {
-    std::cout<<"\n\n --->GETTING INSIDE doBsTauTauFH<---\n\n"<<std::endl;
-    nTuplizers_["BsTauTauFH"] = new BsTauTauFHNtuplizer( muonToken_   , 
-							 vtxToken_   , 
-							 packedpfcandidatesToken_,
-							 triggerToken_,
-							 triggerObjects_,
-							 genparticleToken_,
-							 gentauToken_,
-							 runFlags,
-							 runValues,
-							 runStrings,
-							 nBranches_ );
-  }
-
-  if (runFlags["doBsTauTauFH_mr"]) {
-    std::cout<<"\n\n --->GETTING INSIDE doBsTauTauFH_mr<---\n\n"<<std::endl;
-    nTuplizers_["BsTauTauFH_mr"] = new BsTauTauFHNtuplizer_mr( muonToken_   , 
-							 vtxToken_   , 
-							 packedpfcandidatesToken_,
-							 triggerToken_,
-							 triggerObjects_,
-							 genparticleToken_,
-							 gentauToken_,
-							 runFlags,
-							 runValues,
-							 runStrings,
-							 nBranches_ );
-  }
-
-  if (runFlags["doBsDstarTauNu"]) {
-    std::cout<<"\n\n --->GETTING INSIDE doBsDstarTauNu<---\n\n"<<std::endl;
-    nTuplizers_["BsDstarTauNu"] = new BsDstarTauNuNtuplizer( muonToken_   , 
-							 vtxToken_   , 
-							 packedpfcandidatesToken_,
-							 triggerToken_,
-							 triggerObjects_,
-							 genparticleToken_,
-							 gentauToken_,
-							 runFlags,
-							 runValues,
-							 runStrings,
-							 nBranches_ );
-  }
+//  if (runFlags["doBsTauTau"]) {
+//    std::cout<<"\n\n --->GETTING INSIDE doBsTauTau<---\n\n"<<std::endl;
+//    nTuplizers_["BsTauTau"] = new BsTauTauNtuplizer( muonToken_   , 
+//						     vtxToken_   , 
+//						     packedpfcandidatesToken_,
+//						     triggerToken_,
+//						     triggerObjects_,
+//						     genparticleToken_,
+//						     gentauToken_,
+//						     runFlags,
+//						     runValues,
+//						     runStrings,
+//						     nBranches_ );
+//  }
+//
+//  if (runFlags["doBsTauTauFH"]) {
+//    std::cout<<"\n\n --->GETTING INSIDE doBsTauTauFH<---\n\n"<<std::endl;
+//    nTuplizers_["BsTauTauFH"] = new BsTauTauFHNtuplizer( muonToken_   , 
+//							 vtxToken_   , 
+//							 packedpfcandidatesToken_,
+//							 triggerToken_,
+//							 triggerObjects_,
+//							 genparticleToken_,
+//							 gentauToken_,
+//							 runFlags,
+//							 runValues,
+//							 runStrings,
+//							 nBranches_ );
+//  }
+//
+//  if (runFlags["doBsTauTauFH_mr"]) {
+//    std::cout<<"\n\n --->GETTING INSIDE doBsTauTauFH_mr<---\n\n"<<std::endl;
+//    nTuplizers_["BsTauTauFH_mr"] = new BsTauTauFHNtuplizer_mr( muonToken_   , 
+//							 vtxToken_   , 
+//							 packedpfcandidatesToken_,
+//							 triggerToken_,
+//							 triggerObjects_,
+//							 genparticleToken_,
+//							 gentauToken_,
+//							 runFlags,
+//							 runValues,
+//							 runStrings,
+//							 nBranches_ );
+//  }
+//
+//  if (runFlags["doBsDstarTauNu"]) {
+//    std::cout<<"\n\n --->GETTING INSIDE doBsDstarTauNu<---\n\n"<<std::endl;
+//    nTuplizers_["BsDstarTauNu"] = new BsDstarTauNuNtuplizer( muonToken_   , 
+//							 vtxToken_   , 
+//							 packedpfcandidatesToken_,
+//							 triggerToken_,
+//							 triggerObjects_,
+//							 genparticleToken_,
+//							 gentauToken_,
+//							 runFlags,
+//							 runValues,
+//							 runStrings,
+//							 nBranches_ );
+//  }
   
 
  

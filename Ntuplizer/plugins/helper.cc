@@ -200,19 +200,119 @@ particle_cand helper::calculateIPvariables(
 
 
 std::pair<bool, Measurement1D> helper::absoluteImpactParameter(const TrajectoryStateOnSurface& tsos,
-                                                                        RefCountedKinematicVertex vertex,
-                                                                        VertexDistance& distanceComputer){
-    if (!tsos.isValid()) {
-        return std::pair<bool, Measurement1D>(false, Measurement1D(0., 0.));
-    }
-    GlobalPoint refPoint = tsos.globalPosition();
-    GlobalError refPointErr = tsos.cartesianError().position();
-    GlobalPoint vertexPosition = vertex->vertexState().position();
-    GlobalError vertexPositionErr = RecoVertex::convertError(vertex->vertexState().error());
-    return std::pair<bool, Measurement1D>(
-                                          true,
-                                          distanceComputer.distance(VertexState(vertexPosition, vertexPositionErr), VertexState(refPoint, refPointErr)));
+							       RefCountedKinematicVertex vertex,
+							       VertexDistance& distanceComputer){
+  if (!tsos.isValid()) {
+    return std::pair<bool, Measurement1D>(false, Measurement1D(0., 0.));
+  }
+  GlobalPoint refPoint = tsos.globalPosition();
+  GlobalError refPointErr = tsos.cartesianError().position();
+  GlobalPoint vertexPosition = vertex->vertexState().position();
+  GlobalError vertexPositionErr = RecoVertex::convertError(vertex->vertexState().error());
+  return std::pair<bool, Measurement1D>(
+					true,
+					distanceComputer.distance(VertexState(vertexPosition, vertexPositionErr), VertexState(refPoint, refPointErr)));
 }
+
+
+std::pair<bool, Measurement1D> helper::absoluteImpactParameter3D(const TrajectoryStateOnSurface& tsos,
+								 RefCountedKinematicVertex vertex){
+
+  VertexDistance3D dist;
+  
+  return absoluteImpactParameter(tsos, vertex, dist);
+}
+
+
+std::pair<bool, Measurement1D> helper::absoluteTransverseImpactParameter(const TrajectoryStateOnSurface& tsos,
+									 RefCountedKinematicVertex vertex){
+
+  VertexDistanceXY dist;
+  
+  return absoluteImpactParameter(tsos, vertex, dist);
+}
+
+
+
+
+
+std::pair<bool, Measurement1D> helper::signedTransverseImpactParameter(const TrajectoryStateOnSurface& tsos,
+								       RefCountedKinematicVertex vertex,
+								       reco::Vertex wrtVertex){
+//  if (!tsos.isValid()) {
+//    return std::pair<bool, Measurement1D>(false, Measurement1D(0., 0.));
+//    }
+//  GlobalPoint refPoint = tsos.globalPosition();
+//  GlobalError refPointErr = tsos.cartesianError().position();
+//  GlobalPoint vertexPosition = vertex->vertexState().position();
+//  GlobalError vertexPositionErr = RecoVertex::convertError(vertex->vertexState().error());
+//  return std::pair<bool, Measurement1D>(
+//					true,
+//					distanceComputer.distance(VertexState(vertexPosition, vertexPositionErr), VertexState(refPoint, refPointErr)));
+  
+  VertexDistanceXY dist;
+  
+  std::pair<bool,Measurement1D> result = absoluteImpactParameter(tsos, vertex, dist);
+  if (!result.first)
+    return result;
+
+  //Compute Sign
+  GlobalPoint impactPoint = tsos.globalPosition();
+  GlobalVector IPVec(impactPoint.x() - vertex->vertexState().position().x(), impactPoint.y() - vertex->vertexState().position().y(), 0.);
+  GlobalVector direction(vertex->vertexState().position().x() - wrtVertex.position().x(), 
+			 vertex->vertexState().position().y() - wrtVertex.position().y(), 0);
+
+  double prod = IPVec.dot(direction);
+  double sign = (prod >= 0) ? 1. : -1.;
+  
+  //Apply sign to the result
+  return pair<bool, Measurement1D>(result.first, Measurement1D(sign * result.second.value(), result.second.error()));
+  
+}
+
+
+std::pair<bool, Measurement1D> helper::signedImpactParameter3D(const TrajectoryStateOnSurface& tsos,
+							       RefCountedKinematicVertex vertex,
+							       reco::Vertex wrtVertex){
+//  if (!tsos.isValid()) {
+//    return std::pair<bool, Measurement1D>(false, Measurement1D(0., 0.));
+//    }
+//  GlobalPoint refPoint = tsos.globalPosition();
+//  GlobalError refPointErr = tsos.cartesianError().position();
+//  GlobalPoint vertexPosition = vertex->vertexState().position();
+//  GlobalError vertexPositionErr = RecoVertex::convertError(vertex->vertexState().error());
+//  return std::pair<bool, Measurement1D>(
+//					true,
+//					distanceComputer.distance(VertexState(vertexPosition, vertexPositionErr), VertexState(refPoint, refPointErr)));
+  
+  VertexDistance3D dist;
+  
+  std::pair<bool,Measurement1D> result = absoluteImpactParameter(tsos, vertex, dist);
+  if (!result.first)
+    return result;
+  
+  //Compute Sign
+  GlobalPoint impactPoint = tsos.globalPosition();
+  GlobalVector IPVec(impactPoint.x() - vertex->vertexState().position().x(), 
+		     impactPoint.y() - vertex->vertexState().position().y(),  
+		     impactPoint.z() - vertex->vertexState().position().z());
+
+  GlobalVector direction(vertex->vertexState().position().x() - wrtVertex.position().x(), 
+			 vertex->vertexState().position().y() - wrtVertex.position().y(), 
+			 vertex->vertexState().position().z() - wrtVertex.position().z());
+
+  double prod = IPVec.dot(direction);
+  double sign = (prod >= 0) ? 1. : -1.;
+  
+  //Apply sign to the result
+  return pair<bool, Measurement1D>(result.first, Measurement1D(sign * result.second.value(), result.second.error()));
+  
+}
+
+
+
+
+
 
 
 
@@ -339,3 +439,77 @@ void helper::recursiveDaughters(size_t index,
     }
   }
 }
+
+std::tuple<Bool_t, RefCountedKinematicParticle, RefCountedKinematicVertex, RefCountedKinematicTree> helper::KinematicFit(std::vector<RefCountedKinematicParticle> particles, Float_t constrain_mass, Float_t constrain_error){
+  
+  //creating the vertex fitter
+  KinematicParticleVertexFitter kpvFitter;
+   
+  //reconstructing a J/Psi decay
+  RefCountedKinematicTree tree = kpvFitter.fit(particles);
+  RefCountedKinematicParticle part; // = tree->currentParticle();
+  RefCountedKinematicVertex vertex; // = tree->currentDecayVertex();
+
+  if(!tree->isEmpty() && tree->isValid() && tree->isConsistent()){
+
+    //creating the particle fitter
+    KinematicParticleFitter csFitter;
+    
+    // creating the constraint
+
+    if(constrain_mass!=-1){
+      std::cout << "Constrained fit with mass = " << constrain_mass << " error = " <<  constrain_error << std::endl;
+      KinematicConstraint* constraint = new MassKinematicConstraint(constrain_mass, constrain_error);
+      //the constrained fit
+      tree = csFitter.fit(constraint, tree);
+    }else{
+      std::cout << "No mass constrained fit" << std::endl;
+    }
+
+
+    //getting the J/Psi KinematicParticle
+    tree->movePointerToTheTop();
+    part = tree->currentParticle();
+
+    if(part->currentState().isValid()){
+    
+      vertex = tree->currentDecayVertex();
+
+      if(vertex->vertexIsValid()){
+      
+	if(TMath::Prob(vertex->chiSquared(), vertex->degreesOfFreedom()) > 0){
+
+	  return std::forward_as_tuple(true, part, vertex, tree);
+
+	}
+      }
+    }
+  }
+
+  
+  return std::forward_as_tuple(false, part, vertex, tree);
+
+}
+
+
+bool helper::basicPFcut(pat::PackedCandidate pf){
+  if(pf.pt() < 0.5) return false;
+  if(!pf.hasTrackDetails()) return false;
+  
+  // use the PF candidates that come from closestVertex    
+  //  Float_t precut_dz = pf.vz() - closestVertex.position().z();
+  //  if(TMath::Abs(precut_dz) > c_dz) return false;
+  
+  Bool_t hpflag = pf.trackHighPurity();
+  if(!hpflag) return false;
+  if(pf.pseudoTrack().hitPattern().numberOfValidPixelHits() < 0) return false;
+  if(pf.pseudoTrack().hitPattern().numberOfValidHits() < 3) return false;
+  if(pf.pseudoTrack().normalizedChi2() > 100) return false;
+  
+  if(TMath::Abs(pf.pdgId())!=211) return false; 
+  if(TMath::Abs(pf.eta()) > 2.5) return false; 
+
+  return true;
+
+}
+

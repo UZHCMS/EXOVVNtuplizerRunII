@@ -1265,64 +1265,64 @@ bool JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
     // ordinary method 
     //////////////////////////
 
-    for(int i=0; i<11; i++) { //Loop over eigenVar
-      for (int j=0; j<2; j++) { //Loop over pos/neg direction
-
-        map<string, double> settings;
-
-        for (int k=0; k<11; k++) { //Loop over parameters
-          settings["delta_" + parName[k]] = eigVar[i][k][j];
-        }
-
-        hammer.setFFEigenvectors("BctoJpsi", "BGLVar", settings);
-        auto weights = hammer.getWeights("Scheme1");
-        string var_name = "eig";
-	var_name += std::to_string(i);
-        var_name += j==0? "_Up" : "_Down";
-
-
-
-	Float_t weight_sys = -1;
-
-	if(!weights.empty()){
-	  for(auto elem: weights) {
-	    if(isnan(elem.second)) {
-	      std::cout << "[ERROR]: BGL nan weight: " << elem.second << std::endl;
-	    }else{
-	      weight_sys = elem.second;
-	    }
-	  }
-	}
-
-	if(var_name==std::string("eig0_Up")) nBranches_->JpsiMu_hammer_ebe_a0_up.push_back(weight_sys);
-	else if(var_name==std::string("eig0_Down")) nBranches_->JpsiMu_hammer_ebe_a0_down.push_back(weight_sys);
-	else if(var_name==std::string("eig1_Up")) nBranches_->JpsiMu_hammer_ebe_a1_up.push_back(weight_sys);
-	else if(var_name==std::string("eig1_Down")) nBranches_->JpsiMu_hammer_ebe_a1_down.push_back(weight_sys);
-	else if(var_name==std::string("eig2_Up")) nBranches_->JpsiMu_hammer_ebe_a2_up.push_back(weight_sys);
-	else if(var_name==std::string("eig2_Down")) nBranches_->JpsiMu_hammer_ebe_a2_down.push_back(weight_sys);
-
-	else if(var_name==std::string("eig3_Up")) nBranches_->JpsiMu_hammer_ebe_b0_up.push_back(weight_sys);
-	else if(var_name==std::string("eig3_Down")) nBranches_->JpsiMu_hammer_ebe_b0_down.push_back(weight_sys);
-	else if(var_name==std::string("eig4_Up")) nBranches_->JpsiMu_hammer_ebe_b1_up.push_back(weight_sys);
-	else if(var_name==std::string("eig4_Down")) nBranches_->JpsiMu_hammer_ebe_b1_down.push_back(weight_sys);
-	else if(var_name==std::string("eig5_Up")) nBranches_->JpsiMu_hammer_ebe_b2_up.push_back(weight_sys);
-	else if(var_name==std::string("eig5_Down")) nBranches_->JpsiMu_hammer_ebe_b2_down.push_back(weight_sys);
-
-	else if(var_name==std::string("eig6_Up")) nBranches_->JpsiMu_hammer_ebe_c1_up.push_back(weight_sys);
-	else if(var_name==std::string("eig6_Down")) nBranches_->JpsiMu_hammer_ebe_c1_down.push_back(weight_sys);
-	else if(var_name==std::string("eig7_Up")) nBranches_->JpsiMu_hammer_ebe_c2_up.push_back(weight_sys);
-	else if(var_name==std::string("eig7_Down")) nBranches_->JpsiMu_hammer_ebe_c2_down.push_back(weight_sys);
-
-	else if(var_name==std::string("eig8_Up")) nBranches_->JpsiMu_hammer_ebe_d0_up.push_back(weight_sys);
-	else if(var_name==std::string("eig8_Down")) nBranches_->JpsiMu_hammer_ebe_d0_down.push_back(weight_sys);
-	else if(var_name==std::string("eig9_Up")) nBranches_->JpsiMu_hammer_ebe_d1_up.push_back(weight_sys);
-	else if(var_name==std::string("eig9_Down")) nBranches_->JpsiMu_hammer_ebe_d1_down.push_back(weight_sys);
-	else if(var_name==std::string("eig10_Up")) nBranches_->JpsiMu_hammer_ebe_d2_up.push_back(weight_sys);
-	else if(var_name==std::string("eig10_Down")) nBranches_->JpsiMu_hammer_ebe_d2_down.push_back(weight_sys);
-	
-	//	std::cout << "test1 \t " << var_name << " " << weight_sys << std::endl;
-      }
-    }
+//    for(int i=0; i<11; i++) { //Loop over eigenVar
+//      for (int j=0; j<2; j++) { //Loop over pos/neg direction
+//
+//        map<string, double> settings;
+//
+//        for (int k=0; k<11; k++) { //Loop over parameters
+//          settings["delta_" + parName[k]] = eigVar[i][k][j];
+//        }
+//
+//        hammer.setFFEigenvectors("BctoJpsi", "BGLVar", settings);
+//        auto weights = hammer.getWeights("Scheme1");
+//        string var_name = "eig";
+//	var_name += std::to_string(i);
+//        var_name += j==0? "_Up" : "_Down";
+//
+//
+//
+//	Float_t weight_sys = -1;
+//
+//	if(!weights.empty()){
+//	  for(auto elem: weights) {
+//	    if(isnan(elem.second)) {
+//	      std::cout << "[ERROR]: BGL nan weight: " << elem.second << std::endl;
+//	    }else{
+//	      weight_sys = elem.second;
+//	    }
+//	  }
+//	}
+//
+//	if(var_name==std::string("eig0_Up")) nBranches_->JpsiMu_hammer_ebe_a0_up.push_back(weight_sys);
+//	else if(var_name==std::string("eig0_Down")) nBranches_->JpsiMu_hammer_ebe_a0_down.push_back(weight_sys);
+//	else if(var_name==std::string("eig1_Up")) nBranches_->JpsiMu_hammer_ebe_a1_up.push_back(weight_sys);
+//	else if(var_name==std::string("eig1_Down")) nBranches_->JpsiMu_hammer_ebe_a1_down.push_back(weight_sys);
+//	else if(var_name==std::string("eig2_Up")) nBranches_->JpsiMu_hammer_ebe_a2_up.push_back(weight_sys);
+//	else if(var_name==std::string("eig2_Down")) nBranches_->JpsiMu_hammer_ebe_a2_down.push_back(weight_sys);
+//
+//	else if(var_name==std::string("eig3_Up")) nBranches_->JpsiMu_hammer_ebe_b0_up.push_back(weight_sys);
+//	else if(var_name==std::string("eig3_Down")) nBranches_->JpsiMu_hammer_ebe_b0_down.push_back(weight_sys);
+//	else if(var_name==std::string("eig4_Up")) nBranches_->JpsiMu_hammer_ebe_b1_up.push_back(weight_sys);
+//	else if(var_name==std::string("eig4_Down")) nBranches_->JpsiMu_hammer_ebe_b1_down.push_back(weight_sys);
+//	else if(var_name==std::string("eig5_Up")) nBranches_->JpsiMu_hammer_ebe_b2_up.push_back(weight_sys);
+//	else if(var_name==std::string("eig5_Down")) nBranches_->JpsiMu_hammer_ebe_b2_down.push_back(weight_sys);
+//
+//	else if(var_name==std::string("eig6_Up")) nBranches_->JpsiMu_hammer_ebe_c1_up.push_back(weight_sys);
+//	else if(var_name==std::string("eig6_Down")) nBranches_->JpsiMu_hammer_ebe_c1_down.push_back(weight_sys);
+//	else if(var_name==std::string("eig7_Up")) nBranches_->JpsiMu_hammer_ebe_c2_up.push_back(weight_sys);
+//	else if(var_name==std::string("eig7_Down")) nBranches_->JpsiMu_hammer_ebe_c2_down.push_back(weight_sys);
+//
+//	else if(var_name==std::string("eig8_Up")) nBranches_->JpsiMu_hammer_ebe_d0_up.push_back(weight_sys);
+//	else if(var_name==std::string("eig8_Down")) nBranches_->JpsiMu_hammer_ebe_d0_down.push_back(weight_sys);
+//	else if(var_name==std::string("eig9_Up")) nBranches_->JpsiMu_hammer_ebe_d1_up.push_back(weight_sys);
+//	else if(var_name==std::string("eig9_Down")) nBranches_->JpsiMu_hammer_ebe_d1_down.push_back(weight_sys);
+//	else if(var_name==std::string("eig10_Up")) nBranches_->JpsiMu_hammer_ebe_d2_up.push_back(weight_sys);
+//	else if(var_name==std::string("eig10_Down")) nBranches_->JpsiMu_hammer_ebe_d2_down.push_back(weight_sys);
+//	
+//	//	std::cout << "test1 \t " << var_name << " " << weight_sys << std::endl;
+//      }
+//    }
 
     //    nBranches_->JpsiTau_hammer_ebe_up.push_back(TMath::Sqrt(hammer_up));
     //    nBranches_->JpsiTau_hammer_ebe_down.push_back(TMath::Sqrt(hammer_down));
