@@ -13,7 +13,7 @@ config["VERBOSE"] = False
 
 #--------- For taus ----------#
 config["USEDNN"] = True
-config["DZCUT"] = 0.25 # this is fixed !!
+config["DZCUT"] = 0.12 # this is fixed !!
 config["FSIGCUT"] = 3
 config["VPROBCUT"] = 0.1
 #config["DNNCUT"] = 0.1443 80% eff.
@@ -58,7 +58,8 @@ if config["DOJPSIMU"]:
     config["USEDNN"] = False
 
 if config["DOJPSITAU"]:
-    config["DNNFILE"] = "data/DNN/BcJPsi/DUMMY"
+    config["DNNFILE_PERPF"] = "data/DNN/BcJPsi/TAU/DUMMY"
+    config["DNNFILE_PEREVT"] = "data/DNN/BcJPsi/TAU_class/DUMMY"
 
 elif config["DOBSTAUTAU"] or config["DOBSDSTARTAUNU"]:
     config["DNNFILE"] = "data/DNN/BsTauTau_semilep/DUMMY"    

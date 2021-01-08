@@ -200,19 +200,117 @@ particle_cand helper::calculateIPvariables(
 
 
 std::pair<bool, Measurement1D> helper::absoluteImpactParameter(const TrajectoryStateOnSurface& tsos,
-                                                                        RefCountedKinematicVertex vertex,
-                                                                        VertexDistance& distanceComputer){
-    if (!tsos.isValid()) {
-        return std::pair<bool, Measurement1D>(false, Measurement1D(0., 0.));
-    }
-    GlobalPoint refPoint = tsos.globalPosition();
-    GlobalError refPointErr = tsos.cartesianError().position();
-    GlobalPoint vertexPosition = vertex->vertexState().position();
-    GlobalError vertexPositionErr = RecoVertex::convertError(vertex->vertexState().error());
-    return std::pair<bool, Measurement1D>(
-                                          true,
-                                          distanceComputer.distance(VertexState(vertexPosition, vertexPositionErr), VertexState(refPoint, refPointErr)));
+							       RefCountedKinematicVertex vertex,
+							       VertexDistance& distanceComputer){
+  if (!tsos.isValid()) {
+    return std::pair<bool, Measurement1D>(false, Measurement1D(0., 0.));
+  }
+  GlobalPoint refPoint = tsos.globalPosition();
+  GlobalError refPointErr = tsos.cartesianError().position();
+  GlobalPoint vertexPosition = vertex->vertexState().position();
+  GlobalError vertexPositionErr = RecoVertex::convertError(vertex->vertexState().error());
+  return std::pair<bool, Measurement1D>(
+					true,
+					distanceComputer.distance(VertexState(vertexPosition, vertexPositionErr), VertexState(refPoint, refPointErr)));
 }
+
+
+std::pair<bool, Measurement1D> helper::absoluteImpactParameter3D(const TrajectoryStateOnSurface& tsos,
+								 RefCountedKinematicVertex vertex){
+
+  VertexDistance3D dist;
+  
+  return absoluteImpactParameter(tsos, vertex, dist);
+}
+
+
+std::pair<bool, Measurement1D> helper::absoluteTransverseImpactParameter(const TrajectoryStateOnSurface& tsos,
+									 RefCountedKinematicVertex vertex){
+
+  VertexDistanceXY dist;
+  
+  return absoluteImpactParameter(tsos, vertex, dist);
+}
+
+
+
+
+
+std::pair<bool, Measurement1D> helper::signedTransverseImpactParameter(const TrajectoryStateOnSurface& tsos,
+								       RefCountedKinematicVertex vertex,
+								       reco::Vertex wrtVertex){
+//  if (!tsos.isValid()) {
+//    return std::pair<bool, Measurement1D>(false, Measurement1D(0., 0.));
+//    }
+//  GlobalPoint refPoint = tsos.globalPosition();
+//  GlobalError refPointErr = tsos.cartesianError().position();
+//  GlobalPoint vertexPosition = vertex->vertexState().position();
+//  GlobalError vertexPositionErr = RecoVertex::convertError(vertex->vertexState().error());
+//  return std::pair<bool, Measurement1D>(
+//					true,
+//					distanceComputer.distance(VertexState(vertexPosition, vertexPositionErr), VertexState(refPoint, refPointErr)));
+  
+  VertexDistanceXY dist;
+  
+  std::pair<bool,Measurement1D> result = absoluteImpactParameter(tsos, vertex, dist);
+  if (!result.first)
+    return result;
+
+  //Compute Sign
+  GlobalPoint impactPoint = tsos.globalPosition();
+  GlobalVector IPVec(impactPoint.x() - vertex->vertexState().position().x(), impactPoint.y() - vertex->vertexState().position().y(), 0.);
+  GlobalVector direction(vertex->vertexState().position().x() - wrtVertex.position().x(), 
+			 vertex->vertexState().position().y() - wrtVertex.position().y(), 0);
+
+  double prod = IPVec.dot(direction);
+  double sign = (prod >= 0) ? 1. : -1.;
+  
+  //Apply sign to the result
+  return pair<bool, Measurement1D>(result.first, Measurement1D(sign * result.second.value(), result.second.error()));
+  
+}
+
+
+std::pair<bool, Measurement1D> helper::signedImpactParameter3D(const TrajectoryStateOnSurface& tsos,
+							       RefCountedKinematicVertex vertex,
+							       reco::Vertex wrtVertex){
+//  if (!tsos.isValid()) {
+//    return std::pair<bool, Measurement1D>(false, Measurement1D(0., 0.));
+//    }
+//  GlobalPoint refPoint = tsos.globalPosition();
+//  GlobalError refPointErr = tsos.cartesianError().position();
+//  GlobalPoint vertexPosition = vertex->vertexState().position();
+//  GlobalError vertexPositionErr = RecoVertex::convertError(vertex->vertexState().error());
+//  return std::pair<bool, Measurement1D>(
+//					true,
+//					distanceComputer.distance(VertexState(vertexPosition, vertexPositionErr), VertexState(refPoint, refPointErr)));
+  
+  VertexDistance3D dist;
+  
+  std::pair<bool,Measurement1D> result = absoluteImpactParameter(tsos, vertex, dist);
+  if (!result.first)
+    return result;
+  
+  //Compute Sign
+  GlobalPoint impactPoint = tsos.globalPosition();
+  GlobalVector IPVec(impactPoint.x() - vertex->vertexState().position().x(), 
+		     impactPoint.y() - vertex->vertexState().position().y(),  
+		     impactPoint.z() - vertex->vertexState().position().z());
+
+  GlobalVector direction(vertex->vertexState().position().x() - wrtVertex.position().x(), 
+			 vertex->vertexState().position().y() - wrtVertex.position().y(), 
+			 vertex->vertexState().position().z() - wrtVertex.position().z());
+
+  double prod = IPVec.dot(direction);
+  double sign = (prod >= 0) ? 1. : -1.;
+  
+  //Apply sign to the result
+  return pair<bool, Measurement1D>(result.first, Measurement1D(sign * result.second.value(), result.second.error()));
+  
+}
+
+
+
 
 
 
@@ -261,3 +359,157 @@ std::tuple<Float_t, TransientVertex> helper::vertexProb( const std::vector<reco:
 
     }
 }
+
+
+
+bool helper::isAncestor(const reco::Candidate* ancestor, const reco::Candidate * particle)
+{
+  //particle is already the ancestor
+  //  std::cout << "isA 1" << std::endl;
+  if(ancestor == particle ) return true;
+  //  std::cout << "isA 2" << std::endl;
+  //otherwise loop on mothers, if any and return true if the ancestor is found
+  for(size_t i=0;i< particle->numberOfMothers();i++)
+    {
+      //      std::cout << "isA 3" << i << std::endl;
+      if(isAncestor(ancestor,particle->mother(i))) return true;
+      //      std::cout << "isA 4" << std::endl;
+    }
+  //if we did not return yet, then particle and ancestor are not relatives
+  return false;
+}
+
+
+
+void helper::recursiveDaughters(size_t index,
+				int rank, 
+				const reco::GenParticleCollection &src,
+				std::vector<size_t> &allIndices,
+				std::vector<int> &pdgs,
+				std::vector<int> &layers,
+				std::vector<float> &ppt,
+				std::vector<float> &peta,
+				std::vector<float> &pphi,
+				bool verbose
+				) {
+  
+  reco::GenParticleRefVector daughters = src[index].daughterRefVector();
+  // avoid infinite recursion if the daughters are set to "this" particle.
+  size_t cachedIndex = index;
+
+  for (reco::GenParticleRefVector::const_iterator i = daughters.begin(); i != daughters.end(); ++i) {
+
+    index = i->key();
+
+    // To also avoid infinite recursion if a "loop" is found in the daughter list,
+    // check to make sure the index hasn't already been added.
+    if (find(allIndices.begin(), allIndices.end(), index) == allIndices.end()) {
+
+      allIndices.push_back(index);
+      pdgs.push_back(src[index].pdgId());
+      layers.push_back(rank);
+      ppt.push_back(src[index].pt());
+      peta.push_back(src[index].eta());
+      pphi.push_back(src[index].phi());
+
+      int _layer = -1;
+
+      if(src[index].numberOfDaughters()!=0){
+	_layer = rank;
+      }
+
+      layers.push_back(_layer);
+
+
+      if(verbose){
+	for(int ii=0; ii<rank-1; ii++){
+	  std::cout << "  "; 
+	}
+	std::cout << " +->" << src[index].pdgId() << " (" << _layer << ")" << std::endl;
+	
+	if (cachedIndex == index) {
+	  std::cout << "WARNING !!! This is already there ... " << cachedIndex << " " << index << " " << std::endl;
+	}
+      }
+
+
+      if (cachedIndex != index) {
+	recursiveDaughters(index, rank+1, src, allIndices, pdgs, layers, ppt, peta, pphi, verbose);
+      }
+    }
+  }
+}
+
+std::tuple<Bool_t, RefCountedKinematicParticle, RefCountedKinematicVertex, RefCountedKinematicTree> helper::KinematicFit(std::vector<RefCountedKinematicParticle> particles, Float_t constrain_mass, Float_t constrain_error){
+  
+  //creating the vertex fitter
+  KinematicParticleVertexFitter kpvFitter;
+   
+  //reconstructing a J/Psi decay
+  RefCountedKinematicTree tree = kpvFitter.fit(particles);
+  RefCountedKinematicParticle part; // = tree->currentParticle();
+  RefCountedKinematicVertex vertex; // = tree->currentDecayVertex();
+
+  if(!tree->isEmpty() && tree->isValid() && tree->isConsistent()){
+
+    //creating the particle fitter
+    KinematicParticleFitter csFitter;
+    
+    // creating the constraint
+
+    if(constrain_mass!=-1){
+      std::cout << "Constrained fit with mass = " << constrain_mass << " error = " <<  constrain_error << std::endl;
+      KinematicConstraint* constraint = new MassKinematicConstraint(constrain_mass, constrain_error);
+      //the constrained fit
+      tree = csFitter.fit(constraint, tree);
+    }else{
+      std::cout << "No mass constrained fit" << std::endl;
+    }
+
+
+    //getting the J/Psi KinematicParticle
+    tree->movePointerToTheTop();
+    part = tree->currentParticle();
+
+    if(part->currentState().isValid()){
+    
+      vertex = tree->currentDecayVertex();
+
+      if(vertex->vertexIsValid()){
+      
+	if(TMath::Prob(vertex->chiSquared(), vertex->degreesOfFreedom()) > 0){
+
+	  return std::forward_as_tuple(true, part, vertex, tree);
+
+	}
+      }
+    }
+  }
+
+  
+  return std::forward_as_tuple(false, part, vertex, tree);
+
+}
+
+
+bool helper::basicPFcut(pat::PackedCandidate pf){
+  if(pf.pt() < 0.5) return false;
+  if(!pf.hasTrackDetails()) return false;
+  
+  // use the PF candidates that come from closestVertex    
+  //  Float_t precut_dz = pf.vz() - closestVertex.position().z();
+  //  if(TMath::Abs(precut_dz) > c_dz) return false;
+  
+  Bool_t hpflag = pf.trackHighPurity();
+  if(!hpflag) return false;
+  if(pf.pseudoTrack().hitPattern().numberOfValidPixelHits() < 0) return false;
+  if(pf.pseudoTrack().hitPattern().numberOfValidHits() < 3) return false;
+  if(pf.pseudoTrack().normalizedChi2() > 100) return false;
+  
+  if(TMath::Abs(pf.pdgId())!=211) return false; 
+  if(TMath::Abs(pf.eta()) > 2.5) return false; 
+
+  return true;
+
+}
+

@@ -33,6 +33,8 @@ To check the status and resubmit:
 
 ls CRAB_tot* |grep "_tot"  | awk {' print "crab resubmit " $0 }' |sed 's/:/ /' >resubmit.sh 
 ls CRAB_tot/* |grep "_tot"  | awk {' print "crab status " $0 }' |sed 's/:/ /' >status.sh
+ls crab/Crab_202010091*/* |grep "Crab_"  | awk {' print "crab resubmit " $0 }' |sed 's/:/ /' >resubmit.sh 
+
 
 chmod +x  status.sh
 chmod +x  resubmit.sh

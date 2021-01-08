@@ -1,5 +1,20 @@
 # Hammer ver. 1.0 configuration settings
 
+BctoJpsiBGL:
+  BcStatesP1: [6.2749, 6.871]
+  BcStatesf: [6.7305, 6.7385, 7.1355, 7.1435]
+  BcStatesg: [6.329, 6.8975, 7.0065]
+  Chim: 0.007168
+  ChimL: 0.025042
+  Chip: 0.012539
+  Rb*: 0.8484462151394422
+  Rb0: 0.8414342629482071
+  Rd0: 0.602390180878553
+  Units: GeV
+  avec: [0.004698, -0.02218, 0.1503]
+  bvec: [0.003424, -0.02595, 0.3897]
+  cvec: [-0.003164, 0.08731]
+  dvec: [0.04011, -0.2132, 0.008156999999999999]
 BctoJpsiBGLVar:
   BcStatesP1: [6.2749, 6.871]
   BcStatesf: [6.7305, 6.7385, 7.1355, 7.1435]
@@ -27,3 +42,855 @@ BctoJpsiBGLVar:
   delta_d1: 0
   delta_d2: 0
   dvec: [0.04011, -0.2132, 0.008156999999999999]
+BctoJpsiEFG:
+  Units: GeV
+BctoJpsiKiselev:
+  Units: GeV
+BstoDs**0*BLR:
+  Units: GeV
+  as: 0.26
+  chi1: 0
+  chi2: 0
+  laB: 0.4
+  laS: 0.76
+  mb: 4.71
+  mc: 1.31
+  zeta1: 0.6
+  zt1: 0.7
+  ztp: 0.2
+BstoDs**0*BLRVar:
+  Units: GeV
+  as: 0.26
+  chi1: 0
+  chi2: 0
+  delta_chi1: 0
+  delta_chi2: 0
+  delta_zeta1: 0
+  delta_zt1: 0
+  delta_ztp: 0
+  laB: 0.4
+  laS: 0.76
+  mb: 4.71
+  mc: 1.31
+  sliwmatrix: [[1, 0, 0, 0, 0], [0, 1, 0, 0, 0], [0, 0, 1, 0, 0], [0, 0, 0, 1, 0], [0, 0, 0, 0, 1]]
+  zeta1: 0.6
+  zt1: 0.7
+  ztp: 0.2
+BstoDs**0*ISGW2:
+  Units: GeV
+BstoDs**0*LLSW:
+  Units: GeV
+  chi1: 0
+  chi2: 0
+  laB: 0.4
+  laS: 0.76
+  mb: 4.2
+  mc: 1.4
+  zeta1: 0.3
+  zt1: 0.68
+  ztp: -0.2
+BstoDs**1*BLR:
+  Units: GeV
+  as: 0.26
+  chi1: 0
+  chi2: 0
+  laB: 0.4
+  laS: 0.76
+  mb: 4.71
+  mc: 1.31
+  zeta1: 0.6
+  zt1: 0.7
+  ztp: 0.2
+BstoDs**1*BLRVar:
+  Units: GeV
+  as: 0.26
+  chi1: 0
+  chi2: 0
+  delta_chi1: 0
+  delta_chi2: 0
+  delta_zeta1: 0
+  delta_zt1: 0
+  delta_ztp: 0
+  laB: 0.4
+  laS: 0.76
+  mb: 4.71
+  mc: 1.31
+  sliwmatrix: [[1, 0, 0, 0, 0], [0, 1, 0, 0, 0], [0, 0, 1, 0, 0], [0, 0, 0, 1, 0], [0, 0, 0, 0, 1]]
+  zeta1: 0.6
+  zt1: 0.7
+  ztp: 0.2
+BstoDs**1*ISGW2:
+  Units: GeV
+BstoDs**1*LLSW:
+  Units: GeV
+  chi1: 0
+  chi2: 0
+  laB: 0.4
+  laS: 0.76
+  mb: 4.2
+  mc: 1.4
+  zeta1: 0.3
+  zt1: 0.68
+  ztp: -0.2
+BstoDs**1BLR:
+  Units: GeV
+  as: 0.26
+  eta1: 0
+  eta2: 0
+  eta3: 0
+  laB: 0.4
+  laP: 0.8
+  mb: 4.71
+  mc: 1.31
+  t1: 0.7
+  tau1: -0.5
+  tau2: 2.9
+  tp: -1.6
+BstoDs**1BLRVar:
+  Units: GeV
+  as: 0.26
+  delta_eta1: 0
+  delta_eta2: 0
+  delta_eta3: 0
+  delta_t1: 0
+  delta_tau1: 0
+  delta_tau2: 0
+  delta_tp: 0
+  eta1: 0
+  eta2: 0
+  eta3: 0
+  laB: 0.4
+  laP: 0.8
+  mb: 4.71
+  mc: 1.31
+  sliwmatrix: [[1, 0, 0, 0, 0, 0, 0], [0, 1, 0, 0, 0, 0, 0], [0, 0, 1, 0, 0, 0, 0], [0, 0, 0, 1, 0, 0, 0], [0, 0, 0, 0, 1, 0, 0], [0, 0, 0, 0, 0, 1, 0], [0, 0, 0, 0, 0, 0, 1]]
+  t1: 0.7
+  tau1: -0.5
+  tau2: 2.9
+  tp: -1.6
+BstoDs**1ISGW2:
+  Units: GeV
+BstoDs**1LLSW:
+  Units: GeV
+  eta1: 0
+  eta2: 0
+  eta3: 0
+  laB: 0.4
+  laP: 0.8
+  mb: 4.2
+  mc: 1.4
+  t1: 0.71
+  tau1: -0.5
+  tau2: 2.9
+  tp: -1.6
+BstoDs**2*BLR:
+  Units: GeV
+  as: 0.26
+  eta1: 0
+  eta2: 0
+  eta3: 0
+  laB: 0.4
+  laP: 0.8
+  mb: 4.71
+  mc: 1.31
+  t1: 0.7
+  tau1: -0.5
+  tau2: 2.9
+  tp: -1.6
+BstoDs**2*BLRVar:
+  Units: GeV
+  as: 0.26
+  delta_eta1: 0
+  delta_eta2: 0
+  delta_eta3: 0
+  delta_t1: 0
+  delta_tau1: 0
+  delta_tau2: 0
+  delta_tp: 0
+  eta1: 0
+  eta2: 0
+  eta3: 0
+  laB: 0.4
+  laP: 0.8
+  mb: 4.71
+  mc: 1.31
+  sliwmatrix: [[1, 0, 0, 0, 0, 0, 0], [0, 1, 0, 0, 0, 0, 0], [0, 0, 1, 0, 0, 0, 0], [0, 0, 0, 1, 0, 0, 0], [0, 0, 0, 0, 1, 0, 0], [0, 0, 0, 0, 0, 1, 0], [0, 0, 0, 0, 0, 0, 1]]
+  t1: 0.7
+  tau1: -0.5
+  tau2: 2.9
+  tp: -1.6
+BstoDs**2*ISGW2:
+  Units: GeV
+BstoDs**2*LLSW:
+  Units: GeV
+  eta1: 0
+  eta2: 0
+  eta3: 0
+  laB: 0.4
+  laP: 0.8
+  mb: 4.2
+  mc: 1.4
+  t1: 0.71
+  tau1: -0.5
+  tau2: 2.9
+  tp: -1.6
+BstoDs*BGL:
+  BcStatesP1: [6.275, 6.842, 7.25]
+  BcStatesf: [6.73, 6.736, 7.135, 7.142]
+  BcStatesg: [6.337, 6.899, 7.012, 7.28]
+  Chim: 0.000307
+  ChimL: 0.019421
+  Chip: 0.000528
+  Units: GeV
+  Vcb: 0.0415
+  avec: [0.00038, 0.026905, 0]
+  bvec: [0.00055, -0.002037, 0]
+  cvec: [-0.000433, 0.005353]
+  dvec: [0.0025, -0.013]
+BstoDs*BGLVar:
+  BcStatesP1: [6.275, 6.842, 7.25]
+  BcStatesf: [6.73, 6.736, 7.135, 7.142]
+  BcStatesg: [6.337, 6.899, 7.012, 7.28]
+  Chim: 0.000307
+  ChimL: 0.019421
+  Chip: 0.000528
+  Units: GeV
+  Vcb: 0.0415
+  abcdmatrix: [[1, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 1, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 1, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 1, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 1, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 1, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 1, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 1, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 1, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 1]]
+  avec: [0.00038, 0.026905, 0]
+  bvec: [0.00055, -0.002037, 0]
+  cvec: [-0.000433, 0.005353]
+  delta_a0: 0
+  delta_a1: 0
+  delta_a2: 0
+  delta_b0: 0
+  delta_b1: 0
+  delta_b2: 0
+  delta_c1: 0
+  delta_c2: 0
+  delta_d0: 0
+  delta_d1: 0
+  dvec: [0.0025, -0.013]
+BstoDs*BLPR:
+  RhoSq: 1.24
+  Units: GeV
+  a: 1.0670241328105
+  as: 0.26
+  chi1p: 0
+  chi21: -0.06
+  chi2p: -0
+  chi3p: 0.05
+  dV20: 0
+  ebR/eb: 0.861
+  ecR/ec: 0.822
+  eta1: 0.3
+  etap: -0.05
+  la: 0.57115
+  mb: 4.71
+  mc: 1.31
+BstoDs*BLPRVar:
+  RhoSq: 1.24
+  Units: GeV
+  a: 1.0670241328105
+  as: 0.26
+  chi21: -0.06
+  chi2p: -0
+  chi3p: 0.05
+  dV20: 0
+  delta_RhoSq: 0
+  delta_chi21: 0
+  delta_chi2p: 0
+  delta_chi3p: 0
+  delta_dV20: 0
+  delta_eta1: 0
+  delta_etap: 0
+  ebR/eb: 0.861
+  ecR/ec: 0.822
+  eta1: 0.3
+  etap: -0.05
+  la: 0.57115
+  mb: 4.71
+  mc: 1.31
+  sliwmatrix: [[1, 0, 0, 0, 0, 0, 0], [0, 1, 0, 0, 0, 0, 0], [0, 0, 1, 0, 0, 0, 0], [0, 0, 0, 1, 0, 0, 0], [0, 0, 0, 0, 1, 0, 0], [0, 0, 0, 0, 0, 1, 0], [0, 0, 0, 0, 0, 0, 1]]
+BstoDs*CLN:
+  F1: 0.908
+  R0: 1.15
+  R1: 1.401
+  R2: 0.854
+  RhoSq: 1.207
+  Units: GeV
+  a: 1
+  as: 0.26
+  la: 0.48
+  mcOnmb: 0.29
+BstoDs*CLNVar:
+  F1: 0.908
+  R0: 1.15
+  R1: 1.401
+  R2: 0.854
+  RhoRsmatrix: [[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1]]
+  RhoSq: 1.207
+  Units: GeV
+  a: 1
+  as: 0.26
+  delta_R0: 0
+  delta_R1: 0
+  delta_R2: 0
+  delta_RhoSq: 0
+  la: 0.48
+  mcOnmb: 0.29
+BstoDs*ISGW2:
+  Units: GeV
+BstoDsBGL:
+  BcStates0: [6.716, 7.121]
+  BcStatesp: [6.329, 6.92, 7.02]
+  ChiL: 0.006332
+  ChiT: 0.0005130999999999999
+  Units: GeV
+  a0: [0.07932, -0.214, 0.17, -0.958]
+  ap: [0.01565, -0.0353, -0.043, 0.194]
+BstoDsBGLVar:
+  BcStates0: [6.716, 7.121]
+  BcStatesp: [6.329, 6.92, 7.02]
+  ChiL: 0.006332
+  ChiT: 0.0005130999999999999
+  Units: GeV
+  a0: [0.07932, -0.214, 0.17, -0.958]
+  ap: [0.01565, -0.0353, -0.043, 0.194]
+  apa0matrix: [[1, 0, 0, 0, 0, 0, 0, 0], [0, 1, 0, 0, 0, 0, 0, 0], [0, 0, 1, 0, 0, 0, 0, 0], [0, 0, 0, 1, 0, 0, 0, 0], [0, 0, 0, 0, 1, 0, 0, 0], [0, 0, 0, 0, 0, 1, 0, 0], [0, 0, 0, 0, 0, 0, 1, 0], [0, 0, 0, 0, 0, 0, 0, 1]]
+  delta_a00: 0
+  delta_a01: 0
+  delta_a02: 0
+  delta_a03: 0
+  delta_ap0: 0
+  delta_ap1: 0
+  delta_ap2: 0
+  delta_ap3: 0
+BstoDsBLPR:
+  RhoSq: 1.24
+  Units: GeV
+  a: 1.0670241328105
+  as: 0.26
+  chi21: -0.06
+  chi2p: -0
+  chi3p: 0.05
+  dV20: 0
+  ebR/eb: 0.861
+  ecR/ec: 0.822
+  eta1: 0.3
+  etap: -0.05
+  la: 0.57115
+  mb: 4.71
+  mc: 1.31
+BstoDsBLPRVar:
+  RhoSq: 1.24
+  Units: GeV
+  a: 1.0670241328105
+  as: 0.26
+  chi21: -0.06
+  chi2p: -0
+  chi3p: 0.05
+  dV20: 0
+  delta_RhoSq: 0
+  delta_chi21: 0
+  delta_chi2p: 0
+  delta_chi3p: 0
+  delta_dV20: 0
+  delta_eta1: 0
+  delta_etap: 0
+  ebR/eb: 0.861
+  ecR/ec: 0.822
+  eta1: 0.3
+  etap: -0.05
+  la: 0.57115
+  mb: 4.71
+  mc: 1.31
+  sliwmatrix: [[1, 0, 0, 0, 0, 0, 0], [0, 1, 0, 0, 0, 0, 0], [0, 0, 1, 0, 0, 0, 0], [0, 0, 0, 1, 0, 0, 0], [0, 0, 0, 0, 1, 0, 0], [0, 0, 0, 0, 0, 1, 0], [0, 0, 0, 0, 0, 0, 1]]
+BstoDsCLN:
+  Delta: 1
+  G1: 1.082
+  RhoSq: 1.186
+  Units: GeV
+  a: 1
+  as: 0.26
+  la: 0.48
+  mcOnmb: 0.29
+BstoDsISGW2:
+  Units: GeV
+BtoCENu:
+  SM: [1, 0]
+  S_qLlL: [0, 0]
+  S_qLlR: [0, 0]
+  S_qRlL: [0, 0]
+  S_qRlR: [0, 0]
+  T_qLlL: [0, 0]
+  T_qRlR: [0, 0]
+  V_qLlL: [0, 0]
+  V_qLlR: [0, 0]
+  V_qRlL: [0, 0]
+  V_qRlR: [0, 0]
+BtoCMuNu:
+  SM: [1, 0]
+  S_qLlL: [0, 0]
+  S_qLlR: [0, 0]
+  S_qRlL: [0, 0]
+  S_qRlR: [0, 0]
+  T_qLlL: [0, 0]
+  T_qRlR: [0, 0]
+  V_qLlL: [0, 0]
+  V_qLlR: [0, 0]
+  V_qRlL: [0, 0]
+  V_qRlR: [0, 0]
+BtoCTauNu:
+  SM: [1, 0]
+  S_qLlL: [0, 0]
+  S_qLlR: [0, 0]
+  S_qRlL: [0, 0]
+  S_qRlR: [0, 0]
+  T_qLlL: [0, 0]
+  T_qRlR: [0, 0]
+  V_qLlL: [0, 0]
+  V_qLlR: [0, 0]
+  V_qRlL: [0, 0]
+  V_qRlR: [0, 0]
+BtoD**0*BLR:
+  Units: GeV
+  as: 0.26
+  chi1: 0
+  chi2: 0
+  laB: 0.4
+  laS: 0.76
+  mb: 4.71
+  mc: 1.31
+  zeta1: 0.6
+  zt1: 0.7
+  ztp: 0.2
+BtoD**0*BLRVar:
+  Units: GeV
+  as: 0.26
+  chi1: 0
+  chi2: 0
+  delta_chi1: 0
+  delta_chi2: 0
+  delta_zeta1: 0
+  delta_zt1: 0
+  delta_ztp: 0
+  laB: 0.4
+  laS: 0.76
+  mb: 4.71
+  mc: 1.31
+  sliwmatrix: [[1, 0, 0, 0, 0], [0, 1, 0, 0, 0], [0, 0, 1, 0, 0], [0, 0, 0, 1, 0], [0, 0, 0, 0, 1]]
+  zeta1: 0.6
+  zt1: 0.7
+  ztp: 0.2
+BtoD**0*ISGW2:
+  Units: GeV
+BtoD**0*LLSW:
+  Units: GeV
+  chi1: 0
+  chi2: 0
+  laB: 0.4
+  laS: 0.76
+  mb: 4.2
+  mc: 1.4
+  zeta1: 0.3
+  zt1: 0.68
+  ztp: -0.2
+BtoD**1*BLR:
+  Units: GeV
+  as: 0.26
+  chi1: 0
+  chi2: 0
+  laB: 0.4
+  laS: 0.76
+  mb: 4.71
+  mc: 1.31
+  zeta1: 0.6
+  zt1: 0.7
+  ztp: 0.2
+BtoD**1*BLRVar:
+  Units: GeV
+  as: 0.26
+  chi1: 0
+  chi2: 0
+  delta_chi1: 0
+  delta_chi2: 0
+  delta_zeta1: 0
+  delta_zt1: 0
+  delta_ztp: 0
+  laB: 0.4
+  laS: 0.76
+  mb: 4.71
+  mc: 1.31
+  sliwmatrix: [[1, 0, 0, 0, 0], [0, 1, 0, 0, 0], [0, 0, 1, 0, 0], [0, 0, 0, 1, 0], [0, 0, 0, 0, 1]]
+  zeta1: 0.6
+  zt1: 0.7
+  ztp: 0.2
+BtoD**1*ISGW2:
+  Units: GeV
+BtoD**1*LLSW:
+  Units: GeV
+  chi1: 0
+  chi2: 0
+  laB: 0.4
+  laS: 0.76
+  mb: 4.2
+  mc: 1.4
+  zeta1: 0.3
+  zt1: 0.68
+  ztp: -0.2
+BtoD**1BLR:
+  Units: GeV
+  as: 0.26
+  eta1: 0
+  eta2: 0
+  eta3: 0
+  laB: 0.4
+  laP: 0.8
+  mb: 4.71
+  mc: 1.31
+  t1: 0.7
+  tau1: -0.5
+  tau2: 2.9
+  tp: -1.6
+BtoD**1BLRVar:
+  Units: GeV
+  as: 0.26
+  delta_eta1: 0
+  delta_eta2: 0
+  delta_eta3: 0
+  delta_t1: 0
+  delta_tau1: 0
+  delta_tau2: 0
+  delta_tp: 0
+  eta1: 0
+  eta2: 0
+  eta3: 0
+  laB: 0.4
+  laP: 0.8
+  mb: 4.71
+  mc: 1.31
+  sliwmatrix: [[1, 0, 0, 0, 0, 0, 0], [0, 1, 0, 0, 0, 0, 0], [0, 0, 1, 0, 0, 0, 0], [0, 0, 0, 1, 0, 0, 0], [0, 0, 0, 0, 1, 0, 0], [0, 0, 0, 0, 0, 1, 0], [0, 0, 0, 0, 0, 0, 1]]
+  t1: 0.7
+  tau1: -0.5
+  tau2: 2.9
+  tp: -1.6
+BtoD**1ISGW2:
+  Units: GeV
+BtoD**1LLSW:
+  Units: GeV
+  eta1: 0
+  eta2: 0
+  eta3: 0
+  laB: 0.4
+  laP: 0.8
+  mb: 4.2
+  mc: 1.4
+  t1: 0.71
+  tau1: -0.5
+  tau2: 2.9
+  tp: -1.6
+BtoD**2*BLR:
+  Units: GeV
+  as: 0.26
+  eta1: 0
+  eta2: 0
+  eta3: 0
+  laB: 0.4
+  laP: 0.8
+  mb: 4.71
+  mc: 1.31
+  t1: 0.7
+  tau1: -0.5
+  tau2: 2.9
+  tp: -1.6
+BtoD**2*BLRVar:
+  Units: GeV
+  as: 0.26
+  delta_eta1: 0
+  delta_eta2: 0
+  delta_eta3: 0
+  delta_t1: 0
+  delta_tau1: 0
+  delta_tau2: 0
+  delta_tp: 0
+  eta1: 0
+  eta2: 0
+  eta3: 0
+  laB: 0.4
+  laP: 0.8
+  mb: 4.71
+  mc: 1.31
+  sliwmatrix: [[1, 0, 0, 0, 0, 0, 0], [0, 1, 0, 0, 0, 0, 0], [0, 0, 1, 0, 0, 0, 0], [0, 0, 0, 1, 0, 0, 0], [0, 0, 0, 0, 1, 0, 0], [0, 0, 0, 0, 0, 1, 0], [0, 0, 0, 0, 0, 0, 1]]
+  t1: 0.7
+  tau1: -0.5
+  tau2: 2.9
+  tp: -1.6
+BtoD**2*ISGW2:
+  Units: GeV
+BtoD**2*LLSW:
+  Units: GeV
+  eta1: 0
+  eta2: 0
+  eta3: 0
+  laB: 0.4
+  laP: 0.8
+  mb: 4.2
+  mc: 1.4
+  t1: 0.71
+  tau1: -0.5
+  tau2: 2.9
+  tp: -1.6
+BtoD*BGL:
+  BcStatesP1: [6.275, 6.842, 7.25]
+  BcStatesf: [6.73, 6.736, 7.135, 7.142]
+  BcStatesg: [6.337, 6.899, 7.012, 7.28]
+  Chim: 0.000307
+  ChimL: 0.019421
+  Chip: 0.000528
+  Units: GeV
+  Vcb: 0.0415
+  avec: [0.00038, 0.026905, 0]
+  bvec: [0.00055, -0.002037, 0]
+  cvec: [-0.000433, 0.005353]
+  dvec: [0.0025, -0.013]
+BtoD*BGLVar:
+  BcStatesP1: [6.275, 6.842, 7.25]
+  BcStatesf: [6.73, 6.736, 7.135, 7.142]
+  BcStatesg: [6.337, 6.899, 7.012, 7.28]
+  Chim: 0.000307
+  ChimL: 0.019421
+  Chip: 0.000528
+  Units: GeV
+  Vcb: 0.0415
+  abcdmatrix: [[1, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 1, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 1, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 1, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 1, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 1, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 1, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 1, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 1, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 1]]
+  avec: [0.00038, 0.026905, 0]
+  bvec: [0.00055, -0.002037, 0]
+  cvec: [-0.000433, 0.005353]
+  delta_a0: 0
+  delta_a1: 0
+  delta_a2: 0
+  delta_b0: 0
+  delta_b1: 0
+  delta_b2: 0
+  delta_c1: 0
+  delta_c2: 0
+  delta_d0: 0
+  delta_d1: 0
+  dvec: [0.0025, -0.013]
+BtoD*BLPR:
+  RhoSq: 1.24
+  Units: GeV
+  a: 1.0670241328105
+  as: 0.26
+  chi1p: 0
+  chi21: -0.06
+  chi2p: -0
+  chi3p: 0.05
+  dV20: 0
+  ebR/eb: 0.861
+  ecR/ec: 0.822
+  eta1: 0.3
+  etap: -0.05
+  la: 0.57115
+  mb: 4.71
+  mc: 1.31
+BtoD*BLPRVar:
+  RhoSq: 1.24
+  Units: GeV
+  a: 1.0670241328105
+  as: 0.26
+  chi21: -0.06
+  chi2p: -0
+  chi3p: 0.05
+  dV20: 0
+  delta_RhoSq: 0
+  delta_chi21: 0
+  delta_chi2p: 0
+  delta_chi3p: 0
+  delta_dV20: 0
+  delta_eta1: 0
+  delta_etap: 0
+  ebR/eb: 0.861
+  ecR/ec: 0.822
+  eta1: 0.3
+  etap: -0.05
+  la: 0.57115
+  mb: 4.71
+  mc: 1.31
+  sliwmatrix: [[1, 0, 0, 0, 0, 0, 0], [0, 1, 0, 0, 0, 0, 0], [0, 0, 1, 0, 0, 0, 0], [0, 0, 0, 1, 0, 0, 0], [0, 0, 0, 0, 1, 0, 0], [0, 0, 0, 0, 0, 1, 0], [0, 0, 0, 0, 0, 0, 1]]
+BtoD*CLN:
+  F1: 0.908
+  R0: 1.15
+  R1: 1.401
+  R2: 0.854
+  RhoSq: 1.207
+  Units: GeV
+  a: 1
+  as: 0.26
+  la: 0.48
+  mcOnmb: 0.29
+BtoD*CLNVar:
+  F1: 0.908
+  R0: 1.15
+  R1: 1.401
+  R2: 0.854
+  RhoRsmatrix: [[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1]]
+  RhoSq: 1.207
+  Units: GeV
+  a: 1
+  as: 0.26
+  delta_R0: 0
+  delta_R1: 0
+  delta_R2: 0
+  delta_RhoSq: 0
+  la: 0.48
+  mcOnmb: 0.29
+BtoD*ISGW2:
+  Units: GeV
+BtoDBGL:
+  BcStates0: [6.716, 7.121]
+  BcStatesp: [6.329, 6.92, 7.02]
+  ChiL: 0.006332
+  ChiT: 0.0005130999999999999
+  Units: GeV
+  a0: [0.07932, -0.214, 0.17, -0.958]
+  ap: [0.01565, -0.0353, -0.043, 0.194]
+BtoDBGLVar:
+  BcStates0: [6.716, 7.121]
+  BcStatesp: [6.329, 6.92, 7.02]
+  ChiL: 0.006332
+  ChiT: 0.0005130999999999999
+  Units: GeV
+  a0: [0.07932, -0.214, 0.17, -0.958]
+  ap: [0.01565, -0.0353, -0.043, 0.194]
+  apa0matrix: [[1, 0, 0, 0, 0, 0, 0, 0], [0, 1, 0, 0, 0, 0, 0, 0], [0, 0, 1, 0, 0, 0, 0, 0], [0, 0, 0, 1, 0, 0, 0, 0], [0, 0, 0, 0, 1, 0, 0, 0], [0, 0, 0, 0, 0, 1, 0, 0], [0, 0, 0, 0, 0, 0, 1, 0], [0, 0, 0, 0, 0, 0, 0, 1]]
+  delta_a00: 0
+  delta_a01: 0
+  delta_a02: 0
+  delta_a03: 0
+  delta_ap0: 0
+  delta_ap1: 0
+  delta_ap2: 0
+  delta_ap3: 0
+BtoDBLPR:
+  RhoSq: 1.24
+  Units: GeV
+  a: 1.0670241328105
+  as: 0.26
+  chi21: -0.06
+  chi2p: -0
+  chi3p: 0.05
+  dV20: 0
+  ebR/eb: 0.861
+  ecR/ec: 0.822
+  eta1: 0.3
+  etap: -0.05
+  la: 0.57115
+  mb: 4.71
+  mc: 1.31
+BtoDBLPRVar:
+  RhoSq: 1.24
+  Units: GeV
+  a: 1.0670241328105
+  as: 0.26
+  chi21: -0.06
+  chi2p: -0
+  chi3p: 0.05
+  dV20: 0
+  delta_RhoSq: 0
+  delta_chi21: 0
+  delta_chi2p: 0
+  delta_chi3p: 0
+  delta_dV20: 0
+  delta_eta1: 0
+  delta_etap: 0
+  ebR/eb: 0.861
+  ecR/ec: 0.822
+  eta1: 0.3
+  etap: -0.05
+  la: 0.57115
+  mb: 4.71
+  mc: 1.31
+  sliwmatrix: [[1, 0, 0, 0, 0, 0, 0], [0, 1, 0, 0, 0, 0, 0], [0, 0, 1, 0, 0, 0, 0], [0, 0, 0, 1, 0, 0, 0], [0, 0, 0, 0, 1, 0, 0], [0, 0, 0, 0, 0, 1, 0], [0, 0, 0, 0, 0, 0, 1]]
+BtoDCLN:
+  Delta: 1
+  G1: 1.082
+  RhoSq: 1.186
+  Units: GeV
+  a: 1
+  as: 0.26
+  la: 0.48
+  mcOnmb: 0.29
+BtoDISGW2:
+  Units: GeV
+D**1toD*PiPW:
+  D: [1, 0]
+  S: [0, 0]
+  Units: GeV
+D**2*toD*PiPW:
+  D: [1, 0]
+  Units: GeV
+D**2*toDPiPW:
+  D: [1, 0]
+  Units: GeV
+Hammer:
+  CalcHistograms: true
+  CalcProcesses: true
+  Units: GeV
+Histos:
+  KeepErrors: false
+LbtoLcBLRS:
+  Units: GeV
+  as: 0.26
+  b1: -0.459
+  b2: -0.39
+  dmbmc: 3.4
+  mLb: 5.62
+  mLc: 2.286
+  mb1S: 4.7215
+  z1: -2.037
+  z2: 3.159
+LbtoLcBLRSVar:
+  Units: GeV
+  as: 0.26
+  b1: -0.459
+  b2: -0.39
+  delta_b1: 0
+  delta_b2: 0
+  delta_z1: 0
+  delta_z2: 0
+  dmbmc: 3.4
+  mLb: 5.62
+  mLc: 2.286
+  mb1S: 4.7215
+  sliwmatrix: [[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1]]
+  z1: -2.037
+  z2: 3.159
+LbtoLcPCR:
+  Units: GeV
+  aL: 0.59
+  aLp: 0.55
+  k2: 1
+  mQ: 5.28
+  md: 0.4
+  mq: 1.89
+Tauto3PiRCT:
+  FA: 0.131
+  FV: 0.1686
+  GA: 0.5
+  GRhoP: 0.44
+  GS: 0.7
+  MA: 1.091
+  MRho: 0.7718
+  MRhoP: 1.35
+  MS: 0.48
+  RS: 1.8
+  Units: GeV
+  Vud: 0.9741968538237024
+  alphaS: -8
+  betaRhoP: -0.318
+  betaS: 9
+  deltaS: 0.6
+  fPi: 0.09130000000000001
+  gammaS: 1.2

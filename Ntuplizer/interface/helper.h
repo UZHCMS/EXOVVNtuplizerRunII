@@ -8,7 +8,9 @@
 #include "DataFormats/VertexReco/interface/Vertex.h"
 //#include "DataFormats/PatCandidates/interface/Jet.h"
 #include "DataFormats/PatCandidates/interface/PackedCandidate.h"
+#include "DataFormats/PatCandidates/interface/PackedGenParticle.h"
 #include "DataFormats/Candidate/interface/Candidate.h"
+
 
 #include "JetMETCorrections/Modules/interface/JetResolution.h"
 //#include <CondFormats/JetMETObjects/interface/JetResolutionObject.h>
@@ -168,8 +170,24 @@ class helper{
 
   // absolute impact parameter
   std::pair<bool, Measurement1D> absoluteImpactParameter(const TrajectoryStateOnSurface& tsos,
-							   RefCountedKinematicVertex vertex,
-							   VertexDistance& distanceComputer);
+							 RefCountedKinematicVertex vertex,
+							 VertexDistance& distanceComputer);
+
+  std::pair<bool, Measurement1D> absoluteImpactParameter3D(const TrajectoryStateOnSurface& tsos,
+							   RefCountedKinematicVertex vertex);
+
+
+  std::pair<bool, Measurement1D> absoluteTransverseImpactParameter(const TrajectoryStateOnSurface& tsos,
+								   RefCountedKinematicVertex vertex);
+  
+
+  std::pair<bool, Measurement1D> signedTransverseImpactParameter(const TrajectoryStateOnSurface& tsos,
+								 RefCountedKinematicVertex vertex,
+								 reco::Vertex wrtVertex);
+
+  std::pair<bool, Measurement1D> signedImpactParameter3D(const TrajectoryStateOnSurface& tsos,
+							 RefCountedKinematicVertex vertex,
+							 reco::Vertex wrtVertex);
 
 
   math::PtEtaPhiMLorentzVector daughter_p4(std::vector< RefCountedKinematicParticle > fitted_children, size_t i);
@@ -177,9 +195,25 @@ class helper{
   // Vertex probability calculater
   std::tuple<Float_t, TransientVertex> vertexProb( const std::vector<reco::TransientTrack>& tracks);
 
+  void recursiveDaughters(size_t index,
+			  int rank, 
+			  const reco::GenParticleCollection &src,
+			  std::vector<size_t> &allIndices,
+			  std::vector<int> &pdgs,
+			  std::vector<int> &layers,
+			  std::vector<float> &ppt,
+			  std::vector<float> &peta,
+			  std::vector<float> &pphi,
+			  bool verbose
+			  );
+  
 
 
+  bool isAncestor(const reco::Candidate* ancestor, const reco::Candidate * particle);
+  
+  std::tuple<Bool_t, RefCountedKinematicParticle, RefCountedKinematicVertex, RefCountedKinematicTree> KinematicFit(std::vector<RefCountedKinematicParticle> particles, Float_t constrain_mass, Float_t constrain_error);
 
+  bool basicPFcut(pat::PackedCandidate pf);
 
 };
 
