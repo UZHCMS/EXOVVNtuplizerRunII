@@ -283,8 +283,10 @@ JpsiTauNtuplizer::~JpsiTauNtuplizer( void )
 {
 
   
+  tensorflow::closeSession(session_old);
   tensorflow::closeSession(session_perPF);
   tensorflow::closeSession(session_perEVT);
+  delete graphDef_old;
   delete graphDef_perPF;
   delete graphDef_perEVT;
 
@@ -1599,187 +1601,187 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 
     //    std::vector<pfcand> pfcands;
 
-    Int_t count_dnn = 0;
-    Int_t count_dnn_muon = 0;
-    
-    for(int imu = 0; imu < (int)muoncollection.size(); imu++){
-      
-      if(count_dnn < numberofDNN){
-	data.tensor<float, 3>()(0, count_dnn, 0) = mu1_fit.eta();
-	data.tensor<float, 3>()(0, count_dnn, 1) = mu1_fit.phi();
-	data.tensor<float, 3>()(0, count_dnn, 2) = TMath::Log(mu1_fit.pt());
-	data.tensor<float, 3>()(0, count_dnn, 3) = muoncollection[mcidx_mu1].charge();
-	data.tensor<float, 3>()(0, count_dnn, 4) = 0;
-	data.tensor<float, 3>()(0, count_dnn, 5) = 0;
-	data.tensor<float, 3>()(0, count_dnn, 6) = 0;
-	data.tensor<float, 3>()(0, count_dnn, 7) = 0;
-	data.tensor<float, 3>()(0, count_dnn, 8) = 0;
-	data.tensor<float, 3>()(0, count_dnn, 9) = 0;
-	data.tensor<float, 3>()(0, count_dnn, 10) = 0;
-	data.tensor<float, 3>()(0, count_dnn, 11) = 0;
-	data.tensor<float, 3>()(0, count_dnn, 12) = 1;
-	
-	label_perPF.matrix<int>()(0, count_dnn) = 0;
-	label_perEVT.matrix<int>()(0, count_dnn) = 0;
-	//	norm.matrix<float>()(0, count_dnn) = float(1);
-	
-
-
-	count_dnn_muon++;
-	count_dnn++;
-      }
-    }
-
-
-
-
-
-/////    for( size_t ii = 0; ii < packedpfcandidates_->size(); ++ii ){   
+/////    Int_t count_dnn = 0;
+/////    Int_t count_dnn_muon = 0;
+/////    
+/////    for(int imu = 0; imu < (int)muoncollection.size(); imu++){
+/////      
+/////      if(count_dnn < numberofDNN){
+/////	data.tensor<float, 3>()(0, count_dnn, 0) = mu1_fit.eta();
+/////	data.tensor<float, 3>()(0, count_dnn, 1) = mu1_fit.phi();
+/////	data.tensor<float, 3>()(0, count_dnn, 2) = TMath::Log(mu1_fit.pt());
+/////	data.tensor<float, 3>()(0, count_dnn, 3) = muoncollection[mcidx_mu1].charge();
+/////	data.tensor<float, 3>()(0, count_dnn, 4) = 0;
+/////	data.tensor<float, 3>()(0, count_dnn, 5) = 0;
+/////	data.tensor<float, 3>()(0, count_dnn, 6) = 0;
+/////	data.tensor<float, 3>()(0, count_dnn, 7) = 0;
+/////	data.tensor<float, 3>()(0, count_dnn, 8) = 0;
+/////	data.tensor<float, 3>()(0, count_dnn, 9) = 0;
+/////	data.tensor<float, 3>()(0, count_dnn, 10) = 0;
+/////	data.tensor<float, 3>()(0, count_dnn, 11) = 0;
+/////	data.tensor<float, 3>()(0, count_dnn, 12) = 1;
 /////	
-/////      pat::PackedCandidate pf = (*packedpfcandidates_)[ii];
+/////	label_perPF.matrix<int>()(0, count_dnn) = 0;
+/////	label_perEVT.matrix<int>()(0, count_dnn) = 0;
+/////	//	norm.matrix<float>()(0, count_dnn) = float(1);
 /////	
-/////	
-/////      if(!pf.hasTrackDetails()) continue;
-/////      Float_t precut_dz = pf.vz() - closestVertex.position().z();
-/////      if(TMath::Abs(precut_dz) > c_dz) continue;
-/////      //      if(pf.vertexRef()->z()!=closestVertex.position().z()) continue;
-/////
-/////      npf_qr++;
-/////	
-/////      if(pf.pt() < 0.5) continue;
-/////	
-/////      Bool_t hpflag = pf.trackHighPurity();
-/////      if(!hpflag) continue;
-/////      if(pf.pseudoTrack().hitPattern().numberOfValidPixelHits() < 0) continue;
-/////      if(pf.pseudoTrack().hitPattern().numberOfValidHits() < 3) continue;
-/////      if(pf.pseudoTrack().normalizedChi2() > 100) continue;
-/////	
-/////      if(TMath::Abs(pf.pdgId())!=211) continue; 
-/////      if(TMath::Abs(pf.eta()) > 2.5) continue; 
 /////
 /////
-/////
-/////
-/////      ////////// prefiltering by the distance between J/psi and the tau candidate
-/////
-/////
-////////      reco::TransientTrack  _track = (*builder).build(pf.pseudoTrack());
-////////      TrajectoryStateOnSurface _tsos_pf = extrapolator.extrapolate(_track.impactPointState(), jpsi_vertex->position());
-////////    
-////////      //      VertexDistance3D _a3d_pf;  
-////////      
-////////      std::pair<bool,Measurement1D> _cur3DIP_pf = aux.absoluteImpactParameter3D(_tsos_pf, jpsi_vertex);
-////////      
-////////      Float_t _pvip_pf = _cur3DIP_pf.second.value();
-////////    
-////////      
-////////      if(_pvip_pf > 0.03) continue;
-/////
-/////
-/////      npf_before_dnn++;	
-/////
-/////      ////////// prefiltering ////////////////////////////////////////////////////////
-/////
-/////
-/////      pfcand _cand_ = {
-/////	(Int_t)ii,
-/////	(Float_t) _pvip_pf,
-/////	(Float_t) abs(precut_dz)
-/////      };
-/////	  
-/////      pfcands.push_back(_cand_);
+/////	count_dnn_muon++;
+/////	count_dnn++;
+/////      }
 /////    }
 /////
-/////    //    if(pfcands.size()>30) return false;
 /////
 /////
-/////    //sorting by distance to the vertex
-/////    sort(pfcands.begin(), pfcands.end());
-
-
-    for(size_t ic = 0; ic < reducedpfcands.size(); ic++){
-      //      Int_t idx = reducedpfcands[ic].cand_idx;
-
-      pat::PackedCandidate pf = reducedpfcands[ic].pfcand; //(*packedpfcandidates_)[idx];
-      attribute attr = reducedpfcands[ic].pfaux;
-
-      if(count_dnn < numberofDNN){
-	data.tensor<float, 3>()(0, count_dnn, 0) = pf.eta();
-	data.tensor<float, 3>()(0, count_dnn, 1) = pf.phi();
-	data.tensor<float, 3>()(0, count_dnn, 2) = TMath::Log(pf.pt());
-	data.tensor<float, 3>()(0, count_dnn, 3) = pf.charge();
-	data.tensor<float, 3>()(0, count_dnn, 4) = attr.pvAssociationQuality;
-	data.tensor<float, 3>()(0, count_dnn, 5) = attr.doca3d;
-	data.tensor<float, 3>()(0, count_dnn, 6) = attr.doca2d;
-	data.tensor<float, 3>()(0, count_dnn, 7) = attr.doca3de;
-	data.tensor<float, 3>()(0, count_dnn, 8) = attr.doca2de;
-	data.tensor<float, 3>()(0, count_dnn, 9) = attr.dz;
-	data.tensor<float, 3>()(0, count_dnn, 10) = attr.isAssociate;
-	data.tensor<float, 3>()(0, count_dnn, 11) = attr.near_dz;
-	data.tensor<float, 3>()(0, count_dnn, 12) = 0;
-	
-	label_perPF.matrix<int>()(0, count_dnn) = 0;
-	label_perEVT.matrix<int>()(0, count_dnn) = 0;
-	//	norm.matrix<float>()(0, count_dnn) = float(1);
-	count_dnn++;
-
-
-
-
-	
-	//	pfcollection.push_back(pf);
-	//	pfcollection_id.push_back(idx);
-	//	reco::TransientTrack  tt_track = (*builder).build(pf.pseudoTrack());
-	//	mytracks.push_back(tt_track);
-	//	mypvassociation.push_back(pf.pvAssociationQuality());
-	//	mydoca.push_back(pfcands[ic].doca);
-      }
-    }
-    
-      
-    for(int ic=count_dnn; ic < numberofDNN; ic++){
-      
-      data.tensor<float, 3>()(0, ic, 0) = 0;
-      data.tensor<float, 3>()(0, ic, 1) = 0;
-      data.tensor<float, 3>()(0, ic, 2) = 0;
-      data.tensor<float, 3>()(0, ic, 3) = 0;
-      data.tensor<float, 3>()(0, ic, 4) = 0;
-      data.tensor<float, 3>()(0, ic, 5) = 0;
-      data.tensor<float, 3>()(0, ic, 6) = 0;
-      data.tensor<float, 3>()(0, ic, 7) = 0;
-      data.tensor<float, 3>()(0, ic, 8) = 0;
-      data.tensor<float, 3>()(0, ic, 9) = 0;
-      data.tensor<float, 3>()(0, ic, 10) = 0;
-      data.tensor<float, 3>()(0, ic, 11) = 0;
-      data.tensor<float, 3>()(0, ic, 12) = 0;
-	
-      label_perPF.matrix<int>()(0, ic) = 0;
-      label_perEVT.matrix<int>()(0, ic) = 0;
-      //      norm.matrix<float>()(0, ic) = float(1);
-
-    }
-
-
-    isTraining.scalar<bool>()() = false;
-    
-    std::vector<tensorflow::Tensor> outputs_perPF;
-    std::vector<tensorflow::Tensor> outputs_perEVT;
-    //    tensorflow::run(session, {  { "Placeholder:0", data },  { "Placeholder_1:0", label }, { "Placeholder_2:0", add_global } , {"Placeholder_3:0", isTraining}, {"Placeholder_4:0", norm}}, { "Reshape_13:0" }, &outputs);
-    tensorflow::run(session_perPF, {  { "Placeholder:0", data },  { "Placeholder_1:0", label_perPF }, { "Placeholder_2:0", isTraining}} , { "Softmax_2:0" }, &outputs_perPF);
-		    
-    
-    tensorflow::run(session_perEVT, {  { "Placeholder:0", data },  { "Placeholder_1:0", label_perEVT }, { "Placeholder_2:0", isTraining}} , { "Softmax_2:0" }, &outputs_perEVT);
-      
-    auto finalOutputTensor_perPF = outputs_perPF[0].tensor<float, 3>();
-    auto finalOutputTensor_perEVT = outputs_perEVT[0].tensor<float, 3>();
-
-    for(int ic=count_dnn_muon; ic<count_dnn; ic++){
-      mydnn.push_back(finalOutputTensor_perPF(0, ic, 1));
-      std::cout <<  "pefPF DNN = " << ic << " " << finalOutputTensor_perPF(0, ic, 1) << std::endl;
-    }
-
-    Float_t evtDNN = finalOutputTensor_perEVT(0, 0, 1);
-    std::cout << "evtDNN = " << evtDNN << std::endl;
+/////
+/////
+//////////    for( size_t ii = 0; ii < packedpfcandidates_->size(); ++ii ){   
+//////////	
+//////////      pat::PackedCandidate pf = (*packedpfcandidates_)[ii];
+//////////	
+//////////	
+//////////      if(!pf.hasTrackDetails()) continue;
+//////////      Float_t precut_dz = pf.vz() - closestVertex.position().z();
+//////////      if(TMath::Abs(precut_dz) > c_dz) continue;
+//////////      //      if(pf.vertexRef()->z()!=closestVertex.position().z()) continue;
+//////////
+//////////      npf_qr++;
+//////////	
+//////////      if(pf.pt() < 0.5) continue;
+//////////	
+//////////      Bool_t hpflag = pf.trackHighPurity();
+//////////      if(!hpflag) continue;
+//////////      if(pf.pseudoTrack().hitPattern().numberOfValidPixelHits() < 0) continue;
+//////////      if(pf.pseudoTrack().hitPattern().numberOfValidHits() < 3) continue;
+//////////      if(pf.pseudoTrack().normalizedChi2() > 100) continue;
+//////////	
+//////////      if(TMath::Abs(pf.pdgId())!=211) continue; 
+//////////      if(TMath::Abs(pf.eta()) > 2.5) continue; 
+//////////
+//////////
+//////////
+//////////
+//////////      ////////// prefiltering by the distance between J/psi and the tau candidate
+//////////
+//////////
+/////////////      reco::TransientTrack  _track = (*builder).build(pf.pseudoTrack());
+/////////////      TrajectoryStateOnSurface _tsos_pf = extrapolator.extrapolate(_track.impactPointState(), jpsi_vertex->position());
+/////////////    
+/////////////      //      VertexDistance3D _a3d_pf;  
+/////////////      
+/////////////      std::pair<bool,Measurement1D> _cur3DIP_pf = aux.absoluteImpactParameter3D(_tsos_pf, jpsi_vertex);
+/////////////      
+/////////////      Float_t _pvip_pf = _cur3DIP_pf.second.value();
+/////////////    
+/////////////      
+/////////////      if(_pvip_pf > 0.03) continue;
+//////////
+//////////
+//////////      npf_before_dnn++;	
+//////////
+//////////      ////////// prefiltering ////////////////////////////////////////////////////////
+//////////
+//////////
+//////////      pfcand _cand_ = {
+//////////	(Int_t)ii,
+//////////	(Float_t) _pvip_pf,
+//////////	(Float_t) abs(precut_dz)
+//////////      };
+//////////	  
+//////////      pfcands.push_back(_cand_);
+//////////    }
+//////////
+//////////    //    if(pfcands.size()>30) return false;
+//////////
+//////////
+//////////    //sorting by distance to the vertex
+//////////    sort(pfcands.begin(), pfcands.end());
+/////
+/////
+/////    for(size_t ic = 0; ic < reducedpfcands.size(); ic++){
+/////      //      Int_t idx = reducedpfcands[ic].cand_idx;
+/////
+/////      pat::PackedCandidate pf = reducedpfcands[ic].pfcand; //(*packedpfcandidates_)[idx];
+/////      attribute attr = reducedpfcands[ic].pfaux;
+/////
+/////      if(count_dnn < numberofDNN){
+/////	data.tensor<float, 3>()(0, count_dnn, 0) = pf.eta();
+/////	data.tensor<float, 3>()(0, count_dnn, 1) = pf.phi();
+/////	data.tensor<float, 3>()(0, count_dnn, 2) = TMath::Log(pf.pt());
+/////	data.tensor<float, 3>()(0, count_dnn, 3) = pf.charge();
+/////	data.tensor<float, 3>()(0, count_dnn, 4) = attr.pvAssociationQuality;
+/////	data.tensor<float, 3>()(0, count_dnn, 5) = attr.doca3d;
+/////	data.tensor<float, 3>()(0, count_dnn, 6) = attr.doca2d;
+/////	data.tensor<float, 3>()(0, count_dnn, 7) = attr.doca3de;
+/////	data.tensor<float, 3>()(0, count_dnn, 8) = attr.doca2de;
+/////	data.tensor<float, 3>()(0, count_dnn, 9) = attr.dz;
+/////	data.tensor<float, 3>()(0, count_dnn, 10) = attr.isAssociate;
+/////	data.tensor<float, 3>()(0, count_dnn, 11) = attr.near_dz;
+/////	data.tensor<float, 3>()(0, count_dnn, 12) = 0;
+/////	
+/////	label_perPF.matrix<int>()(0, count_dnn) = 0;
+/////	label_perEVT.matrix<int>()(0, count_dnn) = 0;
+/////	//	norm.matrix<float>()(0, count_dnn) = float(1);
+/////	count_dnn++;
+/////
+/////
+/////
+/////
+/////	
+/////	//	pfcollection.push_back(pf);
+/////	//	pfcollection_id.push_back(idx);
+/////	//	reco::TransientTrack  tt_track = (*builder).build(pf.pseudoTrack());
+/////	//	mytracks.push_back(tt_track);
+/////	//	mypvassociation.push_back(pf.pvAssociationQuality());
+/////	//	mydoca.push_back(pfcands[ic].doca);
+/////      }
+/////    }
+/////    
+/////      
+/////    for(int ic=count_dnn; ic < numberofDNN; ic++){
+/////      
+/////      data.tensor<float, 3>()(0, ic, 0) = 0;
+/////      data.tensor<float, 3>()(0, ic, 1) = 0;
+/////      data.tensor<float, 3>()(0, ic, 2) = 0;
+/////      data.tensor<float, 3>()(0, ic, 3) = 0;
+/////      data.tensor<float, 3>()(0, ic, 4) = 0;
+/////      data.tensor<float, 3>()(0, ic, 5) = 0;
+/////      data.tensor<float, 3>()(0, ic, 6) = 0;
+/////      data.tensor<float, 3>()(0, ic, 7) = 0;
+/////      data.tensor<float, 3>()(0, ic, 8) = 0;
+/////      data.tensor<float, 3>()(0, ic, 9) = 0;
+/////      data.tensor<float, 3>()(0, ic, 10) = 0;
+/////      data.tensor<float, 3>()(0, ic, 11) = 0;
+/////      data.tensor<float, 3>()(0, ic, 12) = 0;
+/////	
+/////      label_perPF.matrix<int>()(0, ic) = 0;
+/////      label_perEVT.matrix<int>()(0, ic) = 0;
+/////      //      norm.matrix<float>()(0, ic) = float(1);
+/////
+/////    }
+/////
+/////
+/////    isTraining.scalar<bool>()() = false;
+/////    
+/////    std::vector<tensorflow::Tensor> outputs_perPF;
+/////    std::vector<tensorflow::Tensor> outputs_perEVT;
+/////    //    tensorflow::run(session, {  { "Placeholder:0", data },  { "Placeholder_1:0", label }, { "Placeholder_2:0", add_global } , {"Placeholder_3:0", isTraining}, {"Placeholder_4:0", norm}}, { "Reshape_13:0" }, &outputs);
+/////    tensorflow::run(session_perPF, {  { "Placeholder:0", data },  { "Placeholder_1:0", label_perPF }, { "Placeholder_2:0", isTraining}} , { "Softmax_2:0" }, &outputs_perPF);
+/////		    
+/////    
+/////    tensorflow::run(session_perEVT, {  { "Placeholder:0", data },  { "Placeholder_1:0", label_perEVT }, { "Placeholder_2:0", isTraining}} , { "Softmax_2:0" }, &outputs_perEVT);
+/////      
+/////    auto finalOutputTensor_perPF = outputs_perPF[0].tensor<float, 3>();
+/////    auto finalOutputTensor_perEVT = outputs_perEVT[0].tensor<float, 3>();
+/////
+/////    for(int ic=count_dnn_muon; ic<count_dnn; ic++){
+/////      mydnn.push_back(finalOutputTensor_perPF(0, ic, 1));
+/////      std::cout <<  "pefPF DNN = " << ic << " " << finalOutputTensor_perPF(0, ic, 1) << std::endl;
+/////    }
+/////
+/////    Float_t evtDNN = finalOutputTensor_perEVT(0, 0, 1);
+/////    std::cout << "evtDNN = " << evtDNN << std::endl;
 
     
     
@@ -1802,7 +1804,7 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 	 ){
 	
 
-	if(count_dnn < 50){
+	if(count_dnn_old < 50){
 	  data_old.tensor<float, 3>()(0, count_dnn_old, 0) = pf.eta();
 	  data_old.tensor<float, 3>()(0, count_dnn_old, 1) = pf.phi();
 	  data_old.tensor<float, 3>()(0, count_dnn_old, 2) = TMath::Log(pf.pt());
@@ -1874,7 +1876,7 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 
     for(int ic=count_dnn_muon_old; ic<count_dnn_old; ic++){
 
-      mydnn_old.push_back(finalOutputTensor(0, ic, 1));
+      mydnn.push_back(finalOutputTensor(0, ic, 1));
     }
 
 
