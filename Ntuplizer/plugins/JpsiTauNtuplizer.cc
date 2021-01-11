@@ -33,6 +33,7 @@ JpsiTauNtuplizer::JpsiTauNtuplizer( edm::EDGetTokenT<pat::MuonCollection>    muo
   , c_vprob (runValues["vprobcut"])
   , c_dnn (runValues["dnncut"])
   , c_charge (runValues["tau_charge"])
+  , dnnfile_old_ (runStrings["dnnfile_old"])      
   , dnnfile_perPF_ (runStrings["dnnfile_perPF"])      
   , dnnfile_perEVT_ (runStrings["dnnfile_perEVT"])      
    
@@ -53,16 +54,27 @@ JpsiTauNtuplizer::JpsiTauNtuplizer( edm::EDGetTokenT<pat::MuonCollection>    muo
 
   if(useDNN_){
     
+    std::string dnnfilepath_old = edm::FileInPath("EXOVVNtuplizerRunII/Ntuplizer/" +  dnnfile_old_).fullPath();
     std::string dnnfilepath_perPF = edm::FileInPath("EXOVVNtuplizerRunII/Ntuplizer/" +  dnnfile_perPF_).fullPath();
     std::string dnnfilepath_perEVT = edm::FileInPath("EXOVVNtuplizerRunII/Ntuplizer/" +  dnnfile_perEVT_).fullPath();
 
 
+    if(verbose_) std::cout << "[JpsiTauNtuplizer] DNN old  = " << dnnfilepath_old << std::endl;
     if(verbose_) std::cout << "[JpsiTauNtuplizer] DNN per pion  = " << dnnfilepath_perPF << std::endl;
     if(verbose_) std::cout << "[JpsiTauNtuplizer] DNN per event = " << dnnfilepath_perEVT << std::endl;
 
+
+    std::string tbr_old = "DUMMY";  // to be replaced
+    auto pos = dnnfilepath_old.find(tbr_old);
+    auto len = tbr_old.length();
+    if (pos != std::string::npos) {
+      dnnfilepath_old.replace(pos, len, "");
+    }
+
+
     std::string tbr_perPF = "DUMMY";  // to be replaced
-    auto pos = dnnfilepath_perPF.find(tbr_perPF);
-    auto len = tbr_perPF.length();
+    pos = dnnfilepath_perPF.find(tbr_perPF);
+    len = tbr_perPF.length();
     if (pos != std::string::npos) {
       dnnfilepath_perPF.replace(pos, len, "");
     }
@@ -74,6 +86,9 @@ JpsiTauNtuplizer::JpsiTauNtuplizer( edm::EDGetTokenT<pat::MuonCollection>    muo
       dnnfilepath_perEVT.replace(pos, len, "");
     }
     
+    graphDef_old = tensorflow::loadMetaGraph(dnnfilepath_old);
+    session_old = tensorflow::createSession(graphDef_old, dnnfilepath_old);
+
     graphDef_perPF = tensorflow::loadMetaGraph(dnnfilepath_perPF);
     session_perPF = tensorflow::createSession(graphDef_perPF, dnnfilepath_perPF);
 
@@ -87,6 +102,15 @@ JpsiTauNtuplizer::JpsiTauNtuplizer( edm::EDGetTokenT<pat::MuonCollection>    muo
     //    add_global = tensorflow::Tensor(tensorflow::DT_FLOAT, { 1, 2 }); 
     isTraining = tensorflow::Tensor(tensorflow::DT_BOOL, tensorflow::TensorShape()); 
     //    norm = tensorflow::Tensor(tensorflow::DT_FLOAT, { 1, numberofDNN }); 
+
+
+    data_old = tensorflow::Tensor(tensorflow::DT_FLOAT, { 1, 50, 8 }); // single batch of dimension 10
+    label_old = tensorflow::Tensor(tensorflow::DT_INT32, { 1,50}); 
+    add_global_old = tensorflow::Tensor(tensorflow::DT_FLOAT, { 1, 2 }); 
+    isTraining_old = tensorflow::Tensor(tensorflow::DT_BOOL, tensorflow::TensorShape()); 
+    norm_old = tensorflow::Tensor(tensorflow::DT_FLOAT, { 1, 50 }); 
+
+
     
   }
   
@@ -1566,6 +1590,7 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
   //  std::vector<Int_t> mypvassociation;
   //  std::vector<Float_t> mydoca;
   std::vector<Float_t> mydnn;
+  std::vector<Float_t> mydnn_old;
     
   Int_t npf_before_dnn = 0;
   Int_t npf_qr = 0;
@@ -1598,10 +1623,15 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 	label_perEVT.matrix<int>()(0, count_dnn) = 0;
 	//	norm.matrix<float>()(0, count_dnn) = float(1);
 	
+
+
 	count_dnn_muon++;
 	count_dnn++;
       }
     }
+
+
+
 
 
 /////    for( size_t ii = 0; ii < packedpfcandidates_->size(); ++ii ){   
@@ -1692,6 +1722,10 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 	label_perEVT.matrix<int>()(0, count_dnn) = 0;
 	//	norm.matrix<float>()(0, count_dnn) = float(1);
 	count_dnn++;
+
+
+
+
 	
 	//	pfcollection.push_back(pf);
 	//	pfcollection_id.push_back(idx);
@@ -1746,6 +1780,108 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 
     Float_t evtDNN = finalOutputTensor_perEVT(0, 0, 1);
     std::cout << "evtDNN = " << evtDNN << std::endl;
+
+    
+    
+    //////////////// old 
+
+    ////////////// old 
+
+    Int_t count_dnn_old = 0;
+    Int_t count_dnn_muon_old = 0;
+
+    for( size_t ii = 0; ii < packedpfcandidates_->size(); ++ii ){   
+      
+      pat::PackedCandidate pf = (*packedpfcandidates_)[ii];
+      
+      if(TMath::Abs(pf.eta()) < 2.4 && 
+	 TMath::Abs(pf.charge())==1 &&
+	 pf.pt() > 4. &&
+	 pf.isGlobalMuon() > 0.5 &&
+	 pf.hasTrackDetails() > 0.5
+	 ){
+	
+
+	if(count_dnn < 50){
+	  data_old.tensor<float, 3>()(0, count_dnn_old, 0) = pf.eta();
+	  data_old.tensor<float, 3>()(0, count_dnn_old, 1) = pf.phi();
+	  data_old.tensor<float, 3>()(0, count_dnn_old, 2) = TMath::Log(pf.pt());
+	  data_old.tensor<float, 3>()(0, count_dnn_old, 3) = TMath::Log(pf.energy());
+	  data_old.tensor<float, 3>()(0, count_dnn_old, 4) = pf.charge();
+	  data_old.tensor<float, 3>()(0, count_dnn_old, 5) = TMath::Abs(closestVertex.position().z() - pf.pseudoTrack().vz());
+	  data_old.tensor<float, 3>()(0, count_dnn_old, 6) = TMath::Sqrt( TMath::Power((closestVertex.position().x() - pf.pseudoTrack().vx()), 2) + TMath::Power((closestVertex.position().y() - pf.pseudoTrack().vy()), 2));
+	  data_old.tensor<float, 3>()(0, count_dnn_old, 7) = pf.isGlobalMuon();
+	    
+	  label_old.matrix<int>()(0, count_dnn_old) = 0;
+	  norm_old.matrix<float>()(0, count_dnn_old) = float(1);
+
+	  count_dnn_muon_old++;
+	  count_dnn_old++;
+	}
+      }
+    }
+
+    for(size_t ic = 0; ic < reducedpfcands.size(); ic++){
+      //      Int_t idx = reducedpfcands[ic].cand_idx;
+
+      pat::PackedCandidate pf = reducedpfcands[ic].pfcand; //(*packedpfcandidates_)[idx];
+      //      attribute attr = reducedpfcands[ic].pfaux;
+
+
+      if(count_dnn_old < 50){
+	data_old.tensor<float, 3>()(0, count_dnn_old, 0) = pf.eta();
+	data_old.tensor<float, 3>()(0, count_dnn_old, 1) = pf.phi();
+	data_old.tensor<float, 3>()(0, count_dnn_old, 2) = TMath::Log(pf.pt());
+	data_old.tensor<float, 3>()(0, count_dnn_old, 3) = TMath::Log(pf.energy());
+	data_old.tensor<float, 3>()(0, count_dnn_old, 4) = pf.charge();
+	data_old.tensor<float, 3>()(0, count_dnn_old, 5) = TMath::Abs(closestVertex.position().z() - pf.pseudoTrack().vz());
+	data_old.tensor<float, 3>()(0, count_dnn_old, 6) = TMath::Sqrt( TMath::Power((closestVertex.position().x() - pf.pseudoTrack().vx()), 2) + TMath::Power((closestVertex.position().y() - pf.pseudoTrack().vy()), 2));
+	data_old.tensor<float, 3>()(0, count_dnn_old, 7) = pf.isGlobalMuon();
+	  
+	label_old.matrix<int>()(0, count_dnn_old) = 0;
+	norm_old.matrix<float>()(0, count_dnn_old) = float(1);
+	count_dnn_old++;
+
+      }
+    }
+
+      
+    for(int ic=count_dnn_old; ic<50; ic++){
+
+      data_old.tensor<float, 3>()(0, ic, 0) = 0;
+      data_old.tensor<float, 3>()(0, ic, 1) = 0;
+      data_old.tensor<float, 3>()(0, ic, 2) = 0;
+      data_old.tensor<float, 3>()(0, ic, 3) = 0;
+      data_old.tensor<float, 3>()(0, ic, 4) = 0;
+      data_old.tensor<float, 3>()(0, ic, 5) = 0;
+      data_old.tensor<float, 3>()(0, ic, 6) = 0;
+      data_old.tensor<float, 3>()(0, ic, 7) = 0;
+	
+      label_old.matrix<int>()(0, ic) = 0;
+      norm_old.matrix<float>()(0, ic) = float(1);
+
+    }
+
+    add_global_old.matrix<float>()(0, 0) = float(count_dnn_muon_old); // Number of muons around 0.5 cm from PV
+    add_global_old.matrix<float>()(0, 1) = float(count_dnn_old/100); //Number of charged pf candidates around 0.5 cm from PV
+    isTraining_old.scalar<bool>()() = false; //Number of charged pf candidates around 0.5 cm from PV
+
+
+    std::vector<tensorflow::Tensor> outputs_old;
+    tensorflow::run(session_old, {  { "Placeholder:0", data_old },  { "Placeholder_1:0", label_old }, { "Placeholder_2:0", add_global_old } , {"Placeholder_3:0", isTraining_old}, {"Placeholder_4:0", norm_old}}, { "Reshape_13:0" }, &outputs_old);
+      
+    auto finalOutputTensor = outputs_old[0].tensor<float, 3>();
+
+    for(int ic=count_dnn_muon_old; ic<count_dnn_old; ic++){
+
+      mydnn_old.push_back(finalOutputTensor(0, ic, 1));
+    }
+
+
+
+
+
+
     
     
   }

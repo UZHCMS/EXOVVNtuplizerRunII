@@ -58,6 +58,7 @@ if config["DOJPSIMU"]:
     config["USEDNN"] = False
 
 if config["DOJPSITAU"]:
+    config["DNNFILE_OLD"] = "data/DNN/BcJPsi/DUMMY"
     config["DNNFILE_PERPF"] = "data/DNN/BcJPsi/TAU/DUMMY"
     config["DNNFILE_PEREVT"] = "data/DNN/BcJPsi/TAU_class/DUMMY"
 
