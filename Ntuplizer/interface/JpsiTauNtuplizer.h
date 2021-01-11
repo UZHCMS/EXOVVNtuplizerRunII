@@ -80,9 +80,11 @@ private:
 
    helper aux;
    
+   tensorflow::MetaGraphDef* graphDef_old;
    tensorflow::MetaGraphDef* graphDef_perPF;
    tensorflow::MetaGraphDef* graphDef_perEVT;
 
+   tensorflow::Session* session_old;
    tensorflow::Session* session_perPF;
    tensorflow::Session* session_perEVT;
 
@@ -94,6 +96,15 @@ private:
    tensorflow::Tensor isTraining; //(tensorflow::DT_FLOAT, { 1, 2 }); 
    //   tensorflow::Tensor norm; //(tensorflow::DT_FLOAT, { 1, 2 }); 
 
+   tensorflow::Tensor data_old; // (tensorflow::DT_FLOAT, { 1, 50, 8 }); // single batch of dimension 10
+   tensorflow::Tensor label_old; // (tensorflow::DT_FLOAT, { 1,50}); 
+   tensorflow::Tensor add_global_old; //(tensorflow::DT_FLOAT, { 1, 2 }); 
+   tensorflow::Tensor isTraining_old; //(tensorflow::DT_FLOAT, { 1, 2 }); 
+   tensorflow::Tensor norm_old; //(tensorflow::DT_FLOAT, { 1, 2 }); 
+
+
+
+   std::string dnnfile_old_;
    std::string dnnfile_perPF_;
    std::string dnnfile_perEVT_;
 

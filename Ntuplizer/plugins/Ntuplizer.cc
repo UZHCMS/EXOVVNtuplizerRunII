@@ -96,9 +96,11 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
   runValues["dnncut"] = iConfig.getParameter<double>("dnncut");
   runValues["tau_charge"] = iConfig.getParameter<unsigned int>("tau_charge");
 
+  runStrings["dnnfile_old"] = iConfig.getParameter<std::string>("dnnfile_old");  
   runStrings["dnnfile_perPF"] = iConfig.getParameter<std::string>("dnnfile_perPF");  
   runStrings["dnnfile_perEVT"] = iConfig.getParameter<std::string>("dnnfile_perEVT");  
 
+  std::cout << "Ntuplizer: dnn_old file: " << runStrings["dnnfile_old"] << std::endl;
   std::cout << "Ntuplizer: dnn_perPF file: " << runStrings["dnnfile_perPF"] << std::endl;
   std::cout << "Ntuplizer: dnn_perEVT file: " << runStrings["dnnfile_perEVT"] << std::endl;
 
