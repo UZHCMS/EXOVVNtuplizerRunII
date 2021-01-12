@@ -9,11 +9,11 @@ config["RUNONMC"] = True
 #-----------------------------------------#
 #config["USEHAMMER"] = (True and config["RUNONMC"])
 config["USEHAMMER"] = False
-config["VERBOSE"] = False
+config["VERBOSE"] = True
 
 #--------- For taus ----------#
 config["USEDNN"] = True
-config["DZCUT"] = 0.12 # this is fixed !!
+config["DZCUT"] = 0.25 # this is fixed !!
 config["FSIGCUT"] = 3
 config["VPROBCUT"] = 0.1
 #config["DNNCUT"] = 0.1443 80% eff.
@@ -42,7 +42,7 @@ config["DOGENPARTICLES"] = (True and config["RUNONMC"])
 config["DOGENEVENT"] = (True and config["RUNONMC"])
 config["DOPILEUP"] = (True and config["RUNONMC"])
 config["DOVERTICES"] = True
-config["DOMISSINGET"] = True
+config["DOMISSINGET"] = False
 
 config["DOJPSIMU"] = False
 config["DOJPSITAU"] = True
@@ -54,13 +54,15 @@ config["ISTRUTH"] = False
 
 config["DOGENHIST"] = (True and config["RUNONMC"]);
 
+config["DNNFILE_OLD"] = "data/DNN/BcJPsi/DUMMY"
+config["DNNFILE_PERPF"] = "data/DNN/BcJPsi/TAU/DUMMY"
+config["DNNFILE_PEREVT"] = "data/DNN/BcJPsi/TAU_class/DUMMY"
+
+
+
 if config["DOJPSIMU"]:
     config["USEDNN"] = False
 
-if config["DOJPSITAU"]:
-    config["DNNFILE_OLD"] = "data/DNN/BcJPsi/DUMMY"
-    config["DNNFILE_PERPF"] = "data/DNN/BcJPsi/TAU/DUMMY"
-    config["DNNFILE_PEREVT"] = "data/DNN/BcJPsi/TAU_class/DUMMY"
 
 elif config["DOBSTAUTAU"] or config["DOBSDSTARTAUNU"]:
     config["DNNFILE"] = "data/DNN/BsTauTau_semilep/DUMMY"    

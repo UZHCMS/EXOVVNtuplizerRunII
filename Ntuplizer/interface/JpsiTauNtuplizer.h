@@ -7,6 +7,7 @@
 
 #include <TRandom3.h>
 
+
 class JpsiTauNtuplizer : public CandidateNtuplizer {
 
 
@@ -108,7 +109,7 @@ private:
    std::string dnnfile_perPF_;
    std::string dnnfile_perEVT_;
 
-   Hammer::Hammer hammer;
+   //   Hammer::Hammer hammer;
 
    const vector<string> parName = {"a0", "a1", "a2", "b0", "b1", "b2", "c1", "c2", "d0", "d1", "d2"};
 //   
