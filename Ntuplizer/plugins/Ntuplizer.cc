@@ -34,7 +34,7 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
 	lheEventProductToken_       (consumes<LHEEventProduct>(iConfig.getParameter<edm::InputTag>("externallheProducer"))),     
 	genparticleToken_     	    (consumes<reco::GenParticleCollection>(iConfig.getParameter<edm::InputTag>("genparticles"))),
   packedgenparticleToken_     (consumes<pat::PackedGenParticleCollection>(iConfig.getParameter<edm::InputTag>("packedgenparticles"))),
-  gentauToken_     	    (consumes<std::vector<reco::GenJet>>(iConfig.getParameter<edm::InputTag>("gentaus"))),
+//  gentauToken_     	    (consumes<std::vector<reco::GenJet>>(iConfig.getParameter<edm::InputTag>("gentaus"))),
 
 	muonToken_	      	    (consumes<pat::MuonCollection>(iConfig.getParameter<edm::InputTag>("muons"))),
 //	electronToken_	      	    (consumes<pat::ElectronCollection>(iConfig.getParameter<edm::InputTag>("electrons"))),
@@ -89,7 +89,6 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
   //  runFlags["doBsTauTauFH_mr"] = iConfig.getParameter<bool>("doBsTauTauFH_mr");
   //  runFlags["doBsDstarTauNu"] = iConfig.getParameter<bool>("doBsDstarTauNu");
   runFlags["doGenHist"] = iConfig.getParameter<bool>("doGenHist");
-  runFlags["isTruth"] = iConfig.getParameter<bool>("isTruth");
   runFlags["verbose"] = iConfig.getParameter<bool>("verbose");
   runValues["dzcut"] = iConfig.getParameter<double>("dzcut");
   runValues["fsigcut"] = iConfig.getParameter<double>("fsigcut");
@@ -230,7 +229,6 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
 						   triggerObjects_,
 						   genparticleToken_,
 						   packedgenparticleToken_,
-						   gentauToken_,
 						   runFlags,
 						   runValues,
 						   runStrings,
@@ -338,7 +336,7 @@ Ntuplizer::~Ntuplizer()
 {
 	  
   for( std::unordered_map<std::string,CandidateNtuplizer*>::iterator it = nTuplizers_.begin(); it != nTuplizers_.end(); ++it ){
-    std::cout << "deconstructor: Branches: " << it->first << std::endl;
+    //    std::cout << "deconstructor: Branches: " << it->first << std::endl;
     delete it->second;
   }
    nTuplizers_.clear();
@@ -374,13 +372,13 @@ void Ntuplizer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
   for( std::unordered_map<std::string,CandidateNtuplizer*>::iterator it = nTuplizers_.begin(); it != nTuplizers_.end(); ++it ){
 
     isSave = (it->second)->fillBranches( iEvent, iSetup );
-    std::cout << "Fill Branchines: " << it->first << ", result = " << isSave << std::endl;
+    //    std::cout << "Fill Branchines: " << it->first << ", result = " << isSave << std::endl;
     if(!isSave) break;
   }
 
   //  std::cout << "isSave =  " << isSave << std::endl;
   if(isSave){
-    std::cout << "-------------- save -----------" << std::endl;
+    //    std::cout << "-------------- save -----------" << std::endl;
     nBranches_->fillTree();
     nevents++;
   }

@@ -19,7 +19,6 @@ class JpsiTauNtuplizer : public CandidateNtuplizer {
 		    edm::EDGetTokenT<pat::TriggerObjectStandAloneCollection> triggerobject,
 		    edm::EDGetTokenT<reco::GenParticleCollection> genptoken, 
 		    edm::EDGetTokenT<pat::PackedGenParticleCollection> packedgenptoken, 
-		    edm::EDGetTokenT<std::vector<reco::GenJet>> genttoken,
 		    std::map< std::string, bool >& runFlags,
 		    std::map< std::string, double >& runValues,
 		    std::map< std::string, std::string >& runStrings,
@@ -40,7 +39,7 @@ private:
    edm::EDGetTokenT<pat::TriggerObjectStandAloneCollection>  triggerObjects_;
    edm::EDGetTokenT<reco::GenParticleCollection> genParticlesToken_;
    edm::EDGetTokenT<pat::PackedGenParticleCollection> packedgenParticlesToken_;
-   edm::EDGetTokenT<std::vector<reco::GenJet>> genTauToken_;
+   //   edm::EDGetTokenT<std::vector<reco::GenJet>> genTauToken_;
 
    edm::Handle<pat::MuonCollection>      		       muons_		       ;
    edm::Handle< reco::VertexCollection >  vertices_;
@@ -50,7 +49,7 @@ private:
    edm::Handle<pat::TriggerObjectStandAloneCollection>	     triggerObjects;
    edm::Handle< reco::GenParticleCollection >  genParticles_;
    edm::Handle< std::vector<pat::PackedGenParticle> >  packedgenParticles_;
-   edm::Handle< std::vector<reco::GenJet> >  genTaus_;
+   //   edm::Handle< std::vector<reco::GenJet> >  genTaus_;
 
    edm::ESHandle<TransientTrackBuilder> builder;
 

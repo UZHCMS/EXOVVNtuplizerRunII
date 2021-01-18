@@ -74,7 +74,7 @@ private:
   edm::EDGetTokenT<reco::GenParticleCollection>             genparticleToken_   ;
   edm::EDGetTokenT<pat::PackedGenParticleCollection>             packedgenparticleToken_   ;
 
-  edm::EDGetTokenT<std::vector<reco::GenJet>>               gentauToken_   ;
+  //  edm::EDGetTokenT<std::vector<reco::GenJet>>               gentauToken_   ;
  
   edm::EDGetTokenT<pat::MuonCollection>     		    muonToken_  	;	
   edm::EDGetTokenT<pat::ElectronCollection>     		    electronToken_  	;	

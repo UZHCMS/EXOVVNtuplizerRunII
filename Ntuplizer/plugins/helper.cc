@@ -339,8 +339,8 @@ std::tuple<Float_t, TransientVertex> helper::vertexProb( const std::vector<reco:
     try{
         vertex = kalman_fitter.vertex(tracks);
     }catch(std::exception e){
-        std::cout << "No vertex found ... return" << std::endl;
-        return std::forward_as_tuple(-9, vertex);
+      std::cout << "No vertex found ... return" << std::endl;
+      return std::forward_as_tuple(-9, vertex);
     }
 
     if(vertex.isValid()){
@@ -458,16 +458,17 @@ std::tuple<Bool_t, RefCountedKinematicParticle, RefCountedKinematicVertex, RefCo
     // creating the constraint
 
     if(constrain_mass!=-1){
-      std::cout << "Constrained fit with mass = " << constrain_mass << " error = " <<  constrain_error << std::endl;
+      //      std::cout << "Constrained fit with mass = " << constrain_mass << " error = " <<  constrain_error << std::endl;
       KinematicConstraint* constraint = new MassKinematicConstraint(constrain_mass, constrain_error);
       //the constrained fit
       tree = csFitter.fit(constraint, tree);
-    }else{
-      std::cout << "No mass constrained fit" << std::endl;
-    }
+    } //else{
+      //      std::cout << "No mass constrained fit" << std::endl;
+    //    }
 
 
     //getting the J/Psi KinematicParticle
+    //    std::cout <<"check" <<  tree->isEmpty() << std::endl;
     tree->movePointerToTheTop();
     part = tree->currentParticle();
 

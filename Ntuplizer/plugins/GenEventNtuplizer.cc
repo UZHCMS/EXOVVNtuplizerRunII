@@ -5,9 +5,6 @@ GenEventNtuplizer::GenEventNtuplizer( std::vector< edm::EDGetTokenT< GenEventInf
    : CandidateNtuplizer( nBranches )
    , geneventToken_( tokens[0] )
    , lheEventProductToken_( tokens_lhe[0])
-   , isJpsiMu_( runFlags["doJpsiMu"]  )
-   , isJpsiEle_( runFlags["doJpsiEle"]  )
-   , isJpsiTau_( runFlags["doJpsiTau"]  )
 {
 
 }

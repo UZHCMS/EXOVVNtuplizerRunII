@@ -5,9 +5,6 @@ GenParticlesNtuplizer::GenParticlesNtuplizer( std::vector<edm::EDGetTokenT<reco:
 
    : CandidateNtuplizer( nBranches )
    , genParticlesToken_( tokens[0] )
-   , isJpsiMu_( runFlags["doJpsiMu"])
-   , isJpsiEle_( runFlags["doJpsiEle"]  )
-   , isJpsiTau_( runFlags["doJpsiTau"]  )
    , doGenHist_( runFlags["doGenHist"]  )
    , verbose_   (runFlags["verbose"])
 {
