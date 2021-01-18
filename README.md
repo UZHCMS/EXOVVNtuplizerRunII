@@ -7,8 +7,8 @@ Ntuplizer for searches for heavy resonances decaying to dibosons
 Setting up CMSSW (for september reprocessing):
 
 ```
-cmsrel CMSSW_10_2_10
-cd CMSSW_10_2_10/src
+cmsrel CMSSW_11_1_0
+cd CMSSW_11_1_0/src
 cmsenv
 git cms-init
 ```
@@ -28,7 +28,7 @@ cd $CMSSW_BASE/src
 scram b -j 8
 ```
 
-### setting up Hammer
+### setting up Hammer (n/a for now!)
 ```
 export PATH=/cvmfs/sft.cern.ch/lcg/contrib/CMake/3.14.2/Linux-x86_64/bin:${PATH}
 export BOOST_ROOT=/cvmfs/sft.cern.ch/lcg/releases/Boost/1.66.0-f50b5/x86_64-centos7-gcc7-opt/
@@ -47,32 +47,6 @@ cp ../../src/Hammer/Hammer-1.0.0-dev/lib64/*.so.* ./
 cp ../../src/Hammer/Hammer-1.0.0-dev/lib64/Hammer/*.so.* ./
 cd $CMSSW_BASE/src/Hammer/Hammer-1.0.0-dev-build
 ctest
-```
-
-### JETMET filters to remove noise events
-```
-cd $CMSSW_BASE/src
-git cms-addpkg RecoMET/METFilters 
-scram b -j 8
-```
-
-
-### Update the electronIDs: not really used, but for consistency
-(https://twiki.cern.ch/twiki/bin/view/CMS/CutBasedElectronIdentificationRun2)
-```
-git cms-merge-topic cms-egamma:EgammaPostRecoTools 
-scram b -j 8
-
-git cms-addpkg EgammaAnalysis/ElectronTools
-rm EgammaAnalysis/ElectronTools/data -rf
-git clone https://github.com/cms-egamma/EgammaAnalysis-ElectronTools.git EgammaAnalysis/ElectronTools/data
-cd EgammaAnalysis/ElectronTools/data
-git checkout ScalesSmearing2018_Dev
-cd -
-git cms-merge-topic cms-egamma:EgammaPostRecoTools_dev
-scram b clean 
-scam b distclean 
-scram b -j 8 
 ```
 
 

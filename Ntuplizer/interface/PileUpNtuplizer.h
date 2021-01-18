@@ -15,9 +15,6 @@ private:
    edm::EDGetTokenT< std::vector<PileupSummaryInfo> > pileUpToken_; 
      
    edm::Handle< std::vector<PileupSummaryInfo> >  pileUpInfo_;
-   bool isJpsiMu_;
-   bool isJpsiEle_;
-   bool isJpsiTau_;
 
 
 };

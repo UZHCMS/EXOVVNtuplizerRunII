@@ -10,9 +10,6 @@ VerticesNtuplizer::VerticesNtuplizer( std::vector<edm::EDGetTokenT<reco::VertexC
    : CandidateNtuplizer( nBranches )
    , vtxToken_ ( tokens[0])
    , beamToken_( beamToken)
-   , isJpsiMu_( runFlags["doJpsiMu"]  )
-   , isJpsiEle_( runFlags["doJpsiEle"]  )
-   , isJpsiTau_( runFlags["doJpsiTau"]  )
 {
 
 }

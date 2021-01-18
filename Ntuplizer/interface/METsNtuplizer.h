@@ -67,9 +67,6 @@ public:
     bool doCorrOnTheFly_;
     bool doMETSVFIT_;
     bool doMVAMET_;
-    bool isJpsiMu_;
-    bool isJpsiEle_;
-    bool isJpsiTau_;
 };
 
 #endif // METsNtuplizer_H

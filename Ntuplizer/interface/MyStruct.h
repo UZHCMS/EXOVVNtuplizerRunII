@@ -57,7 +57,7 @@ struct attribute
 //  Float_t doca1de;
 //  Float_t doca1ds;
 
-  Bool_t isRight;
+//  Bool_t isRight;
 
   Float_t dz;
   
@@ -206,10 +206,20 @@ struct pfcand_struct{
     
   bool operator<(const pfcand_struct& another) const { 
     //    return cand_absdz < another.cand_absdz;
-    return TMath::Abs(pfaux.dz) < TMath::Abs(another.pfaux.dz);
+    //    return TMath::Abs(pfaux.dz) < TMath::Abs(another.pfaux.dz);
+    return pfcand.pt() > another.pfcand.pt();
   }
 };
 
+
+struct reducedpfcand_struct{
+  pfcand_struct reducedpfcand;
+  Float_t dnn;
+  Float_t dnn_1prong;
+  Float_t dnn_otherB;
+  Float_t dnn_pu;
+  Float_t dnn_old;
+};
 
 
 struct taucand{
@@ -237,23 +247,27 @@ struct taucand{
   //  Float_t cand_tau_vz;
   Float_t cand_tau_max_dr_3prong;	
   Int_t cand_tau_charge;
-  Bool_t cand_tau_isRight;
-  Bool_t cand_tau_isRight1;
-  Bool_t cand_tau_isRight2;
-  Bool_t cand_tau_isRight3;
+  //  Bool_t cand_tau_isRight;
+  //  Bool_t cand_tau_isRight1;
+  //  Bool_t cand_tau_isRight2;
+  //  Bool_t cand_tau_isRight3;
   //  Float_t cand_tau_dr1;
   //  Float_t cand_tau_dr2;
   //  Float_t cand_tau_dr3;
   //  Float_t cand_tau_ptres1;
   //  Float_t cand_tau_ptres2;
   //  Float_t cand_tau_ptres3;
-  Int_t cand_tau_matched_ppdgId;
-  Float_t cand_tau_matched_gentaupt;
+  //  Int_t cand_tau_matched_ppdgId;
+  //  Float_t cand_tau_matched_gentaupt;
   Float_t cand_tau_sumofdnn;
-  Float_t cand_tau_sumofdnn_others;
-  Float_t cand_tau_pi1_dnn;
-  Float_t cand_tau_pi2_dnn;
-  Float_t cand_tau_pi3_dnn;
+  Float_t cand_tau_sumofdnn_1prong;
+  Float_t cand_tau_sumofdnn_otherB;
+  Float_t cand_tau_sumofdnn_pu;
+  Float_t cand_tau_sumofdnn_old;
+  //  Float_t cand_tau_sumofdnn_others;
+  //  Float_t cand_tau_pi1_dnn;
+//  Float_t cand_tau_pi2_dnn;
+  //  Float_t cand_tau_pi3_dnn;
 //  Float_t cand_tau_pi1_doca;
 //  Float_t cand_tau_pi2_doca;
 //  Float_t cand_tau_pi3_doca;

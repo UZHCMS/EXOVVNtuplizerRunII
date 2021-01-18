@@ -60,7 +60,7 @@ private:
 
    bool flag_fill = false;
 
-   Hammer::Hammer hammer;
+   //   Hammer::Hammer hammer;
 
 
    const vector<string> parName = {"a0", "a1", "a2", "b0", "b1", "b2", "c1", "c2", "d0", "d1", "d2"};

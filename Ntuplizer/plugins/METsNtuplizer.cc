@@ -33,9 +33,6 @@ METsNtuplizer::METsNtuplizer( 	edm::EDGetTokenT<pat::METCollection>     mettoken
   , jetCorrLabel_	     ( jecAK4labels )
   , corrFormulas_	     ( corrformulas )	
   , doMVAMET_        ( runFlags["doMVAMET"]  )					    
-  , isJpsiMu_( runFlags["doJpsiMu"]  )
-  , isJpsiEle_( runFlags["doJpsiEle"]  )
-  , isJpsiTau_( runFlags["doJpsiTau"]  )
 {
         if( jetCorrLabel_.size() != 0 ){
 	   offsetCorrLabel_.push_back(jetCorrLabel_[0]);

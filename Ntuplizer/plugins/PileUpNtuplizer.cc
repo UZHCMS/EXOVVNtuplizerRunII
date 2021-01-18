@@ -4,9 +4,6 @@
 PileUpNtuplizer::PileUpNtuplizer( std::vector< edm::EDGetTokenT< std::vector<PileupSummaryInfo> > > tokens, NtupleBranches* nBranches, std::map< std::string, bool >& runFlags )
    : CandidateNtuplizer( nBranches )
    , pileUpToken_( tokens[0] )
-   , isJpsiMu_( runFlags["doJpsiMu"]  )
-   , isJpsiEle_( runFlags["doJpsiEle"]  )
-   , isJpsiTau_( runFlags["doJpsiTau"]  )
 {
 
 }

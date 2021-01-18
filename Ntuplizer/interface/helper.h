@@ -98,9 +98,9 @@
 #include <vector>
 #include <map>
 
-#include "Hammer/Hammer.hh"
-#include "Hammer/Process.hh"
-#include "Hammer/Particle.hh"
+//#include "Hammer/Hammer.hh"
+//#include "Hammer/Process.hh"
+//#include "Hammer/Particle.hh"
 
 
 //#include "../interface/MyStruct.h"

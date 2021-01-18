@@ -29,9 +29,6 @@ public:
 private:
    edm::EDGetTokenT<reco::GenParticleCollection> genParticlesToken_;
    edm::Handle< reco::GenParticleCollection >  genParticles_;
-   bool isJpsiMu_;
-   bool isJpsiEle_;
-   bool isJpsiTau_;
    bool doGenHist_;
    bool verbose_;
 
