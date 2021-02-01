@@ -452,10 +452,10 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch("JpsiTau_tau_fls3d", &JpsiTau_tau_fls3d);
     tree_->Branch("JpsiTau_tau_alpha", &JpsiTau_tau_alpha);
     tree_->Branch("JpsiTau_tau_vprob", &JpsiTau_tau_vprob);
-    tree_->Branch("JpsiTau_tau_isRight", &JpsiTau_tau_isRight);
-    tree_->Branch("JpsiTau_tau_isRight1", &JpsiTau_tau_isRight1);
-    tree_->Branch("JpsiTau_tau_isRight2", &JpsiTau_tau_isRight2);
-    tree_->Branch("JpsiTau_tau_isRight3", &JpsiTau_tau_isRight3);
+
+    tree_->Branch("JpsiTau_tau_fl3d_wjpsi", &JpsiTau_tau_fl3d_wjpsi);
+    tree_->Branch("JpsiTau_tau_fls3d_wjpsi", &JpsiTau_tau_fls3d_wjpsi);
+
 //    tree_->Branch("JpsiTau_tau_dr1", &JpsiTau_tau_dr1);
 //    tree_->Branch("JpsiTau_tau_dr2", &JpsiTau_tau_dr2);
 //    tree_->Branch("JpsiTau_tau_dr3", &JpsiTau_tau_dr3);
@@ -509,6 +509,7 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch("JpsiTau_tau_pi1_isBdecayppdg", &JpsiTau_tau_pi1_isBdecayppdg);
     tree_->Branch("JpsiTau_tau_pi1_isSignal", &JpsiTau_tau_pi1_isSignal);
     tree_->Branch("JpsiTau_tau_pi1_nprong", &JpsiTau_tau_pi1_nprong);
+    tree_->Branch("JpsiTau_tau_pi1_nprong_pi0", &JpsiTau_tau_pi1_nprong_pi0);
 
 
     tree_->Branch("JpsiTau_tau_pi2_pt", &JpsiTau_tau_pi2_pt );
@@ -533,7 +534,7 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch("JpsiTau_tau_pi2_isBdecayppdg", &JpsiTau_tau_pi2_isBdecayppdg);
     tree_->Branch("JpsiTau_tau_pi2_isSignal", &JpsiTau_tau_pi2_isSignal);
     tree_->Branch("JpsiTau_tau_pi2_nprong", &JpsiTau_tau_pi2_nprong);
-
+    tree_->Branch("JpsiTau_tau_pi2_nprong_pi0", &JpsiTau_tau_pi2_nprong_pi0);
 
 
     tree_->Branch("JpsiTau_tau_pi3_pt", &JpsiTau_tau_pi3_pt );
@@ -558,7 +559,29 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch("JpsiTau_tau_pi3_isBdecayppdg", &JpsiTau_tau_pi3_isBdecayppdg);
     tree_->Branch("JpsiTau_tau_pi3_isSignal", &JpsiTau_tau_pi3_isSignal);
     tree_->Branch("JpsiTau_tau_pi3_nprong", &JpsiTau_tau_pi3_nprong);
+    tree_->Branch("JpsiTau_tau_pi3_nprong_pi0", &JpsiTau_tau_pi3_nprong_pi0);
 
+    tree_->Branch("JpsiTau_tau_delta_chi2", &JpsiTau_tau_delta_chi2);
+    tree_->Branch("JpsiTau_tau_delta_n_ch", &JpsiTau_tau_delta_n_ch);
+    tree_->Branch("JpsiTau_tau_delta_n_mu", &JpsiTau_tau_delta_n_mu);
+    tree_->Branch("JpsiTau_tau_vweight", &JpsiTau_tau_vweight);
+    tree_->Branch("JpsiTau_tau_refit_vx", &JpsiTau_tau_refit_vx);
+    tree_->Branch("JpsiTau_tau_refit_vy", &JpsiTau_tau_refit_vy);
+    tree_->Branch("JpsiTau_tau_refit_vz", &JpsiTau_tau_refit_vz);
+    tree_->Branch("JpsiTau_tau_refit_chi2", &JpsiTau_tau_refit_chi2);
+    tree_->Branch("JpsiTau_tau_refit_ndof", &JpsiTau_tau_refit_ndof);
+    tree_->Branch("JpsiTau_tau_refit_rho", &JpsiTau_tau_refit_rho);
+
+    tree_->Branch("JpsiTau_tau_iso", &JpsiTau_tau_iso);
+    tree_->Branch("JpsiTau_tau_iso_ntracks", &JpsiTau_tau_iso_ntracks );
+    tree_->Branch("JpsiTau_tau_iso_mindoca", &JpsiTau_tau_iso_mindoca );
+
+    //  std::vector<float> JpsiTau_tau_delta_chi2;
+//  std::vector<float> JpsiTau_tau_delta_n;
+//  std::vector<float> JpsiTau_tau_vweight;
+//  std::vector<float> JpsiTau_tau_refit_vx;
+//  std::vector<float> JpsiTau_tau_refit_vy;
+//  std::vector<float> JpsiTau_tau_refit_vz;
 
 
     tree_->Branch("JpsiTau_ptbal", &JpsiTau_ptbal );
@@ -572,6 +595,9 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch("JpsiTau_bbPV_vx", &JpsiTau_bbPV_vx );
     tree_->Branch("JpsiTau_bbPV_vy", &JpsiTau_bbPV_vy );
     tree_->Branch("JpsiTau_bbPV_vz", &JpsiTau_bbPV_vz );
+    tree_->Branch("JpsiTau_bbPV_chi2", &JpsiTau_bbPV_chi2 );
+    tree_->Branch("JpsiTau_bbPV_ndof", &JpsiTau_bbPV_ndof );
+    tree_->Branch("JpsiTau_bbPV_rho", &JpsiTau_bbPV_rho );
 
     //    tree_->Branch("JpsiTau_bbPV_refit_vx", &JpsiTau_bbPV_vx );
     //    tree_->Branch("JpsiTau_bbPV_refit_vy", &JpsiTau_bbPV_vy );
@@ -622,9 +648,6 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch("JpsiTau_B_vx", &JpsiTau_B_vx );
     tree_->Branch("JpsiTau_B_vy", &JpsiTau_B_vy );
     tree_->Branch("JpsiTau_B_vz", &JpsiTau_B_vz );
-    tree_->Branch("JpsiTau_B_iso", &JpsiTau_B_iso);
-    tree_->Branch("JpsiTau_B_iso_ntracks", &JpsiTau_B_iso_ntracks );
-    tree_->Branch("JpsiTau_B_iso_mindoca", &JpsiTau_B_iso_mindoca );
 
     //    tree_->Branch("JpsiTau_B_iso_nocut", &JpsiTau_B_iso_nocut);
     //    tree_->Branch("JpsiTau_B_iso_ntracks_nocut", &JpsiTau_B_iso_ntracks_nocut );
@@ -636,11 +659,24 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch("JpsiTau_B_Es", &JpsiTau_B_Es );
     tree_->Branch("JpsiTau_B_ptback", &JpsiTau_B_ptback );
 
+    tree_->Branch("JpsiTau_B_pt_simple", &JpsiTau_B_pt_simple );
+    tree_->Branch("JpsiTau_B_eta_simple", &JpsiTau_B_eta_simple );
+    tree_->Branch("JpsiTau_B_phi_simple", &JpsiTau_B_phi_simple );
+    tree_->Branch("JpsiTau_B_mass_simple", &JpsiTau_B_mass_simple );
+    tree_->Branch("JpsiTau_B_q2_simple", &JpsiTau_B_q2_simple );
+    tree_->Branch("JpsiTau_B_mm2_simple", &JpsiTau_B_mm2_simple );
+    tree_->Branch("JpsiTau_B_ptmiss_simple", &JpsiTau_B_ptmiss_simple );
+    tree_->Branch("JpsiTau_B_Es_simple", &JpsiTau_B_Es_simple );
+    tree_->Branch("JpsiTau_B_ptback_simple", &JpsiTau_B_ptback_simple );
+
 
   if (runFlags["runOnMC"] ){
     tree_->Branch("JpsiTau_genPV_vx", &JpsiTau_genPV_vx );
     tree_->Branch("JpsiTau_genPV_vy", &JpsiTau_genPV_vy );
     tree_->Branch("JpsiTau_genPV_vz", &JpsiTau_genPV_vz );
+    tree_->Branch("JpsiTau_genSV_vx", &JpsiTau_genSV_vx );
+    tree_->Branch("JpsiTau_genSV_vy", &JpsiTau_genSV_vy );
+    tree_->Branch("JpsiTau_genSV_vz", &JpsiTau_genSV_vz );
     tree_->Branch("JpsiTau_ngenmuons", &JpsiTau_ngenmuons);
     tree_->Branch("JpsiTau_isgenmatched", &JpsiTau_isgenmatched);
     //    tree_->Branch("JpsiTau_isgen3", &JpsiTau_isgen3);
@@ -731,6 +767,20 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
   //  tree_->Branch("JpsiTau_st_dz_max", &JpsiTau_st_dz_max);
   tree_->Branch("JpsiTau_st_nch", &JpsiTau_st_nch);
   tree_->Branch("JpsiTau_st_nch_matched", &JpsiTau_st_nch_matched);
+  tree_->Branch("JpsiTau_st_n_charged_pions", &JpsiTau_st_n_charged_pions);
+  tree_->Branch("JpsiTau_st_n_neutral_pions", &JpsiTau_st_n_neutral_pions);
+  tree_->Branch("JpsiTau_st_n_mu_decay", &JpsiTau_st_n_mu_decay);
+  tree_->Branch("JpsiTau_st_n_e_decay", &JpsiTau_st_n_e_decay);
+  tree_->Branch("JpsiTau_st_n_occurance", &JpsiTau_st_n_occurance);
+  tree_->Branch("JpsiTau_st_decayid", &JpsiTau_st_decayid);
+  tree_->Branch("JpsiTau_st_gentau_pt", &JpsiTau_st_gentau_pt);
+  tree_->Branch("JpsiTau_st_gentau_eta", &JpsiTau_st_gentau_eta);
+  tree_->Branch("JpsiTau_st_gentau_phi", &JpsiTau_st_gentau_phi);
+
+  tree_->Branch("JpsiTau_st_genjpsi_pt", &JpsiTau_st_genjpsi_pt);
+  tree_->Branch("JpsiTau_st_genjpsi_eta", &JpsiTau_st_genjpsi_eta);
+  tree_->Branch("JpsiTau_st_genjpsi_phi", &JpsiTau_st_genjpsi_phi);
+
 
   //  tree_->Branch("JpsiTau_st_isRight", &JpsiTau_st_isRight);
   tree_->Branch("JpsiTau_st_isBdecay", &JpsiTau_st_isBdecay);
@@ -738,6 +788,7 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
   tree_->Branch("JpsiTau_st_isBdecayppdg", &JpsiTau_st_isBdecayppdg);
   tree_->Branch("JpsiTau_st_isSignal", &JpsiTau_st_isSignal);
   tree_->Branch("JpsiTau_st_nprong", &JpsiTau_st_nprong);
+  tree_->Branch("JpsiTau_st_nprong_pi0", &JpsiTau_st_nprong_pi0);
 
   tree_->Branch("JpsiTau_st_doca3d", &JpsiTau_st_doca3d);
   tree_->Branch("JpsiTau_st_doca2d", &JpsiTau_st_doca2d);
@@ -1676,6 +1727,9 @@ void NtupleBranches::reset( void ){
   JpsiTau_bbPV_vx = -99;
   JpsiTau_bbPV_vy = -99;
   JpsiTau_bbPV_vz = -99;
+  JpsiTau_bbPV_chi2 = -99;
+  JpsiTau_bbPV_ndof = -99;
+  JpsiTau_bbPV_rho = -99;
 
   JpsiTau_Jpsi_pt = -99;
   JpsiTau_Jpsi_eta = -99;
@@ -1726,10 +1780,11 @@ void NtupleBranches::reset( void ){
   JpsiTau_tau_fls3d.clear();
   JpsiTau_tau_alpha.clear();
   JpsiTau_tau_vprob.clear();
-  JpsiTau_tau_isRight.clear();
-  JpsiTau_tau_isRight1.clear();
-  JpsiTau_tau_isRight2.clear();
-  JpsiTau_tau_isRight3.clear();
+
+  JpsiTau_tau_fl3d_wjpsi.clear();
+  JpsiTau_tau_fls3d_wjpsi.clear();
+
+
   //  JpsiTau_tau_matched_isBdecay.clear();
   //  JpsiTau_tau_matched_gentaupt.clear();
   JpsiTau_tau_sumofdnn.clear();
@@ -1764,6 +1819,7 @@ void NtupleBranches::reset( void ){
   JpsiTau_tau_pi1_isBdecayppdg.clear();
   JpsiTau_tau_pi1_isSignal.clear();
   JpsiTau_tau_pi1_nprong.clear();
+  JpsiTau_tau_pi1_nprong_pi0.clear();
 
 
 
@@ -1787,7 +1843,7 @@ void NtupleBranches::reset( void ){
   JpsiTau_tau_pi2_isBdecayppdg.clear();
   JpsiTau_tau_pi2_isSignal.clear();
   JpsiTau_tau_pi2_nprong.clear();
-
+  JpsiTau_tau_pi2_nprong_pi0.clear();
 
 
   JpsiTau_tau_pi3_pt.clear();
@@ -1809,7 +1865,21 @@ void NtupleBranches::reset( void ){
   JpsiTau_tau_pi3_isBdecayppdg.clear();
   JpsiTau_tau_pi3_isSignal.clear();
   JpsiTau_tau_pi3_nprong.clear();
+  JpsiTau_tau_pi3_nprong_pi0.clear();
+  JpsiTau_tau_delta_chi2.clear();
+  JpsiTau_tau_delta_n_ch.clear();
+  JpsiTau_tau_delta_n_mu.clear();
+  JpsiTau_tau_vweight.clear();
+  JpsiTau_tau_refit_vx.clear();
+  JpsiTau_tau_refit_vy.clear();
+  JpsiTau_tau_refit_vz.clear();
+  JpsiTau_tau_refit_chi2.clear();
+  JpsiTau_tau_refit_ndof.clear();
+  JpsiTau_tau_refit_rho.clear();
 
+  JpsiTau_tau_iso.clear();
+  JpsiTau_tau_iso_ntracks.clear();
+  JpsiTau_tau_iso_mindoca.clear();
 
 
   JpsiTau_ptbal.clear();
@@ -1834,9 +1904,6 @@ void NtupleBranches::reset( void ){
   JpsiTau_B_vx.clear();
   JpsiTau_B_vy.clear();
   JpsiTau_B_vz.clear();
-  JpsiTau_B_iso.clear();
-  JpsiTau_B_iso_ntracks.clear();
-  JpsiTau_B_iso_mindoca.clear();
 
   //  JpsiTau_B_iso_nocut.clear();
   //  JpsiTau_B_iso_ntracks_nocut.clear();
@@ -1848,6 +1915,15 @@ void NtupleBranches::reset( void ){
   JpsiTau_B_Es.clear();
   JpsiTau_B_ptback.clear();
 
+  JpsiTau_B_pt_simple.clear();
+  JpsiTau_B_eta_simple.clear();
+  JpsiTau_B_phi_simple.clear();
+  JpsiTau_B_mass_simple.clear();
+  JpsiTau_B_q2_simple.clear();
+  JpsiTau_B_mm2_simple.clear();
+  JpsiTau_B_ptmiss_simple.clear();
+  JpsiTau_B_Es_simple.clear();
+  JpsiTau_B_ptback_simple.clear();
 
 
 
@@ -1859,6 +1935,9 @@ void NtupleBranches::reset( void ){
   JpsiTau_genPV_vx = -99;
   JpsiTau_genPV_vy = -99;
   JpsiTau_genPV_vz = -99;
+  JpsiTau_genSV_vx = -99;
+  JpsiTau_genSV_vy = -99;
+  JpsiTau_genSV_vz = -99;
 
   JpsiTau_ngenmuons = -99;
   JpsiTau_isgenmatched = -99;
@@ -1900,6 +1979,7 @@ void NtupleBranches::reset( void ){
   JpsiTau_st_isBdecayppdg.clear();
   JpsiTau_st_isSignal.clear();
   JpsiTau_st_nprong.clear();
+  JpsiTau_st_nprong_pi0.clear();
 
   JpsiTau_st_dz.clear();
   JpsiTau_st_isAssociate.clear();
@@ -1940,6 +2020,21 @@ void NtupleBranches::reset( void ){
 
   JpsiTau_st_nch = 0;
   JpsiTau_st_nch_matched = 0;
+  //  JpsiTau_st_decayid = -1;
+  //  JpsiTau_st_npi0 = -1;
+
+  JpsiTau_st_n_charged_pions = -99;
+  JpsiTau_st_n_neutral_pions = -99;
+  JpsiTau_st_n_mu_decay = -99;
+  JpsiTau_st_n_e_decay = -99;
+  JpsiTau_st_n_occurance = -99;
+  JpsiTau_st_decayid = -99;
+  JpsiTau_st_gentau_pt = -99;
+  JpsiTau_st_gentau_eta = -99;
+  JpsiTau_st_gentau_phi = -99;
+  JpsiTau_st_genjpsi_pt = -99;
+  JpsiTau_st_genjpsi_eta = -99;
+  JpsiTau_st_genjpsi_phi = -99;
 
   JpsiTau_perEVT_dnn = -99;
 

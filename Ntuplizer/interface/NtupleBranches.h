@@ -463,6 +463,9 @@ public:
   float                JpsiTau_bbPV_vx       ;
   float                JpsiTau_bbPV_vy       ;
   float                JpsiTau_bbPV_vz       ;
+  float                JpsiTau_bbPV_chi2       ;
+  float                JpsiTau_bbPV_ndof       ;
+  float                JpsiTau_bbPV_rho       ;
 
   float                JpsiTau_Jpsi_pt      ;
   float                JpsiTau_Jpsi_eta     ;
@@ -515,10 +518,10 @@ public:
   std::vector<float>       JpsiTau_tau_fls3d;
   std::vector<float>       JpsiTau_tau_alpha;
   std::vector<float>       JpsiTau_tau_vprob;
-  std::vector<bool>        JpsiTau_tau_isRight;
-  std::vector<bool>        JpsiTau_tau_isRight1;
-  std::vector<bool>        JpsiTau_tau_isRight2;
-  std::vector<bool>        JpsiTau_tau_isRight3;
+
+  std::vector<float>       JpsiTau_tau_fl3d_wjpsi;
+  std::vector<float>       JpsiTau_tau_fls3d_wjpsi;
+
 //  std::vector<float>        JpsiTau_tau_dr1;
 //  std::vector<float>        JpsiTau_tau_dr2;
 //  std::vector<float>        JpsiTau_tau_dr3;
@@ -572,6 +575,7 @@ public:
   std::vector<int> JpsiTau_tau_pi1_isBdecayppdg;
   std::vector<bool> JpsiTau_tau_pi1_isSignal;
   std::vector<int> JpsiTau_tau_pi1_nprong;
+  std::vector<int> JpsiTau_tau_pi1_nprong_pi0;
 
 
 
@@ -597,6 +601,7 @@ public:
   std::vector<int> JpsiTau_tau_pi2_isBdecayppdg;
   std::vector<bool> JpsiTau_tau_pi2_isSignal;
   std::vector<int> JpsiTau_tau_pi2_nprong;
+  std::vector<int> JpsiTau_tau_pi2_nprong_pi0;
 
 
 
@@ -622,7 +627,22 @@ public:
   std::vector<int> JpsiTau_tau_pi3_isBdecayppdg;
   std::vector<bool> JpsiTau_tau_pi3_isSignal;
   std::vector<int> JpsiTau_tau_pi3_nprong;
+  std::vector<int> JpsiTau_tau_pi3_nprong_pi0;
 
+  std::vector<float> JpsiTau_tau_delta_chi2;
+  std::vector<int> JpsiTau_tau_delta_n_ch;
+  std::vector<int> JpsiTau_tau_delta_n_mu;
+  std::vector<float> JpsiTau_tau_vweight;
+  std::vector<float> JpsiTau_tau_refit_vx;
+  std::vector<float> JpsiTau_tau_refit_vy;
+  std::vector<float> JpsiTau_tau_refit_vz;
+  std::vector<float> JpsiTau_tau_refit_chi2;
+  std::vector<float> JpsiTau_tau_refit_ndof;
+  std::vector<float> JpsiTau_tau_refit_rho;
+
+  std::vector<std::vector<float>>                JpsiTau_tau_iso;
+  std::vector<std::vector<int > >                JpsiTau_tau_iso_ntracks;
+  std::vector<std::vector<float>>                JpsiTau_tau_iso_mindoca;
 
 
   std::vector<float>       JpsiTau_ptbal;
@@ -647,25 +667,34 @@ public:
   std::vector<float>                JpsiTau_B_vx      ;
   std::vector<float>                JpsiTau_B_vy      ;
   std::vector<float>                JpsiTau_B_vz      ;
-  std::vector<std::vector<float>>                JpsiTau_B_iso;
-  std::vector<std::vector<int > >                JpsiTau_B_iso_ntracks;
-  std::vector<std::vector<float>>                JpsiTau_B_iso_mindoca;
+
 
   //  std::vector<float>                JpsiTau_B_iso_nocut;
   //  std::vector<int  >                JpsiTau_B_iso_ntracks_nocut;
   //  std::vector<float>                JpsiTau_B_iso_mindoca_nocut;
 
-  std::vector<float>                JpsiTau_B_unfit_pt      ;
-  std::vector<float>                JpsiTau_B_unfit_mass       ;
-  std::vector<float>                JpsiTau_B_unfit_vprob    ;
-  std::vector<float>                JpsiTau_B_unfit_vx;
-  std::vector<float>                JpsiTau_B_unfit_vy;
-  std::vector<float>                JpsiTau_B_unfit_vz;
+//  std::vector<float>                JpsiTau_B_unfit_pt      ;
+//  std::vector<float>                JpsiTau_B_unfit_mass       ;
+//  std::vector<float>                JpsiTau_B_unfit_vprob    ;
+//  std::vector<float>                JpsiTau_B_unfit_vx;
+//  std::vector<float>                JpsiTau_B_unfit_vy;
+//  std::vector<float>                JpsiTau_B_unfit_vz;
   std::vector<float>                JpsiTau_B_q2;
   std::vector<float>                JpsiTau_B_mm2;
   std::vector<float>                JpsiTau_B_ptmiss;
   std::vector<float>                JpsiTau_B_Es;
   std::vector<float>                JpsiTau_B_ptback;
+
+  std::vector<float>                JpsiTau_B_pt_simple;
+  std::vector<float>                JpsiTau_B_eta_simple;
+  std::vector<float>                JpsiTau_B_phi_simple;
+  std::vector<float>                JpsiTau_B_mass_simple;
+  std::vector<float>                JpsiTau_B_q2_simple;
+  std::vector<float>                JpsiTau_B_mm2_simple;
+  std::vector<float>                JpsiTau_B_ptmiss_simple;
+  std::vector<float>                JpsiTau_B_Es_simple;
+  std::vector<float>                JpsiTau_B_ptback_simple;
+
 
   //  std::vector<float>                JpsiTau_bbPV_refit_vx       ;
   //  std::vector<float>                JpsiTau_bbPV_refit_vy       ;
@@ -676,6 +705,9 @@ public:
   float                JpsiTau_genPV_vx       ;
   float                JpsiTau_genPV_vy       ;
   float                JpsiTau_genPV_vz       ;
+  float                JpsiTau_genSV_vx       ;
+  float                JpsiTau_genSV_vy       ;
+  float                JpsiTau_genSV_vz       ;
 
   int                  JpsiTau_ngenmuons      ;
   int                  JpsiTau_isgenmatched;
@@ -718,6 +750,20 @@ public:
 
   Int_t JpsiTau_st_nch;
   Int_t JpsiTau_st_nch_matched;
+  //  Int_t JpsiTau_st_npi0;
+  Int_t JpsiTau_st_n_charged_pions = 0;
+  Int_t JpsiTau_st_n_neutral_pions = 0;
+  Int_t JpsiTau_st_n_mu_decay = 0;
+  Int_t JpsiTau_st_n_e_decay = 0;
+  Int_t JpsiTau_st_n_occurance = 0;
+  Int_t JpsiTau_st_decayid;
+  Float_t JpsiTau_st_gentau_pt;
+  Float_t JpsiTau_st_gentau_eta;
+  Float_t JpsiTau_st_gentau_phi;
+  Float_t JpsiTau_st_genjpsi_pt;
+  Float_t JpsiTau_st_genjpsi_eta;
+  Float_t JpsiTau_st_genjpsi_phi;
+
   Float_t JpsiTau_perEVT_dnn;
 
   std::vector<float> JpsiTau_st_doca3d;
@@ -741,6 +787,7 @@ public:
   std::vector<int> JpsiTau_st_isBdecaypdg;
   std::vector<int> JpsiTau_st_isBdecayppdg;
   std::vector<int> JpsiTau_st_nprong;
+  std::vector<int> JpsiTau_st_nprong_pi0;
   std::vector<float> JpsiTau_st_dz;
   std::vector<bool> JpsiTau_st_isAssociate;
   std::vector<float> JpsiTau_st_near_dz;

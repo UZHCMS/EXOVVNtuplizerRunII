@@ -14,6 +14,7 @@ class JpsiTauNtuplizer : public CandidateNtuplizer {
  public:
   JpsiTauNtuplizer( edm::EDGetTokenT<pat::MuonCollection>    muonToken   , 
 		    edm::EDGetTokenT<reco::VertexCollection> verticeToken, 
+		    edm::EDGetTokenT<reco::BeamSpot>             beamToken , 
 		    edm::EDGetTokenT<pat::PackedCandidateCollection> packedpfcandidatesToken,
 		    edm::EDGetTokenT<edm::TriggerResults> triggertoken,
 		    edm::EDGetTokenT<pat::TriggerObjectStandAloneCollection> triggerobject,
