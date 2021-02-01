@@ -224,6 +224,7 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
     std::cout<<"\n\n --->GETTING INSIDE doJpsiTau<---\n\n"<<std::endl;
     nTuplizers_["JpsiTau"] = new JpsiTauNtuplizer( muonToken_   , 
 						   vtxToken_   , 
+						   beamToken_ ,
 						   packedpfcandidatesToken_,
 						   triggerToken_,
 						   triggerObjects_,

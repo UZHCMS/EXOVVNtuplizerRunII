@@ -199,6 +199,40 @@ particle_cand helper::calculateIPvariables(
 }
 
 
+
+
+std::pair<float, float> helper::calculateIPvariables(
+						     RefCountedKinematicVertex tauVertex,
+						     RefCountedKinematicVertex jpsiVertex,
+						     reco::Vertex refitVertex
+						     ){
+  
+  //  TrajectoryStateOnSurface tsos = extrapolator.extrapolate(particle->currentState().freeTrajectoryState(),
+  //							   RecoVertex::convertPos(jpsiVertex->vertexState().position()));
+  
+  VertexDistance3D a3d;   
+  // flight length
+  Float_t fl3d = a3d.distance(jpsiVertex->vertexState(), tauVertex->vertexState()).value();
+  Float_t fl3de = a3d.distance(jpsiVertex->vertexState(), tauVertex->vertexState()).error();
+  Float_t fls3d = -1;
+  
+  if(fl3de!=0) fls3d = fl3d/fl3de;
+  
+  GlobalVector IPVec(tauVertex->vertexState().position().x() - jpsiVertex->vertexState().position().x(), 
+		     tauVertex->vertexState().position().y() - jpsiVertex->vertexState().position().y(), 
+		     tauVertex->vertexState().position().z() - jpsiVertex->vertexState().position().z());
+
+  GlobalVector direction(jpsiVertex->vertexState().position().x() - refitVertex.position().x(), 
+			 jpsiVertex->vertexState().position().y() - refitVertex.position().y(), 
+			 jpsiVertex->vertexState().position().z() - refitVertex.position().z());
+
+  double prod = IPVec.dot(direction);
+  double sign = (prod >= 0) ? 1. : -1.;
+
+  return pair<float, float>(sign*fl3d, sign*fls3d);
+}
+
+
 std::pair<bool, Measurement1D> helper::absoluteImpactParameter(const TrajectoryStateOnSurface& tsos,
 							       RefCountedKinematicVertex vertex,
 							       VertexDistance& distanceComputer){

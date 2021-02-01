@@ -168,6 +168,10 @@ class helper{
 				     RefCountedKinematicVertex vertex,
 				     reco::Vertex wrtVertex);
 
+  std::pair<float, float> calculateIPvariables(RefCountedKinematicVertex tauVertex,
+					       RefCountedKinematicVertex jpsiVertex,
+					       reco::Vertex refitVertex);
+
   // absolute impact parameter
   std::pair<bool, Measurement1D> absoluteImpactParameter(const TrajectoryStateOnSurface& tsos,
 							 RefCountedKinematicVertex vertex,

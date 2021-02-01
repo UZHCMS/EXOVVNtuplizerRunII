@@ -74,6 +74,7 @@ struct attribute
   Int_t isBdecayppdg;
   Bool_t isSignal;
   Int_t nprong;
+  Int_t nprong_pi0;
 
   Float_t near_dz; 
 
@@ -228,6 +229,9 @@ struct taucand{
   //  Int_t cand_tau_id2;
   //  Int_t cand_tau_id3;
   math::PtEtaPhiMLorentzVector cand_tlv_tau_fit;
+  math::PtEtaPhiMLorentzVector cand_tlv_pi1_fit;
+  math::PtEtaPhiMLorentzVector cand_tlv_pi2_fit;
+  math::PtEtaPhiMLorentzVector cand_tlv_pi3_fit;
   //  Float_t cand_tau_pt;
   //  Float_t cand_tau_eta;
   //  Float_t cand_tau_phi;
@@ -240,12 +244,13 @@ struct taucand{
 //  Float_t cand_tau_fls3d;
 //  Float_t cand_tau_alpha;
   particle_cand cand_tau;
+  RefCountedKinematicParticle cand_tau_part;
   RefCountedKinematicVertex cand_tau_vertex;
   //  Float_t cand_tau_vprob;
   //  Float_t cand_tau_vx;
   //  Float_t cand_tau_vy;
   //  Float_t cand_tau_vz;
-  Float_t cand_tau_max_dr_3prong;	
+  //  Float_t cand_tau_max_dr_3prong;	
   Int_t cand_tau_charge;
   //  Bool_t cand_tau_isRight;
   //  Bool_t cand_tau_isRight1;
@@ -259,11 +264,11 @@ struct taucand{
   //  Float_t cand_tau_ptres3;
   //  Int_t cand_tau_matched_ppdgId;
   //  Float_t cand_tau_matched_gentaupt;
-  Float_t cand_tau_sumofdnn;
-  Float_t cand_tau_sumofdnn_1prong;
-  Float_t cand_tau_sumofdnn_otherB;
-  Float_t cand_tau_sumofdnn_pu;
-  Float_t cand_tau_sumofdnn_old;
+//  Float_t cand_tau_sumofdnn;
+//  Float_t cand_tau_sumofdnn_1prong;
+//  Float_t cand_tau_sumofdnn_otherB;
+//  Float_t cand_tau_sumofdnn_pu;
+//  Float_t cand_tau_sumofdnn_old;
   //  Float_t cand_tau_sumofdnn_others;
   //  Float_t cand_tau_pi1_dnn;
 //  Float_t cand_tau_pi2_dnn;
@@ -274,17 +279,17 @@ struct taucand{
 //  Int_t cand_tau_pi1_pv;
 //  Int_t cand_tau_pi2_pv;
 //  Int_t cand_tau_pi3_pv;
-  RefCountedKinematicVertex cand_b_vertex;
+//  RefCountedKinematicVertex cand_b_vertex;
   //  Float_t cand_b_vprob;
   //  Float_t cand_b_vx;
   //  Float_t cand_b_vy;
   //  Float_t cand_b_vz;
-  RefCountedKinematicParticle cand_b_part;
+  //  RefCountedKinematicParticle cand_b_part;
 //  Float_t cand_b_pt;
 //  Float_t cand_b_eta; 
 //  Float_t cand_b_phi;
 //  Float_t cand_b_mass;
-  particle_cand cand_b;
+//  particle_cand cand_b;
   //  Float_t cand_b_lip;
   //  Float_t cand_b_lips;
 //  Float_t cand_b_pvip;
@@ -292,18 +297,23 @@ struct taucand{
 //  Float_t cand_b_fl3d;
 //  Float_t cand_b_fls3d;
 //  Float_t cand_b_alpha;
-  std::vector<float> cand_b_iso;
-  std::vector<int> cand_b_iso_ntracks;
-  std::vector<float> cand_b_iso_mindoca;
+//  std::vector<float> cand_b_iso;
+//  std::vector<int> cand_b_iso_ntracks;
+//  std::vector<float> cand_b_iso_mindoca;
   //  Float_t cand_b_iso_nocut;
   //  Float_t cand_b_iso_ntracks_nocut;
   //  Float_t cand_b_iso_mindoca_nocut;
   //  attribute aux1;
   //  attribute aux2;
   //  attribute aux3;
-  pfcand_struct cand_pf1;
-  pfcand_struct cand_pf2;
-  pfcand_struct cand_pf3;
+  reducedpfcand_struct cand_pf1;
+  reducedpfcand_struct cand_pf2;
+  reducedpfcand_struct cand_pf3;
+  //  Float_t vweight;
+  //  Float_t delta_chi2; 
+  Int_t delta_n_ch;
+  Int_t delta_n_mu;
+  reco::Vertex refitVtx;
     
   bool operator<(const taucand& another) const { 
     return cand_tlv_tau_fit.Pt() > another.cand_tlv_tau_fit.Pt();
