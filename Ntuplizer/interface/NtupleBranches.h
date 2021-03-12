@@ -565,7 +565,7 @@ public:
   std::vector<float> JpsiTau_tau_pi1_doca2de;
   //  std::vector<float> JpsiTau_tau_pi1_doca1d;
   //  std::vector<float> JpsiTau_tau_pi1_doca1de;
-  std::vector<bool> JpsiTau_tau_pi1_isRight;
+  //  std::vector<bool> JpsiTau_tau_pi1_isRight;
   std::vector<float> JpsiTau_tau_pi1_dz;
   std::vector<float> JpsiTau_tau_pi1_near_dz;
   std::vector<bool> JpsiTau_tau_pi1_isAssociate;
@@ -577,7 +577,14 @@ public:
   std::vector<int> JpsiTau_tau_pi1_nprong;
   std::vector<int> JpsiTau_tau_pi1_nprong_pi0;
 
+  std::vector<float> JpsiTau_tau_pi1_dnn;
+  std::vector<float> JpsiTau_tau_pi1_dnn_1prong;
+  std::vector<float> JpsiTau_tau_pi1_dnn_otherB;
+  std::vector<float> JpsiTau_tau_pi1_dnn_pu;
+  std::vector<float> JpsiTau_tau_pi1_dnn_old;
 
+  std::vector<bool> JpsiTau_tau_pi1_trigMatch;
+  std::vector<float> JpsiTau_tau_pi1_trigMatch_dr;
 
   std::vector<float>       JpsiTau_tau_pi2_pt;
   std::vector<float>       JpsiTau_tau_pi2_eta;
@@ -591,7 +598,7 @@ public:
   std::vector<float> JpsiTau_tau_pi2_doca2de;
   //  std::vector<float> JpsiTau_tau_pi2_doca1d;
   //  std::vector<float> JpsiTau_tau_pi2_doca1de;
-  std::vector<bool> JpsiTau_tau_pi2_isRight;
+  //  std::vector<bool> JpsiTau_tau_pi2_isRight;
   std::vector<float> JpsiTau_tau_pi2_dz;
   std::vector<float> JpsiTau_tau_pi2_near_dz;
   std::vector<bool> JpsiTau_tau_pi2_isAssociate;
@@ -602,7 +609,14 @@ public:
   std::vector<bool> JpsiTau_tau_pi2_isSignal;
   std::vector<int> JpsiTau_tau_pi2_nprong;
   std::vector<int> JpsiTau_tau_pi2_nprong_pi0;
+  std::vector<float> JpsiTau_tau_pi2_dnn;
+  std::vector<float> JpsiTau_tau_pi2_dnn_1prong;
+  std::vector<float> JpsiTau_tau_pi2_dnn_otherB;
+  std::vector<float> JpsiTau_tau_pi2_dnn_pu;
+  std::vector<float> JpsiTau_tau_pi2_dnn_old;
 
+  std::vector<bool> JpsiTau_tau_pi2_trigMatch;
+  std::vector<float> JpsiTau_tau_pi2_trigMatch_dr;
 
 
   std::vector<float>       JpsiTau_tau_pi3_pt;
@@ -617,7 +631,7 @@ public:
   std::vector<float> JpsiTau_tau_pi3_doca2de;
   //  std::vector<float> JpsiTau_tau_pi3_doca1d;
   //  std::vector<float> JpsiTau_tau_pi3_doca1de;
-  std::vector<bool> JpsiTau_tau_pi3_isRight;
+  //  std::vector<bool> JpsiTau_tau_pi3_isRight;
   std::vector<float> JpsiTau_tau_pi3_dz;
   std::vector<float> JpsiTau_tau_pi3_near_dz;
   std::vector<bool> JpsiTau_tau_pi3_isAssociate;
@@ -628,6 +642,16 @@ public:
   std::vector<bool> JpsiTau_tau_pi3_isSignal;
   std::vector<int> JpsiTau_tau_pi3_nprong;
   std::vector<int> JpsiTau_tau_pi3_nprong_pi0;
+
+  std::vector<float> JpsiTau_tau_pi3_dnn;
+  std::vector<float> JpsiTau_tau_pi3_dnn_1prong;
+  std::vector<float> JpsiTau_tau_pi3_dnn_otherB;
+  std::vector<float> JpsiTau_tau_pi3_dnn_pu;
+  std::vector<float> JpsiTau_tau_pi3_dnn_old;
+
+  std::vector<bool> JpsiTau_tau_pi3_trigMatch;
+  std::vector<float> JpsiTau_tau_pi3_trigMatch_dr;
+
 
   std::vector<float> JpsiTau_tau_delta_chi2;
   std::vector<int> JpsiTau_tau_delta_n_ch;
@@ -764,7 +788,13 @@ public:
   Float_t JpsiTau_st_genjpsi_eta;
   Float_t JpsiTau_st_genjpsi_phi;
 
-  Float_t JpsiTau_perEVT_dnn;
+  Float_t JpsiTau_perEVT_old;
+  Float_t JpsiTau_perEVT_otherB;
+  Float_t JpsiTau_perEVT_sig;
+  Float_t JpsiTau_perEVT_leptonic;
+  Float_t JpsiTau_perEVT_1prong;
+ 
+  std::vector<int> JpsiTau_st_idx;
 
   std::vector<float> JpsiTau_st_doca3d;
   std::vector<float> JpsiTau_st_doca2d;
@@ -791,6 +821,9 @@ public:
   std::vector<float> JpsiTau_st_dz;
   std::vector<bool> JpsiTau_st_isAssociate;
   std::vector<float> JpsiTau_st_near_dz;
+  std::vector<float> JpsiTau_st_dr_jpsi;
+  std::vector<bool> JpsiTau_st_trigMatch;
+  std::vector<float> JpsiTau_st_trigMatch_dr;
   std::vector<int> JpsiTau_st_pvAssociationQuality;
   std::vector<float> JpsiTau_st_pt;
   std::vector<float> JpsiTau_st_eta;

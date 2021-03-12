@@ -77,7 +77,9 @@ struct attribute
   Int_t nprong_pi0;
 
   Float_t near_dz; 
-
+  Bool_t trigMatch;
+  Float_t trigMatch_dr;
+  Float_t dr_jpsi;
 };
 
 
@@ -214,6 +216,7 @@ struct pfcand_struct{
 
 
 struct reducedpfcand_struct{
+  Int_t idx;
   pfcand_struct reducedpfcand;
   Float_t dnn;
   Float_t dnn_1prong;

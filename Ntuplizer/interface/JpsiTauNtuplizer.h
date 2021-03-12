@@ -74,6 +74,8 @@ private:
    float chi = 0.;
    float ndf = 0.;
 
+   int globalCounter = 0;
+
    const int numberofDNN = 80;
 
    const int numberofToys = 1000;
@@ -84,15 +86,20 @@ private:
    tensorflow::MetaGraphDef* graphDef_old;
    tensorflow::MetaGraphDef* graphDef_perPF;
    tensorflow::MetaGraphDef* graphDef_perEVT;
+   tensorflow::MetaGraphDef* graphDef_perEVT_v2;
 
    tensorflow::Session* session_old;
    tensorflow::Session* session_perPF;
    tensorflow::Session* session_perEVT;
+   tensorflow::Session* session_perEVT_v2;
 
    tensorflow::Tensor data; // (tensorflow::DT_FLOAT, { 1, 50, 8 }); // single batch of dimension 10
+   tensorflow::Tensor data_v2; // (tensorflow::DT_FLOAT, { 1, 50, 8 }); // single batch of dimension 10
 
-   tensorflow::Tensor label_perPF; // (tensorflow::DT_FLOAT, { 1,50}); 
-   tensorflow::Tensor label_perEVT; // (tensorflow::DT_FLOAT, { 1,50}); 
+   //   tensorflow::Tensor label_perPF; // (tensorflow::DT_FLOAT, { 1,50}); 
+   //   tensorflow::Tensor label_perEVT; // (tensorflow::DT_FLOAT, { 1,50}); 
+   //   tensorflow::Tensor label_perEVT_v2; // (tensorflow::DT_FLOAT, { 1,50}); 
+   tensorflow::Tensor label_new; // (tensorflow::DT_FLOAT, { 1,50}); 
    //   tensorflow::Tensor add_global; //(tensorflow::DT_FLOAT, { 1, 2 }); 
    tensorflow::Tensor isTraining; //(tensorflow::DT_FLOAT, { 1, 2 }); 
    //   tensorflow::Tensor norm; //(tensorflow::DT_FLOAT, { 1, 2 }); 
@@ -108,6 +115,7 @@ private:
    std::string dnnfile_old_;
    std::string dnnfile_perPF_;
    std::string dnnfile_perEVT_;
+   std::string dnnfile_perEVT_v2_;
 
    //   Hammer::Hammer hammer;
 
