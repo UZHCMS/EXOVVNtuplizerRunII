@@ -5,7 +5,7 @@ config = dict()
 #--------- general ----------#
 
 #--------- Set Just one to true ----------#
-config["RUNONMC"] = False
+config["RUNONMC"] = True
 #-----------------------------------------#
 #config["USEHAMMER"] = (True and config["RUNONMC"])
 config["USEHAMMER"] = False
@@ -15,7 +15,7 @@ config["VERBOSE"] = False
 config["USEDNN"] = True
 config["DZCUT"] = 0.12 # this is fixed !!
 config["FSIGCUT"] = 3
-config["VPROBCUT"] = 0.1
+config["VPROBCUT"] = 0.00001
 #config["DNNCUT"] = 0.1443 80% eff.
 #config["DNNCUT"] = 0.0131 90% eff. 
 #config["DNNCUT"] = 0.0012 95% eff.
@@ -56,6 +56,7 @@ config["DOGENHIST"] = (True and config["RUNONMC"]);
 config["DNNFILE_OLD"] = "data/DNN/BcJPsi/DUMMY"
 config["DNNFILE_PERPF"] = "data/DNN/BcJPsi/TAU/DUMMY"
 config["DNNFILE_PEREVT"] = "data/DNN/BcJPsi/TAU_class/DUMMY"
+config["DNNFILE_PEREVT_V2"] = "data/DNN/BcJPsi/TAU_class_v21/DUMMY"
 
 
 
