@@ -43,6 +43,7 @@ public:
   std::map< std::string, double > runValues;
   std::map< std::string, std::string > runStrings;
  
+
 private:
   virtual void beginJob()                                                                   override;
   virtual void analyze(const edm::Event&, const edm::EventSetup&)                           override;
@@ -110,4 +111,7 @@ private:
   edm::EDGetTokenT<bool>                                    HBHENoiseIsoFilterResultToken_;  
   edm::EDGetTokenT<bool>                                    ecalBadCalibFilterUpdateToken_;
 
+  bool                                    isBkgBSample_;
+  TFile  *fileWeights;
+  TH1F  *histGenWeights;
 };

@@ -50,7 +50,7 @@ options.register( 'runUpToEarlyF',
 
 
 
-options.maxEvents = 2000
+options.maxEvents = 200
 #options.maxEvents = -1
 
 #data file
@@ -97,7 +97,9 @@ else:
 #                              skipEvents=cms.untracked.uint32(23000)
                               ) 
 
-print " process source filenames %s" %(process.source) 
+print " process source filenames %s" %(process.source)
+
+#print " process source filenames ", process.source.fileNames
 ######## Sequence settings ##########
 
 hltFiltersProcessName = 'RECO'
@@ -306,9 +308,17 @@ if config["CORRMETONTHEFLY"]:
      	 'JEC/%s_DATA_L3Absolute_AK4PFchs.txt'%(JECprefix),
          'JEC/%s_DATA_L2L3Residual_AK4PFchs.txt'%(JECprefix)
        ]	
-      			    
+      	
 
-                                                                       
+################# Weights for B generic background #########
+
+IsBkgBSample = False 
+fileName=str(process.source.fileNames) 
+print(fileName)
+if "HbToJPsiMuMu" in fileName:
+   IsBkgBSample = True		    
+print "IsBkgBSample" ,IsBkgBSample
+
 ################## Ntuplizer ###################
 process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     runOnMC	      = cms.bool(config["RUNONMC"]),
@@ -335,7 +345,8 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     dnnfile_old       = cms.string(config['DNNFILE_OLD']),                        
     dnnfile_perPF     = cms.string(config['DNNFILE_PERPF']),                        
     dnnfile_perEVT    = cms.string(config['DNNFILE_PEREVT']),                        
-    dnnfile_perEVT_v2 = cms.string(config['DNNFILE_PEREVT_V2']),                        
+    dnnfile_perEVT_v2 = cms.string(config['DNNFILE_PEREVT_V2']),
+    isBkgBSample = cms.bool(IsBkgBSample),                        
     vertices = cms.InputTag("offlineSlimmedPrimaryVertices"),
     beamSpot = cms.InputTag("offlineBeamSpot"),
     taus = cms.InputTag("slimmedTaus"),

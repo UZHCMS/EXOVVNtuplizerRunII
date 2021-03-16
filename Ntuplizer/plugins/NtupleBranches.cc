@@ -46,7 +46,8 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
       tree_->Branch( "genParticle_ppt"	     , &genParticle_ppt        );
       tree_->Branch( "genParticle_peta"	     , &genParticle_peta        );
       tree_->Branch( "genParticle_pphi"	     , &genParticle_pphi        );
-	
+      ////Adding weight based on B decay chain for B generic bkg sample
+      tree_->Branch( "genWeightBkgB"             , &genWeightBkgB       );
 	
     } //doGenParticles
       
@@ -1392,7 +1393,8 @@ void NtupleBranches::reset( void ){
   genParticle_nMoth.clear();
   genParticle_nDau.clear();
   genParticle_dau.clear();
-  
+  genWeightBkgB = 0;
+
   //  genParticle_pmother.clear();
   genParticle_pdgs.clear();
   genParticle_layers.clear();
