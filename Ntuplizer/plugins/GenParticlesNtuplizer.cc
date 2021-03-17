@@ -1,12 +1,15 @@
 #include "../interface/GenParticlesNtuplizer.h"
  
 //===================================================================================================================        
-GenParticlesNtuplizer::GenParticlesNtuplizer( std::vector<edm::EDGetTokenT<reco::GenParticleCollection>> tokens, NtupleBranches* nBranches, std::map< std::string, bool >& runFlags ) 
+GenParticlesNtuplizer::GenParticlesNtuplizer( std::vector<edm::EDGetTokenT<reco::GenParticleCollection>> tokens, NtupleBranches* nBranches, std::map< std::string, bool >& runFlags, 
+bool isBkgBSample, TH1F* histGenWeights ) 
 
    : CandidateNtuplizer( nBranches )
    , genParticlesToken_( tokens[0] )
    , doGenHist_( runFlags["doGenHist"]  )
    , verbose_   (runFlags["verbose"])
+   , isBkgBSample_ (isBkgBSample)
+   , histGenWeights_ (histGenWeights)
 {
 
 }
@@ -222,7 +225,34 @@ bool GenParticlesNtuplizer::fillBranches( edm::Event const & event, const edm::E
         bool isB( (abs((*genParticles_)[p].pdgId())>=511 && abs((*genParticles_)[p].pdgId())<=545));
         bool isStatus2( (*genParticles_)[p].status()==2 );
         bool isStatus1( (*genParticles_)[p].status()==1 );
-      
+
+        // Implementation fo the weight for the B chain decay in the generic background B sample
+        if (isBkgBSample_){        
+            int motherID=0;
+            
+            if (abs((*genParticles_)[p].pdgId())==443 and abs((*genParticles_)[p].daughter(0)->pdgId())==13 ){
+                int motherID = (GenParticlesNtuplizer::checkMom(&(*genParticles_)[p]))->pdgId();
+                // std:: cout<< " Jpsi status is "    <<  (*genParticles_)[p].status() << std::endl;
+                // std:: cout<< " Jpsi daugh is "    <<   (*genParticles_)[p].daughter(0)->pdgId() << std::endl;
+                // std:: cout<< " Jpsi mother is "    << motherID << std::endl;
+                
+                std::vector<int> B_hadron = {511,521,531,541,5112,5122,5132,5212,5232};   // at the beginning of the hist there is a bin for the all other possible decays   
+                
+                std::vector<int>::iterator it = std::find(B_hadron.begin(), B_hadron.end(), motherID);
+                int index;
+                if (it != B_hadron.end()) {
+                    index = std::distance(B_hadron.begin(), it);
+                    //std:: cout<< "index is " << index <<" weight is " << histGenWeights_->GetBinContent(index+2)<< std::endl;
+                    nBranches_->genWeightBkgB = histGenWeights_->GetBinContent(index+2);
+                } else {
+                    nBranches_->genWeightBkgB = histGenWeights_->GetBinContent(1); // in the first bin of the hist there is a generic 'other' for all the b decays not contained in the B_hadron vector;
+                } 
+            }
+        } else { 
+            nBranches_->genWeightBkgB = 1;
+        }
+        
+    
         if(!isLepton && !isQuark && !isPhoton && !isGluon && !isWZH && !isHeavyMeson && !isHeavyBaryon && !isBSM && !isDirectPromptTauDecayProduct && !fromHardProcessFinalState && !isDirectHardProcessTauDecayProductFinalState && !isB && !isStatus2 && !isStatus1) continue;
       
         //      nBranches_->genParticle_px    .push_back((*genParticles_)[p].px()     );
@@ -344,8 +374,30 @@ bool GenParticlesNtuplizer::fillBranches( edm::Event const & event, const edm::E
     }
 
     nBranches_->genParticle_N = nBranches_->genParticle_pt.size(); // save number of save genParticles
-    
+    //if     nBranches_->genWeightBkgB = 1;    
 
     return true;
 }
 
+
+const reco::Candidate*  GenParticlesNtuplizer::checkMom(const reco::Candidate * candMom){
+    int diquarks[] = { 1103,2101,2103,2203,3101,3103,3201,3203,3303,4101,4103,4201,4203,4301,4303,4403,5101,5103,5201,5203,5301,5303,5401, 5403,5503};
+    if (candMom == nullptr) return nullptr;
+    
+    if (candMom->mother(0) == nullptr) {
+        return candMom;
+    }  
+    int * p = std::find (diquarks, diquarks+25, candMom->mother(0)->pdgId());
+    if (abs(candMom->mother(0)->pdgId()) < 8  ||    \
+        abs(candMom->mother(0)->pdgId())== 21 ||    \
+        abs(candMom->mother(0)->pdgId())== 2212 ||  \
+        (p != (diquarks+25))
+      ){ 
+        
+    return candMom;
+    }
+    else {
+        candMom = checkMom(candMom->mother(0));
+    return candMom;
+    }  
+}

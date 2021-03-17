@@ -55,7 +55,8 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
 //	jetForMetCorrToken_   	    (consumes<pat::JetCollection>(iConfig.getParameter<edm::InputTag>("jetsForMetCorr"))),
 
 	triggerToken_	      	    (consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("HLT"))),
-	triggerObjects_	      	    (consumes<pat::TriggerObjectStandAloneCollection>(iConfig.getParameter<edm::InputTag>("triggerobjects")))
+	triggerObjects_	      	    (consumes<pat::TriggerObjectStandAloneCollection>(iConfig.getParameter<edm::InputTag>("triggerobjects"))),
+    isBkgBSample_ ( iConfig.getParameter<bool>("isBkgBSample"))
 //	triggerPrescales_     	    (consumes<pat::PackedTriggerPrescales>(iConfig.getParameter<edm::InputTag>("triggerprescales"))),
 //        noiseFilterToken_     	    (consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("noiseFilter"))),
 //        HBHENoiseFilterLooseResultToken_(consumes<bool>(iConfig.getParameter<edm::InputTag>("noiseFilterSelection_HBHENoiseFilterLoose"))),
@@ -75,6 +76,7 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
  
   //std::map< std::string, bool > runFlags;
   runFlags["runOnMC"] = iConfig.getParameter<bool>("runOnMC");
+
   runFlags["useDNN"] = iConfig.getParameter<bool>("useDNN");
   runFlags["useHammer"] = iConfig.getParameter<bool>("useHammer");
   runFlags["doGenParticles"] = iConfig.getParameter<bool>("doGenParticles");
@@ -302,13 +304,17 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
  
   /*=======================================================================================*/    
   if ( runFlags["runOnMC"] ){
-
+      if (isBkgBSample_ ){                                                                                                                                                                       
+          fileWeights = new TFile("root://eoscms.cern.ch//eos/cms/store/user/fiorendi/p5prime/HBMC/decay_weight.root", "READ");                                                                   
+          histGenWeights=(TH1F*)fileWeights->Get("weight");                                                                                                                                        
+          std::cout << "weight hist first bin is : "<<  histGenWeights->GetBinContent(1)<<std::endl ;                                                                                            
+      }
      
     if (runFlags["doGenParticles"]) {
       std::vector<edm::EDGetTokenT<reco::GenParticleCollection>> genpTokens;
       genpTokens.push_back( genparticleToken_ );
 
-      nTuplizers_["genParticles"] = new GenParticlesNtuplizer( genpTokens, nBranches_, runFlags );
+      nTuplizers_["genParticles"] = new GenParticlesNtuplizer( genpTokens, nBranches_, runFlags, isBkgBSample_, histGenWeights );
     }
 
     if (runFlags["doPileUp"]) {
@@ -402,6 +408,7 @@ void Ntuplizer::beginJob(){
 
 ///////////////////////////////////////////////////////////////////////////////////
 void Ntuplizer::endJob( ) {
+    if (isBkgBSample_ ) fileWeights->Close();
 }
 
 ///////////////////////////////////////////////////////////////////////////////////

@@ -341,7 +341,13 @@ if config["CORRMETONTHEFLY"]:
          'JEC/%s_DATA_L2L3Residual_AK4PFchs.txt'%(JECprefix)
        ]	
       			    
+################# Weights for B generic background #########
 
+IsBkgBSample = False 
+fileName=str(process.source.fileNames) 
+if "HbToJPsiMuMu" in fileName:
+  IsBkgBSample = True		    
+print "IsBkgBSample" ,IsBkgBSample
                                                                        
 ################## Ntuplizer ###################
 process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
@@ -363,7 +369,8 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     fsigcut           = cms.double(config['FSIGCUT']),
     vprobcut          = cms.double(config['VPROBCUT']),
     dnncut            = cms.double(config['DNNCUT']),
-    dnnfile           = cms.string(config['DNNFILE']),                        
+    dnnfile           = cms.string(config['DNNFILE']),  
+    isBkgBSample = cms.bool(IsBkgBSample),                          
     vertices = cms.InputTag("offlineSlimmedPrimaryVertices"),
     beamSpot = cms.InputTag("offlineBeamSpot"),
     taus = cms.InputTag("slimmedTaus"),
