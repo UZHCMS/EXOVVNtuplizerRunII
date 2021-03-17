@@ -79,6 +79,7 @@ public:
     
   /** genParticles */
   int                             genParticle_N;
+  float genWeightBkgB;
   std::vector<float>              genParticle_pt       ;
 //  std::vector<float>              genParticle_px       ;
 //  std::vector<float>              genParticle_py       ;
