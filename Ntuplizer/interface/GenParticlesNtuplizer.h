@@ -16,7 +16,7 @@ class GenParticlesNtuplizer : public CandidateNtuplizer {
 
 public:
   GenParticlesNtuplizer( std::vector<edm::EDGetTokenT<reco::GenParticleCollection>> tokens, 
-                         NtupleBranches* nBranches, std::map< std::string, bool >&  runFlags, bool isBkgBSample, TH1F* fileweight );
+                         NtupleBranches* nBranches, std::map< std::string, bool >&  runFlags, TH1F* fileweight );
 
   ~GenParticlesNtuplizer( void ); 
 
@@ -31,9 +31,9 @@ private:
    edm::Handle< reco::GenParticleCollection >  genParticles_;
    bool doGenHist_;
    bool verbose_;
+   bool isBkgBSample_;
 
    helper aux;
-   bool isBkgBSample_;
    TH1F* histGenWeights_ ;
 };
 

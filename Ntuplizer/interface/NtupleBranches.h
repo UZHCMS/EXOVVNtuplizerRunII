@@ -535,7 +535,7 @@ public:
   std::vector<float>       JpsiTau_tau_sumofdnn_1prong; 
   std::vector<float>       JpsiTau_tau_sumofdnn_otherB; 
   std::vector<float>       JpsiTau_tau_sumofdnn_pu; 
-  std::vector<float>       JpsiTau_tau_sumofdnn_old; 
+  //  std::vector<float>       JpsiTau_tau_sumofdnn_old; 
   //  std::vector<float>       JpsiTau_tau_sumofdnn_others; 
 
 //  std::vector<float>       JpsiTau_tau_pi1_dnn;
@@ -582,7 +582,7 @@ public:
   std::vector<float> JpsiTau_tau_pi1_dnn_1prong;
   std::vector<float> JpsiTau_tau_pi1_dnn_otherB;
   std::vector<float> JpsiTau_tau_pi1_dnn_pu;
-  std::vector<float> JpsiTau_tau_pi1_dnn_old;
+  //  std::vector<float> JpsiTau_tau_pi1_dnn_old;
 
   std::vector<bool> JpsiTau_tau_pi1_trigMatch;
   std::vector<float> JpsiTau_tau_pi1_trigMatch_dr;
@@ -614,7 +614,7 @@ public:
   std::vector<float> JpsiTau_tau_pi2_dnn_1prong;
   std::vector<float> JpsiTau_tau_pi2_dnn_otherB;
   std::vector<float> JpsiTau_tau_pi2_dnn_pu;
-  std::vector<float> JpsiTau_tau_pi2_dnn_old;
+  //  std::vector<float> JpsiTau_tau_pi2_dnn_old;
 
   std::vector<bool> JpsiTau_tau_pi2_trigMatch;
   std::vector<float> JpsiTau_tau_pi2_trigMatch_dr;
@@ -648,7 +648,7 @@ public:
   std::vector<float> JpsiTau_tau_pi3_dnn_1prong;
   std::vector<float> JpsiTau_tau_pi3_dnn_otherB;
   std::vector<float> JpsiTau_tau_pi3_dnn_pu;
-  std::vector<float> JpsiTau_tau_pi3_dnn_old;
+  //  std::vector<float> JpsiTau_tau_pi3_dnn_old;
 
   std::vector<bool> JpsiTau_tau_pi3_trigMatch;
   std::vector<float> JpsiTau_tau_pi3_trigMatch_dr;
@@ -789,7 +789,7 @@ public:
   Float_t JpsiTau_st_genjpsi_eta;
   Float_t JpsiTau_st_genjpsi_phi;
 
-  Float_t JpsiTau_perEVT_old;
+  //  Float_t JpsiTau_perEVT_old;
   Float_t JpsiTau_perEVT_otherB;
   Float_t JpsiTau_perEVT_sig;
   Float_t JpsiTau_perEVT_leptonic;
@@ -835,7 +835,7 @@ public:
   std::vector<float> JpsiTau_st_dnn_1prong;
   std::vector<float> JpsiTau_st_dnn_otherB;
   std::vector<float> JpsiTau_st_dnn_pu;
-  std::vector<float> JpsiTau_st_dnn_old;
+  //  std::vector<float> JpsiTau_st_dnn_old;
   std::vector<int> JpsiTau_st_matchidx;
 
 //  std::vector<float> JpsiTau_ed_pfeta;

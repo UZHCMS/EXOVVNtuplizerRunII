@@ -5,7 +5,8 @@ config = dict()
 #--------- general ----------#
 
 #--------- Set Just one to true ----------#
-config["RUNONMC"] = True
+config["RUNONMC"] = False
+config["ISBKG"] = (True and config["RUNONMC"])
 #-----------------------------------------#
 #config["USEHAMMER"] = (True and config["RUNONMC"])
 config["USEHAMMER"] = False
@@ -16,11 +17,6 @@ config["USEDNN"] = True
 config["DZCUT"] = 0.12 # this is fixed !!
 config["FSIGCUT"] = 3
 config["VPROBCUT"] = 0.00001
-#config["DNNCUT"] = 0.1443 80% eff.
-#config["DNNCUT"] = 0.0131 90% eff. 
-#config["DNNCUT"] = 0.0012 95% eff.
-#config["DNNCUT"] = 0.0012
-config["DNNCUT"] = -1
 config["TAU_CHARGE"] = 1
 
 config["USEJSON"] = not (config["RUNONMC"])
@@ -34,8 +30,6 @@ config["JSONFILE"] = "JSON/Cert_314472-325175_13TeV_17SeptEarlyReReco2018ABC_Pro
 #config["JSONFILE"] = "JSON/Cert_294927-306462_13TeV_UL2017_Collisions17_GoldenJSON.txt"
 #config["JSONFILE"] = "JSON/Cert_314472-325175_13TeV_Legacy2018_Collisions18_JSON.txt"
 
-config["USENOHF"] = False
-
 
 #--------- basic sequences ----------#
 config["DOGENPARTICLES"] = (True and config["RUNONMC"])
@@ -46,34 +40,15 @@ config["DOMISSINGET"] = False
 
 config["DOJPSIMU"] = False
 config["DOJPSITAU"] = True
-config["DOBSTAUTAU"] = False
-config["DOBSTAUTAUFH"] = False
-config["DOBSTAUTAUFH_mr"] = False # mass regression
-config["DOBSDSTARTAUNU"] = False
 
 config["DOGENHIST"] = (True and config["RUNONMC"]);
 
-config["DNNFILE_OLD"] = "data/DNN/BcJPsi/DUMMY"
-config["DNNFILE_PERPF"] = "data/DNN/BcJPsi/TAU/DUMMY"
+config["DNNFILE_PERPF"] = "data/DNN/BcJPsi/TAU_UL18/DUMMY"
 config["DNNFILE_PEREVT"] = "data/DNN/BcJPsi/TAU_class/DUMMY"
-config["DNNFILE_PEREVT_V2"] = "data/DNN/BcJPsi/TAU_class_v21/DUMMY"
-
-
+config["BWEIGHTFILE"] = "data/BWEIGHT/decay_weight.root"
 
 if config["DOJPSIMU"]:
     config["USEDNN"] = False
-
-
-elif config["DOBSTAUTAU"] or config["DOBSDSTARTAUNU"]:
-    config["DNNFILE"] = "data/DNN/BsTauTau_semilep/DUMMY"    
-
-elif config["DOBSTAUTAUFH"] or config["DOBSTAUTAUFH_mr"]:
-    config["DNNFILE"] = "data/DNN/BsTauTau_fullhad/DUMMY"
-    config["DNNCUT"] = 0.47
-    config["FSIGCUT"] = 2
-    config["VPROBCUT"] = 0.05
-else:
-    config["DNNFILE"] = "data/DNN/BcJPsi/DUMMY"
 
 
 #--------- JEC ----------#

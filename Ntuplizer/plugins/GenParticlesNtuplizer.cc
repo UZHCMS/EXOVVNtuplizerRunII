@@ -1,14 +1,13 @@
 #include "../interface/GenParticlesNtuplizer.h"
  
 //===================================================================================================================        
-GenParticlesNtuplizer::GenParticlesNtuplizer( std::vector<edm::EDGetTokenT<reco::GenParticleCollection>> tokens, NtupleBranches* nBranches, std::map< std::string, bool >& runFlags, 
-bool isBkgBSample, TH1F* histGenWeights ) 
+GenParticlesNtuplizer::GenParticlesNtuplizer( std::vector<edm::EDGetTokenT<reco::GenParticleCollection>> tokens, NtupleBranches* nBranches, std::map< std::string, bool >& runFlags, TH1F* histGenWeights ) 
 
    : CandidateNtuplizer( nBranches )
    , genParticlesToken_( tokens[0] )
    , doGenHist_( runFlags["doGenHist"]  )
    , verbose_   (runFlags["verbose"])
-   , isBkgBSample_ (isBkgBSample)
+   , isBkgBSample_ (runFlags["isBkgBSample"])
    , histGenWeights_ (histGenWeights)
 {
 
@@ -228,13 +227,13 @@ bool GenParticlesNtuplizer::fillBranches( edm::Event const & event, const edm::E
 
         // Implementation fo the weight for the B chain decay in the generic background B sample
         if (isBkgBSample_){        
-            int motherID=0;
+	  //            int motherID=0;
             
             if (abs((*genParticles_)[p].pdgId())==443 and abs((*genParticles_)[p].daughter(0)->pdgId())==13 ){
-                int motherID = (GenParticlesNtuplizer::checkMom(&(*genParticles_)[p]))->pdgId();
+	      int motherID = abs((GenParticlesNtuplizer::checkMom(&(*genParticles_)[p]))->pdgId());
                 // std:: cout<< " Jpsi status is "    <<  (*genParticles_)[p].status() << std::endl;
                 // std:: cout<< " Jpsi daugh is "    <<   (*genParticles_)[p].daughter(0)->pdgId() << std::endl;
-                // std:: cout<< " Jpsi mother is "    << motherID << std::endl;
+		//		std:: cout<< " Jpsi mother is "    << motherID << std::endl;
                 
                 std::vector<int> B_hadron = {511,521,531,541,5112,5122,5132,5212,5232};   // at the beginning of the hist there is a bin for the all other possible decays   
                 

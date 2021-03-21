@@ -222,7 +222,7 @@ struct reducedpfcand_struct{
   Float_t dnn_1prong;
   Float_t dnn_otherB;
   Float_t dnn_pu;
-  Float_t dnn_old;
+  //  Float_t dnn_old;
 };
 
 
