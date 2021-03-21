@@ -55,8 +55,9 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
 //	jetForMetCorrToken_   	    (consumes<pat::JetCollection>(iConfig.getParameter<edm::InputTag>("jetsForMetCorr"))),
 
 	triggerToken_	      	    (consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("HLT"))),
-	triggerObjects_	      	    (consumes<pat::TriggerObjectStandAloneCollection>(iConfig.getParameter<edm::InputTag>("triggerobjects"))),
-    isBkgBSample_ ( iConfig.getParameter<bool>("isBkgBSample"))
+	triggerObjects_	      	    (consumes<pat::TriggerObjectStandAloneCollection>(iConfig.getParameter<edm::InputTag>("triggerobjects")))
+//  isBkgBSample_ ( iConfig.getParameter<bool>("isBkgBSample")),
+//  bweightfile_ (runStrings["bweightfile"])      
 //	triggerPrescales_     	    (consumes<pat::PackedTriggerPrescales>(iConfig.getParameter<edm::InputTag>("triggerprescales"))),
 //        noiseFilterToken_     	    (consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("noiseFilter"))),
 //        HBHENoiseFilterLooseResultToken_(consumes<bool>(iConfig.getParameter<edm::InputTag>("noiseFilterSelection_HBHENoiseFilterLoose"))),
@@ -86,6 +87,7 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
   runFlags["doMissingEt"] = iConfig.getParameter<bool>("doMissingEt");
   runFlags["doJpsiMu"] = iConfig.getParameter<bool>("doJpsiMu");
   runFlags["doJpsiTau"] = iConfig.getParameter<bool>("doJpsiTau");
+  runFlags["isBkgBSample"] = iConfig.getParameter<bool>("isBkgBSample");
   //  runFlags["doBsTauTau"] = iConfig.getParameter<bool>("doBsTauTau");
   //  runFlags["doBsTauTauFH"] = iConfig.getParameter<bool>("doBsTauTauFH");
   //  runFlags["doBsTauTauFH_mr"] = iConfig.getParameter<bool>("doBsTauTauFH_mr");
@@ -95,21 +97,22 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
   runValues["dzcut"] = iConfig.getParameter<double>("dzcut");
   runValues["fsigcut"] = iConfig.getParameter<double>("fsigcut");
   runValues["vprobcut"] = iConfig.getParameter<double>("vprobcut");
-  runValues["dnncut"] = iConfig.getParameter<double>("dnncut");
   runValues["tau_charge"] = iConfig.getParameter<unsigned int>("tau_charge");
 
-  runStrings["dnnfile_old"] = iConfig.getParameter<std::string>("dnnfile_old");  
+  //  runStrings["dnnfile_old"] = iConfig.getParameter<std::string>("dnnfile_old");  
   runStrings["dnnfile_perPF"] = iConfig.getParameter<std::string>("dnnfile_perPF");  
   runStrings["dnnfile_perEVT"] = iConfig.getParameter<std::string>("dnnfile_perEVT");  
-  runStrings["dnnfile_perEVT_v2"] = iConfig.getParameter<std::string>("dnnfile_perEVT_v2");  
+  runStrings["bweightfile"] = iConfig.getParameter<std::string>("bweightfile");
+  //  runStrings["dnnfile_perEVT_v2"] = iConfig.getParameter<std::string>("dnnfile_perEVT_v2");  
 
-  std::cout << "Ntuplizer: dnn_old file: " << runStrings["dnnfile_old"] << std::endl;
+
+  //  std::cout << "Ntuplizer: dnn_old file: " << runStrings["dnnfile_old"] << std::endl;
   std::cout << "Ntuplizer: dnn_perPF file: " << runStrings["dnnfile_perPF"] << std::endl;
   std::cout << "Ntuplizer: dnn_perEVT file: " << runStrings["dnnfile_perEVT"] << std::endl;
-  std::cout << "Ntuplizer: dnn_perEVT_v2 file: " << runStrings["dnnfile_perEVT_v2"] << std::endl;
+  //  std::cout << "Ntuplizer: dnn_perEVT_v2 file: " << runStrings["dnnfile_perEVT_v2"] << std::endl;
 
 
-  std::cout << "Ntuplizer: (dzcut, fsigcut, vprobcut, dnn cut, tau_charge) = " << runValues["dzcut"] << " " << runValues["fsigcut"] << " " << runValues["vprobcut"] << " " << runValues["dnncut"] << " " << runValues["tau_charge"] << std::endl;
+  std::cout << "Ntuplizer: (dzcut, fsigcut, vprobcut, dnn cut, tau_charge) = " << runValues["dzcut"] << " " << runValues["fsigcut"] << " " << runValues["vprobcut"] << " " << " " << runValues["tau_charge"] << std::endl;
   
   std::cout << "useHammer" << runFlags["useHammer"] << std::endl;
 
@@ -304,17 +307,22 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
  
   /*=======================================================================================*/    
   if ( runFlags["runOnMC"] ){
-      if (isBkgBSample_ ){                                                                                                                                                                       
-          fileWeights = new TFile("root://eoscms.cern.ch//eos/cms/store/user/fiorendi/p5prime/HBMC/decay_weight.root", "READ");                                                                   
-          histGenWeights=(TH1F*)fileWeights->Get("weight");                                                                                                                                        
-          std::cout << "weight hist first bin is : "<<  histGenWeights->GetBinContent(1)<<std::endl ;                                                                                            
+      if (runFlags["isBkgBSample"] ){                                                                                  
+
+	std::string bweightfilepath = edm::FileInPath("EXOVVNtuplizerRunII/Ntuplizer/" + runStrings["bweightfile"]).fullPath();                                                                                     
+	//	fileWeights = new TFile("root://eoscms.cern.ch//eos/cms/store/user/fiorendi/p5prime/HBMC/decay_weight.root", "READ");                                                                   
+
+	std::cout << "b weight file = "<< bweightfilepath << std::endl;
+	fileWeights = new TFile((TString)bweightfilepath);
+	histGenWeights=(TH1F*)fileWeights->Get("weight");                                                                                                                                        
+	std::cout << "weight hist first bin is : "<<  histGenWeights->GetBinContent(1)<<std::endl ;                                                                                            
       }
      
     if (runFlags["doGenParticles"]) {
       std::vector<edm::EDGetTokenT<reco::GenParticleCollection>> genpTokens;
       genpTokens.push_back( genparticleToken_ );
 
-      nTuplizers_["genParticles"] = new GenParticlesNtuplizer( genpTokens, nBranches_, runFlags, isBkgBSample_, histGenWeights );
+      nTuplizers_["genParticles"] = new GenParticlesNtuplizer( genpTokens, nBranches_, runFlags, histGenWeights );
     }
 
     if (runFlags["doPileUp"]) {
@@ -408,7 +416,7 @@ void Ntuplizer::beginJob(){
 
 ///////////////////////////////////////////////////////////////////////////////////
 void Ntuplizer::endJob( ) {
-    if (isBkgBSample_ ) fileWeights->Close();
+    if (runFlags["isBkgBSample"]) fileWeights->Close();
 }
 
 ///////////////////////////////////////////////////////////////////////////////////

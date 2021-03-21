@@ -111,7 +111,8 @@ private:
   edm::EDGetTokenT<bool>                                    HBHENoiseIsoFilterResultToken_;  
   edm::EDGetTokenT<bool>                                    ecalBadCalibFilterUpdateToken_;
 
-  bool                                    isBkgBSample_;
+  std::string bweightfile_;
+  //  bool                                    isBkgBSample_;
   TFile  *fileWeights;
   TH1F  *histGenWeights;
 };

@@ -470,7 +470,7 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch("JpsiTau_tau_sumofdnn_1prong", &JpsiTau_tau_sumofdnn_1prong);
     tree_->Branch("JpsiTau_tau_sumofdnn_otherB", &JpsiTau_tau_sumofdnn_otherB);
     tree_->Branch("JpsiTau_tau_sumofdnn_pu", &JpsiTau_tau_sumofdnn_pu);
-    tree_->Branch("JpsiTau_tau_sumofdnn_old", &JpsiTau_tau_sumofdnn_old);
+    //    tree_->Branch("JpsiTau_tau_sumofdnn_old", &JpsiTau_tau_sumofdnn_old);
     //    tree_->Branch("JpsiTau_tau_sumofdnn_others", &JpsiTau_tau_sumofdnn_others);
     //    tree_->Branch("JpsiTau_tau_pi1_dnn", &JpsiTau_tau_pi1_dnn );
     //    tree_->Branch("JpsiTau_tau_pi2_dnn", &JpsiTau_tau_pi2_dnn );
@@ -515,7 +515,7 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch("JpsiTau_tau_pi1_dnn_1prong", &JpsiTau_tau_pi1_dnn_1prong);
     tree_->Branch("JpsiTau_tau_pi1_dnn_otherB", &JpsiTau_tau_pi1_dnn_otherB);
     tree_->Branch("JpsiTau_tau_pi1_dnn_pu", &JpsiTau_tau_pi1_dnn_pu);
-    tree_->Branch("JpsiTau_tau_pi1_dnn_old", &JpsiTau_tau_pi1_dnn_old);
+    //    tree_->Branch("JpsiTau_tau_pi1_dnn_old", &JpsiTau_tau_pi1_dnn_old);
     tree_->Branch("JpsiTau_tau_pi1_trigMatch", &JpsiTau_tau_pi1_trigMatch);
     tree_->Branch("JpsiTau_tau_pi1_trigMatch_dr", &JpsiTau_tau_pi1_trigMatch_dr);
 
@@ -547,7 +547,7 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch("JpsiTau_tau_pi2_dnn_1prong", &JpsiTau_tau_pi2_dnn_1prong);
     tree_->Branch("JpsiTau_tau_pi2_dnn_otherB", &JpsiTau_tau_pi2_dnn_otherB);
     tree_->Branch("JpsiTau_tau_pi2_dnn_pu", &JpsiTau_tau_pi2_dnn_pu);
-    tree_->Branch("JpsiTau_tau_pi2_dnn_old", &JpsiTau_tau_pi2_dnn_old);
+    //    tree_->Branch("JpsiTau_tau_pi2_dnn_old", &JpsiTau_tau_pi2_dnn_old);
     tree_->Branch("JpsiTau_tau_pi2_trigMatch", &JpsiTau_tau_pi2_trigMatch);
     tree_->Branch("JpsiTau_tau_pi2_trigMatch_dr", &JpsiTau_tau_pi2_trigMatch_dr);
 
@@ -580,7 +580,7 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch("JpsiTau_tau_pi3_dnn_1prong", &JpsiTau_tau_pi3_dnn_1prong);
     tree_->Branch("JpsiTau_tau_pi3_dnn_otherB", &JpsiTau_tau_pi3_dnn_otherB);
     tree_->Branch("JpsiTau_tau_pi3_dnn_pu", &JpsiTau_tau_pi3_dnn_pu);
-    tree_->Branch("JpsiTau_tau_pi3_dnn_old", &JpsiTau_tau_pi3_dnn_old);
+    //    tree_->Branch("JpsiTau_tau_pi3_dnn_old", &JpsiTau_tau_pi3_dnn_old);
     tree_->Branch("JpsiTau_tau_pi3_trigMatch", &JpsiTau_tau_pi3_trigMatch);
     tree_->Branch("JpsiTau_tau_pi3_trigMatch_dr", &JpsiTau_tau_pi3_trigMatch_dr);
 
@@ -842,10 +842,10 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
   tree_->Branch("JpsiTau_st_dnn_1prong", &JpsiTau_st_dnn_1prong);
   tree_->Branch("JpsiTau_st_dnn_otherB", &JpsiTau_st_dnn_otherB);
   tree_->Branch("JpsiTau_st_dnn_pu", &JpsiTau_st_dnn_pu);
-  tree_->Branch("JpsiTau_st_dnn_old", &JpsiTau_st_dnn_old);
+  //  tree_->Branch("JpsiTau_st_dnn_old", &JpsiTau_st_dnn_old);
   tree_->Branch("JpsiTau_st_matchidx", &JpsiTau_st_matchidx);
 
-  tree_->Branch("JpsiTau_perEVT_old", &JpsiTau_perEVT_old);
+  //  tree_->Branch("JpsiTau_perEVT_old", &JpsiTau_perEVT_old);
   tree_->Branch("JpsiTau_perEVT_otherB", &JpsiTau_perEVT_otherB);
   tree_->Branch("JpsiTau_perEVT_sig", &JpsiTau_perEVT_sig);
   tree_->Branch("JpsiTau_perEVT_leptonic", &JpsiTau_perEVT_leptonic);
@@ -1825,7 +1825,7 @@ void NtupleBranches::reset( void ){
   JpsiTau_tau_sumofdnn_1prong.clear();
   JpsiTau_tau_sumofdnn_otherB.clear();
   JpsiTau_tau_sumofdnn_pu.clear();
-  JpsiTau_tau_sumofdnn_old.clear();
+  //  JpsiTau_tau_sumofdnn_old.clear();
   //  JpsiTau_tau_sumofdnn_others.clear();
   //  JpsiTau_tau_pi1_dnn.clear();
   //  JpsiTau_tau_pi2_dnn.clear();
@@ -1858,7 +1858,7 @@ void NtupleBranches::reset( void ){
   JpsiTau_tau_pi1_dnn_1prong.clear();
   JpsiTau_tau_pi1_dnn_otherB.clear();
   JpsiTau_tau_pi1_dnn_pu.clear();
-  JpsiTau_tau_pi1_dnn_old.clear();
+  //  JpsiTau_tau_pi1_dnn_old.clear();
   JpsiTau_tau_pi1_trigMatch.clear();
   JpsiTau_tau_pi1_trigMatch_dr.clear();
 
@@ -1889,7 +1889,7 @@ void NtupleBranches::reset( void ){
   JpsiTau_tau_pi2_dnn_1prong.clear();
   JpsiTau_tau_pi2_dnn_otherB.clear();
   JpsiTau_tau_pi2_dnn_pu.clear();
-  JpsiTau_tau_pi2_dnn_old.clear();
+  //  JpsiTau_tau_pi2_dnn_old.clear();
   JpsiTau_tau_pi2_trigMatch.clear();
   JpsiTau_tau_pi2_trigMatch_dr.clear();
 
@@ -1918,7 +1918,7 @@ void NtupleBranches::reset( void ){
   JpsiTau_tau_pi3_dnn_1prong.clear();
   JpsiTau_tau_pi3_dnn_otherB.clear();
   JpsiTau_tau_pi3_dnn_pu.clear();
-  JpsiTau_tau_pi3_dnn_old.clear();
+  //  JpsiTau_tau_pi3_dnn_old.clear();
   JpsiTau_tau_pi3_trigMatch.clear();
   JpsiTau_tau_pi3_trigMatch_dr.clear();
 
@@ -2056,7 +2056,7 @@ void NtupleBranches::reset( void ){
   JpsiTau_st_dnn_1prong.clear();
   JpsiTau_st_dnn_otherB.clear();
   JpsiTau_st_dnn_pu.clear();
-  JpsiTau_st_dnn_old.clear();
+  //  JpsiTau_st_dnn_old.clear();
   JpsiTau_st_matchidx.clear();
 
   //  JpsiTau_st_doca3d_max.clear();
@@ -2098,7 +2098,7 @@ void NtupleBranches::reset( void ){
   JpsiTau_st_genjpsi_eta = -99;
   JpsiTau_st_genjpsi_phi = -99;
 
-  JpsiTau_perEVT_old = -99;
+  //  JpsiTau_perEVT_old = -99;
 
   JpsiTau_perEVT_otherB = -99;
   JpsiTau_perEVT_sig = -99;

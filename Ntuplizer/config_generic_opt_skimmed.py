@@ -27,6 +27,18 @@ from EXOVVNtuplizerRunII.Ntuplizer.ntuplizerOptions_generic_cfi import config
 #config["VPROBCUT"] = 0.1
 #config["DNNCUT"] = 0.2
 
+isData = True
+
+print 'isData? ', isData
+
+if isData:
+  config["RUNONMC"] = False
+
+else:
+  config["RUNONMC"] = True
+  config["ISBKG"] = True
+
+print 'RunOnMC? ', config["RUNONMC"], 'config["ISBKG"] = ', config["ISBKG"]
 				   
 ####### Config parser ##########
 
@@ -50,7 +62,7 @@ options.register( 'runUpToEarlyF',
 
 
 
-options.maxEvents = 200
+options.maxEvents = 1000
 #options.maxEvents = -1
 
 #data file
@@ -60,11 +72,17 @@ options.maxEvents = 200
 
 #options.inputFiles = '/store/mc/RunIIAutumn18MiniAOD/BcToJPsiMuNu_TuneCP5_13TeV-bcvegpy2-pythia8-evtgen/MINIAODSIM/102X_upgrade2018_realistic_v15-v3/100000/78A9DF86-EAC5-D242-8E7B-171AFD012CC7.root'
 
-options.inputFiles = '/store/mc/RunIISummer19UL18MiniAOD/BcToJPsiTauNu_TuneCP5_13TeV-bcvegpy2-pythia8-evtgen/MINIAODSIM/106X_upgrade2018_realistic_v11_L1v1_ext1-v2/100000/02F13381-1D94-CC43-948A-2EFFB8572949.root'
+#options.inputFiles = 'file:/scratch/ytakahas/HbToJPsiMuMu/014EC954-4C5E-AD48-BB44-401D779323E3.root'
 
 #options.inputFiles = '/store/mc/RunIIAutumn18MiniAOD/OniaAndX_ToMuMu_MuFilter_SoftQCDnonD_TuneCP5_13TeV-pythia8-evtgen/MINIAODSIM/102X_upgrade2018_realistic_v15-v1/00000/01325465-A815-E24E-ABB3-DAB8D4880BDE.root'
 
-#options.inputFiles = '/store/data/Run2018D/Charmonium/MINIAOD/12Nov2019_UL2018-v1/280000/D7FD376D-30CD-AA48-8D03-E0220043BBDE.root'
+if isData:
+  options.inputFiles = '/store/data/Run2018D/Charmonium/MINIAOD/12Nov2019_UL2018-v1/280000/D7FD376D-30CD-AA48-8D03-E0220043BBDE.root'
+
+else:
+
+  options.inputFiles = '/store/mc/RunIISummer19UL18MiniAOD/BcToJPsiTauNu_TuneCP5_13TeV-bcvegpy2-pythia8-evtgen/MINIAODSIM/106X_upgrade2018_realistic_v11_L1v1_ext1-v2/100000/02F13381-1D94-CC43-948A-2EFFB8572949.root'
+  
 #options.inputFiles = '/store/data/Run2017F/Charmonium/MINIAOD/09Aug2019_UL2017-v1/20000/00BACB48-9B0F-8F48-A68B-2F08A3E9E681.root'
 #options.inputFiles = '/store/data/Run2016B/Charmonium/MINIAOD/21Feb2020_ver2_UL2016_HIPM-v1/240000/0333D5C7-28C0-7641-994A-ADE29A1EBAAD.root'
 #options.inputFiles = '/store/data/Run2016B/Charmonium/MINIAOD/21Feb2020_ver2_UL2016_HIPM-v1/240000/00251310-7FD5-BE47-B127-8CFC5B8DFE6E.root'
@@ -77,7 +95,11 @@ process.options  = cms.untracked.PSet(
                      allowUnscheduled = cms.untracked.bool(True),
                      )
 
-#process.options.numberOfThreads=cms.untracked.uint32(2)
+
+if isData:
+  print 'setting process.options.numberOfThreads = 2'
+  process.options.numberOfThreads=cms.untracked.uint32(2)
+
 
 process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(options.maxEvents) )
 
@@ -193,7 +215,6 @@ METS_EGclean = "slimmedMETsEGClean"
 METS_MEGclean = "slimmedMETsMuEGClean"
 METS_uncorr = "slimmedMETsUncorrected"
 
-if config["USENOHF"]: METS = "slimmedMETsNoHF"  
 
 ##___________________ MET significance and covariance matrix ______________________##
 
@@ -312,12 +333,12 @@ if config["CORRMETONTHEFLY"]:
 
 ################# Weights for B generic background #########
 
-IsBkgBSample = False 
-fileName=str(process.source.fileNames) 
-print(fileName)
-if "HbToJPsiMuMu" in fileName:
-   IsBkgBSample = True		    
-print "IsBkgBSample" ,IsBkgBSample
+#IsBkgBSample = False 
+#fileName=str(process.source.fileNames) 
+#print(fileName)
+#if "HbToJPsiMuMu" in fileName:
+#   IsBkgBSample = True		    
+print "IsBkgBSample" , config['ISBKG']
 
 ################## Ntuplizer ###################
 process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
@@ -329,10 +350,6 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     doPileUp	      = cms.bool(config["DOPILEUP"]),
     doJpsiMu	      = cms.bool(config["DOJPSIMU"]),
     doJpsiTau	      = cms.bool(config["DOJPSITAU"]),
-    doBsTauTau	      = cms.bool(config["DOBSTAUTAU"]),
-    doBsTauTauFH      = cms.bool(config["DOBSTAUTAUFH"]),
-    doBsTauTauFH_mr   = cms.bool(config["DOBSTAUTAUFH_mr"]),
-    doBsDstarTauNu    = cms.bool(config["DOBSDSTARTAUNU"]),
     doVertices	      = cms.bool(config["DOVERTICES"]),
     doMissingEt       = cms.bool(config["DOMISSINGET"]),
     doGenHist         = cms.bool(config["DOGENHIST"]),
@@ -340,13 +357,14 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     dzcut             = cms.double(config['DZCUT']),
     fsigcut           = cms.double(config['FSIGCUT']),
     vprobcut          = cms.double(config['VPROBCUT']),
-    dnncut            = cms.double(config['DNNCUT']),
     tau_charge        = cms.uint32(config['TAU_CHARGE']),
-    dnnfile_old       = cms.string(config['DNNFILE_OLD']),                        
+#    dnnfile_old       = cms.string(config['DNNFILE_OLD']),                        
     dnnfile_perPF     = cms.string(config['DNNFILE_PERPF']),                        
     dnnfile_perEVT    = cms.string(config['DNNFILE_PEREVT']),                        
-    dnnfile_perEVT_v2 = cms.string(config['DNNFILE_PEREVT_V2']),
-    isBkgBSample = cms.bool(IsBkgBSample),                        
+#    dnnfile_perEVT_v2 = cms.string(config['DNNFILE_PEREVT_V2']),
+    bweightfile = cms.string(config['BWEIGHTFILE']),
+#    isBkgBSample = cms.bool(IsBkgBSample),                        
+    isBkgBSample      = cms.bool(config['ISBKG']),
     vertices = cms.InputTag("offlineSlimmedPrimaryVertices"),
     beamSpot = cms.InputTag("offlineBeamSpot"),
     taus = cms.InputTag("slimmedTaus"),

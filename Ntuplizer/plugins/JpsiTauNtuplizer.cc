@@ -30,12 +30,11 @@ JpsiTauNtuplizer::JpsiTauNtuplizer( edm::EDGetTokenT<pat::MuonCollection>    muo
   , c_dz (runValues["dzcut"])
   , c_fsig (runValues["fsigcut"])
   , c_vprob (runValues["vprobcut"])
-  , c_dnn (runValues["dnncut"])
   , c_charge (runValues["tau_charge"])
-  , dnnfile_old_ (runStrings["dnnfile_old"])      
+  //  , dnnfile_old_ (runStrings["dnnfile_old"])      
   , dnnfile_perPF_ (runStrings["dnnfile_perPF"])      
   , dnnfile_perEVT_ (runStrings["dnnfile_perEVT"])      
-  , dnnfile_perEVT_v2_ (runStrings["dnnfile_perEVT_v2"])      
+  //  , dnnfile_perEVT_v2_ (runStrings["dnnfile_perEVT_v2"])      
    
 {
 
@@ -46,36 +45,35 @@ JpsiTauNtuplizer::JpsiTauNtuplizer( edm::EDGetTokenT<pat::MuonCollection>    muo
     std::cout << "[JpsiTauNtuplizer] dzcut      = " << c_dz << std::endl;
     std::cout << "[JpsiTauNtuplizer] fsigcut    = " << c_fsig << std::endl;
     std::cout << "[JpsiTauNtuplizer] vprob      = " << c_vprob << std::endl;
-    std::cout << "[JpsiTauNtuplizer] dnn cut    = " << c_dnn << std::endl;
     std::cout << "[JpsiTauNtuplizer] tau charge = " << c_charge << std::endl;
   }
 
 
   if(useDNN_){
     
-    std::string dnnfilepath_old = edm::FileInPath("EXOVVNtuplizerRunII/Ntuplizer/" +  dnnfile_old_).fullPath();
+    //    std::string dnnfilepath_old = edm::FileInPath("EXOVVNtuplizerRunII/Ntuplizer/" +  dnnfile_old_).fullPath();
     std::string dnnfilepath_perPF = edm::FileInPath("EXOVVNtuplizerRunII/Ntuplizer/" +  dnnfile_perPF_).fullPath();
     std::string dnnfilepath_perEVT = edm::FileInPath("EXOVVNtuplizerRunII/Ntuplizer/" +  dnnfile_perEVT_).fullPath();
-    std::string dnnfilepath_perEVT_v2 = edm::FileInPath("EXOVVNtuplizerRunII/Ntuplizer/" +  dnnfile_perEVT_v2_).fullPath();
+    //    std::string dnnfilepath_perEVT_v2 = edm::FileInPath("EXOVVNtuplizerRunII/Ntuplizer/" +  dnnfile_perEVT_v2_).fullPath();
 
 
-    if(verbose_) std::cout << "[JpsiTauNtuplizer] DNN old  = " << dnnfilepath_old << std::endl;
+    //    if(verbose_) std::cout << "[JpsiTauNtuplizer] DNN old  = " << dnnfilepath_old << std::endl;
     if(verbose_) std::cout << "[JpsiTauNtuplizer] DNN per pion  = " << dnnfilepath_perPF << std::endl;
     if(verbose_) std::cout << "[JpsiTauNtuplizer] DNN per event = " << dnnfilepath_perEVT << std::endl;
-    if(verbose_) std::cout << "[JpsiTauNtuplizer] DNN per event v2 = " << dnnfilepath_perEVT_v2 << std::endl;
+    //    if(verbose_) std::cout << "[JpsiTauNtuplizer] DNN per event v2 = " << dnnfilepath_perEVT_v2 << std::endl;
 
 
-    std::string tbr_old = "DUMMY";  // to be replaced
-    auto pos = dnnfilepath_old.find(tbr_old);
-    auto len = tbr_old.length();
-    if (pos != std::string::npos) {
-      dnnfilepath_old.replace(pos, len, "");
-    }
+//    std::string tbr_old = "DUMMY";  // to be replaced
+//    auto pos = dnnfilepath_old.find(tbr_old);
+//    auto len = tbr_old.length();
+//    if (pos != std::string::npos) {
+//      dnnfilepath_old.replace(pos, len, "");
+//    }
 
 
     std::string tbr_perPF = "DUMMY";  // to be replaced
-    pos = dnnfilepath_perPF.find(tbr_perPF);
-    len = tbr_perPF.length();
+    auto pos = dnnfilepath_perPF.find(tbr_perPF);
+    auto len = tbr_perPF.length();
     if (pos != std::string::npos) {
       dnnfilepath_perPF.replace(pos, len, "");
     }
@@ -87,38 +85,40 @@ JpsiTauNtuplizer::JpsiTauNtuplizer( edm::EDGetTokenT<pat::MuonCollection>    muo
       dnnfilepath_perEVT.replace(pos, len, "");
     }
     
-    std::string tbr_perEVT_v2 = "DUMMY";  // to be replaced
-    pos = dnnfilepath_perEVT_v2.find(tbr_perEVT_v2);
-    len = tbr_perEVT_v2.length();
-    if (pos != std::string::npos) {
-      dnnfilepath_perEVT_v2.replace(pos, len, "");
-    }
+//    std::string tbr_perEVT_v2 = "DUMMY";  // to be replaced
+//    pos = dnnfilepath_perEVT_v2.find(tbr_perEVT_v2);
+//    len = tbr_perEVT_v2.length();
+//    if (pos != std::string::npos) {
+//      dnnfilepath_perEVT_v2.replace(pos, len, "");
+//    }
     
 
-    graphDef_old = tensorflow::loadMetaGraphDef(dnnfilepath_old);
-    session_old = tensorflow::createSession(graphDef_old, dnnfilepath_old);
+    //    graphDef_old = tensorflow::loadMetaGraphDef(dnnfilepath_old);
+    //    session_old = tensorflow::createSession(graphDef_old, dnnfilepath_old);
 
     graphDef_perPF = tensorflow::loadMetaGraphDef(dnnfilepath_perPF);
     session_perPF = tensorflow::createSession(graphDef_perPF, dnnfilepath_perPF);
 
     graphDef_perEVT = tensorflow::loadMetaGraphDef(dnnfilepath_perEVT);
     session_perEVT = tensorflow::createSession(graphDef_perEVT, dnnfilepath_perEVT);
-
-    graphDef_perEVT_v2 = tensorflow::loadMetaGraphDef(dnnfilepath_perEVT_v2);
-    session_perEVT_v2 = tensorflow::createSession(graphDef_perEVT_v2, dnnfilepath_perEVT_v2);
+//
+//    graphDef_perEVT_v2 = tensorflow::loadMetaGraphDef(dnnfilepath_perEVT_v2);
+//    session_perEVT_v2 = tensorflow::createSession(graphDef_perEVT_v2, dnnfilepath_perEVT_v2);
 
    
-    data = tensorflow::Tensor(tensorflow::DT_FLOAT, { 1, numberofDNN, 13 }); // single batch of dimension 10
-    data_v2 = tensorflow::Tensor(tensorflow::DT_FLOAT, { 1, numberofDNN, 17 }); // single batch of dimension 10
-    label_new = tensorflow::Tensor(tensorflow::DT_INT32, { 1,numberofDNN}); 
+    data_perPF = tensorflow::Tensor(tensorflow::DT_FLOAT, { 1, numberofDNN, 13 }); // single batch of dimension 10
+    label_perPF = tensorflow::Tensor(tensorflow::DT_INT32, { 1,numberofDNN}); 
+
+    data_perEVT = tensorflow::Tensor(tensorflow::DT_FLOAT, { 1, 80, 17 }); // single batch of dimension 10
+    label_perEVT = tensorflow::Tensor(tensorflow::DT_INT32, { 1, 80}); 
     //    label_perEVT = tensorflow::Tensor(tensorflow::DT_INT32, { 1,numberofDNN}); 
     isTraining = tensorflow::Tensor(tensorflow::DT_BOOL, tensorflow::TensorShape()); 
 
-    data_old = tensorflow::Tensor(tensorflow::DT_FLOAT, { 1, 50, 8 }); // single batch of dimension 10
-    label_old = tensorflow::Tensor(tensorflow::DT_INT32, { 1,50}); 
-    add_global_old = tensorflow::Tensor(tensorflow::DT_FLOAT, { 1, 2 }); 
-    isTraining_old = tensorflow::Tensor(tensorflow::DT_BOOL, tensorflow::TensorShape()); 
-    norm_old = tensorflow::Tensor(tensorflow::DT_FLOAT, { 1, 50 }); 
+//    data_old = tensorflow::Tensor(tensorflow::DT_FLOAT, { 1, 50, 8 }); // single batch of dimension 10
+//    label_old = tensorflow::Tensor(tensorflow::DT_INT32, { 1,50}); 
+//    add_global_old = tensorflow::Tensor(tensorflow::DT_FLOAT, { 1, 2 }); 
+//    isTraining_old = tensorflow::Tensor(tensorflow::DT_BOOL, tensorflow::TensorShape()); 
+//    norm_old = tensorflow::Tensor(tensorflow::DT_FLOAT, { 1, 50 }); 
 
     if(verbose_) std::cout << "[JpsiTauNtuplizer] DNN has been setup" << std::endl;
     
@@ -293,14 +293,14 @@ JpsiTauNtuplizer::~JpsiTauNtuplizer( void )
 {
 
   
-  tensorflow::closeSession(session_old);
+  //  tensorflow::closeSession(session_old);
   tensorflow::closeSession(session_perPF);
   tensorflow::closeSession(session_perEVT);
-  tensorflow::closeSession(session_perEVT_v2);
-  delete graphDef_old;
+  //  tensorflow::closeSession(session_perEVT_v2);
+  //  delete graphDef_old;
   delete graphDef_perPF;
   delete graphDef_perEVT;
-  delete graphDef_perEVT_v2;
+  //  delete graphDef_perEVT_v2;
 
 
 /////  if(runOnMC_ && useHammer_){
@@ -1236,6 +1236,9 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 				 jpsi_part->currentState().globalMomentum().phi());
 
 
+    if(doca3d < -0.04 || doca3d > 0.06) continue;
+    if(dr_jpsi > 1.) continue;
+
 
     attribute attr = {
       (Float_t) doca3d,
@@ -1317,7 +1320,7 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
   std::vector<Float_t> mydnn_1prong;
   std::vector<Float_t> mydnn_otherB;
   std::vector<Float_t> mydnn_pu;
-  std::vector<Float_t> mydnn_old;
+  //  std::vector<Float_t> mydnn_old;
     
   //  Int_t npf_before_dnn = 0;
   //  Int_t npf_qr = 0;
@@ -1325,58 +1328,59 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
   if(useDNN_){
 
     Int_t count_dnn = 0;
-    Int_t count_dnn_v2 = 0;
+    //    Int_t count_dnn_v2 = 0;
     Int_t count_dnn_muon = 0;
     
     for(size_t imu = 0; imu < muoncollection_selected.size(); imu++){
       
-      data.tensor<float, 3>()(0, count_dnn, 0) = muoncollection_selected[imu].eta();
-      data.tensor<float, 3>()(0, count_dnn, 1) = muoncollection_selected[imu].phi();
-      data.tensor<float, 3>()(0, count_dnn, 2) = TMath::Log(muoncollection_selected[imu].pt());
-      data.tensor<float, 3>()(0, count_dnn, 3) = muoncollection_selected[imu].charge();
-      data.tensor<float, 3>()(0, count_dnn, 4) = 0;
-      data.tensor<float, 3>()(0, count_dnn, 5) = 0;
-      data.tensor<float, 3>()(0, count_dnn, 6) = 0;
-      data.tensor<float, 3>()(0, count_dnn, 7) = 0;
-      data.tensor<float, 3>()(0, count_dnn, 8) = 0;
-      data.tensor<float, 3>()(0, count_dnn, 9) = 0;
-      data.tensor<float, 3>()(0, count_dnn, 10) = 0;
-      data.tensor<float, 3>()(0, count_dnn, 11) = 0;
-      data.tensor<float, 3>()(0, count_dnn, 12) = 1;
+      data_perPF.tensor<float, 3>()(0, count_dnn, 0) = muoncollection_selected[imu].eta();
+      data_perPF.tensor<float, 3>()(0, count_dnn, 1) = muoncollection_selected[imu].phi();
+      data_perPF.tensor<float, 3>()(0, count_dnn, 2) = TMath::Log(muoncollection_selected[imu].pt());
+      data_perPF.tensor<float, 3>()(0, count_dnn, 3) = muoncollection_selected[imu].charge();
+      data_perPF.tensor<float, 3>()(0, count_dnn, 4) = 0;
+      data_perPF.tensor<float, 3>()(0, count_dnn, 5) = 0;
+      data_perPF.tensor<float, 3>()(0, count_dnn, 6) = 0;
+      data_perPF.tensor<float, 3>()(0, count_dnn, 7) = 0;
+      data_perPF.tensor<float, 3>()(0, count_dnn, 8) = 0;
+      data_perPF.tensor<float, 3>()(0, count_dnn, 9) = 0;
+      data_perPF.tensor<float, 3>()(0, count_dnn, 10) = 0;
+      data_perPF.tensor<float, 3>()(0, count_dnn, 11) = 0;
+      data_perPF.tensor<float, 3>()(0, count_dnn, 12) = 1;
       
-      data_v2.tensor<float, 3>()(0, count_dnn_v2, 0) = muoncollection_selected[imu].eta();
-      data_v2.tensor<float, 3>()(0, count_dnn_v2, 1) = muoncollection_selected[imu].phi();
-      data_v2.tensor<float, 3>()(0, count_dnn_v2, 2) = TMath::Log(muoncollection_selected[imu].pt());
-      data_v2.tensor<float, 3>()(0, count_dnn_v2, 3) = muoncollection_selected[imu].charge();
-      data_v2.tensor<float, 3>()(0, count_dnn_v2, 4) = 0;
-      data_v2.tensor<float, 3>()(0, count_dnn_v2, 5) = 0;
-      data_v2.tensor<float, 3>()(0, count_dnn_v2, 6) = 0;
-      data_v2.tensor<float, 3>()(0, count_dnn_v2, 7) = 0;
-      data_v2.tensor<float, 3>()(0, count_dnn_v2, 8) = 0;
-      data_v2.tensor<float, 3>()(0, count_dnn_v2, 9) = 0;
-      data_v2.tensor<float, 3>()(0, count_dnn_v2, 10) = 0;
-      data_v2.tensor<float, 3>()(0, count_dnn_v2, 11) = 0;
-      data_v2.tensor<float, 3>()(0, count_dnn_v2, 12) = 0;
-      data_v2.tensor<float, 3>()(0, count_dnn_v2, 13) = 0;
-      data_v2.tensor<float, 3>()(0, count_dnn_v2, 14) = 0;
-      data_v2.tensor<float, 3>()(0, count_dnn_v2, 15) = 0;
-      data_v2.tensor<float, 3>()(0, count_dnn_v2, 16) = 1;
+//      data_v2.tensor<float, 3>()(0, count_dnn_v2, 0) = muoncollection_selected[imu].eta();
+//      data_v2.tensor<float, 3>()(0, count_dnn_v2, 1) = muoncollection_selected[imu].phi();
+//      data_v2.tensor<float, 3>()(0, count_dnn_v2, 2) = TMath::Log(muoncollection_selected[imu].pt());
+//      data_v2.tensor<float, 3>()(0, count_dnn_v2, 3) = muoncollection_selected[imu].charge();
+//      data_v2.tensor<float, 3>()(0, count_dnn_v2, 4) = 0;
+//      data_v2.tensor<float, 3>()(0, count_dnn_v2, 5) = 0;
+//      data_v2.tensor<float, 3>()(0, count_dnn_v2, 6) = 0;
+//      data_v2.tensor<float, 3>()(0, count_dnn_v2, 7) = 0;
+//      data_v2.tensor<float, 3>()(0, count_dnn_v2, 8) = 0;
+//      data_v2.tensor<float, 3>()(0, count_dnn_v2, 9) = 0;
+//      data_v2.tensor<float, 3>()(0, count_dnn_v2, 10) = 0;
+//      data_v2.tensor<float, 3>()(0, count_dnn_v2, 11) = 0;
+//      data_v2.tensor<float, 3>()(0, count_dnn_v2, 12) = 0;
+//      data_v2.tensor<float, 3>()(0, count_dnn_v2, 13) = 0;
+//      data_v2.tensor<float, 3>()(0, count_dnn_v2, 14) = 0;
+//      data_v2.tensor<float, 3>()(0, count_dnn_v2, 15) = 0;
+//      data_v2.tensor<float, 3>()(0, count_dnn_v2, 16) = 1;
       
 
       //      label_perPF.matrix<int>()(0, count_dnn) = 0;
       //      label_perEVT.matrix<int>()(0, count_dnn) = 0;
-      label_new.matrix<int>()(0, count_dnn) = 0;
+      label_perPF.matrix<int>()(0, count_dnn) = 0;
+      //      label_v2.matrix<int>()(0, count_dnn) = 0;
       
       count_dnn_muon++;
       count_dnn++;
-      count_dnn_v2++;
+      //      count_dnn_v2++;
       
     }
 
 
 
 
-
+    //    std::cout << "step1 " << count_dnn_muon << " " << count_dnn << std::endl;
 /////    for( size_t ii = 0; ii < packedpfcandidates_->size(); ++ii ){   
 /////	
 /////      pat::PackedCandidate pf = (*packedpfcandidates_)[ii];
@@ -1440,7 +1444,7 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 /////    sort(pfcands.begin(), pfcands.end());
 
 
-    for(size_t ic = 0; ic < pfcands.size(); ic++){
+    for(size_t ic = 0; ic < pfcands.size() && ic < 12; ic++){
       //      Int_t idx = pfcands[ic].cand_idx;
 
 
@@ -1449,31 +1453,34 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 
       //      std::cout << ic << " " << pf.pt() << std::endl;
 
+      //      if(pfcands[ii].pfaux.doca3d < -0.04 || pfcands[ii].pfaux.doca3d > 0.06) continue;
+      //      if(pfcands[ii].pfaux.dr_jpsi > 1.) continue;
 
       //      if(attr.doca3d < -0.04 || attr.doca3d > 0.06) continue;
+      //if(attr.dr_jpsi > 1.) continue;
 
       if(count_dnn < numberofDNN){
-	data.tensor<float, 3>()(0, count_dnn, 0) = pf.eta();
-	data.tensor<float, 3>()(0, count_dnn, 1) = pf.phi();
-	data.tensor<float, 3>()(0, count_dnn, 2) = TMath::Log(pf.pt());
-	data.tensor<float, 3>()(0, count_dnn, 3) = pf.charge();
-	data.tensor<float, 3>()(0, count_dnn, 4) = attr.pvAssociationQuality;
-	data.tensor<float, 3>()(0, count_dnn, 5) = attr.doca3d;
-	data.tensor<float, 3>()(0, count_dnn, 6) = attr.doca2d;
-	data.tensor<float, 3>()(0, count_dnn, 7) = attr.doca3de;
-	data.tensor<float, 3>()(0, count_dnn, 8) = attr.doca2de;
-	data.tensor<float, 3>()(0, count_dnn, 9) = attr.dz;
-	data.tensor<float, 3>()(0, count_dnn, 10) = attr.isAssociate;
-	data.tensor<float, 3>()(0, count_dnn, 11) = attr.near_dz;
-	data.tensor<float, 3>()(0, count_dnn, 12) = 0;
+	data_perPF.tensor<float, 3>()(0, count_dnn, 0) = pf.eta();
+	data_perPF.tensor<float, 3>()(0, count_dnn, 1) = pf.phi();
+	data_perPF.tensor<float, 3>()(0, count_dnn, 2) = TMath::Log(pf.pt());
+	data_perPF.tensor<float, 3>()(0, count_dnn, 3) = pf.charge();
+	data_perPF.tensor<float, 3>()(0, count_dnn, 4) = attr.pvAssociationQuality;
+	data_perPF.tensor<float, 3>()(0, count_dnn, 5) = attr.doca3d;
+	data_perPF.tensor<float, 3>()(0, count_dnn, 6) = attr.doca2d;
+	data_perPF.tensor<float, 3>()(0, count_dnn, 7) = attr.doca3de;
+	data_perPF.tensor<float, 3>()(0, count_dnn, 8) = attr.doca2de;
+	data_perPF.tensor<float, 3>()(0, count_dnn, 9) = attr.dz;
+	data_perPF.tensor<float, 3>()(0, count_dnn, 10) = attr.isAssociate;
+	data_perPF.tensor<float, 3>()(0, count_dnn, 11) = attr.near_dz;
+	data_perPF.tensor<float, 3>()(0, count_dnn, 12) = 0;
 	
-	label_new.matrix<int>()(0, count_dnn) = 0;
+	label_perPF.matrix<int>()(0, count_dnn) = 0;
 //	label_perPF.matrix<int>()(0, count_dnn) = 0;
 	//	label_perEVT.matrix<int>()(0, count_dnn) = 0;
 	//	norm.matrix<float>()(0, count_dnn) = float(1);
 	count_dnn++;
 
-
+	//	std::cout << "step2 " << count_dnn  << "/" << numberofDNN << std::endl;
 
 
 	
@@ -1486,44 +1493,46 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
       }
     }
     
+    //    std::cout << "step3 " << count_dnn  << "/" << numberofDNN << std::endl;
       
     for(int ic=count_dnn; ic < numberofDNN; ic++){
       
-      data.tensor<float, 3>()(0, ic, 0) = 0;
-      data.tensor<float, 3>()(0, ic, 1) = 0;
-      data.tensor<float, 3>()(0, ic, 2) = 0;
-      data.tensor<float, 3>()(0, ic, 3) = 0;
-      data.tensor<float, 3>()(0, ic, 4) = 0;
-      data.tensor<float, 3>()(0, ic, 5) = 0;
-      data.tensor<float, 3>()(0, ic, 6) = 0;
-      data.tensor<float, 3>()(0, ic, 7) = 0;
-      data.tensor<float, 3>()(0, ic, 8) = 0;
-      data.tensor<float, 3>()(0, ic, 9) = 0;
-      data.tensor<float, 3>()(0, ic, 10) = 0;
-      data.tensor<float, 3>()(0, ic, 11) = 0;
-      data.tensor<float, 3>()(0, ic, 12) = 0;
+      data_perPF.tensor<float, 3>()(0, ic, 0) = 0;
+      data_perPF.tensor<float, 3>()(0, ic, 1) = 0;
+      data_perPF.tensor<float, 3>()(0, ic, 2) = 0;
+      data_perPF.tensor<float, 3>()(0, ic, 3) = 0;
+      data_perPF.tensor<float, 3>()(0, ic, 4) = 0;
+      data_perPF.tensor<float, 3>()(0, ic, 5) = 0;
+      data_perPF.tensor<float, 3>()(0, ic, 6) = 0;
+      data_perPF.tensor<float, 3>()(0, ic, 7) = 0;
+      data_perPF.tensor<float, 3>()(0, ic, 8) = 0;
+      data_perPF.tensor<float, 3>()(0, ic, 9) = 0;
+      data_perPF.tensor<float, 3>()(0, ic, 10) = 0;
+      data_perPF.tensor<float, 3>()(0, ic, 11) = 0;
+      data_perPF.tensor<float, 3>()(0, ic, 12) = 0;
 	
 
-      label_new.matrix<int>()(0, ic) = 0;
+      label_perPF.matrix<int>()(0, ic) = 0;
       //      label_perPF.matrix<int>()(0, ic) = 0;
       //      label_perEVT.matrix<int>()(0, ic) = 0;
+      //      std::cout << "step4 " << ic  << "/" << numberofDNN << std::endl;
     }
 
 
     isTraining.scalar<bool>()() = false;
 
     std::vector<tensorflow::Tensor> outputs_perPF;
-    std::vector<tensorflow::Tensor> outputs_perEVT;
+    //    std::vector<tensorflow::Tensor> outputs_perEVT;
 
-    tensorflow::run(session_perPF, {  { "Placeholder:0", data },  { "Placeholder_1:0", label_new }, { "Placeholder_2:0", isTraining}} , { "Softmax_2:0" }, &outputs_perPF);
+    tensorflow::run(session_perPF, {  { "Placeholder:0", data_perPF },  { "Placeholder_1:0", label_perPF }, { "Placeholder_2:0", isTraining}} , { "Softmax_2:0" }, &outputs_perPF);
 		    
-    tensorflow::run(session_perEVT, {  { "Placeholder:0", data },  { "Placeholder_1:0", label_new }, { "Placeholder_2:0", isTraining}} , { "Softmax_2:0" }, &outputs_perEVT);
+    //    tensorflow::run(session_perEVT, {  { "Placeholder:0", data },  { "Placeholder_1:0", label_v2 }, { "Placeholder_2:0", isTraining}} , { "Softmax_2:0" }, &outputs_perEVT);
 
-//    std::cout << outputs_perPF[0].DebugString() << std::endl;
+    //    std::cout << outputs_perPF[0].DebugString() << std::endl;
 //    std::cout << outputs_perEVT[0].DebugString() << std::endl;
       
     auto finalOutputTensor_perPF = outputs_perPF[0].tensor<float, 3>();
-    auto finalOutputTensor_perEVT = outputs_perEVT[0].tensor<float, 2>();
+    //    auto finalOutputTensor_perEVT = outputs_perEVT[0].tensor<float, 2>();
 
 
     for(int ic=count_dnn_muon; ic<count_dnn; ic++){
@@ -1536,202 +1545,203 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 
     }
 
-    Float_t evtDNN = finalOutputTensor_perEVT(0, 1);
-    nBranches_->JpsiTau_perEVT_old = evtDNN;
+    //    Float_t evtDNN = finalOutputTensor_perEVT(0, 1);
+    //    nBranches_->JpsiTau_perEVT_old = 1;
 
 
     // new event DNN
 
 
-    for(size_t ic = 0; ic < pfcands.size(); ic++){
-      //      Int_t idx = pfcands[ic].cand_idx;
-
-
-      pat::PackedCandidate pf = pfcands[ic].pfcand; //(*packedpfcandidates_)[idx];
-      attribute attr = pfcands[ic].pfaux;
-
-      //      std::cout << ic << " " << pf.pt() << std::endl;
-
-
-      //      if(attr.doca3d < -0.04 || attr.doca3d > 0.06) continue;
-
-      if(count_dnn_v2 < numberofDNN){
-
-	data_v2.tensor<float, 3>()(0, count_dnn_v2, 0) = pf.eta();
-	data_v2.tensor<float, 3>()(0, count_dnn_v2, 1) = pf.phi();
-	data_v2.tensor<float, 3>()(0, count_dnn_v2, 2) = TMath::Log(pf.pt());
-	data_v2.tensor<float, 3>()(0, count_dnn_v2, 3) = pf.charge();
-	data_v2.tensor<float, 3>()(0, count_dnn_v2, 4) = attr.pvAssociationQuality;
-	data_v2.tensor<float, 3>()(0, count_dnn_v2, 5) = attr.doca3d;
-	data_v2.tensor<float, 3>()(0, count_dnn_v2, 6) = attr.doca2d;
-	data_v2.tensor<float, 3>()(0, count_dnn_v2, 7) = attr.doca3de;
-	data_v2.tensor<float, 3>()(0, count_dnn_v2, 8) = attr.doca2de;
-	data_v2.tensor<float, 3>()(0, count_dnn_v2, 9) = attr.dz;
-	data_v2.tensor<float, 3>()(0, count_dnn_v2, 10) = attr.isAssociate;
-	data_v2.tensor<float, 3>()(0, count_dnn_v2, 11) = attr.near_dz;
-	data_v2.tensor<float, 3>()(0, count_dnn_v2, 12) = mydnn[ic];
-	data_v2.tensor<float, 3>()(0, count_dnn_v2, 13) = mydnn_1prong[ic];
-	data_v2.tensor<float, 3>()(0, count_dnn_v2, 14) = mydnn_otherB[ic];
-	data_v2.tensor<float, 3>()(0, count_dnn_v2, 15) = mydnn_pu[ic];
-	data_v2.tensor<float, 3>()(0, count_dnn_v2, 16) = 0;
-	
-	//	label_new.matrix<int>()(0, count_dnn_v2) = 0;
-//	label_perPF.matrix<int>()(0, count_dnn) = 0;
-	//	label_perEVT.matrix<int>()(0, count_dnn) = 0;
-	//	norm.matrix<float>()(0, count_dnn) = float(1);
-	count_dnn_v2++;
-
-
-
-
-	
-	//	pfcollection.push_back(pf);
-	//	pfcollection_id.push_back(idx);
-	//	reco::TransientTrack  tt_track = (*builder).build(pf.pseudoTrack());
-	//	mytracks.push_back(tt_track);
-	//	mypvassociation.push_back(pf.pvAssociationQuality());
-	//	mydoca.push_back(pfcands[ic].doca);
-      }
-    }
-    
-      
-    for(int ic=count_dnn_v2; ic < numberofDNN; ic++){
-      
-      data_v2.tensor<float, 3>()(0, ic, 0) = 0;
-      data_v2.tensor<float, 3>()(0, ic, 1) = 0;
-      data_v2.tensor<float, 3>()(0, ic, 2) = 0;
-      data_v2.tensor<float, 3>()(0, ic, 3) = 0;
-      data_v2.tensor<float, 3>()(0, ic, 4) = 0;
-      data_v2.tensor<float, 3>()(0, ic, 5) = 0;
-      data_v2.tensor<float, 3>()(0, ic, 6) = 0;
-      data_v2.tensor<float, 3>()(0, ic, 7) = 0;
-      data_v2.tensor<float, 3>()(0, ic, 8) = 0;
-      data_v2.tensor<float, 3>()(0, ic, 9) = 0;
-      data_v2.tensor<float, 3>()(0, ic, 10) = 0;
-      data_v2.tensor<float, 3>()(0, ic, 11) = 0;
-      data_v2.tensor<float, 3>()(0, ic, 12) = 0;
-      data_v2.tensor<float, 3>()(0, ic, 13) = 0;
-      data_v2.tensor<float, 3>()(0, ic, 14) = 0;
-      data_v2.tensor<float, 3>()(0, ic, 15) = 0;
-      data_v2.tensor<float, 3>()(0, ic, 16) = 0;
-	
-
-      //      label_new.matrix<int>()(0, ic) = 0;
-      //      label_perPF.matrix<int>()(0, ic) = 0;
-      //      label_perEVT.matrix<int>()(0, ic) = 0;
-    }
-
-    
-    std::vector<tensorflow::Tensor> outputs_perEVT_v2;
-
-    tensorflow::run(session_perEVT_v2, {  { "Placeholder:0", data_v2 },  { "Placeholder_1:0", label_new }, { "Placeholder_2:0", isTraining}} , { "Softmax_2:0" }, &outputs_perEVT_v2);
-
-//    std::cout << outputs_perPF[0].DebugString() << std::endl;
-//    std::cout << outputs_perEVT[0].DebugString() << std::endl;
-//    std::cout << outputs_perEVT_v2[0].DebugString() << std::endl;
-      
-    //    auto finalOutputTensor_perPF = outputs_perPF[0].tensor<float, 3>();
-    //    auto finalOutputTensor_perEVT = outputs_perEVT[0].tensor<float, 2>();
-
-    auto finalOutputTensor_perEVT_v2 = outputs_perEVT_v2[0].tensor<float, 2>();
-
-    Float_t evtDNN_otherB = finalOutputTensor_perEVT_v2(0, 0);
-    Float_t evtDNN_sig = finalOutputTensor_perEVT_v2(0, 1);
-    Float_t evtDNN_leptonic = finalOutputTensor_perEVT_v2(0, 2);
-    Float_t evtDNN_1prong = finalOutputTensor_perEVT_v2(0, 3);
-    //    nBranches_->JpsiTau_perEVT_dnn = evtDNN;
-    
-    //    std::cout << evtDNN_otherB<< " " << evtDNN_sig << " " << evtDNN_leptonic<< " " << evtDNN_1prong << std::endl;
-    nBranches_->JpsiTau_perEVT_otherB = evtDNN_otherB;
-    nBranches_->JpsiTau_perEVT_sig = evtDNN_sig;
-    nBranches_->JpsiTau_perEVT_leptonic = evtDNN_leptonic;
-    nBranches_->JpsiTau_perEVT_1prong = evtDNN_1prong;
+///    for(size_t ic = 0; ic < pfcands.size(); ic++){
+///      //      Int_t idx = pfcands[ic].cand_idx;
+///
+///
+///      pat::PackedCandidate pf = pfcands[ic].pfcand; //(*packedpfcandidates_)[idx];
+///      attribute attr = pfcands[ic].pfaux;
+///
+///      //      std::cout << ic << " " << pf.pt() << std::endl;
+///
+///
+///      //      if(attr.doca3d < -0.04 || attr.doca3d > 0.06) continue;
+///
+///      if(count_dnn_v2 < 80){
+///
+///	data_v2.tensor<float, 3>()(0, count_dnn_v2, 0) = pf.eta();
+///	data_v2.tensor<float, 3>()(0, count_dnn_v2, 1) = pf.phi();
+///	data_v2.tensor<float, 3>()(0, count_dnn_v2, 2) = TMath::Log(pf.pt());
+///	data_v2.tensor<float, 3>()(0, count_dnn_v2, 3) = pf.charge();
+///	data_v2.tensor<float, 3>()(0, count_dnn_v2, 4) = attr.pvAssociationQuality;
+///	data_v2.tensor<float, 3>()(0, count_dnn_v2, 5) = attr.doca3d;
+///	data_v2.tensor<float, 3>()(0, count_dnn_v2, 6) = attr.doca2d;
+///	data_v2.tensor<float, 3>()(0, count_dnn_v2, 7) = attr.doca3de;
+///	data_v2.tensor<float, 3>()(0, count_dnn_v2, 8) = attr.doca2de;
+///	data_v2.tensor<float, 3>()(0, count_dnn_v2, 9) = attr.dz;
+///	data_v2.tensor<float, 3>()(0, count_dnn_v2, 10) = attr.isAssociate;
+///	data_v2.tensor<float, 3>()(0, count_dnn_v2, 11) = attr.near_dz;
+///	data_v2.tensor<float, 3>()(0, count_dnn_v2, 12) = mydnn[ic];
+///	data_v2.tensor<float, 3>()(0, count_dnn_v2, 13) = mydnn_1prong[ic];
+///	data_v2.tensor<float, 3>()(0, count_dnn_v2, 14) = mydnn_otherB[ic];
+///	data_v2.tensor<float, 3>()(0, count_dnn_v2, 15) = mydnn_pu[ic];
+///	data_v2.tensor<float, 3>()(0, count_dnn_v2, 16) = 0;
+///	
+///	//	label_new.matrix<int>()(0, count_dnn_v2) = 0;
+/////	label_perPF.matrix<int>()(0, count_dnn) = 0;
+///	//	label_perEVT.matrix<int>()(0, count_dnn) = 0;
+///	//	norm.matrix<float>()(0, count_dnn) = float(1);
+///	count_dnn_v2++;
+///
+///
+///
+///
+///	
+///	//	pfcollection.push_back(pf);
+///	//	pfcollection_id.push_back(idx);
+///	//	reco::TransientTrack  tt_track = (*builder).build(pf.pseudoTrack());
+///	//	mytracks.push_back(tt_track);
+///	//	mypvassociation.push_back(pf.pvAssociationQuality());
+///	//	mydoca.push_back(pfcands[ic].doca);
+///      }
+///    }
+///    
+///      
+///    for(int ic=count_dnn_v2; ic < 80; ic++){
+///      
+///      data_v2.tensor<float, 3>()(0, ic, 0) = 0;
+///      data_v2.tensor<float, 3>()(0, ic, 1) = 0;
+///      data_v2.tensor<float, 3>()(0, ic, 2) = 0;
+///      data_v2.tensor<float, 3>()(0, ic, 3) = 0;
+///      data_v2.tensor<float, 3>()(0, ic, 4) = 0;
+///      data_v2.tensor<float, 3>()(0, ic, 5) = 0;
+///      data_v2.tensor<float, 3>()(0, ic, 6) = 0;
+///      data_v2.tensor<float, 3>()(0, ic, 7) = 0;
+///      data_v2.tensor<float, 3>()(0, ic, 8) = 0;
+///      data_v2.tensor<float, 3>()(0, ic, 9) = 0;
+///      data_v2.tensor<float, 3>()(0, ic, 10) = 0;
+///      data_v2.tensor<float, 3>()(0, ic, 11) = 0;
+///      data_v2.tensor<float, 3>()(0, ic, 12) = 0;
+///      data_v2.tensor<float, 3>()(0, ic, 13) = 0;
+///      data_v2.tensor<float, 3>()(0, ic, 14) = 0;
+///      data_v2.tensor<float, 3>()(0, ic, 15) = 0;
+///      data_v2.tensor<float, 3>()(0, ic, 16) = 0;
+///	
+///
+///      //      label_new.matrix<int>()(0, ic) = 0;
+///      //      label_perPF.matrix<int>()(0, ic) = 0;
+///      //      label_perEVT.matrix<int>()(0, ic) = 0;
+///    }
+///
+///    
+///    std::vector<tensorflow::Tensor> outputs_perEVT_v2;
+///
+///    tensorflow::run(session_perEVT_v2, {  { "Placeholder:0", data_v2 },  { "Placeholder_1:0", label_new }, { "Placeholder_2:0", isTraining}} , { "Softmax_2:0" }, &outputs_perEVT_v2);
+///
+/////    std::cout << outputs_perPF[0].DebugString() << std::endl;
+/////    std::cout << outputs_perEVT[0].DebugString() << std::endl;
+/////    std::cout << outputs_perEVT_v2[0].DebugString() << std::endl;
+///      
+///    //    auto finalOutputTensor_perPF = outputs_perPF[0].tensor<float, 3>();
+///    //    auto finalOutputTensor_perEVT = outputs_perEVT[0].tensor<float, 2>();
+///
+///    auto finalOutputTensor_perEVT_v2 = outputs_perEVT_v2[0].tensor<float, 2>();
+///
+///    Float_t evtDNN_otherB = finalOutputTensor_perEVT_v2(0, 0);
+///    Float_t evtDNN_sig = finalOutputTensor_perEVT_v2(0, 1);
+///    Float_t evtDNN_leptonic = finalOutputTensor_perEVT_v2(0, 2);
+///    Float_t evtDNN_1prong = finalOutputTensor_perEVT_v2(0, 3);
+///    //    nBranches_->JpsiTau_perEVT_dnn = evtDNN;
+///    
+///    //    std::cout << evtDNN_otherB<< " " << evtDNN_sig << " " << evtDNN_leptonic<< " " << evtDNN_1prong << std::endl;
+    nBranches_->JpsiTau_perEVT_otherB = 1;
+    nBranches_->JpsiTau_perEVT_sig = 1;
+    nBranches_->JpsiTau_perEVT_leptonic = 1;
+    nBranches_->JpsiTau_perEVT_1prong = 1;
 
 
     
     ////////////// old 
 
-    Int_t count_dnn_old = 0;
-    Int_t count_dnn_muon_old = 0;
+//    Int_t count_dnn_old = 0;
+//    Int_t count_dnn_muon_old = 0;
+//
+//
+//    for(size_t imu = 0; imu < muoncollection_selected.size(); imu++){
+//      
+//      data_old.tensor<float, 3>()(0, count_dnn_old, 0) = muoncollection_selected[imu].eta();
+//      data_old.tensor<float, 3>()(0, count_dnn_old, 1) = muoncollection_selected[imu].phi();
+//      data_old.tensor<float, 3>()(0, count_dnn_old, 2) = TMath::Log(muoncollection_selected[imu].pt());
+//      data_old.tensor<float, 3>()(0, count_dnn_old, 3) = TMath::Log(muoncollection_selected[imu].energy());
+//      data_old.tensor<float, 3>()(0, count_dnn_old, 4) = muoncollection_selected[imu].charge();
+//      data_old.tensor<float, 3>()(0, count_dnn_old, 5) = TMath::Abs(closestVertex.position().z() - muoncollection_selected[imu].vz());
+//      data_old.tensor<float, 3>()(0, count_dnn_old, 6) = TMath::Sqrt( TMath::Power((closestVertex.position().x() - muoncollection_selected[imu].vx()), 2) + TMath::Power((closestVertex.position().y() - muoncollection_selected[imu].vy()), 2));
+//      data_old.tensor<float, 3>()(0, count_dnn_old, 7) = 1;
+//      
+//      label_old.matrix<int>()(0, count_dnn_old) = 0;
+//      norm_old.matrix<float>()(0, count_dnn_old) = float(1);
+//
+//      count_dnn_muon_old++;
+//      count_dnn_old++;
+//      
+//    }
+//
+//
+//
+//
+//    for(size_t ic = 0; ic < pfcands.size(); ic++){
+//      //      Int_t idx = pfcands[ic].cand_idx;
+//
+//      pat::PackedCandidate pf = pfcands[ic].pfcand; //(*packedpfcandidates_)[idx];
+//      //      attribute attr = pfcands[ic].pfaux;
+//
+//
+//      if(count_dnn_old < 50){
+//	data_old.tensor<float, 3>()(0, count_dnn_old, 0) = pf.eta();
+//	data_old.tensor<float, 3>()(0, count_dnn_old, 1) = pf.phi();
+//	data_old.tensor<float, 3>()(0, count_dnn_old, 2) = TMath::Log(pf.pt());
+//	data_old.tensor<float, 3>()(0, count_dnn_old, 3) = TMath::Log(pf.energy());
+//	data_old.tensor<float, 3>()(0, count_dnn_old, 4) = pf.charge();
+//	data_old.tensor<float, 3>()(0, count_dnn_old, 5) = TMath::Abs(closestVertex.position().z() - pf.pseudoTrack().vz());
+//	data_old.tensor<float, 3>()(0, count_dnn_old, 6) = TMath::Sqrt( TMath::Power((closestVertex.position().x() - pf.pseudoTrack().vx()), 2) + TMath::Power((closestVertex.position().y() - pf.pseudoTrack().vy()), 2));
+//	data_old.tensor<float, 3>()(0, count_dnn_old, 7) = pf.isGlobalMuon();
+//	  
+//	label_old.matrix<int>()(0, count_dnn_old) = 0;
+//	norm_old.matrix<float>()(0, count_dnn_old) = float(1);
+//	count_dnn_old++;
+//
+//      }
+//    }
+//
+//      
+//    for(int ic=count_dnn_old; ic<50; ic++){
+//
+//      data_old.tensor<float, 3>()(0, ic, 0) = 0;
+//      data_old.tensor<float, 3>()(0, ic, 1) = 0;
+//      data_old.tensor<float, 3>()(0, ic, 2) = 0;
+//      data_old.tensor<float, 3>()(0, ic, 3) = 0;
+//      data_old.tensor<float, 3>()(0, ic, 4) = 0;
+//      data_old.tensor<float, 3>()(0, ic, 5) = 0;
+//      data_old.tensor<float, 3>()(0, ic, 6) = 0;
+//      data_old.tensor<float, 3>()(0, ic, 7) = 0;
+//	
+//      label_old.matrix<int>()(0, ic) = 0;
+//      norm_old.matrix<float>()(0, ic) = float(1);
+//
+//    }
+//
+//    add_global_old.matrix<float>()(0, 0) = float(count_dnn_muon_old); // Number of muons around 0.5 cm from PV
+//    add_global_old.matrix<float>()(0, 1) = float(count_dnn_old/100); //Number of charged pf candidates around 0.5 cm from PV
+//    isTraining_old.scalar<bool>()() = false; //Number of charged pf candidates around 0.5 cm from PV
+//
+//
+//    std::vector<tensorflow::Tensor> outputs_old;
+//    tensorflow::run(session_old, {  { "Placeholder:0", data_old },  { "Placeholder_1:0", label_old }, { "Placeholder_2:0", add_global_old } , {"Placeholder_3:0", isTraining_old}, {"Placeholder_4:0", norm_old}}, { "Reshape_13:0" }, &outputs_old);
+//
+//     
+//    auto finalOutputTensor = outputs_old[0].tensor<float, 3>();
 
-
-    for(size_t imu = 0; imu < muoncollection_selected.size(); imu++){
-      
-      data_old.tensor<float, 3>()(0, count_dnn_old, 0) = muoncollection_selected[imu].eta();
-      data_old.tensor<float, 3>()(0, count_dnn_old, 1) = muoncollection_selected[imu].phi();
-      data_old.tensor<float, 3>()(0, count_dnn_old, 2) = TMath::Log(muoncollection_selected[imu].pt());
-      data_old.tensor<float, 3>()(0, count_dnn_old, 3) = TMath::Log(muoncollection_selected[imu].energy());
-      data_old.tensor<float, 3>()(0, count_dnn_old, 4) = muoncollection_selected[imu].charge();
-      data_old.tensor<float, 3>()(0, count_dnn_old, 5) = TMath::Abs(closestVertex.position().z() - muoncollection_selected[imu].vz());
-      data_old.tensor<float, 3>()(0, count_dnn_old, 6) = TMath::Sqrt( TMath::Power((closestVertex.position().x() - muoncollection_selected[imu].vx()), 2) + TMath::Power((closestVertex.position().y() - muoncollection_selected[imu].vy()), 2));
-      data_old.tensor<float, 3>()(0, count_dnn_old, 7) = 1;
-      
-      label_old.matrix<int>()(0, count_dnn_old) = 0;
-      norm_old.matrix<float>()(0, count_dnn_old) = float(1);
-
-      count_dnn_muon_old++;
-      count_dnn_old++;
-      
-    }
-
-
-
-
-    for(size_t ic = 0; ic < pfcands.size(); ic++){
-      //      Int_t idx = pfcands[ic].cand_idx;
-
-      pat::PackedCandidate pf = pfcands[ic].pfcand; //(*packedpfcandidates_)[idx];
-      //      attribute attr = pfcands[ic].pfaux;
-
-
-      if(count_dnn_old < 50){
-	data_old.tensor<float, 3>()(0, count_dnn_old, 0) = pf.eta();
-	data_old.tensor<float, 3>()(0, count_dnn_old, 1) = pf.phi();
-	data_old.tensor<float, 3>()(0, count_dnn_old, 2) = TMath::Log(pf.pt());
-	data_old.tensor<float, 3>()(0, count_dnn_old, 3) = TMath::Log(pf.energy());
-	data_old.tensor<float, 3>()(0, count_dnn_old, 4) = pf.charge();
-	data_old.tensor<float, 3>()(0, count_dnn_old, 5) = TMath::Abs(closestVertex.position().z() - pf.pseudoTrack().vz());
-	data_old.tensor<float, 3>()(0, count_dnn_old, 6) = TMath::Sqrt( TMath::Power((closestVertex.position().x() - pf.pseudoTrack().vx()), 2) + TMath::Power((closestVertex.position().y() - pf.pseudoTrack().vy()), 2));
-	data_old.tensor<float, 3>()(0, count_dnn_old, 7) = pf.isGlobalMuon();
-	  
-	label_old.matrix<int>()(0, count_dnn_old) = 0;
-	norm_old.matrix<float>()(0, count_dnn_old) = float(1);
-	count_dnn_old++;
-
-      }
-    }
-
-      
-    for(int ic=count_dnn_old; ic<50; ic++){
-
-      data_old.tensor<float, 3>()(0, ic, 0) = 0;
-      data_old.tensor<float, 3>()(0, ic, 1) = 0;
-      data_old.tensor<float, 3>()(0, ic, 2) = 0;
-      data_old.tensor<float, 3>()(0, ic, 3) = 0;
-      data_old.tensor<float, 3>()(0, ic, 4) = 0;
-      data_old.tensor<float, 3>()(0, ic, 5) = 0;
-      data_old.tensor<float, 3>()(0, ic, 6) = 0;
-      data_old.tensor<float, 3>()(0, ic, 7) = 0;
-	
-      label_old.matrix<int>()(0, ic) = 0;
-      norm_old.matrix<float>()(0, ic) = float(1);
-
-    }
-
-    add_global_old.matrix<float>()(0, 0) = float(count_dnn_muon_old); // Number of muons around 0.5 cm from PV
-    add_global_old.matrix<float>()(0, 1) = float(count_dnn_old/100); //Number of charged pf candidates around 0.5 cm from PV
-    isTraining_old.scalar<bool>()() = false; //Number of charged pf candidates around 0.5 cm from PV
-
-
-    std::vector<tensorflow::Tensor> outputs_old;
-    tensorflow::run(session_old, {  { "Placeholder:0", data_old },  { "Placeholder_1:0", label_old }, { "Placeholder_2:0", add_global_old } , {"Placeholder_3:0", isTraining_old}, {"Placeholder_4:0", norm_old}}, { "Reshape_13:0" }, &outputs_old);
-
-     
-    auto finalOutputTensor = outputs_old[0].tensor<float, 3>();
-
-    for(int ic=count_dnn_muon_old; ic<count_dnn_old; ic++){
-      mydnn_old.push_back(finalOutputTensor(0, ic, 1));
-    }
+//    for(int ic=2; ic<count_dnn_old; ic++){
+      // mydnn_old.push_back(finalOutputTensor(0, ic, 1));
+    //      mydnn_old.push_back(1);
+    //    }
 
   }
   
@@ -1795,8 +1805,8 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
   for( size_t ii = 0; ii < pfcands.size() && st_counter < 12; ++ii ){   
       
 
-    if(pfcands[ii].pfaux.doca3d < -0.04 || pfcands[ii].pfaux.doca3d > 0.06) continue;
-    if(pfcands[ii].pfaux.dr_jpsi > 1.) continue;
+    //    if(pfcands[ii].pfaux.doca3d < -0.04 || pfcands[ii].pfaux.doca3d > 0.06) continue;
+    //    if(pfcands[ii].pfaux.dr_jpsi > 1.) continue;
 
 
     nBranches_->JpsiTau_st_doca3d.push_back(pfcands[ii].pfaux.doca3d);
@@ -1848,11 +1858,11 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
       nBranches_->JpsiTau_st_dnn_pu.push_back(-1);
     }
 
-    if(ii < mydnn_old.size()){
-      nBranches_->JpsiTau_st_dnn_old.push_back(mydnn_old[ii]);
-    }else{
-      nBranches_->JpsiTau_st_dnn_old.push_back(-1);
-    }
+//    if(ii < mydnn_old.size()){
+//      nBranches_->JpsiTau_st_dnn_old.push_back(mydnn_old[ii]);
+//    }else{
+//      nBranches_->JpsiTau_st_dnn_old.push_back(-1);
+//    }
 
     
     if(pfcands[ii].pfaux.isSignal){
@@ -2200,15 +2210,15 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
   //  for( size_t ii = 0; ii < pfcands.size() && ii < (size_t)mydnn.size(); ++ii ){   
   for( size_t ii = 0; ii < pfcands.size() && rcounter < 12; ++ii ){   
 
-    attribute attr = pfcands[ii].pfaux;
+    //    attribute attr = pfcands[ii].pfaux;
     //    if(attr.doca3d < -0.03 || attr.doca3d > 0.05) continue;    
-    if(attr.doca3d < -0.04 || attr.doca3d > 0.06) continue;    
-    if(attr.dr_jpsi > 1.) continue;
+    //    if(attr.doca3d < -0.04 || attr.doca3d > 0.06) continue;    
+    //    if(attr.dr_jpsi > 1.) continue;
     //    if(ii >= mydnn.size()) continue;
 
  
-    Float_t _mydnn_old = -1;
-    if(ii < mydnn_old.size()) _mydnn_old = mydnn_old[ii];
+    //    Float_t _mydnn_old = -1;
+    //    if(ii < mydnn_old.size()) _mydnn_old = mydnn_old[ii];
 
     Float_t _mydnn = -1;
     Float_t _mydnn_1prong = -1;
@@ -2230,7 +2240,7 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
       (Float_t)_mydnn_1prong,
       (Float_t)_mydnn_otherB,
       (Float_t)_mydnn_pu,
-      (Float_t)_mydnn_old
+      //      (Float_t)_mydnn_old
     };
     
     //    std::cout << "check " << ii << " " << mydnn[ii] << std::endl;
@@ -2265,20 +2275,17 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
     pat::PackedCandidate pf1 = reducedpfcands[iii].reducedpfcand.pfcand;
     reco::TransientTrack track1 = reducedpfcands[iii].reducedpfcand.track;
 
-    //    if(useDNN_==true && mydnn[iii] < c_dnn) continue;
     for(int jjj = iii+1; jjj < numOfch; jjj ++){
 	
       pat::PackedCandidate pf2 = reducedpfcands[jjj].reducedpfcand.pfcand;
       reco::TransientTrack track2 = reducedpfcands[jjj].reducedpfcand.track;
 
-      //      if(useDNN_==true && mydnn[jjj] < c_dnn) continue;
 
       for(int kkk = jjj+1; kkk < numOfch; kkk ++){
 
 	pat::PackedCandidate pf3 = reducedpfcands[kkk].reducedpfcand.pfcand;
 	reco::TransientTrack track3 = reducedpfcands[kkk].reducedpfcand.track;
 
-	//	if(useDNN_==true && mydnn[kkk] < c_dnn) continue;
 
 	Int_t tau_charge = pf1.charge() + pf2.charge() + pf3.charge(); 
 
@@ -2693,7 +2700,7 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
     Float_t sumofdnn_1prong = 0;
     Float_t sumofdnn_otherB = 0;
     Float_t sumofdnn_pu = 0;
-    Float_t sumofdnn_old = 0;
+    //    Float_t sumofdnn_old = 0;
 
     //    if(useDNN_){
 
@@ -2701,7 +2708,7 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
     sumofdnn_1prong = cands[ic].cand_pf1.dnn_1prong + cands[ic].cand_pf2.dnn_1prong + cands[ic].cand_pf3.dnn_1prong;
     sumofdnn_otherB = cands[ic].cand_pf1.dnn_otherB + cands[ic].cand_pf2.dnn_otherB + cands[ic].cand_pf3.dnn_otherB;
     sumofdnn_pu = cands[ic].cand_pf1.dnn_pu + cands[ic].cand_pf2.dnn_pu + cands[ic].cand_pf3.dnn_pu;
-    sumofdnn_old = cands[ic].cand_pf1.dnn_old + cands[ic].cand_pf2.dnn_old + cands[ic].cand_pf3.dnn_old;
+    //    sumofdnn_old = cands[ic].cand_pf1.dnn_old + cands[ic].cand_pf2.dnn_old + cands[ic].cand_pf3.dnn_old;
 
       //	  std::cout << "CHECK !!! " << iii << " " << jjj << " " << kkk << reducedpfcands[iii].dnn << " " << reducedpfcands[jjj].dnn << " " << reducedpfcands[kkk].dnn << " " << sumofdnn << std::endl;
       //	  dnn1 = mydnn[iii];
@@ -2728,7 +2735,7 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
     nBranches_->JpsiTau_tau_sumofdnn_1prong.push_back(sumofdnn_1prong);
     nBranches_->JpsiTau_tau_sumofdnn_otherB.push_back(sumofdnn_otherB);
     nBranches_->JpsiTau_tau_sumofdnn_pu.push_back(sumofdnn_pu);
-    nBranches_->JpsiTau_tau_sumofdnn_old.push_back(sumofdnn_old);
+    //    nBranches_->JpsiTau_tau_sumofdnn_old.push_back(sumofdnn_old);
     //    nBranches_->JpsiTau_tau_pi1_dnn.push_back(cands[ic].cand_tau_pi1_dnn);
     //    nBranches_->JpsiTau_tau_pi2_dnn.push_back(cands[ic].cand_tau_pi2_dnn);
     //    nBranches_->JpsiTau_tau_pi3_dnn.push_back(cands[ic].cand_tau_pi3_dnn);
@@ -2808,7 +2815,7 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
     nBranches_->JpsiTau_tau_pi1_dnn_1prong.push_back(cands[ic].cand_pf1.dnn_1prong);
     nBranches_->JpsiTau_tau_pi1_dnn_otherB.push_back(cands[ic].cand_pf1.dnn_otherB);
     nBranches_->JpsiTau_tau_pi1_dnn_pu.push_back(cands[ic].cand_pf1.dnn_pu);
-    nBranches_->JpsiTau_tau_pi1_dnn_old.push_back(cands[ic].cand_pf1.dnn_old);
+    //    nBranches_->JpsiTau_tau_pi1_dnn_old.push_back(cands[ic].cand_pf1.dnn_old);
     nBranches_->JpsiTau_tau_pi1_trigMatch.push_back(cands[ic].cand_pf1.reducedpfcand.pfaux.trigMatch);
     nBranches_->JpsiTau_tau_pi1_trigMatch_dr.push_back(cands[ic].cand_pf1.reducedpfcand.pfaux.trigMatch_dr);
 
@@ -2837,7 +2844,7 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
     nBranches_->JpsiTau_tau_pi2_dnn_1prong.push_back(cands[ic].cand_pf2.dnn_1prong);
     nBranches_->JpsiTau_tau_pi2_dnn_otherB.push_back(cands[ic].cand_pf2.dnn_otherB);
     nBranches_->JpsiTau_tau_pi2_dnn_pu.push_back(cands[ic].cand_pf2.dnn_pu);
-    nBranches_->JpsiTau_tau_pi2_dnn_old.push_back(cands[ic].cand_pf2.dnn_old);
+    //    nBranches_->JpsiTau_tau_pi2_dnn_old.push_back(cands[ic].cand_pf2.dnn_old);
     nBranches_->JpsiTau_tau_pi2_trigMatch.push_back(cands[ic].cand_pf2.reducedpfcand.pfaux.trigMatch);
     nBranches_->JpsiTau_tau_pi2_trigMatch_dr.push_back(cands[ic].cand_pf2.reducedpfcand.pfaux.trigMatch_dr);
 
@@ -2865,7 +2872,7 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
     nBranches_->JpsiTau_tau_pi3_dnn_1prong.push_back(cands[ic].cand_pf3.dnn_1prong);
     nBranches_->JpsiTau_tau_pi3_dnn_otherB.push_back(cands[ic].cand_pf3.dnn_otherB);
     nBranches_->JpsiTau_tau_pi3_dnn_pu.push_back(cands[ic].cand_pf3.dnn_pu);
-    nBranches_->JpsiTau_tau_pi3_dnn_old.push_back(cands[ic].cand_pf3.dnn_old);
+    //    nBranches_->JpsiTau_tau_pi3_dnn_old.push_back(cands[ic].cand_pf3.dnn_old);
     nBranches_->JpsiTau_tau_pi3_trigMatch.push_back(cands[ic].cand_pf3.reducedpfcand.pfaux.trigMatch);
     nBranches_->JpsiTau_tau_pi3_trigMatch_dr.push_back(cands[ic].cand_pf3.reducedpfcand.pfaux.trigMatch_dr);
 
