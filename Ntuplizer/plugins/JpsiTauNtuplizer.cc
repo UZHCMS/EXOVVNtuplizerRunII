@@ -24,7 +24,6 @@ JpsiTauNtuplizer::JpsiTauNtuplizer( edm::EDGetTokenT<pat::MuonCollection>    muo
   , genParticlesToken_( genptoken )
   , packedgenParticlesToken_( packedgenptoken )
   , runOnMC_   (runFlags["runOnMC"])
-  , useDNN_   (runFlags["useDNN"])
   , useHammer_   (runFlags["useHammer"])
   , verbose_   (runFlags["verbose"])
   , c_dz (runValues["dzcut"])
@@ -40,7 +39,6 @@ JpsiTauNtuplizer::JpsiTauNtuplizer( edm::EDGetTokenT<pat::MuonCollection>    muo
 
   if(verbose_){
     std::cout << "[JpsiTauNtuplizer] runOnMC    = " << runOnMC_ << std::endl;
-    std::cout << "[JpsiTauNtuplizer] UseDNN     = " << useDNN_ << std::endl;
     std::cout << "[JpsiTauNtuplizer] UseHammer  = " << useHammer_ << std::endl;
     std::cout << "[JpsiTauNtuplizer] dzcut      = " << c_dz << std::endl;
     std::cout << "[JpsiTauNtuplizer] fsigcut    = " << c_fsig << std::endl;
@@ -49,8 +47,7 @@ JpsiTauNtuplizer::JpsiTauNtuplizer( edm::EDGetTokenT<pat::MuonCollection>    muo
   }
 
 
-  if(useDNN_){
-    
+   
     //    std::string dnnfilepath_old = edm::FileInPath("EXOVVNtuplizerRunII/Ntuplizer/" +  dnnfile_old_).fullPath();
     std::string dnnfilepath_perPF = edm::FileInPath("EXOVVNtuplizerRunII/Ntuplizer/" +  dnnfile_perPF_).fullPath();
     std::string dnnfilepath_perEVT = edm::FileInPath("EXOVVNtuplizerRunII/Ntuplizer/" +  dnnfile_perEVT_).fullPath();
@@ -122,7 +119,7 @@ JpsiTauNtuplizer::JpsiTauNtuplizer( edm::EDGetTokenT<pat::MuonCollection>    muo
 
     if(verbose_) std::cout << "[JpsiTauNtuplizer] DNN has been setup" << std::endl;
     
-  }
+    
   
 
 /////  if(runOnMC_ && useHammer_){
@@ -1325,7 +1322,6 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
   //  Int_t npf_before_dnn = 0;
   //  Int_t npf_qr = 0;
 
-  if(useDNN_){
 
     Int_t count_dnn = 0;
     //    Int_t count_dnn_v2 = 0;
@@ -1743,7 +1739,6 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
     //      mydnn_old.push_back(1);
     //    }
 
-  }
   
 /////else{
 /////
@@ -2701,8 +2696,6 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
     Float_t sumofdnn_otherB = 0;
     Float_t sumofdnn_pu = 0;
     //    Float_t sumofdnn_old = 0;
-
-    //    if(useDNN_){
 
     sumofdnn = cands[ic].cand_pf1.dnn + cands[ic].cand_pf2.dnn + cands[ic].cand_pf3.dnn;
     sumofdnn_1prong = cands[ic].cand_pf1.dnn_1prong + cands[ic].cand_pf2.dnn_1prong + cands[ic].cand_pf3.dnn_1prong;

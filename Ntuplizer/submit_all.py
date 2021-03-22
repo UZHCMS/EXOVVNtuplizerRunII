@@ -129,7 +129,8 @@ def main():
     config.section_("Site")
     config.Site.storageSite = 'T2_CH_CSCS'
 #    config.Site.storageSite = 'T3_CH_PSI'
-    config.Site.blacklist=['T2_US_Florida', 'T2_UA_KIPT']
+#    config.Site.blacklist=['T2_US_Florida', 'T2_UA_KIPT']
+#    config.Site.blacklist=['T2_US_Florida', 'T2_UA_KIPT']
 #    config.Site.whitelist=['T2_US_Nebraska','T2_FR_GRIF_IRFU', 'T2_IT_Legnaro', 'T2_US_Purdue','T2_CH_CSCS', 'T2_CH_CERN', 'T2_US_Florida', 'T2_ES_CIEMAT', 'T2_US_Wisconsin']
     print 'Using config ' + options.config
     print 'Writing to directory ' + options.dir
