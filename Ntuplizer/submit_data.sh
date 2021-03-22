@@ -2,6 +2,7 @@ today=`date "+%Y%m%d"`
 
 
 sed -i -e "s/isData = False/isData = True/" config_generic_opt_skimmed.py
+sed -i -e "s/config\[\"ISBKG\"\] = True/config\[\"ISBKG\"\] = False/" config_generic_opt_skimmed.py
 
 #for year in 2016
 for year in 2018

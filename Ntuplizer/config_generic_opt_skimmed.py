@@ -27,18 +27,40 @@ from EXOVVNtuplizerRunII.Ntuplizer.ntuplizerOptions_generic_cfi import config
 #config["VPROBCUT"] = 0.1
 #config["DNNCUT"] = 0.2
 
-isData = True
+isData = False
+
+### SWITCHES ###
 
 print 'isData? ', isData
 
+
+config["ISBKG"] = False
+
 if isData:
   config["RUNONMC"] = False
+  config["USEHAMMER"] = False
+  config["USEJSON"] = True
+  config["DOGENPARTICLES"] = False
+  config["DOGENEVENT"] = False
+  config["DOPILEUP"] = False
+  config["DOGENHIST"] = False
 
 else:
   config["RUNONMC"] = True
-  config["ISBKG"] = True
+  config["USEHAMMER"] = False
+  config["USEJSON"] = False
+  config["DOGENPARTICLES"] = True
+  config["DOGENEVENT"] = True
+  config["DOPILEUP"] = True
+  config["DOGENHIST"] = True
 
-print 'RunOnMC? ', config["RUNONMC"], 'config["ISBKG"] = ', config["ISBKG"]
+print '-'*80
+for key, val in config.items():
+  print key.ljust(20), '====>', val
+print '-'*80
+
+
+
 				   
 ####### Config parser ##########
 
@@ -331,19 +353,11 @@ if config["CORRMETONTHEFLY"]:
        ]	
       	
 
-################# Weights for B generic background #########
 
-#IsBkgBSample = False 
-#fileName=str(process.source.fileNames) 
-#print(fileName)
-#if "HbToJPsiMuMu" in fileName:
-#   IsBkgBSample = True		    
-print "IsBkgBSample" , config['ISBKG']
 
 ################## Ntuplizer ###################
 process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     runOnMC	      = cms.bool(config["RUNONMC"]),
-    useDNN	      = cms.bool(config["USEDNN"]),
     useHammer	      = cms.bool(config["USEHAMMER"]),
     doGenParticles    = cms.bool(config["DOGENPARTICLES"]),
     doGenEvent	      = cms.bool(config["DOGENEVENT"]),
@@ -363,7 +377,6 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     dnnfile_perEVT    = cms.string(config['DNNFILE_PEREVT']),                        
 #    dnnfile_perEVT_v2 = cms.string(config['DNNFILE_PEREVT_V2']),
     bweightfile = cms.string(config['BWEIGHTFILE']),
-#    isBkgBSample = cms.bool(IsBkgBSample),                        
     isBkgBSample      = cms.bool(config['ISBKG']),
     vertices = cms.InputTag("offlineSlimmedPrimaryVertices"),
     beamSpot = cms.InputTag("offlineBeamSpot"),
