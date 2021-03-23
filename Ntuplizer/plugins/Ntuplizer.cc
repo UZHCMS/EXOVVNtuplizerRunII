@@ -126,6 +126,7 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
   /* Histogram for cutflow */
 
   nBranches_->cutflow_perevt = fs->make<TH1F>("cutflow_perevt", "Per Event Ntuplizer Cutflow", 15, 0, 15);
+  //nBranches_->hist_BkgB_weight = fs->make<TH2F>("hist_BkgB_weight", "Bkg B sample decay chain and weight", 11, 0, 11, 100,0 ,100);
 
   nBranches_->nmuon = fs->make<TH1F>("nmuon", "number of muon", 10, 0, 10);
 
@@ -214,6 +215,18 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
 						     runFlags    );
   }
 
+  if ( runFlags["runOnMC"] ){
+      if (runFlags["isBkgBSample"] ){
+          
+          std::string bweightfilepath = edm::FileInPath("EXOVVNtuplizerRunII/Ntuplizer/" + runStrings["bweightfile"]).fullPath();
+          //  fileWeights = new TFile("root://eoscms.cern.ch//eos/cms/store/user/fiorendi/p5prime/HBMC/decay_weight.root", "READ");                                                                                                                           
+          
+          std::cout << "b weight file = "<< bweightfilepath << std::endl;
+          fileWeights = new TFile((TString)bweightfilepath);
+          histGenWeights=(TH1F*)fileWeights->Get("weight");
+          std::cout << "weight hist first bin is : "<<  histGenWeights->GetBinContent(1)<<std::endl ;
+      }
+  }
 
   if (runFlags["doJpsiMu"]) {
     std::cout<<"\n\n --->GETTING INSIDE doJpsiMu<---\n\n"<<std::endl;
@@ -239,7 +252,8 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
 						   runFlags,
 						   runValues,
 						   runStrings,
-						   nBranches_ );
+                           nBranches_ , 
+                           histGenWeights);
   }
 
 //  if (runFlags["doBsTauTau"]) {
@@ -306,22 +320,13 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
  
   /*=======================================================================================*/    
   if ( runFlags["runOnMC"] ){
-      if (runFlags["isBkgBSample"] ){                                                                                  
-
-	std::string bweightfilepath = edm::FileInPath("EXOVVNtuplizerRunII/Ntuplizer/" + runStrings["bweightfile"]).fullPath();                                                                                     
-	//	fileWeights = new TFile("root://eoscms.cern.ch//eos/cms/store/user/fiorendi/p5prime/HBMC/decay_weight.root", "READ");                                                                   
-
-	std::cout << "b weight file = "<< bweightfilepath << std::endl;
-	fileWeights = new TFile((TString)bweightfilepath);
-	histGenWeights=(TH1F*)fileWeights->Get("weight");                                                                                                                                        
-	std::cout << "weight hist first bin is : "<<  histGenWeights->GetBinContent(1)<<std::endl ;                                                                                            
-      }
      
     if (runFlags["doGenParticles"]) {
       std::vector<edm::EDGetTokenT<reco::GenParticleCollection>> genpTokens;
       genpTokens.push_back( genparticleToken_ );
 
-      nTuplizers_["genParticles"] = new GenParticlesNtuplizer( genpTokens, nBranches_, runFlags, histGenWeights );
+      nTuplizers_["genParticles"] = new GenParticlesNtuplizer( genpTokens, nBranches_, runFlags//, histGenWeights 
+                                                               );
     }
 
     if (runFlags["doPileUp"]) {
