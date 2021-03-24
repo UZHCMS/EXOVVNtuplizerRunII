@@ -23,14 +23,13 @@ class JpsiTauNtuplizer : public CandidateNtuplizer {
 		    std::map< std::string, bool >& runFlags,
 		    std::map< std::string, double >& runValues,
 		    std::map< std::string, std::string >& runStrings,
-		    NtupleBranches* nBranches );
+                    NtupleBranches* nBranches , TH1F* fileweight );
 
   ~JpsiTauNtuplizer( void );
   
 
   bool fillBranches( edm::Event const & event, const edm::EventSetup& iSetup );
-
-  
+  const reco::Candidate*  checkMom(const reco::Candidate * candMom);
 private:
    edm::EDGetTokenT<pat::MuonCollection>    muonToken_   ;
    edm::EDGetTokenT<reco::VertexCollection> verticeToken_   ;
@@ -63,6 +62,7 @@ private:
    bool isTruth_;
    bool verbose_;
 
+  
    bool flag_fill = false;
 
    float c_dz;
@@ -81,6 +81,8 @@ private:
    std::vector<map<string, double>> FFdict;
 
    helper aux;
+
+
    
    //   tensorflow::MetaGraphDef* graphDef_old;
    tensorflow::MetaGraphDef* graphDef_perPF;
@@ -232,6 +234,10 @@ private:
 
    //   std::vector<double> _FFErr = {1, 1,1,1,1,1,1,1,1,1,1};
 
+   bool isBkgBSample_;
+   TH1F* histGenWeights_ ;
+   float genWeightBkgB_ =1;
+   int motherID_ =0;
 
 
 

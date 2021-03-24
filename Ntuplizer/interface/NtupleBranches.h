@@ -79,7 +79,7 @@ public:
     
   /** genParticles */
   int                             genParticle_N;
-  float genWeightBkgB;
+ 
   std::vector<float>              genParticle_pt       ;
 //  std::vector<float>              genParticle_px       ;
 //  std::vector<float>              genParticle_py       ;
@@ -738,6 +738,8 @@ public:
   int                  JpsiTau_isgenmatched;
   //  int                  JpsiTau_isgen3;
   //  int                  JpsiTau_isgen3matched;
+
+  float genWeightBkgB;
 
   int JpsiTau_nch;
   //  int JpsiTau_nch_after_dnn;

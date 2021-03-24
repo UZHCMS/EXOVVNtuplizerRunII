@@ -13,7 +13,7 @@ JpsiTauNtuplizer::JpsiTauNtuplizer( edm::EDGetTokenT<pat::MuonCollection>    muo
 				    std::map< std::string, bool >& runFlags,
 				    std::map< std::string, double >& runValues,
 				    std::map< std::string, std::string >& runStrings,
-				    NtupleBranches* nBranches )
+                                    NtupleBranches* nBranches ,TH1F* histGenWeights )  
 : CandidateNtuplizer ( nBranches )
   , muonToken_	        ( muonToken )
   , verticeToken_          ( verticeToken )
@@ -32,7 +32,9 @@ JpsiTauNtuplizer::JpsiTauNtuplizer( edm::EDGetTokenT<pat::MuonCollection>    muo
   , c_charge (runValues["tau_charge"])
   //  , dnnfile_old_ (runStrings["dnnfile_old"])      
   , dnnfile_perPF_ (runStrings["dnnfile_perPF"])      
-  , dnnfile_perEVT_ (runStrings["dnnfile_perEVT"])      
+  , dnnfile_perEVT_ (runStrings["dnnfile_perEVT"])
+    , isBkgBSample_ (runFlags["isBkgBSample"]) 
+    , histGenWeights_ (histGenWeights)        
   //  , dnnfile_perEVT_v2_ (runStrings["dnnfile_perEVT_v2"])      
    
 {
@@ -715,13 +717,40 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 
 
 
+  /*****************
+   * Save mother and weight if needed 
+   ****************/
+  // Implementation fo the weight for the B chain decay in the generic background B sample
+  if (isBkgBSample_){ 
+      //std::cout << "---------------- New event-------------"<< std::endl;
+      for(size_t p=0; p < genParticles_->size(); ++p){
+          if (abs((*genParticles_)[p].pdgId())==443 and abs((*genParticles_)[p].daughter(0)->pdgId())==13 ){ 
 
+              //             std:: cout<< "A) Jpsi direct mother is "    << abs((*genParticles_)[p].mother(0)->pdgId()) << std::endl;
+              std::vector<int> B_hadron = {511,521,531,541,5112,5122,5132,5212,5232};
+              motherID_ = abs((JpsiTauNtuplizer::checkMom(&(*genParticles_)[p]))->pdgId());
+              // std:: cout<< " Jpsi status is "    <<  (*genParticles_)[p].status() <<std::endl;
+              
+              // std:: cout<< " Jpsi daugh is "    <<   (*genParticles_)[p].daughter(0)->pdgId() << std::endl;
+              // std:: cout<< " Jpsi mother is "    << motherID_ << std::endl;
+              
+              std::vector<int>::iterator it = std::find(B_hadron.begin(), B_hadron.end(), motherID_); 
+              int index; 
+              if (motherID_ == 541){ genWeightBkgB_ =0; //set as default to 0 to Bc events in generic Bkg sample  because the Bc sample should be used
+              } else if (it != B_hadron.end()) {  
+                  index = std::distance(B_hadron.begin(), it);    
+                  //                  std:: cout<< "index is " << index <<" weight is " << histGenWeights_->GetBinContent(index+2)<<std::endl;
+                  genWeightBkgB_ = histGenWeights_->GetBinContent(index+2);
+              } else {    
+                  genWeightBkgB_ = histGenWeights_->GetBinContent(1); // in the first bin of the hist there is a generic 'other' for all the b decays not contained in the B_hadron vector;
+              }
+          }
+      }
+  }else{
+      genWeightBkgB_ = 1; 
+  } 
 
-
-
-
-
-
+      
   
   /********************************************************************
    *
@@ -731,7 +760,7 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
    ********************************************************************/
 
   event.getByToken(HLTtriggersToken_, HLTtriggers_);
-  nBranches_->cutflow_perevt->Fill(0);
+  nBranches_->cutflow_perevt->Fill(0.,genWeightBkgB_); // it should be 1 if the sample is not Bkg B generic sample, so 1 for data and 1 for Bc if flags properly set
   
   bool isTriggered = false;
   const edm::TriggerNames& trigNames = event.triggerNames(*HLTtriggers_);
@@ -3188,7 +3217,7 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
   nBranches_->JpsiTau_nCandidates = cands.size();
 
   if(!runOnMC_) return true;
-  
+  nBranches_->genWeightBkgB=genWeightBkgB_;
 
 /////  if(useHammer_){
 /////    hammer.initEvent();
@@ -3588,4 +3617,32 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 
 }
 
+const reco::Candidate*  JpsiTauNtuplizer::checkMom(const reco::Candidate * candMom){
+    int diquarks[] = { 1103,2101,2103,2203,3101,3103,3201,3203,3303,4101,4103,4201,4203,4301,4303,4403,5101,5103,5201,5203,5301,5303,5401, 5403,5503};
+    if (candMom == nullptr) return nullptr;
 
+    if (candMom->mother(0) == nullptr) {
+        return candMom;
+    }
+    std::vector<int> B_hadron = {511,521,531,541,5112,5122,5132,5212,5232};
+    std::vector<int>::iterator it0 = std::find(B_hadron.begin(), B_hadron.end(),  abs(candMom->pdgId()));
+    if (it0!= B_hadron.end()){
+        return candMom;    
+    }
+    
+    int * p = std::find (diquarks, diquarks+25, candMom->mother(0)->pdgId());
+    //std::cout << "  check mother  "<< abs(candMom->mother(0)->pdgId()) << std::endl; 
+   if (abs(candMom->mother(0)->pdgId()) < 8  ||    \
+        abs(candMom->mother(0)->pdgId())== 21 ||    \
+        abs(candMom->mother(0)->pdgId())== 2212 ||  \
+        (p != (diquarks+25))
+        ){
+       // std::cout << " ---- original mother   "<<  abs(candMom->pdgId()) << std::endl;
+        return candMom;
+    }
+    else {
+        candMom = checkMom(candMom->mother(0));
+        //std::cout << "  intermediate mother   "<<  abs(candMom->pdgId())<< std::endl;
+        return candMom;
+    }
+}
