@@ -373,7 +373,7 @@ bool JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
 
 
   event.getByToken(HLTtriggersToken_, HLTtriggers_);
-  nBranches_->cutflow_perevt->Fill(0);
+  nBranches_->cutflow->Fill(0);
   
   bool isTriggered = false;
   const edm::TriggerNames& trigNames = event.triggerNames(*HLTtriggers_);
@@ -393,7 +393,7 @@ bool JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
   }
 
   if(!isTriggered) return false;
-  nBranches_->cutflow_perevt->Fill(1);
+  nBranches_->cutflow->Fill(1);
 
   if(verbose_) std::cout << "[JpsiMuNtuplizer] Trigger fired" << std::endl;
 
@@ -465,7 +465,7 @@ bool JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
 
 
   if(!( muoncollection.size() >= 2)) return false;
-  nBranches_->cutflow_perevt->Fill(2);
+  nBranches_->cutflow->Fill(2);
     
   if(verbose_) std::cout << "[JpsiMuNtuplizer] At least 2 muons are found" << std::endl;
 
@@ -532,7 +532,7 @@ bool JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
   }
 
   if(jpsi_max_pt == -1) return false;
-  nBranches_->cutflow_perevt->Fill(3);
+  nBranches_->cutflow->Fill(3);
 
   if(verbose_) std::cout << "[JpsiMuNtuplizer] J/psi found" << std::endl;
 
@@ -562,7 +562,7 @@ bool JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
 
   if(jpTree->isEmpty() || !jpTree->isValid() || !jpTree->isConsistent()) return false;
 
-  nBranches_->cutflow_perevt->Fill(4);
+  nBranches_->cutflow->Fill(4);
 
   //creating the particle fitter
   KinematicParticleFitter csFitter;
@@ -577,14 +577,14 @@ bool JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
   jpTree->movePointerToTheTop();
   RefCountedKinematicParticle jpsi_part = jpTree->currentParticle();
   if(!jpsi_part->currentState().isValid()) return false;
-  nBranches_->cutflow_perevt->Fill(5);
+  nBranches_->cutflow->Fill(5);
 
   RefCountedKinematicVertex jpsi_vertex = jpTree->currentDecayVertex();
   if(!jpsi_vertex->vertexIsValid()) return false; 
-  nBranches_->cutflow_perevt->Fill(6);
+  nBranches_->cutflow->Fill(6);
 
   if(TMath::Prob(jpsi_vertex->chiSquared(), jpsi_vertex->degreesOfFreedom()) <=0) return false;
-  nBranches_->cutflow_perevt->Fill(7);
+  nBranches_->cutflow->Fill(7);
 
   std::vector< RefCountedKinematicParticle > jpsi_children = jpTree->finalStateParticles();
 
@@ -646,7 +646,7 @@ bool JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
 
 
   if(!(muoncollection[mcidx_mu1].isSoftMuon(closestVertex) > 0.5 && muoncollection[mcidx_mu2].isSoftMuon(closestVertex) > 0.5)) return false;
-  nBranches_->cutflow_perevt->Fill(8);
+  nBranches_->cutflow->Fill(8);
 
   if(verbose_) std::cout << "[JpsiMuNtuplizer] J/psi soft muon ID passed" << std::endl;
 
@@ -686,7 +686,7 @@ bool JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
   }
 
   if(max_pt3==-1) return false;
-  nBranches_->cutflow_perevt->Fill(9);
+  nBranches_->cutflow->Fill(9);
 
 
   for( auto mu3: mu3_vec){

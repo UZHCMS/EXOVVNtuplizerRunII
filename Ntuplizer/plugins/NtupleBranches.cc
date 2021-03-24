@@ -487,6 +487,10 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
 
     tree_->Branch("JpsiTau_tau_rhomass1", &JpsiTau_tau_rhomass1 );
     tree_->Branch("JpsiTau_tau_rhomass2", &JpsiTau_tau_rhomass2 );
+    tree_->Branch("JpsiTau_tau_rhopt1", &JpsiTau_tau_rhopt1 );
+    tree_->Branch("JpsiTau_tau_rhopt2", &JpsiTau_tau_rhopt2 );
+
+    tree_->Branch("JpsiTau_tau_rhomass_ss", &JpsiTau_tau_rhomass_ss );
 
     tree_->Branch("JpsiTau_tau_pi1_pt", &JpsiTau_tau_pi1_pt );
     tree_->Branch("JpsiTau_tau_pi1_eta", &JpsiTau_tau_pi1_eta );
@@ -1835,6 +1839,9 @@ void NtupleBranches::reset( void ){
 
   JpsiTau_tau_rhomass1.clear();
   JpsiTau_tau_rhomass2.clear();
+  JpsiTau_tau_rhopt1.clear();
+  JpsiTau_tau_rhopt2.clear();
+  JpsiTau_tau_rhomass_ss.clear();
 
   JpsiTau_tau_pi1_pt.clear();
   JpsiTau_tau_pi1_eta.clear();
@@ -2649,9 +2656,9 @@ void NtupleBranches::reset( void ){
 
 
 void NtupleBranches::LabelHistograms( std::map< std::string, bool >& runFlags ){
-  std::vector bins_string = {"Precut", "Trigger","muons", "J/#psi", "J/#psi fit","Tau  presence"};
+  std::vector bins_string = {"Precut", "Trigger","muons", "J/#psi", "J/#psi fit", "muon loose ID", "nch > 3", "Tau  presence"};
   for(size_t i=0; i< bins_string.size(); i++){
-    cutflow_perevt->GetXaxis()->SetBinLabel(i+1, bins_string[i]);
+    cutflow->GetXaxis()->SetBinLabel(i+1, bins_string[i]);
   }
 
 

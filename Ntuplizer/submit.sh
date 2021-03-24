@@ -12,7 +12,7 @@ for year in 2018
 do
     echo $year
 
-    postfix="legacy_mc_${year}_${today}"
+    postfix="${year}_${today}"
 
     sed -i -e "s/config\[\"ISBKG\"\] = True/config\[\"ISBKG\"\] = False/" config_generic_opt_skimmed.py
     
@@ -29,7 +29,7 @@ do
 
 	sed -i -e "s/config\[\"ISBKG\"\] = False/config\[\"ISBKG\"\] = True/" config_generic_opt_skimmed.py
 
-	postfix="legacy_${year}_${today}"
+#	postfix="${year}_${today}"
 	echo $postfix
 	python submit_all.py -d crab/Crab_${today2}_${postfix} -c config_generic_opt_skimmed.py -f samples/BcJpsiX.txt -s "_v1" --string "${postfix}" --isGlobal --numOfFiles 5
 #	python submit_all.py -d crab/Crab_${today2}_${postfix} -c config_generic_opt_skimmed.py -f samples/BcJpsiX_inclusive.txt -s "_v1" --string "${postfix}" --numOfFiles 3
