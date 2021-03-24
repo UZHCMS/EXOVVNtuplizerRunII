@@ -760,7 +760,9 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
    ********************************************************************/
 
   event.getByToken(HLTtriggersToken_, HLTtriggers_);
-  nBranches_->cutflow_perevt->Fill(0.,genWeightBkgB_); // it should be 1 if the sample is not Bkg B generic sample, so 1 for data and 1 for Bc if flags properly set
+  nBranches_->cutflow->Fill(10); // just to save total events here ... 
+  nBranches_->cutflow->Fill(0.,genWeightBkgB_); // it should be 1 if the sample is not Bkg B generic sample, so 1 for data and 1 for Bc if flags properly set
+  nBranches_->bweight->Fill(genWeightBkgB_);
   
   bool isTriggered = false;
   const edm::TriggerNames& trigNames = event.triggerNames(*HLTtriggers_);
@@ -781,7 +783,7 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 
 
   if(!isTriggered) return false;
-  nBranches_->cutflow_perevt->Fill(1);
+  nBranches_->cutflow->Fill(1);
 
   if(verbose_) std::cout << "[JpsiTauNtuplizer] Trigger fired" << std::endl;
 
@@ -868,7 +870,7 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 
   if(!( muoncollection.size() >= 2)) return false;
 
-  nBranches_->cutflow_perevt->Fill(2);
+  nBranches_->cutflow->Fill(2);
 
   if(verbose_) std::cout << "[JpsiTauNtuplizer] At least 2 muons are found" << std::endl;
 
@@ -929,7 +931,7 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
   }
 
   if(jpsi_max_pt == -1) return false;
-  nBranches_->cutflow_perevt->Fill(3);
+  nBranches_->cutflow->Fill(3);
 
   if(verbose_) std::cout << "[JpsiTauNtuplizer] J/psi found" << std::endl;
 
@@ -959,7 +961,7 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
    
 //  if(jpTree->isEmpty() || !jpTree->isValid() || !jpTree->isConsistent()) return false;
 
-//  nBranches_->cutflow_perevt->Fill(4);
+//  nBranches_->cutflow->Fill(4);
 
   //creating the particle fitter
   //  KinematicParticleFitter csFitter;
@@ -973,14 +975,14 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 //  jpTree->movePointerToTheTop();
 //  RefCountedKinematicParticle jpsi_part = jpTree->currentParticle();
 //  if(!jpsi_part->currentState().isValid()) return false; 
-//  nBranches_->cutflow_perevt->Fill(5);
+//  nBranches_->cutflow->Fill(5);
 //
 //  RefCountedKinematicVertex jpsi_vertex = jpTree->currentDecayVertex();
 //  if(!jpsi_vertex->vertexIsValid()) return false; 
-//  nBranches_->cutflow_perevt->Fill(6);
+//  nBranches_->cutflow->Fill(6);
 //
 //  if(TMath::Prob(jpsi_vertex->chiSquared(), jpsi_vertex->degreesOfFreedom()) <=0) return false;
-//  nBranches_->cutflow_perevt->Fill(7);
+//  nBranches_->cutflow->Fill(7);
 
 
 
@@ -993,7 +995,7 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 
   if(!jpsifit_flag) return false;
 
-//  nBranches_->cutflow_perevt->Fill(7);
+  nBranches_->cutflow->Fill(4);
 
 
   std::vector< RefCountedKinematicParticle > jpsi_children = jpTree->finalStateParticles();
@@ -1070,7 +1072,7 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
   
 
   if(!(muoncollection[mcidx_mu1].isSoftMuon(closestVertex) > 0.5 && muoncollection[mcidx_mu2].isSoftMuon(closestVertex) > 0.5)) return false;
-  nBranches_->cutflow_perevt->Fill(8);
+  nBranches_->cutflow->Fill(5);
 
   if(verbose_) std::cout << "[JpsiTauNtuplizer] J/psi soft muon ID passed" << std::endl;
 
@@ -2282,9 +2284,9 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 
   //  std::cout << "size (old, new, orig) = " <<  numOfch << std::endl;
 
-  nBranches_->cutflow_perevt->Fill(9);
+  //  nBranches_->cutflow->Fill(9);
   if(numOfch<3) return false;
-  nBranches_->cutflow_perevt->Fill(10);
+  nBranches_->cutflow->Fill(6);
 
 
 
@@ -2629,7 +2631,7 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 
   if(verbose_) std::cout << "[JpsiTauNtuplizer] " << cands.size() << " tau candidates were found" << std::endl;
 
-  nBranches_->cutflow_perevt->Fill(11);
+  nBranches_->cutflow->Fill(7);
 
   //  Int_t ncomb = 0;
 
@@ -2762,7 +2764,8 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
     //    nBranches_->JpsiTau_tau_pi2_dnn.push_back(cands[ic].cand_tau_pi2_dnn);
     //    nBranches_->JpsiTau_tau_pi3_dnn.push_back(cands[ic].cand_tau_pi3_dnn);
 
-    std::vector<Float_t> rhomass;
+    //    std::vector<Float_t> rhomass;
+    std::vector<TLorentzVector> rhomass;
     //    pat::PackedCandidate pf1 = cands[ic].cand_pf1.reducedpfcand.pfcand;
     //    pat::PackedCandidate pf2 = cands[ic].cand_pf2.reducedpfcand.pfcand;
     //    pat::PackedCandidate pf3 = cands[ic].cand_pf3.reducedpfcand.pfcand;
@@ -2788,29 +2791,57 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
     //    tlv_pion2.SetPtEtaPhiM(pf2.pt(), pf2.eta(), pf2.phi(), pf2.mass());
     //    tlv_pion3.SetPtEtaPhiM(pf3.pt(), pf3.eta(), pf3.phi(), pf3.mass());
 
-	
+
+    Float_t rhomass_ss = -1;
+
     if(q1*q2 == -1){
       TLorentzVector tlv_rho = tlv_pion1 + tlv_pion2;
-      rhomass.push_back(tlv_rho.M());
+      rhomass.push_back(tlv_rho);
+    }else if(q1*q2==1){
+      TLorentzVector tlv_rho = tlv_pion1 + tlv_pion2;
+      rhomass_ss = tlv_rho.M();
     }
       
     if(q1*q3 == -1){
       TLorentzVector tlv_rho = tlv_pion1 + tlv_pion3;
-      rhomass.push_back(tlv_rho.M());
+      rhomass.push_back(tlv_rho);
+    }else if(q1*q3==1){
+      TLorentzVector tlv_rho = tlv_pion1 + tlv_pion3;
+      rhomass_ss = tlv_rho.M();
     }
       
     if(q2*q3 == -1){
       TLorentzVector tlv_rho = tlv_pion2 + tlv_pion3;
-      rhomass.push_back(tlv_rho.M());
+      rhomass.push_back(tlv_rho);
+    }else if(q2*q3==1){
+      TLorentzVector tlv_rho = tlv_pion2 + tlv_pion3;
+      rhomass_ss = tlv_rho.M();
     }
       
+
     if(rhomass.size()==2){
-      nBranches_->JpsiTau_tau_rhomass1.push_back(rhomass.at(0));
-      nBranches_->JpsiTau_tau_rhomass2.push_back(rhomass.at(1));
+      // check the pT and order them.
+
+      if(rhomass.at(0).Pt() > rhomass.at(1).Pt()){      
+	nBranches_->JpsiTau_tau_rhomass1.push_back(rhomass.at(0).M());
+	nBranches_->JpsiTau_tau_rhomass2.push_back(rhomass.at(1).M());
+	nBranches_->JpsiTau_tau_rhopt1.push_back(rhomass.at(0).Pt());
+	nBranches_->JpsiTau_tau_rhopt2.push_back(rhomass.at(1).Pt());
+      }else{
+	nBranches_->JpsiTau_tau_rhomass1.push_back(rhomass.at(1).M());
+	nBranches_->JpsiTau_tau_rhomass2.push_back(rhomass.at(0).M());
+	nBranches_->JpsiTau_tau_rhopt1.push_back(rhomass.at(1).Pt());
+	nBranches_->JpsiTau_tau_rhopt2.push_back(rhomass.at(0).Pt());
+      }
+
     }else{
       nBranches_->JpsiTau_tau_rhomass1.push_back(-1);
       nBranches_->JpsiTau_tau_rhomass2.push_back(-1);
+      nBranches_->JpsiTau_tau_rhopt1.push_back(-1);
+      nBranches_->JpsiTau_tau_rhopt2.push_back(-1);
     }
+
+    nBranches_->JpsiTau_tau_rhomass_ss.push_back(rhomass_ss);
 
 
     nBranches_->JpsiTau_tau_pi1_pt.push_back(tlv_pion1.Pt());

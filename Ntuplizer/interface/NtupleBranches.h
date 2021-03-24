@@ -49,7 +49,8 @@ public:
 
   /* output histogram */
   /* Cutflow */
-  TH1F* cutflow_perevt ;
+  TH1F* cutflow ;
+  TH1F* bweight ;
   TH1F* nmuon ;
   TH1F* q2_nocut;
   TH1F* hammer_width;
@@ -553,6 +554,9 @@ public:
 
   std::vector<float>                JpsiTau_tau_rhomass1     ;
   std::vector<float>                JpsiTau_tau_rhomass2     ;
+  std::vector<float>                JpsiTau_tau_rhomass_ss     ;
+  std::vector<float>                JpsiTau_tau_rhopt1     ;
+  std::vector<float>                JpsiTau_tau_rhopt2     ;
 
   std::vector<float>       JpsiTau_tau_pi1_pt;
   std::vector<float>       JpsiTau_tau_pi1_eta;

@@ -125,7 +125,8 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
   /* Histogram buildinng, definition in NtupleBrances */
   /* Histogram for cutflow */
 
-  nBranches_->cutflow_perevt = fs->make<TH1F>("cutflow_perevt", "Per Event Ntuplizer Cutflow", 15, 0, 15);
+  nBranches_->cutflow = fs->make<TH1F>("cutflow", "Per Event Ntuplizer Cutflow", 15, 0, 15);
+  nBranches_->bweight = fs->make<TH1F>("bweight", "b weight", 10000, 0, 40);
   //nBranches_->hist_BkgB_weight = fs->make<TH2F>("hist_BkgB_weight", "Bkg B sample decay chain and weight", 11, 0, 11, 100,0 ,100);
 
   nBranches_->nmuon = fs->make<TH1F>("nmuon", "number of muon", 10, 0, 10);
