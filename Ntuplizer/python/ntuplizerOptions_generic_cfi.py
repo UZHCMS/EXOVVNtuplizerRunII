@@ -29,7 +29,8 @@ config["DOJPSIMU"] = False
 config["DOJPSITAU"] = True
 
 config["DNNFILE_PERPF"] = "data/DNN/BcJPsi/TAU_UL18/DUMMY"
-config["DNNFILE_PEREVT"] = "data/DNN/BcJPsi/TAU_class/DUMMY"
+config["DNNFILE_PEREVT_MC"] = "data/DNN/BcJPsi/TAU_MCBKG/DUMMY"
+config["DNNFILE_PEREVT_DATA"] = "data/DNN/BcJPsi/TAU_DATABKG/DUMMY"
 config["BWEIGHTFILE"] = "data/BWEIGHT/decay_weight.root"
 
 #--------- JEC ----------#

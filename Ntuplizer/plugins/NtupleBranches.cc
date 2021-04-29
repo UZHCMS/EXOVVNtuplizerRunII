@@ -851,11 +851,13 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
   //  tree_->Branch("JpsiTau_st_dnn_old", &JpsiTau_st_dnn_old);
   tree_->Branch("JpsiTau_st_matchidx", &JpsiTau_st_matchidx);
 
-  //  tree_->Branch("JpsiTau_perEVT_old", &JpsiTau_perEVT_old);
-  tree_->Branch("JpsiTau_perEVT_otherB", &JpsiTau_perEVT_otherB);
-  tree_->Branch("JpsiTau_perEVT_sig", &JpsiTau_perEVT_sig);
-  tree_->Branch("JpsiTau_perEVT_leptonic", &JpsiTau_perEVT_leptonic);
-  tree_->Branch("JpsiTau_perEVT_1prong", &JpsiTau_perEVT_1prong);
+  tree_->Branch("JpsiTau_perEVT_mc", &JpsiTau_perEVT_mc);
+  tree_->Branch("JpsiTau_perEVT_data", &JpsiTau_perEVT_data);
+
+//  tree_->Branch("JpsiTau_perEVT_otherB", &JpsiTau_perEVT_otherB);
+//  tree_->Branch("JpsiTau_perEVT_sig", &JpsiTau_perEVT_sig);
+//  tree_->Branch("JpsiTau_perEVT_leptonic", &JpsiTau_perEVT_leptonic);
+//  tree_->Branch("JpsiTau_perEVT_1prong", &JpsiTau_perEVT_1prong);
 
   //  tree_->Branch("JpsiTau_st_isOtherPV", &JpsiTau_st_isOtherPV);
 
@@ -2107,12 +2109,13 @@ void NtupleBranches::reset( void ){
   JpsiTau_st_genjpsi_eta = -99;
   JpsiTau_st_genjpsi_phi = -99;
 
-  //  JpsiTau_perEVT_old = -99;
+  JpsiTau_perEVT_mc = -99;
+  JpsiTau_perEVT_data = -99;
 
-  JpsiTau_perEVT_otherB = -99;
-  JpsiTau_perEVT_sig = -99;
-  JpsiTau_perEVT_leptonic = -99;
-  JpsiTau_perEVT_1prong = -99;
+  //  JpsiTau_perEVT_otherB = -99;
+  //  JpsiTau_perEVT_sig = -99;
+  //  JpsiTau_perEVT_leptonic = -99;
+  //  JpsiTau_perEVT_1prong = -99;
 
 
 //  JpsiTau_ed_pfeta.clear();

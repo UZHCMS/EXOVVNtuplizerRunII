@@ -795,11 +795,12 @@ public:
   Float_t JpsiTau_st_genjpsi_eta;
   Float_t JpsiTau_st_genjpsi_phi;
 
-  //  Float_t JpsiTau_perEVT_old;
-  Float_t JpsiTau_perEVT_otherB;
-  Float_t JpsiTau_perEVT_sig;
-  Float_t JpsiTau_perEVT_leptonic;
-  Float_t JpsiTau_perEVT_1prong;
+  Float_t JpsiTau_perEVT_mc;
+  Float_t JpsiTau_perEVT_data;
+  //  Float_t JpsiTau_perEVT_otherB;
+  //  Float_t JpsiTau_perEVT_sig;
+  //  Float_t JpsiTau_perEVT_leptonic;
+  //  Float_t JpsiTau_perEVT_1prong;
  
   std::vector<int> JpsiTau_st_idx;
 

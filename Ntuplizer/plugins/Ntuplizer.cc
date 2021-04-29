@@ -100,15 +100,15 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
 
   //  runStrings["dnnfile_old"] = iConfig.getParameter<std::string>("dnnfile_old");  
   runStrings["dnnfile_perPF"] = iConfig.getParameter<std::string>("dnnfile_perPF");  
-  runStrings["dnnfile_perEVT"] = iConfig.getParameter<std::string>("dnnfile_perEVT");  
+  runStrings["dnnfile_perEVT_mc"] = iConfig.getParameter<std::string>("dnnfile_perEVT_mc");  
+  runStrings["dnnfile_perEVT_data"] = iConfig.getParameter<std::string>("dnnfile_perEVT_data");  
   runStrings["bweightfile"] = iConfig.getParameter<std::string>("bweightfile");
-  //  runStrings["dnnfile_perEVT_v2"] = iConfig.getParameter<std::string>("dnnfile_perEVT_v2");  
 
 
   //  std::cout << "Ntuplizer: dnn_old file: " << runStrings["dnnfile_old"] << std::endl;
   std::cout << "Ntuplizer: dnn_perPF file: " << runStrings["dnnfile_perPF"] << std::endl;
-  std::cout << "Ntuplizer: dnn_perEVT file: " << runStrings["dnnfile_perEVT"] << std::endl;
-  //  std::cout << "Ntuplizer: dnn_perEVT_v2 file: " << runStrings["dnnfile_perEVT_v2"] << std::endl;
+  std::cout << "Ntuplizer: dnn_perEVT file (mc): " << runStrings["dnnfile_perEVT_mc"] << std::endl;
+  std::cout << "Ntuplizer: dnn_perEVT file (data): " << runStrings["dnnfile_perEVT_data"] << std::endl;
 
 
   std::cout << "Ntuplizer: (dzcut, fsigcut, vprobcut, dnn cut, tau_charge) = " << runValues["dzcut"] << " " << runValues["fsigcut"] << " " << runValues["vprobcut"] << " " << " " << runValues["tau_charge"] << std::endl;

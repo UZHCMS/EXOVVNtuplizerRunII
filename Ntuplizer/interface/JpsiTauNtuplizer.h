@@ -86,12 +86,14 @@ private:
    
    //   tensorflow::MetaGraphDef* graphDef_old;
    tensorflow::MetaGraphDef* graphDef_perPF;
-   tensorflow::MetaGraphDef* graphDef_perEVT;
+   tensorflow::MetaGraphDef* graphDef_perEVT_mc;
+   tensorflow::MetaGraphDef* graphDef_perEVT_data;
    //   tensorflow::MetaGraphDef* graphDef_perEVT_v2;
 
    //   tensorflow::Session* session_old;
    tensorflow::Session* session_perPF;
-   tensorflow::Session* session_perEVT;
+   tensorflow::Session* session_perEVT_mc;
+   tensorflow::Session* session_perEVT_data;
    //   tensorflow::Session* session_perEVT_v2;
 
    tensorflow::Tensor data_perPF; // (tensorflow::DT_FLOAT, { 1, 50, 8 }); // single batch of dimension 10
@@ -117,10 +119,11 @@ private:
 
    //   std::string dnnfile_old_;
    std::string dnnfile_perPF_;
-   std::string dnnfile_perEVT_;
+   std::string dnnfile_perEVT_mc;
+   std::string dnnfile_perEVT_data;
    //   std::string dnnfile_perEVT_v2_;
 
-   //   Hammer::Hammer hammer;
+   Hammer::Hammer hammer;
 
    const vector<string> parName = {"a0", "a1", "a2", "b0", "b1", "b2", "c1", "c2", "d0", "d1", "d2"};
 //   
