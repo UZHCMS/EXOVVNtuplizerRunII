@@ -7,6 +7,8 @@
 #include "../interface/VerticesNtuplizer.h"
 #include "../interface/JpsiMuNtuplizer.h"
 #include "../interface/JpsiTauNtuplizer.h"
+#include "../interface/JpsiKNtuplizer.h"
+#include "../interface/JpsiKNtuplizerE.h"
 //#include "../interface/BsTauTauNtuplizer.h"
 //#include "../interface/BsTauTauFHNtuplizer.h"
 //#include "../interface/BsTauTauFHNtuplizer_mr.h"
@@ -86,6 +88,8 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
   runFlags["doMissingEt"] = iConfig.getParameter<bool>("doMissingEt");
   runFlags["doJpsiMu"] = iConfig.getParameter<bool>("doJpsiMu");
   runFlags["doJpsiTau"] = iConfig.getParameter<bool>("doJpsiTau");
+  runFlags["doJpsiK"] = iConfig.getParameter<bool>("doJpsiK");
+  runFlags["doJpsiKE"] = iConfig.getParameter<bool>("doJpsiKE");
   runFlags["isBkgBSample"] = iConfig.getParameter<bool>("isBkgBSample");
   //  runFlags["doBsTauTau"] = iConfig.getParameter<bool>("doBsTauTau");
   //  runFlags["doBsTauTauFH"] = iConfig.getParameter<bool>("doBsTauTauFH");
@@ -113,7 +117,7 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
 
   std::cout << "Ntuplizer: (dzcut, fsigcut, vprobcut, dnn cut, tau_charge) = " << runValues["dzcut"] << " " << runValues["fsigcut"] << " " << runValues["vprobcut"] << " " << " " << runValues["tau_charge"] << std::endl;
   
-  std::cout << "useHammer" << runFlags["useHammer"] << std::endl;
+  std::cout << "useHammer = " << runFlags["useHammer"] << std::endl;
 
   std::string jecpath = iConfig.getParameter<std::string>("jecpath");
   jecpath = "EXOVVNtuplizerRunII/Ntuplizer/data/" + jecpath;
@@ -137,7 +141,8 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
   }
 
   if(runFlags["useHammer"]){
-    nBranches_->hammer_width = fs->make<TH1F>("hammer_width", "Hammer width", 24, 0, 24);  
+    nBranches_->hammer_width = fs->make<TH1F>("hammer_width", "Hammer width", 32, 0, 32);  
+    nBranches_->hammer_width_lattice = fs->make<TH1F>("hammer_width_lattice", "Hammer width lattice", 32, 0, 32);
   }
 
   /* Histogram for genParticles */ 
@@ -256,6 +261,40 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
                            nBranches_ , 
                            histGenWeights);
   }
+
+
+  if (runFlags["doJpsiK"]) {
+    std::cout<<"\n\n --->GETTING INSIDE doJpsiK<---\n\n"<<std::endl;
+    nTuplizers_["JpsiK"] = new JpsiKNtuplizer( muonToken_   , 
+					       vtxToken_   , 
+					       beamToken_ ,
+					       packedpfcandidatesToken_,
+					       triggerToken_,
+					       triggerObjects_,
+					       genparticleToken_,
+					       packedgenparticleToken_,
+					       runFlags,
+					       runValues,
+					       runStrings,
+					       nBranches_, histGenWeights );
+  }
+
+  if (runFlags["doJpsiKE"]) {
+    std::cout<<"\n\n --->GETTING INSIDE doJpsiKE <---\n\n"<<std::endl;
+    nTuplizers_["JpsiKE"] = new JpsiKNtuplizerE( muonToken_   , 
+						   vtxToken_   , 
+						   beamToken_ ,
+						   packedpfcandidatesToken_,
+						   triggerToken_,
+						   triggerObjects_,
+						   genparticleToken_,
+						   packedgenparticleToken_,
+						   runFlags,
+						   runValues,
+						   runStrings,
+						   nBranches_, histGenWeights );
+  }
+
 
 //  if (runFlags["doBsTauTau"]) {
 //    std::cout<<"\n\n --->GETTING INSIDE doBsTauTau<---\n\n"<<std::endl;

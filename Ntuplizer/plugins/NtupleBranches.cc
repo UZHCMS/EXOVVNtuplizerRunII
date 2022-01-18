@@ -347,7 +347,6 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch("JpsiMu_isgenmatched", &JpsiMu_isgenmatched);
     tree_->Branch("JpsiMu_mu3_isgenmatched", &JpsiMu_mu3_isgenmatched);
     tree_->Branch("JpsiMu_q2_gen", &JpsiMu_q2_gen);
-    tree_->Branch("JpsiMu_B_pt_gen", &JpsiMu_B_pt_gen);
     tree_->Branch("JpsiMu_B_eta_gen", &JpsiMu_B_eta_gen);
     tree_->Branch("JpsiMu_B_phi_gen", &JpsiMu_B_phi_gen);
     tree_->Branch("JpsiMu_B_mass_gen", &JpsiMu_B_mass_gen);
@@ -723,25 +722,87 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     //    tree_->Branch("JpsiTau_gentaumass_bd", &JpsiTau_gentaumass_bd);
     //    tree_->Branch("JpsiTau_gentaudm", &JpsiTau_gentaudm);
     tree_->Branch("JpsiTau_q2_gen", &JpsiTau_q2_gen);
+    tree_->Branch("JpsiTau_nBc", &JpsiTau_nBc);
     tree_->Branch("JpsiTau_B_pt_gen", &JpsiTau_B_pt_gen);
     tree_->Branch("JpsiTau_B_eta_gen", &JpsiTau_B_eta_gen);
     tree_->Branch("JpsiTau_B_phi_gen", &JpsiTau_B_phi_gen);
     tree_->Branch("JpsiTau_B_mass_gen", &JpsiTau_B_mass_gen);
 
-    tree_->Branch("JpsiTau_hammer_ff", &JpsiTau_hammer_ff);
-    tree_->Branch("JpsiTau_hammer_ebe", &JpsiTau_hammer_ebe);
-    tree_->Branch("JpsiTau_hammer_ebe_toy", &JpsiTau_hammer_ebe_toy);
+    //    tree_->Branch("JpsiTau_hammer_ff", &JpsiTau_hammer_ff);
+    //    tree_->Branch("JpsiTau_hammer_ebe_toy", &JpsiTau_hammer_ebe_toy);
     //    tree_->Branch("JpsiTau_hammer_ebe_up", &JpsiTau_hammer_ebe_up);
     //    tree_->Branch("JpsiTau_hammer_ebe_down", &JpsiTau_hammer_ebe_down);
     //    tree_->Branch("JpsiTau_hammer_ebe_rate_up", &JpsiTau_hammer_ebe_rate_up);
     //    tree_->Branch("JpsiTau_hammer_ebe_rate_down", &JpsiTau_hammer_ebe_rate_down);
-//    tree_->Branch("JpsiTau_hammer_ebe_a0_up", &JpsiTau_hammer_ebe_a0_up);
-//    tree_->Branch("JpsiTau_hammer_ebe_a0_down", &JpsiTau_hammer_ebe_a0_down);
-//    tree_->Branch("JpsiTau_hammer_ebe_a1_up", &JpsiTau_hammer_ebe_a1_up);
-//    tree_->Branch("JpsiTau_hammer_ebe_a1_down", &JpsiTau_hammer_ebe_a1_down);
-//    tree_->Branch("JpsiTau_hammer_ebe_a2_up", &JpsiTau_hammer_ebe_a2_up);
-//    tree_->Branch("JpsiTau_hammer_ebe_a2_down", &JpsiTau_hammer_ebe_a2_down);
-//
+
+    tree_->Branch("JpsiTau_hammer_ebe", &JpsiTau_hammer_ebe);
+
+    tree_->Branch("JpsiTau_hammer_ebe_e0_up", &JpsiTau_hammer_ebe_e0_up);
+    tree_->Branch("JpsiTau_hammer_ebe_e0_down", &JpsiTau_hammer_ebe_e0_down);
+    tree_->Branch("JpsiTau_hammer_ebe_e1_up", &JpsiTau_hammer_ebe_e1_up);
+    tree_->Branch("JpsiTau_hammer_ebe_e1_down", &JpsiTau_hammer_ebe_e1_down);
+    tree_->Branch("JpsiTau_hammer_ebe_e2_up", &JpsiTau_hammer_ebe_e2_up);
+    tree_->Branch("JpsiTau_hammer_ebe_e2_down", &JpsiTau_hammer_ebe_e2_down);
+    tree_->Branch("JpsiTau_hammer_ebe_e3_up", &JpsiTau_hammer_ebe_e3_up);
+    tree_->Branch("JpsiTau_hammer_ebe_e3_down", &JpsiTau_hammer_ebe_e3_down);
+    tree_->Branch("JpsiTau_hammer_ebe_e4_up", &JpsiTau_hammer_ebe_e4_up);
+    tree_->Branch("JpsiTau_hammer_ebe_e4_down", &JpsiTau_hammer_ebe_e4_down);
+    tree_->Branch("JpsiTau_hammer_ebe_e5_up", &JpsiTau_hammer_ebe_e5_up);
+    tree_->Branch("JpsiTau_hammer_ebe_e5_down", &JpsiTau_hammer_ebe_e5_down);
+    tree_->Branch("JpsiTau_hammer_ebe_e6_up", &JpsiTau_hammer_ebe_e6_up);
+    tree_->Branch("JpsiTau_hammer_ebe_e6_down", &JpsiTau_hammer_ebe_e6_down);
+    tree_->Branch("JpsiTau_hammer_ebe_e7_up", &JpsiTau_hammer_ebe_e7_up);
+    tree_->Branch("JpsiTau_hammer_ebe_e7_down", &JpsiTau_hammer_ebe_e7_down);
+    tree_->Branch("JpsiTau_hammer_ebe_e8_up", &JpsiTau_hammer_ebe_e8_up);
+    tree_->Branch("JpsiTau_hammer_ebe_e8_down", &JpsiTau_hammer_ebe_e8_down);
+    tree_->Branch("JpsiTau_hammer_ebe_e9_up", &JpsiTau_hammer_ebe_e9_up);
+    tree_->Branch("JpsiTau_hammer_ebe_e9_down", &JpsiTau_hammer_ebe_e9_down);
+    tree_->Branch("JpsiTau_hammer_ebe_e10_up", &JpsiTau_hammer_ebe_e10_up);
+    tree_->Branch("JpsiTau_hammer_ebe_e10_down", &JpsiTau_hammer_ebe_e10_down);
+    tree_->Branch("JpsiTau_hammer_ebe_e11_up", &JpsiTau_hammer_ebe_e11_up);
+    tree_->Branch("JpsiTau_hammer_ebe_e11_down", &JpsiTau_hammer_ebe_e11_down);
+    tree_->Branch("JpsiTau_hammer_ebe_e12_up", &JpsiTau_hammer_ebe_e12_up);
+    tree_->Branch("JpsiTau_hammer_ebe_e12_down", &JpsiTau_hammer_ebe_e12_down);
+    tree_->Branch("JpsiTau_hammer_ebe_e13_up", &JpsiTau_hammer_ebe_e13_up);
+    tree_->Branch("JpsiTau_hammer_ebe_e13_down", &JpsiTau_hammer_ebe_e13_down);
+    tree_->Branch("JpsiTau_hammer_ebe_e14_up", &JpsiTau_hammer_ebe_e14_up);
+    tree_->Branch("JpsiTau_hammer_ebe_e14_down", &JpsiTau_hammer_ebe_e14_down);
+
+
+    tree_->Branch("JpsiTau_hammer_ebe_lattice", &JpsiTau_hammer_ebe_lattice);
+
+    tree_->Branch("JpsiTau_hammer_ebe_e0_up_lattice", &JpsiTau_hammer_ebe_e0_up_lattice);
+    tree_->Branch("JpsiTau_hammer_ebe_e0_down_lattice", &JpsiTau_hammer_ebe_e0_down_lattice);
+    tree_->Branch("JpsiTau_hammer_ebe_e1_up_lattice", &JpsiTau_hammer_ebe_e1_up_lattice);
+    tree_->Branch("JpsiTau_hammer_ebe_e1_down_lattice", &JpsiTau_hammer_ebe_e1_down_lattice);
+    tree_->Branch("JpsiTau_hammer_ebe_e2_up_lattice", &JpsiTau_hammer_ebe_e2_up_lattice);
+    tree_->Branch("JpsiTau_hammer_ebe_e2_down_lattice", &JpsiTau_hammer_ebe_e2_down_lattice);
+    tree_->Branch("JpsiTau_hammer_ebe_e3_up_lattice", &JpsiTau_hammer_ebe_e3_up_lattice);
+    tree_->Branch("JpsiTau_hammer_ebe_e3_down_lattice", &JpsiTau_hammer_ebe_e3_down_lattice);
+    tree_->Branch("JpsiTau_hammer_ebe_e4_up_lattice", &JpsiTau_hammer_ebe_e4_up_lattice);
+    tree_->Branch("JpsiTau_hammer_ebe_e4_down_lattice", &JpsiTau_hammer_ebe_e4_down_lattice);
+    tree_->Branch("JpsiTau_hammer_ebe_e5_up_lattice", &JpsiTau_hammer_ebe_e5_up_lattice);
+    tree_->Branch("JpsiTau_hammer_ebe_e5_down_lattice", &JpsiTau_hammer_ebe_e5_down_lattice);
+    tree_->Branch("JpsiTau_hammer_ebe_e6_up_lattice", &JpsiTau_hammer_ebe_e6_up_lattice);
+    tree_->Branch("JpsiTau_hammer_ebe_e6_down_lattice", &JpsiTau_hammer_ebe_e6_down_lattice);
+    tree_->Branch("JpsiTau_hammer_ebe_e7_up_lattice", &JpsiTau_hammer_ebe_e7_up_lattice);
+    tree_->Branch("JpsiTau_hammer_ebe_e7_down_lattice", &JpsiTau_hammer_ebe_e7_down_lattice);
+    tree_->Branch("JpsiTau_hammer_ebe_e8_up_lattice", &JpsiTau_hammer_ebe_e8_up_lattice);
+    tree_->Branch("JpsiTau_hammer_ebe_e8_down_lattice", &JpsiTau_hammer_ebe_e8_down_lattice);
+    tree_->Branch("JpsiTau_hammer_ebe_e9_up_lattice", &JpsiTau_hammer_ebe_e9_up_lattice);
+    tree_->Branch("JpsiTau_hammer_ebe_e9_down_lattice", &JpsiTau_hammer_ebe_e9_down_lattice);
+    tree_->Branch("JpsiTau_hammer_ebe_e10_up_lattice", &JpsiTau_hammer_ebe_e10_up_lattice);
+    tree_->Branch("JpsiTau_hammer_ebe_e10_down_lattice", &JpsiTau_hammer_ebe_e10_down_lattice);
+    tree_->Branch("JpsiTau_hammer_ebe_e11_up_lattice", &JpsiTau_hammer_ebe_e11_up_lattice);
+    tree_->Branch("JpsiTau_hammer_ebe_e11_down_lattice", &JpsiTau_hammer_ebe_e11_down_lattice);
+    tree_->Branch("JpsiTau_hammer_ebe_e12_up_lattice", &JpsiTau_hammer_ebe_e12_up_lattice);
+    tree_->Branch("JpsiTau_hammer_ebe_e12_down_lattice", &JpsiTau_hammer_ebe_e12_down_lattice);
+    tree_->Branch("JpsiTau_hammer_ebe_e13_up_lattice", &JpsiTau_hammer_ebe_e13_up_lattice);
+    tree_->Branch("JpsiTau_hammer_ebe_e13_down_lattice", &JpsiTau_hammer_ebe_e13_down_lattice);
+    tree_->Branch("JpsiTau_hammer_ebe_e14_up_lattice", &JpsiTau_hammer_ebe_e14_up_lattice);
+    tree_->Branch("JpsiTau_hammer_ebe_e14_down_lattice", &JpsiTau_hammer_ebe_e14_down_lattice);
+
+
 //    tree_->Branch("JpsiTau_hammer_ebe_b0_up", &JpsiTau_hammer_ebe_b0_up);
 //    tree_->Branch("JpsiTau_hammer_ebe_b0_down", &JpsiTau_hammer_ebe_b0_down);
 //    tree_->Branch("JpsiTau_hammer_ebe_b1_up", &JpsiTau_hammer_ebe_b1_up);
@@ -870,6 +931,435 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
 //    tree_->Branch("JpsiTau_ed_pfdnn", &JpsiTau_ed_pfdnn);
 //    tree_->Branch("JpsiTau_ed_genpt", &JpsiTau_ed_genpt);
 
+
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  if (runFlags["doJpsiK"]){
+
+    tree_->Branch("JpsiK_nCandidates", &JpsiK_nCandidates );
+    tree_->Branch("JpsiK_nch", &JpsiK_nch );
+    tree_->Branch("JpsiK_nch_before", &JpsiK_nch_before );
+
+    tree_->Branch("JpsiK_mu1_pt", &JpsiK_mu1_pt );
+    tree_->Branch("JpsiK_mu1_eta", &JpsiK_mu1_eta );
+    tree_->Branch("JpsiK_mu1_phi", &JpsiK_mu1_phi );
+    tree_->Branch("JpsiK_mu1_mass", &JpsiK_mu1_mass );
+    tree_->Branch("JpsiK_mu1_q", &JpsiK_mu1_q );
+    tree_->Branch("JpsiK_mu1_isLoose"  , &JpsiK_mu1_isLoose   );
+    tree_->Branch("JpsiK_mu1_isTight"  , &JpsiK_mu1_isTight   );
+    tree_->Branch("JpsiK_mu1_isPF"     , &JpsiK_mu1_isPF      );
+    tree_->Branch("JpsiK_mu1_isGlobal" , &JpsiK_mu1_isGlobal  );
+    tree_->Branch("JpsiK_mu1_isTracker", &JpsiK_mu1_isTracker );
+    tree_->Branch("JpsiK_mu1_isSoft"   , &JpsiK_mu1_isSoft    );
+    tree_->Branch("JpsiK_mu1_vx"   , &JpsiK_mu1_vx    );
+    tree_->Branch("JpsiK_mu1_vy"   , &JpsiK_mu1_vy    );
+    tree_->Branch("JpsiK_mu1_vz"   , &JpsiK_mu1_vz    );
+    //    tree_->Branch("JpsiK_mu1_iso"   , &JpsiK_mu1_iso    );
+    tree_->Branch("JpsiK_mu1_dbiso"   , &JpsiK_mu1_dbiso    );
+
+    tree_->Branch("JpsiK_mu2_pt", &JpsiK_mu2_pt );
+    tree_->Branch("JpsiK_mu2_eta", &JpsiK_mu2_eta );
+    tree_->Branch("JpsiK_mu2_phi", &JpsiK_mu2_phi );
+    tree_->Branch("JpsiK_mu2_mass", &JpsiK_mu2_mass );
+    tree_->Branch("JpsiK_mu2_q", &JpsiK_mu2_q );
+    tree_->Branch("JpsiK_mu2_isLoose"  , &JpsiK_mu2_isLoose   );
+    tree_->Branch("JpsiK_mu2_isTight"  , &JpsiK_mu2_isTight   );
+    tree_->Branch("JpsiK_mu2_isPF"     , &JpsiK_mu2_isPF      );
+    tree_->Branch("JpsiK_mu2_isGlobal" , &JpsiK_mu2_isGlobal  );
+    tree_->Branch("JpsiK_mu2_isTracker", &JpsiK_mu2_isTracker );
+    tree_->Branch("JpsiK_mu2_isSoft"   , &JpsiK_mu2_isSoft    );
+    tree_->Branch("JpsiK_mu2_vx"   , &JpsiK_mu2_vx    );
+    tree_->Branch("JpsiK_mu2_vy"   , &JpsiK_mu2_vy    );
+    tree_->Branch("JpsiK_mu2_vz"   , &JpsiK_mu2_vz    );
+    //    tree_->Branch("JpsiK_mu2_iso"   , &JpsiK_mu2_iso    );
+    tree_->Branch("JpsiK_mu2_dbiso"   , &JpsiK_mu2_dbiso    );
+
+    //  std::vector<float> JpsiK_tau_delta_chi2;
+//  std::vector<float> JpsiK_tau_delta_n;
+//  std::vector<float> JpsiK_tau_vweight;
+//  std::vector<float> JpsiK_tau_refit_vx;
+//  std::vector<float> JpsiK_tau_refit_vy;
+//  std::vector<float> JpsiK_tau_refit_vz;
+
+
+
+    tree_->Branch("JpsiK_PV_vx", &JpsiK_PV_vx );
+    tree_->Branch("JpsiK_PV_vy", &JpsiK_PV_vy );
+    tree_->Branch("JpsiK_PV_vz", &JpsiK_PV_vz );
+
+    tree_->Branch("JpsiK_bbPV_vx", &JpsiK_bbPV_vx );
+    tree_->Branch("JpsiK_bbPV_vy", &JpsiK_bbPV_vy );
+    tree_->Branch("JpsiK_bbPV_vz", &JpsiK_bbPV_vz );
+    tree_->Branch("JpsiK_bbPV_chi2", &JpsiK_bbPV_chi2 );
+    tree_->Branch("JpsiK_bbPV_ndof", &JpsiK_bbPV_ndof );
+    tree_->Branch("JpsiK_bbPV_rho", &JpsiK_bbPV_rho );
+
+    //    tree_->Branch("JpsiK_bbPV_refit_vx", &JpsiK_bbPV_vx );
+    //    tree_->Branch("JpsiK_bbPV_refit_vy", &JpsiK_bbPV_vy );
+    //    tree_->Branch("JpsiK_bbPV_refit_vz", &JpsiK_bbPV_vz );
+
+
+
+    tree_->Branch("JpsiK_Jpsi_pt", &JpsiK_Jpsi_pt );
+    tree_->Branch("JpsiK_Jpsi_eta", &JpsiK_Jpsi_eta );
+    tree_->Branch("JpsiK_Jpsi_phi", &JpsiK_Jpsi_phi );
+    tree_->Branch("JpsiK_Jpsi_mass", &JpsiK_Jpsi_mass );
+    tree_->Branch("JpsiK_Jpsi_vprob", &JpsiK_Jpsi_vprob );
+    tree_->Branch("JpsiK_Jpsi_lip", &JpsiK_Jpsi_lip);
+    tree_->Branch("JpsiK_Jpsi_lips", &JpsiK_Jpsi_lips);
+    tree_->Branch("JpsiK_Jpsi_pvip", &JpsiK_Jpsi_pvip);
+    tree_->Branch("JpsiK_Jpsi_pvips", &JpsiK_Jpsi_pvips);
+    tree_->Branch("JpsiK_Jpsi_fl3d", &JpsiK_Jpsi_fl3d);
+    tree_->Branch("JpsiK_Jpsi_fls3d", &JpsiK_Jpsi_fls3d);
+    tree_->Branch("JpsiK_Jpsi_alpha", &JpsiK_Jpsi_alpha);
+    tree_->Branch("JpsiK_Jpsi_maxdoca", &JpsiK_Jpsi_maxdoca);
+    tree_->Branch("JpsiK_Jpsi_mindoca", &JpsiK_Jpsi_mindoca);
+    tree_->Branch("JpsiK_Jpsi_vx", &JpsiK_Jpsi_vx );
+    tree_->Branch("JpsiK_Jpsi_vy", &JpsiK_Jpsi_vy );
+    tree_->Branch("JpsiK_Jpsi_vz", &JpsiK_Jpsi_vz );
+//    tree_->Branch("JpsiK_Jpsi_unfit_pt", &JpsiK_Jpsi_unfit_pt );
+//    tree_->Branch("JpsiK_Jpsi_unfit_mass", &JpsiK_Jpsi_unfit_mass );
+//    tree_->Branch("JpsiK_Jpsi_unfit_vprob", &JpsiK_Jpsi_unfit_vprob );
+//    tree_->Branch("JpsiK_Jpsi_unfit_vx", &JpsiK_Jpsi_unfit_vx );
+//    tree_->Branch("JpsiK_Jpsi_unfit_vy", &JpsiK_Jpsi_unfit_vy );
+//    tree_->Branch("JpsiK_Jpsi_unfit_vz", &JpsiK_Jpsi_unfit_vz );
+
+
+    tree_->Branch("JpsiK_B_pt", &JpsiK_B_pt );
+    tree_->Branch("JpsiK_B_eta", &JpsiK_B_eta );
+    tree_->Branch("JpsiK_B_phi", &JpsiK_B_phi );
+    tree_->Branch("JpsiK_B_mass", &JpsiK_B_mass );
+    tree_->Branch("JpsiK_B_mcorr", &JpsiK_B_mcorr );
+    tree_->Branch("JpsiK_B_vprob", &JpsiK_B_vprob );
+    tree_->Branch("JpsiK_B_lip", &JpsiK_B_lip);
+    tree_->Branch("JpsiK_B_lips", &JpsiK_B_lips);
+    tree_->Branch("JpsiK_B_pvip", &JpsiK_B_pvip);
+    tree_->Branch("JpsiK_B_pvips", &JpsiK_B_pvips);
+    tree_->Branch("JpsiK_B_fl3d", &JpsiK_B_fl3d);
+    tree_->Branch("JpsiK_B_fls3d", &JpsiK_B_fls3d);
+    tree_->Branch("JpsiK_B_alpha", &JpsiK_B_alpha);
+    tree_->Branch("JpsiK_B_maxdoca", &JpsiK_B_maxdoca);
+    tree_->Branch("JpsiK_B_mindoca", &JpsiK_B_mindoca);
+    tree_->Branch("JpsiK_B_vx", &JpsiK_B_vx );
+    tree_->Branch("JpsiK_B_vy", &JpsiK_B_vy );
+    tree_->Branch("JpsiK_B_vz", &JpsiK_B_vz );
+
+
+
+    tree_->Branch("JpsiK_pi_pt", &JpsiK_pi_pt );
+    tree_->Branch("JpsiK_pi_eta", &JpsiK_pi_eta );
+    tree_->Branch("JpsiK_pi_phi", &JpsiK_pi_phi );
+    tree_->Branch("JpsiK_pi_mass", &JpsiK_pi_mass );
+    tree_->Branch("JpsiK_pi_q", &JpsiK_pi_q );
+
+    tree_->Branch("JpsiK_pi_doca3d", &JpsiK_pi_doca3d);
+    tree_->Branch("JpsiK_pi_doca3de", &JpsiK_pi_doca3de);
+    tree_->Branch("JpsiK_pi_doca2d", &JpsiK_pi_doca2d);
+    tree_->Branch("JpsiK_pi_doca2de", &JpsiK_pi_doca2de);
+    tree_->Branch("JpsiK_pi_dz", &JpsiK_pi_dz);
+    tree_->Branch("JpsiK_pi_near_dz", &JpsiK_pi_near_dz);
+    tree_->Branch("JpsiK_pi_isAssociate", &JpsiK_pi_isAssociate);
+    tree_->Branch("JpsiK_pi_pvAssociationQuality", &JpsiK_pi_pvAssociationQuality);
+    tree_->Branch("JpsiK_pi_trigMatch", &JpsiK_pi_trigMatch);
+    tree_->Branch("JpsiK_pi_trigMatch_dr", &JpsiK_pi_trigMatch_dr);
+
+
+
+    //    tree_->Branch("JpsiK_B_iso_nocut", &JpsiK_B_iso_nocut);
+    //    tree_->Branch("JpsiK_B_iso_ntracks_nocut", &JpsiK_B_iso_ntracks_nocut );
+    //    tree_->Branch("JpsiK_B_iso_mindoca_nocut", &JpsiK_B_iso_mindoca_nocut );
+
+    tree_->Branch("JpsiK_B_q2", &JpsiK_B_q2 );
+    tree_->Branch("JpsiK_B_mm2", &JpsiK_B_mm2 );
+    tree_->Branch("JpsiK_B_ptmiss", &JpsiK_B_ptmiss );
+    tree_->Branch("JpsiK_B_Es", &JpsiK_B_Es );
+    tree_->Branch("JpsiK_B_ptback", &JpsiK_B_ptback );
+
+
+
+
+
+
+
+    if (runFlags["runOnMC"] ){
+      ////Adding weight based on B decay chain for B generic bkg sample                                                                                                                                                                            
+      tree_->Branch( "genWeightBkgB"             , &genWeightBkgB       );
+      tree_->Branch("JpsiK_genPV_vx", &JpsiK_genPV_vx );
+      tree_->Branch("JpsiK_genPV_vy", &JpsiK_genPV_vy );
+      tree_->Branch("JpsiK_genPV_vz", &JpsiK_genPV_vz );
+      tree_->Branch("JpsiK_genSV_vx", &JpsiK_genSV_vx );
+      tree_->Branch("JpsiK_genSV_vy", &JpsiK_genSV_vy );
+      tree_->Branch("JpsiK_genSV_vz", &JpsiK_genSV_vz );
+      tree_->Branch("JpsiK_ngenmuons", &JpsiK_ngenmuons);
+      tree_->Branch("JpsiK_isgenmatched", &JpsiK_isgenmatched);
+      //    tree_->Branch("JpsiK_isgen3", &JpsiK_isgen3);
+    //    tree_->Branch("JpsiK_isgen3matched", &JpsiK_isgen3matched);
+    //    tree_->Branch("JpsiK_ngentau3", &JpsiK_ngentau3); 
+    //    tree_->Branch("JpsiK_ngentau", &JpsiK_ngentau);
+    //    tree_->Branch("JpsiK_gentaupt", &JpsiK_gentaupt);
+    //    tree_->Branch("JpsiK_gentaueta", &JpsiK_gentaueta);
+    //    tree_->Branch("JpsiK_gentauphi", &JpsiK_gentauphi);
+    //    tree_->Branch("JpsiK_gentaumass", &JpsiK_gentaumass);
+    //    tree_->Branch("JpsiK_gentaupt_bd", &JpsiK_gentaupt_bd);
+    //    tree_->Branch("JpsiK_gentaueta_bd", &JpsiK_gentaueta_bd);
+    //    tree_->Branch("JpsiK_gentauphi_bd", &JpsiK_gentauphi_bd);
+    //    tree_->Branch("JpsiK_gentaumass_bd", &JpsiK_gentaumass_bd);
+    //    tree_->Branch("JpsiK_gentaudm", &JpsiK_gentaudm);
+      tree_->Branch("JpsiK_q2_gen", &JpsiK_q2_gen);
+      tree_->Branch("JpsiK_nBc", &JpsiK_nBc);
+      tree_->Branch("JpsiK_B_pt_gen", &JpsiK_B_pt_gen);
+      tree_->Branch("JpsiK_B_eta_gen", &JpsiK_B_eta_gen);
+      tree_->Branch("JpsiK_B_phi_gen", &JpsiK_B_phi_gen);
+      tree_->Branch("JpsiK_B_mass_gen", &JpsiK_B_mass_gen);
+    
+    //    tree_->Branch("JpsiK_hammer_ff", &JpsiK_hammer_ff);
+    //    tree_->Branch("JpsiK_hammer_ebe_toy", &JpsiK_hammer_ebe_toy);
+    //    tree_->Branch("JpsiK_hammer_ebe_up", &JpsiK_hammer_ebe_up);
+    //    tree_->Branch("JpsiK_hammer_ebe_down", &JpsiK_hammer_ebe_down);
+    //    tree_->Branch("JpsiK_hammer_ebe_rate_up", &JpsiK_hammer_ebe_rate_up);
+    //    tree_->Branch("JpsiK_hammer_ebe_rate_down", &JpsiK_hammer_ebe_rate_down);
+//    tree_->Branch("JpsiTau_hammer_ebe_b1_up", &JpsiTau_hammer_ebe_b1_up);
+//    tree_->Branch("JpsiTau_hammer_ebe_b1_down", &JpsiTau_hammer_ebe_b1_down);
+//    tree_->Branch("JpsiTau_hammer_ebe_b2_up", &JpsiTau_hammer_ebe_b2_up);
+//    tree_->Branch("JpsiTau_hammer_ebe_b2_down", &JpsiTau_hammer_ebe_b2_down);
+//
+//    tree_->Branch("JpsiTau_hammer_ebe_c1_up", &JpsiTau_hammer_ebe_c1_up);
+//    tree_->Branch("JpsiTau_hammer_ebe_c1_down", &JpsiTau_hammer_ebe_c1_down);
+//    tree_->Branch("JpsiTau_hammer_ebe_c2_up", &JpsiTau_hammer_ebe_c2_up);
+//    tree_->Branch("JpsiTau_hammer_ebe_c2_down", &JpsiTau_hammer_ebe_c2_down);
+//
+//    tree_->Branch("JpsiTau_hammer_ebe_d0_up", &JpsiTau_hammer_ebe_d0_up);
+//    tree_->Branch("JpsiTau_hammer_ebe_d0_down", &JpsiTau_hammer_ebe_d0_down);
+//    tree_->Branch("JpsiTau_hammer_ebe_d1_up", &JpsiTau_hammer_ebe_d1_up);
+//    tree_->Branch("JpsiTau_hammer_ebe_d1_down", &JpsiTau_hammer_ebe_d1_down);
+//    tree_->Branch("JpsiTau_hammer_ebe_d2_up", &JpsiTau_hammer_ebe_d2_up);
+//    tree_->Branch("JpsiTau_hammer_ebe_d2_down", &JpsiTau_hammer_ebe_d2_down);
+
+    }
+
+  }
+
+
+
+
+
+
+  if (runFlags["doJpsiK_e"]){
+
+    tree_->Branch("JpsiK_nCandidates", &JpsiK_nCandidates );
+    tree_->Branch("JpsiK_nch", &JpsiK_nch );
+    tree_->Branch("JpsiK_nch_before", &JpsiK_nch_before );
+
+    tree_->Branch("JpsiK_mu1_pt", &JpsiK_mu1_pt );
+    tree_->Branch("JpsiK_mu1_eta", &JpsiK_mu1_eta );
+    tree_->Branch("JpsiK_mu1_phi", &JpsiK_mu1_phi );
+    tree_->Branch("JpsiK_mu1_mass", &JpsiK_mu1_mass );
+    tree_->Branch("JpsiK_mu1_q", &JpsiK_mu1_q );
+    tree_->Branch("JpsiK_mu1_isLoose"  , &JpsiK_mu1_isLoose   );
+    tree_->Branch("JpsiK_mu1_isTight"  , &JpsiK_mu1_isTight   );
+    tree_->Branch("JpsiK_mu1_isPF"     , &JpsiK_mu1_isPF      );
+    tree_->Branch("JpsiK_mu1_isGlobal" , &JpsiK_mu1_isGlobal  );
+    tree_->Branch("JpsiK_mu1_isTracker", &JpsiK_mu1_isTracker );
+    tree_->Branch("JpsiK_mu1_isSoft"   , &JpsiK_mu1_isSoft    );
+    tree_->Branch("JpsiK_mu1_vx"   , &JpsiK_mu1_vx    );
+    tree_->Branch("JpsiK_mu1_vy"   , &JpsiK_mu1_vy    );
+    tree_->Branch("JpsiK_mu1_vz"   , &JpsiK_mu1_vz    );
+    //    tree_->Branch("JpsiK_mu1_iso"   , &JpsiK_mu1_iso    );
+    tree_->Branch("JpsiK_mu1_dbiso"   , &JpsiK_mu1_dbiso    );
+
+    tree_->Branch("JpsiK_mu2_pt", &JpsiK_mu2_pt );
+    tree_->Branch("JpsiK_mu2_eta", &JpsiK_mu2_eta );
+    tree_->Branch("JpsiK_mu2_phi", &JpsiK_mu2_phi );
+    tree_->Branch("JpsiK_mu2_mass", &JpsiK_mu2_mass );
+    tree_->Branch("JpsiK_mu2_q", &JpsiK_mu2_q );
+    tree_->Branch("JpsiK_mu2_isLoose"  , &JpsiK_mu2_isLoose   );
+    tree_->Branch("JpsiK_mu2_isTight"  , &JpsiK_mu2_isTight   );
+    tree_->Branch("JpsiK_mu2_isPF"     , &JpsiK_mu2_isPF      );
+    tree_->Branch("JpsiK_mu2_isGlobal" , &JpsiK_mu2_isGlobal  );
+    tree_->Branch("JpsiK_mu2_isTracker", &JpsiK_mu2_isTracker );
+    tree_->Branch("JpsiK_mu2_isSoft"   , &JpsiK_mu2_isSoft    );
+    tree_->Branch("JpsiK_mu2_vx"   , &JpsiK_mu2_vx    );
+    tree_->Branch("JpsiK_mu2_vy"   , &JpsiK_mu2_vy    );
+    tree_->Branch("JpsiK_mu2_vz"   , &JpsiK_mu2_vz    );
+    //    tree_->Branch("JpsiK_mu2_iso"   , &JpsiK_mu2_iso    );
+    tree_->Branch("JpsiK_mu2_dbiso"   , &JpsiK_mu2_dbiso    );
+
+    //  std::vector<float> JpsiK_tau_delta_chi2;
+//  std::vector<float> JpsiK_tau_delta_n;
+//  std::vector<float> JpsiK_tau_vweight;
+//  std::vector<float> JpsiK_tau_refit_vx;
+//  std::vector<float> JpsiK_tau_refit_vy;
+//  std::vector<float> JpsiK_tau_refit_vz;
+
+
+
+    tree_->Branch("JpsiK_PV_vx", &JpsiK_PV_vx );
+    tree_->Branch("JpsiK_PV_vy", &JpsiK_PV_vy );
+    tree_->Branch("JpsiK_PV_vz", &JpsiK_PV_vz );
+
+    tree_->Branch("JpsiK_bbPV_vx", &JpsiK_bbPV_vx );
+    tree_->Branch("JpsiK_bbPV_vy", &JpsiK_bbPV_vy );
+    tree_->Branch("JpsiK_bbPV_vz", &JpsiK_bbPV_vz );
+    tree_->Branch("JpsiK_bbPV_chi2", &JpsiK_bbPV_chi2 );
+    tree_->Branch("JpsiK_bbPV_ndof", &JpsiK_bbPV_ndof );
+    tree_->Branch("JpsiK_bbPV_rho", &JpsiK_bbPV_rho );
+
+    //    tree_->Branch("JpsiK_bbPV_refit_vx", &JpsiK_bbPV_vx );
+    //    tree_->Branch("JpsiK_bbPV_refit_vy", &JpsiK_bbPV_vy );
+    //    tree_->Branch("JpsiK_bbPV_refit_vz", &JpsiK_bbPV_vz );
+
+
+
+    tree_->Branch("JpsiK_Jpsi_pt", &JpsiK_Jpsi_pt );
+    tree_->Branch("JpsiK_Jpsi_eta", &JpsiK_Jpsi_eta );
+    tree_->Branch("JpsiK_Jpsi_phi", &JpsiK_Jpsi_phi );
+    tree_->Branch("JpsiK_Jpsi_mass", &JpsiK_Jpsi_mass );
+    tree_->Branch("JpsiK_Jpsi_vprob", &JpsiK_Jpsi_vprob );
+    tree_->Branch("JpsiK_Jpsi_lip", &JpsiK_Jpsi_lip);
+    tree_->Branch("JpsiK_Jpsi_lips", &JpsiK_Jpsi_lips);
+    tree_->Branch("JpsiK_Jpsi_pvip", &JpsiK_Jpsi_pvip);
+    tree_->Branch("JpsiK_Jpsi_pvips", &JpsiK_Jpsi_pvips);
+    tree_->Branch("JpsiK_Jpsi_fl3d", &JpsiK_Jpsi_fl3d);
+    tree_->Branch("JpsiK_Jpsi_fls3d", &JpsiK_Jpsi_fls3d);
+    tree_->Branch("JpsiK_Jpsi_alpha", &JpsiK_Jpsi_alpha);
+    tree_->Branch("JpsiK_Jpsi_maxdoca", &JpsiK_Jpsi_maxdoca);
+    tree_->Branch("JpsiK_Jpsi_mindoca", &JpsiK_Jpsi_mindoca);
+    tree_->Branch("JpsiK_Jpsi_vx", &JpsiK_Jpsi_vx );
+    tree_->Branch("JpsiK_Jpsi_vy", &JpsiK_Jpsi_vy );
+    tree_->Branch("JpsiK_Jpsi_vz", &JpsiK_Jpsi_vz );
+//    tree_->Branch("JpsiK_Jpsi_unfit_pt", &JpsiK_Jpsi_unfit_pt );
+//    tree_->Branch("JpsiK_Jpsi_unfit_mass", &JpsiK_Jpsi_unfit_mass );
+//    tree_->Branch("JpsiK_Jpsi_unfit_vprob", &JpsiK_Jpsi_unfit_vprob );
+//    tree_->Branch("JpsiK_Jpsi_unfit_vx", &JpsiK_Jpsi_unfit_vx );
+//    tree_->Branch("JpsiK_Jpsi_unfit_vy", &JpsiK_Jpsi_unfit_vy );
+//    tree_->Branch("JpsiK_Jpsi_unfit_vz", &JpsiK_Jpsi_unfit_vz );
+
+
+    tree_->Branch("JpsiK_B_pt", &JpsiK_B_pt );
+    tree_->Branch("JpsiK_B_eta", &JpsiK_B_eta );
+    tree_->Branch("JpsiK_B_phi", &JpsiK_B_phi );
+    tree_->Branch("JpsiK_B_mass", &JpsiK_B_mass );
+    tree_->Branch("JpsiK_B_mcorr", &JpsiK_B_mcorr );
+    tree_->Branch("JpsiK_B_vprob", &JpsiK_B_vprob );
+    tree_->Branch("JpsiK_B_lip", &JpsiK_B_lip);
+    tree_->Branch("JpsiK_B_lips", &JpsiK_B_lips);
+    tree_->Branch("JpsiK_B_pvip", &JpsiK_B_pvip);
+    tree_->Branch("JpsiK_B_pvips", &JpsiK_B_pvips);
+    tree_->Branch("JpsiK_B_fl3d", &JpsiK_B_fl3d);
+    tree_->Branch("JpsiK_B_fls3d", &JpsiK_B_fls3d);
+    tree_->Branch("JpsiK_B_alpha", &JpsiK_B_alpha);
+    tree_->Branch("JpsiK_B_maxdoca", &JpsiK_B_maxdoca);
+    tree_->Branch("JpsiK_B_mindoca", &JpsiK_B_mindoca);
+    tree_->Branch("JpsiK_B_vx", &JpsiK_B_vx );
+    tree_->Branch("JpsiK_B_vy", &JpsiK_B_vy );
+    tree_->Branch("JpsiK_B_vz", &JpsiK_B_vz );
+
+
+
+    tree_->Branch("JpsiK_pi_pt", &JpsiK_pi_pt );
+    tree_->Branch("JpsiK_pi_eta", &JpsiK_pi_eta );
+    tree_->Branch("JpsiK_pi_phi", &JpsiK_pi_phi );
+    tree_->Branch("JpsiK_pi_mass", &JpsiK_pi_mass );
+    tree_->Branch("JpsiK_pi_q", &JpsiK_pi_q );
+
+    tree_->Branch("JpsiK_pi_doca3d", &JpsiK_pi_doca3d);
+    tree_->Branch("JpsiK_pi_doca3de", &JpsiK_pi_doca3de);
+    tree_->Branch("JpsiK_pi_doca2d", &JpsiK_pi_doca2d);
+    tree_->Branch("JpsiK_pi_doca2de", &JpsiK_pi_doca2de);
+    tree_->Branch("JpsiK_pi_dz", &JpsiK_pi_dz);
+    tree_->Branch("JpsiK_pi_near_dz", &JpsiK_pi_near_dz);
+    tree_->Branch("JpsiK_pi_isAssociate", &JpsiK_pi_isAssociate);
+    tree_->Branch("JpsiK_pi_pvAssociationQuality", &JpsiK_pi_pvAssociationQuality);
+    tree_->Branch("JpsiK_pi_trigMatch", &JpsiK_pi_trigMatch);
+    tree_->Branch("JpsiK_pi_trigMatch_dr", &JpsiK_pi_trigMatch_dr);
+
+
+
+    //    tree_->Branch("JpsiK_B_iso_nocut", &JpsiK_B_iso_nocut);
+    //    tree_->Branch("JpsiK_B_iso_ntracks_nocut", &JpsiK_B_iso_ntracks_nocut );
+    //    tree_->Branch("JpsiK_B_iso_mindoca_nocut", &JpsiK_B_iso_mindoca_nocut );
+
+    tree_->Branch("JpsiK_B_q2", &JpsiK_B_q2 );
+    tree_->Branch("JpsiK_B_mm2", &JpsiK_B_mm2 );
+    tree_->Branch("JpsiK_B_ptmiss", &JpsiK_B_ptmiss );
+    tree_->Branch("JpsiK_B_Es", &JpsiK_B_Es );
+    tree_->Branch("JpsiK_B_ptback", &JpsiK_B_ptback );
+
+
+
+
+
+
+
+    if (runFlags["runOnMC"] ){
+      ////Adding weight based on B decay chain for B generic bkg sample                                                                                                                                                                            
+      tree_->Branch( "genWeightBkgB"             , &genWeightBkgB       );
+      tree_->Branch("JpsiK_genPV_vx", &JpsiK_genPV_vx );
+      tree_->Branch("JpsiK_genPV_vy", &JpsiK_genPV_vy );
+      tree_->Branch("JpsiK_genPV_vz", &JpsiK_genPV_vz );
+      tree_->Branch("JpsiK_genSV_vx", &JpsiK_genSV_vx );
+      tree_->Branch("JpsiK_genSV_vy", &JpsiK_genSV_vy );
+      tree_->Branch("JpsiK_genSV_vz", &JpsiK_genSV_vz );
+      tree_->Branch("JpsiK_ngenmuons", &JpsiK_ngenmuons);
+      tree_->Branch("JpsiK_isgenmatched", &JpsiK_isgenmatched);
+      //    tree_->Branch("JpsiK_isgen3", &JpsiK_isgen3);
+    //    tree_->Branch("JpsiK_isgen3matched", &JpsiK_isgen3matched);
+    //    tree_->Branch("JpsiK_ngentau3", &JpsiK_ngentau3); 
+    //    tree_->Branch("JpsiK_ngentau", &JpsiK_ngentau);
+    //    tree_->Branch("JpsiK_gentaupt", &JpsiK_gentaupt);
+    //    tree_->Branch("JpsiK_gentaueta", &JpsiK_gentaueta);
+    //    tree_->Branch("JpsiK_gentauphi", &JpsiK_gentauphi);
+    //    tree_->Branch("JpsiK_gentaumass", &JpsiK_gentaumass);
+    //    tree_->Branch("JpsiK_gentaupt_bd", &JpsiK_gentaupt_bd);
+    //    tree_->Branch("JpsiK_gentaueta_bd", &JpsiK_gentaueta_bd);
+    //    tree_->Branch("JpsiK_gentauphi_bd", &JpsiK_gentauphi_bd);
+    //    tree_->Branch("JpsiK_gentaumass_bd", &JpsiK_gentaumass_bd);
+    //    tree_->Branch("JpsiK_gentaudm", &JpsiK_gentaudm);
+      tree_->Branch("JpsiK_q2_gen", &JpsiK_q2_gen);
+      tree_->Branch("JpsiK_nBc", &JpsiK_nBc);
+      tree_->Branch("JpsiK_B_pt_gen", &JpsiK_B_pt_gen);
+      tree_->Branch("JpsiK_B_eta_gen", &JpsiK_B_eta_gen);
+      tree_->Branch("JpsiK_B_phi_gen", &JpsiK_B_phi_gen);
+      tree_->Branch("JpsiK_B_mass_gen", &JpsiK_B_mass_gen);
+    
+    //    tree_->Branch("JpsiK_hammer_ff", &JpsiK_hammer_ff);
+    //    tree_->Branch("JpsiK_hammer_ebe_toy", &JpsiK_hammer_ebe_toy);
+    //    tree_->Branch("JpsiK_hammer_ebe_up", &JpsiK_hammer_ebe_up);
+    //    tree_->Branch("JpsiK_hammer_ebe_down", &JpsiK_hammer_ebe_down);
+    //    tree_->Branch("JpsiK_hammer_ebe_rate_up", &JpsiK_hammer_ebe_rate_up);
+    //    tree_->Branch("JpsiK_hammer_ebe_rate_down", &JpsiK_hammer_ebe_rate_down);
+//    tree_->Branch("JpsiTau_hammer_ebe_b1_up", &JpsiTau_hammer_ebe_b1_up);
+//    tree_->Branch("JpsiTau_hammer_ebe_b1_down", &JpsiTau_hammer_ebe_b1_down);
+//    tree_->Branch("JpsiTau_hammer_ebe_b2_up", &JpsiTau_hammer_ebe_b2_up);
+//    tree_->Branch("JpsiTau_hammer_ebe_b2_down", &JpsiTau_hammer_ebe_b2_down);
+//
+//    tree_->Branch("JpsiTau_hammer_ebe_c1_up", &JpsiTau_hammer_ebe_c1_up);
+//    tree_->Branch("JpsiTau_hammer_ebe_c1_down", &JpsiTau_hammer_ebe_c1_down);
+//    tree_->Branch("JpsiTau_hammer_ebe_c2_up", &JpsiTau_hammer_ebe_c2_up);
+//    tree_->Branch("JpsiTau_hammer_ebe_c2_down", &JpsiTau_hammer_ebe_c2_down);
+//
+//    tree_->Branch("JpsiTau_hammer_ebe_d0_up", &JpsiTau_hammer_ebe_d0_up);
+//    tree_->Branch("JpsiTau_hammer_ebe_d0_down", &JpsiTau_hammer_ebe_d0_down);
+//    tree_->Branch("JpsiTau_hammer_ebe_d1_up", &JpsiTau_hammer_ebe_d1_up);
+//    tree_->Branch("JpsiTau_hammer_ebe_d1_down", &JpsiTau_hammer_ebe_d1_down);
+//    tree_->Branch("JpsiTau_hammer_ebe_d2_up", &JpsiTau_hammer_ebe_d2_up);
+//    tree_->Branch("JpsiTau_hammer_ebe_d2_down", &JpsiTau_hammer_ebe_d2_down);
+
+    }
 
   }
 
@@ -2031,6 +2521,7 @@ void NtupleBranches::reset( void ){
 //  JpsiTau_gentaudm = -99;
   JpsiTau_q2_gen = -99;
   JpsiTau_B_pt_gen = -99;
+  JpsiTau_nBc = 0;
   JpsiTau_B_eta_gen = -99;
   JpsiTau_B_phi_gen = -99;
   JpsiTau_B_mass_gen = -99;
@@ -2125,41 +2616,241 @@ void NtupleBranches::reset( void ){
 //  JpsiTau_ed_pfdnn.clear();
 //  JpsiTau_ed_genpt.clear();
 
-  JpsiTau_hammer_ff.clear();
-  JpsiTau_hammer_ebe.clear();
-  JpsiTau_hammer_ebe_toy.clear();
+//  JpsiTau_hammer_ff.clear();
+//  JpsiTau_hammer_ebe_toy.clear();
   //  JpsiTau_hammer_ebe_up.clear();
   //  JpsiTau_hammer_ebe_down.clear();
   //  JpsiTau_hammer_ebe_rate_up.clear();
   //  JpsiTau_hammer_ebe_rate_down.clear();
-//  JpsiTau_hammer_ebe_a0_up.clear();
-//  JpsiTau_hammer_ebe_a0_down.clear();
-//  JpsiTau_hammer_ebe_a1_up.clear();
-//  JpsiTau_hammer_ebe_a1_down.clear();
-//  JpsiTau_hammer_ebe_a2_up.clear();
-//  JpsiTau_hammer_ebe_a2_down.clear();
-//  
-//  JpsiTau_hammer_ebe_b0_up.clear();
-//  JpsiTau_hammer_ebe_b0_down.clear();
-//  JpsiTau_hammer_ebe_b1_up.clear();
-//  JpsiTau_hammer_ebe_b1_down.clear();
-//  JpsiTau_hammer_ebe_b2_up.clear();
-//  JpsiTau_hammer_ebe_b2_down.clear();
-//  
-//  JpsiTau_hammer_ebe_c1_up.clear();
-//  JpsiTau_hammer_ebe_c1_down.clear();
-//  JpsiTau_hammer_ebe_c2_up.clear();
-//  JpsiTau_hammer_ebe_c2_down.clear();
-//  
-//  JpsiTau_hammer_ebe_d0_up.clear();
-//  JpsiTau_hammer_ebe_d0_down.clear();
-//  JpsiTau_hammer_ebe_d1_up.clear();
-//  JpsiTau_hammer_ebe_d1_down.clear();
-//  JpsiTau_hammer_ebe_d2_up.clear();
-//  JpsiTau_hammer_ebe_d2_down.clear();
+
+  JpsiTau_hammer_ebe.clear();
+
+  JpsiTau_hammer_ebe_e0_up.clear();
+  JpsiTau_hammer_ebe_e0_down.clear();
+  JpsiTau_hammer_ebe_e1_up.clear();
+  JpsiTau_hammer_ebe_e1_down.clear();
+  JpsiTau_hammer_ebe_e2_up.clear();
+  JpsiTau_hammer_ebe_e2_down.clear();  
+  JpsiTau_hammer_ebe_e3_up.clear();
+  JpsiTau_hammer_ebe_e3_down.clear();
+  JpsiTau_hammer_ebe_e4_up.clear();
+  JpsiTau_hammer_ebe_e4_down.clear();
+  JpsiTau_hammer_ebe_e5_up.clear();
+  JpsiTau_hammer_ebe_e5_down.clear();  
+  JpsiTau_hammer_ebe_e6_up.clear();
+  JpsiTau_hammer_ebe_e6_down.clear();
+  JpsiTau_hammer_ebe_e7_up.clear();
+  JpsiTau_hammer_ebe_e7_down.clear();
+  JpsiTau_hammer_ebe_e8_up.clear();
+  JpsiTau_hammer_ebe_e8_down.clear();
+  JpsiTau_hammer_ebe_e9_up.clear();
+  JpsiTau_hammer_ebe_e9_down.clear();
+  JpsiTau_hammer_ebe_e10_up.clear();
+  JpsiTau_hammer_ebe_e10_down.clear();
+  JpsiTau_hammer_ebe_e11_up.clear();
+  JpsiTau_hammer_ebe_e11_down.clear();
+  JpsiTau_hammer_ebe_e12_up.clear();
+  JpsiTau_hammer_ebe_e12_down.clear();
+  JpsiTau_hammer_ebe_e13_up.clear();
+  JpsiTau_hammer_ebe_e13_down.clear();
+  JpsiTau_hammer_ebe_e14_up.clear();
+  JpsiTau_hammer_ebe_e14_down.clear();
+
+
+  JpsiTau_hammer_ebe_lattice.clear();
+
+  JpsiTau_hammer_ebe_e0_up_lattice.clear();
+  JpsiTau_hammer_ebe_e0_down_lattice.clear();
+  JpsiTau_hammer_ebe_e1_up_lattice.clear();
+  JpsiTau_hammer_ebe_e1_down_lattice.clear();
+  JpsiTau_hammer_ebe_e2_up_lattice.clear();
+  JpsiTau_hammer_ebe_e2_down_lattice.clear();  
+  JpsiTau_hammer_ebe_e3_up_lattice.clear();
+  JpsiTau_hammer_ebe_e3_down_lattice.clear();
+  JpsiTau_hammer_ebe_e4_up_lattice.clear();
+  JpsiTau_hammer_ebe_e4_down_lattice.clear();
+  JpsiTau_hammer_ebe_e5_up_lattice.clear();
+  JpsiTau_hammer_ebe_e5_down_lattice.clear();  
+  JpsiTau_hammer_ebe_e6_up_lattice.clear();
+  JpsiTau_hammer_ebe_e6_down_lattice.clear();
+  JpsiTau_hammer_ebe_e7_up_lattice.clear();
+  JpsiTau_hammer_ebe_e7_down_lattice.clear();
+  JpsiTau_hammer_ebe_e8_up_lattice.clear();
+  JpsiTau_hammer_ebe_e8_down_lattice.clear();
+  JpsiTau_hammer_ebe_e9_up_lattice.clear();
+  JpsiTau_hammer_ebe_e9_down_lattice.clear();
+  JpsiTau_hammer_ebe_e10_up_lattice.clear();
+  JpsiTau_hammer_ebe_e10_down_lattice.clear();
+  JpsiTau_hammer_ebe_e11_up_lattice.clear();
+  JpsiTau_hammer_ebe_e11_down_lattice.clear();
+  JpsiTau_hammer_ebe_e12_up_lattice.clear();
+  JpsiTau_hammer_ebe_e12_down_lattice.clear();
+  JpsiTau_hammer_ebe_e13_up_lattice.clear();
+  JpsiTau_hammer_ebe_e13_down_lattice.clear();
+  JpsiTau_hammer_ebe_e14_up_lattice.clear();
+  JpsiTau_hammer_ebe_e14_down_lattice.clear();
+
 
 
   /////////////////
+
+  JpsiK_nCandidates = -99;
+
+  JpsiK_mu1_pt = -99;
+  JpsiK_mu1_eta = -99;
+  JpsiK_mu1_phi = -99;
+  JpsiK_mu1_mass = -99;
+  JpsiK_mu1_q = -99;
+  JpsiK_mu1_isLoose = -99;
+  JpsiK_mu1_isTight = -99;
+  JpsiK_mu1_isPF = -99;
+  JpsiK_mu1_isGlobal = -99;
+  JpsiK_mu1_isTracker = -99;
+  JpsiK_mu1_isSoft = -99;
+  JpsiK_mu1_vx = -99;
+  JpsiK_mu1_vy = -99;
+  JpsiK_mu1_vz = -99;
+  //  JpsiK_mu1_iso = -99;
+  JpsiK_mu1_dbiso = -99;
+
+  JpsiK_mu2_pt = -99;
+  JpsiK_mu2_eta = -99;
+  JpsiK_mu2_phi = -99;
+  JpsiK_mu2_mass = -99;
+  JpsiK_mu2_q = -99;
+  JpsiK_mu2_isLoose = -99;
+  JpsiK_mu2_isTight = -99;
+  JpsiK_mu2_isPF = -99;
+  JpsiK_mu2_isGlobal = -99;
+  JpsiK_mu2_isTracker = -99;
+  JpsiK_mu2_isSoft = -99;
+  JpsiK_mu2_vx = -99;
+  JpsiK_mu2_vy = -99;
+  JpsiK_mu2_vz = -99;
+  //  JpsiK_mu2_iso = -99;
+  JpsiK_mu2_dbiso = -99;
+
+  JpsiK_PV_vx = -99;
+  JpsiK_PV_vy = -99;
+  JpsiK_PV_vz = -99;
+
+  JpsiK_bbPV_vx = -99;
+  JpsiK_bbPV_vy = -99;
+  JpsiK_bbPV_vz = -99;
+  JpsiK_bbPV_chi2 = -99;
+  JpsiK_bbPV_ndof = -99;
+  JpsiK_bbPV_rho = -99;
+
+  JpsiK_Jpsi_pt = -99;
+  JpsiK_Jpsi_eta = -99;
+  JpsiK_Jpsi_phi = -99;
+  JpsiK_Jpsi_mass = -99;
+  JpsiK_Jpsi_vprob = -99;
+  JpsiK_Jpsi_lip = -99;
+  JpsiK_Jpsi_lips = -99;
+  JpsiK_Jpsi_pvip = -99;
+  JpsiK_Jpsi_pvips = -99;
+  JpsiK_Jpsi_fl3d = -99;
+  JpsiK_Jpsi_fls3d = -99;
+  JpsiK_Jpsi_alpha = -99;
+  JpsiK_Jpsi_maxdoca = -99;
+  JpsiK_Jpsi_mindoca = -99;
+  JpsiK_Jpsi_vx = -99;
+  JpsiK_Jpsi_vy = -99;
+  JpsiK_Jpsi_vz = -99;
+
+  JpsiK_B_pt.clear();
+  JpsiK_B_eta.clear();
+  JpsiK_B_phi.clear();
+  JpsiK_B_mass.clear();
+  JpsiK_B_mcorr.clear();
+  JpsiK_B_vprob.clear();
+  JpsiK_B_lip.clear();
+  JpsiK_B_lips.clear();
+  JpsiK_B_pvip.clear();
+  JpsiK_B_pvips.clear();
+  JpsiK_B_fl3d.clear();
+  JpsiK_B_fls3d.clear();
+  JpsiK_B_alpha.clear();
+  JpsiK_B_maxdoca.clear();
+  JpsiK_B_mindoca.clear();
+  JpsiK_B_vx.clear();
+  JpsiK_B_vy.clear();
+  JpsiK_B_vz.clear();
+
+
+  JpsiK_pi_pt.clear();
+  JpsiK_pi_eta.clear();
+  JpsiK_pi_phi.clear();
+  JpsiK_pi_mass.clear();
+  JpsiK_pi_q.clear();  
+  JpsiK_pi_doca3d.clear();
+  JpsiK_pi_doca3de.clear();
+  JpsiK_pi_doca2d.clear();
+  JpsiK_pi_doca2de.clear();
+  JpsiK_pi_dz.clear();
+  JpsiK_pi_near_dz.clear();
+  JpsiK_pi_isAssociate.clear();
+  JpsiK_pi_pvAssociationQuality.clear();
+  JpsiK_pi_trigMatch.clear();
+  JpsiK_pi_trigMatch_dr.clear();
+
+
+
+  JpsiK_B_q2.clear();
+  JpsiK_B_mm2.clear();
+  JpsiK_B_ptmiss.clear();
+  JpsiK_B_Es.clear();
+  JpsiK_B_ptback.clear();
+
+  JpsiK_genPV_vx = -99;
+  JpsiK_genPV_vy = -99;
+  JpsiK_genPV_vz = -99;
+  JpsiK_genSV_vx = -99;
+  JpsiK_genSV_vy = -99;
+  JpsiK_genSV_vz = -99;
+
+  JpsiK_ngenmuons = -99;
+  JpsiK_isgenmatched = -99;
+
+//  JpsiK_isgen3 = -99;
+//  JpsiK_isgen3matched = -99;
+
+  JpsiK_nch = -99;
+  //  JpsiK_nch_after_dnn = -99;
+  JpsiK_nch_before = -99;
+  //  JpsiK_nch_qr = -99;
+
+//  JpsiK_ngentau3 = -99;
+//  JpsiK_ngentau = -99;
+//  JpsiK_gentaupt = -99;
+//  JpsiK_gentaueta = -99;
+//  JpsiK_gentauphi = -99;
+//  JpsiK_gentaumass = -99;
+//  JpsiK_gentaupt_bd = -99;
+//  JpsiK_gentaueta_bd = -99;
+//  JpsiK_gentauphi_bd = -99;
+//  JpsiK_gentaumass_bd = -99;
+//  JpsiK_gentaudm = -99;
+  JpsiK_q2_gen = -99;
+  JpsiK_B_pt_gen = -99;
+  JpsiK_nBc = 0;
+  JpsiK_B_eta_gen = -99;
+  JpsiK_B_phi_gen = -99;
+  JpsiK_B_mass_gen = -99;
+
+
+  //  JpsiK_st_doca3d_max.clear();
+  //  JpsiK_st_doca2d_max.clear();
+  //  JpsiK_st_doca3ds_max.clear();
+  //  JpsiK_st_doca2ds_max.clear();
+  //  JpsiK_st_doca3de_max.clear();
+  //  JpsiK_st_doca2de_max.clear();
+  //  JpsiK_st_dz_max.clear();
+
+
+
+
 
 
 //  BsTauTau_nCandidates.clear();
@@ -2666,10 +3357,28 @@ void NtupleBranches::LabelHistograms( std::map< std::string, bool >& runFlags ){
 
 
   if ( runFlags["useHammer"] ){
-    std::vector bins_hammer = {"den", "num", "num_a0_up", "num_a0_down", "num_a1_up", "num_a1_down","num_a2_up", "num_a2_down", "num_b0_up", "num_b0_down", "num_b1_up", "num_b1_down","num_b2_up", "num_b2_down", "num_c1_up", "num_c1_down", "num_c2_up", "num_c2_down", "num_d0_up", "num_d0_down", "num_d1_up", "num_d1_down","num_d2_up", "num_d2_down"};
+    std::vector bins_hammer = {"den", "num",
+			       "num_e0_up", "num_e0_down",
+			       "num_e1_up", "num_e1_down",
+			       "num_e2_up", "num_e2_down",
+			       "num_e3_up", "num_e3_down",
+			       "num_e4_up", "num_e4_down",
+			       "num_e5_up", "num_e5_down",
+			       "num_e6_up", "num_e6_down",
+			       "num_e7_up", "num_e7_down",
+			       "num_e8_up", "num_e8_down",
+			       "num_e9_up", "num_e9_down",
+			       "num_e10_up", "num_e10_down",
+			       "num_e11_up", "num_e11_down",
+			       "num_e12_up", "num_e12_down",
+			       "num_e13_up", "num_e13_down",
+			       "num_e14_up", "num_e14_down"
+    };
+
     
     for(size_t i=0; i< bins_hammer.size(); i++){
       hammer_width->GetXaxis()->SetBinLabel(i+1, bins_hammer[i]);
+      hammer_width_lattice->GetXaxis()->SetBinLabel(i+1, bins_hammer[i]);
     }
   }
 

@@ -27,7 +27,7 @@ from EXOVVNtuplizerRunII.Ntuplizer.ntuplizerOptions_generic_cfi import config
 #config["VPROBCUT"] = 0.1
 #config["DNNCUT"] = 0.2
 
-isData = True
+isData = False
 
 ### SWITCHES ###
 
@@ -47,7 +47,12 @@ if isData:
 
 else:
   config["RUNONMC"] = True
-  config["USEHAMMER"] = False
+  
+  if not config["ISBKG"]:
+    config["USEHAMMER"] = True
+  else:
+    config["USEHAMMER"] = False
+
   config["USEJSON"] = False
   config["DOGENPARTICLES"] = True
   config["DOGENEVENT"] = True
@@ -89,19 +94,29 @@ options.maxEvents = 1000
 
 
 if isData:
-  options.inputFiles = '/store/data/Run2018D/Charmonium/MINIAOD/12Nov2019_UL2018-v1/280000/D7FD376D-30CD-AA48-8D03-E0220043BBDE.root'
+#  options.inputFiles = '/store/data/Run2018D/Charmonium/MINIAOD/12Nov2019_UL2018-v1/280000/D7FD376D-30CD-AA48-8D03-E0220043BBDE.root'
+  options.inputFiles = 'file:/pnfs/psi.ch/cms/trivcat/store/user/ytakahas/purityStudy_CMSSW12_1_0/EphemeralZeroBias1/winter21/211129_085534/0000/output_1.root'
 
 else:
 
   if config["ISBKG"]:
-    #  options.inputFiles = '/store/mc/RunIISummer20UL18MiniAOD/HbToJPsiMuMu_TuneCP5_13TeV-pythia8-evtgen/MINIAODSIM/106X_upgrade2018_realistic_v11_L1v1-v1/00000/014EC954-4C5E-AD48-BB44-401D779323E3.root'
-    options.inputFiles = 'file:/scratch/ytakahas/HbToJPsiMuMu/014EC954-4C5E-AD48-BB44-401D779323E3.root'
+#    options.inputFiles = '/store/mc/RunIISummer20UL18MiniAOD/HbToJPsiMuMu_TuneCP5_13TeV-pythia8-evtgen/MINIAODSIM/106X_upgrade2018_realistic_v11_L1v1-v1/00000/014EC954-4C5E-AD48-BB44-401D779323E3.root'
+#    options.inputFiles = '/store/user/ytakahas/qq_JpsiX_MuMu_20211012/UL18_MINIAOD_v1_noDuplCheck/211018_022715/0000/output_file_MINIAOD_92.root'
+
+#    options.inputFiles = []
+#    for a in range(1,176):
+#      options.inputFiles.append('/store/user/ytakahas/qq_JpsiX_MuMu_20211012/UL18_MINIAOD_v1_noDuplCheck/211018_022715/0000/output_file_MINIAOD_' + str(a) + '.root')
+
+#    options.inputFiles = ''
+    options.inputFiles = '/store/mc/RunIISummer20UL18MiniAODv2/JPsiMuMu_JPsiPtFilter_2MuPtEtaFilter_TuneCP5_13TeV-pythia8-evtgen/MINIAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2540000/004C57FB-98FA-5345-8CA3-F72478FC8999.root'
   else:
-    options.inputFiles = '/store/mc/RunIISummer19UL18MiniAOD/BcToJPsiTauNu_TuneCP5_13TeV-bcvegpy2-pythia8-evtgen/MINIAODSIM/106X_upgrade2018_realistic_v11_L1v1_ext1-v2/100000/02F13381-1D94-CC43-948A-2EFFB8572949.root'
+#    options.inputFiles = '/store/mc/RunIISummer19UL18MiniAOD/BcToJPsiTauNu_TuneCP5_13TeV-bcvegpy2-pythia8-evtgen/MINIAODSIM/106X_upgrade2018_realistic_v11_L1v1_ext1-v2/100000/02F13381-1D94-CC43-948A-2EFFB8572949.root'
+    options.inputFiles = '/store/mc/RunIISummer20UL18MiniAOD/BcToJPsiMuMu_inclusive_TuneCP5_13TeV-bcvegpy2-pythia8-evtgen/MINIAODSIM/106X_upgrade2018_realistic_v11_L1v1-v2/00000/06261AC0-CB13-4241-8FCE-729E5E649532.root'
 
 
 
-  
+print 'file=', options.inputFiles
+
 
 options.parseArguments()
 
@@ -126,7 +141,7 @@ if config["RUNONMC"]:
   process.source = cms.Source("PoolSource",
                               fileNames = cms.untracked.vstring(options.inputFiles),
                               # Run, lumi, Event
-#                              eventsToProcess = cms.untracked.VEventRange('1:35137:14345'),
+#                              eventsToProcess = cms.untracked.VEventRange('1:15965:82689'),
                               duplicateCheckMode = cms.untracked.string("noDuplicateCheck"),                              
                               ) 
 else:                    
@@ -358,6 +373,8 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     doPileUp	      = cms.bool(config["DOPILEUP"]),
     doJpsiMu	      = cms.bool(config["DOJPSIMU"]),
     doJpsiTau	      = cms.bool(config["DOJPSITAU"]),
+    doJpsiK	      = cms.bool(config["DOJPSIK"]),
+    doJpsiKE	      = cms.bool(config["DOJPSIKE"]),
     doVertices	      = cms.bool(config["DOVERTICES"]),
     doMissingEt       = cms.bool(config["DOMISSINGET"]),
     doGenHist         = cms.bool(config["DOGENHIST"]),

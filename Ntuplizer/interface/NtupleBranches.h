@@ -54,6 +54,7 @@ public:
   TH1F* nmuon ;
   TH1F* q2_nocut;
   TH1F* hammer_width;
+  TH1F* hammer_width_lattice;
   
   /* Histogram for genParticles */
    TH1F* genParticle_Bdau_X_id;
@@ -762,6 +763,7 @@ public:
 //  float JpsiTau_gentaumass_bd;
 //  int JpsiTau_gentaudm;
   float JpsiTau_q2_gen;
+  int JpsiTau_nBc;
   float JpsiTau_B_pt_gen;
   float JpsiTau_B_eta_gen;
   float JpsiTau_B_phi_gen;
@@ -852,41 +854,466 @@ public:
 //  std::vector<float> JpsiTau_ed_pfdnn;
 //  std::vector<float> JpsiTau_ed_genpt;
     
-  std::vector<std::vector<float>> JpsiTau_hammer_ff;
-  std::vector<float> JpsiTau_hammer_ebe;
-  std::vector<std::vector<float>> JpsiTau_hammer_ebe_toy;
+//  std::vector<std::vector<float>> JpsiTau_hammer_ff;
+
+  //  std::vector<std::vector<float>> JpsiTau_hammer_ebe_toy;
   //  std::vector<float> JpsiTau_hammer_ebe_up;
   //  std::vector<float> JpsiTau_hammer_ebe_down;
   //  std::vector<float> JpsiTau_hammer_ebe_rate_up;
 //  std::vector<float> JpsiTau_hammer_ebe_rate_down;
 
-//  std::vector<float> JpsiTau_hammer_ebe_a0_up;
-//  std::vector<float> JpsiTau_hammer_ebe_a0_down;
-//  std::vector<float> JpsiTau_hammer_ebe_a1_up;
-//  std::vector<float> JpsiTau_hammer_ebe_a1_down;
-//  std::vector<float> JpsiTau_hammer_ebe_a2_up;
-//  std::vector<float> JpsiTau_hammer_ebe_a2_down;
-//
-//  std::vector<float> JpsiTau_hammer_ebe_b0_up;
-//  std::vector<float> JpsiTau_hammer_ebe_b0_down;
-//  std::vector<float> JpsiTau_hammer_ebe_b1_up;
-//  std::vector<float> JpsiTau_hammer_ebe_b1_down;
-//  std::vector<float> JpsiTau_hammer_ebe_b2_up;
-//  std::vector<float> JpsiTau_hammer_ebe_b2_down;
-//
-//  std::vector<float> JpsiTau_hammer_ebe_c1_up;
-//  std::vector<float> JpsiTau_hammer_ebe_c1_down;
-//  std::vector<float> JpsiTau_hammer_ebe_c2_up;
-//  std::vector<float> JpsiTau_hammer_ebe_c2_down;
-//
-//  std::vector<float> JpsiTau_hammer_ebe_d0_up;
-//  std::vector<float> JpsiTau_hammer_ebe_d0_down;
-//  std::vector<float> JpsiTau_hammer_ebe_d1_up;
-//  std::vector<float> JpsiTau_hammer_ebe_d1_down;
-//  std::vector<float> JpsiTau_hammer_ebe_d2_up;
-//  std::vector<float> JpsiTau_hammer_ebe_d2_down;
+  std::vector<float> JpsiTau_hammer_ebe;
+  std::vector<float> JpsiTau_hammer_ebe_e0_up;
+  std::vector<float> JpsiTau_hammer_ebe_e0_down;
+  std::vector<float> JpsiTau_hammer_ebe_e1_up;
+  std::vector<float> JpsiTau_hammer_ebe_e1_down;
+  std::vector<float> JpsiTau_hammer_ebe_e2_up;
+  std::vector<float> JpsiTau_hammer_ebe_e2_down;
+  std::vector<float> JpsiTau_hammer_ebe_e3_up;
+  std::vector<float> JpsiTau_hammer_ebe_e3_down;
+  std::vector<float> JpsiTau_hammer_ebe_e4_up;
+  std::vector<float> JpsiTau_hammer_ebe_e4_down;
+  std::vector<float> JpsiTau_hammer_ebe_e5_up;
+  std::vector<float> JpsiTau_hammer_ebe_e5_down;
+  std::vector<float> JpsiTau_hammer_ebe_e6_up;
+  std::vector<float> JpsiTau_hammer_ebe_e6_down;
+  std::vector<float> JpsiTau_hammer_ebe_e7_up;
+  std::vector<float> JpsiTau_hammer_ebe_e7_down;
+  std::vector<float> JpsiTau_hammer_ebe_e8_up;
+  std::vector<float> JpsiTau_hammer_ebe_e8_down;
+  std::vector<float> JpsiTau_hammer_ebe_e9_up;
+  std::vector<float> JpsiTau_hammer_ebe_e9_down;
+  std::vector<float> JpsiTau_hammer_ebe_e10_up;
+  std::vector<float> JpsiTau_hammer_ebe_e10_down;
+  std::vector<float> JpsiTau_hammer_ebe_e11_up;
+  std::vector<float> JpsiTau_hammer_ebe_e11_down;
+  std::vector<float> JpsiTau_hammer_ebe_e12_up;
+  std::vector<float> JpsiTau_hammer_ebe_e12_down;
+  std::vector<float> JpsiTau_hammer_ebe_e13_up;
+  std::vector<float> JpsiTau_hammer_ebe_e13_down;
+  std::vector<float> JpsiTau_hammer_ebe_e14_up;
+  std::vector<float> JpsiTau_hammer_ebe_e14_down;
+
+
+  std::vector<float> JpsiTau_hammer_ebe_lattice;
+  std::vector<float> JpsiTau_hammer_ebe_e0_up_lattice;
+  std::vector<float> JpsiTau_hammer_ebe_e0_down_lattice;
+  std::vector<float> JpsiTau_hammer_ebe_e1_up_lattice;
+  std::vector<float> JpsiTau_hammer_ebe_e1_down_lattice;
+  std::vector<float> JpsiTau_hammer_ebe_e2_up_lattice;
+  std::vector<float> JpsiTau_hammer_ebe_e2_down_lattice;
+  std::vector<float> JpsiTau_hammer_ebe_e3_up_lattice;
+  std::vector<float> JpsiTau_hammer_ebe_e3_down_lattice;
+  std::vector<float> JpsiTau_hammer_ebe_e4_up_lattice;
+  std::vector<float> JpsiTau_hammer_ebe_e4_down_lattice;
+  std::vector<float> JpsiTau_hammer_ebe_e5_up_lattice;
+  std::vector<float> JpsiTau_hammer_ebe_e5_down_lattice;
+  std::vector<float> JpsiTau_hammer_ebe_e6_up_lattice;
+  std::vector<float> JpsiTau_hammer_ebe_e6_down_lattice;
+  std::vector<float> JpsiTau_hammer_ebe_e7_up_lattice;
+  std::vector<float> JpsiTau_hammer_ebe_e7_down_lattice;
+  std::vector<float> JpsiTau_hammer_ebe_e8_up_lattice;
+  std::vector<float> JpsiTau_hammer_ebe_e8_down_lattice;
+  std::vector<float> JpsiTau_hammer_ebe_e9_up_lattice;
+  std::vector<float> JpsiTau_hammer_ebe_e9_down_lattice;
+  std::vector<float> JpsiTau_hammer_ebe_e10_up_lattice;
+  std::vector<float> JpsiTau_hammer_ebe_e10_down_lattice;
+  std::vector<float> JpsiTau_hammer_ebe_e11_up_lattice;
+  std::vector<float> JpsiTau_hammer_ebe_e11_down_lattice;
+  std::vector<float> JpsiTau_hammer_ebe_e12_up_lattice;
+  std::vector<float> JpsiTau_hammer_ebe_e12_down_lattice;
+  std::vector<float> JpsiTau_hammer_ebe_e13_up_lattice;
+  std::vector<float> JpsiTau_hammer_ebe_e13_down_lattice;
+  std::vector<float> JpsiTau_hammer_ebe_e14_up_lattice;
+  std::vector<float> JpsiTau_hammer_ebe_e14_down_lattice;
+
+
+
+
+
+
 
   ////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  ////////////////////////////////////////
+
+  // event by event quantity ... 
+
+  int                 JpsiK_nCandidates ;
+  float                JpsiK_mu1_pt      ;
+  float                JpsiK_mu1_eta     ;
+  float                JpsiK_mu1_phi     ;
+  float                JpsiK_mu1_mass     ;
+  int                  JpsiK_mu1_q      ;   
+  int                  JpsiK_mu1_isLoose   ;
+  int                  JpsiK_mu1_isTight   ;
+  int                  JpsiK_mu1_isPF      ;
+  int                  JpsiK_mu1_isGlobal  ;
+  int                  JpsiK_mu1_isTracker ;
+  int                  JpsiK_mu1_isSoft    ;
+  float                JpsiK_mu1_vx       ;
+  float                JpsiK_mu1_vy       ;
+  float                JpsiK_mu1_vz       ;
+  //  float                JpsiK_mu1_iso       ;
+  float                JpsiK_mu1_dbiso       ;
+
+  float                JpsiK_mu2_pt      ;
+  float                JpsiK_mu2_eta     ;
+  float                JpsiK_mu2_phi     ;
+  float                JpsiK_mu2_mass     ;
+  int                  JpsiK_mu2_q   ;   
+  int                  JpsiK_mu2_isLoose   ;
+  int                  JpsiK_mu2_isTight   ;
+  int                  JpsiK_mu2_isPF      ;
+  int                  JpsiK_mu2_isGlobal  ;
+  int                  JpsiK_mu2_isTracker ;
+  int                  JpsiK_mu2_isSoft    ;
+  float                JpsiK_mu2_vx       ;
+  float                JpsiK_mu2_vy       ;
+  float                JpsiK_mu2_vz       ;
+  //  float                JpsiK_mu2_iso       ;
+  float                JpsiK_mu2_dbiso       ;
+
+
+  float                JpsiK_PV_vx       ;
+  float                JpsiK_PV_vy       ;
+  float                JpsiK_PV_vz       ;
+  
+  float                JpsiK_bbPV_vx       ;
+  float                JpsiK_bbPV_vy       ;
+  float                JpsiK_bbPV_vz       ;
+  float                JpsiK_bbPV_chi2       ;
+  float                JpsiK_bbPV_ndof       ;
+  float                JpsiK_bbPV_rho       ;
+
+  float                JpsiK_Jpsi_pt      ;
+  float                JpsiK_Jpsi_eta     ;
+  float                JpsiK_Jpsi_phi     ;
+  float                JpsiK_Jpsi_mass       ;
+  float                JpsiK_Jpsi_vprob    ;
+  float                JpsiK_Jpsi_lip;
+  float                JpsiK_Jpsi_lips;
+  float                JpsiK_Jpsi_pvip;
+  float                JpsiK_Jpsi_pvips;
+  float                JpsiK_Jpsi_fl3d;
+  float                JpsiK_Jpsi_fls3d;
+  float                JpsiK_Jpsi_alpha;
+  float                JpsiK_Jpsi_maxdoca;
+  float                JpsiK_Jpsi_mindoca;
+  float                JpsiK_Jpsi_vx      ;
+  float                JpsiK_Jpsi_vy      ;
+  float                JpsiK_Jpsi_vz      ;
+//  float                JpsiK_Jpsi_unfit_pt      ;
+//  float                JpsiK_Jpsi_unfit_mass       ;
+//  float                JpsiK_Jpsi_unfit_vprob    ;
+//  float                JpsiK_Jpsi_unfit_vx;
+//  float                JpsiK_Jpsi_unfit_vy;
+//  float                JpsiK_Jpsi_unfit_vz;
+
+
+
+
+
+  std::vector<float>                JpsiK_B_pt      ;
+  std::vector<float>                JpsiK_B_eta     ;
+  std::vector<float>                JpsiK_B_phi     ;
+  std::vector<float>                JpsiK_B_mass    ;
+  std::vector<float>                JpsiK_B_mcorr    ;
+  std::vector<float>                JpsiK_B_vprob ;
+  std::vector<float>                JpsiK_B_lip;
+  std::vector<float>                JpsiK_B_lips;
+  std::vector<float>                JpsiK_B_pvip;
+  std::vector<float>                JpsiK_B_pvips;
+  std::vector<float>                JpsiK_B_fl3d;
+  std::vector<float>                JpsiK_B_fls3d;
+  std::vector<float>                JpsiK_B_alpha;
+  std::vector<float>                JpsiK_B_maxdoca;
+  std::vector<float>                JpsiK_B_mindoca;
+  std::vector<float>                JpsiK_B_vx      ;
+  std::vector<float>                JpsiK_B_vy      ;
+  std::vector<float>                JpsiK_B_vz      ;
+
+
+  std::vector<float>       JpsiK_pi_pt;
+  std::vector<float>       JpsiK_pi_eta;
+  std::vector<float>       JpsiK_pi_phi;
+  std::vector<float>       JpsiK_pi_mass;
+  std::vector<int>       JpsiK_pi_q;
+
+  std::vector<float> JpsiK_pi_doca3d;
+  std::vector<float> JpsiK_pi_doca3de;
+  std::vector<float> JpsiK_pi_doca2d;
+  std::vector<float> JpsiK_pi_doca2de;
+  std::vector<float> JpsiK_pi_dz;
+  std::vector<float> JpsiK_pi_near_dz;
+  std::vector<bool> JpsiK_pi_isAssociate;
+  std::vector<int> JpsiK_pi_pvAssociationQuality;
+  std::vector<bool> JpsiK_pi_trigMatch;
+  std::vector<float> JpsiK_pi_trigMatch_dr;
+
+
+  //  std::vector<float>                JpsiK_B_iso_nocut;
+  //  std::vector<int  >                JpsiK_B_iso_ntracks_nocut;
+  //  std::vector<float>                JpsiK_B_iso_mindoca_nocut;
+
+//  std::vector<float>                JpsiK_B_unfit_pt      ;
+//  std::vector<float>                JpsiK_B_unfit_mass       ;
+//  std::vector<float>                JpsiK_B_unfit_vprob    ;
+//  std::vector<float>                JpsiK_B_unfit_vx;
+//  std::vector<float>                JpsiK_B_unfit_vy;
+//  std::vector<float>                JpsiK_B_unfit_vz;
+  std::vector<float>                JpsiK_B_q2;
+  std::vector<float>                JpsiK_B_mm2;
+  std::vector<float>                JpsiK_B_ptmiss;
+  std::vector<float>                JpsiK_B_Es;
+  std::vector<float>                JpsiK_B_ptback;
+
+
+
+  //  std::vector<float>                JpsiK_bbPV_refit_vx       ;
+  //  std::vector<float>                JpsiK_bbPV_refit_vy       ;
+  //  std::vector<float>                JpsiK_bbPV_refit_vz       ;
+
+  
+  // gen related quantity, event-by-event
+  float                JpsiK_genPV_vx       ;
+  float                JpsiK_genPV_vy       ;
+  float                JpsiK_genPV_vz       ;
+  float                JpsiK_genSV_vx       ;
+  float                JpsiK_genSV_vy       ;
+  float                JpsiK_genSV_vz       ;
+
+  int                  JpsiK_ngenmuons      ;
+  int                  JpsiK_isgenmatched;
+  //  int                  JpsiK_isgen3;
+  //  int                  JpsiK_isgen3matched;
+
+
+  int JpsiK_nch;
+  //  int JpsiK_nch_after_dnn;
+  int JpsiK_nch_before;
+  //  int JpsiK_nch_qr;
+
+//  int JpsiK_ngentau3;
+//  int JpsiK_ngentau;
+//  float JpsiK_gentaupt;
+//  float JpsiK_gentaueta;
+//  float JpsiK_gentauphi;
+//  float JpsiK_gentaumass;
+//  float JpsiK_gentaupt_bd;
+//  float JpsiK_gentaueta_bd;
+//  float JpsiK_gentauphi_bd;
+//  float JpsiK_gentaumass_bd;
+//  int JpsiK_gentaudm;
+  float JpsiK_q2_gen;
+  int JpsiK_nBc;
+  float JpsiK_B_pt_gen;
+  float JpsiK_B_eta_gen;
+  float JpsiK_B_phi_gen;
+  float JpsiK_B_mass_gen;
+
+
+
+  ///////////////////////////////////////////////////////
+
+
+
+
+
+
+  //////////////////////////////////////// 
+  // event by event quantity ... 
+
+  int                 JpsiK_e_nCandidates ;
+  float                JpsiK_e_mu1_pt      ;
+  float                JpsiK_e_mu1_eta     ;
+  float                JpsiK_e_mu1_phi     ;
+  float                JpsiK_e_mu1_mass     ;
+  int                  JpsiK_e_mu1_q      ;   
+  int                  JpsiK_e_mu1_isLoose   ;
+  int                  JpsiK_e_mu1_isTight   ;
+  int                  JpsiK_e_mu1_isPF      ;
+  int                  JpsiK_e_mu1_isGlobal  ;
+  int                  JpsiK_e_mu1_isTracker ;
+  int                  JpsiK_e_mu1_isSoft    ;
+  float                JpsiK_e_mu1_vx       ;
+  float                JpsiK_e_mu1_vy       ;
+  float                JpsiK_e_mu1_vz       ;
+  //  float                JpsiK_e_mu1_iso       ;
+  float                JpsiK_e_mu1_dbiso       ;
+
+  float                JpsiK_e_mu2_pt      ;
+  float                JpsiK_e_mu2_eta     ;
+  float                JpsiK_e_mu2_phi     ;
+  float                JpsiK_e_mu2_mass     ;
+  int                  JpsiK_e_mu2_q   ;   
+  int                  JpsiK_e_mu2_isLoose   ;
+  int                  JpsiK_e_mu2_isTight   ;
+  int                  JpsiK_e_mu2_isPF      ;
+  int                  JpsiK_e_mu2_isGlobal  ;
+  int                  JpsiK_e_mu2_isTracker ;
+  int                  JpsiK_e_mu2_isSoft    ;
+  float                JpsiK_e_mu2_vx       ;
+  float                JpsiK_e_mu2_vy       ;
+  float                JpsiK_e_mu2_vz       ;
+  //  float                JpsiK_e_mu2_iso       ;
+  float                JpsiK_e_mu2_dbiso       ;
+
+
+  float                JpsiK_e_PV_vx       ;
+  float                JpsiK_e_PV_vy       ;
+  float                JpsiK_e_PV_vz       ;
+  
+  float                JpsiK_e_bbPV_vx       ;
+  float                JpsiK_e_bbPV_vy       ;
+  float                JpsiK_e_bbPV_vz       ;
+  float                JpsiK_e_bbPV_chi2       ;
+  float                JpsiK_e_bbPV_ndof       ;
+  float                JpsiK_e_bbPV_rho       ;
+
+  float                JpsiK_e_Jpsi_pt      ;
+  float                JpsiK_e_Jpsi_eta     ;
+  float                JpsiK_e_Jpsi_phi     ;
+  float                JpsiK_e_Jpsi_mass       ;
+  float                JpsiK_e_Jpsi_vprob    ;
+  float                JpsiK_e_Jpsi_lip;
+  float                JpsiK_e_Jpsi_lips;
+  float                JpsiK_e_Jpsi_pvip;
+  float                JpsiK_e_Jpsi_pvips;
+  float                JpsiK_e_Jpsi_fl3d;
+  float                JpsiK_e_Jpsi_fls3d;
+  float                JpsiK_e_Jpsi_alpha;
+  float                JpsiK_e_Jpsi_maxdoca;
+  float                JpsiK_e_Jpsi_mindoca;
+  float                JpsiK_e_Jpsi_vx      ;
+  float                JpsiK_e_Jpsi_vy      ;
+  float                JpsiK_e_Jpsi_vz      ;
+//  float                JpsiK_e_Jpsi_unfit_pt      ;
+//  float                JpsiK_e_Jpsi_unfit_mass       ;
+//  float                JpsiK_e_Jpsi_unfit_vprob    ;
+//  float                JpsiK_e_Jpsi_unfit_vx;
+//  float                JpsiK_e_Jpsi_unfit_vy;
+//  float                JpsiK_e_Jpsi_unfit_vz;
+
+
+
+
+
+  std::vector<float>                JpsiK_e_B_pt      ;
+  std::vector<float>                JpsiK_e_B_eta     ;
+  std::vector<float>                JpsiK_e_B_phi     ;
+  std::vector<float>                JpsiK_e_B_mass    ;
+  std::vector<float>                JpsiK_e_B_mcorr    ;
+  std::vector<float>                JpsiK_e_B_vprob ;
+  std::vector<float>                JpsiK_e_B_lip;
+  std::vector<float>                JpsiK_e_B_lips;
+  std::vector<float>                JpsiK_e_B_pvip;
+  std::vector<float>                JpsiK_e_B_pvips;
+  std::vector<float>                JpsiK_e_B_fl3d;
+  std::vector<float>                JpsiK_e_B_fls3d;
+  std::vector<float>                JpsiK_e_B_alpha;
+  std::vector<float>                JpsiK_e_B_maxdoca;
+  std::vector<float>                JpsiK_e_B_mindoca;
+  std::vector<float>                JpsiK_e_B_vx      ;
+  std::vector<float>                JpsiK_e_B_vy      ;
+  std::vector<float>                JpsiK_e_B_vz      ;
+
+
+  std::vector<float>       JpsiK_e_pi_pt;
+  std::vector<float>       JpsiK_e_pi_eta;
+  std::vector<float>       JpsiK_e_pi_phi;
+  std::vector<float>       JpsiK_e_pi_mass;
+  std::vector<int>       JpsiK_e_pi_q;
+
+  std::vector<float> JpsiK_e_pi_doca3d;
+  std::vector<float> JpsiK_e_pi_doca3de;
+  std::vector<float> JpsiK_e_pi_doca2d;
+  std::vector<float> JpsiK_e_pi_doca2de;
+  std::vector<float> JpsiK_e_pi_dz;
+  std::vector<float> JpsiK_e_pi_near_dz;
+  std::vector<bool> JpsiK_e_pi_isAssociate;
+  std::vector<int> JpsiK_e_pi_pvAssociationQuality;
+  std::vector<bool> JpsiK_e_pi_trigMatch;
+  std::vector<float> JpsiK_e_pi_trigMatch_dr;
+
+
+  //  std::vector<float>                JpsiK_e_B_iso_nocut;
+  //  std::vector<int  >                JpsiK_e_B_iso_ntracks_nocut;
+  //  std::vector<float>                JpsiK_e_B_iso_mindoca_nocut;
+
+//  std::vector<float>                JpsiK_e_B_unfit_pt      ;
+//  std::vector<float>                JpsiK_e_B_unfit_mass       ;
+//  std::vector<float>                JpsiK_e_B_unfit_vprob    ;
+//  std::vector<float>                JpsiK_e_B_unfit_vx;
+//  std::vector<float>                JpsiK_e_B_unfit_vy;
+//  std::vector<float>                JpsiK_e_B_unfit_vz;
+  std::vector<float>                JpsiK_e_B_q2;
+  std::vector<float>                JpsiK_e_B_mm2;
+  std::vector<float>                JpsiK_e_B_ptmiss;
+  std::vector<float>                JpsiK_e_B_Es;
+  std::vector<float>                JpsiK_e_B_ptback;
+
+
+
+  //  std::vector<float>                JpsiK_e_bbPV_refit_vx       ;
+  //  std::vector<float>                JpsiK_e_bbPV_refit_vy       ;
+  //  std::vector<float>                JpsiK_e_bbPV_refit_vz       ;
+
+  
+  // gen related quantity, event-by-event
+  float                JpsiK_e_genPV_vx       ;
+  float                JpsiK_e_genPV_vy       ;
+  float                JpsiK_e_genPV_vz       ;
+  float                JpsiK_e_genSV_vx       ;
+  float                JpsiK_e_genSV_vy       ;
+  float                JpsiK_e_genSV_vz       ;
+
+  int                  JpsiK_e_ngenmuons      ;
+  int                  JpsiK_e_isgenmatched;
+  //  int                  JpsiK_e_isgen3;
+  //  int                  JpsiK_e_isgen3matched;
+
+
+  int JpsiK_e_nch;
+  //  int JpsiK_e_nch_after_dnn;
+  int JpsiK_e_nch_before;
+  //  int JpsiK_e_nch_qr;
+
+//  int JpsiK_e_ngentau3;
+//  int JpsiK_e_ngentau;
+//  float JpsiK_e_gentaupt;
+//  float JpsiK_e_gentaueta;
+//  float JpsiK_e_gentauphi;
+//  float JpsiK_e_gentaumass;
+//  float JpsiK_e_gentaupt_bd;
+//  float JpsiK_e_gentaueta_bd;
+//  float JpsiK_e_gentauphi_bd;
+//  float JpsiK_e_gentaumass_bd;
+//  int JpsiK_e_gentaudm;
+  float JpsiK_e_q2_gen;
+  int JpsiK_e_nBc;
+  float JpsiK_e_B_pt_gen;
+  float JpsiK_e_B_eta_gen;
+  float JpsiK_e_B_phi_gen;
+  float JpsiK_e_B_mass_gen;
+
 
 
 

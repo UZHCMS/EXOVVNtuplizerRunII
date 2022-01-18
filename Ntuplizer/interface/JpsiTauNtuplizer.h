@@ -125,9 +125,12 @@ private:
 
    Hammer::Hammer hammer;
 
-   const vector<string> parName = {"a0", "a1", "a2", "b0", "b1", "b2", "c1", "c2", "d0", "d1", "d2"};
+   //   const vector<string> parName = {"a0", "a1", "a2", "b0", "b1", "b2", "c1", "c2", "d0", "d1", "d2"};
+   //   const vector<string> parName = {"a0", "a1", "a2", "b0", "b1", "b2", "c1", "c2", "d0", "d1", "d2"};
+   const vector<string> parName = {"e0", "e1", "e2", "e3", "e4", "e5", "e6", "e7", "e8", "e9", "e10", "e11", "e12", "e13", "e14"};
 //   
-   const vector<string> _FFErrNames = {"delta_a0","delta_a1","delta_a2","delta_b0","delta_b1","delta_b2","delta_c1","delta_c2","delta_d0","delta_d1","delta_d2"};
+//   const vector<string> _FFErrNames = {"delta_a0","delta_a1","delta_a2","delta_b0","delta_b1","delta_b2","delta_c1","delta_c2","delta_d0","delta_d1","delta_d2"};
+   const vector<string> _FFErrNames = {"delta_e0","delta_e1","delta_e2","delta_e3","delta_e4","delta_e5","delta_e6","delta_e7","delta_e8","delta_e9","delta_e10", "delta_e11", "delta_e12", "delta_e13", "delta_e14"};
 //
 //   //   std::vector<double> _FFErr = {0.6850051095, 0.3674778905, 0.08740600666, 0.05468939568, 0.01128871118, 0.006722573912, 0.006537973692, 0.003156718233, 0.0004988336396, 0.0004454548237, 6.41244005e-07};
    std::vector<double> _FFErr = {0.6850042974, 0.3674780815, 0.0874061782, 0.0546894675, 0.0112887042, 0.0067225920, 0.0065379763, 0.0031567090, 0.0004988304, 0.0004454549, 0.0000006412};
