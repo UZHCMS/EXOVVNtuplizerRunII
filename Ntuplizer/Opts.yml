@@ -1,4 +1,4 @@
-# Hammer ver. 1.1 configuration settings
+# Hammer ver. 1.2 configuration settings
 
 BctoJpsiBGL:
   BcStatesP1: [6.2749, 6.842]
@@ -23,7 +23,7 @@ BctoJpsiBGLVar:
   Chim: 0.0003225862642460741
   ChimL: 0.0249307
   Chip: 0.0005551154566621733
-  ErrNames: [delta_e0, delta_e1, delta_e2, delta_e3, delta_e4, delta_e5, delta_e6, delta_e7, delta_e8, delta_e9, delta_e10, delta_e11, delta_e12, delta_e13, delta_e14, delta_e15]
+  ErrNames: [delta_e0, delta_e1, delta_e2, delta_e3, delta_e4, delta_e5, delta_e6, delta_e7, delta_e8, delta_e9, delta_e10, delta_e11, delta_e12, delta_e13, delta_e14]
   OptZ: false
   Rb*: 0.8484462151394422
   Rb0: 0.8414342629482071
@@ -40,7 +40,6 @@ BctoJpsiBGLVar:
   delta_e12: 0
   delta_e13: 0
   delta_e14: 0
-  delta_e15: 0
   delta_e2: 0
   delta_e3: 0
   delta_e4: 0
@@ -57,7 +56,7 @@ BctoJpsiBGLVar_1909:
   Chim: 0.007168
   ChimL: 0.025042
   Chip: 0.012539
-  ErrNames: [delta_e0, delta_e1, delta_e2, delta_e3, delta_e4, delta_e5, delta_e6, delta_e7, delta_e8, delta_e9, delta_e10, delta_e11, delta_e12, delta_e13, delta_e14, delta_e15]
+  ErrNames: [delta_e0, delta_e1, delta_e2, delta_e3, delta_e4, delta_e5, delta_e6, delta_e7, delta_e8, delta_e9, delta_e10, delta_e11, delta_e12, delta_e13, delta_e14]
   OptZ: true
   Rb*: 0.8484462151394422
   Rb0: 0.8414342629482071
@@ -74,7 +73,6 @@ BctoJpsiBGLVar_1909:
   delta_e12: 0
   delta_e13: 0
   delta_e14: 0
-  delta_e15: 0
   delta_e2: 0
   delta_e3: 0
   delta_e4: 0
@@ -91,7 +89,7 @@ BctoJpsiBGLVar_lattice:
   Chim: 0.0003225862642460741
   ChimL: 0.0249307
   Chip: 0.0005551154566621733
-  ErrNames: [delta_e0, delta_e1, delta_e2, delta_e3, delta_e4, delta_e5, delta_e6, delta_e7, delta_e8, delta_e9, delta_e10, delta_e11, delta_e12, delta_e13, delta_e14, delta_e15]
+  ErrNames: [delta_e0, delta_e1, delta_e2, delta_e3, delta_e4, delta_e5, delta_e6, delta_e7, delta_e8, delta_e9, delta_e10, delta_e11, delta_e12, delta_e13, delta_e14]
   OptZ: false
   Rb*: 0.8484462151394422
   Rb0: 0.8414342629482071
@@ -108,7 +106,6 @@ BctoJpsiBGLVar_lattice:
   delta_e12: 0
   delta_e13: 0
   delta_e14: 0
-  delta_e15: 0
   delta_e2: 0
   delta_e3: 0
   delta_e4: 0

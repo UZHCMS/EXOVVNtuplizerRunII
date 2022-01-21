@@ -4,7 +4,7 @@ Ntuplizer for searches for heavy resonances decaying to dibosons
 
 ## installation instructions
 
-Setting up CMSSW (for september reprocessing):
+Setting up CMSSW:
 
 ```
 cmsrel CMSSW_11_1_0
@@ -23,31 +23,47 @@ git clone https://github.com/${GITUSER}/EXOVVNtuplizerRunII
 cd EXOVVNtuplizerRunII
 git remote add UZHCMS https://github.com/UZHCMS/EXOVVNtuplizerRunII
 git fetch UZHCMS
-git checkout -b Development_BcMu_10210_NoLepProducers UZHCMS/BcMu_10210_NoLepProducers
+git checkout -b myDevelopment4RJpsi UZHCMS/Development_BcMu_10210_NoLepProducers_11_1_X
+cd $CMSSW_BASE/src
+```
+
+### setting up Hammer
+```
+export PATH=/cvmfs/sft.cern.ch/lcg/contrib/CMake/3.14.2/Linux-x86_64/bin:${PATH}
+export BOOST_ROOT=/cvmfs/sft.cern.ch/lcg/releases/Boost/1.72.0-30ed7/x86_64-centos7-gcc8-opt/
+cd $CMSSW_BASE/src
+mkdir Hammer
+cd Hammer
+git clone https://gitlab.com/mpapucci/Hammer.git Hammer-Source
+
+# I used v.1.2.1 but in case, in the future, the Hammer is updated, 
+# you can always come back to this version as follows
+# git checkout -b tags/v1.2.1 -b myHammer
+
+mkdir Hammer-build
+cd Hammer-build
+cmake -DCMAKE_INSTALL_PREFIX=../Hammer-Install -DENABLE_TESTS=ON -DWITH_ROOT=OFF -DWITH_EXAMPLES=OFF -DINSTALL_EXTERNAL_DEPENDENCIES=ON -DWITH_PYTHON=OFF -DBUILD_SHARED_LIBS=ON -DFORCE_YAMLCPP_INSTALL=ON ../Hammer-Source
+make -j24
+make install -j24
+cd $CMSSW_BASE/lib/slc7_amd64_gcc820/
+cp ../../src/Hammer/Hammer-Install/lib64/*.so.* ./
+cp ../../src/Hammer/Hammer-Install/lib64/Hammer/*.so.* ./
+cd $CMSSW_BASE/src/Hammer/Hammer-build/
+ctest
+
+```
+
+### Compile
+In case, in the future, the Hammer is updated, 
+you need to modify $CMSSW_BASE/src/EXOVVNtuplizerRunII/Ntuplizer/plugins/BuildFile.xml
+such that includes right version of the Hammer libraries (which can be found at $CMSSW_BASE/lib/*
+```
 cd $CMSSW_BASE/src
 scram b -j 8
 ```
 
-### setting up Hammer (n/a for now!)
-```
-export PATH=/cvmfs/sft.cern.ch/lcg/contrib/CMake/3.14.2/Linux-x86_64/bin:${PATH}
-export BOOST_ROOT=/cvmfs/sft.cern.ch/lcg/releases/Boost/1.66.0-f50b5/x86_64-centos7-gcc7-opt/
-export HEPMC_DIR=/cvmfs/sft.cern.ch/lcg/external/HepMC/2.06.08/x86_64-slc6-gcc48-opt
-mkdir Hammer
-cd Hammer
-git clone https://gitlab.com/mpapucci/Hammer Hammer-1.0.0-Source-dev
-git checkout development
-mkdir Hammer-1.0.0-dev-build
-cd Hammer-1.0.0-dev-build
-cmake -DCMAKE_INSTALL_PREFIX=../Hammer-1.0.0-dev -DENABLE_TESTS=ON -DWITH_ROOT=OFF -DWITH_EXAMPLES=OFF -DINSTALL_EXTERNAL_DEPENDENCIES=ON -DWITH_PYTHON=OFF -DBUILD_SHARED_LIBS=ON ../Hammer-1.0.0-Source-dev
-make -j24
-make install -j24
-cd $CMSSW_BASE/lib/slc7_amd64_gcc700
-cp ../../src/Hammer/Hammer-1.0.0-dev/lib64/*.so.* ./
-cp ../../src/Hammer/Hammer-1.0.0-dev/lib64/Hammer/*.so.* ./
-cd $CMSSW_BASE/src/Hammer/Hammer-1.0.0-dev-build
-ctest
-```
+
+
 
 
 ### running for data and MC
