@@ -424,6 +424,9 @@ public:
 
   int                 JpsiTau_nCandidates ;
 
+  bool JpsiTau_isJpsiMu;
+  bool JpsiTau_isJpsiTau2Mu;
+
   float                JpsiTau_mu1_pt      ;
   float                JpsiTau_mu1_eta     ;
   float                JpsiTau_mu1_phi     ;

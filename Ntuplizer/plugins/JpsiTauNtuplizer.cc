@@ -162,7 +162,7 @@ JpsiTauNtuplizer::JpsiTauNtuplizer( edm::EDGetTokenT<pat::MuonCollection>    muo
     //    std::cout << "[Hammer]: Central values:\n\t" << centralValues << std::endl;
     //    hammer.setOptions(centralValues);
 
-    //    hammer.setOptions("BctoJpsiBGLVar_1909: {OptZ: true}");
+      hammer.setOptions("BctoJpsiBGLVar_1909: {OptZ: true}");
       hammer.setOptions("BctoJpsiBGLVar_1909: {Chim: 0.007168}");
       hammer.setOptions("BctoJpsiBGLVar_1909: {Chip:  0.012539}");
       hammer.setOptions("BctoJpsiBGLVar_1909: {ChimL: 0.025042}");
@@ -174,6 +174,24 @@ JpsiTauNtuplizer::JpsiTauNtuplizer( edm::EDGetTokenT<pat::MuonCollection>    muo
       hammer.setOptions("BctoJpsiBGLVar_1909: {BcStatesg: [6.3290,6.8975,7.0065]}");
       hammer.setOptions("BctoJpsiBGLVar_1909: {BcStatesP1: [6.2749, 6.8710]}");
 
+      hammer.setOptions("BctoJpsiBGLVar_1909: {abcdmatrix: "
+			"[[-0.0002985,-0.00047113,0.00032104,0.00024581,-0.000071767,0.000014312,0.000017762,6.6187e-6,0.00014964,-0.00042492,0,0,0,0,0],"
+			"[-0.0059998,0.013288,-0.010085,-0.0083593,0.0092303,0.0035641,-0.00061206,0.00018311,-4.8458e-6,-3.862e-6,0,0,0,0,0],"
+			"[0.48075,0.25868,-0.0060761,-0.0040621,-0.00036533,-0.00014485,0.000047604,-6.3816e-6,4.8442e-7,-6.2144e-7,0,0,0,0,0],"
+			"[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"
+			"[-0.00019261,0.00023477,0.000069658,0.0001332,-0.00016561,0.000048105,-8.355e-6,0.00025903,-0.00015094,-0.000042262,0,0,0,0,0],"
+			"[-0.012245,-0.0048488,-0.010276,-0.0080284,0.0049277,-0.0050091,0.0014737,0.0012903,6.3472e-6,-6.6005e-8,0,0,0,0,0],"
+			"[0.46874,-0.25923,-0.015052,-0.0032993,-0.00015392,0.00016795,-0.000027387,-4.9908e-6,-4.8511e-7,-2.1671e-7,0,0,0,0,0],"
+			"[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"
+			"[-0.0019755,0.00058918,-0.0017607,0.0004028,-0.00017472,0.00022324,-0.000080239,0.00020993,0.00045048,0.00012664,0,0,0,0,0],"
+			"[0.04564,0.0083111,-0.016423,0.05222,0.0022665,-0.00044649,0.00012835,-0.00016877,-1.8569e-6,4.4369e-7,0,0,0,0,0],"
+			"[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"
+			"[0.0026001,0.0035169,-0.00088325,0.0067419,-0.0028029,0.0020156,-0.00060006,0.0028451,-0.00002307,-4.444e-6,0,0,0,0,0],"
+			"[-0.12691,0.02533,-0.082967,-0.0074754,-0.0021148,0.00030063,0.00013732,-0.00018189,-8.5902e-6,-3.7607e-6,0,0,0,0,0],"
+			"[0.0027425,-0.0010323,0.0034357,0.00082698,-0.00052248,0.001715,0.0063082,-2.6057e-6,1.1803e-6,2.0459e-6,0,0,0,0,0],"
+			"[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]]}");
+
+      hammer.saveOptionCard("Opts.yml", false);
 
 //    hammer.setOptions("BctoJpsiBGLVar_1909: {abcdmatrix: "
 //		      "[[1.,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"
@@ -193,28 +211,11 @@ JpsiTauNtuplizer::JpsiTauNtuplizer( edm::EDGetTokenT<pat::MuonCollection>    muo
 //		      "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,1.]]}");
 
 
-      hammer.setOptions("BctoJpsiBGLVar_1909: {abcdmatrix: "
-			"[[-0.0002985,-0.00047113,0.00032104,0.00024581,-0.000071767,0.000014312,0.000017762,6.6187e-6,0.00014964,-0.00042492,0,0,0,0,0],"
-			"[-0.0059998,0.013288,-0.010085,-0.0083593,0.0092303,0.0035641,-0.00061206,0.00018311,-4.8458e-6,-3.862e-6,0,0,0,0,0],"
-			"[0.48075,0.25868,-0.0060761,-0.0040621,-0.00036533,-0.00014485,0.000047604,-6.3816e-6,4.8442e-7,-6.2144e-7,0,0,0,0,0],"
-			"[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"
-			"[-0.00019261,0.00023477,0.000069658,0.0001332,-0.00016561,0.000048105,-8.355e-6,0.00025903,-0.00015094,-0.000042262,0,0,0,0,0],"
-			"[-0.012245,-0.0048488,-0.010276,-0.0080284,0.0049277,-0.0050091,0.0014737,0.0012903,6.3472e-6,-6.6005e-8,0,0,0,0,0],"
-			"[0.46874,-0.25923,-0.015052,-0.0032993,-0.00015392,0.00016795,-0.000027387,-4.9908e-6,-4.8511e-7,-2.1671e-7,0,0,0,0,0],"
-			"[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"
-			"[-0.0019755,0.00058918,-0.0017607,0.0004028,-0.00017472,0.00022324,-0.000080239,0.00020993,0.00045048,0.00012664,0,0,0,0,0],"
-			"[0.04564,0.0083111,-0.016423,0.05222,0.0022665,-0.00044649,0.00012835,-0.00016877,-1.8569e-6,4.4369e-7,0,0,0,0,0],"
-			"[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"
-			"[0.0026001,0.0035169,-0.00088325,0.0067419,-0.0028029,0.0020156,-0.00060006,0.0028451,-0.00002307,-4.444e-6,0,0,0,0,0],"
-			"[-0.12691,0.02533,-0.082967,-0.0074754,-0.0021148,0.00030063,0.00013732,-0.00018189,-8.5902e-6,-3.7607e-6,0,0,0,0,0],"
-			"[0.0027425,-0.0010323,0.0034357,0.00082698,-0.00052248,0.001715,0.0063082,-2.6057e-6,1.1803e-6,2.0459e-6,0,0,0,0,0],"
-			"[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]]}");
     
 
 
 
 
-      hammer.saveOptionCard("Opts.yml", false);
     
 
 
@@ -542,6 +543,9 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
   Int_t n_e_decay = 0;
   Int_t n_occurance = 0;
   TLorentzVector p_gentau;
+  
+  bool isJpsiMu = 0;
+  bool isJpsiTau2Mu = 0;
 
   if(runOnMC_){ 
     
@@ -556,6 +560,7 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
       
       bool isJpsi = false;
       bool isTau = false;
+      bool isMu = false;
       
       for(auto d : _part_.daughterRefVector()) {
 	if(TMath::Abs(d->pdgId()) == 443){
@@ -566,8 +571,14 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 	if(TMath::Abs(d->pdgId()) == 15){
 	  isTau = true;
 	}
+
+	if(TMath::Abs(d->pdgId()) == 13){
+	  isMu = true;
+	}
       }
       
+      if(isJpsi && isMu) isJpsiMu = true;
+
       pB_gen.SetPtEtaPhiM(_part_.pt(), _part_.eta(), _part_.phi(), _part_.mass());
       genvertex = aux.getVertex(_part_);
       nBc += 1;
@@ -596,6 +607,26 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 	  
 	  gen_nr_mu.push_back(nojpsi_muon_tlv);
 	}
+
+
+
+	if(TMath::Abs(d->pdgId())==15){
+
+	  //	  std::cout << "gen:" << d->pdgId() << std::endl;
+	  for (auto dd : d->daughterRefVector()) {
+	    //	    std::cout << "\t --> " << dd->pdgId() << std::endl;
+	    if(TMath::Abs(dd->pdgId())==13){
+
+
+	      isJpsiTau2Mu = true;
+	      
+	    }
+	  }
+	}
+
+
+
+
       }
     }
 
@@ -3792,6 +3823,9 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 
   nBranches_->JpsiTau_ngenmuons = gen_nr_mu.size() + gen_jpsi_mu.size();
   nBranches_->JpsiTau_isgenmatched = (int)flag_jpsi_match;
+
+  nBranches_->JpsiTau_isJpsiMu = isJpsiMu;
+  nBranches_->JpsiTau_isJpsiTau2Mu = isJpsiTau2Mu;
 
 
   //  nBranches_->JpsiTau_isgen3 = isgen3;

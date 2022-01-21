@@ -58,7 +58,7 @@ BctoJpsiBGLVar_1909:
   ChimL: 0.025042
   Chip: 0.012539
   ErrNames: [delta_e0, delta_e1, delta_e2, delta_e3, delta_e4, delta_e5, delta_e6, delta_e7, delta_e8, delta_e9, delta_e10, delta_e11, delta_e12, delta_e13, delta_e14, delta_e15]
-  OptZ: false
+  OptZ: true
   Rb*: 0.8484462151394422
   Rb0: 0.8414342629482071
   Rd0: 0.602390180878553

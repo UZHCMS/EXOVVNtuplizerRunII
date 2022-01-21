@@ -395,6 +395,9 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
 
     tree_->Branch("JpsiTau_nCandidates", &JpsiTau_nCandidates );
 
+    tree_->Branch("JpsiTau_isJpsiMu", &JpsiTau_isJpsiMu );
+    tree_->Branch("JpsiTau_isJpsiTau2Mu", &JpsiTau_isJpsiTau2Mu );
+
 
     tree_->Branch("JpsiTau_mu1_pt", &JpsiTau_mu1_pt );
     tree_->Branch("JpsiTau_mu1_eta", &JpsiTau_mu1_eta );
@@ -2217,6 +2220,8 @@ void NtupleBranches::reset( void ){
 
 
   JpsiTau_nCandidates = -99;
+  JpsiTau_isJpsiMu = false;
+  JpsiTau_isJpsiTau2Mu = false;
 
   JpsiTau_mu1_pt = -99;
   JpsiTau_mu1_eta = -99;
