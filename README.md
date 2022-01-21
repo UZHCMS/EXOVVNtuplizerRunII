@@ -38,7 +38,7 @@ git clone https://gitlab.com/mpapucci/Hammer.git Hammer-Source
 
 # I used v.1.2.1 but in case, in the future, the Hammer is updated, 
 # you can always come back to this version as follows
-# git checkout -b tags/v1.2.1 -b myHammer
+# git checkout tags/v1.2.1 -b myHammer
 
 mkdir Hammer-build
 cd Hammer-build
