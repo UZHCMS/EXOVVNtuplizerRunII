@@ -544,8 +544,8 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
   Int_t n_occurance = 0;
   TLorentzVector p_gentau;
   
-  bool isJpsiMu = 0;
-  bool isJpsiTau2Mu = 0;
+  bool isJpsiMu = false;
+  bool isJpsiTau2Mu = false;
 
   if(runOnMC_){ 
     
