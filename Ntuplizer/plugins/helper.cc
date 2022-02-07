@@ -424,6 +424,7 @@ void helper::recursiveDaughters(size_t index,
 				std::vector<float> &ppt,
 				std::vector<float> &peta,
 				std::vector<float> &pphi,
+				std::vector<int> &isfinal,
 				bool verbose
 				) {
   
@@ -441,25 +442,28 @@ void helper::recursiveDaughters(size_t index,
 
       allIndices.push_back(index);
       pdgs.push_back(src[index].pdgId());
-      layers.push_back(rank);
+      //      layers.push_back(rank);
       ppt.push_back(src[index].pt());
       peta.push_back(src[index].eta());
       pphi.push_back(src[index].phi());
 
-      int _layer = -1;
+      //      int _layer = -1;
 
-      if(src[index].numberOfDaughters()!=0){
-	_layer = rank;
-      }
+      //      if(src[index].numberOfDaughters()!=0){
+      //	_layer = rank;
+      //      }
+      bool _isfinal = false;
 
-      layers.push_back(_layer);
+      if(src[index].numberOfDaughters()==0) _isfinal = true; 
 
+      layers.push_back(rank);
+      isfinal.push_back(_isfinal);
 
       if(verbose){
 	for(int ii=0; ii<rank-1; ii++){
 	  std::cout << "  "; 
 	}
-	std::cout << " +->" << src[index].pdgId() << " (" << _layer << ")" << std::endl;
+	std::cout << " +->" << src[index].pdgId() << " (" << rank << ", isfinal = " << _isfinal << ")" << std::endl;
 	
 	if (cachedIndex == index) {
 	  std::cout << "WARNING !!! This is already there ... " << cachedIndex << " " << index << " " << std::endl;
@@ -468,7 +472,7 @@ void helper::recursiveDaughters(size_t index,
 
 
       if (cachedIndex != index) {
-	recursiveDaughters(index, rank+1, src, allIndices, pdgs, layers, ppt, peta, pphi, verbose);
+	recursiveDaughters(index, rank+1, src, allIndices, pdgs, layers, ppt, peta, pphi, isfinal, verbose);
       }
     }
   }

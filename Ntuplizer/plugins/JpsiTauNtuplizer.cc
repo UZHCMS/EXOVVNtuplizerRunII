@@ -563,9 +563,13 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
       bool isMu = false;
       
       for(auto d : _part_.daughterRefVector()) {
-	if(TMath::Abs(d->pdgId()) == 443){
-	  //	  std::cout << d->vx() << " " << d->vy() << " " << d->vz() << std::endl;
+
+	if(genvertex_sv.x()==-9){
 	  genvertex_sv = TVector3(d->vx(), d->vy(), d->vz());
+	}
+
+	if(TMath::Abs(d->pdgId()) == 443){
+
 	  isJpsi = true;
 	}
 	if(TMath::Abs(d->pdgId()) == 15){
@@ -3105,6 +3109,11 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 
     TLorentzVector Tlv_B_simple;
     Tlv_B_simple = Tlv_Jpsi + Tlv_tau;
+
+    if(Tlv_B_simple.M() > 5.25 && Tlv_B_simple.M() < 5.3){
+      std::cout << "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ B mass = " <<  Tlv_B_simple.M() << std::endl;
+    }
+
 
     nBranches_->JpsiTau_B_pt_simple.push_back(Tlv_B_simple.Pt());
     nBranches_->JpsiTau_B_eta_simple.push_back(Tlv_B_simple.Eta());
