@@ -339,11 +339,11 @@ bool GenParticlesNtuplizer::fillBranches( edm::Event const & event, const edm::E
 	    aux.recursiveDaughters(p, _rank, *genParticles_, allIndices, pdgs, layers, ppt, peta, pphi, isfinal, verbose_);
 
 
-	    std::cout << "******************* this is stored ******************" << std::endl;
-	    for(int ivec = 0; ivec < (int)pdgs.size(); ivec++){
-	      std::cout << ivec << " " << pdgs[ivec] << " " << layers[ivec] << " " << isfinal[ivec] << std::endl;
-	    }
-	    std::cout << "*****************************************************" << std::endl;
+//	    std::cout << "******************* this is stored ******************" << std::endl;
+//	    for(int ivec = 0; ivec < (int)pdgs.size(); ivec++){
+//	      std::cout << ivec << " " << pdgs[ivec] << " " << layers[ivec] << " " << isfinal[ivec] << std::endl;
+//	    }
+//	    std::cout << "*****************************************************" << std::endl;
 
 //	  for(int ivec = 0; ivec < (int)pdgs.size(); ivec++){
 //	    nBranches_->genParticle_pmother.push_back( (*genParticles_)[p].pdgId() );

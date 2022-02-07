@@ -3110,9 +3110,9 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
     TLorentzVector Tlv_B_simple;
     Tlv_B_simple = Tlv_Jpsi + Tlv_tau;
 
-    if(Tlv_B_simple.M() > 5.25 && Tlv_B_simple.M() < 5.3){
-      std::cout << "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ B mass = " <<  Tlv_B_simple.M() << std::endl;
-    }
+    //    if(Tlv_B_simple.M() > 5.25 && Tlv_B_simple.M() < 5.3){
+    //      std::cout << "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ B mass = " <<  Tlv_B_simple.M() << std::endl;
+    //    }
 
 
     nBranches_->JpsiTau_B_pt_simple.push_back(Tlv_B_simple.Pt());
