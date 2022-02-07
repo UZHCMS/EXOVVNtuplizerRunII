@@ -108,6 +108,7 @@ public:
   std::vector<std::vector<float>>  genParticle_ppt   ; 
   std::vector<std::vector<float>>  genParticle_peta   ; 
   std::vector<std::vector<float>>  genParticle_pphi   ; 
+  std::vector<std::vector<int>>  genParticle_isfinal   ; 
 
   /** generator info */
   float                           lheV_pt              ;

@@ -34,7 +34,7 @@ isData = False
 print 'isData? ', isData
 
 
-config["ISBKG"] = False
+config["ISBKG"] = True
 
 if isData:
   config["RUNONMC"] = False

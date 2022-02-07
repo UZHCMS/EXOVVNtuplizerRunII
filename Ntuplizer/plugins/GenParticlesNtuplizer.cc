@@ -251,7 +251,24 @@ bool GenParticlesNtuplizer::fillBranches( edm::Event const & event, const edm::E
       //   } else { 
       //       nBranches_->genWeightBkgB = 1;
       //   }
-        
+    
+
+//	std::cout << "[TESTGenParticlesNtuplizer] " << (*genParticles_)[p].pdgId() << " from ";
+//	
+//	for( unsigned int m=0; m<(*genParticles_)[p].numberOfMothers(); ++m ){
+//	  if(verbose_) std::cout << (*genParticles_)[p].mother(m)->pdgId() << " ";
+//	}
+//	
+//	if(verbose_) std::cout << "decays into ..." << std::endl;
+//	
+//	for( unsigned int d=0; d<(*genParticles_)[p].numberOfDaughters(); ++d ){
+//	  if(verbose_) std::cout << "[TESTGenParticlesNtuplizer]   ---->  " << (*genParticles_)[p].daughter(d)->pdgId() << std::endl;
+//	}
+//	
+//	std::cout << "[TESTGenParticlesNtuplizer] " << std::endl;
+
+
+    
     
          if(!isLepton && !isQuark && !isPhoton && !isGluon && !isWZH && !isHeavyMeson && !isHeavyBaryon && !isBSM && !isDirectPromptTauDecayProduct && !fromHardProcessFinalState && !isDirectHardProcessTauDecayProductFinalState && !isB && !isStatus2 && !isStatus1) continue;
       
@@ -310,19 +327,21 @@ bool GenParticlesNtuplizer::fillBranches( edm::Event const & event, const edm::E
 	    std::vector<float> ppt;
 	    std::vector<float> peta;
 	    std::vector<float> pphi;
+	    std::vector<int> isfinal;
 	    
 	    pdgs.push_back((*genParticles_)[p].pdgId());
 	    layers.push_back(0);
 	    ppt.push_back((*genParticles_)[p].pt());
 	    peta.push_back((*genParticles_)[p].eta());
 	    pphi.push_back((*genParticles_)[p].phi());
+	    isfinal.push_back(0);
 
-	    aux.recursiveDaughters(p, _rank, *genParticles_, allIndices, pdgs, layers, ppt, peta, pphi, verbose_);
+	    aux.recursiveDaughters(p, _rank, *genParticles_, allIndices, pdgs, layers, ppt, peta, pphi, isfinal, verbose_);
 
 
-	    //	    std::cout << "******************* this is stored ******************" << std::endl;
+//	    std::cout << "******************* this is stored ******************" << std::endl;
 //	    for(int ivec = 0; ivec < (int)pdgs.size(); ivec++){
-//	      std::cout << ivec << " " << pdgs[ivec] << " " << layers[ivec] << std::endl;
+//	      std::cout << ivec << " " << pdgs[ivec] << " " << layers[ivec] << " " << isfinal[ivec] << std::endl;
 //	    }
 //	    std::cout << "*****************************************************" << std::endl;
 
@@ -333,6 +352,7 @@ bool GenParticlesNtuplizer::fillBranches( edm::Event const & event, const edm::E
 	    nBranches_->genParticle_ppt.push_back( ppt);
 	    nBranches_->genParticle_peta.push_back( peta);
 	    nBranches_->genParticle_pphi.push_back( pphi);
+	    nBranches_->genParticle_isfinal.push_back( isfinal);
 	    //	  }
 	  }
 	  

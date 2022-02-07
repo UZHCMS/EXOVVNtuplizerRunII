@@ -208,6 +208,7 @@ class helper{
 			  std::vector<float> &ppt,
 			  std::vector<float> &peta,
 			  std::vector<float> &pphi,
+			  std::vector<int> &isfinal,
 			  bool verbose
 			  );
   
