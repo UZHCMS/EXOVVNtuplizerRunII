@@ -423,9 +423,9 @@ void Ntuplizer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
   
   //  std::cout << "check3" << std::endl;
 
-  nBranches_->EVENT_event     = iEvent.id().event();
-  nBranches_->EVENT_run       = iEvent.id().run();
-  nBranches_->EVENT_lumiBlock = iEvent.id().luminosityBlock();  
+  nBranches_->EVENT_event     = int(iEvent.id().event());
+  nBranches_->EVENT_run       = int(iEvent.id().run());
+  nBranches_->EVENT_lumiBlock = int(iEvent.id().luminosityBlock());  
 
   //  std::cout<<" ----------------- before the branches loop"<<std::endl; 
 

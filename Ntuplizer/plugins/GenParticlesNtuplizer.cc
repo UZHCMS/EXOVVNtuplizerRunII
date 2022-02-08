@@ -223,6 +223,7 @@ bool GenParticlesNtuplizer::fillBranches( edm::Event const & event, const edm::E
         bool isHeavyBaryon( abs((*genParticles_)[p].pdgId())>=1000);
         bool isBSM( (abs((*genParticles_)[p].pdgId())>=30 && abs((*genParticles_)[p].pdgId())<=50) || abs((*genParticles_)[p].pdgId())>=1000000 );
         bool isB( (abs((*genParticles_)[p].pdgId())>=511 && abs((*genParticles_)[p].pdgId())<=545));
+        bool isB2( abs((*genParticles_)[p].pdgId())==511 || abs((*genParticles_)[p].pdgId())==521 || abs((*genParticles_)[p].pdgId())==531 || abs((*genParticles_)[p].pdgId())==541 );
         bool isStatus2( (*genParticles_)[p].status()==2 );
         bool isStatus1( (*genParticles_)[p].status()==1 );
 
@@ -288,37 +289,37 @@ bool GenParticlesNtuplizer::fillBranches( edm::Event const & event, const edm::E
 	
 	if(isB){
 	  
-	  if(verbose_) std::cout << "[GenParticlesNtuplizer] " << (*genParticles_)[p].pdgId() << " from ";
+	  if(verbose_) std::cout << "[GenParticlesNtuplizer] " << (*genParticles_)[p].pdgId() << " (" << (*genParticles_)[p].status() << ") from ";
 	  
-	  Bool_t ismother_B = false;
+	  //	  Bool_t ismother_B = false;
 	    
 	  for( unsigned int m=0; m<(*genParticles_)[p].numberOfMothers(); ++m ){
-	    if(verbose_) std::cout << (*genParticles_)[p].mother(m)->pdgId() << " ";
+	    if(verbose_) std::cout << (*genParticles_)[p].mother(m)->pdgId() << " (" << (*genParticles_)[p].mother(m)->status() <<") ";
 
-	    if( abs((*genParticles_)[p].mother(m)->pdgId())>=511 && abs((*genParticles_)[p].mother(m)->pdgId())<=545 ){
-	      ismother_B = true;
-	    }
+	    //	    if( abs((*genParticles_)[p].mother(m)->pdgId())>=511 && abs((*genParticles_)[p].mother(m)->pdgId())<=545 ){
+	    //	      ismother_B = true;
+	    //	    }
 	  }
 
 	  //	  if(verbose_) std::cout << "[GenParticlesNtuplizer] ismother_B = " << ismother_B << " " << (*genParticles_)[p].numberOfDaughters() << " " << (*genParticles_)[p].daughter(0)->pdgId() << "  " << (*genParticles_)[p].pdgId()  << std::endl;
 	  if(verbose_) std::cout << "decays into ..." << std::endl;
 
 	  for( unsigned int d=0; d<(*genParticles_)[p].numberOfDaughters(); ++d ){
-	    if(verbose_) std::cout << "[GenParticlesNtuplizer]   ---->  " << (*genParticles_)[p].daughter(d)->pdgId() << std::endl;
+	    if(verbose_) std::cout << "[GenParticlesNtuplizer]   ---->  " << (*genParticles_)[p].daughter(d)->pdgId() << " (" << (*genParticles_)[p].daughter(d)->status()  << ")" << std::endl;
 	  }
-	 	  
+	}	  
 
-	  if( (*genParticles_)[p].numberOfDaughters()!=1 && 
-	      (*genParticles_)[p].numberOfMothers()==1 && 
-	      (*genParticles_)[p].mother(0)->pdgId()==(*genParticles_)[p].pdgId() 
-	      ){
-	    ismother_B = false; 
-	  }
+//	  if( (*genParticles_)[p].numberOfDaughters()!=1 && 
+//	      (*genParticles_)[p].numberOfMothers()==1 && 
+//	      (*genParticles_)[p].mother(0)->pdgId()==(*genParticles_)[p].pdgId() 
+//	      ){
+//	    ismother_B = false; 
+//	  }
 
 	  
 
-
-	  if(! ( (*genParticles_)[p].numberOfDaughters()==1 && (*genParticles_)[p].daughter(0)->pdgId()==(*genParticles_)[p].pdgId() ) && ismother_B==false ){
+	if(isB2){
+	  if(! ( (*genParticles_)[p].numberOfDaughters()==1 && (*genParticles_)[p].daughter(0)->pdgId()==(*genParticles_)[p].pdgId() )  && (*genParticles_)[p].status()==2){
 
 	    int _rank = 1;
 	    std::vector<size_t> allIndices;
