@@ -1,30 +1,31 @@
 
 For everybody:
 
-change in submit_all.py in the output dir "cgalloni" with your username
+change in submit_all_opt.py in the output dir "cgalloni" with your username
  
 cmsenv 
 source /cvmfs/cms.cern.ch/crab3/crab.sh
 voms-proxy-init  --voms cms --valid 200:00:00
 
 
-This is to  run data with JEC that are run dependent:
+This is to run data with JEC that are run dependent and remember to change in python/ntuplizerOptions_generic_cfi.py the JSON depending on the year for data.
 
+for 2018:
+python submit_all_opt.py -d CRAB_tot -c config_generic_opt_skimmed.py -f samples/data_charmonium_2018.txt -D True -l True -s ""
 
+for 2017: 
 
+python submit_all_opt.py -d CRAB_tot -c config_generic_opt_skimmed.py -f samples/data_charmonium_2017.txt  -D True -l True -s ""
 
-python submit_all_opt.py -d CRAB_tot -c config_generic_opt.py -f samples/Fall2017/Dataset_rereco_2017.txt -D True -l True -s ""
-python submit_all_opt.py -d CRAB_tot -c config_generic_opt.py -f samples/Fall2017/Dataset_rereco_2016.txt -D True -l True -s "" --runUpToEarlyF True
-python submit_all_opt.py -d CRAB_tot -c config_generic_opt.py -f samples/Fall2017/Dataset_rereco_2016.txt -D True -l True -s "" 
+for 2016:
+python submit_all_opt.py -d CRAB_tot -c config_generic_opt_skimmed.py -f samples/data_charmonium_2016.txt -D True -l True -s "" --runUpToEarlyF True
+python submit_all_opt.py -d CRAB_tot -c config_generic_opt_skimmed.py -f samples/data_charmonium_2016.txt -D True -l True -s "" 
 
 
 
 For MC, no need to use run dependent corrections, just to change the RUNONMC flag in python/ntuplizerOptions_generic_cfi.py
 
-python submit_all_opt.py -d CRAB_tot -c config_generic_opt.py -f samples/Fall2017/MC2017_v2.txt  -s ""
-python submit_all_opt.py -d CRAB_tot -c config_generic_opt.py -f samples/Fall2017/MC2017_v2_ext.txt  -s "_ext"
-python submit_all_opt.py -d CRAB_tot -c config_generic_opt.py -f samples/Fall2016/MC2016_v2.txt  -s ""
-python submit_all_opt.py -d CRAB_tot -c config_generic_opt.py -f samples/Fall2016/MC2016_v2_ext.txt  -s "_ext"
+python submit_all_opt.py -d CRAB_tot -c config_generic_opt_skimmed.py -f samples/BJpsiX_270819.txt  -s ""
 
 
 
@@ -32,6 +33,8 @@ To check the status and resubmit:
 
 ls CRAB_tot* |grep "_tot"  | awk {' print "crab resubmit " $0 }' |sed 's/:/ /' >resubmit.sh 
 ls CRAB_tot/* |grep "_tot"  | awk {' print "crab status " $0 }' |sed 's/:/ /' >status.sh
+ls crab/Crab_202010091*/* |grep "Crab_"  | awk {' print "crab resubmit " $0 }' |sed 's/:/ /' >resubmit.sh 
+
 
 chmod +x  status.sh
 chmod +x  resubmit.sh

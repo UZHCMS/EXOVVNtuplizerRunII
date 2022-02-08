@@ -1,0 +1,11 @@
+TAU -> First per-tau DNN
+TAU_UL18 -> Second per-tau DNN (only using 12 candidates after dR cuts, dz cuts and DOCA cuts) --> OFFICIAL
+TAU_UL17 -> Second per-tau DNN (only using 12 candidates after dR cuts, dz cuts and DOCA cuts) --> OFFICIAL
+
+
+*** PER_EVENT DNN
+TAU_class -> First per-event DNN (all tau decay as target) --> SIGNAL HAS NEGATIVE ENTRIES TOO ... ABONDON
+TAU_class_v21 -> Second per-event DNN: Train only for 3prong as target. add multi-classification. --> NOT WELL MODELLED ... ABONDON
+
+
+TAU_DATABKG -> Data-driven DNN

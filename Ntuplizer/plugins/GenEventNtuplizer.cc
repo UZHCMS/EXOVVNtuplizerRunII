@@ -1,7 +1,7 @@
 #include "../interface/GenEventNtuplizer.h"
 
 //===================================================================================================================
-GenEventNtuplizer::GenEventNtuplizer( std::vector< edm::EDGetTokenT< GenEventInfoProduct > > tokens, NtupleBranches* nBranches,  std::vector< edm::EDGetTokenT< LHEEventProduct > > tokens_lhe )
+GenEventNtuplizer::GenEventNtuplizer( std::vector< edm::EDGetTokenT< GenEventInfoProduct > > tokens, NtupleBranches* nBranches,  std::vector< edm::EDGetTokenT< LHEEventProduct > > tokens_lhe, std::map< std::string, bool >& runFlags )
    : CandidateNtuplizer( nBranches )
    , geneventToken_( tokens[0] )
    , lheEventProductToken_( tokens_lhe[0])
@@ -16,8 +16,22 @@ GenEventNtuplizer::~GenEventNtuplizer( void )
 }
 
 //===================================================================================================================
-void GenEventNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetup& iSetup ){
+bool GenEventNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetup& iSetup ){
 
+  //Skip events with no jspi if that analysis is chosen
+
+//    bool rflag = false;
+//    
+//    if(isJpsiEle_ || isJpsiMu_){
+//      if ( nBranches_->JpsiMu_B_pt.size() >=1) rflag = true;
+//    }
+//    
+//    if(isJpsiTau_){
+//      if ( nBranches_->JpsiTau_B_pt.size() >=1)  rflag = true;
+//    }
+//
+//    if(rflag==false) return;
+  
   event.getByToken(geneventToken_, geneventInfo_);  
   
   nBranches_->genWeight=geneventInfo_->weight();
@@ -139,4 +153,5 @@ void GenEventNtuplizer::fillBranches( edm::Event const & event, const edm::Event
   nBranches_->genFacRenWeightDown = weightFacRenDown;
   nBranches_->PDF_rms = 1. + pdfRMS;
 
+  return true;
 }

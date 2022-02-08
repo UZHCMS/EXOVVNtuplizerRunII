@@ -20,21 +20,19 @@ METsNtuplizer::METsNtuplizer( 	edm::EDGetTokenT<pat::METCollection>     mettoken
 				NtupleBranches* 			 nBranches   , 
 				std::map< std::string, bool >&                        runFlags 	)
 									
-: CandidateNtuplizer ( nBranches    )
-, metInputToken_     ( mettoken     )
-, metpuppiInputToken_( metpuppitoken)
-, metmvaInputToken_  ( metmvatoken  )
-, jetInputToken_     ( jettoken     )
-, muonInputToken_    ( muontoken    )	    
-, rhoToken_	     ( rhotoken     )	    
-, verticeToken_	     ( vtxtoken     )	
-, metSigToken_       ( metSigtoken  )
-, metCovToken_       ( metCovtoken  )
-, jetCorrLabel_	     ( jecAK4labels )
-, corrFormulas_	     ( corrformulas )	
-, doMETSVFIT_        ( runFlags["doMETSVFIT"]  )					    
-, doMVAMET_        ( runFlags["doMVAMET"]  )					    
-
+  : CandidateNtuplizer ( nBranches    )
+  , metInputToken_     ( mettoken     )
+  , metpuppiInputToken_( metpuppitoken)
+  , metmvaInputToken_  ( metmvatoken  )
+  , jetInputToken_     ( jettoken     )
+  , muonInputToken_    ( muontoken    )	    
+  , rhoToken_	     ( rhotoken     )	    
+  , verticeToken_	     ( vtxtoken     )	
+  , metSigToken_       ( metSigtoken  )
+  , metCovToken_       ( metCovtoken  )
+  , jetCorrLabel_	     ( jecAK4labels )
+  , corrFormulas_	     ( corrformulas )	
+  , doMVAMET_        ( runFlags["doMVAMET"]  )					    
 {
         if( jetCorrLabel_.size() != 0 ){
 	   offsetCorrLabel_.push_back(jetCorrLabel_[0]);
@@ -182,15 +180,29 @@ void METsNtuplizer::addTypeICorr( edm::Event const & event ){
 }
 
 //===================================================================================================================
-void METsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetup& iSetup ){
-
-
-
-  // PFMET
+bool METsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetup& iSetup ){
+    //Skip events with no jspi if that analysis is chosen
+   
+//    bool rflag = false;
+//    
+//    if(isJpsiEle_ || isJpsiMu_){
+//      if ( nBranches_->JpsiMu_B_pt.size() >=1) rflag = true;
+//    }
+//    
+//    if(isJpsiTau_){
+//      if ( nBranches_->JpsiTau_B_pt.size() >=1)  rflag = true;
+//    }
+//
+//    if(rflag==false) return;
+      
+        // PFMET
 	
   event.getByToken(metInputToken_, METs_ );
 
   if( doCorrOnTheFly_ ) addTypeICorr(event);
+
+  event.getByToken(rhoToken_ , rho_ );
+  nBranches_->rho = *(rho_.product()); //moving this from JetsNtuplizer.cc to here
 
   for (const pat::MET &met : *METs_) {
     //const float rawPt	= met.shiftedPt(pat::MET::NoShift, pat::MET::Raw);
@@ -302,26 +314,7 @@ void METsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
 
 
 
-  if (doMETSVFIT_) {
- 
-
-    event.getByToken (metSigToken_, significanceHandle);
-    event.getByToken (metCovToken_, covHandle);
-  //event.getByLabel ("METSignificance", "METSignificance", significanceHandle);
-  //event.getByLabel ("METSignificance", "METCovariance", covHandle);
- 
-    nBranches_->MET_significance.push_back( (*significanceHandle));
-    nBranches_->MET_cov00.push_back(    (*covHandle)(0,0));
-    nBranches_->MET_cov10.push_back(    (*covHandle)(1,0));
-    nBranches_->MET_cov11.push_back(    (*covHandle)(1,1));
-  //FROM LOW MASS ANALYSIS
-  // covMET[0][0] = (*covHandle)(0,0);
-  // covMET[1][0] = (*covHandle)(1,0);
-  // covMET[0][1] = covMET[1][0]; // (1,0) is the only one saved
-  // covMET[1][1] = (*covHandle)(1,1);
-  
-  }
-
+  return true;
 
 }
 

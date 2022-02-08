@@ -2,55 +2,40 @@ import FWCore.ParameterSet.Config as cms
 
 config = dict()
 
-#--------- general ----------#
+# only common flags are described here !!!
+# the rest will be dynamically switched later in the config
 
-#--------- Set Just one to true ----------#
-config["RUNONMC"] = False
-config["RUNONPromptReco"] = False
-config["RUNONReReco"] = True
-#-----------------------------------------#
 
-config["USEJSON"] = not (config["RUNONMC"])
-config["JSONFILE"] = "Cert_294927-306462_13TeV_PromptReco_Collisions17_JSON.txt"
-config["BUNCHSPACING"] = 25
-config["USENOHF"] = False
-config["FILTEREVENTS"] = False
+#--------- Verbose setting ----------#
+config["VERBOSE"] = False
+
+#--------- For filtering ----------#
+config["DZCUT"] = 0.12
+config["FSIGCUT"] = 3
+config["VPROBCUT"] = 0.00001
+config["TAU_CHARGE"] = 1
+
+config["JSONFILE"] = "JSON/Cert_314472-325175_13TeV_17SeptEarlyReReco2018ABC_PromptEraD_Collisions18_JSON.txt" # data 2018
+#config["JSONFILE"] = "JSON/Cert_271036-284044_13TeV_Legacy2016_Collisions16_JSON.txt"
+#config["JSONFILE"] = "JSON/Cert_294927-306462_13TeV_UL2017_Collisions17_GoldenJSON.txt"
+#config["JSONFILE"] = "JSON/Cert_314472-325175_13TeV_Legacy2018_Collisions18_JSON.txt"
+
 
 #--------- basic sequences ----------#
-config["DOGENPARTICLES"] = (True and config["RUNONMC"])
-config["DOGENJETS"] = (True and config["RUNONMC"])
-config["DOGENEVENT"] = (True and config["RUNONMC"])
-config["DOPILEUP"] = (True and config["RUNONMC"])
-config["DOELECTRONS"] = True
-config["DOMUONS"] = True
-config["DOTAUS"] = True
-config["DOAK8JETS"] = True
-config["DOAK4JETS"] = True
 config["DOVERTICES"] = True
-config["DOTRIGGERDECISIONS"] = True
-config["DOTRIGGEROBJECTS"] = False
-config["DOHLTFILTERS"] = True
-config["DOMISSINGET"] = True
-config["DOTAUSBOOSTED"] = True
-config["DOMETSVFIT"] = True
-config["DOMVAMET"] = False
+config["DOMISSINGET"] = False
 
-#--------- AK8 jets reclustering ----------#
-config["ADDAK8GENJETS"] = (True and config["RUNONMC"]) #! Add AK8 gen jet collection with pruned and softdrop mass
-config["DOAK8RECLUSTERING"] = False
-config["DOAK8PRUNEDRECLUSTERING"] = False #! To add pruned jet and pruned subjet collection (not in MINIAOD)
-config["DOAK8PUPPI"] = False
-config["DOAK10TRIMMEDRECLUSTERING"] = False #ATLAS sequence
-config["DOHBBTAG"] = False #Higgs-tagger
-config["DOAK8PUPPIRECLUSTERING"] = False
-config["UpdateJetCollection"] = False #needed for Higgs-tagger in 80X
+config["DOJPSIMU"] = False
+config["DOJPSITAU"] = True
+config["DOJPSIK"] = False
+config["DOJPSIKE"] = False
 
-#--------- MET reclustering ----------#
-config["DOMETRECLUSTERING"] = False
+config["DNNFILE_PERPF"] = "data/DNN/BcJPsi/TAU_UL18/DUMMY"
+config["DNNFILE_PEREVT_MC"] = "data/DNN/BcJPsi/TAU_MCBKG/DUMMY"
+config["DNNFILE_PEREVT_DATA"] = "data/DNN/BcJPsi/TAU_DATABKG/DUMMY"
+config["BWEIGHTFILE"] = "data/BWEIGHT/decay_weight.root"
 
 #--------- JEC ----------#
-config["CORRJETSONTHEFLY"] = True # at the moment JEC available just for MC Fall17
-config["CORRMETONTHEFLY"] = True  # at the moment JEC available just for MC Fall17
-config["GETJECFROMDBFILE"] = False # If not yet in global tag, but db file available
-#--------- TAU ----------#
-config["DOMULTIPLETAUMVAVERSIONS"] = True #This flag eneables the possibility to access a sqlite *db file and save the latest training of the tau MVA isolation "v2" in parellel as the one of "v1" taken from the CMSSW database.
+
+config["CORRMETONTHEFLY"] = False  # at the moment JEC available just for MC Fall17
+

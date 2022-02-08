@@ -15,4 +15,26 @@
 <use name="DataFormats/PatCandidates"/>
 <use name="DataFormats/Candidate"/>
 <use name="AnalysisDataFormats/TopObjects"/>
+<use name="RecoVertex/KalmanVertexFit"/>
+<use name="RecoVertex/AdaptiveVertexFit"/>
+<use name="TrackingTools/Records"/>
+<use name="TrackingTools/TransientTrack"/>
+<use name="TrackingTools/IPTools"/>
+<use name="RecoBTag/SecondaryVertex"/> 
+<use name="DataFormats/Common"/>
+<use name="SimDataFormats/TrackingAnalysis"/>
+<use name="SimTracker/Records"/>
+<use name="RecoVertex/KinematicFit"/>
+<use name="RecoVertex/KinematicFitPrimitives"/>
+<use name="SimTracker/TrackAssociation"/>
+<use name="clhep"/>
+<use name="root"/>
+<use name="DataFormats/Math"/>
+<use name="DataFormats/TrackReco"/>
+<use   name="DataFormats/HepMCCandidate"/>
+<use   name="PhysicsTools/JetMCUtils"/>
+<use name="PhysicsTools/TensorFlow" />
+
+<flags CXXFLAGS="-Wno-unknown-pragmas -I$(CMSSW_BASE)/src/Hammer/Hammer-Install/include -l:libHammerCore.so.1.2.1 -l:libHammerBase.so.1.2.1 -l:libHammerTools.so.1.2.1 -l:libAmplitudes.so.1.2.1 -l:libRates.so.1.2.1 -l:libFormFactors.so.1.2.1 -l:libyaml-cpp.so.0.6"/>
+
 <flags EDM_PLUGIN="1"/>

@@ -1,0 +1,4 @@
+#/OniaAndX_ToMuMu_MuFilter_SoftQCDnonD_TuneCP5_13TeV-pythia8-evtgen/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v1/MINIAODSIM
+#/JpsiX_MuMu_J_211119/cgalloni-Autumn18_10_2_9_miniAOD-39a089a8e7301f392b8b059e430f83ef/USER
+#/DIGI_JpsiX_MuMu_20210905/cgalloni-UL18_MINIAOD_v1_noDuplCheck-cb0e7829b1b4ca4eee675686c1769096/USER
+/qq_JpsiX_MuMu_20211012/cgalloni-UL18_MINIAOD_v1_noDuplCheck-cb0e7829b1b4ca4eee675686c1769096/USER

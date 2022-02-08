@@ -9,7 +9,7 @@ public:
    CandidateNtuplizer( NtupleBranches* nBranches );
    virtual ~CandidateNtuplizer( void );
 
-   virtual void fillBranches( edm::Event const & event, const edm::EventSetup& iSetup ){};
+   virtual bool fillBranches( edm::Event const & event, const edm::EventSetup& iSetup ){return true;};
    
 protected:
    NtupleBranches* nBranches_;
