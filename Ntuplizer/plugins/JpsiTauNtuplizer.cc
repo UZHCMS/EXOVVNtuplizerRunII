@@ -523,6 +523,7 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 
   std::vector<TLorentzVector> gen_nr_mu;
   std::vector<TLorentzVector> gen_jpsi_mu;
+  std::vector<TLorentzVector> gen_pions;
 
   std::vector<float> match_pt;
   std::vector<float> match_eta;
@@ -551,6 +552,144 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
     
     event.getByToken(genParticlesToken_ , genParticles_);   
     event.getByToken(packedgenParticlesToken_ , packedgenParticles_);   
+
+    /////////////////////////////////////////////////
+    // code from Stefanos 
+    /////////////////////////////////////////////////
+
+    int pion_counter = 0;
+    TLorentzVector pion1; pion1.SetPtEtaPhiM(0., 0., 0., 0.); 
+    TLorentzVector pion2; pion2.SetPtEtaPhiM(0., 0., 0., 0.);
+    TLorentzVector pion3; pion3.SetPtEtaPhiM(0., 0., 0., 0.);
+    double pion1charge = 0;
+    double pion2charge = 0;
+    double pion3charge = 0;
+
+    //    for( unsigned p=0; p < genParticles_->size(); ++p){
+      
+    //      if(!(TMath::Abs((*genParticles_)[p].pdgId())==541 && (*genParticles_)[p].status()==2)) continue;
+
+
+    for(unsigned int i = 0; i < genParticles_->size(); ++i) {
+      const reco::GenParticle* gen_particle = &genParticles_->at(i);
+      if ( TMath::Abs(gen_particle->pdgId()) == 15 && pion_counter==0) {//  && gen_particle->status() == 62) {
+        for (size_t j = 0; j < gen_particle->numberOfDaughters(); ++j) {
+          if (TMath::Abs(gen_particle->daughter(j)->pdgId())==211)
+            pion_counter++;
+        }
+        if (pion_counter!=3) {continue;}
+        std::vector<double> pt, eta, phi, mass, charge;
+        for (size_t j = 0; j < gen_particle->numberOfDaughters(); ++j) {
+          if (TMath::Abs(gen_particle->daughter(j)->pdgId())==211) {
+            pt.push_back(gen_particle->daughter(j)->pt());
+            eta.push_back(gen_particle->daughter(j)->eta());
+            phi.push_back(gen_particle->daughter(j)->phi());
+            mass.push_back(gen_particle->daughter(j)->mass());
+            if (gen_particle->daughter(j)->pdgId() > 0) { charge.push_back(1); } else { charge.push_back(-1); }
+          }
+	  //          truth_tau_daughter_status.push_back(gen_particle->daughter(j)->status());
+	  //          truth_tau_daughter_pdg.push_back   (gen_particle->daughter(j)->pdgId());
+	  //          truth_tau_daughter_pt.push_back    (gen_particle->daughter(j)->pt());
+	  //          truth_tau_daughter_eta.push_back   (gen_particle->daughter(j)->eta());
+	  //          truth_tau_daughter_phi.push_back   (gen_particle->daughter(j)->phi());
+        }
+
+        if ((pt.at(0) > pt.at(1)) && (pt.at(0) > pt.at(2))) {
+          pion1charge = charge.at(0);
+          pion1.SetPtEtaPhiM( pt.at(0), eta.at(0), phi.at(0), mass.at(0) );
+          if (pt.at(1)>pt.at(2)) {
+            pion2charge = charge.at(1);
+            pion3charge = charge.at(2);
+            pion2.SetPtEtaPhiM( pt.at(1), eta.at(1), phi.at(1), mass.at(1) );
+            pion3.SetPtEtaPhiM( pt.at(2), eta.at(2), phi.at(2), mass.at(2) );
+          } else {
+            pion2charge = charge.at(2);
+            pion3charge = charge.at(1);
+            pion2.SetPtEtaPhiM( pt.at(2), eta.at(2), phi.at(2), mass.at(2) );
+            pion3.SetPtEtaPhiM( pt.at(1), eta.at(1), phi.at(1), mass.at(1) );
+          }
+        }
+
+        if ((pt.at(1) > pt.at(0)) && (pt.at(1) > pt.at(2))) {
+          pion1charge = charge.at(1);
+          pion1.SetPtEtaPhiM( pt.at(1), eta.at(1), phi.at(1), mass.at(1) );
+          if (pt.at(0)>pt.at(2)) {
+            pion2charge = charge.at(0);
+            pion3charge = charge.at(2);
+            pion2.SetPtEtaPhiM( pt.at(0), eta.at(0), phi.at(0), mass.at(0) );
+            pion3.SetPtEtaPhiM( pt.at(2), eta.at(2), phi.at(2), mass.at(2) );
+          } else {
+            pion2charge = charge.at(2);
+            pion3charge = charge.at(0);
+            pion2.SetPtEtaPhiM( pt.at(2), eta.at(2), phi.at(2), mass.at(2) );
+            pion3.SetPtEtaPhiM( pt.at(0), eta.at(0), phi.at(0), mass.at(0) );
+          }
+        }
+
+        if ((pt.at(2) > pt.at(0)) && (pt.at(2) > pt.at(1))) {
+          pion1charge = charge.at(2);
+          pion1.SetPtEtaPhiM( pt.at(2), eta.at(2), phi.at(2), mass.at(2) );
+          if (pt.at(0)>pt.at(1)) {
+            pion2charge = charge.at(0);
+            pion3charge = charge.at(1);
+            pion2.SetPtEtaPhiM( pt.at(0), eta.at(0), phi.at(0), mass.at(0) );
+            pion3.SetPtEtaPhiM( pt.at(1), eta.at(1), phi.at(1), mass.at(1) );
+          } else {
+            pion2charge = charge.at(1);
+            pion3charge = charge.at(0);
+            pion2.SetPtEtaPhiM( pt.at(1), eta.at(1), phi.at(1), mass.at(1) );
+            pion3.SetPtEtaPhiM( pt.at(0), eta.at(0), phi.at(0), mass.at(0) );
+          }
+        }
+
+
+
+        if (pion1charge+pion2charge==0 && pion1charge+pion3charge==0) {
+          nBranches_->truth_tau_dipion1_mass.push_back((pion1+pion2).M());
+          nBranches_->truth_tau_dipion1_pt.push_back  ((pion1+pion2).Pt());
+          nBranches_->truth_tau_dipion1_eta.push_back ((pion1+pion2).Eta());
+          nBranches_->truth_tau_dipion1_phi.push_back ((pion1+pion2).Phi());
+
+          nBranches_->truth_tau_dipion2_mass.push_back((pion1+pion3).M());
+          nBranches_->truth_tau_dipion2_pt.push_back  ((pion1+pion3).Pt());
+          nBranches_->truth_tau_dipion2_eta.push_back ((pion1+pion3).Eta());
+          nBranches_->truth_tau_dipion2_phi.push_back ((pion1+pion3).Phi());
+        } else if (pion1charge+pion2charge==0 && pion2charge+pion3charge==0) {
+          nBranches_->truth_tau_dipion1_mass.push_back((pion1+pion2).M());
+          nBranches_->truth_tau_dipion1_pt.push_back  ((pion1+pion2).Pt());
+          nBranches_->truth_tau_dipion1_eta.push_back ((pion1+pion2).Eta());
+          nBranches_->truth_tau_dipion1_phi.push_back ((pion1+pion2).Phi());
+
+          nBranches_->truth_tau_dipion2_mass.push_back((pion2+pion3).M());
+          nBranches_->truth_tau_dipion2_pt.push_back  ((pion2+pion3).Pt());
+          nBranches_->truth_tau_dipion2_eta.push_back ((pion2+pion3).Eta());
+          nBranches_->truth_tau_dipion2_phi.push_back ((pion2+pion3).Phi());
+        } else if (pion1charge+pion3charge==0 && pion2charge+pion3charge==0) {
+          nBranches_->truth_tau_dipion1_mass.push_back((pion1+pion3).M());
+          nBranches_->truth_tau_dipion1_pt.push_back  ((pion1+pion3).Pt());
+          nBranches_->truth_tau_dipion1_eta.push_back ((pion1+pion3).Eta());
+          nBranches_->truth_tau_dipion1_phi.push_back ((pion1+pion3).Phi());
+
+          nBranches_->truth_tau_dipion2_mass.push_back((pion2+pion3).M());
+          nBranches_->truth_tau_dipion2_pt.push_back  ((pion2+pion3).Pt());
+          nBranches_->truth_tau_dipion2_eta.push_back ((pion2+pion3).Eta());
+          nBranches_->truth_tau_dipion2_phi.push_back ((pion2+pion3).Phi());
+        }
+
+	//	std::cout <<"check:" << nBranches_->truth_tau_dipion2_phi.size() << " " << nBranches_->truth_tau_dipion1_phi.size() << std::endl;
+
+//        truth_tau_status.push_back(gen_particle->mass());
+//        truth_tau_pdg.push_back(gen_particle->pdgId());
+//        truth_tau_pt.push_back (gen_particle->pt());
+//        truth_tau_eta.push_back(gen_particle->eta());
+//        truth_tau_phi.push_back(gen_particle->phi());
+      }
+
+    }
+
+
+    /////////////////////////////////////////////////
+
 
     for( unsigned p=0; p < genParticles_->size(); ++p){
       

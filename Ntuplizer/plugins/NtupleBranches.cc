@@ -399,6 +399,17 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch("JpsiTau_isJpsiMu", &JpsiTau_isJpsiMu );
     tree_->Branch("JpsiTau_isJpsiTau2Mu", &JpsiTau_isJpsiTau2Mu );
 
+    tree_->Branch("truth_tau_dipion1_mass", &truth_tau_dipion1_mass);
+    //    tree_->Branch("truth_tau_dipion1_pdg", &truth_tau_dipion1_pdg);
+    tree_->Branch("truth_tau_dipion1_pt",  &truth_tau_dipion1_pt);
+    tree_->Branch("truth_tau_dipion1_eta", &truth_tau_dipion1_eta);
+    tree_->Branch("truth_tau_dipion1_phi", &truth_tau_dipion1_phi);
+    tree_->Branch("truth_tau_dipion2_mass", &truth_tau_dipion2_mass);
+    //    tree_->Branch("truth_tau_dipion2_pdg", &truth_tau_dipion2_pdg);
+    tree_->Branch("truth_tau_dipion2_pt",  &truth_tau_dipion2_pt);
+    tree_->Branch("truth_tau_dipion2_eta", &truth_tau_dipion2_eta);
+    tree_->Branch("truth_tau_dipion2_phi", &truth_tau_dipion2_phi);
+
 
     tree_->Branch("JpsiTau_mu1_pt", &JpsiTau_mu1_pt );
     tree_->Branch("JpsiTau_mu1_eta", &JpsiTau_mu1_eta );
@@ -2224,6 +2235,19 @@ void NtupleBranches::reset( void ){
   JpsiTau_nCandidates = -99;
   JpsiTau_isJpsiMu = false;
   JpsiTau_isJpsiTau2Mu = false;
+
+  truth_tau_dipion1_mass.clear();
+  //  truth_tau_dipion1_pdg.clear(); 
+  truth_tau_dipion1_pt.clear();
+  truth_tau_dipion1_eta.clear();
+  truth_tau_dipion1_phi.clear();
+
+  truth_tau_dipion2_mass.clear();
+  //  truth_tau_dipion2_pdg.clear(); 
+  truth_tau_dipion2_pt.clear();
+  truth_tau_dipion2_eta.clear();
+  truth_tau_dipion2_phi.clear();
+
 
   JpsiTau_mu1_pt = -99;
   JpsiTau_mu1_eta = -99;

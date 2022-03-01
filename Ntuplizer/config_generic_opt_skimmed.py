@@ -89,7 +89,7 @@ options.register( 'runUpToEarlyF',
 
 
 
-options.maxEvents = 1000
+options.maxEvents = 100
 #options.maxEvents = -1
 
 
@@ -110,8 +110,8 @@ else:
 #    options.inputFiles = ''
     options.inputFiles = '/store/mc/RunIISummer20UL18MiniAODv2/JPsiMuMu_JPsiPtFilter_2MuPtEtaFilter_TuneCP5_13TeV-pythia8-evtgen/MINIAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2540000/004C57FB-98FA-5345-8CA3-F72478FC8999.root'
   else:
-#    options.inputFiles = '/store/mc/RunIISummer19UL18MiniAOD/BcToJPsiTauNu_TuneCP5_13TeV-bcvegpy2-pythia8-evtgen/MINIAODSIM/106X_upgrade2018_realistic_v11_L1v1_ext1-v2/100000/02F13381-1D94-CC43-948A-2EFFB8572949.root'
-    options.inputFiles = '/store/mc/RunIISummer20UL18MiniAOD/BcToJPsiMuMu_inclusive_TuneCP5_13TeV-bcvegpy2-pythia8-evtgen/MINIAODSIM/106X_upgrade2018_realistic_v11_L1v1-v2/00000/06261AC0-CB13-4241-8FCE-729E5E649532.root'
+    options.inputFiles = '/store/mc/RunIISummer19UL18MiniAOD/BcToJPsiTauNu_TuneCP5_13TeV-bcvegpy2-pythia8-evtgen/MINIAODSIM/106X_upgrade2018_realistic_v11_L1v1_ext1-v2/100000/02F13381-1D94-CC43-948A-2EFFB8572949.root'
+#    options.inputFiles = '/store/mc/RunIISummer20UL18MiniAOD/BcToJPsiMuMu_inclusive_TuneCP5_13TeV-bcvegpy2-pythia8-evtgen/MINIAODSIM/106X_upgrade2018_realistic_v11_L1v1-v2/00000/06261AC0-CB13-4241-8FCE-729E5E649532.root'
 
 
 

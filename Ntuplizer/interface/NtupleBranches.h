@@ -500,6 +500,17 @@ public:
 
 
 
+  
+  std::vector<double> truth_tau_dipion1_mass;
+  //  std::vector<double> truth_tau_dipion1_pdg;
+  std::vector<double> truth_tau_dipion1_pt;
+  std::vector<double> truth_tau_dipion1_eta;
+  std::vector<double> truth_tau_dipion1_phi;
+  std::vector<double> truth_tau_dipion2_mass;
+  //  std::vector<double> truth_tau_dipion2_pdg;
+  std::vector<double> truth_tau_dipion2_pt;
+  std::vector<double> truth_tau_dipion2_eta;
+  std::vector<double> truth_tau_dipion2_phi;
 
 
 

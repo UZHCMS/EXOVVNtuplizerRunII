@@ -224,6 +224,7 @@ bool GenParticlesNtuplizer::fillBranches( edm::Event const & event, const edm::E
         bool isBSM( (abs((*genParticles_)[p].pdgId())>=30 && abs((*genParticles_)[p].pdgId())<=50) || abs((*genParticles_)[p].pdgId())>=1000000 );
         bool isB( (abs((*genParticles_)[p].pdgId())>=511 && abs((*genParticles_)[p].pdgId())<=545));
         bool isB2( abs((*genParticles_)[p].pdgId())==511 || abs((*genParticles_)[p].pdgId())==521 || abs((*genParticles_)[p].pdgId())==531 || abs((*genParticles_)[p].pdgId())==541 );
+	//        bool isD( abs((*genParticles_)[p].pdgId())==411 || abs((*genParticles_)[p].pdgId())==421 || abs((*genParticles_)[p].pdgId())==431);
         bool isStatus2( (*genParticles_)[p].status()==2 );
         bool isStatus1( (*genParticles_)[p].status()==1 );
 
@@ -287,6 +288,7 @@ bool GenParticlesNtuplizer::fillBranches( edm::Event const & event, const edm::E
 	///////////////////////////////
 	// Yuta 
 	
+	//	if(isB || isD){
 	if(isB){
 	  
 	  if(verbose_) std::cout << "[GenParticlesNtuplizer] " << (*genParticles_)[p].pdgId() << " (" << (*genParticles_)[p].status() << ") from ";
