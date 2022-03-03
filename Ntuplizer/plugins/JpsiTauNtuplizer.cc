@@ -572,7 +572,10 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 
     for(unsigned int i = 0; i < genParticles_->size(); ++i) {
       const reco::GenParticle* gen_particle = &genParticles_->at(i);
-      if ( TMath::Abs(gen_particle->pdgId()) == 15 && pion_counter==0) {//  && gen_particle->status() == 62) {
+      if ( TMath::Abs(gen_particle->pdgId()) == 15 && gen_particle->status() ==2 && TMath::Abs(gen_particle->mother(0)->pdgId())==541 && pion_counter==0) {//  && gen_particle->status() == 62) {
+	
+
+
         for (size_t j = 0; j < gen_particle->numberOfDaughters(); ++j) {
           if (TMath::Abs(gen_particle->daughter(j)->pdgId())==211)
             pion_counter++;
