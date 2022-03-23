@@ -805,6 +805,7 @@ public:
   Int_t JpsiTau_st_n_e_decay = 0;
   Int_t JpsiTau_st_n_occurance = 0;
   Int_t JpsiTau_st_decayid;
+  Int_t JpsiTau_general_ntau = 0;
   Float_t JpsiTau_st_gentau_pt;
   Float_t JpsiTau_st_gentau_eta;
   Float_t JpsiTau_st_gentau_phi;

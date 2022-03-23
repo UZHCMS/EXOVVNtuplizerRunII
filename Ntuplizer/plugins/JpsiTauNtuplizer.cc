@@ -568,6 +568,25 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
     //    for( unsigned p=0; p < genParticles_->size(); ++p){
       
     //      if(!(TMath::Abs((*genParticles_)[p].pdgId())==541 && (*genParticles_)[p].status()==2)) continue;
+    
+    int general_ntau = 0;
+    
+    for(unsigned int i = 0; i < genParticles_->size(); ++i) {
+      const reco::GenParticle* gen_particle = &genParticles_->at(i);
+      if ( TMath::Abs(gen_particle->pdgId()) == 15 && gen_particle->status() ==2){
+
+	int general_pion_counter = 0;
+
+        for (size_t j = 0; j < gen_particle->numberOfDaughters(); ++j) {
+          if (TMath::Abs(gen_particle->daughter(j)->pdgId())==211) general_pion_counter++;
+        }
+	
+	if(general_pion_counter==3) general_ntau += 1;
+	
+      }
+    }
+
+    nBranches_->JpsiTau_general_ntau = general_ntau;
 
 
     for(unsigned int i = 0; i < genParticles_->size(); ++i) {
