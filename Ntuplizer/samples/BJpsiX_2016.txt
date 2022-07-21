@@ -1,0 +1,2 @@
+/HbToJPsiMuMu_TuneCP5_13TeV-pythia8-evtgen/RunIISummer20UL16MiniAODAPVv2-106X_mcRun2_asymptotic_preVFP_v11-v2/MINIAODSIM
+/HbToJPsiMuMu_TuneCP5_13TeV-pythia8-evtgen/RunIISummer20UL16MiniAODv2-106X_mcRun2_asymptotic_v17-v2/MINIAODSIM

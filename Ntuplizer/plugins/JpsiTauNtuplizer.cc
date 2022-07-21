@@ -1201,8 +1201,10 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 
   const reco::TrackRef track1_muon = muoncollection[mcidx_mu1].muonBestTrack();
   const reco::TrackRef track2_muon = muoncollection[mcidx_mu2].muonBestTrack();
-  reco::TransientTrack tt1_muon = (*builder).build(track1_muon);
-  reco::TransientTrack tt2_muon = (*builder).build(track2_muon);
+  //  reco::TransientTrack tt1_muon = (*builder).build(track1_muon);
+  //  reco::TransientTrack tt2_muon = (*builder).build(track2_muon);
+  reco::TransientTrack tt1_muon = (*builder).build(aux.fix_track(track1_muon));
+  reco::TransientTrack tt2_muon = (*builder).build(aux.fix_track(track2_muon));
 
   KinematicParticleFactoryFromTransientTrack pFactory;
   std::vector<RefCountedKinematicParticle> muonParticles;
@@ -1388,7 +1390,8 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 
       if(pf.vertexRef()->z()==closestVertex.position().z()){
 	//      std::cout << "test2" << std::endl;
-	reco::TransientTrack  _track_ = (*builder).build(pf.pseudoTrack());
+	//reco::TransientTrack  _track_ = (*builder).build(pf.pseudoTrack());
+	reco::TransientTrack  _track_ = (*builder).build(aux.fix_track(&pf.pseudoTrack()));
 	//	_track = (*builder).build(pf.pseudoTrack());
 	//	std::cout << "test3" << std::endl;
 	_track_.setBeamSpot(*beamspot_);
@@ -1409,7 +1412,8 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
     if(TMath::Abs(precut_dz) > c_dz) continue;
 
 
-    reco::TransientTrack  _track = (*builder).build(pf.pseudoTrack());
+    //reco::TransientTrack  _track = (*builder).build(pf.pseudoTrack());
+    reco::TransientTrack  _track = (*builder).build(aux.fix_track(&pf.pseudoTrack()));
   
     TrajectoryStateOnSurface _tsos_pf = extrapolator.extrapolate(_track.impactPointState(), jpsi_vertex->position());
 
@@ -1553,7 +1557,8 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
     };
 
     
-    reco::TransientTrack  tt_track = (*builder).build(pf.pseudoTrack());
+    //reco::TransientTrack  tt_track = (*builder).build(pf.pseudoTrack());
+    reco::TransientTrack  tt_track = (*builder).build(aux.fix_track(&pf.pseudoTrack()));
     
     pfcand_struct _cand_ = {
       (Int_t)ii,

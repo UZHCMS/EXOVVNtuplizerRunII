@@ -592,6 +592,7 @@ bool JpsiKNtuplizer::fillBranches( edm::Event const & event, const edm::EventSet
     std::vector<RefCountedKinematicParticle> allParticles;
       
     allParticles.push_back(pFactory.particle(track, aux.kaon_mass, chi, ndf, aux.kaon_sigma));
+    //    allParticles.push_back(pFactory.particle(track, aux.pion_mass, chi, ndf, aux.pion_sigma));
     allParticles.push_back(pFactory.particle(tt1_muon, aux.muon_mass, chi, ndf, aux.muon_sigma));
     allParticles.push_back(pFactory.particle(tt2_muon, aux.muon_mass, chi, ndf, aux.muon_sigma));
 

@@ -97,6 +97,9 @@
 #include <stdlib.h>
 #include <vector>
 #include <map>
+#include "TMatrixDSym.h"
+#include "TVectorD.h"
+
 
 #include "Hammer/Hammer.hh"
 #include "Hammer/Process.hh"
@@ -212,6 +215,9 @@ class helper{
 			  bool verbose
 			  );
   
+
+  reco::Track fix_track(const reco::Track *tk, double delta = 1e-8);
+  reco::Track fix_track(const reco::TrackRef& tk);
 
 
   bool isAncestor(const reco::Candidate* ancestor, const reco::Candidate * particle);
