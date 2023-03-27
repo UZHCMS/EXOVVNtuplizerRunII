@@ -228,7 +228,7 @@ public:
   /*-------------------------JPSI VARIABLES---------------------*/
   std::vector<int  >                IsJpsiMu    ;   
   //  std::vector<int  >                IsBsTauTau   ;
-  //  std::vector<int  >                IsBsTauTauFH   ;
+  std::vector<int  >                IsBsTauTauFH   ;
   //  std::vector<int  >                IsBsDstarTauNu   ;
 
   std::vector<int  >                JpsiMu_nCandidates ;
@@ -1471,172 +1471,172 @@ public:
 //
 //
 //
-//  std::vector<int  >                BsTauTauFH_nCandidates ;
-//  std::vector<int  >                BsTauTauFH_ntaus ;
-//
-//  std::vector<float>                BsTauTauFH_mu1_pt      ;
-//  std::vector<float>                BsTauTauFH_mu1_eta     ;
-//  std::vector<float>                BsTauTauFH_mu1_phi     ;
-//  std::vector<float>                BsTauTauFH_mu1_mass     ;
-//  std::vector<float>                BsTauTauFH_mu1_unfit_pt      ;
-//  std::vector<float>                BsTauTauFH_mu1_unfit_eta     ;
-//  std::vector<float>                BsTauTauFH_mu1_unfit_phi     ;
-//  std::vector<float>                BsTauTauFH_mu1_unfit_mass     ;
-//  std::vector<int  >                BsTauTauFH_mu1_q      ;   
-//  std::vector<int  >                BsTauTauFH_mu1_isLoose   ;
-//  std::vector<int  >                BsTauTauFH_mu1_isTight   ;
-//  std::vector<int  >                BsTauTauFH_mu1_isPF      ;
-//  std::vector<int  >                BsTauTauFH_mu1_isGlobal  ;
-//  std::vector<int  >                BsTauTauFH_mu1_isTracker ;
-//  std::vector<int  >                BsTauTauFH_mu1_isSoft    ;
-//  std::vector<float>                BsTauTauFH_mu1_vx       ;
-//  std::vector<float>                BsTauTauFH_mu1_vy       ;
-//  std::vector<float>                BsTauTauFH_mu1_vz       ;
-//  std::vector<float>                BsTauTauFH_mu1_iso       ;
-//  std::vector<float>                BsTauTauFH_mu1_dbiso       ;
-//
-//  std::vector<float>                BsTauTauFH_tau1_pt      ;
-//  std::vector<float>                BsTauTauFH_tau1_eta     ;
-//  std::vector<float>                BsTauTauFH_tau1_phi     ;
-//  std::vector<float>                BsTauTauFH_tau1_mass     ;
-//  std::vector<float>                BsTauTauFH_tau1_rhomass1     ;
-//  std::vector<float>                BsTauTauFH_tau1_rhomass2     ;
-//  std::vector<int  >                BsTauTauFH_tau1_q   ;   
-//  std::vector<float>                BsTauTauFH_tau1_vx       ;
-//  std::vector<float>                BsTauTauFH_tau1_vy       ;
-//  std::vector<float>                BsTauTauFH_tau1_vz       ;
-//
-//  std::vector<float>       BsTauTauFH_tau1_max_dr_3prong;
-//  std::vector<float>       BsTauTauFH_tau1_lip;
-//  std::vector<float>       BsTauTauFH_tau1_lips;
-//  std::vector<float>       BsTauTauFH_tau1_pvip;
-//  std::vector<float>       BsTauTauFH_tau1_pvips;
-//  std::vector<float>       BsTauTauFH_tau1_fl3d;
-//  std::vector<float>       BsTauTauFH_tau1_fls3d;
-//  std::vector<float>       BsTauTauFH_tau1_alpha;
-//  std::vector<float>       BsTauTauFH_tau1_vprob;
-//  std::vector<bool>        BsTauTauFH_tau1_isRight;
-//  std::vector<int>         BsTauTauFH_tau1_matched_ppdgId;
-//  std::vector<float>       BsTauTauFH_tau1_matched_gentaupt;
-//  std::vector<float>       BsTauTauFH_tau1_sumofdnn; 
-//  std::vector<int>       BsTauTauFH_tau1_pfidx1;
-//  std::vector<int>       BsTauTauFH_tau1_pfidx2;
-//  std::vector<int>       BsTauTauFH_tau1_pfidx3;
-//  std::vector<float>       BsTauTauFH_tau1_pi1_dnn;
-//  std::vector<float>       BsTauTauFH_tau1_pi2_dnn;
-//  std::vector<float>       BsTauTauFH_tau1_pi3_dnn;
-//
-//  std::vector<float>       BsTauTauFH_tau1_pi1_pt;
-//  std::vector<float>       BsTauTauFH_tau1_pi1_eta;
-//  std::vector<float>       BsTauTauFH_tau1_pi1_phi;
-//  std::vector<float>       BsTauTauFH_tau1_pi1_mass;
-//  std::vector<float>       BsTauTauFH_tau1_pi2_pt;
-//  std::vector<float>       BsTauTauFH_tau1_pi2_eta;
-//  std::vector<float>       BsTauTauFH_tau1_pi2_phi;
-//  std::vector<float>       BsTauTauFH_tau1_pi2_mass;
-//  std::vector<float>       BsTauTauFH_tau1_pi3_pt;
-//  std::vector<float>       BsTauTauFH_tau1_pi3_eta;
-//  std::vector<float>       BsTauTauFH_tau1_pi3_phi;
-//  std::vector<float>       BsTauTauFH_tau1_pi3_mass;
-//
-//  std::vector<float>                BsTauTauFH_tau2_pt      ;
-//  std::vector<float>                BsTauTauFH_tau2_eta     ;
-//  std::vector<float>                BsTauTauFH_tau2_phi     ;
-//  std::vector<float>                BsTauTauFH_tau2_mass     ;
-//  std::vector<float>                BsTauTauFH_tau2_rhomass1     ;
-//  std::vector<float>                BsTauTauFH_tau2_rhomass2     ;
-//  std::vector<int  >                BsTauTauFH_tau2_q   ;   
-//  std::vector<float>                BsTauTauFH_tau2_vx       ;
-//  std::vector<float>                BsTauTauFH_tau2_vy       ;
-//  std::vector<float>                BsTauTauFH_tau2_vz       ;
-//
-//  std::vector<float>       BsTauTauFH_tau2_max_dr_3prong;
-//  std::vector<float>       BsTauTauFH_tau2_lip;
-//  std::vector<float>       BsTauTauFH_tau2_lips;
-//  std::vector<float>       BsTauTauFH_tau2_pvip;
-//  std::vector<float>       BsTauTauFH_tau2_pvips;
-//  std::vector<float>       BsTauTauFH_tau2_fl3d;
-//  std::vector<float>       BsTauTauFH_tau2_fls3d;
-//  std::vector<float>       BsTauTauFH_tau2_alpha;
-//  std::vector<float>       BsTauTauFH_tau2_vprob;
-//  std::vector<bool>        BsTauTauFH_tau2_isRight;
-//  std::vector<int>         BsTauTauFH_tau2_matched_ppdgId;
-//  std::vector<float>       BsTauTauFH_tau2_matched_gentaupt;
-//  std::vector<float>       BsTauTauFH_tau2_sumofdnn; 
-//  std::vector<int>       BsTauTauFH_tau2_pfidx1;
-//  std::vector<int>       BsTauTauFH_tau2_pfidx2;
-//  std::vector<int>       BsTauTauFH_tau2_pfidx3;
-//  std::vector<float>       BsTauTauFH_tau2_pi1_dnn;
-//  std::vector<float>       BsTauTauFH_tau2_pi2_dnn;
-//  std::vector<float>       BsTauTauFH_tau2_pi3_dnn;
-//
-//  std::vector<float>       BsTauTauFH_tau2_pi1_pt;
-//  std::vector<float>       BsTauTauFH_tau2_pi1_eta;
-//  std::vector<float>       BsTauTauFH_tau2_pi1_phi;
-//  std::vector<float>       BsTauTauFH_tau2_pi1_mass;
-//  std::vector<float>       BsTauTauFH_tau2_pi2_pt;
-//  std::vector<float>       BsTauTauFH_tau2_pi2_eta;
-//  std::vector<float>       BsTauTauFH_tau2_pi2_phi;
-//  std::vector<float>       BsTauTauFH_tau2_pi2_mass;
-//  std::vector<float>       BsTauTauFH_tau2_pi3_pt;
-//  std::vector<float>       BsTauTauFH_tau2_pi3_eta;
-//  std::vector<float>       BsTauTauFH_tau2_pi3_phi;
-//  std::vector<float>       BsTauTauFH_tau2_pi3_mass;
-//
-//  std::vector<float>                BsTauTauFH_B_pt      ;
-//  std::vector<float>                BsTauTauFH_B_eta     ;
-//  std::vector<float>                BsTauTauFH_B_phi     ;
-//  std::vector<float>                BsTauTauFH_B_mass    ;
-//  std::vector<float>                BsTauTauFH_B_vprob ;
-//  std::vector<float>                BsTauTauFH_B_lip;
-//  std::vector<float>                BsTauTauFH_B_lips;
-//  std::vector<float>                BsTauTauFH_B_pvip;
-//  std::vector<float>                BsTauTauFH_B_pvips;
-//  std::vector<float>                BsTauTauFH_B_fl3d;
-//  std::vector<float>                BsTauTauFH_B_fls3d;
-//  std::vector<float>                BsTauTauFH_B_alpha;
-//  std::vector<float>                BsTauTauFH_B_maxdoca;
-//  std::vector<float>                BsTauTauFH_B_mindoca;
-//  std::vector<float>                BsTauTauFH_B_vx      ;
-//  std::vector<float>                BsTauTauFH_B_vy      ;
-//  std::vector<float>                BsTauTauFH_B_vz      ;
-//  std::vector<float>                BsTauTauFH_B_iso;
-//  std::vector<int  >                BsTauTauFH_B_iso_ntracks;
-//  std::vector<float>                BsTauTauFH_B_iso_mindoca;
-//  std::vector<float>                BsTauTauFH_B_unfit_pt      ;
-//  std::vector<float>                BsTauTauFH_B_unfit_mass       ;
-//  std::vector<float>                BsTauTauFH_B_unfit_vprob    ;
-//  std::vector<float>                BsTauTauFH_B_unfit_vx;
-//  std::vector<float>                BsTauTauFH_B_unfit_vy;
-//  std::vector<float>                BsTauTauFH_B_unfit_vz;
-//
-//  std::vector<float>                BsTauTauFH_PV_vx       ;
-//  std::vector<float>                BsTauTauFH_PV_vy       ;
-//  std::vector<float>                BsTauTauFH_PV_vz       ;
-//
-//  std::vector<float>                BsTauTauFH_bbPV_vx       ;
-//  std::vector<float>                BsTauTauFH_bbPV_vy       ;
-//  std::vector<float>                BsTauTauFH_bbPV_vz       ;
-//
-//  std::vector<float>                BsTauTauFH_bbPV_refit_vx       ;
-//  std::vector<float>                BsTauTauFH_bbPV_refit_vy       ;
-//  std::vector<float>                BsTauTauFH_bbPV_refit_vz       ;
-//
-//  std::vector<float>                BsTauTauFH_genPV_vx       ;
-//  std::vector<float>                BsTauTauFH_genPV_vy       ;
-//  std::vector<float>                BsTauTauFH_genPV_vz       ;
-//
-//  std::vector<int  >                BsTauTauFH_ngenmuons      ;
-//  std::vector<int  >                BsTauTauFH_isgen3;
-//  std::vector<int  >                BsTauTauFH_isgen3matched;
-//  std::vector<int> BsTauTauFH_nch;
-//  std::vector<int> BsTauTauFH_nch_after_dnn;
-//  std::vector<int> BsTauTauFH_nch_before_dnn;
-//  std::vector<int> BsTauTauFH_nch_qr;
-//  std::vector<int> BsTauTauFH_ngentau3;
-//  std::vector<int> BsTauTauFH_ngentau;
-//  std::vector<float> BsTauTauFH_gentaupt;
-//  std::vector<int> BsTauTauFH_gentaudm;
+  std::vector<int  >                BsTauTauFH_nCandidates ;
+  std::vector<int  >                BsTauTauFH_ntaus ;
+
+  std::vector<float>                BsTauTauFH_mu1_pt      ;
+  std::vector<float>                BsTauTauFH_mu1_eta     ;
+  std::vector<float>                BsTauTauFH_mu1_phi     ;
+  std::vector<float>                BsTauTauFH_mu1_mass     ;
+  std::vector<float>                BsTauTauFH_mu1_unfit_pt      ;
+  std::vector<float>                BsTauTauFH_mu1_unfit_eta     ;
+  std::vector<float>                BsTauTauFH_mu1_unfit_phi     ;
+  std::vector<float>                BsTauTauFH_mu1_unfit_mass     ;
+  std::vector<int  >                BsTauTauFH_mu1_q      ;   
+  std::vector<int  >                BsTauTauFH_mu1_isLoose   ;
+  std::vector<int  >                BsTauTauFH_mu1_isTight   ;
+  std::vector<int  >                BsTauTauFH_mu1_isPF      ;
+  std::vector<int  >                BsTauTauFH_mu1_isGlobal  ;
+  std::vector<int  >                BsTauTauFH_mu1_isTracker ;
+  std::vector<int  >                BsTauTauFH_mu1_isSoft    ;
+  std::vector<float>                BsTauTauFH_mu1_vx       ;
+  std::vector<float>                BsTauTauFH_mu1_vy       ;
+  std::vector<float>                BsTauTauFH_mu1_vz       ;
+  std::vector<float>                BsTauTauFH_mu1_iso       ;
+  std::vector<float>                BsTauTauFH_mu1_dbiso       ;
+
+  std::vector<float>                BsTauTauFH_tau1_pt      ;
+  std::vector<float>                BsTauTauFH_tau1_eta     ;
+  std::vector<float>                BsTauTauFH_tau1_phi     ;
+  std::vector<float>                BsTauTauFH_tau1_mass     ;
+  std::vector<float>                BsTauTauFH_tau1_rhomass1     ;
+  std::vector<float>                BsTauTauFH_tau1_rhomass2     ;
+  std::vector<int  >                BsTauTauFH_tau1_q   ;   
+  std::vector<float>                BsTauTauFH_tau1_vx       ;
+  std::vector<float>                BsTauTauFH_tau1_vy       ;
+  std::vector<float>                BsTauTauFH_tau1_vz       ;
+
+  std::vector<float>       BsTauTauFH_tau1_max_dr_3prong;
+  std::vector<float>       BsTauTauFH_tau1_lip;
+  std::vector<float>       BsTauTauFH_tau1_lips;
+  std::vector<float>       BsTauTauFH_tau1_pvip;
+  std::vector<float>       BsTauTauFH_tau1_pvips;
+  std::vector<float>       BsTauTauFH_tau1_fl3d;
+  std::vector<float>       BsTauTauFH_tau1_fls3d;
+  std::vector<float>       BsTauTauFH_tau1_alpha;
+  std::vector<float>       BsTauTauFH_tau1_vprob;
+  std::vector<bool>        BsTauTauFH_tau1_isRight;
+  std::vector<int>         BsTauTauFH_tau1_matched_ppdgId;
+  std::vector<float>       BsTauTauFH_tau1_matched_gentaupt;
+  std::vector<float>       BsTauTauFH_tau1_sumofdnn; 
+  std::vector<int>       BsTauTauFH_tau1_pfidx1;
+  std::vector<int>       BsTauTauFH_tau1_pfidx2;
+  std::vector<int>       BsTauTauFH_tau1_pfidx3;
+  std::vector<float>       BsTauTauFH_tau1_pi1_dnn;
+  std::vector<float>       BsTauTauFH_tau1_pi2_dnn;
+  std::vector<float>       BsTauTauFH_tau1_pi3_dnn;
+
+  std::vector<float>       BsTauTauFH_tau1_pi1_pt;
+  std::vector<float>       BsTauTauFH_tau1_pi1_eta;
+  std::vector<float>       BsTauTauFH_tau1_pi1_phi;
+  std::vector<float>       BsTauTauFH_tau1_pi1_mass;
+  std::vector<float>       BsTauTauFH_tau1_pi2_pt;
+  std::vector<float>       BsTauTauFH_tau1_pi2_eta;
+  std::vector<float>       BsTauTauFH_tau1_pi2_phi;
+  std::vector<float>       BsTauTauFH_tau1_pi2_mass;
+  std::vector<float>       BsTauTauFH_tau1_pi3_pt;
+  std::vector<float>       BsTauTauFH_tau1_pi3_eta;
+  std::vector<float>       BsTauTauFH_tau1_pi3_phi;
+  std::vector<float>       BsTauTauFH_tau1_pi3_mass;
+
+  std::vector<float>                BsTauTauFH_tau2_pt      ;
+  std::vector<float>                BsTauTauFH_tau2_eta     ;
+  std::vector<float>                BsTauTauFH_tau2_phi     ;
+  std::vector<float>                BsTauTauFH_tau2_mass     ;
+  std::vector<float>                BsTauTauFH_tau2_rhomass1     ;
+  std::vector<float>                BsTauTauFH_tau2_rhomass2     ;
+  std::vector<int  >                BsTauTauFH_tau2_q   ;   
+  std::vector<float>                BsTauTauFH_tau2_vx       ;
+  std::vector<float>                BsTauTauFH_tau2_vy       ;
+  std::vector<float>                BsTauTauFH_tau2_vz       ;
+
+  std::vector<float>       BsTauTauFH_tau2_max_dr_3prong;
+  std::vector<float>       BsTauTauFH_tau2_lip;
+  std::vector<float>       BsTauTauFH_tau2_lips;
+  std::vector<float>       BsTauTauFH_tau2_pvip;
+  std::vector<float>       BsTauTauFH_tau2_pvips;
+  std::vector<float>       BsTauTauFH_tau2_fl3d;
+  std::vector<float>       BsTauTauFH_tau2_fls3d;
+  std::vector<float>       BsTauTauFH_tau2_alpha;
+  std::vector<float>       BsTauTauFH_tau2_vprob;
+  std::vector<bool>        BsTauTauFH_tau2_isRight;
+  std::vector<int>         BsTauTauFH_tau2_matched_ppdgId;
+  std::vector<float>       BsTauTauFH_tau2_matched_gentaupt;
+  std::vector<float>       BsTauTauFH_tau2_sumofdnn; 
+  std::vector<int>       BsTauTauFH_tau2_pfidx1;
+  std::vector<int>       BsTauTauFH_tau2_pfidx2;
+  std::vector<int>       BsTauTauFH_tau2_pfidx3;
+  std::vector<float>       BsTauTauFH_tau2_pi1_dnn;
+  std::vector<float>       BsTauTauFH_tau2_pi2_dnn;
+  std::vector<float>       BsTauTauFH_tau2_pi3_dnn;
+
+  std::vector<float>       BsTauTauFH_tau2_pi1_pt;
+  std::vector<float>       BsTauTauFH_tau2_pi1_eta;
+  std::vector<float>       BsTauTauFH_tau2_pi1_phi;
+  std::vector<float>       BsTauTauFH_tau2_pi1_mass;
+  std::vector<float>       BsTauTauFH_tau2_pi2_pt;
+  std::vector<float>       BsTauTauFH_tau2_pi2_eta;
+  std::vector<float>       BsTauTauFH_tau2_pi2_phi;
+  std::vector<float>       BsTauTauFH_tau2_pi2_mass;
+  std::vector<float>       BsTauTauFH_tau2_pi3_pt;
+  std::vector<float>       BsTauTauFH_tau2_pi3_eta;
+  std::vector<float>       BsTauTauFH_tau2_pi3_phi;
+  std::vector<float>       BsTauTauFH_tau2_pi3_mass;
+
+  std::vector<float>                BsTauTauFH_B_pt      ;
+  std::vector<float>                BsTauTauFH_B_eta     ;
+  std::vector<float>                BsTauTauFH_B_phi     ;
+  std::vector<float>                BsTauTauFH_B_mass    ;
+  std::vector<float>                BsTauTauFH_B_vprob ;
+  std::vector<float>                BsTauTauFH_B_lip;
+  std::vector<float>                BsTauTauFH_B_lips;
+  std::vector<float>                BsTauTauFH_B_pvip;
+  std::vector<float>                BsTauTauFH_B_pvips;
+  std::vector<float>                BsTauTauFH_B_fl3d;
+  std::vector<float>                BsTauTauFH_B_fls3d;
+  std::vector<float>                BsTauTauFH_B_alpha;
+  std::vector<float>                BsTauTauFH_B_maxdoca;
+  std::vector<float>                BsTauTauFH_B_mindoca;
+  std::vector<float>                BsTauTauFH_B_vx      ;
+  std::vector<float>                BsTauTauFH_B_vy      ;
+  std::vector<float>                BsTauTauFH_B_vz      ;
+  std::vector<float>                BsTauTauFH_B_iso;
+  std::vector<int  >                BsTauTauFH_B_iso_ntracks;
+  std::vector<float>                BsTauTauFH_B_iso_mindoca;
+  std::vector<float>                BsTauTauFH_B_unfit_pt      ;
+  std::vector<float>                BsTauTauFH_B_unfit_mass       ;
+  std::vector<float>                BsTauTauFH_B_unfit_vprob    ;
+  std::vector<float>                BsTauTauFH_B_unfit_vx;
+  std::vector<float>                BsTauTauFH_B_unfit_vy;
+  std::vector<float>                BsTauTauFH_B_unfit_vz;
+
+  std::vector<float>                BsTauTauFH_PV_vx       ;
+  std::vector<float>                BsTauTauFH_PV_vy       ;
+  std::vector<float>                BsTauTauFH_PV_vz       ;
+
+  std::vector<float>                BsTauTauFH_bbPV_vx       ;
+  std::vector<float>                BsTauTauFH_bbPV_vy       ;
+  std::vector<float>                BsTauTauFH_bbPV_vz       ;
+
+  std::vector<float>                BsTauTauFH_bbPV_refit_vx       ;
+  std::vector<float>                BsTauTauFH_bbPV_refit_vy       ;
+  std::vector<float>                BsTauTauFH_bbPV_refit_vz       ;
+
+  std::vector<float>                BsTauTauFH_genPV_vx       ;
+  std::vector<float>                BsTauTauFH_genPV_vy       ;
+  std::vector<float>                BsTauTauFH_genPV_vz       ;
+
+  std::vector<int  >                BsTauTauFH_ngenmuons      ;
+  std::vector<int  >                BsTauTauFH_isgen3;
+  std::vector<int  >                BsTauTauFH_isgen3matched;
+  std::vector<int> BsTauTauFH_nch;
+  std::vector<int> BsTauTauFH_nch_after_dnn;
+  std::vector<int> BsTauTauFH_nch_before_dnn;
+  std::vector<int> BsTauTauFH_nch_qr;
+  std::vector<int> BsTauTauFH_ngentau3;
+  std::vector<int> BsTauTauFH_ngentau;
+  std::vector<float> BsTauTauFH_gentaupt;
+  std::vector<int> BsTauTauFH_gentaudm;
 //
 //
 //  //////////////////////

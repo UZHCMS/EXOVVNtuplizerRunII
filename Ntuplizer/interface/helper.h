@@ -85,6 +85,10 @@
 #include "FWCore/ParameterSet/interface/FileInPath.h"
 #include "PhysicsTools/TensorFlow/interface/TensorFlow.h"
 
+#include "PhysicsTools/HepMCCandAlgos/interface/GenParticlesHelper.h"
+#include "PhysicsTools/JetMCAlgos/plugins/TauGenJetProducer.h" 
+#include "DataFormats/JetReco/interface/GenJet.h"
+#include "DataFormats/JetReco/interface/GenJetCollection.h"
 
 #include <tuple>
 #include <sstream>
@@ -112,7 +116,9 @@
 //#include <TVector3.h>
 //#include <TRandom.h>
 
+//using namespace reco;
 using namespace std;
+using namespace GenParticlesHelper;
 
 // mass
 

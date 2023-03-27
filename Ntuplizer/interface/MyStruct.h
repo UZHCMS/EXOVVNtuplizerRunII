@@ -323,6 +323,15 @@ struct taucand{
   }
 };
 
+struct pfcand{
+  
+  Int_t cand_idx;
+  Float_t cand_absdz;
+    
+  bool operator<(const pfcand& another) const { 
+    return cand_absdz < another.cand_absdz;
+  }
+};
 
 
 

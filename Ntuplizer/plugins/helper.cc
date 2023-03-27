@@ -571,7 +571,11 @@ std::tuple<Bool_t, RefCountedKinematicParticle, RefCountedKinematicVertex, RefCo
 
 
 bool helper::basicPFcut(pat::PackedCandidate pf){
-  if(pf.pt() < 0.5) return false;
+  if(pf.pt() < 0.5){
+    //    std::cout << pf.pt() << std::endl;
+    return false;
+  }
+
   if(!pf.hasTrackDetails()) return false;
   
   // use the PF candidates that come from closestVertex    

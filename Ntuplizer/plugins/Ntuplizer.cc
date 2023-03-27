@@ -10,7 +10,7 @@
 #include "../interface/JpsiKNtuplizer.h"
 #include "../interface/JpsiKNtuplizerE.h"
 //#include "../interface/BsTauTauNtuplizer.h"
-//#include "../interface/BsTauTauFHNtuplizer.h"
+#include "../interface/BsTauTauFHNtuplizer.h"
 //#include "../interface/BsTauTauFHNtuplizer_mr.h"
 //#include "../interface/BsDstarTauNuNtuplizer.h"
 
@@ -92,7 +92,7 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
   runFlags["doJpsiKE"] = iConfig.getParameter<bool>("doJpsiKE");
   runFlags["isBkgBSample"] = iConfig.getParameter<bool>("isBkgBSample");
   //  runFlags["doBsTauTau"] = iConfig.getParameter<bool>("doBsTauTau");
-  //  runFlags["doBsTauTauFH"] = iConfig.getParameter<bool>("doBsTauTauFH");
+  runFlags["doBsTauTauFH"] = iConfig.getParameter<bool>("doBsTauTauFH");
   //  runFlags["doBsTauTauFH_mr"] = iConfig.getParameter<bool>("doBsTauTauFH_mr");
   //  runFlags["doBsDstarTauNu"] = iConfig.getParameter<bool>("doBsDstarTauNu");
   runFlags["doGenHist"] = iConfig.getParameter<bool>("doGenHist");
@@ -311,20 +311,20 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
 //						     nBranches_ );
 //  }
 //
-//  if (runFlags["doBsTauTauFH"]) {
-//    std::cout<<"\n\n --->GETTING INSIDE doBsTauTauFH<---\n\n"<<std::endl;
-//    nTuplizers_["BsTauTauFH"] = new BsTauTauFHNtuplizer( muonToken_   , 
-//							 vtxToken_   , 
-//							 packedpfcandidatesToken_,
-//							 triggerToken_,
-//							 triggerObjects_,
-//							 genparticleToken_,
-//							 gentauToken_,
-//							 runFlags,
-//							 runValues,
-//							 runStrings,
-//							 nBranches_ );
-//  }
+  if (runFlags["doBsTauTauFH"]) {
+    std::cout<<"\n\n --->GETTING INSIDE doBsTauTauFH<---\n\n"<<std::endl;
+    nTuplizers_["BsTauTauFH"] = new BsTauTauFHNtuplizer( muonToken_   , 
+							 vtxToken_   , 
+							 packedpfcandidatesToken_,
+							 triggerToken_,
+							 triggerObjects_,
+							 genparticleToken_,
+							 //							 gentauToken_,
+							 runFlags,
+							 runValues,
+							 runStrings,
+							 nBranches_ );
+  }
 //
 //  if (runFlags["doBsTauTauFH_mr"]) {
 //    std::cout<<"\n\n --->GETTING INSIDE doBsTauTauFH_mr<---\n\n"<<std::endl;

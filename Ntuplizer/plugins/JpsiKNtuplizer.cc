@@ -581,7 +581,7 @@ bool JpsiKNtuplizer::fillBranches( edm::Event const & event, const edm::EventSet
   int numOfch = (int)pfcands.size();
   if(verbose_) std::cout << "[JpsiKNtuplizer] Starts to build tau candidate out of " << numOfch << " pion candidates" << std::endl;
 
-  Int_t nkaon = 0;
+  Int_t nKaon = 0;
 
   for(int iii = 0; iii < (int)pfcands.size(); iii ++){
       
@@ -591,8 +591,8 @@ bool JpsiKNtuplizer::fillBranches( edm::Event const & event, const edm::EventSet
 
     std::vector<RefCountedKinematicParticle> allParticles;
       
-    allParticles.push_back(pFactory.particle(track, aux.kaon_mass, chi, ndf, aux.kaon_sigma));
-    //    allParticles.push_back(pFactory.particle(track, aux.pion_mass, chi, ndf, aux.pion_sigma));
+    //    allParticles.push_back(pFactory.particle(track, aux.kaon_mass, chi, ndf, aux.kaon_sigma));
+    allParticles.push_back(pFactory.particle(track, aux.pion_mass, chi, ndf, aux.pion_sigma));
     allParticles.push_back(pFactory.particle(tt1_muon, aux.muon_mass, chi, ndf, aux.muon_sigma));
     allParticles.push_back(pFactory.particle(tt2_muon, aux.muon_mass, chi, ndf, aux.muon_sigma));
 
@@ -609,6 +609,9 @@ bool JpsiKNtuplizer::fillBranches( edm::Event const & event, const edm::EventSet
     particle_cand Bcand; 
     Bcand = aux.calculateIPvariables(extrapolator, b_part, b_vertex, closestVertex);
 	  
+    float b_mass = b_part->currentState().mass();
+    if(b_mass < 6 || b_mass > 6.6) continue;
+
     nBranches_->JpsiK_B_pt.push_back(b_part->currentState().globalMomentum().perp());
     nBranches_->JpsiK_B_eta.push_back(b_part->currentState().globalMomentum().eta());
     nBranches_->JpsiK_B_phi.push_back(b_part->currentState().globalMomentum().phi());
@@ -641,7 +644,7 @@ bool JpsiKNtuplizer::fillBranches( edm::Event const & event, const edm::EventSet
     nBranches_->JpsiK_pi_trigMatch.push_back(attr.trigMatch);
     nBranches_->JpsiK_pi_trigMatch_dr.push_back(attr.trigMatch_dr);
 
-    nkaon+=1;
+    nKaon+=1;
   }
     
 
@@ -720,7 +723,7 @@ bool JpsiKNtuplizer::fillBranches( edm::Event const & event, const edm::EventSet
 
   nBranches_->JpsiK_nch = numOfch;
   nBranches_->JpsiK_nch_before = pfcands.size();
-  nBranches_->JpsiK_nCandidates = nkaon;
+  nBranches_->JpsiK_nCandidates = nKaon;
 
   if(!runOnMC_) return true;
   nBranches_->genWeightBkgB=genWeightBkgB_;

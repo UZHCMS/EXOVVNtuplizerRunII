@@ -27,12 +27,15 @@
 <use name="RecoVertex/KinematicFit"/>
 <use name="RecoVertex/KinematicFitPrimitives"/>
 <use name="SimTracker/TrackAssociation"/>
+<use name="SimDataFormats/GeneratorProducts"/>
+<use name="PhysicsTools/JetMCAlgos"/>
+<use name="PhysicsTools/JetMCUtils"/>
+<use name="PhysicsTools/HepMCCandAlgos"/>
 <use name="clhep"/>
 <use name="root"/>
 <use name="DataFormats/Math"/>
 <use name="DataFormats/TrackReco"/>
 <use   name="DataFormats/HepMCCandidate"/>
-<use   name="PhysicsTools/JetMCUtils"/>
 <use name="PhysicsTools/TensorFlow" />
 
 <flags CXXFLAGS="-Wno-unknown-pragmas -I$(CMSSW_BASE)/src/Hammer/Hammer-Install/include -l:libHammerCore.so.1.2.1 -l:libHammerBase.so.1.2.1 -l:libHammerTools.so.1.2.1 -l:libAmplitudes.so.1.2.1 -l:libRates.so.1.2.1 -l:libFormFactors.so.1.2.1 -l:libyaml-cpp.so.0.6"/>

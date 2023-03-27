@@ -548,10 +548,59 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
   bool isJpsiMu = false;
   bool isJpsiTau2Mu = false;
 
+  //  std::cout << "-----" << std::endl;
+
   if(runOnMC_){ 
     
     event.getByToken(genParticlesToken_ , genParticles_);   
     event.getByToken(packedgenParticlesToken_ , packedgenParticles_);   
+
+
+    // derive all daughter particles from tau decay ...
+
+    int general_ntau = 0;
+
+    reco::GenParticleRefVector allStatus2Taus;
+    findParticles(*genParticles_, allStatus2Taus, 15, 2);
+
+
+    for (IGR iTau = allStatus2Taus.begin(); iTau != allStatus2Taus.end(); ++iTau) {
+      // look for all status 1 (stable) descendents 
+      reco::GenParticleRefVector descendents;
+      findDescendents(*iTau, descendents, 1);
+      
+      // CV: skip status 2 taus that radiate-off a photon
+      //    --> have a status 2 tau lepton in the list of descendents
+      reco::GenParticleRefVector status2TauDaughters;
+      findDescendents(*iTau, status2TauDaughters, 2, 15);
+      
+      if (!status2TauDaughters.empty())	continue;
+      
+      math::XYZTLorentzVector sumVisMom;
+      
+      //      std::cout << "Tau:" << (*iTau)->pdgId() << std::endl;
+
+      int general_pion_counter = 0;
+
+      for (IGR igr = descendents.begin(); igr != descendents.end(); ++igr) {
+	int absPdgId = abs((*igr)->pdgId());
+	
+	//	std::cout << "\t" << (*igr)->pdgId() << std::endl;
+
+
+	if (absPdgId == 12 || absPdgId == 14 || absPdgId == 16) continue;
+
+	if(absPdgId==211) general_pion_counter++;
+	
+	sumVisMom += (*igr)->p4();
+      }
+
+      if(general_pion_counter==3) general_ntau += 1;
+
+    }
+
+    nBranches_->JpsiTau_general_ntau = general_ntau;
+
 
     /////////////////////////////////////////////////
     // code from Stefanos 
@@ -569,24 +618,24 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
       
     //      if(!(TMath::Abs((*genParticles_)[p].pdgId())==541 && (*genParticles_)[p].status()==2)) continue;
     
-    int general_ntau = 0;
     
-    for(unsigned int i = 0; i < genParticles_->size(); ++i) {
-      const reco::GenParticle* gen_particle = &genParticles_->at(i);
-      if ( TMath::Abs(gen_particle->pdgId()) == 15 && gen_particle->status() ==2){
+//    for(unsigned int i = 0; i < genParticles_->size(); ++i) {
+//      const reco::GenParticle* gen_particle = &genParticles_->at(i);
+//      if ( TMath::Abs(gen_particle->pdgId()) == 15 && gen_particle->status() ==2){
+//
+//	int general_pion_counter = 0;
+//
+//        for (size_t j = 0; j < gen_particle->numberOfDaughters(); ++j) {
+//          if (TMath::Abs(gen_particle->daughter(j)->pdgId())==211) general_pion_counter++;
+//        }
+//	
+//	if(general_pion_counter==3) general_ntau += 1;
+//	
+//      }
+//    }
 
-	int general_pion_counter = 0;
 
-        for (size_t j = 0; j < gen_particle->numberOfDaughters(); ++j) {
-          if (TMath::Abs(gen_particle->daughter(j)->pdgId())==211) general_pion_counter++;
-        }
-	
-	if(general_pion_counter==3) general_ntau += 1;
-	
-      }
-    }
-
-    nBranches_->JpsiTau_general_ntau = general_ntau;
+//    std::cout << "cross-check:" << general_ntau << " "  << allStatus2Taus.size() << std::endl;
 
 
     for(unsigned int i = 0; i < genParticles_->size(); ++i) {
@@ -1523,6 +1572,7 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 				 pf.phi(),
 				 jpsi_part->currentState().globalMomentum().eta(),
 				 jpsi_part->currentState().globalMomentum().phi());
+
 
 
     if(doca3d < -0.04 || doca3d > 0.06) continue;

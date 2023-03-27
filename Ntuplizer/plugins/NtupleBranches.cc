@@ -1513,177 +1513,180 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
 //  }
 //
 //
-//  if (runFlags["doBsTauTauFH"]){
-//    tree_->Branch("IsBsTauTauFH", &IsBsTauTauFH );
-//
-//
-//    tree_->Branch("BsTauTauFH_nCandidates", &BsTauTauFH_nCandidates );
-//    tree_->Branch("BsTauTauFH_ntaus", &BsTauTauFH_ntaus );
-//
-//    tree_->Branch("BsTauTauFH_mu1_pt", &BsTauTauFH_mu1_pt );
-//    tree_->Branch("BsTauTauFH_mu1_eta", &BsTauTauFH_mu1_eta );
-//    tree_->Branch("BsTauTauFH_mu1_phi", &BsTauTauFH_mu1_phi );
-//    tree_->Branch("BsTauTauFH_mu1_mass", &BsTauTauFH_mu1_mass );
-//    tree_->Branch("BsTauTauFH_mu1_q", &BsTauTauFH_mu1_q );
-//    tree_->Branch("BsTauTauFH_mu1_isLoose"  , &BsTauTauFH_mu1_isLoose   );
-//    tree_->Branch("BsTauTauFH_mu1_isTight"  , &BsTauTauFH_mu1_isTight   );
-//    tree_->Branch("BsTauTauFH_mu1_isPF"     , &BsTauTauFH_mu1_isPF      );
-//    tree_->Branch("BsTauTauFH_mu1_isGlobal" , &BsTauTauFH_mu1_isGlobal  );
-//    tree_->Branch("BsTauTauFH_mu1_isTracker", &BsTauTauFH_mu1_isTracker );
-//    tree_->Branch("BsTauTauFH_mu1_isSoft"   , &BsTauTauFH_mu1_isSoft    );
-//    tree_->Branch("BsTauTauFH_mu1_vx"   , &BsTauTauFH_mu1_vx    );
-//    tree_->Branch("BsTauTauFH_mu1_vy"   , &BsTauTauFH_mu1_vy    );
-//    tree_->Branch("BsTauTauFH_mu1_vz"   , &BsTauTauFH_mu1_vz    );
-//    tree_->Branch("BsTauTauFH_mu1_iso"   , &BsTauTauFH_mu1_iso    );
-//    tree_->Branch("BsTauTauFH_mu1_dbiso"   , &BsTauTauFH_mu1_dbiso    );
-//
-//
-//    tree_->Branch("BsTauTauFH_tau1_pt", &BsTauTauFH_tau1_pt );
-//    tree_->Branch("BsTauTauFH_tau1_eta", &BsTauTauFH_tau1_eta );
-//    tree_->Branch("BsTauTauFH_tau1_phi", &BsTauTauFH_tau1_phi );
-//    tree_->Branch("BsTauTauFH_tau1_mass", &BsTauTauFH_tau1_mass );
-//    tree_->Branch("BsTauTauFH_tau1_rhomass1", &BsTauTauFH_tau1_rhomass1 );
-//    tree_->Branch("BsTauTauFH_tau1_rhomass2", &BsTauTauFH_tau1_rhomass2 );
-//    tree_->Branch("BsTauTauFH_tau1_q", &BsTauTauFH_tau1_q );
-//    tree_->Branch("BsTauTauFH_tau1_vx"   , &BsTauTauFH_tau1_vx    );
-//    tree_->Branch("BsTauTauFH_tau1_vy"   , &BsTauTauFH_tau1_vy    );
-//    tree_->Branch("BsTauTauFH_tau1_vz"   , &BsTauTauFH_tau1_vz    );
-//
-//    tree_->Branch("BsTauTauFH_tau1_max_dr_3prong", &BsTauTauFH_tau1_max_dr_3prong);
-//    tree_->Branch("BsTauTauFH_tau1_lip", &BsTauTauFH_tau1_lip);
-//    tree_->Branch("BsTauTauFH_tau1_lips", &BsTauTauFH_tau1_lips);
-//    tree_->Branch("BsTauTauFH_tau1_pvip", &BsTauTauFH_tau1_pvip);
-//    tree_->Branch("BsTauTauFH_tau1_pvips", &BsTauTauFH_tau1_pvips);
-//    tree_->Branch("BsTauTauFH_tau1_fl3d", &BsTauTauFH_tau1_fl3d);
-//    tree_->Branch("BsTauTauFH_tau1_fls3d", &BsTauTauFH_tau1_fls3d);
-//    tree_->Branch("BsTauTauFH_tau1_alpha", &BsTauTauFH_tau1_alpha);
-//    tree_->Branch("BsTauTauFH_tau1_vprob", &BsTauTauFH_tau1_vprob);
-//    tree_->Branch("BsTauTauFH_tau1_isRight", &BsTauTauFH_tau1_isRight);
-//    tree_->Branch("BsTauTauFH_tau1_matched_ppdgId", &BsTauTauFH_tau1_matched_ppdgId);
-//    tree_->Branch("BsTauTauFH_tau1_matched_gentaupt", &BsTauTauFH_tau1_matched_gentaupt);
-//    //    tree_->Branch("BsTauTauFH_tau1_gentaupt", &BsTauTauFH_tau1_gentaupt);
-//    tree_->Branch("BsTauTauFH_tau1_sumofdnn", &BsTauTauFH_tau1_sumofdnn);
-//    tree_->Branch("BsTauTauFH_tau1_pfidx1", &BsTauTauFH_tau1_pfidx1);
-//    tree_->Branch("BsTauTauFH_tau1_pfidx2", &BsTauTauFH_tau1_pfidx2);
-//    tree_->Branch("BsTauTauFH_tau1_pfidx3", &BsTauTauFH_tau1_pfidx3);
-//    tree_->Branch("BsTauTauFH_tau1_pi1_dnn", &BsTauTauFH_tau1_pi1_dnn );
-//    tree_->Branch("BsTauTauFH_tau1_pi2_dnn", &BsTauTauFH_tau1_pi2_dnn );
-//    tree_->Branch("BsTauTauFH_tau1_pi3_dnn", &BsTauTauFH_tau1_pi3_dnn );
-//
-//    tree_->Branch("BsTauTauFH_tau1_pi1_pt", &BsTauTauFH_tau1_pi1_pt );
-//    tree_->Branch("BsTauTauFH_tau1_pi1_eta", &BsTauTauFH_tau1_pi1_eta );
-//    tree_->Branch("BsTauTauFH_tau1_pi1_phi", &BsTauTauFH_tau1_pi1_phi );
-//    tree_->Branch("BsTauTauFH_tau1_pi1_mass", &BsTauTauFH_tau1_pi1_mass );
-//
-//    tree_->Branch("BsTauTauFH_tau1_pi2_pt", &BsTauTauFH_tau1_pi2_pt );
-//    tree_->Branch("BsTauTauFH_tau1_pi2_eta", &BsTauTauFH_tau1_pi2_eta );
-//    tree_->Branch("BsTauTauFH_tau1_pi2_phi", &BsTauTauFH_tau1_pi2_phi );
-//    tree_->Branch("BsTauTauFH_tau1_pi2_mass", &BsTauTauFH_tau1_pi2_mass );
-//
-//    tree_->Branch("BsTauTauFH_tau1_pi3_pt", &BsTauTauFH_tau1_pi3_pt );
-//    tree_->Branch("BsTauTauFH_tau1_pi3_eta", &BsTauTauFH_tau1_pi3_eta );
-//    tree_->Branch("BsTauTauFH_tau1_pi3_phi", &BsTauTauFH_tau1_pi3_phi );
-//    tree_->Branch("BsTauTauFH_tau1_pi3_mass", &BsTauTauFH_tau1_pi3_mass );
-//
-//    
-//    tree_->Branch("BsTauTauFH_tau2_pt", &BsTauTauFH_tau2_pt );
-//    tree_->Branch("BsTauTauFH_tau2_eta", &BsTauTauFH_tau2_eta );
-//    tree_->Branch("BsTauTauFH_tau2_phi", &BsTauTauFH_tau2_phi );
-//    tree_->Branch("BsTauTauFH_tau2_mass", &BsTauTauFH_tau2_mass );
-//    tree_->Branch("BsTauTauFH_tau2_rhomass1", &BsTauTauFH_tau2_rhomass1 );
-//    tree_->Branch("BsTauTauFH_tau2_rhomass2", &BsTauTauFH_tau2_rhomass2 );
-//    tree_->Branch("BsTauTauFH_tau2_q", &BsTauTauFH_tau2_q );
-//    tree_->Branch("BsTauTauFH_tau2_vx"   , &BsTauTauFH_tau2_vx    );
-//    tree_->Branch("BsTauTauFH_tau2_vy"   , &BsTauTauFH_tau2_vy    );
-//    tree_->Branch("BsTauTauFH_tau2_vz"   , &BsTauTauFH_tau2_vz    );
-//
-//    tree_->Branch("BsTauTauFH_tau2_max_dr_3prong", &BsTauTauFH_tau2_max_dr_3prong);
-//    tree_->Branch("BsTauTauFH_tau2_lip", &BsTauTauFH_tau2_lip);
-//    tree_->Branch("BsTauTauFH_tau2_lips", &BsTauTauFH_tau2_lips);
-//    tree_->Branch("BsTauTauFH_tau2_pvip", &BsTauTauFH_tau2_pvip);
-//    tree_->Branch("BsTauTauFH_tau2_pvips", &BsTauTauFH_tau2_pvips);
-//    tree_->Branch("BsTauTauFH_tau2_fl3d", &BsTauTauFH_tau2_fl3d);
-//    tree_->Branch("BsTauTauFH_tau2_fls3d", &BsTauTauFH_tau2_fls3d);
-//    tree_->Branch("BsTauTauFH_tau2_alpha", &BsTauTauFH_tau2_alpha);
-//    tree_->Branch("BsTauTauFH_tau2_vprob", &BsTauTauFH_tau2_vprob);
-//    tree_->Branch("BsTauTauFH_tau2_isRight", &BsTauTauFH_tau2_isRight);
-//    tree_->Branch("BsTauTauFH_tau2_matched_ppdgId", &BsTauTauFH_tau2_matched_ppdgId);
-//    tree_->Branch("BsTauTauFH_tau2_matched_gentaupt", &BsTauTauFH_tau2_matched_gentaupt);
-//    //    tree_->Branch("BsTauTauFH_tau2_gentaupt", &BsTauTauFH_tau2_gentaupt);
-//    tree_->Branch("BsTauTauFH_tau2_sumofdnn", &BsTauTauFH_tau2_sumofdnn);
-//    tree_->Branch("BsTauTauFH_tau2_pfidx1", &BsTauTauFH_tau2_pfidx1);
-//    tree_->Branch("BsTauTauFH_tau2_pfidx2", &BsTauTauFH_tau2_pfidx2);
-//    tree_->Branch("BsTauTauFH_tau2_pfidx3", &BsTauTauFH_tau2_pfidx3);
-//    tree_->Branch("BsTauTauFH_tau2_pi1_dnn", &BsTauTauFH_tau2_pi1_dnn );
-//    tree_->Branch("BsTauTauFH_tau2_pi2_dnn", &BsTauTauFH_tau2_pi2_dnn );
-//    tree_->Branch("BsTauTauFH_tau2_pi3_dnn", &BsTauTauFH_tau2_pi3_dnn );
-//
-//    tree_->Branch("BsTauTauFH_tau2_pi1_pt", &BsTauTauFH_tau2_pi1_pt );
-//    tree_->Branch("BsTauTauFH_tau2_pi1_eta", &BsTauTauFH_tau2_pi1_eta );
-//    tree_->Branch("BsTauTauFH_tau2_pi1_phi", &BsTauTauFH_tau2_pi1_phi );
-//    tree_->Branch("BsTauTauFH_tau2_pi1_mass", &BsTauTauFH_tau2_pi1_mass );
-//
-//    tree_->Branch("BsTauTauFH_tau2_pi2_pt", &BsTauTauFH_tau2_pi2_pt );
-//    tree_->Branch("BsTauTauFH_tau2_pi2_eta", &BsTauTauFH_tau2_pi2_eta );
-//    tree_->Branch("BsTauTauFH_tau2_pi2_phi", &BsTauTauFH_tau2_pi2_phi );
-//    tree_->Branch("BsTauTauFH_tau2_pi2_mass", &BsTauTauFH_tau2_pi2_mass );
-//
-//    tree_->Branch("BsTauTauFH_tau2_pi3_pt", &BsTauTauFH_tau2_pi3_pt );
-//    tree_->Branch("BsTauTauFH_tau2_pi3_eta", &BsTauTauFH_tau2_pi3_eta );
-//    tree_->Branch("BsTauTauFH_tau2_pi3_phi", &BsTauTauFH_tau2_pi3_phi );
-//    tree_->Branch("BsTauTauFH_tau2_pi3_mass", &BsTauTauFH_tau2_pi3_mass );
-//
-//
-//    tree_->Branch("BsTauTauFH_PV_vx", &BsTauTauFH_PV_vx );
-//    tree_->Branch("BsTauTauFH_PV_vy", &BsTauTauFH_PV_vy );
-//    tree_->Branch("BsTauTauFH_PV_vz", &BsTauTauFH_PV_vz );
-//
-//    tree_->Branch("BsTauTauFH_bbPV_vx", &BsTauTauFH_bbPV_vx );
-//    tree_->Branch("BsTauTauFH_bbPV_vy", &BsTauTauFH_bbPV_vy );
-//    tree_->Branch("BsTauTauFH_bbPV_vz", &BsTauTauFH_bbPV_vz );
-//
-//    tree_->Branch("BsTauTauFH_bbPV_refit_vx", &BsTauTauFH_bbPV_vx );
-//    tree_->Branch("BsTauTauFH_bbPV_refit_vy", &BsTauTauFH_bbPV_vy );
-//    tree_->Branch("BsTauTauFH_bbPV_refit_vz", &BsTauTauFH_bbPV_vz );
-//
-//    tree_->Branch("BsTauTauFH_genPV_vx", &BsTauTauFH_genPV_vx );
-//    tree_->Branch("BsTauTauFH_genPV_vy", &BsTauTauFH_genPV_vy );
-//    tree_->Branch("BsTauTauFH_genPV_vz", &BsTauTauFH_genPV_vz );
-//
-//    tree_->Branch("BsTauTauFH_B_pt", &BsTauTauFH_B_pt );
-//    tree_->Branch("BsTauTauFH_B_eta", &BsTauTauFH_B_eta );
-//    tree_->Branch("BsTauTauFH_B_phi", &BsTauTauFH_B_phi );
-//    tree_->Branch("BsTauTauFH_B_mass", &BsTauTauFH_B_mass );
-//    tree_->Branch("BsTauTauFH_B_vprob", &BsTauTauFH_B_vprob );
-//    tree_->Branch("BsTauTauFH_B_lip", &BsTauTauFH_B_lip);
-//    tree_->Branch("BsTauTauFH_B_lips", &BsTauTauFH_B_lips);
-//    tree_->Branch("BsTauTauFH_B_pvip", &BsTauTauFH_B_pvip);
-//    tree_->Branch("BsTauTauFH_B_pvips", &BsTauTauFH_B_pvips);
-//    tree_->Branch("BsTauTauFH_B_fl3d", &BsTauTauFH_B_fl3d);
-//    tree_->Branch("BsTauTauFH_B_fls3d", &BsTauTauFH_B_fls3d);
-//    tree_->Branch("BsTauTauFH_B_alpha", &BsTauTauFH_B_alpha);
-//    tree_->Branch("BsTauTauFH_B_maxdoca", &BsTauTauFH_B_maxdoca);
-//    tree_->Branch("BsTauTauFH_B_mindoca", &BsTauTauFH_B_mindoca);
-//    tree_->Branch("BsTauTauFH_B_vx", &BsTauTauFH_B_vx );
-//    tree_->Branch("BsTauTauFH_B_vy", &BsTauTauFH_B_vy );
-//    tree_->Branch("BsTauTauFH_B_vz", &BsTauTauFH_B_vz );
-//    tree_->Branch("BsTauTauFH_B_iso", &BsTauTauFH_B_iso);
-//    tree_->Branch("BsTauTauFH_B_iso_ntracks", &BsTauTauFH_B_iso_ntracks );
-//    tree_->Branch("BsTauTauFH_B_iso_mindoca", &BsTauTauFH_B_iso_mindoca );
-//
-//    tree_->Branch("BsTauTauFH_ngenmuons", &BsTauTauFH_ngenmuons);
-//    tree_->Branch("BsTauTauFH_isgen3", &BsTauTauFH_isgen3);
-//    tree_->Branch("BsTauTauFH_isgen3matched", &BsTauTauFH_isgen3matched);
-//    tree_->Branch("BsTauTauFH_nch", &BsTauTauFH_nch);
-//    tree_->Branch("BsTauTauFH_nch_after_dnn", &BsTauTauFH_nch_after_dnn);
-//    tree_->Branch("BsTauTauFH_nch_before_dnn", &BsTauTauFH_nch_before_dnn);
-//    tree_->Branch("BsTauTauFH_nch_qr", &BsTauTauFH_nch_qr);
-//    tree_->Branch("BsTauTauFH_ngentau3", &BsTauTauFH_ngentau3); 
-//    tree_->Branch("BsTauTauFH_ngentau", &BsTauTauFH_ngentau);
-//    tree_->Branch("BsTauTauFH_gentaupt", &BsTauTauFH_gentaupt);
-//    tree_->Branch("BsTauTauFH_gentaudm", &BsTauTauFH_gentaudm);
-//
-//  }
+  if (runFlags["doBsTauTauFH"]){
+    tree_->Branch("IsBsTauTauFH", &IsBsTauTauFH );
+
+
+    tree_->Branch("BsTauTauFH_nCandidates", &BsTauTauFH_nCandidates );
+    tree_->Branch("BsTauTauFH_ntaus", &BsTauTauFH_ntaus );
+
+    tree_->Branch("BsTauTauFH_mu1_pt", &BsTauTauFH_mu1_pt );
+    tree_->Branch("BsTauTauFH_mu1_eta", &BsTauTauFH_mu1_eta );
+    tree_->Branch("BsTauTauFH_mu1_phi", &BsTauTauFH_mu1_phi );
+    tree_->Branch("BsTauTauFH_mu1_mass", &BsTauTauFH_mu1_mass );
+    tree_->Branch("BsTauTauFH_mu1_q", &BsTauTauFH_mu1_q );
+    tree_->Branch("BsTauTauFH_mu1_isLoose"  , &BsTauTauFH_mu1_isLoose   );
+    tree_->Branch("BsTauTauFH_mu1_isTight"  , &BsTauTauFH_mu1_isTight   );
+    tree_->Branch("BsTauTauFH_mu1_isPF"     , &BsTauTauFH_mu1_isPF      );
+    tree_->Branch("BsTauTauFH_mu1_isGlobal" , &BsTauTauFH_mu1_isGlobal  );
+    tree_->Branch("BsTauTauFH_mu1_isTracker", &BsTauTauFH_mu1_isTracker );
+    tree_->Branch("BsTauTauFH_mu1_isSoft"   , &BsTauTauFH_mu1_isSoft    );
+    tree_->Branch("BsTauTauFH_mu1_vx"   , &BsTauTauFH_mu1_vx    );
+    tree_->Branch("BsTauTauFH_mu1_vy"   , &BsTauTauFH_mu1_vy    );
+    tree_->Branch("BsTauTauFH_mu1_vz"   , &BsTauTauFH_mu1_vz    );
+    tree_->Branch("BsTauTauFH_mu1_iso"   , &BsTauTauFH_mu1_iso    );
+    tree_->Branch("BsTauTauFH_mu1_dbiso"   , &BsTauTauFH_mu1_dbiso    );
+
+
+    tree_->Branch("BsTauTauFH_tau1_pt", &BsTauTauFH_tau1_pt );
+    tree_->Branch("BsTauTauFH_tau1_eta", &BsTauTauFH_tau1_eta );
+    tree_->Branch("BsTauTauFH_tau1_phi", &BsTauTauFH_tau1_phi );
+    tree_->Branch("BsTauTauFH_tau1_mass", &BsTauTauFH_tau1_mass );
+    tree_->Branch("BsTauTauFH_tau1_rhomass1", &BsTauTauFH_tau1_rhomass1 );
+    tree_->Branch("BsTauTauFH_tau1_rhomass2", &BsTauTauFH_tau1_rhomass2 );
+    tree_->Branch("BsTauTauFH_tau1_q", &BsTauTauFH_tau1_q );
+    tree_->Branch("BsTauTauFH_tau1_vx"   , &BsTauTauFH_tau1_vx    );
+    tree_->Branch("BsTauTauFH_tau1_vy"   , &BsTauTauFH_tau1_vy    );
+    tree_->Branch("BsTauTauFH_tau1_vz"   , &BsTauTauFH_tau1_vz    );
+
+    tree_->Branch("BsTauTauFH_tau1_max_dr_3prong", &BsTauTauFH_tau1_max_dr_3prong);
+    tree_->Branch("BsTauTauFH_tau1_lip", &BsTauTauFH_tau1_lip);
+    tree_->Branch("BsTauTauFH_tau1_lips", &BsTauTauFH_tau1_lips);
+    tree_->Branch("BsTauTauFH_tau1_pvip", &BsTauTauFH_tau1_pvip);
+    tree_->Branch("BsTauTauFH_tau1_pvips", &BsTauTauFH_tau1_pvips);
+    tree_->Branch("BsTauTauFH_tau1_fl3d", &BsTauTauFH_tau1_fl3d);
+    tree_->Branch("BsTauTauFH_tau1_fls3d", &BsTauTauFH_tau1_fls3d);
+    tree_->Branch("BsTauTauFH_tau1_alpha", &BsTauTauFH_tau1_alpha);
+    tree_->Branch("BsTauTauFH_tau1_vprob", &BsTauTauFH_tau1_vprob);
+    tree_->Branch("BsTauTauFH_tau1_isRight", &BsTauTauFH_tau1_isRight);
+    tree_->Branch("BsTauTauFH_tau1_matched_ppdgId", &BsTauTauFH_tau1_matched_ppdgId);
+    tree_->Branch("BsTauTauFH_tau1_matched_gentaupt", &BsTauTauFH_tau1_matched_gentaupt);
+    //    tree_->Branch("BsTauTauFH_tau1_gentaupt", &BsTauTauFH_tau1_gentaupt);
+    tree_->Branch("BsTauTauFH_tau1_sumofdnn", &BsTauTauFH_tau1_sumofdnn);
+    tree_->Branch("BsTauTauFH_tau1_pfidx1", &BsTauTauFH_tau1_pfidx1);
+    tree_->Branch("BsTauTauFH_tau1_pfidx2", &BsTauTauFH_tau1_pfidx2);
+    tree_->Branch("BsTauTauFH_tau1_pfidx3", &BsTauTauFH_tau1_pfidx3);
+    tree_->Branch("BsTauTauFH_tau1_pi1_dnn", &BsTauTauFH_tau1_pi1_dnn );
+    tree_->Branch("BsTauTauFH_tau1_pi2_dnn", &BsTauTauFH_tau1_pi2_dnn );
+    tree_->Branch("BsTauTauFH_tau1_pi3_dnn", &BsTauTauFH_tau1_pi3_dnn );
+
+    tree_->Branch("BsTauTauFH_tau1_pi1_pt", &BsTauTauFH_tau1_pi1_pt );
+    tree_->Branch("BsTauTauFH_tau1_pi1_eta", &BsTauTauFH_tau1_pi1_eta );
+    tree_->Branch("BsTauTauFH_tau1_pi1_phi", &BsTauTauFH_tau1_pi1_phi );
+    tree_->Branch("BsTauTauFH_tau1_pi1_mass", &BsTauTauFH_tau1_pi1_mass );
+
+    tree_->Branch("BsTauTauFH_tau1_pi2_pt", &BsTauTauFH_tau1_pi2_pt );
+    tree_->Branch("BsTauTauFH_tau1_pi2_eta", &BsTauTauFH_tau1_pi2_eta );
+    tree_->Branch("BsTauTauFH_tau1_pi2_phi", &BsTauTauFH_tau1_pi2_phi );
+    tree_->Branch("BsTauTauFH_tau1_pi2_mass", &BsTauTauFH_tau1_pi2_mass );
+
+    tree_->Branch("BsTauTauFH_tau1_pi3_pt", &BsTauTauFH_tau1_pi3_pt );
+    tree_->Branch("BsTauTauFH_tau1_pi3_eta", &BsTauTauFH_tau1_pi3_eta );
+    tree_->Branch("BsTauTauFH_tau1_pi3_phi", &BsTauTauFH_tau1_pi3_phi );
+    tree_->Branch("BsTauTauFH_tau1_pi3_mass", &BsTauTauFH_tau1_pi3_mass );
+
+    
+    tree_->Branch("BsTauTauFH_tau2_pt", &BsTauTauFH_tau2_pt );
+    tree_->Branch("BsTauTauFH_tau2_eta", &BsTauTauFH_tau2_eta );
+    tree_->Branch("BsTauTauFH_tau2_phi", &BsTauTauFH_tau2_phi );
+    tree_->Branch("BsTauTauFH_tau2_mass", &BsTauTauFH_tau2_mass );
+    tree_->Branch("BsTauTauFH_tau2_rhomass1", &BsTauTauFH_tau2_rhomass1 );
+    tree_->Branch("BsTauTauFH_tau2_rhomass2", &BsTauTauFH_tau2_rhomass2 );
+    tree_->Branch("BsTauTauFH_tau2_q", &BsTauTauFH_tau2_q );
+    tree_->Branch("BsTauTauFH_tau2_vx"   , &BsTauTauFH_tau2_vx    );
+    tree_->Branch("BsTauTauFH_tau2_vy"   , &BsTauTauFH_tau2_vy    );
+    tree_->Branch("BsTauTauFH_tau2_vz"   , &BsTauTauFH_tau2_vz    );
+
+    tree_->Branch("BsTauTauFH_tau2_max_dr_3prong", &BsTauTauFH_tau2_max_dr_3prong);
+    tree_->Branch("BsTauTauFH_tau2_lip", &BsTauTauFH_tau2_lip);
+    tree_->Branch("BsTauTauFH_tau2_lips", &BsTauTauFH_tau2_lips);
+    tree_->Branch("BsTauTauFH_tau2_pvip", &BsTauTauFH_tau2_pvip);
+    tree_->Branch("BsTauTauFH_tau2_pvips", &BsTauTauFH_tau2_pvips);
+    tree_->Branch("BsTauTauFH_tau2_fl3d", &BsTauTauFH_tau2_fl3d);
+    tree_->Branch("BsTauTauFH_tau2_fls3d", &BsTauTauFH_tau2_fls3d);
+    tree_->Branch("BsTauTauFH_tau2_alpha", &BsTauTauFH_tau2_alpha);
+    tree_->Branch("BsTauTauFH_tau2_vprob", &BsTauTauFH_tau2_vprob);
+    tree_->Branch("BsTauTauFH_tau2_isRight", &BsTauTauFH_tau2_isRight);
+    tree_->Branch("BsTauTauFH_tau2_matched_ppdgId", &BsTauTauFH_tau2_matched_ppdgId);
+    tree_->Branch("BsTauTauFH_tau2_matched_gentaupt", &BsTauTauFH_tau2_matched_gentaupt);
+    //    tree_->Branch("BsTauTauFH_tau2_gentaupt", &BsTauTauFH_tau2_gentaupt);
+    tree_->Branch("BsTauTauFH_tau2_sumofdnn", &BsTauTauFH_tau2_sumofdnn);
+    tree_->Branch("BsTauTauFH_tau2_pfidx1", &BsTauTauFH_tau2_pfidx1);
+    tree_->Branch("BsTauTauFH_tau2_pfidx2", &BsTauTauFH_tau2_pfidx2);
+    tree_->Branch("BsTauTauFH_tau2_pfidx3", &BsTauTauFH_tau2_pfidx3);
+    tree_->Branch("BsTauTauFH_tau2_pi1_dnn", &BsTauTauFH_tau2_pi1_dnn );
+    tree_->Branch("BsTauTauFH_tau2_pi2_dnn", &BsTauTauFH_tau2_pi2_dnn );
+    tree_->Branch("BsTauTauFH_tau2_pi3_dnn", &BsTauTauFH_tau2_pi3_dnn );
+
+    tree_->Branch("BsTauTauFH_tau2_pi1_pt", &BsTauTauFH_tau2_pi1_pt );
+    tree_->Branch("BsTauTauFH_tau2_pi1_eta", &BsTauTauFH_tau2_pi1_eta );
+    tree_->Branch("BsTauTauFH_tau2_pi1_phi", &BsTauTauFH_tau2_pi1_phi );
+    tree_->Branch("BsTauTauFH_tau2_pi1_mass", &BsTauTauFH_tau2_pi1_mass );
+
+    tree_->Branch("BsTauTauFH_tau2_pi2_pt", &BsTauTauFH_tau2_pi2_pt );
+    tree_->Branch("BsTauTauFH_tau2_pi2_eta", &BsTauTauFH_tau2_pi2_eta );
+    tree_->Branch("BsTauTauFH_tau2_pi2_phi", &BsTauTauFH_tau2_pi2_phi );
+    tree_->Branch("BsTauTauFH_tau2_pi2_mass", &BsTauTauFH_tau2_pi2_mass );
+
+    tree_->Branch("BsTauTauFH_tau2_pi3_pt", &BsTauTauFH_tau2_pi3_pt );
+    tree_->Branch("BsTauTauFH_tau2_pi3_eta", &BsTauTauFH_tau2_pi3_eta );
+    tree_->Branch("BsTauTauFH_tau2_pi3_phi", &BsTauTauFH_tau2_pi3_phi );
+    tree_->Branch("BsTauTauFH_tau2_pi3_mass", &BsTauTauFH_tau2_pi3_mass );
+
+
+    tree_->Branch("BsTauTauFH_PV_vx", &BsTauTauFH_PV_vx );
+    tree_->Branch("BsTauTauFH_PV_vy", &BsTauTauFH_PV_vy );
+    tree_->Branch("BsTauTauFH_PV_vz", &BsTauTauFH_PV_vz );
+
+    tree_->Branch("BsTauTauFH_bbPV_vx", &BsTauTauFH_bbPV_vx );
+    tree_->Branch("BsTauTauFH_bbPV_vy", &BsTauTauFH_bbPV_vy );
+    tree_->Branch("BsTauTauFH_bbPV_vz", &BsTauTauFH_bbPV_vz );
+
+    tree_->Branch("BsTauTauFH_bbPV_refit_vx", &BsTauTauFH_bbPV_vx );
+    tree_->Branch("BsTauTauFH_bbPV_refit_vy", &BsTauTauFH_bbPV_vy );
+    tree_->Branch("BsTauTauFH_bbPV_refit_vz", &BsTauTauFH_bbPV_vz );
+
+    tree_->Branch("BsTauTauFH_genPV_vx", &BsTauTauFH_genPV_vx );
+    tree_->Branch("BsTauTauFH_genPV_vy", &BsTauTauFH_genPV_vy );
+    tree_->Branch("BsTauTauFH_genPV_vz", &BsTauTauFH_genPV_vz );
+
+    tree_->Branch("BsTauTauFH_B_pt", &BsTauTauFH_B_pt );
+    tree_->Branch("BsTauTauFH_B_eta", &BsTauTauFH_B_eta );
+    tree_->Branch("BsTauTauFH_B_phi", &BsTauTauFH_B_phi );
+    tree_->Branch("BsTauTauFH_B_mass", &BsTauTauFH_B_mass );
+    tree_->Branch("BsTauTauFH_B_vprob", &BsTauTauFH_B_vprob );
+    tree_->Branch("BsTauTauFH_B_lip", &BsTauTauFH_B_lip);
+    tree_->Branch("BsTauTauFH_B_lips", &BsTauTauFH_B_lips);
+    tree_->Branch("BsTauTauFH_B_pvip", &BsTauTauFH_B_pvip);
+    tree_->Branch("BsTauTauFH_B_pvips", &BsTauTauFH_B_pvips);
+    tree_->Branch("BsTauTauFH_B_fl3d", &BsTauTauFH_B_fl3d);
+    tree_->Branch("BsTauTauFH_B_fls3d", &BsTauTauFH_B_fls3d);
+    tree_->Branch("BsTauTauFH_B_alpha", &BsTauTauFH_B_alpha);
+    tree_->Branch("BsTauTauFH_B_maxdoca", &BsTauTauFH_B_maxdoca);
+    tree_->Branch("BsTauTauFH_B_mindoca", &BsTauTauFH_B_mindoca);
+    tree_->Branch("BsTauTauFH_B_vx", &BsTauTauFH_B_vx );
+    tree_->Branch("BsTauTauFH_B_vy", &BsTauTauFH_B_vy );
+    tree_->Branch("BsTauTauFH_B_vz", &BsTauTauFH_B_vz );
+    tree_->Branch("BsTauTauFH_B_iso", &BsTauTauFH_B_iso);
+    tree_->Branch("BsTauTauFH_B_iso_ntracks", &BsTauTauFH_B_iso_ntracks );
+    tree_->Branch("BsTauTauFH_B_iso_mindoca", &BsTauTauFH_B_iso_mindoca );
+
+    tree_->Branch("BsTauTauFH_ngenmuons", &BsTauTauFH_ngenmuons);
+    tree_->Branch("BsTauTauFH_isgen3", &BsTauTauFH_isgen3);
+    tree_->Branch("BsTauTauFH_isgen3matched", &BsTauTauFH_isgen3matched);
+    tree_->Branch("BsTauTauFH_nch", &BsTauTauFH_nch);
+    tree_->Branch("BsTauTauFH_nch_after_dnn", &BsTauTauFH_nch_after_dnn);
+    tree_->Branch("BsTauTauFH_nch_before_dnn", &BsTauTauFH_nch_before_dnn);
+    tree_->Branch("BsTauTauFH_nch_qr", &BsTauTauFH_nch_qr);
+    tree_->Branch("BsTauTauFH_ngentau3", &BsTauTauFH_ngentau3); 
+    tree_->Branch("BsTauTauFH_ngentau", &BsTauTauFH_ngentau);
+    tree_->Branch("BsTauTauFH_gentaupt", &BsTauTauFH_gentaupt);
+    tree_->Branch("BsTauTauFH_gentaudm", &BsTauTauFH_gentaudm);
+
+  }
+
+
+
 //
 //  if (runFlags["doBsTauTauFH_mr"]){
 //    tree_->Branch("BsTauTauFH_mr_tau_pi1_pt", &BsTauTauFH_mr_tau_pi1_pt );
@@ -2046,7 +2049,7 @@ void NtupleBranches::reset( void ){
   /*-------------------------JPSI infos--------------------------*/ 
   IsJpsiMu.clear();
   //  IsBsTauTau.clear();
-  //  IsBsTauTauFH.clear();
+  IsBsTauTauFH.clear();
   //  IsBsDstarTauNu.clear();
 
   JpsiMu_nCandidates.clear();
@@ -3016,171 +3019,171 @@ void NtupleBranches::reset( void ){
 //
 //
 //
-//  BsTauTauFH_nCandidates.clear();
-//  BsTauTauFH_ntaus.clear();
-//
-//  BsTauTauFH_mu1_pt.clear();
-//  BsTauTauFH_mu1_eta.clear();
-//  BsTauTauFH_mu1_phi.clear();
-//  BsTauTauFH_mu1_mass.clear();
-//  BsTauTauFH_mu1_q.clear();
-//  BsTauTauFH_mu1_isLoose.clear();
-//  BsTauTauFH_mu1_isTight.clear();
-//  BsTauTauFH_mu1_isPF.clear();
-//  BsTauTauFH_mu1_isGlobal.clear();
-//  BsTauTauFH_mu1_isTracker.clear();
-//  BsTauTauFH_mu1_isSoft.clear();
-//  BsTauTauFH_mu1_vx.clear();
-//  BsTauTauFH_mu1_vy.clear();
-//  BsTauTauFH_mu1_vz.clear();
-//  BsTauTauFH_mu1_iso.clear();
-//  BsTauTauFH_mu1_dbiso.clear();
-//
-//
-//  BsTauTauFH_tau1_pt.clear();
-//  BsTauTauFH_tau1_eta.clear();
-//  BsTauTauFH_tau1_phi.clear();
-//  BsTauTauFH_tau1_mass.clear();
-//  BsTauTauFH_tau1_rhomass1.clear();
-//  BsTauTauFH_tau1_rhomass2.clear();
-//  BsTauTauFH_tau1_q.clear();
-//  BsTauTauFH_tau1_vx.clear();
-//  BsTauTauFH_tau1_vy.clear();
-//  BsTauTauFH_tau1_vz.clear();
-//
-//
-//  BsTauTauFH_tau1_max_dr_3prong.clear();
-//  BsTauTauFH_tau1_lip.clear();
-//  BsTauTauFH_tau1_lips.clear();
-//  BsTauTauFH_tau1_pvip.clear();
-//  BsTauTauFH_tau1_pvips.clear();
-//  BsTauTauFH_tau1_fl3d.clear();
-//  BsTauTauFH_tau1_fls3d.clear();
-//  BsTauTauFH_tau1_alpha.clear();
-//  BsTauTauFH_tau1_vprob.clear();
-//  BsTauTauFH_tau1_isRight.clear();
-//  BsTauTauFH_tau1_matched_ppdgId.clear();
-//  BsTauTauFH_tau1_matched_gentaupt.clear();
-//  BsTauTauFH_tau1_sumofdnn.clear();
-//  BsTauTauFH_tau1_pfidx1.clear();
-//  BsTauTauFH_tau1_pfidx2.clear();
-//  BsTauTauFH_tau1_pfidx3.clear();
-//  BsTauTauFH_tau1_pi1_dnn.clear();
-//  BsTauTauFH_tau1_pi2_dnn.clear();
-//  BsTauTauFH_tau1_pi3_dnn.clear();
-//
-//  BsTauTauFH_tau1_pi1_pt.clear();
-//  BsTauTauFH_tau1_pi1_eta.clear();
-//  BsTauTauFH_tau1_pi1_phi.clear();
-//  BsTauTauFH_tau1_pi1_mass.clear();
-//
-//  BsTauTauFH_tau1_pi2_pt.clear();
-//  BsTauTauFH_tau1_pi2_eta.clear();
-//  BsTauTauFH_tau1_pi2_phi.clear();
-//  BsTauTauFH_tau1_pi2_mass.clear();
-//
-//  BsTauTauFH_tau1_pi3_pt.clear();
-//  BsTauTauFH_tau1_pi3_eta.clear();
-//  BsTauTauFH_tau1_pi3_phi.clear();
-//  BsTauTauFH_tau1_pi3_mass.clear();
-//
-//
-//  BsTauTauFH_tau2_pt.clear();
-//  BsTauTauFH_tau2_eta.clear();
-//  BsTauTauFH_tau2_phi.clear();
-//  BsTauTauFH_tau2_mass.clear();
-//  BsTauTauFH_tau2_rhomass1.clear();
-//  BsTauTauFH_tau2_rhomass2.clear();
-//  BsTauTauFH_tau2_q.clear();
-//  BsTauTauFH_tau2_vx.clear();
-//  BsTauTauFH_tau2_vy.clear();
-//  BsTauTauFH_tau2_vz.clear();
-//
-//
-//  BsTauTauFH_tau2_max_dr_3prong.clear();
-//  BsTauTauFH_tau2_lip.clear();
-//  BsTauTauFH_tau2_lips.clear();
-//  BsTauTauFH_tau2_pvip.clear();
-//  BsTauTauFH_tau2_pvips.clear();
-//  BsTauTauFH_tau2_fl3d.clear();
-//  BsTauTauFH_tau2_fls3d.clear();
-//  BsTauTauFH_tau2_alpha.clear();
-//  BsTauTauFH_tau2_vprob.clear();
-//  BsTauTauFH_tau2_isRight.clear();
-//  BsTauTauFH_tau2_matched_ppdgId.clear();
-//  BsTauTauFH_tau2_matched_gentaupt.clear();
-//  BsTauTauFH_tau2_sumofdnn.clear();
-//  BsTauTauFH_tau2_pfidx1.clear();
-//  BsTauTauFH_tau2_pfidx2.clear();
-//  BsTauTauFH_tau2_pfidx3.clear();
-//  BsTauTauFH_tau2_pi1_dnn.clear();
-//  BsTauTauFH_tau2_pi2_dnn.clear();
-//  BsTauTauFH_tau2_pi3_dnn.clear();
-//
-//  BsTauTauFH_tau2_pi1_pt.clear();
-//  BsTauTauFH_tau2_pi1_eta.clear();
-//  BsTauTauFH_tau2_pi1_phi.clear();
-//  BsTauTauFH_tau2_pi1_mass.clear();
-//
-//  BsTauTauFH_tau2_pi2_pt.clear();
-//  BsTauTauFH_tau2_pi2_eta.clear();
-//  BsTauTauFH_tau2_pi2_phi.clear();
-//  BsTauTauFH_tau2_pi2_mass.clear();
-//
-//  BsTauTauFH_tau2_pi3_pt.clear();
-//  BsTauTauFH_tau2_pi3_eta.clear();
-//  BsTauTauFH_tau2_pi3_phi.clear();
-//  BsTauTauFH_tau2_pi3_mass.clear();
-//
-//  BsTauTauFH_B_pt.clear();
-//  BsTauTauFH_B_eta.clear();
-//  BsTauTauFH_B_phi.clear();
-//  BsTauTauFH_B_mass.clear();
-//  BsTauTauFH_B_vprob.clear();
-//  BsTauTauFH_B_lip.clear();
-//  BsTauTauFH_B_lips.clear();
-//  BsTauTauFH_B_pvip.clear();
-//  BsTauTauFH_B_pvips.clear();
-//  BsTauTauFH_B_fl3d.clear();
-//  BsTauTauFH_B_fls3d.clear();
-//  BsTauTauFH_B_alpha.clear();
-//  BsTauTauFH_B_maxdoca.clear();
-//  BsTauTauFH_B_mindoca.clear();
-//  BsTauTauFH_B_vx.clear();
-//  BsTauTauFH_B_vy.clear();
-//  BsTauTauFH_B_vz.clear();
-//  BsTauTauFH_B_iso.clear();
-//  BsTauTauFH_B_iso_ntracks.clear();
-//  BsTauTauFH_B_iso_mindoca.clear();
-//
-//  BsTauTauFH_PV_vx.clear();
-//  BsTauTauFH_PV_vy.clear();
-//  BsTauTauFH_PV_vz.clear();
-//
-//  BsTauTauFH_bbPV_vx.clear();
-//  BsTauTauFH_bbPV_vy.clear();
-//  BsTauTauFH_bbPV_vz.clear();
-//
-//  BsTauTauFH_bbPV_refit_vx.clear();
-//  BsTauTauFH_bbPV_refit_vy.clear();
-//  BsTauTauFH_bbPV_refit_vz.clear();
-//
-//  BsTauTauFH_genPV_vx.clear();
-//  BsTauTauFH_genPV_vy.clear();
-//  BsTauTauFH_genPV_vz.clear();
-//
-//  BsTauTauFH_ngenmuons.clear();
-//
-//  BsTauTauFH_isgen3.clear();
-//  BsTauTauFH_isgen3matched.clear();
-//  BsTauTauFH_nch.clear();
-//  BsTauTauFH_nch_after_dnn.clear();
-//  BsTauTauFH_nch_before_dnn.clear();
-//  BsTauTauFH_nch_qr.clear();
-//  BsTauTauFH_ngentau3.clear();
-//  BsTauTauFH_ngentau.clear();
-//  BsTauTauFH_gentaupt.clear();
-//  BsTauTauFH_gentaudm.clear();
+  BsTauTauFH_nCandidates.clear();
+  BsTauTauFH_ntaus.clear();
+
+  BsTauTauFH_mu1_pt.clear();
+  BsTauTauFH_mu1_eta.clear();
+  BsTauTauFH_mu1_phi.clear();
+  BsTauTauFH_mu1_mass.clear();
+  BsTauTauFH_mu1_q.clear();
+  BsTauTauFH_mu1_isLoose.clear();
+  BsTauTauFH_mu1_isTight.clear();
+  BsTauTauFH_mu1_isPF.clear();
+  BsTauTauFH_mu1_isGlobal.clear();
+  BsTauTauFH_mu1_isTracker.clear();
+  BsTauTauFH_mu1_isSoft.clear();
+  BsTauTauFH_mu1_vx.clear();
+  BsTauTauFH_mu1_vy.clear();
+  BsTauTauFH_mu1_vz.clear();
+  BsTauTauFH_mu1_iso.clear();
+  BsTauTauFH_mu1_dbiso.clear();
+
+
+  BsTauTauFH_tau1_pt.clear();
+  BsTauTauFH_tau1_eta.clear();
+  BsTauTauFH_tau1_phi.clear();
+  BsTauTauFH_tau1_mass.clear();
+  BsTauTauFH_tau1_rhomass1.clear();
+  BsTauTauFH_tau1_rhomass2.clear();
+  BsTauTauFH_tau1_q.clear();
+  BsTauTauFH_tau1_vx.clear();
+  BsTauTauFH_tau1_vy.clear();
+  BsTauTauFH_tau1_vz.clear();
+
+
+  BsTauTauFH_tau1_max_dr_3prong.clear();
+  BsTauTauFH_tau1_lip.clear();
+  BsTauTauFH_tau1_lips.clear();
+  BsTauTauFH_tau1_pvip.clear();
+  BsTauTauFH_tau1_pvips.clear();
+  BsTauTauFH_tau1_fl3d.clear();
+  BsTauTauFH_tau1_fls3d.clear();
+  BsTauTauFH_tau1_alpha.clear();
+  BsTauTauFH_tau1_vprob.clear();
+  BsTauTauFH_tau1_isRight.clear();
+  BsTauTauFH_tau1_matched_ppdgId.clear();
+  BsTauTauFH_tau1_matched_gentaupt.clear();
+  BsTauTauFH_tau1_sumofdnn.clear();
+  BsTauTauFH_tau1_pfidx1.clear();
+  BsTauTauFH_tau1_pfidx2.clear();
+  BsTauTauFH_tau1_pfidx3.clear();
+  BsTauTauFH_tau1_pi1_dnn.clear();
+  BsTauTauFH_tau1_pi2_dnn.clear();
+  BsTauTauFH_tau1_pi3_dnn.clear();
+
+  BsTauTauFH_tau1_pi1_pt.clear();
+  BsTauTauFH_tau1_pi1_eta.clear();
+  BsTauTauFH_tau1_pi1_phi.clear();
+  BsTauTauFH_tau1_pi1_mass.clear();
+
+  BsTauTauFH_tau1_pi2_pt.clear();
+  BsTauTauFH_tau1_pi2_eta.clear();
+  BsTauTauFH_tau1_pi2_phi.clear();
+  BsTauTauFH_tau1_pi2_mass.clear();
+
+  BsTauTauFH_tau1_pi3_pt.clear();
+  BsTauTauFH_tau1_pi3_eta.clear();
+  BsTauTauFH_tau1_pi3_phi.clear();
+  BsTauTauFH_tau1_pi3_mass.clear();
+
+
+  BsTauTauFH_tau2_pt.clear();
+  BsTauTauFH_tau2_eta.clear();
+  BsTauTauFH_tau2_phi.clear();
+  BsTauTauFH_tau2_mass.clear();
+  BsTauTauFH_tau2_rhomass1.clear();
+  BsTauTauFH_tau2_rhomass2.clear();
+  BsTauTauFH_tau2_q.clear();
+  BsTauTauFH_tau2_vx.clear();
+  BsTauTauFH_tau2_vy.clear();
+  BsTauTauFH_tau2_vz.clear();
+
+
+  BsTauTauFH_tau2_max_dr_3prong.clear();
+  BsTauTauFH_tau2_lip.clear();
+  BsTauTauFH_tau2_lips.clear();
+  BsTauTauFH_tau2_pvip.clear();
+  BsTauTauFH_tau2_pvips.clear();
+  BsTauTauFH_tau2_fl3d.clear();
+  BsTauTauFH_tau2_fls3d.clear();
+  BsTauTauFH_tau2_alpha.clear();
+  BsTauTauFH_tau2_vprob.clear();
+  BsTauTauFH_tau2_isRight.clear();
+  BsTauTauFH_tau2_matched_ppdgId.clear();
+  BsTauTauFH_tau2_matched_gentaupt.clear();
+  BsTauTauFH_tau2_sumofdnn.clear();
+  BsTauTauFH_tau2_pfidx1.clear();
+  BsTauTauFH_tau2_pfidx2.clear();
+  BsTauTauFH_tau2_pfidx3.clear();
+  BsTauTauFH_tau2_pi1_dnn.clear();
+  BsTauTauFH_tau2_pi2_dnn.clear();
+  BsTauTauFH_tau2_pi3_dnn.clear();
+
+  BsTauTauFH_tau2_pi1_pt.clear();
+  BsTauTauFH_tau2_pi1_eta.clear();
+  BsTauTauFH_tau2_pi1_phi.clear();
+  BsTauTauFH_tau2_pi1_mass.clear();
+
+  BsTauTauFH_tau2_pi2_pt.clear();
+  BsTauTauFH_tau2_pi2_eta.clear();
+  BsTauTauFH_tau2_pi2_phi.clear();
+  BsTauTauFH_tau2_pi2_mass.clear();
+
+  BsTauTauFH_tau2_pi3_pt.clear();
+  BsTauTauFH_tau2_pi3_eta.clear();
+  BsTauTauFH_tau2_pi3_phi.clear();
+  BsTauTauFH_tau2_pi3_mass.clear();
+
+  BsTauTauFH_B_pt.clear();
+  BsTauTauFH_B_eta.clear();
+  BsTauTauFH_B_phi.clear();
+  BsTauTauFH_B_mass.clear();
+  BsTauTauFH_B_vprob.clear();
+  BsTauTauFH_B_lip.clear();
+  BsTauTauFH_B_lips.clear();
+  BsTauTauFH_B_pvip.clear();
+  BsTauTauFH_B_pvips.clear();
+  BsTauTauFH_B_fl3d.clear();
+  BsTauTauFH_B_fls3d.clear();
+  BsTauTauFH_B_alpha.clear();
+  BsTauTauFH_B_maxdoca.clear();
+  BsTauTauFH_B_mindoca.clear();
+  BsTauTauFH_B_vx.clear();
+  BsTauTauFH_B_vy.clear();
+  BsTauTauFH_B_vz.clear();
+  BsTauTauFH_B_iso.clear();
+  BsTauTauFH_B_iso_ntracks.clear();
+  BsTauTauFH_B_iso_mindoca.clear();
+
+  BsTauTauFH_PV_vx.clear();
+  BsTauTauFH_PV_vy.clear();
+  BsTauTauFH_PV_vz.clear();
+
+  BsTauTauFH_bbPV_vx.clear();
+  BsTauTauFH_bbPV_vy.clear();
+  BsTauTauFH_bbPV_vz.clear();
+
+  BsTauTauFH_bbPV_refit_vx.clear();
+  BsTauTauFH_bbPV_refit_vy.clear();
+  BsTauTauFH_bbPV_refit_vz.clear();
+
+  BsTauTauFH_genPV_vx.clear();
+  BsTauTauFH_genPV_vy.clear();
+  BsTauTauFH_genPV_vz.clear();
+
+  BsTauTauFH_ngenmuons.clear();
+
+  BsTauTauFH_isgen3.clear();
+  BsTauTauFH_isgen3matched.clear();
+  BsTauTauFH_nch.clear();
+  BsTauTauFH_nch_after_dnn.clear();
+  BsTauTauFH_nch_before_dnn.clear();
+  BsTauTauFH_nch_qr.clear();
+  BsTauTauFH_ngentau3.clear();
+  BsTauTauFH_ngentau.clear();
+  BsTauTauFH_gentaupt.clear();
+  BsTauTauFH_gentaudm.clear();
 //
 //
 //  //////////////////////////////
