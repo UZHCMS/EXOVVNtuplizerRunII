@@ -80,6 +80,11 @@ struct attribute
   Bool_t trigMatch;
   Float_t trigMatch_dr;
   Float_t dr_jpsi;
+
+  Float_t d0sig;
+  Float_t mumuTrk_vprob;
+  Float_t mumuTrk_chi2;
+  Float_t mumuTrk_ndof;
 };
 
 

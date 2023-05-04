@@ -15,7 +15,8 @@ echo HOSTNAME: $HOSTNAME
 mkdir -p /scratch/$USER/${SLURM_JOB_ID}
 export TMPDIR=/scratch/$USER/${SLURM_JOB_ID}
 
-cmsRun config_generic_opt_skimmed_batch.py INFILE OUTFILE
+cmsRun config_generic_opt_skimmed_batch.py INFILE $TMPDIR/tmp_ONAME_IDJ.root
+xrdcp -f $TMPDIR/tmp_ONAME_IDJ.root root://t3dcachedb03.psi.ch/OUTFILE
 
 # cleaning of temporal working dir when job was completed:
 rm -rf /scratch/$USER/${SLURM_JOB_ID}

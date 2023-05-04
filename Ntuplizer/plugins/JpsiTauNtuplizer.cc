@@ -548,7 +548,6 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
   bool isJpsiMu = false;
   bool isJpsiTau2Mu = false;
 
-  //  std::cout << "-----" << std::endl;
 
   if(runOnMC_){ 
     
@@ -1018,7 +1017,6 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 
 
 
-
   /*****************
    * Save mother and weight if needed 
    ****************/
@@ -1116,9 +1114,14 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 
     const pat::Muon & muon = (*muons_)[imuon];
 
+    if(TMath::Abs(muon.pdgId())!=13) continue;
+      //      std::cout << "TEST_not_good:" <<muon.pdgId() <<std::endl;
+    //    }
+
     if(muon.pt() < 4) continue;
     if(TMath::Abs(muon.eta()) > 2.4) continue;
     if(!(muon.track().isNonnull())) continue;
+
 
 
     // Trigger matching
@@ -1151,8 +1154,10 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
       }
       
       if(!isFilterExist) continue;
+
       
       if(TMath::Abs(obj.pdgId()) != 13) continue;
+
       
       Float_t trigger_dR = reco::deltaR(obj.eta(), obj.phi(),
 					muon.eta(), muon.phi());
@@ -1301,7 +1306,12 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
   //  std::tie(jpsifit_flag, jpsi_part, jpsi_vertex, jpTree) = aux.KinematicFit(muonParticles, aux.jpsi_mass, aux.jpsi_m_sigma);
   std::tie(jpsifit_flag, jpsi_part, jpsi_vertex, jpTree) = aux.KinematicFit(muonParticles, -1, -1);
 
+  //  std::cout << "jpsi vertex = " << jpsi_vertex->chiSquared() << " " << jpsi_vertex->degreesOfFreedom() << std::endl;
+
   if(!jpsifit_flag) return false;
+  
+
+
 
   nBranches_->cutflow->Fill(4);
 
@@ -1341,6 +1351,9 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 
   AnalyticalImpactPointExtrapolator extrapolator(fMagneticField);
   TransverseImpactPointExtrapolator extrapolatort(fMagneticField);
+
+  TSCBLBuilderNoMaterial blsBuilder;
+
 
   Float_t max_criteria = 999;
   reco::Vertex closestVertex; 
@@ -1455,6 +1468,10 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
   for( size_t ii = 0; ii < packedpfcandidates_->size(); ++ii ){   
       
     pat::PackedCandidate pf = (*packedpfcandidates_)[ii];
+
+    //    if(TMath::Abs(pf.pdgId())!=211){
+      //      std::cout << "test_not_good:" << pf.pdgId() << std::endl;
+    //    }
 
     if(!aux.basicPFcut(pf)) continue;
     Float_t precut_dz = pf.vz() - closestVertex.position().z();
@@ -1579,6 +1596,45 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
     if(dr_jpsi > 1.) continue;
 
 
+    //    std::cout <<"test1" <<std::endl;
+
+    FreeTrajectoryState InitialFTS = JpsiTauNtuplizer::initialFreeState(pf.pseudoTrack(), fMagneticField);
+    TrajectoryStateClosestToBeamLine tscb(blsBuilder(InitialFTS, *beamspot_));
+    float d0sig = tscb.transverseImpactParameter().significance();
+
+    //    std::cout << "D0 sig:" << d0sig << std::endl;
+
+    // calculate mumu+trk chi2 
+    
+    std::vector<RefCountedKinematicParticle> mumuTrkParticles;
+    
+    mumuTrkParticles.push_back(pFactory.particle(tt1_muon, aux.muon_mass, chi, ndf, aux.muon_sigma));
+    mumuTrkParticles.push_back(pFactory.particle(tt2_muon, aux.muon_mass, chi, ndf, aux.muon_sigma));
+    mumuTrkParticles.push_back(pFactory.particle(_track, aux.pion_mass, chi, ndf, aux.pion_sigma));
+
+    RefCountedKinematicParticle mumuTrk_part;
+    RefCountedKinematicVertex mumuTrk_vertex;
+    RefCountedKinematicTree mumuTrkTree;
+    Bool_t mumuTrkfit_flag;
+    std::tie(mumuTrkfit_flag, mumuTrk_part, mumuTrk_vertex, mumuTrkTree) = aux.KinematicFit(mumuTrkParticles, -1, -1);
+    
+    float mumuTrk_chi2 = -1;
+    float mumuTrk_ndof = -1;
+    float mumuTrk_vprob = -1;
+
+    if(mumuTrkfit_flag){
+      mumuTrk_chi2 = mumuTrk_vertex->chiSquared();
+      mumuTrk_ndof = mumuTrk_vertex->degreesOfFreedom();
+      mumuTrk_vprob = TMath::Prob(mumuTrk_vertex->chiSquared(), mumuTrk_vertex->degreesOfFreedom());
+    }
+
+
+    //    std::cout << "mumuTrk (chi2, ndof, vprob)" << mumuTrk_chi2 << " " << mumuTrk_ndof << " " << mumuTrk_vprob << std::endl;
+
+
+
+
+
     attribute attr = {
       (Float_t) doca3d,
       (Float_t) doca3de,
@@ -1603,7 +1659,11 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
       (Float_t) near_dz,
       (Bool_t) trigMatch,
       (Float_t) trigMatch_dr,
-      (Float_t) dr_jpsi
+      (Float_t) dr_jpsi,
+      (Float_t) d0sig,
+      (Float_t) mumuTrk_vprob,
+      (Float_t) mumuTrk_chi2,
+      (Float_t) mumuTrk_ndof,
     };
 
     
@@ -3191,6 +3251,11 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
     //    nBranches_->JpsiTau_tau_pi1_dnn_old.push_back(cands[ic].cand_pf1.dnn_old);
     nBranches_->JpsiTau_tau_pi1_trigMatch.push_back(cands[ic].cand_pf1.reducedpfcand.pfaux.trigMatch);
     nBranches_->JpsiTau_tau_pi1_trigMatch_dr.push_back(cands[ic].cand_pf1.reducedpfcand.pfaux.trigMatch_dr);
+    nBranches_->JpsiTau_tau_pi1_d0sig.push_back(cands[ic].cand_pf1.reducedpfcand.pfaux.d0sig);
+    nBranches_->JpsiTau_tau_pi1_mumuTrk_vprob.push_back(cands[ic].cand_pf1.reducedpfcand.pfaux.mumuTrk_vprob);
+    nBranches_->JpsiTau_tau_pi1_mumuTrk_chi2.push_back(cands[ic].cand_pf1.reducedpfcand.pfaux.mumuTrk_chi2);
+    nBranches_->JpsiTau_tau_pi1_mumuTrk_ndof.push_back(cands[ic].cand_pf1.reducedpfcand.pfaux.mumuTrk_ndof);
+
 
       
     nBranches_->JpsiTau_tau_pi2_pt.push_back(tlv_pion2.Pt());
@@ -3220,6 +3285,11 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
     //    nBranches_->JpsiTau_tau_pi2_dnn_old.push_back(cands[ic].cand_pf2.dnn_old);
     nBranches_->JpsiTau_tau_pi2_trigMatch.push_back(cands[ic].cand_pf2.reducedpfcand.pfaux.trigMatch);
     nBranches_->JpsiTau_tau_pi2_trigMatch_dr.push_back(cands[ic].cand_pf2.reducedpfcand.pfaux.trigMatch_dr);
+    nBranches_->JpsiTau_tau_pi2_d0sig.push_back(cands[ic].cand_pf2.reducedpfcand.pfaux.d0sig);
+    nBranches_->JpsiTau_tau_pi2_mumuTrk_vprob.push_back(cands[ic].cand_pf2.reducedpfcand.pfaux.mumuTrk_vprob);
+    nBranches_->JpsiTau_tau_pi2_mumuTrk_chi2.push_back(cands[ic].cand_pf2.reducedpfcand.pfaux.mumuTrk_chi2);
+    nBranches_->JpsiTau_tau_pi2_mumuTrk_ndof.push_back(cands[ic].cand_pf2.reducedpfcand.pfaux.mumuTrk_ndof);
+
 
     nBranches_->JpsiTau_tau_pi3_pt.push_back(tlv_pion3.Pt());
     nBranches_->JpsiTau_tau_pi3_eta.push_back(tlv_pion3.Eta());
@@ -3248,6 +3318,12 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
     //    nBranches_->JpsiTau_tau_pi3_dnn_old.push_back(cands[ic].cand_pf3.dnn_old);
     nBranches_->JpsiTau_tau_pi3_trigMatch.push_back(cands[ic].cand_pf3.reducedpfcand.pfaux.trigMatch);
     nBranches_->JpsiTau_tau_pi3_trigMatch_dr.push_back(cands[ic].cand_pf3.reducedpfcand.pfaux.trigMatch_dr);
+    nBranches_->JpsiTau_tau_pi3_d0sig.push_back(cands[ic].cand_pf3.reducedpfcand.pfaux.d0sig);
+    nBranches_->JpsiTau_tau_pi3_mumuTrk_vprob.push_back(cands[ic].cand_pf3.reducedpfcand.pfaux.mumuTrk_vprob);
+    nBranches_->JpsiTau_tau_pi3_mumuTrk_chi2.push_back(cands[ic].cand_pf3.reducedpfcand.pfaux.mumuTrk_chi2);
+    nBranches_->JpsiTau_tau_pi3_mumuTrk_ndof.push_back(cands[ic].cand_pf3.reducedpfcand.pfaux.mumuTrk_ndof);
+
+
 
     Float_t vweight = (cands[ic].refitVtx.ndof()+2.)/(2. * cands[ic].refitVtx.tracksSize());
     Float_t delta_chi2 = closestVertex.chi2() - cands[ic].refitVtx.chi2();
@@ -3533,7 +3609,56 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
   nBranches_->JpsiTau_Jpsi_eta = jpsi_part->currentState().globalMomentum().eta();
   nBranches_->JpsiTau_Jpsi_phi = jpsi_part->currentState().globalMomentum().phi();
   nBranches_->JpsiTau_Jpsi_mass = jpsi_part->currentState().mass();
-  nBranches_->JpsiTau_Jpsi_vprob = TMath::Prob(jpsi_part->chiSquared(), jpsi_part->degreesOfFreedom());
+  nBranches_->JpsiTau_Jpsi_vprob = TMath::Prob(jpsi_vertex->chiSquared(), jpsi_vertex->degreesOfFreedom());
+  nBranches_->JpsiTau_Jpsi_chi2 = jpsi_vertex->chiSquared(); 
+  nBranches_->JpsiTau_Jpsi_ndof = jpsi_vertex->degreesOfFreedom();
+
+
+
+  // Yuta: add trigger-related quantities
+
+  GlobalPoint secondaryVertex(jpsi_vertex->vertexState().position().x(), jpsi_vertex->vertexState().position().y(), jpsi_vertex->vertexState().position().z());
+///¥
+///¥  reco::Vertex::Error verr = jpsi_vertex->vertexState().error();
+///¥  GlobalError err(verr.At(0, 0), verr.At(1, 0), verr.At(1, 1), verr.At(2, 0), verr.At(2, 1), verr.At(2, 2));
+///¥    //GlobalError err(jpsi_vertex->vertexState().error().at(0, 0), jpsi_vertex->vertexState().error().At(1, 0), jpsi_vertex->vertexState().error().At(1, 1), jpsi_vertex->vertexState().error().At(2, 0), jpsi_vertex->vertexState().error().At(2, 1), jpsi_vertex->vertexState().error().At(2, 2));
+///¥
+  reco::BeamSpot vertexBeamSpot = *beamspot_;
+  GlobalPoint displacementFromBeamspot(-1 * ((vertexBeamSpot.x0() - secondaryVertex.x()) +
+					     (secondaryVertex.z() - vertexBeamSpot.z0()) * vertexBeamSpot.dxdz()),
+				       -1 * ((vertexBeamSpot.y0() - secondaryVertex.y()) +
+					     (secondaryVertex.z() - vertexBeamSpot.z0()) * vertexBeamSpot.dydz()),
+				       0);
+
+  math::XYZVector pperp_jpsi(muoncollection[mcidx_mu1].px() + muoncollection[mcidx_mu2].px(), muoncollection[mcidx_mu1].py() + muoncollection[mcidx_mu2].py(), 0.);
+
+
+//  float lxy = displacementFromBeamspot.perp();
+//  float lxyerr = sqrt(err.rerr(displacementFromBeamspot));
+  reco::Vertex::Point vperp(displacementFromBeamspot.x(), displacementFromBeamspot.y(), 0.);
+  float cosAlpha_2d = vperp.Dot(pperp_jpsi) / (vperp.R() * pperp_jpsi.R());
+  
+
+
+
+
+  VertexDistanceXY a2d_jpsi;
+
+  
+  // flight length
+  Float_t fl2d_jpsi = a2d_jpsi.distance(closestVertex, jpsi_vertex->vertexState()).value();
+  Float_t fl2de_jpsi = a2d_jpsi.distance(closestVertex, jpsi_vertex->vertexState()).error();
+  Float_t fls2d_jpsi = -1;
+  if(fl2de_jpsi!=0) fls2d_jpsi = fl2d_jpsi/fl2de_jpsi;
+
+  
+  //  std::cout << "test" << std::endl;
+
+
+
+
+  /////////////////////////////////////////
+
 
   particle_cand JPcand;
   JPcand = aux.calculateIPvariables(extrapolator, jpsi_part, jpsi_vertex, closestVertex);
@@ -3547,9 +3672,16 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
   nBranches_->JpsiTau_Jpsi_alpha = JPcand.alpha;
   nBranches_->JpsiTau_Jpsi_maxdoca = aux.getMaxDoca(muonParticles);
   nBranches_->JpsiTau_Jpsi_mindoca = aux.getMinDoca(muonParticles);
+  nBranches_->JpsiTau_Jpsi_dr = reco::deltaR(muoncollection[mcidx_mu1].eta(), muoncollection[mcidx_mu1].phi(), muoncollection[mcidx_mu2].eta(), muoncollection[mcidx_mu2].phi());
   nBranches_->JpsiTau_Jpsi_vx = jpsi_vertex->vertexState().position().x();
   nBranches_->JpsiTau_Jpsi_vy = jpsi_vertex->vertexState().position().y();
   nBranches_->JpsiTau_Jpsi_vz = jpsi_vertex->vertexState().position().z();  
+  nBranches_->JpsiTau_Jpsi_alpha2d = cosAlpha_2d;
+  nBranches_->JpsiTau_Jpsi_fls2d = fls2d_jpsi;
+
+  //  std::cout << "lxy sig=" << fls2d_jpsi << ", 3d = " << JPcand.fls3d  << ", alpha (2D) = " << cosAlpha_2d << ", alpha (3D) =" << JPcand.alpha << std::endl;
+
+
   //  nBranches_->JpsiTau_Jpsi_unfit_pt = jpsi_tlv_highest.Pt();
   //  nBranches_->JpsiTau_Jpsi_unfit_mass = jpsi_tlv_highest.M();
   //  nBranches_->JpsiTau_Jpsi_unfit_vprob = jpsi_vprob_highest;
@@ -4104,3 +4236,16 @@ const reco::Candidate*  JpsiTauNtuplizer::checkMom(const reco::Candidate * candM
         return candMom;
     }
 }
+
+
+
+FreeTrajectoryState JpsiTauNtuplizer::initialFreeState(const reco::Track& tk, const MagneticField *field) {
+  Basic3DVector<float> pos(tk.vertex());
+  GlobalPoint gpos(pos);
+  Basic3DVector<float> mom(tk.momentum());
+  GlobalVector gmom(mom);
+  GlobalTrajectoryParameters par(gpos, gmom, tk.charge(), field);
+  CurvilinearTrajectoryError err(tk.covariance());
+  return FreeTrajectoryState(par, err);
+}
+

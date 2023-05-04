@@ -39,6 +39,46 @@ process.TFileService = cms.Service("TFileService",
                                    )
 
 
+
+isData = False
+
+### SWITCHES ###
+
+print 'isData? ', isData
+
+
+config["ISBKG"] = True
+
+if isData:
+  config["RUNONMC"] = False
+  config["USEHAMMER"] = False
+  config["USEJSON"] = True
+  config["DOGENPARTICLES"] = False
+  config["DOGENEVENT"] = False
+  config["DOPILEUP"] = False
+  config["DOGENHIST"] = False
+
+else:
+  config["RUNONMC"] = True
+  
+  if not config["ISBKG"]:
+    config["USEHAMMER"] = True
+  else:
+    config["USEHAMMER"] = False
+
+  config["USEJSON"] = False
+  config["DOGENPARTICLES"] = True
+  config["DOGENEVENT"] = True
+  config["DOPILEUP"] = True
+  config["DOGENHIST"] = True
+
+print '-'*80
+for key, val in config.items():
+  print key.ljust(20), '====>', val
+print '-'*80
+
+
+
 ####### Config parser ##########
 
 #import FWCore.ParameterSet.VarParsing as VarParsing
@@ -225,7 +265,7 @@ METS_EGclean = "slimmedMETsEGClean"
 METS_MEGclean = "slimmedMETsMuEGClean"
 METS_uncorr = "slimmedMETsUncorrected"
 
-if config["USENOHF"]: METS = "slimmedMETsNoHF"  
+#if config["USENOHF"]: METS = "slimmedMETsNoHF"  
 
 ##___________________ MET significance and covariance matrix ______________________##
 
@@ -352,25 +392,30 @@ print "IsBkgBSample" ,IsBkgBSample
 ################## Ntuplizer ###################
 process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     runOnMC	      = cms.bool(config["RUNONMC"]),
-    useDNN	      = cms.bool(config["USEDNN"]),
+    useHammer	      = cms.bool(config["USEHAMMER"]),
     doGenParticles    = cms.bool(config["DOGENPARTICLES"]),
     doGenEvent	      = cms.bool(config["DOGENEVENT"]),
     doPileUp	      = cms.bool(config["DOPILEUP"]),
     doJpsiMu	      = cms.bool(config["DOJPSIMU"]),
     doJpsiTau	      = cms.bool(config["DOJPSITAU"]),
-    doBsTauTau	      = cms.bool(config["DOBSTAUTAU"]),
+    doJpsiK	      = cms.bool(config["DOJPSIK"]),
+    doJpsiKE	      = cms.bool(config["DOJPSIKE"]),
     doBsTauTauFH      = cms.bool(config["DOBSTAUTAUFH"]),
-    doBsDstarTauNu    = cms.bool(config["DOBSDSTARTAUNU"]),
-    isTruth           = cms.bool(config["ISTRUTH"]),
     doVertices	      = cms.bool(config["DOVERTICES"]),
     doMissingEt       = cms.bool(config["DOMISSINGET"]),
     doGenHist         = cms.bool(config["DOGENHIST"]),
+    verbose           = cms.bool(config["VERBOSE"]),
     dzcut             = cms.double(config['DZCUT']),
     fsigcut           = cms.double(config['FSIGCUT']),
     vprobcut          = cms.double(config['VPROBCUT']),
-    dnncut            = cms.double(config['DNNCUT']),
-    dnnfile           = cms.string(config['DNNFILE']),  
-    isBkgBSample = cms.bool(IsBkgBSample),                          
+    tau_charge        = cms.uint32(config['TAU_CHARGE']),
+#    dnnfile_old       = cms.string(config['DNNFILE_OLD']),                        
+    dnnfile_perPF     = cms.string(config['DNNFILE_PERPF']),                        
+    dnnfile_perEVT_mc    = cms.string(config['DNNFILE_PEREVT_MC']),                        
+    dnnfile_perEVT_data    = cms.string(config['DNNFILE_PEREVT_DATA']),                        
+#    dnnfile_perEVT_v2 = cms.string(config['DNNFILE_PEREVT_V2']),
+    bweightfile = cms.string(config['BWEIGHTFILE']),
+    isBkgBSample      = cms.bool(config['ISBKG']),
     vertices = cms.InputTag("offlineSlimmedPrimaryVertices"),
     beamSpot = cms.InputTag("offlineBeamSpot"),
     taus = cms.InputTag("slimmedTaus"),
@@ -411,7 +456,8 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     jetsForMetCorr = cms.InputTag(jetsAK4),
     rho = cms.InputTag("fixedGridRhoFastjetAll"),
     genparticles = cms.InputTag("prunedGenParticles"),
-    gentaus = cms.InputTag("tauGenJets"),
+    packedgenparticles = cms.InputTag("packedGenParticles"),
+#    gentaus = cms.InputTag("tauGenJets"),
     PUInfo = cms.InputTag("slimmedAddPileupInfo"),
     genEventInfo = cms.InputTag("generator"),
     externallheProducer = cms.InputTag("externalLHEProducer"),
@@ -461,9 +507,125 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
 
     packedpfcandidates = cms.InputTag('packedPFCandidates'),
     SecondaryVertices = cms.InputTag('slimmedSecondaryVertices'),
-    losttrack = cms.InputTag('lostTracks')
+#    losttrack = cms.InputTag('lostTracks')
 )
 
+
+#process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
+#    runOnMC	      = cms.bool(config["RUNONMC"]),
+#    useHammer	      = cms.bool(config["USEHAMMER"]),
+##    useDNN	      = cms.bool(config["USEDNN"]),
+#    doGenParticles    = cms.bool(config["DOGENPARTICLES"]),
+#    doGenEvent	      = cms.bool(config["DOGENEVENT"]),
+#    doPileUp	      = cms.bool(config["DOPILEUP"]),
+#    doJpsiMu	      = cms.bool(config["DOJPSIMU"]),
+#    doJpsiTau	      = cms.bool(config["DOJPSITAU"]),
+##    doBsTauTau	      = cms.bool(config["DOBSTAUTAU"]),
+##    doBsTauTauFH      = cms.bool(config["DOBSTAUTAUFH"]),
+#    doBsDstarTauNu    = cms.bool(config["DOBSDSTARTAUNU"]),
+#    isTruth           = cms.bool(config["ISTRUTH"]),
+#    doVertices	      = cms.bool(config["DOVERTICES"]),
+#    doMissingEt       = cms.bool(config["DOMISSINGET"]),
+#    doGenHist         = cms.bool(config["DOGENHIST"]),
+#    dzcut             = cms.double(config['DZCUT']),
+#    fsigcut           = cms.double(config['FSIGCUT']),
+#    vprobcut          = cms.double(config['VPROBCUT']),
+#    dnncut            = cms.double(config['DNNCUT']),
+#    dnnfile           = cms.string(config['DNNFILE']),  
+#    isBkgBSample = cms.bool(IsBkgBSample),                          
+#    vertices = cms.InputTag("offlineSlimmedPrimaryVertices"),
+#    beamSpot = cms.InputTag("offlineBeamSpot"),
+#    taus = cms.InputTag("slimmedTaus"),
+#    muons = cms.InputTag("slimmedMuons"),
+#    electrons = cms.InputTag("slimmedElectrons"),
+#    ebRecHits = cms.InputTag("reducedEgamma","reducedEBRecHits"),
+#
+##    eleHEEPId51Map = cms.InputTag("egmGsfElectronIDs:heepElectronID-HEEPV51"),
+##    eleHEEPIdMap = cms.InputTag("egmGsfElectronIDs:heepElectronID-HEEPV60"),
+##    eleVetoIdMap = cms.InputTag("egmGsfElectronIDs:cutBasedElectronID-Spring15-25ns-V1-standalone-veto"),
+##    eleLooseIdMap = cms.InputTag("egmGsfElectronIDs:cutBasedElectronID-Spring15-25ns-V1-standalone-loose"),
+##    eleMediumIdMap = cms.InputTag("egmGsfElectronIDs:cutBasedElectronID-Spring15-25ns-V1-standalone-medium"),
+##    eleTightIdMap = cms.InputTag("egmGsfElectronIDs:cutBasedElectronID-Spring15-25ns-V1-standalone-tight"),
+#
+##    eleVetoIdMap = cms.InputTag("egmGsfElectronIDs:cutBasedElectronID-Fall17-94X-V1-veto"),
+##    eleLooseIdMap = cms.InputTag("egmGsfElectronIDs:cutBasedElectronID-Fall17-94X-V1-loose"),
+##    eleMediumIdMap = cms.InputTag("egmGsfElectronIDs:cutBasedElectronID-Fall17-94X-V1-medium"),
+##    eleTightIdMap = cms.InputTag("egmGsfElectronIDs:cutBasedElectronID-Fall17-94X-V1-tight"),
+#
+##    eleHLTIdMap = cms.InputTag("egmGsfElectronIDs:cutBasedElectronHLTPreselection-Summer16-V1"), 
+##    eleHEEPIdMap = cms.InputTag("egmGsfElectronIDs:heepElectronID-HEEPV70"),
+#                                   
+##    eleMVAMediumIdMap = cms.InputTag("egmGsfElectronIDs:mvaEleID-Fall17-noIso-V1-wp90"),
+##    eleMVATightIdMap  = cms.InputTag("egmGsfElectronIDs:mvaEleID-Fall17-noIso-V1-wp80"),
+##    mvaValuesMap     = cms.InputTag("electronMVAValueMapProducer:ElectronMVAEstimatorRun2Fall17NoIsoV1Values"),
+##    mvaCategoriesMap = cms.InputTag("electronMVAValueMapProducer:ElectronMVAEstimatorRun2Spring16GeneralPurposeV1Categories"),
+#    dupCluster          = cms.InputTag("particleFlowEGammaGSFixed:dupECALClusters"),
+#    hitsNotReplaced     = cms.InputTag("ecalMultiAndGSGlobalRecHitEB:hitsNotReplaced"),
+#    mets = cms.InputTag(METS),
+#    mets_EGclean = cms.InputTag(METS_EGclean),
+#    mets_MEGclean = cms.InputTag(METS_MEGclean),
+#    mets_uncorr = cms.InputTag(METS_uncorr),
+#    mets_puppi = cms.InputTag("slimmedMETsPuppi"),
+#    mets_mva = cms.InputTag("MVAMET","MVAMET"),
+#    corrMetPx = cms.string("+0.1166 + 0.0200*Nvtx"),
+#    corrMetPy = cms.string("+0.2764 - 0.1280*Nvtx"),
+#    jecAK4forMetCorr = cms.vstring( jecLevelsForMET ),
+#    jetsForMetCorr = cms.InputTag(jetsAK4),
+#    rho = cms.InputTag("fixedGridRhoFastjetAll"),
+#    genparticles = cms.InputTag("prunedGenParticles"),
+#    gentaus = cms.InputTag("tauGenJets"),
+#    PUInfo = cms.InputTag("slimmedAddPileupInfo"),
+#    genEventInfo = cms.InputTag("generator"),
+#    externallheProducer = cms.InputTag("externalLHEProducer"),
+#    HLT = cms.InputTag("TriggerResults","","HLT"),
+#    triggerobjects = cms.InputTag("slimmedPatTrigger"),
+#    triggerprescales = cms.InputTag("patTrigger"),
+#    noiseFilter = cms.InputTag('TriggerResults','', hltFiltersProcessName),
+#    jecpath = cms.string(''),
+#   
+#    
+#    ## Noise Filters ###################################
+#    # defined here: https://github.com/cms-sw/cmssw/blob/CMSSW_7_4_X/PhysicsTools/PatAlgos/python/slimming/metFilterPaths_cff.py
+#    noiseFilterSelection_HBHENoiseFilter = cms.string('Flag_HBHENoiseFilter'),   # both data and MC for 2018,
+#    noiseFilterSelection_HBHENoiseFilterLoose = cms.InputTag("HBHENoiseFilterResultProducer", "HBHENoiseFilterResultRun2Loose"),
+#    noiseFilterSelection_HBHENoiseFilterTight = cms.InputTag("HBHENoiseFilterResultProducer", "HBHENoiseFilterResultRun2Tight"),
+#    noiseFilterSelection_HBHENoiseIsoFilter = cms.InputTag("HBHENoiseFilterResultProducer", "HBHEIsoNoiseFilterResult"),    # both data and MC for 2018,  
+#    noiseFilterSelection_ecalBadCalibReducedMINIAODFilter = cms.InputTag("ecalBadCalibReducedMINIAODFilter"),  # both data and MC for 2018,
+#    noiseFilterSelection_CSCTightHaloFilter = cms.string('Flag_CSCTightHaloFilter'),
+#    noiseFilterSelection_CSCTightHalo2015Filter = cms.string('Flag_CSCTightHalo2015Filter'),
+#    noiseFilterSelection_hcalLaserEventFilter = cms.string('Flag_hcalLaserEventFilter'),
+#    noiseFilterSelection_EcalDeadCellTriggerPrimitiveFilter = cms.string('Flag_EcalDeadCellTriggerPrimitiveFilter'),  # both data and MC for 2018,
+#    noiseFilterSelection_goodVertices = cms.string('Flag_goodVertices'),  # both data and MC for 2018,
+#    noiseFilterSelection_trackingFailureFilter = cms.string('Flag_trackingFailureFilter'),
+#    noiseFilterSelection_eeBadScFilter = cms.string('Flag_eeBadScFilter'),
+#    noiseFilterSelection_ecalLaserCorrFilter = cms.string('Flag_ecalLaserCorrFilter'),
+#    noiseFilterSelection_trkPOGFilters = cms.string('Flag_trkPOGFilters'),
+#    
+#    #New for ICHEP 2016
+#    noiseFilterSelection_CSCTightHaloTrkMuUnvetoFilter = cms.string('Flag_CSCTightHaloTrkMuUnvetoFilter'),
+#    noiseFilterSelection_globalTightHalo2016Filter = cms.string('Flag_globalTightHalo2016Filter'),
+#    noiseFilterSelection_globalSuperTightHalo2016Filter = cms.string('Flag_globalSuperTightHalo2016Filter'), # both data and MC for 2018,  
+#    noiseFilterSelection_HcalStripHaloFilter = cms.string('Flag_HcalStripHaloFilter'),
+#    noiseFilterSelection_chargedHadronTrackResolutionFilter = cms.string('Flag_chargedHadronTrackResolutionFilter'),
+#    noiseFilterSelection_muonBadTrackFilter = cms.string('Flag_muonBadTrackFilter'),
+#    
+#    #New for Moriond
+#    noiseFilterSelection_badMuonsFilter = cms.string('Flag_BadPFMuonFilter'),    #('Flag_badMuons'),  # both data and MC for 2018, 
+#    noiseFilterSelection_duplicateMuonsFilter = cms.string('Flag_duplicateMuons'),
+#    noiseFilterSelection_nobadMuonsFilter = cms.string('Flag_nobadMuons'),
+#
+#    # and the sub-filters
+#    noiseFilterSelection_trkPOG_manystripclus53X = cms.string('Flag_trkPOG_manystripclus53X'),
+#    noiseFilterSelection_trkPOG_toomanystripclus53X = cms.string('Flag_trkPOG_toomanystripclus53X'),
+#    noiseFilterSelection_trkPOG_logErrorTooManyClusters = cms.string('Flag_trkPOG_logErrorTooManyClusters'),
+#    # summary
+#    noiseFilterSelection_metFilters = cms.string('Flag_METFilters'),
+#
+#    packedpfcandidates = cms.InputTag('packedPFCandidates'),
+#    SecondaryVertices = cms.InputTag('slimmedSecondaryVertices'),
+#    losttrack = cms.InputTag('lostTracks')
+#)
+#
 process.load('RecoMET.METFilters.ecalBadCalibFilter_cfi')
 
 baddetEcallist = cms.vuint32(

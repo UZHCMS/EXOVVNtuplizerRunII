@@ -9,10 +9,9 @@ for year in 2016 2017 2018
 do
     echo $year
 
+    postfix="Approval_${year}_${today}"
 #    postfix="Freeze_${year}_${today}"
-    postfix="JpsiPi_${year}_${today}"
-#    postfix="Legacy_${year}_20220302"
-#    postfix="Legacy_2018_20220208"
+#    postfix="JpsiPi_${year}_${today}"
 #    postfix="JpsiK_${year}_${today}"
 
 
@@ -22,13 +21,9 @@ do
 
 
 
-#    sed -i -e "s/config\[\"ISBKG\"\] = False/config\[\"ISBKG\"\] = True/" config_generic_opt_skimmed.py
+    sed -i -e "s/config\[\"ISBKG\"\] = False/config\[\"ISBKG\"\] = True/" config_generic_opt_skimmed.py
 
-#    echo $postfix
-#    python submit_all.py -d crab/Crab_${today2}_${postfix} -c config_generic_opt_skimmed.py -f samples/BJpsiX_${year}.txt -s "_v1" --string "${postfix}" --isGlobal --numOfFiles 15
-
-
-    
+    python submit_all.py -d crab/Crab_${today2}_${postfix} -c config_generic_opt_skimmed.py -f samples/BJpsiX_${year}.txt -s "_v1" --string "${postfix}" --isGlobal --numOfFiles 15
 
 done
 

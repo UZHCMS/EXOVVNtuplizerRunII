@@ -30,6 +30,8 @@ class JpsiTauNtuplizer : public CandidateNtuplizer {
 
   bool fillBranches( edm::Event const & event, const edm::EventSetup& iSetup );
   const reco::Candidate*  checkMom(const reco::Candidate * candMom);
+  FreeTrajectoryState initialFreeState(const reco::Track& tk, const MagneticField *field);
+
 private:
    edm::EDGetTokenT<pat::MuonCollection>    muonToken_   ;
    edm::EDGetTokenT<reco::VertexCollection> verticeToken_   ;

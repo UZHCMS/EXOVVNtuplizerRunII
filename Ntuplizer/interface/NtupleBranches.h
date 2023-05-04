@@ -479,6 +479,8 @@ public:
   float                JpsiTau_Jpsi_phi     ;
   float                JpsiTau_Jpsi_mass       ;
   float                JpsiTau_Jpsi_vprob    ;
+  float                JpsiTau_Jpsi_chi2    ;
+  float                JpsiTau_Jpsi_ndof    ;
   float                JpsiTau_Jpsi_lip;
   float                JpsiTau_Jpsi_lips;
   float                JpsiTau_Jpsi_pvip;
@@ -487,10 +489,13 @@ public:
   float                JpsiTau_Jpsi_fls3d;
   float                JpsiTau_Jpsi_alpha;
   float                JpsiTau_Jpsi_maxdoca;
+  float                JpsiTau_Jpsi_dr;
   float                JpsiTau_Jpsi_mindoca;
   float                JpsiTau_Jpsi_vx      ;
   float                JpsiTau_Jpsi_vy      ;
   float                JpsiTau_Jpsi_vz      ;
+  float                JpsiTau_Jpsi_alpha2d      ;
+  float                JpsiTau_Jpsi_fls2d      ;
 //  float                JpsiTau_Jpsi_unfit_pt      ;
 //  float                JpsiTau_Jpsi_unfit_mass       ;
 //  float                JpsiTau_Jpsi_unfit_vprob    ;
@@ -607,6 +612,11 @@ public:
   std::vector<bool> JpsiTau_tau_pi1_trigMatch;
   std::vector<float> JpsiTau_tau_pi1_trigMatch_dr;
 
+  std::vector<float> JpsiTau_tau_pi1_d0sig;
+  std::vector<float> JpsiTau_tau_pi1_mumuTrk_vprob;
+  std::vector<float> JpsiTau_tau_pi1_mumuTrk_chi2;
+  std::vector<float> JpsiTau_tau_pi1_mumuTrk_ndof;
+
   std::vector<float>       JpsiTau_tau_pi2_pt;
   std::vector<float>       JpsiTau_tau_pi2_eta;
   std::vector<float>       JpsiTau_tau_pi2_phi;
@@ -638,6 +648,10 @@ public:
 
   std::vector<bool> JpsiTau_tau_pi2_trigMatch;
   std::vector<float> JpsiTau_tau_pi2_trigMatch_dr;
+  std::vector<float> JpsiTau_tau_pi2_d0sig;
+  std::vector<float> JpsiTau_tau_pi2_mumuTrk_vprob;
+  std::vector<float> JpsiTau_tau_pi2_mumuTrk_chi2;
+  std::vector<float> JpsiTau_tau_pi2_mumuTrk_ndof;
 
 
   std::vector<float>       JpsiTau_tau_pi3_pt;
@@ -672,6 +686,10 @@ public:
 
   std::vector<bool> JpsiTau_tau_pi3_trigMatch;
   std::vector<float> JpsiTau_tau_pi3_trigMatch_dr;
+  std::vector<float> JpsiTau_tau_pi3_d0sig;
+  std::vector<float> JpsiTau_tau_pi3_mumuTrk_vprob;
+  std::vector<float> JpsiTau_tau_pi3_mumuTrk_chi2;
+  std::vector<float> JpsiTau_tau_pi3_mumuTrk_ndof;
 
 
   std::vector<float> JpsiTau_tau_delta_chi2;

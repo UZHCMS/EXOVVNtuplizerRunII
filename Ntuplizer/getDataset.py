@@ -1,7 +1,7 @@
 import subprocess, os, sys
 from optparse import OptionParser, OptionValueError
 
-prefix = 'dcap://t3se01.psi.ch:22125/'
+#prefix = 'dcap://t3se01.psi.ch:22125/'
 
 
 def chunks(lst, n):
@@ -37,7 +37,6 @@ parser = OptionParser(usage)
 parser.add_option("-p", "--path", default="/pnfs/psi.ch/cms/trivcat/store/user/ytakahas/mc/ytakahas/UpsilonToTauTau_inclusive_5f_Pythia_LO/USER/v1/", type="string", help="path", dest="path")
 parser.add_option("-c", "--chunk", default=1, type="int", help="chunk", dest="chunk")
 parser.add_option("-a", "--analysis", default="BsTauTau", type="string", help="analysis channel", dest="analysis")
-parser.add_option("-t", "--type", default="mc", type="string", help="type", dest="type")
 
 (options, args) = parser.parse_args()
 
@@ -45,7 +44,7 @@ print 'Path = ', options.path
 print 'Chunks = ', options.chunk
 
 
-jobdir = cdir + '/job/' + options.analysis + '_' + options.type + '_' + d_today
+jobdir = cdir + '/job/' + options.analysis + '_' + d_today
 
 ensureDir(jobdir)
 
@@ -67,7 +66,7 @@ for line in iter(out.stdout.readline,''):
  
 #   print line 
 
-   listoffiles.append(prefix + '/' + options.path + '/' + line)
+   listoffiles.append('file:' + options.path + '/' + line)
   
 #   if len( line.split())!=9: continue
 
@@ -97,7 +96,11 @@ print len(listoffiles), 'files are detected'
 
 print len(listoffiles), 'chunks are created'
 
-os.system('source ~/grid.sh')
+#os.system('source ~/grid.sh')
+
+odir = '/pnfs/psi.ch/cms/trivcat/store/user/ytakahas/RJpsi/ntuplizer/' + options.analysis
+ensureDir(odir)
+
 
 for ijob, filename in enumerate(listoffiles):
     print ijob, filename
@@ -108,7 +111,7 @@ for ijob, filename in enumerate(listoffiles):
     # Now, write the shell script into job directory
     
     jobscript = jobdir + '/job_' + str(ijob) + '.sh'
-    outfile = jobdir + '/flatTuple_' + str(ijob) + '.root'
+    outfile = odir + '/flatTuple_' + str(ijob) + '.root'
 
     os.system("cp job_template.sh " + jobscript)
 
@@ -116,11 +119,13 @@ for ijob, filename in enumerate(listoffiles):
     with open(jobscript) as f:
         data_lines = f.read()
         
-    data_lines = data_lines.replace('INFILE', filename).replace('OUTFILE', outfile)
+    data_lines = data_lines.replace('INFILE', filename).replace('OUTFILE', outfile).replace('ONAME', options.analysis).replace('IDJ', str(ijob))
         
     with open(jobscript, mode="w") as f:
         f.write(data_lines)
 
 
-    command = 'sbatch -p wn --account=t3 --output=' + jobdir + '/out.' + str(ijob) + ' ' + jobscript
+#    command = 'sbatch -p wn --account=t3 --output=' + jobdir + '/out.' + str(ijob) + ' ' + jobscript
+  #  command = 'sbatch -p standard --account=t3 --output=' + jobdir + '/out.' + str(ijob) + ' ' + jobscript
+    command = 'sbatch -p standard --account=t3 --error=' + jobdir + '/err.' + str(ijob) + ' --output=' + jobdir + '/out.' + str(ijob) + ' ' + jobscript
     os.system(command)
