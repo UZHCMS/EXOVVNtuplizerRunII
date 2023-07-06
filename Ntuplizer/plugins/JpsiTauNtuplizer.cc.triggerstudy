@@ -1076,19 +1076,18 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
     //    std::cout << "trig_name:" <<trigNames.triggerName(i) << std::endl;
 
     if(trigNames.triggerName(i).find("HLT_DoubleMu4_JpsiTrk_Displaced_v")!= std::string::npos){
-      //if(trigNames.triggerName(i).find("HLT_DoubleMu4_3_Jpsi")!= std::string::npos){
       nBranches_->HLT_BPH_isFired[trigNames.triggerName(i)] = HLTtriggers_->accept(i);
       if(HLTtriggers_->accept(i)){
 	isTriggered = true;
 	finalTriggerName=trigNames.triggerName(i);  
 	finalTriggerFilterObjName="hltJpsiTkVertexFilter";
-	//finalTriggerFilterObjName="hltDoubleMu43JpsiDisplacedL3Filtered";
       }
     }
   }
 
 
-  if(!isTriggered) return false;
+  //  if(!isTriggered) return false;
+
   nBranches_->cutflow->Fill(1);
 
   if(verbose_) std::cout << "[JpsiTauNtuplizer] Trigger fired" << std::endl;
@@ -1128,52 +1127,52 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 
     // Trigger matching
 
-    bool trigMatch = false;
-
-    for (pat::TriggerObjectStandAlone obj : *triggerObjects) {
-    
-      obj.unpackPathNames(trigNames);
-      obj.unpackFilterLabels(event, *HLTtriggers_);
-
-      std::vector<std::string> pathNamesAll  = obj.pathNames(false);
-
-      bool isPathExist = false;
-
-      for (unsigned h = 0, n = pathNamesAll.size(); h < n; ++h) {
-	if(pathNamesAll[h]==finalTriggerName) isPathExist = true;
-      }
-      
-      if(!isPathExist) continue;
-
-      bool isFilterExist = false;
-    
-      for (unsigned hh = 0; hh < obj.filterLabels().size(); ++hh){
-	
-	//	if(obj.filterLabels()[hh].find(finalTriggerFilterObjName) != std::string::npos){
-	if(obj.filterLabels()[hh].find("hltDisplacedmumuFilterDoubleMu4Jpsi") != std::string::npos){
-	  isFilterExist = true;
-	}
-      }
-      
-      if(!isFilterExist) continue;
-
-      
-      if(TMath::Abs(obj.pdgId()) != 13) continue;
-
-      
-      Float_t trigger_dR = reco::deltaR(obj.eta(), obj.phi(),
-					muon.eta(), muon.phi());
-      
-      if(trigger_dR < 0.015 &&
-	 obj.pt()/muon.pt() > 0.85 &&
-	 obj.pt()/muon.pt() < 1.15
-	 ){
-	trigMatch = true;
-	//	std::cout << "Muon" << imuon << " matches to the trigger object dR = " << trigger_dR << ", obj pT = " << obj.pt() << ", muon pT = " << muon.pt() << " " << obj.pdgId() << std::endl;
-      }
-    }
-
-    if(!trigMatch) continue;
+////    bool trigMatch = false;
+////
+////    for (pat::TriggerObjectStandAlone obj : *triggerObjects) {
+////    
+////      obj.unpackPathNames(trigNames);
+////      obj.unpackFilterLabels(event, *HLTtriggers_);
+////
+////      std::vector<std::string> pathNamesAll  = obj.pathNames(false);
+////
+////      bool isPathExist = false;
+////
+////      for (unsigned h = 0, n = pathNamesAll.size(); h < n; ++h) {
+////	if(pathNamesAll[h]==finalTriggerName) isPathExist = true;
+////      }
+////      
+////      if(!isPathExist) continue;
+////
+////      bool isFilterExist = false;
+////    
+////      for (unsigned hh = 0; hh < obj.filterLabels().size(); ++hh){
+////	
+////	//	if(obj.filterLabels()[hh].find(finalTriggerFilterObjName) != std::string::npos){
+////	if(obj.filterLabels()[hh].find("hltDisplacedmumuFilterDoubleMu4Jpsi") != std::string::npos){
+////	  isFilterExist = true;
+////	}
+////      }
+////      
+////      if(!isFilterExist) continue;
+////
+////      
+////      if(TMath::Abs(obj.pdgId()) != 13) continue;
+////
+////      
+////      Float_t trigger_dR = reco::deltaR(obj.eta(), obj.phi(),
+////					muon.eta(), muon.phi());
+////      
+////      if(trigger_dR < 0.015 &&
+////	 obj.pt()/muon.pt() > 0.85 &&
+////	 obj.pt()/muon.pt() < 1.15
+////	 ){
+////	trigMatch = true;
+////	//	std::cout << "Muon" << imuon << " matches to the trigger object dR = " << trigger_dR << ", obj pT = " << obj.pt() << ", muon pT = " << muon.pt() << " " << obj.pdgId() << std::endl;
+////      }
+////    }
+////
+////    if(!trigMatch) continue;
 
     muoncollection.push_back(muon);
     //    muoncollection_id.push_back(imuon);
@@ -1282,7 +1281,7 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
   //  KinematicParticleFitter csFitter;
 
   // creating the constraint
-  //  KinematicConstraint* jpsi_constraint = new MassKinematicConstraint(aux.jpsi_mass, aux.jpsi_m_sigma);
+  //  KinematicConstraint* jpsi_constraint = new MassKinematicConstraint(aux.jpsi_mass, aux.jp_m_sigma);
   //the constrained fit
   //  jpTree = csFitter.fit(jpsi_constraint, jpTree);
 
@@ -1305,8 +1304,8 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
   RefCountedKinematicVertex jpsi_vertex;
   RefCountedKinematicTree jpTree;
   Bool_t jpsifit_flag;
-  std::tie(jpsifit_flag, jpsi_part, jpsi_vertex, jpTree) = aux.KinematicFit(muonParticles, aux.jpsi_mass, aux.jpsi_m_sigma);
-  //std::tie(jpsifit_flag, jpsi_part, jpsi_vertex, jpTree) = aux.KinematicFit(muonParticles, -1, -1);
+  //  std::tie(jpsifit_flag, jpsi_part, jpsi_vertex, jpTree) = aux.KinematicFit(muonParticles, aux.jpsi_mass, aux.jpsi_m_sigma);
+  std::tie(jpsifit_flag, jpsi_part, jpsi_vertex, jpTree) = aux.KinematicFit(muonParticles, -1, -1);
 
   //  std::cout << "jpsi vertex = " << jpsi_vertex->chiSquared() << " " << jpsi_vertex->degreesOfFreedom() << std::endl;
 
@@ -1541,48 +1540,48 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
     bool trigMatch = false;
     float trigMatch_dr = -1;
 
-    for (pat::TriggerObjectStandAlone obj : *triggerObjects) {
-    
-      obj.unpackPathNames(trigNames);
-      obj.unpackFilterLabels(event, *HLTtriggers_);
-
-      std::vector<std::string> pathNamesAll  = obj.pathNames(false);
-
-      bool isPathExist = false;
-
-      for (unsigned h = 0, n = pathNamesAll.size(); h < n; ++h) {
-	if(pathNamesAll[h]==finalTriggerName) isPathExist = true;
-      }
-      
-      if(!isPathExist) continue;
-
-      bool isFilterExist = false;
-    
-      for (unsigned hh = 0; hh < obj.filterLabels().size(); ++hh){
-	
-	if(obj.filterLabels()[hh].find(finalTriggerFilterObjName) != std::string::npos){
-	  isFilterExist = true;
-	}
-      }
-      
-      if(!isFilterExist) continue;
-
-      if(TMath::Abs(obj.pdgId()) != 321) continue;
-      
-      Float_t trigger_dR = reco::deltaR(obj.eta(), obj.phi(),
-					pf.eta(), pf.phi());
-
-      if(trigger_dR < 0.015 &&
-	 obj.pt()/pf.pt() > 0.85 &&
-	 obj.pt()/pf.pt() < 1.15){
-	 
-      
-	 //      if(trigger_dR < 0.1){
-	trigMatch = true;
-	trigMatch_dr = trigger_dR;
-	//	std::cout << ii << " pion dR = " << trigger_dR << ", obj pT = " << obj.pt() << ", pf pT = " << pf.pt() << " " << obj.pdgId() << std::endl;
-      }
-    }
+////    for (pat::TriggerObjectStandAlone obj : *triggerObjects) {
+////    
+////      obj.unpackPathNames(trigNames);
+////      obj.unpackFilterLabels(event, *HLTtriggers_);
+////
+////      std::vector<std::string> pathNamesAll  = obj.pathNames(false);
+////
+////      bool isPathExist = false;
+////
+////      for (unsigned h = 0, n = pathNamesAll.size(); h < n; ++h) {
+////	if(pathNamesAll[h]==finalTriggerName) isPathExist = true;
+////      }
+////      
+////      if(!isPathExist) continue;
+////
+////      bool isFilterExist = false;
+////    
+////      for (unsigned hh = 0; hh < obj.filterLabels().size(); ++hh){
+////	
+////	if(obj.filterLabels()[hh].find(finalTriggerFilterObjName) != std::string::npos){
+////	  isFilterExist = true;
+////	}
+////      }
+////      
+////      if(!isFilterExist) continue;
+////
+////      if(TMath::Abs(obj.pdgId()) != 321) continue;
+////      
+////      Float_t trigger_dR = reco::deltaR(obj.eta(), obj.phi(),
+////					pf.eta(), pf.phi());
+////
+////      if(trigger_dR < 0.015 &&
+////	 obj.pt()/pf.pt() > 0.85 &&
+////	 obj.pt()/pf.pt() < 1.15){
+////	 
+////      
+////	 //      if(trigger_dR < 0.1){
+////	trigMatch = true;
+////	trigMatch_dr = trigger_dR;
+////	//	std::cout << ii << " pion dR = " << trigger_dR << ", obj pT = " << obj.pt() << ", pf pT = " << pf.pt() << " " << obj.pdgId() << std::endl;
+////      }
+////    }
 
     //    if(trigMatch) std::cout << "This pion "<< ii << "  matches to the trigger!" << std::endl;
 
@@ -3095,12 +3094,7 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 //    nBranches_->JpsiTau_tau_pvips_wjpsi.push_back(cands[ic].cand_tau.pvips);
     nBranches_->JpsiTau_tau_fl3d_wjpsi.push_back(ip_wjpsi.first);
     nBranches_->JpsiTau_tau_fls3d_wjpsi.push_back(ip_wjpsi.second);
-    
-
-    //particle_cand Taucand_extra; 
-    Float_t alpha_tau_jpsi = aux.calculateAlpha(cands[ic].cand_tau_part, jpsi_vertex, cands[ic].refitVtx);
-    //    std::cout << "alpha_tau_jpsi = " << alpha_tau_jpsi << std::endl;
-    nBranches_->JpsiTau_tau_alpha_wjpsi.push_back(alpha_tau_jpsi);
+    //    nBranches_->JpsiTau_tau_alpha_wjpsi.push_back(cands[ic].cand_tau.alpha);
 
 
     //    nBranches_->JpsiTau_tau_isRight.push_back(cands[ic].cand_tau_isRight);
@@ -3422,94 +3416,23 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
     // kinematic fit
 
     std::vector<RefCountedKinematicParticle> allParticles;
-
-    // 1st version
-//    allParticles.push_back(pFactory.particle(cands[ic].cand_pf1.reducedpfcand.track, aux.pion_mass, chi, ndf, aux.pion_sigma));
-//    allParticles.push_back(pFactory.particle(cands[ic].cand_pf2.reducedpfcand.track, aux.pion_mass, chi, ndf, aux.pion_sigma));
-//    allParticles.push_back(pFactory.particle(cands[ic].cand_pf3.reducedpfcand.track, aux.pion_mass, chi, ndf, aux.pion_sigma));
-//    allParticles.push_back(pFactory.particle(tt1_muon, aux.muon_mass, chi, ndf, aux.muon_sigma));
-//    allParticles.push_back(pFactory.particle(tt2_muon, aux.muon_mass, chi, ndf, aux.muon_sigma));
-
-
-
-    // 2nd version from Sergey (MuonPhys_CF)
-//    allParticles.push_back(pFactory.particle(cands[ic].cand_pf1.reducedpfcand.track, aux.pion_mass, chi, ndf, aux.pion_sigma));
-//    allParticles.push_back(pFactory.particle(cands[ic].cand_pf2.reducedpfcand.track, aux.pion_mass, chi, ndf, aux.pion_sigma));
-//    allParticles.push_back(pFactory.particle(cands[ic].cand_pf3.reducedpfcand.track, aux.pion_mass, chi, ndf, aux.pion_sigma));
-//    allParticles.push_back(jpsi_part);
-
-
-    /////////////////////////////////////////////////
-
-
-
-    std::vector<RefCountedKinematicParticle> tauParticles_test;
-    
-    tauParticles_test.push_back(pFactory.particle(cands[ic].cand_pf1.reducedpfcand.track, aux.pion_mass, chi, ndf, aux.pion_sigma));
-    tauParticles_test.push_back(pFactory.particle(cands[ic].cand_pf2.reducedpfcand.track, aux.pion_mass, chi, ndf, aux.pion_sigma));
-    tauParticles_test.push_back(pFactory.particle(cands[ic].cand_pf3.reducedpfcand.track, aux.pion_mass, chi, ndf, aux.pion_sigma));
-    
-    RefCountedKinematicParticle tau_part_test;
-    RefCountedKinematicVertex tau_vertex_test;
-    RefCountedKinematicTree tauTree_test;
-    Bool_t taufit_flag_test;
-    std::tie(taufit_flag_test, tau_part_test, tau_vertex_test, tauTree_test) = aux.KinematicFit(tauParticles_test, -1, -1);
-    
-    if(!taufit_flag_test){
-      std::cout << "THIS SHOULD NOT HAPPEN !!!!!!!!" << std::endl;
-      continue;
-    }
-
-
-
-    // 3th version from Sergey (CFv2)
-    //    allParticles.push_back(pFactory.particle(tt1_muon, aux.muon_mass, chi, ndf, aux.muon_sigma));
-    //    allParticles.push_back(pFactory.particle(tt2_muon, aux.muon_mass, chi, ndf, aux.muon_sigma));
-    //    allParticles.push_back(tau_part_test);
-
-
-    // 4th version from Serey (CFv3)
-    //    allParticles.push_back(jpsi_part);
-    //    allParticles.push_back(tau_part_test);
-
-
-
-
-
-    // 5th version from Sergey (same as CFv2 but with jpsi mass constraint)
+      
+    allParticles.push_back(pFactory.particle(cands[ic].cand_pf1.reducedpfcand.track, aux.pion_mass, chi, ndf, aux.pion_sigma));
+    allParticles.push_back(pFactory.particle(cands[ic].cand_pf2.reducedpfcand.track, aux.pion_mass, chi, ndf, aux.pion_sigma));
+    allParticles.push_back(pFactory.particle(cands[ic].cand_pf3.reducedpfcand.track, aux.pion_mass, chi, ndf, aux.pion_sigma));
     allParticles.push_back(pFactory.particle(tt1_muon, aux.muon_mass, chi, ndf, aux.muon_sigma));
     allParticles.push_back(pFactory.particle(tt2_muon, aux.muon_mass, chi, ndf, aux.muon_sigma));
-    allParticles.push_back(tau_part_test);
 
+    nBranches_->JpsiTau_B_maxdoca.push_back(aux.getMaxDoca(allParticles));
+    nBranches_->JpsiTau_B_mindoca.push_back(aux.getMinDoca(allParticles));
 
-
-    //    RefCountedKinematicParticle bc_part;
-    //    RefCountedKinematicVertex bc_vertex;
-    //    RefCountedKinematicTree bcTree;
-    //    Bool_t bcfit_flag;
-    //    std::tie(bcfit_flag, bc_part, bc_vertex, bcTree) = aux.KinematicFit(allParticles, -1, -1);
 
     RefCountedKinematicParticle bc_part;
     RefCountedKinematicVertex bc_vertex;
     RefCountedKinematicTree bcTree;
     Bool_t bcfit_flag;
-    std::tie(bcfit_flag, bc_part, bc_vertex, bcTree) = aux.KinematicFitConstrained(allParticles, aux.jpsi_mass);
-
-
-
-
-    ///////////////////////////////////////////////////
-    
-
-    //    std::cout << "test1" << std::endl;
-    nBranches_->JpsiTau_B_maxdoca.push_back(aux.getMaxDoca(allParticles));
-    nBranches_->JpsiTau_B_mindoca.push_back(aux.getMinDoca(allParticles));
-
-    //    std::cout << "test2" << std::endl;
-
+    std::tie(bcfit_flag, bc_part, bc_vertex, bcTree) = aux.KinematicFit(allParticles, -1, -1);
 	
-    //    std::cout << "test3" << std::endl;
-
     if(bcfit_flag){
  
       particle_cand Bcand; 
@@ -4261,21 +4184,7 @@ bool JpsiTauNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 
   nBranches_->JpsiTau_isJpsiMu = isJpsiMu;
   nBranches_->JpsiTau_isJpsiTau2Mu = isJpsiTau2Mu;
-
-
-  bool isTriggered_final = false;
-  //  std::cout << "------------------------------" << std::endl;
-
-  for (unsigned int i = 0, n = HLTtriggers_->size(); i < n; ++i) {
-    if(trigNames.triggerName(i).find("HLT_DoubleMu4_JpsiTrk_Displaced_v")!= std::string::npos){
-      if(HLTtriggers_->accept(i)){
-	isTriggered_final = true;
-      }
-    }
-  }
-
-
-  nBranches_->JpsiTau_isTriggered = isTriggered_final;
+  nBranches_->JpsiTau_isTriggered = isTriggered;
 
   //  nBranches_->JpsiTau_isgen3 = isgen3;
   //  nBranches_->JpsiTau_isgen3matched = isgen3matched;

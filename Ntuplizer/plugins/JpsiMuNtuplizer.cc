@@ -568,7 +568,7 @@ bool JpsiMuNtuplizer::fillBranches( edm::Event const & event, const edm::EventSe
   KinematicParticleFitter csFitter;
 
   // creating the constraint
-  KinematicConstraint* jpsi_constraint = new MassKinematicConstraint(aux.jpsi_mass, aux.jp_m_sigma);
+  KinematicConstraint* jpsi_constraint = new MassKinematicConstraint(aux.jpsi_mass, aux.jpsi_m_sigma);
 
   //the constrained fit
   jpTree = csFitter.fit(jpsi_constraint, jpTree);

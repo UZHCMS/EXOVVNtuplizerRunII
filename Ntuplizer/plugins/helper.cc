@@ -170,44 +170,13 @@ void helper::printout(const RefCountedKinematicTree& myTree){
 }
 
 
-particle_cand helper::calculateIPvariables(
-					   AnalyticalImpactPointExtrapolator extrapolator,
-					   RefCountedKinematicParticle particle,
-					   RefCountedKinematicVertex vertex,
-					   reco::Vertex wrtVertex
-					   ){
+Float_t helper::calculateAlpha(
+			       RefCountedKinematicParticle particle,
+			       RefCountedKinematicVertex vertex,
+			       reco::Vertex wrtVertex
+			       ){
   
-    TrajectoryStateOnSurface tsos = extrapolator.extrapolate(particle->currentState().freeTrajectoryState(),
-                                                             RecoVertex::convertPos(wrtVertex.position()));
-
-
-    VertexDistance3D a3d;  
-
-    std::pair<bool,Measurement1D> currentIp = IPTools::signedDecayLength3D(tsos, GlobalVector(0,0,1), wrtVertex);
-    std::pair<bool,Measurement1D> cur3DIP = IPTools::absoluteImpactParameter(tsos, wrtVertex, a3d);
-  
-    // flight length
-    Float_t fl3d = a3d.distance(wrtVertex, vertex->vertexState()).value();
-    Float_t fl3de = a3d.distance(wrtVertex, vertex->vertexState()).error();
-    Float_t fls3d = -1;
-
-    if(fl3de!=0) fls3d = fl3d/fl3de;
-
-    // longitudinal impact parameters
-    Float_t lip = currentIp.second.value();
-    Float_t lipe = currentIp.second.error();
-    Float_t lips = -1;
-  
-    if(lipe!=0) lips = lip/lipe;
-
-    // impact parameter to the PV
-    Float_t pvip = cur3DIP.second.value();
-    Float_t pvipe = cur3DIP.second.error();
-    Float_t pvips = -1;
-  
-    if(pvipe!=0) pvips = pvip/pvipe;
-
-    // opening angle
+  // opening angle
     TVector3 plab = TVector3(particle->currentState().globalMomentum().x(),
                              particle->currentState().globalMomentum().y(),
                              particle->currentState().globalMomentum().z());
@@ -223,20 +192,78 @@ particle_cand helper::calculateIPvariables(
         alpha = plab.Dot(tv3diff) / (plab.Mag() * tv3diff.Mag());
     }
 
-    particle_cand cand = {
-        lip,
-        lips,
-        pvip, 
-        pvips,
-        fl3d,
-        fls3d,
-        alpha
-    };
-
-
-    return cand;
+    return alpha;
 }
 
+
+
+
+particle_cand helper::calculateIPvariables(
+					   AnalyticalImpactPointExtrapolator extrapolator,
+					   RefCountedKinematicParticle particle,
+					   RefCountedKinematicVertex vertex,
+					   reco::Vertex wrtVertex
+					   ){
+  
+  TrajectoryStateOnSurface tsos = extrapolator.extrapolate(particle->currentState().freeTrajectoryState(),
+							   RecoVertex::convertPos(wrtVertex.position()));
+
+
+  VertexDistance3D a3d;  
+
+  std::pair<bool,Measurement1D> currentIp = IPTools::signedDecayLength3D(tsos, GlobalVector(0,0,1), wrtVertex);
+  std::pair<bool,Measurement1D> cur3DIP = IPTools::absoluteImpactParameter(tsos, wrtVertex, a3d);
+  
+  // flight length
+  Float_t fl3d = a3d.distance(wrtVertex, vertex->vertexState()).value();
+  Float_t fl3de = a3d.distance(wrtVertex, vertex->vertexState()).error();
+  Float_t fls3d = -1;
+
+  if(fl3de!=0) fls3d = fl3d/fl3de;
+
+  // longitudinal impact parameters
+  Float_t lip = currentIp.second.value();
+  Float_t lipe = currentIp.second.error();
+  Float_t lips = -1;
+  
+  if(lipe!=0) lips = lip/lipe;
+
+  // impact parameter to the PV
+  Float_t pvip = cur3DIP.second.value();
+  Float_t pvipe = cur3DIP.second.error();
+  Float_t pvips = -1;
+  
+  if(pvipe!=0) pvips = pvip/pvipe;
+
+  // opening angle
+  TVector3 plab = TVector3(particle->currentState().globalMomentum().x(),
+			   particle->currentState().globalMomentum().y(),
+			   particle->currentState().globalMomentum().z());
+
+  const TVector3 tv3diff = TVector3(vertex->vertexState().position().x() - wrtVertex.position().x(),
+				    vertex->vertexState().position().y() - wrtVertex.position().y(),
+				    vertex->vertexState().position().z() - wrtVertex.position().z()
+				    );
+
+  Float_t alpha = -1;
+
+  if(plab.Mag() != 0. && tv3diff.Mag()!=0){
+    alpha = plab.Dot(tv3diff) / (plab.Mag() * tv3diff.Mag());
+  }
+
+  particle_cand cand = {
+    lip,
+    lips,
+    pvip, 
+    pvips,
+    fl3d,
+    fls3d,
+        alpha
+  };
+
+
+  return cand;
+}
 
 
 
@@ -527,6 +554,10 @@ std::tuple<Bool_t, RefCountedKinematicParticle, RefCountedKinematicVertex, RefCo
   RefCountedKinematicParticle part; // = tree->currentParticle();
   RefCountedKinematicVertex vertex; // = tree->currentDecayVertex();
 
+  //  std::cout << "isEmpty:" << tree->isEmpty()  << std::endl;
+  //  std::cout << "isValid:" << tree->isValid() << std::endl;
+  //  std::cout << "isConsistent:" << tree->isConsistent() << std::endl;
+
   if(!tree->isEmpty() && tree->isValid() && tree->isConsistent()){
 
     //creating the particle fitter
@@ -568,6 +599,56 @@ std::tuple<Bool_t, RefCountedKinematicParticle, RefCountedKinematicVertex, RefCo
   return std::forward_as_tuple(false, part, vertex, tree);
 
 }
+
+
+
+
+
+std::tuple<Bool_t, RefCountedKinematicParticle, RefCountedKinematicVertex, RefCountedKinematicTree> helper::KinematicFitConstrained(std::vector<RefCountedKinematicParticle> particles, ParticleMass mass){
+  
+  //creating the vertex fitter
+  MultiTrackKinematicConstraint *  j_psi_c = new  TwoTrackMassKinematicConstraint(mass);
+  KinematicConstrainedVertexFitter kcvFitter;
+   
+  //reconstructing a J/Psi decay
+  RefCountedKinematicTree tree = kcvFitter.fit(particles, j_psi_c);
+  RefCountedKinematicParticle part; // = tree->currentParticle();
+  RefCountedKinematicVertex vertex; // = tree->currentDecayVertex();
+
+//  std::cout << "isEmpty:" << tree->isEmpty()  << std::endl;
+//  std::cout << "isValid:" << tree->isValid() << std::endl;
+//  std::cout << "isConsistent:" << tree->isConsistent() << std::endl;
+
+  if(!tree->isEmpty() && tree->isValid() && tree->isConsistent()){
+
+    tree->movePointerToTheTop();
+    part = tree->currentParticle();
+
+    if(part->currentState().isValid()){
+    
+      vertex = tree->currentDecayVertex();
+
+      if(vertex->vertexIsValid()){
+      
+	if(TMath::Prob(vertex->chiSquared(), vertex->degreesOfFreedom()) > 0){
+
+	  return std::forward_as_tuple(true, part, vertex, tree);
+
+	}
+      }
+    }
+  }
+
+  
+  return std::forward_as_tuple(false, part, vertex, tree);
+
+}
+
+
+
+
+
+
 
 
 bool helper::basicPFcut(pat::PackedCandidate pf){

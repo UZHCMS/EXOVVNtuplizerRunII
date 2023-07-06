@@ -545,7 +545,6 @@ public:
 
   std::vector<float>       JpsiTau_tau_fl3d_wjpsi;
   std::vector<float>       JpsiTau_tau_fls3d_wjpsi;
-  std::vector<float>       JpsiTau_tau_alpha_wjpsi;
 
 //  std::vector<float>        JpsiTau_tau_dr1;
 //  std::vector<float>        JpsiTau_tau_dr2;
@@ -971,95 +970,15 @@ public:
 
   ////////////////////////
 
-  int                ZTauTau_ncands     ;
-  int                ZTauTau_n_vetomuon     ;
-  int                ZTauTau_n_vetoelectron    ;
-
-  float                ZTauTau_mu_pt      ;
-  float                ZTauTau_mu_eta     ;
-  float                ZTauTau_mu_phi     ;
-  float                ZTauTau_mu_mass     ;
-  int                  ZTauTau_mu_q      ;   
-  int                  ZTauTau_mu_isLoose   ;
-  int                  ZTauTau_mu_isTight   ;
-  int                  ZTauTau_mu_isPF      ;
-  int                  ZTauTau_mu_isGlobal  ;
-  int                  ZTauTau_mu_isTracker ;
-  int                  ZTauTau_mu_isSoft    ;
-  float                ZTauTau_mu_vx       ;
-  float                ZTauTau_mu_vy       ;
-  float                ZTauTau_mu_vz       ;
-  float                ZTauTau_mu_dbiso       ;
-  bool                ZTauTau_mu_isSignal       ;
-
-  float                ZTauTau_PV_vx       ;
-  float                ZTauTau_PV_vy       ;
-  float                ZTauTau_PV_vz       ;
-  
-  
-
-  std::vector<float>                ZTauTau_tau_pt      ;
-  std::vector<float>                ZTauTau_tau_eta     ;
-  std::vector<float>                ZTauTau_tau_phi     ;
-  std::vector<float>                ZTauTau_tau_mass     ;
-  std::vector<int  >                ZTauTau_tau_q   ;   
-  std::vector<float>                ZTauTau_tau_vx       ;
-  std::vector<float>                ZTauTau_tau_vy       ;
-  std::vector<float>                ZTauTau_tau_vz       ;
-  std::vector<float>       ZTauTau_tau_max_dr_3prong;
-  std::vector<float>       ZTauTau_tau_vprob;
-  std::vector<bool>       ZTauTau_tau_isSignal;
-  std::vector<float>       ZTauTau_tau_iso;
-  std::vector<int>       ZTauTau_tau_ntracks;
-
-  std::vector<float>                ZTauTau_tau_rhomass1     ;
-  std::vector<float>                ZTauTau_tau_rhomass2     ;
-  std::vector<float>                ZTauTau_tau_rhopt1     ;
-  std::vector<float>                ZTauTau_tau_rhopt2     ;
-
-  std::vector<float>       ZTauTau_tau_pi1_pt;
-  std::vector<float>       ZTauTau_tau_pi1_eta;
-  std::vector<float>       ZTauTau_tau_pi1_phi;
-  std::vector<float>       ZTauTau_tau_pi1_mass;
-  std::vector<int>       ZTauTau_tau_pi1_q;
 
 
-  std::vector<float>       ZTauTau_tau_pi2_pt;
-  std::vector<float>       ZTauTau_tau_pi2_eta;
-  std::vector<float>       ZTauTau_tau_pi2_phi;
-  std::vector<float>       ZTauTau_tau_pi2_mass;
-  std::vector<int>       ZTauTau_tau_pi2_q;
 
 
-  std::vector<float>       ZTauTau_tau_pi3_pt;
-  std::vector<float>       ZTauTau_tau_pi3_eta;
-  std::vector<float>       ZTauTau_tau_pi3_phi;
-  std::vector<float>       ZTauTau_tau_pi3_mass;
-  std::vector<int>       ZTauTau_tau_pi3_q;
 
 
-  std::vector<float>                ZTauTau_Z_pt      ;
-  std::vector<float>                ZTauTau_Z_eta     ;
-  std::vector<float>                ZTauTau_Z_phi     ;
-  std::vector<float>                ZTauTau_Z_mass    ;
-  std::vector<float>                ZTauTau_Z_vprob ;
-  std::vector<float>                ZTauTau_Z_lip;
-  std::vector<float>                ZTauTau_Z_lips;
-  std::vector<float>                ZTauTau_Z_pvip;
-  std::vector<float>                ZTauTau_Z_pvips;
-  std::vector<float>                ZTauTau_Z_fl3d;
-  std::vector<float>                ZTauTau_Z_fls3d;
-  std::vector<float>                ZTauTau_Z_alpha;
-  std::vector<float>                ZTauTau_Z_vx      ;
-  std::vector<float>                ZTauTau_Z_vy      ;
-  std::vector<float>                ZTauTau_Z_vz      ;
 
 
-  int                ZTauTau_n_muon       ;
-  int                ZTauTau_n_electron       ;
-  int                ZTauTau_n_tauhad      ;
-  int                ZTauTau_n_tauhad_1prong      ;
-  int                ZTauTau_n_tauhad_3prong      ;
+
 
 
 

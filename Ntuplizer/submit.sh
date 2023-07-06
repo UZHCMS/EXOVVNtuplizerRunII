@@ -4,12 +4,15 @@ today2=`date "+%Y%m%d-%H%M%S"`
 
 sed -i -e "s/isData = True/isData = False/" config_generic_opt_skimmed.py
 
-for year in 2016 2017 2018
+#for year in 2016 2017 2018
+for year in 2018
+
 
 do
     echo $year
 
-    postfix="Approval_${year}_${today}"
+    postfix="MuonPhys_${year}_${today}_CFv2c"
+#    postfix="Approval_${year}_${today}"
 #    postfix="Freeze_${year}_${today}"
 #    postfix="JpsiPi_${year}_${today}"
 #    postfix="JpsiK_${year}_${today}"

@@ -328,6 +328,28 @@ struct taucand{
   }
 };
 
+
+struct taucand_ztt{
+  
+  math::PtEtaPhiMLorentzVector cand_tlv_tau_fit;
+  math::PtEtaPhiMLorentzVector cand_tlv_pi1_fit;
+  math::PtEtaPhiMLorentzVector cand_tlv_pi2_fit;
+  math::PtEtaPhiMLorentzVector cand_tlv_pi3_fit;
+  RefCountedKinematicParticle cand_tau_part;
+  RefCountedKinematicVertex cand_tau_vertex;
+  Int_t cand_tau_charge;
+  pfcand_struct cand_pf1;
+  pfcand_struct cand_pf2;
+  pfcand_struct cand_pf3;
+    
+  //  bool operator<(const taucand& another) const { 
+  //    return cand_tlv_tau_fit.Pt() > another.cand_tlv_tau_fit.Pt();
+  //  }
+};
+
+
+
+
 struct pfcand{
   
   Int_t cand_idx;

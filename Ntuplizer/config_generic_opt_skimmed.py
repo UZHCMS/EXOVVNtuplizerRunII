@@ -1,4 +1,4 @@
-#cmsRun  config_generic_opt_skimmed.py  RunPeriod="Fall17" # for MC
+max#cmsRun  config_generic_opt_skimmed.py  RunPeriod="Fall17" # for MC
 #cmsRun  config_generic_opt_skimmed.py  RunPeriod="Run2017B" # for Data from 2017
 #cmsRun  config_generic_opt_skimmed.py  RunPeriod="Run2018B" # for Data from 2018
 #cmsRun  config_generic_opt_skimmed.py  RunPeriod="Autumn18" # for MC from 2018
@@ -90,13 +90,14 @@ options.register( 'runUpToEarlyF',
 
 
 #options.maxEvents = -1
-options.maxEvents = -1
+options.maxEvents = 1000
 
 
 if isData:
 #  options.inputFiles = '/store/data/Run2018D/Charmonium/MINIAOD/UL2018_MiniAODv2_GT36-v1/60000/EC03E203-A8B4-1444-837D-04AA7A729750.root'
 #  options.inputFiles = ['/store/data/Run2016H/Charmonium/MINIAOD/UL2016_MiniAODv2-v2/110000/077B7080-38D9-0A47-8B9F-638870B57ABC.root', 
-  options.inputFiles = ['/store/data/Run2016H/Charmonium/MINIAOD/UL2016_MiniAODv2-v2/110000/0982A5A7-230F-7C4F-88BE-A56B0172131C.root']
+#  options.inputFiles = ['/store/data/Run2016H/Charmonium/MINIAOD/UL2016_MiniAODv2-v2/110000/0982A5A7-230F-7C4F-88BE-A56B0172131C.root']
+  options.inputFiles = ['/store/data/Run2018A/SingleMuon/MINIAOD/UL2018_MiniAODv2-v3/2530000/002A113D-FB15-1341-A170-638E53A7261F.root']
 
 #  options.inputFiles = 'file:/pnfs/psi.ch/cms/trivcat/store/user/ytakahas/purityStudy_CMSSW12_1_0/EphemeralZeroBias1/winter21/211129_085534/0000/output_1.root'
 
@@ -112,13 +113,14 @@ else:
 
 #    options.inputFiles = ''
 #    options.inputFiles = '/store/mc/RunIISummer20UL18MiniAODv2/JPsiMuMu_JPsiPtFilter_2MuPtEtaFilter_TuneCP5_13TeV-pythia8-evtgen/MINIAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2540000/004C57FB-98FA-5345-8CA3-F72478FC8999.root'
-    options.inputFiles = 'file:/pnfs/psi.ch/cms/trivcat/store/user/cgalloni/MINIAOD/jpsi_d2300_kp_pi0_GEN_25jan24_v1/jpsi_d2300_kp_pi0_0_digi_0_10_hlt_0_miniAOD_0.root'
+#    options.inputFiles = 'file:/pnfs/psi.ch/cms/trivcat/store/user/cgalloni/MINIAOD/jpsi_d2300_kp_pi0_GEN_25jan24_v1/jpsi_d2300_kp_pi0_0_digi_0_10_hlt_0_miniAOD_0.root'
+    options.inputFiles = '/store/mc/RunIISummer19UL18MiniAOD/TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8/MINIAODSIM/106X_upgrade2018_realistic_v11_L1v1-v2/260000/00C28834-56C0-2343-B436-AA8521756E9E.root'
   else:
 #    options.inputFiles = '/store/mc/RunIISummer19UL18MiniAOD/BcToJPsiTauNu_TuneCP5_13TeV-bcvegpy2-pythia8-evtgen/MINIAODSIM/106X_upgrade2018_realistic_v11_L1v1_ext1-v2/100000/02F13381-1D94-CC43-948A-2EFFB8572949.root'
 #    options.inputFiles = '/store/mc/RunIISummer20UL18MiniAOD/BcToJPsiMuMu_inclusive_TuneCP5_13TeV-bcvegpy2-pythia8-evtgen/MINIAODSIM/106X_upgrade2018_realistic_v11_L1v1-v2/00000/06261AC0-CB13-4241-8FCE-729E5E649532.root'
 #    options.inputFiles = '/store/mc/Run3Summer22MiniAODv3/TTtoBsto2Tau_BsFilter_TauTauFilter_TuneCP5_13p6TeV_pythia8-evtgen/MINIAODSIM/124X_mcRun3_2022_realistic_v12-v2/2820000/0ad355ec-2f33-4d96-9fcc-4cb609fd6d50.root'
     options.inputFiles = '/store/mc/RunIISummer20UL18MiniAOD/BcToJPsiMuMu_inclusive_TuneCP5_13TeV-bcvegpy2-pythia8-evtgen/MINIAODSIM/106X_upgrade2018_realistic_v11_L1v1_ext1-v2/00000/001CEFE2-2AE6-DF42-BF02-B9D7DC422491.root'
-
+#    options.inputFiles = '/store/mc/RunIIAutumn18MiniAOD/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v1/00000/0038605E-C94B-574F-AF1F-000435E9A26E.root'
 
 
 
@@ -382,6 +384,7 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     doJpsiTau	      = cms.bool(config["DOJPSITAU"]),
     doJpsiK	      = cms.bool(config["DOJPSIK"]),
     doJpsiKE	      = cms.bool(config["DOJPSIKE"]),
+    doZTauTau	      = cms.bool(config["DOZTAUTAU"]),
     doBsTauTauFH      = cms.bool(config["DOBSTAUTAUFH"]),
     doVertices	      = cms.bool(config["DOVERTICES"]),
     doMissingEt       = cms.bool(config["DOMISSINGET"]),
@@ -444,6 +447,7 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     genEventInfo = cms.InputTag("generator"),
     externallheProducer = cms.InputTag("externalLHEProducer"),
     HLT = cms.InputTag("TriggerResults","","HLT"),
+#    HLT = cms.InputTag("TriggerResults"),
     triggerobjects = cms.InputTag("slimmedPatTrigger"),
     triggerprescales = cms.InputTag("patTrigger"),
     noiseFilter = cms.InputTag('TriggerResults','', hltFiltersProcessName),

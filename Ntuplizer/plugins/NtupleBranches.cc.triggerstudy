@@ -398,6 +398,7 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
 
     tree_->Branch("JpsiTau_isJpsiMu", &JpsiTau_isJpsiMu );
     tree_->Branch("JpsiTau_isJpsiTau2Mu", &JpsiTau_isJpsiTau2Mu );
+
     tree_->Branch("JpsiTau_isTriggered", &JpsiTau_isTriggered );
 
     tree_->Branch("truth_tau_dipion1_mass", &truth_tau_dipion1_mass);
@@ -471,7 +472,6 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
 
     tree_->Branch("JpsiTau_tau_fl3d_wjpsi", &JpsiTau_tau_fl3d_wjpsi);
     tree_->Branch("JpsiTau_tau_fls3d_wjpsi", &JpsiTau_tau_fls3d_wjpsi);
-    tree_->Branch("JpsiTau_tau_alpha_wjpsi", &JpsiTau_tau_alpha_wjpsi);
 
 //    tree_->Branch("JpsiTau_tau_dr1", &JpsiTau_tau_dr1);
 //    tree_->Branch("JpsiTau_tau_dr2", &JpsiTau_tau_dr2);
@@ -967,118 +967,6 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
 //    tree_->Branch("JpsiTau_ed_pfdnn", &JpsiTau_ed_pfdnn);
 //    tree_->Branch("JpsiTau_ed_genpt", &JpsiTau_ed_genpt);
 
-
-  }
-
-
-
-
-
-
-
-
-
-
-  if (runFlags["doZTauTau"]){
-
-    tree_->Branch("ZTauTau_ncands"   , &ZTauTau_ncands   );
-    tree_->Branch("ZTauTau_n_vetomuon"   , &ZTauTau_n_vetomuon   );
-    tree_->Branch("ZTauTau_n_vetoelectron"   , &ZTauTau_n_vetoelectron   );
-
-    tree_->Branch("truth_tau_dipion1_mass", &truth_tau_dipion1_mass);
-    tree_->Branch("truth_tau_dipion1_pt",  &truth_tau_dipion1_pt);
-    tree_->Branch("truth_tau_dipion1_eta", &truth_tau_dipion1_eta);
-    tree_->Branch("truth_tau_dipion1_phi", &truth_tau_dipion1_phi);
-    tree_->Branch("truth_tau_dipion2_mass", &truth_tau_dipion2_mass);
-    tree_->Branch("truth_tau_dipion2_pt",  &truth_tau_dipion2_pt);
-    tree_->Branch("truth_tau_dipion2_eta", &truth_tau_dipion2_eta);
-    tree_->Branch("truth_tau_dipion2_phi", &truth_tau_dipion2_phi);
-
-
-    tree_->Branch("ZTauTau_mu_pt", &ZTauTau_mu_pt );
-    tree_->Branch("ZTauTau_mu_eta", &ZTauTau_mu_eta );
-    tree_->Branch("ZTauTau_mu_phi", &ZTauTau_mu_phi );
-    tree_->Branch("ZTauTau_mu_mass", &ZTauTau_mu_mass );
-    tree_->Branch("ZTauTau_mu_q", &ZTauTau_mu_q );
-    tree_->Branch("ZTauTau_mu_isLoose"  , &ZTauTau_mu_isLoose   );
-    tree_->Branch("ZTauTau_mu_isTight"  , &ZTauTau_mu_isTight   );
-    tree_->Branch("ZTauTau_mu_isPF"     , &ZTauTau_mu_isPF      );
-    tree_->Branch("ZTauTau_mu_isGlobal" , &ZTauTau_mu_isGlobal  );
-    tree_->Branch("ZTauTau_mu_isTracker", &ZTauTau_mu_isTracker );
-    tree_->Branch("ZTauTau_mu_isSoft"   , &ZTauTau_mu_isSoft    );
-    tree_->Branch("ZTauTau_mu_vx"   , &ZTauTau_mu_vx    );
-    tree_->Branch("ZTauTau_mu_vy"   , &ZTauTau_mu_vy    );
-    tree_->Branch("ZTauTau_mu_vz"   , &ZTauTau_mu_vz    );
-    tree_->Branch("ZTauTau_mu_dbiso"   , &ZTauTau_mu_dbiso    );
-    tree_->Branch("ZTauTau_mu_isSignal"   , &ZTauTau_mu_isSignal   );
-
-    tree_->Branch("ZTauTau_tau_pt", &ZTauTau_tau_pt );
-    tree_->Branch("ZTauTau_tau_eta", &ZTauTau_tau_eta );
-    tree_->Branch("ZTauTau_tau_phi", &ZTauTau_tau_phi );
-    tree_->Branch("ZTauTau_tau_mass", &ZTauTau_tau_mass );
-    tree_->Branch("ZTauTau_tau_q", &ZTauTau_tau_q );
-    tree_->Branch("ZTauTau_tau_vx"   , &ZTauTau_tau_vx    );
-    tree_->Branch("ZTauTau_tau_vy"   , &ZTauTau_tau_vy    );
-    tree_->Branch("ZTauTau_tau_vz"   , &ZTauTau_tau_vz    );
-    tree_->Branch("ZTauTau_tau_isSignal"   , &ZTauTau_tau_isSignal    );
-    tree_->Branch("ZTauTau_tau_iso"   , &ZTauTau_tau_iso    );
-    tree_->Branch("ZTauTau_tau_ntracks"   , &ZTauTau_tau_ntracks    );
-
-    tree_->Branch("ZTauTau_tau_max_dr_3prong", &ZTauTau_tau_max_dr_3prong);
-    tree_->Branch("ZTauTau_tau_vprob", &ZTauTau_tau_vprob);
-
-    tree_->Branch("ZTauTau_tau_rhomass1", &ZTauTau_tau_rhomass1 );
-    tree_->Branch("ZTauTau_tau_rhomass2", &ZTauTau_tau_rhomass2 );
-    tree_->Branch("ZTauTau_tau_rhopt1", &ZTauTau_tau_rhopt1 );
-    tree_->Branch("ZTauTau_tau_rhopt2", &ZTauTau_tau_rhopt2 );
-
-    tree_->Branch("ZTauTau_tau_pi1_pt", &ZTauTau_tau_pi1_pt );
-    tree_->Branch("ZTauTau_tau_pi1_eta", &ZTauTau_tau_pi1_eta );
-    tree_->Branch("ZTauTau_tau_pi1_phi", &ZTauTau_tau_pi1_phi );
-    tree_->Branch("ZTauTau_tau_pi1_mass", &ZTauTau_tau_pi1_mass );
-    tree_->Branch("ZTauTau_tau_pi1_q", &ZTauTau_tau_pi1_q );
-
-
-
-    tree_->Branch("ZTauTau_tau_pi2_pt", &ZTauTau_tau_pi2_pt );
-    tree_->Branch("ZTauTau_tau_pi2_eta", &ZTauTau_tau_pi2_eta );
-    tree_->Branch("ZTauTau_tau_pi2_phi", &ZTauTau_tau_pi2_phi );
-    tree_->Branch("ZTauTau_tau_pi2_mass", &ZTauTau_tau_pi2_mass );
-    tree_->Branch("ZTauTau_tau_pi2_q", &ZTauTau_tau_pi2_q );
-
-
-    tree_->Branch("ZTauTau_tau_pi3_pt", &ZTauTau_tau_pi3_pt );
-    tree_->Branch("ZTauTau_tau_pi3_eta", &ZTauTau_tau_pi3_eta );
-    tree_->Branch("ZTauTau_tau_pi3_phi", &ZTauTau_tau_pi3_phi );
-    tree_->Branch("ZTauTau_tau_pi3_mass", &ZTauTau_tau_pi3_mass );
-    tree_->Branch("ZTauTau_tau_pi3_q", &ZTauTau_tau_pi3_q );
-
-
-    tree_->Branch("ZTauTau_PV_vx", &ZTauTau_PV_vx );
-    tree_->Branch("ZTauTau_PV_vy", &ZTauTau_PV_vy );
-    tree_->Branch("ZTauTau_PV_vz", &ZTauTau_PV_vz );
-
-    tree_->Branch("ZTauTau_Z_pt", &ZTauTau_Z_pt );
-    tree_->Branch("ZTauTau_Z_eta", &ZTauTau_Z_eta );
-    tree_->Branch("ZTauTau_Z_phi", &ZTauTau_Z_phi );
-    tree_->Branch("ZTauTau_Z_mass", &ZTauTau_Z_mass );
-    tree_->Branch("ZTauTau_Z_vprob", &ZTauTau_Z_vprob );
-    tree_->Branch("ZTauTau_Z_lip", &ZTauTau_Z_lip);
-    tree_->Branch("ZTauTau_Z_lips", &ZTauTau_Z_lips);
-    tree_->Branch("ZTauTau_Z_pvip", &ZTauTau_Z_pvip);
-    tree_->Branch("ZTauTau_Z_pvips", &ZTauTau_Z_pvips);
-    tree_->Branch("ZTauTau_Z_fl3d", &ZTauTau_Z_fl3d);
-    tree_->Branch("ZTauTau_Z_fls3d", &ZTauTau_Z_fls3d);
-    tree_->Branch("ZTauTau_Z_alpha", &ZTauTau_Z_alpha);
-    tree_->Branch("ZTauTau_Z_vx", &ZTauTau_Z_vx );
-    tree_->Branch("ZTauTau_Z_vy", &ZTauTau_Z_vy );
-    tree_->Branch("ZTauTau_Z_vz", &ZTauTau_Z_vz );
-
-    tree_->Branch("ZTauTau_n_muon", &ZTauTau_n_muon );
-    tree_->Branch("ZTauTau_n_electron", &ZTauTau_n_electron );
-    tree_->Branch("ZTauTau_n_tauhad", &ZTauTau_n_tauhad );
-    tree_->Branch("ZTauTau_n_tauhad_1prong", &ZTauTau_n_tauhad_1prong );
-    tree_->Branch("ZTauTau_n_tauhad_3prong", &ZTauTau_n_tauhad_3prong );
 
   }
 
@@ -2488,7 +2376,6 @@ void NtupleBranches::reset( void ){
 
   JpsiTau_tau_fl3d_wjpsi.clear();
   JpsiTau_tau_fls3d_wjpsi.clear();
-  JpsiTau_tau_alpha_wjpsi.clear();
 
 
   //  JpsiTau_tau_matched_isBdecay.clear();
@@ -2876,117 +2763,6 @@ void NtupleBranches::reset( void ){
   JpsiTau_hammer_ebe_e13_down_lattice.clear();
   JpsiTau_hammer_ebe_e14_up_lattice.clear();
   JpsiTau_hammer_ebe_e14_down_lattice.clear();
-
-
-
-
-
-
-
-
-
-  /////////////////////
-
-
-  ZTauTau_ncands = -99;
-  ZTauTau_n_vetomuon = -99;
-  ZTauTau_n_vetoelectron = -99;
-
-
-  ZTauTau_mu_pt = -99;
-  ZTauTau_mu_eta = -99;
-  ZTauTau_mu_phi = -99;
-  ZTauTau_mu_mass = -99;
-  ZTauTau_mu_q = -99;
-  ZTauTau_mu_isLoose = -99;
-  ZTauTau_mu_isTight = -99;
-  ZTauTau_mu_isPF = -99;
-  ZTauTau_mu_isGlobal = -99;
-  ZTauTau_mu_isTracker = -99;
-  ZTauTau_mu_isSoft = -99;
-  ZTauTau_mu_vx = -99;
-  ZTauTau_mu_vy = -99;
-  ZTauTau_mu_vz = -99;
-  ZTauTau_mu_dbiso = -99;
-  ZTauTau_mu_isSignal = false;
-
-
-  ZTauTau_PV_vx = -99;
-  ZTauTau_PV_vy = -99;
-  ZTauTau_PV_vz = -99;
-
-  ZTauTau_tau_pt.clear();
-  ZTauTau_tau_eta.clear();
-  ZTauTau_tau_phi.clear();
-  ZTauTau_tau_mass.clear();
-  ZTauTau_tau_q.clear();
-  ZTauTau_tau_vx.clear();
-  ZTauTau_tau_vy.clear();
-  ZTauTau_tau_vz.clear();
-
-
-  ZTauTau_tau_max_dr_3prong.clear();
-  ZTauTau_tau_vprob.clear();
-  ZTauTau_tau_isSignal.clear();
-  ZTauTau_tau_iso.clear();
-  ZTauTau_tau_ntracks.clear();
-
-  ZTauTau_tau_rhomass1.clear();
-  ZTauTau_tau_rhomass2.clear();
-  ZTauTau_tau_rhopt1.clear();
-  ZTauTau_tau_rhopt2.clear();
-
-  ZTauTau_tau_pi1_pt.clear();
-  ZTauTau_tau_pi1_eta.clear();
-  ZTauTau_tau_pi1_phi.clear();
-  ZTauTau_tau_pi1_mass.clear();
-  ZTauTau_tau_pi1_q.clear();  
-
-
-
-  ZTauTau_tau_pi2_pt.clear();
-  ZTauTau_tau_pi2_eta.clear();
-  ZTauTau_tau_pi2_phi.clear();
-  ZTauTau_tau_pi2_mass.clear();
-  ZTauTau_tau_pi2_q.clear();
-
-
-  ZTauTau_tau_pi3_pt.clear();
-  ZTauTau_tau_pi3_eta.clear();
-  ZTauTau_tau_pi3_phi.clear();
-  ZTauTau_tau_pi3_mass.clear();
-  ZTauTau_tau_pi3_q.clear();
-
-
-  ZTauTau_Z_pt.clear();
-  ZTauTau_Z_eta.clear();
-  ZTauTau_Z_phi.clear();
-  ZTauTau_Z_mass.clear();
-  ZTauTau_Z_vprob.clear();
-  ZTauTau_Z_lip.clear();
-  ZTauTau_Z_lips.clear();
-  ZTauTau_Z_pvip.clear();
-  ZTauTau_Z_pvips.clear();
-  ZTauTau_Z_fl3d.clear();
-  ZTauTau_Z_fls3d.clear();
-  ZTauTau_Z_alpha.clear();
-  ZTauTau_Z_vx.clear();
-  ZTauTau_Z_vy.clear();
-  ZTauTau_Z_vz.clear();
-
-
-
-
-  ZTauTau_n_muon = 0;
-  ZTauTau_n_electron = 0;
-  ZTauTau_n_tauhad = 0;
-  ZTauTau_n_tauhad_1prong = 0;
-  ZTauTau_n_tauhad_3prong = 0;
-
-
-
-
-
 
 
 

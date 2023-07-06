@@ -7,6 +7,7 @@
 #include "../interface/VerticesNtuplizer.h"
 #include "../interface/JpsiMuNtuplizer.h"
 #include "../interface/JpsiTauNtuplizer.h"
+#include "../interface/ZTauTauNtuplizer.h"
 #include "../interface/JpsiKNtuplizer.h"
 #include "../interface/JpsiKNtuplizerE.h"
 //#include "../interface/BsTauTauNtuplizer.h"
@@ -39,7 +40,7 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
 //  gentauToken_     	    (consumes<std::vector<reco::GenJet>>(iConfig.getParameter<edm::InputTag>("gentaus"))),
 
 	muonToken_	      	    (consumes<pat::MuonCollection>(iConfig.getParameter<edm::InputTag>("muons"))),
-//	electronToken_	      	    (consumes<pat::ElectronCollection>(iConfig.getParameter<edm::InputTag>("electrons"))),
+	electronToken_	      	    (consumes<pat::ElectronCollection>(iConfig.getParameter<edm::InputTag>("electrons"))),
 
 	//mvaValuesMapToken_          (consumes<edm::ValueMap<float> >(iConfig.getParameter<edm::InputTag>("mvaValuesMap"))),
 	//mvaCategoriesMapToken_      (consumes<edm::ValueMap<int> >(iConfig.getParameter<edm::InputTag>("mvaCategoriesMap"))),
@@ -88,6 +89,7 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
   runFlags["doMissingEt"] = iConfig.getParameter<bool>("doMissingEt");
   runFlags["doJpsiMu"] = iConfig.getParameter<bool>("doJpsiMu");
   runFlags["doJpsiTau"] = iConfig.getParameter<bool>("doJpsiTau");
+  runFlags["doZTauTau"] = iConfig.getParameter<bool>("doZTauTau");
   runFlags["doJpsiK"] = iConfig.getParameter<bool>("doJpsiK");
   runFlags["doJpsiKE"] = iConfig.getParameter<bool>("doJpsiKE");
   runFlags["isBkgBSample"] = iConfig.getParameter<bool>("isBkgBSample");
@@ -263,6 +265,23 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
   }
 
 
+  if (runFlags["doZTauTau"]) {
+    std::cout<<"\n\n --->GETTING INSIDE doZTauTau<---\n\n"<<std::endl;
+    nTuplizers_["ZTauTau"] = new ZTauTauNtuplizer( muonToken_   , 
+						   electronToken_, 
+						   vtxToken_   , 
+						   beamToken_ ,
+						   packedpfcandidatesToken_,
+						   triggerToken_,
+						   triggerObjects_,
+						   genparticleToken_,
+						   runFlags,
+						   runValues,
+						   runStrings,
+						   nBranches_);
+  }
+
+
   if (runFlags["doJpsiK"]) {
     std::cout<<"\n\n --->GETTING INSIDE doJpsiK<---\n\n"<<std::endl;
     nTuplizers_["JpsiK"] = new JpsiKNtuplizer( muonToken_   , 
@@ -276,7 +295,7 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
 					       runFlags,
 					       runValues,
 					       runStrings,
-					       nBranches_, histGenWeights );
+					       nBranches_, histGenWeights);
   }
 
   if (runFlags["doJpsiKE"]) {
